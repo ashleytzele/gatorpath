@@ -15,8 +15,8 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [x] Install tools: `brew install uv poppler`
 - [x] `uv init` → `pyproject.toml` with deps: `mcp`, `pyyaml`, `httpx`, `beautifulsoup4`; dev: `pytest`
 - [x] Put the Bulletin PDF at `data/raw/bulletin-2026-27.pdf` (git-ignored)
-- [ ] Create a GitHub repo (private until phase 7) and push
-- [ ] GitHub Actions: run `pytest` on push (workflow written: `.github/workflows/test.yml`; runs once pushed)
+- [x] Create a GitHub repo (private until phase 7) and push: github.com/ashleytzele/gatorpath
+- [x] GitHub Actions: run `pytest` on push (`.github/workflows/test.yml`)
 
 **Done when:** `uv run pytest` passes (even with zero tests) locally and in CI.
 
