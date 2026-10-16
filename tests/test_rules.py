@@ -83,3 +83,52 @@ def test_roadmap_semesters_add_up_to_printed_units(variant):
         units = sum(CATALOG[x]["units_min"] if isinstance(x, str) else x["units"] for x in sem["items"])
         assert units == sem["units"], f"{variant} semester {i}"
     assert sum(s["units"] for s in v["semesters"]) == v["total_units"]
+
+
+def run(completed, in_progress=()):
+    profile = {"catalog_year": "2026-27", "completed": completed, "in_progress": list(in_progress)}
+    return audit(profile, PROGRAM, UNIVERSITY, CATALOG)
+
+
+def test_retaking_a_passed_course_in_progress_is_flagged():
+    got = run([{"code": "CSC 220", "grade": "B", "term": "2026-fall"}], in_progress=["CSC 220"])
+    assert any("CSC 220: attempt 2" in w and "may not be repeated" in w for w in got["warnings"])
+
+
+def test_grades_are_normalized_and_unknown_symbols_flagged():
+    got = run([{"code": "CSC 101", "grade": " b", "term": "2026-fall"}, {"code": "CSC 215", "grade": "P", "transfer": True}])
+    core = next(g for g in got["groups"] if g["id"] == "core_cs")
+    assert core["counted"] == ["CSC 101"]
+    assert any("CSC 215: grade 'P'" in w and "enter CR" in w for w in got["warnings"])
+
+
+def test_major_gpa_keeps_a_failed_attempt_while_it_is_retaken():
+    got = run([{"code": "CSC 101", "grade": "A"}, {"code": "CSC 215", "grade": "F"}], in_progress=["CSC 215"])
+    assert got["totals"]["gpa_major"]["value"] == got["totals"]["gpa_sf_state"]["value"] == 1.714
+
+
+def test_forgiveness_is_shared_by_sf_state_and_major_gpa():
+    # 18 repeated units > 16: ENG 114, PHIL 110, CSC 101, 220, 230 are forgiven; CSC 256's F stays, in both GPAs.
+    codes = ["ENG 114", "PHIL 110", "CSC 101", "CSC 220", "CSC 230", "CSC 256"]
+    got = run([{"code": c, "grade": "F"} for c in codes] + [{"code": c, "grade": "A"} for c in codes])
+    assert got["totals"]["gpa_sf_state"]["value"] == round(72 / 21, 3)
+    assert got["totals"]["gpa_major"]["value"] == round(48 / 15, 3)
+
+
+def test_area_4_disciplines_looks_past_the_greedy_pick():
+    got = run([{"code": c, "grade": "A"} for c in ("HIST 120", "HIST 130", "PSY 200", "HIST 308")])
+    assert next(g for g in got["groups"] if g["id"] == "ge_4_disciplines")["status"] == "satisfied"
+
+
+def test_transfer_then_sf_state_repeat_counts_units_once():
+    got = audit({"completed": [{"code": "MATH 226", "grade": "C-", "transfer": True}, {"code": "MATH 226", "grade": "A"}],
+                 "transfer_units": 4}, PROGRAM, UNIVERSITY, CATALOG)
+    assert got["totals"]["units"]["value"] == 4
+
+
+def test_numeric_ge_done_and_transfer_upper_division_units():
+    got = audit({"ge_done": [2], "transfer_units": 3, "completed": [{"code": "CSC 317", "grade": "B", "transfer": True}]},
+                PROGRAM, UNIVERSITY, CATALOG)
+    assert next(g for g in got["groups"] if g["id"] == "ge_2")["status"] == "satisfied"
+    assert got["totals"]["upper_division_units"]["value"] == 3
+    assert got["totals"]["residence_upper_division_units"]["value"] == 0
