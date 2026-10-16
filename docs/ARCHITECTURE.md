@@ -1,0 +1,572 @@
+# GatorPath — Architecture & Design
+
+> Status: **Approved 2026-10-15** · Last updated: 2026-10-15 · Catalog year in scope: **2026-27**
+>
+> GatorPath is an **MCP server** that gives any AI assistant (Claude, Gemini CLI, ChatGPT, …)
+> accurate, checkable tools for planning an SF State degree. The AI talks to the student and
+> picks options; the server knows the rules and checks every plan. **The AI suggests, the code
+> verifies.**
+
+---
+
+## 1. Goal
+
+Help an SF State student answer, correctly:
+
+1. **Where am I?** — what's done, what's left for my major.
+2. **What's my 4-year path?** — a semester-by-semester plan that respects prerequisites,
+   unit loads, and when courses are actually offered.
+3. **Which direction?** — "I want cybersecurity / AI / web" → which electives, and in what order
+   so the prerequisite chain works out.
+
+### In scope (v1)
+
+- SF State only, **BS Computer Science** first (verified), then Math.
+- 4-year roadmap / pathway planning, career-direction elective picks.
+- Course history (typed list **or** local transcript PDF import).
+- Course offering patterns from the public class search.
+
+### Not in scope yet (see §14 Roadmap)
+
+- Transfer credit from other schools (ASSIST, out-of-state equivalency).
+- Week-level schedule building (sections, times, conflicts).
+- A web UI.
+- Majors other than CS/Math being *verified* (they may load, but are labeled unverified).
+
+### Non-goals
+
+- Replacing advisors or the official Degree Progress Report (DPR). We always point back to them.
+- Registering for classes or touching any SFSU account/system.
+
+---
+
+## 2. Users & example questions
+
+| User | Example question |
+|---|---|
+| CS freshman | "I'm in MATH 226 this fall. Give me a 4-year plan." |
+| CS junior | "I've done CSC 215, 220, 230, 256. I want cybersecurity — what should I take and when?" |
+| Undecided / switching | "I'm a Math major with these courses. What if I switch to CS?" *(phase 8)* |
+| Advisor | "Is this student's plan valid? Anything that will block them later?" |
+
+These become the seed of the evaluation set (§12).
+
+---
+
+## 3. Prior art & how we're different
+
+| Project | What it does | Gap we fill |
+|---|---|---|
+| SFSU Degree Planner / DPR / What-If | Official audit + manual planner | No career direction, no "why", no switch-cost comparison |
+| **Plan-Ed** (2nd place, SF Hacks × GDG 2026) | Gemini 4-yr plan + rules engine, web app | Web app only; no offering data; not reusable by other tools |
+| **GatorWay** (`dixisouls/gatorway`, MIT) | Transcript → interest-based electives, FastMCP + pgvector | Local hackathon build; no transfer, no switch compare, no offering patterns |
+| Stellic, Transfermatic, TransferAI | Commercial requirement / transfer planners | Not SFSU-specific career pathways |
+
+**Our angle:**
+
+1. **MCP-first.** The product *is* the tool server — usable from any AI client, not locked
+   in one web app.
+2. **Verified data.** Every rule cites a Bulletin page. There's a public eval score.
+3. **Offering-aware.** Real historical schedule data ("CSC 653 is fall-only").
+4. **Privacy by design.** The server stores no student data. Transcripts are parsed locally.
+
+---
+
+## 4. System overview
+
+```
+┌──────────── OFFLINE BUILD (once per catalog year / term) ─────────────┐
+│                                                                        │
+│  Bulletin PDF ──▶ ingest/bulletin.py ──▶ course, prereq, course_link   │
+│  (2,932 pages)        │                                                │
+│                       └─ unparsed prereq text → status=unparsed (flag) │
+│                                                                        │
+│  Class Search ──▶ ingest/offerings.py ──▶ offering ──▶ offered_terms   │
+│  (public, HTML)                                                        │
+│                                                       ▼                │
+│  rules/programs/*.yaml  ─┐                     data/catalog.db         │
+│  rules/roadmaps/*.yaml  ─┴─ hand-written, reviewed in git, cite pages  │
+└────────────────────────────────────────────────────────────────────────┘
+                                     │ read-only
+┌──────────── MCP SERVER  (gatorpath, runs locally over stdio) ──────────┐
+│                                                                        │
+│  catalog tools      program tools        student tools                 │
+│  search_courses     list_programs        audit_progress                │
+│  get_course         get_program_req.     build_plan                    │
+│  get_prereq_chain   get_roadmap          check_plan                    │
+│                                          list_eligible_electives       │
+│                                          import_transcript (local)     │
+│                                                                        │
+│  engine/: rules.py (requirement eval) · prereq.py · planner.py         │
+│  NO LLM calls · NO student data stored · deterministic                 │
+└────────────────────────────────────────────────────────────────────────┘
+                                     ▲ MCP (tools + one prompt)
+┌──────────── AI CLIENT (Claude Desktop, Gemini CLI, …) ─────────────────┐
+│  conversation · interprets career goal · picks electives · explains   │
+│  MUST call check_plan before presenting a plan                         │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+**Why the server has no LLM:** the client already brings one. Keeping the server deterministic
+makes it free to run, easy to test, and impossible for it to "hallucinate a rule". If a future
+tool truly needs a model (e.g. AI-drafted rules for new majors), that runs **offline** with
+human review, never at question time.
+
+---
+
+## 5. Data sources
+
+| Source | What we take | How | Notes |
+|---|---|---|---|
+| **SF State Bulletin 2026-27 PDF** (2,932 pp) | Courses, units, grading, prereqs, program requirements, roadmaps, GE & graduation rules | `pdftotext` (reading order, not `-layout`) → parse | Official, frozen per year → solves "catalog year" versioning |
+| **Class Search** `webapps.sfsu.edu/public/classservices/classsearch` | Sections per term: days/times, mode, seats, GE attributes. History back to 2000 | Polite scraper: HTML form POST with CSRF token, cached, a few requests per term | Check SFSU terms of use; later ask SFSU IT for an official feed |
+| **Hand-written rules** `rules/` | Major requirement logic + roadmap variants | Humans translate Bulletin text → YAML, cite page | Reviewed like code |
+
+### Known Bulletin quirks (found 2026-10-15)
+
+- **Paired courses:** CSC 671's prereqs are printed inside the CSC 871 entry ("Prerequisites for
+  CSC 671: …"). The parser must split these by course.
+- **Cross-listed courses:** "offered as HUM 690 and CWL 680. Students may not repeat under an
+  alternate prefix."
+- **Unverifiable conditions:** "or permission of the instructor", "restricted to … majors".
+  Store them as conditions, flag them, and never block on them silently.
+- **GPA conditions:** "GPA of 3.0 or higher" (e.g. CSC 653, 671).
+- **Concurrent enrollment:** "(may be taken concurrently)".
+- **Asterisks:** `CSC 510*`, `ACCT 301*`, even `graduate-level standing*`. **No legend anywhere
+  in the PDF** (searched 2026-10-15). Likely "or equivalent", still unconfirmed. See §16.
+- **Every course is printed twice:** once in its department section (CSC: PDF pp. 1896–1905) and
+  again in the A–Z course catalog (CSC: PDF pp. 2557–2564). **Dedupe on `code`** and keep the
+  department-section copy's page. If the two texts differ, store both and add a warning.
+- **Page numbers:** printed page = PDF page − 1 (e.g. PDF 1906 is printed "1905"). Bulletin
+  cross-references use printed numbers, so `source_page` / `source:` always use the **printed**
+  number (read it from the page footer, don't assume the offset).
+- **GE tags are on the course entry:** a `Course Attributes:` bullet list (e.g. `• 3UD: Arts or
+  Humanities`, `• Graduation Writing Assessment`). Parse it into `course.ge_areas`.
+- **Roadmap variants:** BS CS has different 4-year roadmaps by **Quantitative Reasoning (math
+  placement) pathway 1/2 vs 3/4**, plus a 2-year transfer roadmap and an ADT roadmap.
+- **Course renumbering:** the 2026-27 core uses **CSC 215** (older material says CSC 210).
+  Never hard-code course codes from memory. Read them from the Bulletin.
+
+---
+
+## 6. Data model
+
+### 6.1 `data/catalog.db` (SQLite, generated, git-ignored)
+
+```sql
+course(
+  catalog_year TEXT, code TEXT,            -- '2026-27', 'CSC 653'
+  title TEXT, units_min REAL, units_max REAL,
+  description TEXT, grading TEXT,          -- 'letter', 'cr_nc', 'letter_or_cr_nc'
+  ge_areas TEXT,                           -- JSON list from "Course Attributes:", e.g. ["1B","SJ"]
+  source_page INTEGER,
+  PRIMARY KEY (catalog_year, code)
+)
+
+prereq(
+  catalog_year TEXT, code TEXT,
+  raw_text TEXT,                           -- exactly as printed
+  expr TEXT,                               -- JSON expression tree (6.3), NULL if unparsed
+  status TEXT,                             -- 'ok' | 'partial' | 'unparsed' | 'none'
+  needs_permission INTEGER,                -- 1 if any 'permission of …' branch
+  PRIMARY KEY (catalog_year, code)
+)
+
+course_link(
+  catalog_year TEXT, code_a TEXT, code_b TEXT,
+  kind TEXT                                -- 'paired' (671/871) | 'crosslisted' (HUM 690/CWL 680)
+)
+
+offering(
+  term TEXT, code TEXT, section TEXT,      -- term like '2026-fall'
+  days TEXT, start_time TEXT, end_time TEXT,
+  mode TEXT, instructor TEXT, capacity INTEGER, enrolled INTEGER,
+  scraped_at TEXT
+)
+
+-- view: how often a course runs per season over the last N years
+offered_terms(code, fall_count, spring_count, summer_count, years_checked)
+
+course_fts  -- SQLite FTS5 over code/title/description for search_courses
+```
+
+### 6.2 Hand-written rules (`rules/`, in git)
+
+**`rules/programs/2026-27/bs-cs.yaml`** (shape):
+
+```yaml
+program: bs-cs
+title: Bachelor of Science in Computer Science
+catalog_year: 2026-27
+verified: true                     # a human checked every rule against the Bulletin
+verified_by: "<name>, 2026-10-xx"
+total_units: 74
+global:
+  no_cr_nc: true                   # "CR/NC grades are not accepted in courses for the major"
+  source: "Bulletin 2026-27 p.1905"
+groups:
+  - id: math_physics
+    title: Mathematics and Physics
+    all_of: [MATH 225, MATH 226, MATH 227, MATH 324, PHYS 220, PHYS 222, PHYS 230, PHYS 232]
+    min_grade: C                   # C-or-better covers math/physics, core, advanced. NOT electives
+    source: "p.1905"
+  - id: core_cs
+    all_of: [CSC 101, CSC 215, CSC 220, CSC 230, CSC 256, CSC 300GW, CSC 317, CSC 340, CSC 413]
+    min_grade: C
+  - id: advanced_cs
+    all_of: [CSC 415, CSC 510, CSC 648]
+    min_grade: C
+  - id: senior_electives
+    choose_units: 15
+    from:
+      - {list: [CSC 520, ...]}     # the printed list (includes 500-level CSC 520)
+      - {subject: CSC, level: 600, except: [CSC 601, CSC 602, CSC 648, CSC 694]}
+      - {list: [MATH 400, MATH 425, MATH 448]}
+      - {subject: CSC, level: "700+", paired: false,
+         except: [CSC 895, CSC 897, CSC 898, CSC 899], max_courses: 1}
+    min_units_from: {subject: CSC, units: 12}
+```
+
+Rule vocabulary (keep it small; add only when a real major needs it):
+`all_of`, `choose_n`, `choose_units`, `from` (list | subject+level filter | `ge_area`,
+`except`, `paired`, `max_courses`), `min_units_from`, `min_grade`, `no_cr_nc`, `source`.
+
+**`rules/university/2026-27.yaml`:** the graduation requirements every bachelor's degree shares,
+in the same vocabulary. GE areas are matched with `from: {ge_area: ...}` against
+`course.ge_areas`, so no hand-copied GE course lists are needed.
+
+```yaml
+catalog_year: 2026-27
+totals:                            # p.2313
+  min_units: 120
+  min_upper_division_units: 30
+  residence: {units: 30, upper_division: 24, major: 12}
+  max_cr_units: 24                 # SF State units; CR/NC-only major courses excluded
+  min_gpa: {all: 2.0, sf_state: 2.0, major: 2.0}
+groups:
+  - {id: gwar, choose_n: 1, from: {ge_area: GW}, min_grade: C-, source: "p.2313"}
+  - id: ge_1a                      # 1A, 1B, 1C, 2, 3A, 3B, 4 (6u), 5A, 5B, 5C (1u), 6,
+    choose_units: 3                # 5UD|2UD, 3UD, 4UD: see p.2311 table. 43 units minimum
+    from: {ge_area: 1A}
+    min_grade: C-                  # Area 1 only: "CR or C- or better" (p.2314)
+    source: "p.2314"
+  - {id: sfss_aerm, choose_n: 1, from: {ge_area: AERM}, source: "p.2313"}   # + ESCA, GP, SJ
+  - {id: ai_usg, choose_n: 1, from: {ge_area: USG}, source: "p.2313"}       # USH via Area 4
+```
+
+**Double-counting (what the engine allows):**
+- Within one program's groups, a course counts **once**.
+- A course can count toward GE, SF State Studies and American Institutions **at the same time**.
+  The Bulletin designs it that way: one course is tagged e.g. `(Area 1B, GP, SJ)`.
+- Units always count once toward the 120.
+- Major course that also carries a GE tag: **open question** (§16). Until it's resolved, allow it
+  and add a ⚠️.
+
+**`rules/roadmaps/2026-27/bs-cs.yaml`:** variants `qr-1-2`, `qr-3-4`, `transfer-2yr`, `adt`.
+Each is a list of semesters. Each semester lists course codes or placeholders
+(`{slot: GE, area: "1A"}`, `{slot: senior_elective}`), each with `source:` page.
+
+### 6.3 Prerequisite expression (JSON)
+
+```json
+{"any": [
+  {"all": [
+    {"standing": "upper"},
+    {"course": "CSC 510"},
+    {"any": [{"course": "MATH 225", "min_grade": "C"},
+             {"course": "MATH 325", "min_grade": "C"}]},
+    {"gpa": 3.0}
+  ]},
+  {"permission": "instructor"}
+]}
+```
+
+Leaf types: `course` (+ `min_grade`, `concurrent_ok`), `standing`
+(`lower|upper|senior|graduate`), `gpa`, `restricted_to` (majors/programs),
+`permission` (instructor|department|advisor), `unknown` (raw fragment).
+`permission`/`restricted_to`/`unknown` are **unverifiable**. They produce a ⚠️, never a silent pass.
+
+### 6.4 Student profile (never stored, passed in per call)
+
+```yaml
+catalog_year: 2026-27
+program: bs-cs
+qr_pathway: "1/2"                  # math placement → roadmap variant
+start_term: 2027-spring            # first term to plan
+completed:
+  - {code: CSC 215, grade: B+, term: 2025-fall}
+in_progress: [CSC 220, MATH 227]
+gpa: 3.2                           # optional; needed for GPA-gated prereqs
+goal: "cybersecurity"              # optional free text; used by the AI client, not the server
+ge_done: ["1A", "1B", "2"]         # only for transfer/AP/IB credit; SF State courses are
+                                   # matched by their own ge_areas
+max_units_per_term: 15
+include_summer: false
+```
+
+---
+
+## 7. MCP tools
+
+All tools are **read-only and deterministic**. Every response includes `catalog_year`,
+and wherever rules are involved, `source` page refs and `warnings[]`.
+
+### 7.1 Catalog
+
+| Tool | Input | Output |
+|---|---|---|
+| `search_courses` | `query`, `subject?`, `level?` (`lower`/`upper`/`600`…), `limit=10` | `[{code, title, units, ge_areas, offered: "fall-only"\|"both"\|"rare"\|"unknown"}]` (FTS5 keyword search; embeddings later if needed) |
+| `get_course` | `code` | Full record: description, units, grading, `prereq: {raw_text, expr, status, needs_permission}`, `links`, `offered_terms`, `source_page` |
+| `get_prereq_chain` | `code` | Everything that must come before it, as a tree plus a flat ordered list, with min grades and non-course conditions. Answers "what do I need before CSC 653?" |
+
+### 7.2 Programs
+
+| Tool | Input | Output |
+|---|---|---|
+| `list_programs` | — | `[{id, title, verified}]` |
+| `get_program_requirements` | `program` | Requirement groups as in the YAML, plus `verified`, plus sources |
+| `get_roadmap` | `program`, `variant` | Official suggested semesters, with placeholders |
+
+### 7.3 Student (profile in, nothing stored)
+
+| Tool | Input | Output |
+|---|---|---|
+| `audit_progress` | `profile` | Per group: `satisfied`/`in_progress`/`remaining`, which courses counted where, units done vs needed; university totals (120 total, upper-division units, GWAR) |
+| `build_plan` | `profile` | Deterministic baseline plan: `semesters: [{term, courses, units}]`, unfilled `slots` (e.g. 5× senior_elective), `warnings`, `est_graduation_term` |
+| `list_eligible_electives` | `profile`, `group_id`, `by_term?` | Options that satisfy that group, each with description, prereq readiness (`ready` / `ready_by: term` / `blocked_by`), and offering pattern. **The AI picks from this list using the student's goal.** |
+| `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
+| `import_transcript` | `pdf_path` (local file) | `{completed: [...], in_progress: [...], transfer_units, warnings}`, with **only** course code, grade, units and term. Name, student ID, birthdate and address are dropped. Raw text is never returned, logged or stored |
+
+**Unofficial transcript layout (`SSR_TSRPT.pdf`, Oracle Analytics Publisher, confirmed
+2026-10-15 from a real sample, which was not kept).** Read it with `pdftotext -layout`.
+- Every page header has `Name:` and `SF State ID:`. Drop them.
+- `Transfer Credits` blocks are per institution and show **totals only, with no course rows**. Return
+  `transfer_units` plus a ⚠️ asking the student to give transfer GE/major credit as `ge_done`
+  or confirm it on the DPR.
+- A term starts with a line that is only a code: `FA2025` / `SP2026` (summer is probably `SU`,
+  unconfirmed). Map it to `2025-fall` / `2026-spring`.
+- Course row: `SUBJ  NNN[SFX]  DESCRIPTION  Units  Earned  Grade  Points`. The subject can have
+  a space (`I R`). Join the code as `SUBJ NNN[SFX]`.
+- **Blank grade + Earned 0.00 → `in_progress`.**
+- A term's rows can continue after a page break. `Term GPA`/`Totals`/`Term Honor` lines are
+  ignored.
+- Seen so far: letter grades only. CR, W, I and repeat markings haven't appeared in a sample
+  yet. If a row doesn't match, emit a ⚠️ with the row position, never the row text.
+- Fixture: `tests/fixtures/transcript_synthetic.txt` (fake name/ID, same layout).
+
+### 7.4 MCP prompt: `plan_my_degree`
+
+Gives the client its workflow:
+
+1. Get courses (typed or `import_transcript`).
+2. Ask for the math placement / QR pathway if it's unknown.
+3. Call `audit_progress`.
+4. Call `build_plan`.
+5. Fill elective slots using `list_eligible_electives` plus the student's goal.
+6. **Call `check_plan`. Fix any errors and re-check until `valid`.**
+7. Present the plan with warnings and sources, and suggest confirming with an advisor and the DPR.
+
+---
+
+## 8. Planner algorithm (`engine/planner.py`)
+
+The input is the profile, the program rules, the prereq graph and `offered_terms`.
+
+1. **Remaining work:** from `audit_progress`, the concrete required courses still needed, plus
+   **slots** for choose-groups (e.g. 5 × senior elective) and GE areas.
+2. **Priority:** for each course, the **longest downstream prerequisite chain** (critical path).
+   For example, CSC 415 unlocks CSC 653, so it gets scheduled early. Ties are broken by its
+   position in the official roadmap variant.
+3. **Term-by-term greedy fill**, starting at `start_term`:
+   - eligible = prereqs satisfied by courses completed in *earlier* terms (or in this term if
+     `concurrent_ok`)
+   - offered this season according to `offered_terms`; if unknown, allow it and add a ⚠️
+   - fill by priority up to `max_units_per_term`; leave remaining capacity to slots
+   - standing (`upper`/`senior`) is computed from cumulative units
+4. Stop when nothing remains. Report `est_graduation_term`.
+5. If no progress is possible in a term (a blocked prereq), stop and emit an error saying
+   which condition blocks it. Never loop forever.
+
+The plan is a **baseline**: elective slots stay open for the AI to fill with goal-matched picks.
+`check_plan` is the single source of truth for validity, and `build_plan`'s own output must
+pass it (tested).
+
+> ponytail: greedy + critical-path priority, not an optimizer. Upgrade to a constraint solver
+> (OR-Tools CP-SAT) only if evals show greedy producing late graduations that a better order fixes.
+
+---
+
+## 9. Privacy & responsible AI
+
+- **No student data at rest.** The profile lives in the conversation, and the server keeps no
+  database of students and no logs of profiles.
+- **Local transcript parsing.** `import_transcript` runs on the student's machine and returns only
+  code, grade and term. The PDF and personal info never go to the AI provider *through our
+  tool*. (If a student attaches the PDF directly to the chat, that's the client's
+  behavior. The prompt advises using the import tool instead.)
+- **Repo hygiene.** `*.pdf`, `data/`, `transcripts/` are git-ignored. Eval profiles are
+  **synthetic** only.
+- **No invented rules.** Requirements come only from reviewed YAML; prereqs only from the
+  Bulletin. The AI can't add a course that doesn't exist, because `check_plan` rejects unknown
+  codes.
+- **Honest uncertainty.** Every unverifiable condition is surfaced as a warning. Unverified
+  programs are labeled. Every answer points to the DPR and an advisor as the final word.
+- **Bias / equity note.** Offering-history data favors courses that ran recently. "Rare" ≠
+  "never", so we say "not offered in the last N terms" rather than "not offered".
+
+---
+
+## 10. Error handling
+
+| Situation | Behavior |
+|---|---|
+| Unknown course code | `error: unknown_course` with close matches from FTS |
+| Unverified program | Works, but every response has `verified: false` + warning |
+| Prereq `unparsed`/`partial` | Course allowed; ⚠️ with raw Bulletin text so the student/AI can read it |
+| Missing GPA when a prereq needs it | ⚠️ "requires GPA ≥ 3.0 — not provided" |
+| Missing QR pathway | `build_plan` returns `needs_input: qr_pathway` instead of guessing |
+| Offering data missing for a course | `offered: unknown` + ⚠️ |
+| Transcript PDF not recognized | `error: unrecognized_transcript_format`; suggest typing the list |
+| Planner can't make progress | Error naming the blocking condition(s) |
+
+---
+
+## 11. Tech stack & repo layout
+
+- **Python 3.12+**, managed with **uv**
+- **`mcp`** (official Python SDK, includes `FastMCP`), stdio transport
+- **SQLite** (stdlib `sqlite3`, FTS5)
+- **`pdftotext`** from poppler (`brew install poppler`) for the Bulletin and transcripts
+- **`httpx` + `beautifulsoup4`** for the class-search scraper
+- **`pyyaml`** for the rules, **`pytest`** for tests
+
+```
+gatorpath/
+├── AGENTS.md            # instructions for AI coding agents (and humans)
+├── CLAUDE.md            # → @AGENTS.md
+├── README.md
+├── TASKS.md             # phased task list
+├── docs/ARCHITECTURE.md # this file
+├── pyproject.toml
+├── src/gatorpath/
+│   ├── server.py        # MCP tool + prompt definitions only (thin)
+│   ├── db.py            # sqlite access
+│   ├── engine/
+│   │   ├── prereq.py    # parse + evaluate prereq expressions
+│   │   ├── rules.py     # load YAML, evaluate requirement groups (audit)
+│   │   └── planner.py   # build_plan, check_plan
+│   ├── ingest/
+│   │   ├── bulletin.py  # PDF → course/prereq/course_link
+│   │   └── offerings.py # class search → offering
+│   └── transcript.py    # local PDF → completed courses (PII dropped)
+├── rules/
+│   ├── programs/2026-27/bs-cs.yaml
+│   ├── university/2026-27.yaml   # GE, SF State Studies, AI, GWAR, totals
+│   └── roadmaps/2026-27/bs-cs.yaml
+├── evals/
+│   ├── profiles/*.yaml  # synthetic students
+│   └── run_evals.py
+├── tests/
+└── data/                # git-ignored: raw PDFs, catalog.db, scrape cache
+```
+
+---
+
+## 12. Testing & evaluation
+
+**Unit tests (pytest):**
+- prereq parser: a golden set of ~50 real prereq strings (CSC/MATH/PHYS) → expected trees
+- rules engine: audit results for hand-built profiles
+- planner: every `build_plan` output passes `check_plan`; prereq order respected; unit cap
+  respected
+- transcript: a **synthetic** transcript fixture (fake name/ID) → only codes/grades/terms come
+  out, and the fake name and ID strings never appear in output
+
+**Eval set (`evals/`), reported in the README:**
+
+| Metric | Target |
+|---|---|
+| Prereq parse coverage (CSC, MATH, PHYS) | ≥ 95% `ok`, rest flagged |
+| Audit correctness on 30 synthetic profiles (hand-checked vs Bulletin) | 100% |
+| Plans from `build_plan` passing `check_plan` | 100% |
+| End-to-end: 30–50 student questions via a real AI client + our server; plan valid and matches the stated goal (rubric) | Report the number honestly |
+| Hallucinated course codes in final answers | 0 |
+
+The end-to-end number is the resume line: *"…produced valid 4-year plans for 47/50 test
+students; 0 hallucinated courses."*
+
+---
+
+## 13. Decisions log
+
+| # | Decision | Why | Date |
+|---|---|---|---|
+| D1 | MCP server first, UI later | Most differentiated; testable immediately in Claude/Gemini CLI | 2026-10-15 |
+| D2 | SFSU only; CS → Math → all majors | Every answer must be checkable; wrong-but-confident is the worst failure | 2026-10-15 |
+| D3 | Python + official `mcp` SDK + SQLite | Simplest stack; no DB server; one-file catalog | 2026-10-15 |
+| D4 | Bulletin **PDF** as the source, not website scraping | Official, frozen per catalog year, clean text extraction | 2026-10-15 |
+| D5 | Requirements hand-translated to YAML; later AI-drafted + human-reviewed | Bulletin prose has exceptions a parser would get wrong | 2026-10-15 |
+| D6 | No LLM inside the server | Client brings the model; server stays free, testable, non-hallucinating | 2026-10-15 |
+| D7 | Course input: typed list **and** local transcript import | Easy start + smooth UX, PII never leaves the machine via our tool | 2026-10-15 |
+| D8 | Offering patterns from public class-search history | Bulletin lacks term offerings; history shows fall-only/spring-only | 2026-10-15 |
+| D9 | GE + university requirements in v1, not phase 8 | "What's left?" is wrong without GE; GE tags are already on every course entry | 2026-10-15 |
+
+---
+
+## 14. Roadmap (detail in TASKS.md)
+
+- **Phase 0, Foundation:** repo, tooling
+- **Phase 1, Catalog:** Bulletin → courses + prereqs
+- **Phase 2, Rules:** BS CS + GE/university requirements + roadmaps, audit
+- **Phase 3, MCP v0:** read-only tools, tried in Claude Desktop
+- **Phase 4, Planner:** `build_plan`, `check_plan`, electives, prompt
+- **Phase 5, Offerings:** class-search history
+- **Phase 6, Transcript import**
+- **Phase 7, Evals + demo + first real users**
+- **Phase 8, Expand:** Math + `compare_programs` (switch-major cost), AI-drafted rules for more majors
+
+**Later:**
+- transfer credit (ASSIST for CA community colleges; similarity + Course Equivalency
+  Request drafting for out-of-state)
+- week-level schedule builder from live sections
+- web roadmap UI on top of the same server
+- additional catalog years
+
+---
+
+## 15. Glossary
+
+- **Bulletin:** SFSU's official yearly catalog of courses and degree requirements.
+- **Catalog year:** the Bulletin year whose rules a student follows.
+- **DPR:** Degree Progress Report, SFSU's official degree audit.
+- **GE:** General Education requirements.
+- **GWAR:** Graduation Writing Assessment Requirement (e.g. CSC 300GW).
+- **QR pathway:** Quantitative Reasoning / math placement. It selects the roadmap variant.
+- **ADT:** Associate Degree for Transfer (California community colleges).
+- **MCP:** Model Context Protocol, the standard way to expose tools/data to AI clients.
+
+---
+
+## 16. Open questions
+
+1. **Asterisk meaning** in prereqs (`CSC 510*`): **there's no legend in the PDF.** Ask the CS
+   department. Until then, parse `X*` as `{course: X}` and add a ⚠️ quoting the raw text.
+2. **Class search terms of use / rate limits:** confirm scraping is acceptable; consider asking
+   SFSU for a data feed.
+3. ~~Transcript format~~ **Resolved 2026-10-15**, see §7.3. Still unseen: CR, W, I, repeat
+   markings, summer code.
+4. ~~GE in v1~~ **Resolved 2026-10-15:** GE, SF State Studies, American Institutions and GWAR are
+   in v1 (phase 2), via `rules/university/2026-27.yaml` + `course.ge_areas`.
+5. ~~Repeat / grade replacement~~ **Resolved 2026-10-15** (p.2392 "Repeating Courses", p.2406
+   "Grade Forgiveness"):
+   - C or better, or CR → no repeat unless the course is repeatable for credit.
+   - Below C (including W, WU, AU, IC, RD, RP) → one more attempt. A 3rd needs chair consent.
+   - Forgiveness: up to 16 SF State units, where the lower grade leaves the GPA. Fall 2017 onward;
+     not for academic dishonesty.
+   - No repeats after 28 repeated units.
+   - Past the 16-unit limit, both grades count in the GPA, but units count once.
+   - **Engine:** use the best attempt for requirements, count units once, ⚠️ on 2nd/3rd attempts.
+6. **License:** MIT proposed when the repo goes public.
+7. **Major course ↔ UD GE double-counting** for first-time students. Some majors' transfer notes
+   say "courses required for the major may double-count if approved for UD GE". There's no
+   general statement, and CS isn't on the Met in Major list (p.2329). Ask advising.

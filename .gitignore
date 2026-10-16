@@ -1,0 +1,12 @@
+# data & secrets: never commit
+data/
+transcripts/
+*.pdf
+*.db
+.env
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
