@@ -118,7 +118,7 @@ human review, never at question time.
 
 | Source | What we take | How | Notes |
 |---|---|---|---|
-| **SF State Bulletin 2026-27 PDF** (2,932 pp) | Courses, units, grading, prereqs, program requirements, roadmaps, GE & graduation rules | `pdftotext` (reading order, not `-layout`) → parse | Official, frozen per year → solves "catalog year" versioning |
+| **SF State Bulletin 2026-27 PDF** (2,932 pp) | Courses, units, grading, prereqs, program requirements, roadmaps, GE & graduation rules | `pdftotext -raw` (the default mode interleaves the two-column course pages) → NFKC (ligatures) → parse | Official, frozen per year → solves "catalog year" versioning |
 | **Class Search** `webapps.sfsu.edu/public/classservices/classsearch` | Sections per term: days/times, mode, seats, GE attributes. History back to 2000 | Polite scraper: HTML form POST with CSRF token, cached, a few requests per term | Check SFSU terms of use; later ask SFSU IT for an official feed |
 | **Hand-written rules** `rules/` | Major requirement logic + roadmap variants | Humans translate Bulletin text → YAML, cite page | Reviewed like code |
 
@@ -173,8 +173,9 @@ prereq(
 )
 
 course_link(
-  catalog_year TEXT, code_a TEXT, code_b TEXT,
-  kind TEXT                                -- 'paired' (671/871) | 'crosslisted' (HUM 690/CWL 680)
+  catalog_year TEXT, code_a TEXT, code_b TEXT,   -- code_a < code_b
+  kind TEXT,                               -- 'paired' (671/871) | 'crosslisted' (HUM 690/CWL 680)
+  PRIMARY KEY (catalog_year, code_a, code_b, kind)
 )
 
 offering(
@@ -281,10 +282,22 @@ Each is a list of semesters. Each semester lists course codes or placeholders
 ]}
 ```
 
-Leaf types: `course` (+ `min_grade`, `concurrent_ok`), `standing`
-(`lower|upper|senior|graduate`), `gpa`, `restricted_to` (majors/programs),
-`permission` (instructor|department|advisor), `unknown` (raw fragment).
-`permission`/`restricted_to`/`unknown` are **unverifiable**. They produce a ⚠️, never a silent pass.
+Leaf types: `course` (+ `min_grade`, `max_grade` for "C- or lower" retakes, `concurrent_ok`),
+`ge_area` (+ `min_grade`; e.g. "GE Area 1A/A2" → `1A`), `qr_category` (list, e.g. `[1, 2]`;
+**Category = roadmap QR pathway**: p.1906 "QR Pathway 1/2" links to p.1908 "Quantitative Reasoning
+Category 1/2"; checked against `profile.qr_pathway`), `standing` (`lower|upper|senior|graduate`),
+`gpa`, `high_school` (+ `min_grade`; self-reported), `restricted_to` (majors/programs, including bare
+"Graduate Mathematics students"), `permission` (instructor|department|advisor|committee_chair),
+`equivalent` ("or equivalent"), `requirement` (a named non-course requirement from a fixed list:
+First-Year Math Advising Module, Advancement to Candidacy forms, approved study proposal,
+"a college-level X course"), `unknown` (raw fragment).
+`permission`/`restricted_to`/`equivalent`/`requirement`/`high_school`/`unknown` are **unverifiable**.
+They produce a ⚠️, never a silent pass.
+
+Status: `ok` means no `unknown` leaf; `partial` means some; `unparsed` means only unknowns;
+`none` means no prereq text. Advice ("recommended", "should"), audience notes ("For students who
+…") are not requirements; a prereq that is only advice is `expr: null`, `ok`. How the clause grammar reads SFSU's wording is documented at the top of
+`engine/prereq.py`.
 
 ### 6.4 Student profile (never stored, passed in per call)
 

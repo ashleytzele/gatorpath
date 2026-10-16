@@ -24,27 +24,30 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ## Phase 1 — Catalog: Bulletin → courses + prereqs
 
-- [ ] `ingest/bulletin.py`: extract the course-description section with `pdftotext` (reading order)
-- [ ] Parse course headers: `CODE Title (Units: N)` / `(Units: 1-3)` → `course`
-- [ ] Capture description, grading notes ("Plus-minus letter grade only", "CR/NC grading only")
-- [ ] Record `source_page` (the **printed** page number, from the footer) for every course
-- [ ] Dedupe: each course is printed in its department section and again in the A–Z catalog.
+- [x] `ingest/bulletin.py`: extract with `pdftotext -raw` (default mode interleaves columns)
+- [x] Parse course headers: `CODE Title (Units: N)` / `(Units: 1-3)` → `course`
+- [x] Capture description, grading notes ("Plus-minus letter grade only", "CR/NC grading only")
+- [x] Record `source_page` (the **printed** page number, from the footer) for every course
+- [x] Dedupe: each course is printed in its department section and again in the A–Z catalog.
   Keep one row per `code`; warn if the texts differ
-- [ ] Parse `Course Attributes:` bullets → `course.ge_areas` (GE areas, AERM/ESCA/GP/SJ, USH/USG,
+- [x] Parse `Course Attributes:` bullets → `course.ge_areas` (GE areas, AERM/ESCA/GP/SJ, USH/USG,
   GWAR)
-- [ ] Prereq parser → expression tree (ARCHITECTURE §6.3), with status `ok`/`partial`/`unparsed`
-  - [ ] course codes, `and`/`or`/`;`, "with a grade of C or better"
-  - [ ] standing (upper-division, senior, graduate)
-  - [ ] GPA conditions
-  - [ ] "may be taken concurrently"
-  - [ ] "permission of the instructor/department" → `permission` leaf
-  - [ ] "Restricted to … majors" → `restricted_to` leaf
-  - [ ] Paired-course entries ("Prerequisites for CSC 671: …" inside CSC 871)
-- [ ] `course_link` for paired (671/871) and cross-listed (HUM 690/CWL 680) courses
+- [x] Prereq parser → expression tree (ARCHITECTURE §6.3), with status `ok`/`partial`/`unparsed`
+  - [x] course codes, `and`/`or`/`;`, "with a grade of C or better"
+  - [x] standing (upper-division, senior, graduate)
+  - [x] GPA conditions
+  - [x] "may be taken concurrently"
+  - [x] "permission of the instructor/department" → `permission` leaf
+  - [x] "Restricted to … majors" → `restricted_to` leaf
+  - [x] Paired-course entries ("Prerequisites for CSC 671: …" inside CSC 871)
+- [x] `course_link` for paired (671/871) and cross-listed (HUM 690/CWL 680) courses
 - [ ] Asterisk (`CSC 510*`): no legend in the PDF. Parse as the plain course + ⚠️ with raw text;
   ask the CS department (ARCHITECTURE §16.1)
-- [ ] Golden test file: ~50 real prereq strings from CSC/MATH/PHYS → expected trees
-- [ ] Coverage report script: % `ok` per subject; list every `unparsed` string
+- [x] Golden test file: 64 real prereq strings from CSC/MATH/PHYS → expected trees (`tests/test_prereq.py`)
+- [x] Coverage report: printed by `python -m gatorpath.ingest.bulletin <pdf>`; lists every non-ok string
+  and every referenced code missing from the catalog (e.g. renumbered CSC 210)
+- [x] Coverage 95.5% (234/245; CSC 99.0%, MATH 92.4%, PHYS 94.5%). The 11 non-ok are listed by the
+  report (ambiguous MATH 742/760/761; LA, thesis and degree-status text)
 
 **Done when:** CSC, MATH and PHYS prereqs are ≥ 95% `ok`, and every non-ok one is listed in the
 report.
