@@ -1,0 +1,36 @@
+# QR 3/4 freshman year done, third semester in progress.
+# GPA: (12+9+9+12+12+13.2+9+12+12+9) / 31 = 3.523; major (CSC 101 A, CSC 215 B+) 25.2 / 7 = 3.6.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  qr_pathway: "3/4"
+  completed:
+    - {code: CSC 101, grade: A, term: 2026-fall}
+    - {code: MATH 197, grade: B, term: 2026-fall}
+    - {code: ENG 114, grade: B, term: 2026-fall}
+    - {code: PHIL 110, grade: A, term: 2026-fall}
+    - {code: AA S 210, grade: A, term: 2026-fall}
+    - {code: CSC 215, grade: B+, term: 2027-spring}
+    - {code: MATH 198, grade: B, term: 2027-spring}
+    - {code: COMM 150, grade: A, term: 2027-spring}
+    - {code: ARTH 201, grade: A, term: 2027-spring}
+    - {code: BIOL 100, grade: B, term: 2027-spring}
+  in_progress: [CSC 220, MATH 225, MATH 226, PHIL 101, ECON 101]
+expected:
+  complete: false
+  groups:
+    "*": remaining
+    ge_1a: satisfied
+    ge_1b: satisfied
+    ge_1c: satisfied
+    ge_2: satisfied             # MATH 198
+    ge_3a: satisfied
+    ge_3b: in_progress
+    ge_4: in_progress           # AA S 210 done + ECON 101 in progress
+    ge_4_disciplines: in_progress
+    ge_5b: satisfied
+    sfss_aerm: satisfied
+    ai_ush: satisfied
+  counted: {core_cs: [CSC 101, CSC 215]}
+  totals: {units: 31, units_in_progress: 16, upper_division_units: 0, residence_major_units: 7,
+           gpa_sf_state: 3.523, gpa_major: 3.6}

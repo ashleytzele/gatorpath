@@ -1,0 +1,44 @@
+# Bachelor of Science in Computer Science, Bulletin 2026-27 (printed pp.1905-1906).
+# Vocabulary: ARCHITECTURE §6.2. Quotes are the Bulletin's own words.
+program: bs-cs
+title: Bachelor of Science in Computer Science
+catalog_year: 2026-27
+verified: false                    # a second person checks every rule against the PDF, then flips this
+verified_by: null
+total_units: 74                    # "Computer Science (B.S.) – 74 units"
+source: "p.1905"
+global:
+  no_cr_nc: true                   # "CR/NC grades are not accepted in courses for the Computer Science major."
+  source: "p.1905"
+groups:
+  - id: math_physics
+    title: Mathematics and Physics (22 units)
+    all_of: [MATH 225, MATH 226, MATH 227, MATH 324, PHYS 220, PHYS 222, PHYS 230, PHYS 232]
+    min_grade: C                   # "Grades of C or better are required for Mathematics and Physics, Core …, and Advanced …"
+    source: "p.1905"
+  - id: core_cs
+    title: Core Computer Science Requirements (28 units)
+    all_of: [CSC 101, CSC 215, CSC 220, CSC 230, CSC 256, CSC 300GW, CSC 317, CSC 340, CSC 413]
+    min_grade: C
+    source: "p.1905"
+  - id: advanced_cs
+    title: Advanced Computer Science Requirements (9 units)
+    all_of: [CSC 415, CSC 510, CSC 648]
+    min_grade: C
+    source: "p.1905"
+  - id: senior_electives
+    title: Electives (15 units)
+    # "All students must complete five 3-unit senior electives. At least 12 units must be CSC courses."
+    # "Exceptions must be approved in advance by a senior advisor."
+    choose_units: 15
+    from:
+      - list: [CSC 520, CSC 600, CSC 603, CSC 615, CSC 620, CSC 621, CSC 630, CSC 631, CSC 641, CSC 642,
+               CSC 645, CSC 647, CSC 651, CSC 652, CSC 653, CSC 656, CSC 659, CSC 664, CSC 665, CSC 667,
+               CSC 668, CSC 671, CSC 675, CSC 676, CSC 680, CSC 685, CSC 686, CSC 698, CSC 699,
+               MATH 400, MATH 425, MATH 448]
+      # "any 600-level CSC course, with the exception of CSC 601, CSC 602, CSC 648, and CSC 694"
+      - {subject: CSC, level: 600, except: [CSC 601, CSC 602, CSC 648, CSC 694]}
+      # "one CSC graduate course … (700-level or higher, and non-paired excluding CSC 895, CSC 898, CSC 897, CSC 899)"
+      - {subject: CSC, level: "700+", paired: false, except: [CSC 895, CSC 897, CSC 898, CSC 899], max_courses: 1}
+    min_units_from: {subject: CSC, units: 12}
+    source: "p.1905-1906"

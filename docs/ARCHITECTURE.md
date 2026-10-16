@@ -230,7 +230,12 @@ groups:
 
 Rule vocabulary (keep it small; add only when a real major needs it):
 `all_of`, `choose_n`, `choose_units`, `from` (list | subject+level filter | `ge_area`,
-`except`, `paired`, `max_courses`), `min_units_from`, `min_grade`, `no_cr_nc`, `source`.
+`except`, `paired`, `max_courses`), `min_units_from`, `min_grade`, `no_cr_nc`, `source`,
+`waived_if` (a profile flag, e.g. `adt`: SF State Studies are waived for a verified AA-T/AS-T, p.2313),
+`distinct_subjects` + `across` (GE Area 4: "the three courses … must be in at least two different
+disciplines", p.2317).
+`min_grade` compares letter grades; CR counts as C- ("equivalent to grades A through C-", p.2403), so CR
+meets a C- minimum but not a C.
 
 **`rules/university/2026-27.yaml`:** the graduation requirements every bachelor's degree shares,
 in the same vocabulary. GE areas are matched with `from: {ge_area: ...}` against
@@ -260,12 +265,14 @@ groups:
 - A course can count toward GE, SF State Studies and American Institutions **at the same time**.
   The Bulletin designs it that way: one course is tagged e.g. `(Area 1B, GP, SJ)`.
 - Units always count once toward the 120.
-- Major course that also carries a GE tag: **open question** (§16). Until it's resolved, allow it
-  and add a ⚠️.
+- A major course that also carries a GE tag counts for both: "an unlimited number of courses used to
+  meet General Education requirements may be used to fulfill major requirements" (p.2352).
 
-**`rules/roadmaps/2026-27/bs-cs.yaml`:** variants `qr-1-2`, `qr-3-4`, `transfer-2yr`, `adt`.
-Each is a list of semesters. Each semester lists course codes or placeholders
-(`{slot: GE, area: "1A"}`, `{slot: senior_elective}`), each with `source:` page.
+**`rules/roadmaps/2026-27/bs-cs.yaml`:** variants `qr-1-2` (p.1908), `qr-3-4` (p.1910), `adt` (p.1912).
+The p.1906 "Transfer Student Roadmap (2 Year)" heading links to the ADT roadmap, so there's no separate
+transfer variant. Each is a list of semesters. Each semester lists course codes or placeholders
+(`{slot: GE, area: "1A", units: 3}`, `{slot: senior_elective, count: 3, units: 9}`), its printed unit
+total, and a `source:` page.
 
 ### 6.3 Prerequisite expression (JSON)
 
@@ -312,7 +319,11 @@ in_progress: [CSC 220, MATH 227]
 gpa: 3.2                           # optional; needed for GPA-gated prereqs
 goal: "cybersecurity"              # optional free text; used by the AI client, not the server
 ge_done: ["1A", "1B", "2"]         # only for transfer/AP/IB credit; SF State courses are
-                                   # matched by their own ge_areas
+                                   # matched by their own ge_areas. Also USH/USG/CSLG
+transfer_units: 0                  # total transfer units (from the transcript)
+adt: false                         # verified AA-T/AS-T in a similar major → SF State Studies waived
+# completed rows may add `units` (variable-unit courses) and `transfer: true` (articulated
+# transfer course: counts for requirements, not residence or GPA; its units are in transfer_units)
 max_units_per_term: 15
 include_summer: false
 ```
@@ -523,6 +534,7 @@ students; 0 hallucinated courses."*
 | D7 | Course input: typed list **and** local transcript import | Easy start + smooth UX, PII never leaves the machine via our tool | 2026-10-15 |
 | D8 | Offering patterns from public class-search history | Bulletin lacks term offerings; history shows fall-only/spring-only | 2026-10-15 |
 | D9 | GE + university requirements in v1, not phase 8 | "What's left?" is wrong without GE; GE tags are already on every course entry | 2026-10-15 |
+| D10 | Commit `evals/catalog-2026-27.json` (the catalog rows the eval profiles use) | CI has no PDF; a test keeps it equal to `catalog.db` | 2026-10-16 |
 
 ---
 
@@ -580,6 +592,5 @@ students; 0 hallucinated courses."*
    - Past the 16-unit limit, both grades count in the GPA, but units count once.
    - **Engine:** use the best attempt for requirements, count units once, ⚠️ on 2nd/3rd attempts.
 6. **License:** MIT proposed when the repo goes public.
-7. **Major course ↔ UD GE double-counting** for first-time students. Some majors' transfer notes
-   say "courses required for the major may double-count if approved for UD GE". There's no
-   general statement, and CS isn't on the Met in Major list (p.2329). Ask advising.
+7. ~~Major course ↔ GE double-counting~~ **Resolved 2026-10-16:** p.2352 "Duplicate Use of Credit
+   Between the Major and GE": unlimited, units counted once.

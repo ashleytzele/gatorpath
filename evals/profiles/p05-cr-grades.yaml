@@ -1,0 +1,33 @@
+# CR grades: fine for GE (CR = A..C-, p.2403), not accepted in the major (p.1905). 25 CR units > 24 cap.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  qr_pathway: "1/2"
+  completed:
+    - {code: ENG 114, grade: CR, term: 2026-fall}
+    - {code: PHIL 110, grade: CR, term: 2026-fall}
+    - {code: CSC 101, grade: CR, term: 2026-fall}
+    - {code: MATH 226, grade: CR, term: 2026-fall}
+    - {code: COMM 150, grade: CR, term: 2027-spring}
+    - {code: CSC 215, grade: A, term: 2027-spring}
+    - {code: ARTH 201, grade: CR, term: 2027-spring}
+    - {code: PHIL 101, grade: CR, term: 2027-spring}
+    - {code: BIOL 100, grade: CR, term: 2027-spring}
+  in_progress: []
+expected:
+  complete: false
+  groups:
+    "*": remaining
+    ge_1a: satisfied
+    ge_1b: satisfied
+    ge_1c: satisfied
+    ge_2: satisfied             # MATH 226 CR meets "CR or C- or better"
+    ge_3a: satisfied
+    ge_3b: satisfied
+    ge_5b: satisfied
+  counted: {core_cs: [CSC 215], math_physics: []}
+  totals: {units: 29, cr_units: 25, residence_major_units: 4, gpa_sf_state: 4.0, gpa_major: 4.0}
+  totals_ok: {cr_units: false}
+  warnings_include:
+    - "CSC 101: grade CR doesn't count toward Core Computer Science Requirements (28 units); CR/NC is not accepted in the major"
+    - "MATH 226: grade CR doesn't count toward Mathematics and Physics (22 units); CR/NC is not accepted in the major"

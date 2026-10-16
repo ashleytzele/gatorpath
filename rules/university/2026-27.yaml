@@ -1,0 +1,46 @@
+# Graduation requirements shared by every bachelor's degree, Bulletin 2026-27.
+# GE areas match `course.ge_areas` (from each course's "Course Attributes:"), so no GE course lists here.
+# Grades: CR = "equivalent to grades A through C-" (p.2403), so CR meets a C- minimum but not a C.
+catalog_year: 2026-27
+verified: false
+verified_by: null
+totals:
+  min_units: 120                   # "B.S. = 120 units minimum"
+  min_upper_division_units: 30     # "Upper-Division Requirement: 30 units minimum." Upper division = 300+ (p.1905)
+  residence: {units: 30, upper_division: 24, major: 12}   # "30 units minimum at SF State, including 24 units upper-division, and 12 units in the major"
+  max_cr_units: 24                 # SF State units graded CR; "Major courses only offered as CR/NC are not included"
+  min_gpa: {all: 2.0, sf_state: 2.0, major: 2.0}
+  source: "p.2313"
+repeats:
+  forgiveness_units: 16            # lower grade leaves the GPA for up to 16 SF State units; past that both count
+  source: "p.2392, p.2406"
+groups:
+  # General Education, 43 units (table p.2311-2312). Area minimums below add up to 43.
+  - {id: ge_1a, title: "GE 1A English Composition", choose_units: 3, from: {ge_area: 1A}, min_grade: C-, source: "p.2314"}
+  - {id: ge_1b, title: "GE 1B Critical Thinking", choose_units: 3, from: {ge_area: 1B}, min_grade: C-, source: "p.2314"}
+  - {id: ge_1c, title: "GE 1C Oral Communication", choose_units: 3, from: {ge_area: 1C}, min_grade: C-, source: "p.2314"}
+  # "Area 1 courses must be completed with a grade of CR or C– or better" (p.2314); same wording for Area 2 (p.2315)
+  - {id: ge_2, title: "GE 2 Mathematical Concepts and Quantitative Reasoning", choose_units: 3, from: {ge_area: "2"}, min_grade: C-, source: "p.2315"}
+  - {id: ge_3a, title: "GE 3A Arts", choose_units: 3, from: {ge_area: 3A}, source: "p.2315"}
+  - {id: ge_3b, title: "GE 3B Humanities", choose_units: 3, from: {ge_area: 3B}, source: "p.2315"}
+  - {id: ge_4, title: "GE 4 Social and Behavioral Sciences", choose_units: 6, from: {ge_area: "4"}, source: "p.2317"}
+  - {id: ge_5a, title: "GE 5A Physical Science", choose_units: 3, from: {ge_area: 5A}, source: "p.2319"}
+  - {id: ge_5b, title: "GE 5B Biological Science", choose_units: 3, from: {ge_area: 5B}, source: "p.2319"}
+  - {id: ge_5c, title: "GE 5C Laboratory", choose_units: 1, from: {ge_area: 5C}, source: "p.2319"}
+  - {id: ge_6, title: "GE 6 Ethnic Studies", choose_units: 3, from: {ge_area: "6"}, source: "p.2312"}
+  - {id: ge_ud_sci, title: "GE 5UD or 2UD Upper-Division Science or Math/QR", choose_units: 3, from: {ge_area: [5UD, 2UD]}, source: "p.2320"}
+  - {id: ge_3ud, title: "GE 3UD Upper-Division Arts or Humanities", choose_units: 3, from: {ge_area: 3UD}, source: "p.2320"}
+  - {id: ge_4ud, title: "GE 4UD Upper-Division Social and Behavioral Sciences", choose_units: 3, from: {ge_area: 4UD}, source: "p.2320"}
+  # "The three courses taken in Area 4 (one upper-division and two lower-division) must be in at least two different disciplines."
+  - {id: ge_4_disciplines, title: "GE Area 4 in two or more disciplines", distinct_subjects: 2, across: [ge_4, ge_4ud], source: "p.2317"}
+  # GWAR: "identified with a GW after the course number and must be completed with a grade of C- or better"
+  - {id: gwar, title: "Graduation Writing Assessment Requirement", choose_n: 1, from: {ge_area: GW}, min_grade: C-, source: "p.2313"}
+  # SF State Studies. Waived for a verified AA-T/AS-T in a similar major (p.2313).
+  - {id: sfss_aerm, title: "SF State Studies: American Ethnic and Racial Minorities", choose_n: 1, from: {ge_area: AERM}, waived_if: adt, source: "p.2313"}
+  - {id: sfss_esca, title: "SF State Studies: Environmental Sustainability and Climate Action", choose_n: 1, from: {ge_area: ESCA}, waived_if: adt, source: "p.2313"}
+  - {id: sfss_gp, title: "SF State Studies: Global Perspectives", choose_n: 1, from: {ge_area: GP}, waived_if: adt, source: "p.2313"}
+  - {id: sfss_sj, title: "SF State Studies: Social Justice", choose_n: 1, from: {ge_area: SJ}, waived_if: adt, source: "p.2313"}
+  # American Institutions: U.S. History, and U.S. and California Government (USG/CSLG courses cover both parts).
+  - {id: ai_ush, title: "American Institutions: U.S. History", choose_n: 1, from: {ge_area: USH}, source: "p.2313, p.2350"}
+  - {id: ai_usg, title: "American Institutions: U.S. Government", choose_n: 1, from: {ge_area: USG}, source: "p.2313, p.2350"}
+  - {id: ai_cslg, title: "American Institutions: California State and Local Government", choose_n: 1, from: {ge_area: CSLG}, source: "p.2313, p.2350"}

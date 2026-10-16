@@ -1,0 +1,25 @@
+# Repeats: CSC 220 C- then B, MATH 226 D then C. CSC 230 C- not retaken (below the major's C).
+# Units once: 3+4+3+4+3 = 17. Forgiveness drops the C- and D (7 units <= 16):
+# GPA (12 + 12 + 8 + 5.1 + 9) / 17 = 2.712, same for the major.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  qr_pathway: "1/2"
+  completed:
+    - {code: CSC 101, grade: A, term: 2025-fall}
+    - {code: MATH 226, grade: D, term: 2025-fall}
+    - {code: CSC 215, grade: B, term: 2026-spring}
+    - {code: MATH 226, grade: C, term: 2026-spring}
+    - {code: CSC 220, grade: C-, term: 2026-fall}
+    - {code: CSC 230, grade: C-, term: 2026-fall}
+    - {code: CSC 220, grade: B, term: 2027-spring}
+  in_progress: []
+expected:
+  complete: false
+  groups: {"*": remaining, ge_2: satisfied}
+  counted: {math_physics: [MATH 226], core_cs: [CSC 101, CSC 215, CSC 220]}
+  totals: {units: 17, gpa_sf_state: 2.712, gpa_major: 2.712}
+  warnings_include:
+    - "MATH 226: attempt 2"
+    - "CSC 220: attempt 2"
+    - "CSC 230: grade C- doesn't count toward Core Computer Science Requirements (28 units); needs C or better"

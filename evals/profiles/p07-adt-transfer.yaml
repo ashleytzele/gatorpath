@@ -1,0 +1,48 @@
+# AS-T in Computer Science (ADT roadmap p.1912): lower-division major courses and LD GE met in transfer,
+# SF State Studies waived (p.2313). First SF State semester done, second in progress.
+# GPA: (12+12+9+9+12) / 15 = 3.6; major (300GW, 317, 340, MATH 324) 42 / 12 = 3.5.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  adt: true
+  transfer_units: 60
+  ge_done: [1A, 1B, 1C, "2", 3A, 3B, "4", 5A, 5B, 5C, "6", USH]
+  completed:
+    - {code: MATH 225, grade: B, transfer: true}
+    - {code: MATH 226, grade: B, transfer: true}
+    - {code: MATH 227, grade: B, transfer: true}
+    - {code: PHYS 220, grade: B, transfer: true}
+    - {code: PHYS 222, grade: B, transfer: true}
+    - {code: PHYS 230, grade: B, transfer: true}
+    - {code: PHYS 232, grade: B, transfer: true}
+    - {code: CSC 101, grade: B, transfer: true}
+    - {code: CSC 215, grade: B, transfer: true}
+    - {code: CSC 220, grade: B, transfer: true}
+    - {code: CSC 230, grade: B, transfer: true}
+    - {code: CSC 256, grade: B, transfer: true}
+    - {code: CSC 300GW, grade: A, term: 2026-fall}
+    - {code: CSC 317, grade: A, term: 2026-fall}
+    - {code: CSC 340, grade: B, term: 2026-fall}
+    - {code: MATH 324, grade: B, term: 2026-fall}
+    - {code: PLSI 200, grade: A, term: 2026-fall}
+  in_progress: [CSC 413, CSC 415, CSC 510, PHIL 301]
+expected:
+  complete: false
+  groups:
+    "*": satisfied
+    core_cs: in_progress
+    advanced_cs: remaining
+    senior_electives: remaining
+    ge_ud_sci: remaining
+    ge_3ud: in_progress
+    ge_4ud: remaining
+    sfss_aerm: waived
+    sfss_esca: waived
+    sfss_gp: waived
+    sfss_sj: waived
+  totals: {units: 75, residence_units: 15, upper_division_units: 12, residence_major_units: 12,
+           gpa_sf_state: 3.6, gpa_all: 3.6, gpa_major: 3.5}
+  totals_ok: {residence_units: false, residence_major_units: true}
+  warnings_include:
+    - "GE Area 4 in two or more disciplines: can't check with transfer/exam credit"
+    - "Overall GPA includes transfer work"

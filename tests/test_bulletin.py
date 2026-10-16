@@ -202,6 +202,18 @@ repeat the course under an alternate prefix.)
     assert by_code([P1896])[0]["CSC 256"]["crosslisted_with"] == []
 
 
+def test_paired_note_with_formerly():
+    # Real text, CSC 852 entry (printed p.1903)
+    p = page("""
+CSC 852 Introduction to Security and Data Privacy (Units: 3)
+Prerequisite for CSC 852: Graduate standing or permission of the instructor.
+Data privacy. Extra fee required.
+(CSC 852/CSC 652 [formerly CSC 650] is a paired course offering. Students who complete the course at one level may
+not repeat the course at the other level.)
+""", 1903)
+    assert by_code([p])[0]["CSC 852"]["paired_with"] == ["CSC 652"]
+
+
 def test_write_catalog_rows_and_links(tmp_path):
     db = tmp_path / "catalog.db"
     courses, _ = parse_courses([P1896, P871])

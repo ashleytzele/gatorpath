@@ -1,0 +1,274 @@
+"""Requirement YAML + student profile -> degree audit (ARCHITECTURE §6.2, §7.3). Pure functions, no DB.
+
+Counting rules:
+- Within the major a course counts toward one group only; groups are filled in YAML order.
+- University groups (GE, SF State Studies, American Institutions, GWAR) may share a course with each other
+  and with the major: "an unlimited number of courses used to meet General Education requirements may be
+  used to fulfill major requirements" (p.2352). Units still count once toward the 120.
+- Repeats: the best attempt counts and its units count once, unless the course is repeatable for credit.
+- Grades: CR is "equivalent to grades A through C-" (p.2403), so it meets a C- minimum but not a C.
+- `transfer: true` rows count toward requirements, not residence or GPA. Their units are inside
+  `profile.transfer_units`.
+"""
+
+import math
+import re
+from pathlib import Path
+
+import yaml
+
+RULES_DIR = Path(__file__).parents[3] / "rules"
+GRADE_POINTS = {"A": 4.0, "A-": 3.7, "B+": 3.3, "B": 3.0, "B-": 2.7, "C+": 2.3, "C": 2.0, "C-": 1.7,
+                "D+": 1.3, "D": 1.0, "D-": 0.7, "F": 0.0, "IC": 0.0, "WU": 0.0}  # p.2405
+PASSING = GRADE_POINTS["D-"]
+
+
+def load_rules(catalog_year: str, program: str) -> tuple[dict, dict]:
+    """(program rules, university rules) from rules/**/*.yaml."""
+    read = lambda p: yaml.safe_load((RULES_DIR / p).read_text())
+    return read(f"programs/{catalog_year}/{program}.yaml"), read(f"university/{catalog_year}.yaml")
+
+
+def rank(grade: str | None) -> float | None:
+    """Comparable grade value if the grade earns credit, else None (F, NC, W, I, AU, RP, …)."""
+    if grade == "CR":
+        return GRADE_POINTS["C-"]
+    return GRADE_POINTS.get(grade) or None
+
+
+def subject(code: str) -> str:
+    return code.rsplit(" ", 1)[0]
+
+
+def number(code: str) -> int:
+    return int(re.search(r"\d{3}", code.rsplit(" ", 1)[1]).group())
+
+
+def matches(f: dict, code: str, course: dict) -> bool:
+    """One `from` filter: {list} | {ge_area} | {subject, level, paired}, each with optional `except`."""
+    if code in f.get("except", ()):
+        return False
+    if "list" in f:
+        return code in f["list"]
+    if "ge_area" in f:
+        areas = f["ge_area"] if isinstance(f["ge_area"], list) else [f["ge_area"]]
+        return bool({str(a) for a in areas} & set(course["ge_areas"]))
+    level, n = str(f.get("level", "")), number(code)
+    return (subject(code) == f["subject"]
+            and not (level.endswith("+") and n < int(level[:-1]))
+            and not (level.isdigit() and not int(level) <= n < int(level) + 100)
+            and not (f.get("paired") is False and course["paired"]))
+
+
+def best_attempts(profile: dict, catalog: dict, warnings: list[str]) -> dict[str, dict]:
+    """{code: {grade, units, transfer}}: best attempt per course; repeatable courses add up their passing units."""
+    by_code: dict[str, list[dict]] = {}
+    for row in profile.get("completed", []):
+        if row["code"] not in catalog:
+            warnings.append(f"{row['code']}: unknown_course, not in the {profile.get('catalog_year', '')} catalog; ignored")
+            continue
+        by_code.setdefault(row["code"], []).append(row)
+    taken = {}
+    for code, rows in by_code.items():
+        course = catalog[code]
+        units = []
+        for r in rows:
+            if "units" not in r and course["units_min"] != course["units_max"]:
+                warnings.append(f"{code}: variable units ({course['units_min']:g}-{course['units_max']:g}); "
+                                f"counted {course['units_min']:g}, pass `units` to be exact")
+            units.append(r.get("units", course["units_min"]))
+        earned = [(rank(r["grade"]) or 0, u) for r, u in zip(rows, units)]
+        best = max(range(len(rows)), key=lambda i: earned[i][0])
+        repeatable = course["repeatable"]
+        taken[code] = {
+            "grade": rows[best]["grade"],
+            "units": sum(u for e, u in earned if e) if repeatable else (units[best] if earned[best][0] else 0),
+            "transfer": bool(rows[best].get("transfer")),
+        }
+        attempts = len(rows) + (code in profile.get("in_progress", []))
+        if attempts > 1 and not repeatable:
+            msg = f"{code}: attempt {attempts}; the best grade counts and its units count once (p.2392)"
+            if attempts >= 3:
+                msg += ". A 3rd attempt needs the department chair's consent"
+            if any((rank(r["grade"]) or 0) >= GRADE_POINTS["C"] or r["grade"] == "CR" for r in rows[:-1]):
+                msg += ". A course passed with C or better or CR may not be repeated unless it is repeatable for credit"
+            warnings.append(msg)
+    return taken
+
+
+def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, claimed: set | None,
+               no_cr_nc: bool, done_groups: dict, warnings: list[str]) -> dict:
+    out = {"id": g["id"], "title": g.get("title", g["id"]), "kind": kind, "source": g["source"],
+           "counted": [], "in_progress": []}
+    if g.get("waived_if") and profile.get(g["waived_if"]):
+        return out | {"status": "waived"}
+    if "distinct_subjects" in g:
+        return out | distinct_subjects(g, done_groups, warnings)
+
+    in_progress = [c for c in profile.get("in_progress", []) if c in catalog]
+    free = lambda c: claimed is None or c not in claimed
+    bar = GRADE_POINTS[g["min_grade"]] if "min_grade" in g else PASSING
+
+    def ok(c: str) -> bool:
+        t = taken.get(c)
+        return bool(t) and free(c) and not (no_cr_nc and t["grade"] == "CR") and (rank(t["grade"]) or -1) >= bar
+
+    def note_grade(c: str) -> None:
+        if c in taken and free(c) and not ok(c) and c not in in_progress:
+            why = "CR/NC is not accepted in the major" if no_cr_nc and taken[c]["grade"] == "CR" else \
+                f"needs {g.get('min_grade', 'a passing grade')}" + (" or better" if "min_grade" in g else "")
+            warnings.append(f"{c}: grade {taken[c]['grade']} doesn't count toward {out['title']}; {why} ({g['source']})")
+
+    if "all_of" in g:
+        done = [c for c in g["all_of"] if ok(c)]
+        prog = [c for c in g["all_of"] if c not in done and c in in_progress and free(c)]
+        left = [c for c in g["all_of"] if c not in done and c not in prog]
+        for c in left:
+            note_grade(c)
+        if claimed is not None:
+            claimed.update(done + prog)
+        status = "remaining" if left else "in_progress" if prog else "satisfied"
+        return out | {"status": status, "counted": done, "in_progress": prog, "remaining": left}
+
+    filters = g["from"] if isinstance(g["from"], list) else [g["from"]]
+    ge_areas = {str(a) for f in filters if "ge_area" in f for a in (f["ge_area"] if isinstance(f["ge_area"], list) else [f["ge_area"]])}
+    if ge_areas & set(profile.get("ge_done", [])):
+        return out | {"status": "satisfied", "met_by": "ge_done"}
+
+    need_units, need_n = g.get("choose_units"), g.get("choose_n")
+    min_from = g.get("min_units_from")
+    pref = min_from["subject"] if min_from else None
+    units = lambda c: taken[c]["units"] if c in taken and ok(c) else catalog[c]["units_min"]
+    units_met = lambda cs: sum(map(units, cs)) >= need_units if need_units else len(cs) >= need_n
+    pref_units = lambda cs: sum(units(c) for c in cs if subject(c) == pref)
+    enough = lambda cs: units_met(cs) and (not min_from or pref_units(cs) >= min_from["units"])
+    used = [0] * len(filters)
+
+    def pick(codes: list[str], chosen: list[str]) -> list[str]:
+        # ponytail: greedy (preferred subject first, then code order), not an optimal matching.
+        # Upgrade to bipartite matching if a profile shows a better assignment exists.
+        chosen = list(chosen)
+        for c in sorted(codes, key=lambda c: (subject(c) != pref, c)):
+            if enough(chosen):
+                break
+            if units_met(chosen) and subject(c) != pref:
+                continue
+            fi = next((i for i, f in enumerate(filters)
+                       if matches(f, c, catalog[c]) and used[i] < f.get("max_courses", math.inf)), None)
+            if fi is not None:
+                used[fi] += 1
+                chosen.append(c)
+        return chosen
+
+    for c in taken:
+        if any(matches(f, c, catalog[c]) for f in filters):
+            note_grade(c)
+    done = pick([c for c in taken if ok(c)], [])
+    both = pick([c for c in in_progress if free(c) and c not in done and not ok(c)], done)
+    if claimed is not None:
+        claimed.update(both)
+    status = "satisfied" if enough(done) else "in_progress" if enough(both) else "remaining"
+    out |= {"status": status, "counted": done, "in_progress": both[len(done):], "units_done": sum(map(units, done))}
+    out |= {"units_needed": need_units} if need_units else {"courses_needed": need_n}
+    if min_from:
+        out["min_units_from"] = min_from | {"done": pref_units(done)}
+    return out
+
+
+def distinct_subjects(g: dict, done_groups: dict, warnings: list[str]) -> dict:
+    parts = [done_groups[i] for i in g["across"]]
+    if any(p.get("met_by") == "ge_done" for p in parts):
+        warnings.append(f"{g['title']}: can't check with transfer/exam credit; confirm on your DPR ({g['source']})")
+        return {"status": "satisfied"}
+    counted = {subject(c) for p in parts for c in p["counted"]}
+    both = counted | {subject(c) for p in parts for c in p["in_progress"]}
+    n = g["distinct_subjects"]
+    return {"status": "satisfied" if len(counted) >= n else "in_progress" if len(both) >= n else "remaining",
+            "subjects": sorted(both)}
+
+
+def gpa(rows: list[dict], forgiveness_units: float, catalog: dict) -> float | None:
+    """A–F grades only (p.2405). Repeats: the lower grade leaves the GPA for up to `forgiveness_units`."""
+    # ponytail: forgiveness is applied in profile order, not by term; fine until a profile repeats past 16 units.
+    best: dict[str, dict] = {}
+    for r in rows:
+        if r["grade"] in GRADE_POINTS and (r["code"] not in best or GRADE_POINTS[r["grade"]] > GRADE_POINTS[best[r["code"]]["grade"]]):
+            best[r["code"]] = r
+    points = units = forgiven = 0.0
+    for r in rows:
+        if r["grade"] not in GRADE_POINTS:
+            continue
+        u = r.get("units", catalog[r["code"]]["units_min"])
+        if r is not best[r["code"]] and not catalog[r["code"]]["repeatable"] and forgiven + u <= forgiveness_units:
+            forgiven += u
+            continue
+        points, units = points + GRADE_POINTS[r["grade"]] * u, units + u
+    return round(points / units, 3) if units else None
+
+
+def totals(profile: dict, taken: dict, groups: list[dict], university: dict, catalog: dict, warnings: list[str]) -> dict:
+    t = university["totals"]
+    sfsu = {c: r for c, r in taken.items() if not r["transfer"]}
+    # Major GPA covers required courses (passed or not) and counted electives.
+    # ponytail: a failed elective that was never retaken is left out; add it if the DPR is shown to include it.
+    major = {c for g in groups if g["kind"] == "major" for c in g["counted"]}
+    major_gpa = major | {c for g in groups if g["kind"] == "major" for c in g.get("remaining", [])}
+    sfsu_units = sum(r["units"] for r in sfsu.values())
+    ud_units = sum(r["units"] for c, r in sfsu.items() if number(c) >= 300)
+    # "Major courses only offered as CR/NC are not included in the 24 unit maximum"
+    cr_units = sum(r["units"] for c, r in sfsu.items()
+                   if r["grade"] == "CR" and not (c in major and catalog[c]["grading"] == "cr_nc"))
+    rows = [r for r in profile.get("completed", []) if r["code"] in catalog and not r.get("transfer")]
+    forgive = university["repeats"]["forgiveness_units"]
+    gpa_sfsu = gpa(rows, forgive, catalog)
+    gpa_major = gpa([r for r in rows if r["code"] in major_gpa], forgive, catalog)
+    gpa_all = profile.get("gpa")
+    if gpa_all is None:
+        gpa_all = gpa_sfsu
+        if profile.get("transfer_units"):
+            warnings.append("Overall GPA includes transfer work; using the SF State GPA. Pass `gpa` to be exact")
+    min_gpa = t["min_gpa"]
+    check = lambda v, need: {"value": v, "needed": need, "ok": v is not None and v >= need}
+    return {
+        "units": check(sfsu_units + profile.get("transfer_units", 0), t["min_units"]),
+        "units_in_progress": sum(catalog[c]["units_min"] for c in profile.get("in_progress", []) if c in catalog),
+        "upper_division_units": check(ud_units, t["min_upper_division_units"]),
+        "residence_units": check(sfsu_units, t["residence"]["units"]),
+        "residence_upper_division_units": check(ud_units, t["residence"]["upper_division"]),
+        "residence_major_units": check(sum(sfsu[c]["units"] for c in major if c in sfsu), t["residence"]["major"]),
+        "cr_units": {"value": cr_units, "max": t["max_cr_units"], "ok": cr_units <= t["max_cr_units"]},
+        "gpa_all": check(gpa_all, min_gpa["all"]),
+        "gpa_sf_state": check(gpa_sfsu, min_gpa["sf_state"]),
+        "gpa_major": check(gpa_major, min_gpa["major"]),
+        "source": t["source"],
+    }
+
+
+def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict:
+    """Per-group status (satisfied / in_progress / remaining / waived), university totals, warnings."""
+    warnings: list[str] = []
+    taken = best_attempts(profile, catalog, warnings)
+    for c in profile.get("in_progress", []):
+        if c not in catalog:
+            warnings.append(f"{c}: unknown_course, not in the catalog; ignored")
+    groups: list[dict] = []
+    claimed: set[str] = set()
+    no_cr_nc = program.get("global", {}).get("no_cr_nc", False)
+    for kind, rules in (("major", program), ("university", university)):
+        for g in rules["groups"]:
+            done = {x["id"]: x for x in groups}
+            groups.append(eval_group(g, kind, taken, profile, catalog, claimed if kind == "major" else None,
+                                     no_cr_nc and kind == "major", done, warnings))
+    tot = totals(profile, taken, groups, university, catalog, warnings)
+    if not program.get("verified"):
+        warnings.append(f"{program['program']} rules are not verified yet; confirm with an advisor and your DPR")
+    return {
+        "catalog_year": program["catalog_year"],
+        "program": program["program"],
+        "verified": bool(program.get("verified")),
+        "complete": all(g["status"] in ("satisfied", "waived") for g in groups)
+                    and all(v["ok"] for v in tot.values() if isinstance(v, dict)),
+        "groups": groups,
+        "totals": tot,
+        "warnings": warnings,
+    }

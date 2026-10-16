@@ -1,0 +1,105 @@
+# BS Computer Science roadmaps, Bulletin 2026-27. Suggested plans only ("does not replace meeting with an advisor").
+# The Bulletin has three: QR Pathway/Category 1/2, 3/4, and the COMP ADT roadmap. The p.1906 heading
+# "Transfer Student Roadmap (2 Year)" links to that same ADT roadmap, so there is no separate transfer variant.
+# Items: a course code, or a slot {slot: GE | ai | senior_elective | sfss_or_elective | elective, units, …}.
+# `units` on a semester is the printed total; tests check that the items add up to it.
+program: bs-cs
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: First-Time Student Roadmap – QR Pathway/Category 1/2
+    qr_pathway: "1/2"
+    total_units: 120
+    source: "p.1908-1909"
+    notes:
+      - "GE 2: use your Pathway/Category to pick the GE 2 course option (footnote 1)."
+      - "First-time freshmen must take one lower-division Area 4 course that meets US History (USH) (footnote 2)."
+      - "CSC 648 serves as the major capstone course (footnote 5)."
+    semesters:
+      - units: 16
+        source: "p.1908"
+        items: [CSC 101, MATH 226, {slot: GE, area: "1", units: 6, note: "Take Two"}, {slot: GE, area: "4", units: 3, note: USH}]
+      - units: 15
+        source: "p.1908"
+        items: [CSC 215, MATH 227, PHYS 220, PHYS 222, {slot: GE, area: 1A, units: 3}]
+      - units: 16
+        source: "p.1908"
+        items: [CSC 220, CSC 230, PHYS 230, PHYS 232, {slot: GE, area: "3", units: 3}, {slot: GE, area: "4", units: 3, note: USH}]
+      - units: 15
+        source: "p.1908"
+        items: [CSC 256, CSC 340, MATH 225, MATH 324, {slot: GE, area: 5B, units: 3}]
+      - units: 15
+        source: "p.1909"
+        items: [CSC 300GW, CSC 317, CSC 510, {slot: GE, area: "3", units: 3}, {slot: GE, area: "6", units: 3}]
+      - units: 15
+        source: "p.1909"
+        items: [CSC 413, CSC 415, {slot: GE, area: 3UD, units: 3}, {slot: GE, area: 4UD, units: 3}, {slot: GE, area: 5UD/2UD, units: 3}]
+      - units: 15
+        source: "p.1909"
+        items: [{slot: senior_elective, count: 3, units: 9}, {slot: ai, area: USG/CSLG, units: 3}, {slot: sfss_or_elective, units: 3}]
+      - units: 13
+        source: "p.1909"
+        items: [CSC 648, {slot: senior_elective, count: 2, units: 6}, {slot: sfss_or_elective, units: 4}]
+
+  qr-3-4:
+    title: First-Time Student Roadmap – QR Pathway/Category 3/4
+    qr_pathway: "3/4"
+    total_units: 120
+    source: "p.1910-1911"
+    notes:
+      - "MATH 197 and MATH 198 are prerequisites for MATH 226; MATH 198 meets GE 2 (footnote 1)."
+      - "First-time freshmen must take one lower-division Area 4 course that meets US History (USH) (footnote 2)."
+      - "CSC 648 serves as the major capstone course (footnote 5)."
+    semesters:
+      - units: 15
+        source: "p.1910"
+        items: [CSC 101, MATH 197, {slot: GE, area: "1", units: 6, note: "Take Two"}, {slot: GE, area: "4", units: 3, note: USH}]
+      - units: 16
+        source: "p.1910"
+        items: [CSC 215, MATH 198, {slot: GE, area: 1A, units: 3}, {slot: GE, area: "3", units: 3}, {slot: GE, area: 5B, units: 3}]
+      - units: 16
+        source: "p.1910"
+        items: [CSC 220, MATH 225, MATH 226, {slot: GE, area: "3", units: 3}, {slot: GE, area: "4", units: 3, note: USH}]
+      - units: 17
+        source: "p.1910"
+        items: [CSC 230, MATH 227, PHYS 220, PHYS 222, {slot: GE, area: "6", units: 3}, {slot: ai, area: USG/CSLG, units: 3}]
+      - units: 16
+        source: "p.1910-1911"
+        items: [CSC 256, CSC 300GW, CSC 340, MATH 324, PHYS 230, PHYS 232]
+      - units: 15
+        source: "p.1911"
+        items: [CSC 317, CSC 415, CSC 510, {slot: GE, area: 5UD/2UD, units: 3}, {slot: GE, area: 3UD, units: 3}]
+      - units: 13
+        source: "p.1911"
+        items: [CSC 413, {slot: senior_elective, count: 2, units: 6}, {slot: GE, area: 4UD, units: 3}, {slot: sfss_or_elective, units: 1}]
+      - units: 12
+        source: "p.1911"
+        items: [CSC 648, {slot: senior_elective, count: 3, units: 9}]
+
+  adt:
+    title: COMP Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: "p.1912-1913"
+    # "35 units in the major … and all lower-division GE requirements have been satisfied."
+    met_in_transfer: [MATH 225, MATH 226, MATH 227, PHYS 220, PHYS 222, PHYS 230, PHYS 232,
+                      CSC 101, CSC 215, CSC 220, CSC 230, CSC 256]
+    notes:
+      - "Students entering the major with the AS-T in Computer Science are not required to fulfill SF State Studies requirements."
+      - "Degree completion guaranteed in 60 units (p.2304)."
+    semesters:
+      - units: 15
+        source: "p.1912"
+        items: [CSC 300GW, CSC 317, CSC 340, MATH 324,
+                {slot: ai, area: USH, units: 3, note: "or University Elective if US History met in transfer"}]
+      - units: 15
+        source: "p.1912"
+        items: [CSC 413, CSC 415, CSC 510, {slot: GE, area: 3UD, units: 3},
+                {slot: ai, area: USG/CSLG, units: 3, note: "or University Elective if US/CA Government met in transfer"}]
+      - units: 15
+        source: "p.1913"
+        items: [{slot: senior_elective, count: 3, units: 9}, {slot: GE, area: 5UD/2UD, units: 3}, {slot: elective, units: 3}]
+      - units: 15
+        source: "p.1913"
+        items: [CSC 648, {slot: senior_elective, count: 2, units: 6}, {slot: GE, area: 4UD, units: 3}, {slot: elective, units: 3}]

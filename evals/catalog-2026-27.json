@@ -1,0 +1,954 @@
+{
+ "AA S 210": {
+  "ge_areas": [
+   "AERM",
+   "4",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 430,
+  "title": "History of Asians in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 202": {
+  "ge_areas": [
+   "AERM",
+   "6",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 396,
+  "title": "Black Men's Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ARTH 201": {
+  "ge_areas": [
+   "3A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 906,
+  "title": "Global Art History I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 100": {
+  "ge_areas": [
+   "5B"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1769,
+  "title": "Human Biology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 101": {
+  "ge_areas": [
+   "5C"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1769,
+  "title": "Human Biology Laboratory",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "COMM 150": {
+  "ge_areas": [
+   "1C"
+  ],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1029,
+  "title": "Fundamentals of Oral Communication",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 101": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1895,
+  "title": "Introduction to Computing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 215": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1895,
+  "title": "Intermediate Computer Programming",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "CSC 220": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1895,
+  "title": "Data Structures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 230": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1895,
+  "title": "Discrete Mathematical Structures for Computer Science",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 256": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1896,
+  "title": "Machine Structures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 300GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1896,
+  "title": "Ethics, Communication, and Tools for Software Development - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 317": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1896,
+  "title": "Introduction to Web Software Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 340": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1896,
+  "title": "Programming Methodology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 413": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1896,
+  "title": "Software Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 415": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1896,
+  "title": "Operating System Principles",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 510": {
+  "ge_areas": [],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1897,
+  "title": "Analysis of Algorithms I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 520": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1897,
+  "title": "Theory of Computing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 600": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1897,
+  "title": "Programming Paradigms and Languages",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 601": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1897,
+  "title": "Data Science and Machine Learning for Biotechnology Seminar Series",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "CSC 602": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1897,
+  "title": "Interview Preparation for Data Science and Machine Learning for Biotechnology Opportunities",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "CSC 603": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1897,
+  "title": "Generative AI: Fundamentals and Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 615": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1897,
+  "title": "Embedded Linux Systems and Physical Computing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 620": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1897,
+  "title": "Natural Language Technologies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 621": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "Biomedical Imaging and Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 630": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "Computer Graphics Systems Design",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 631": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "Multiplayer Game Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 641": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "Computer Performance Evaluation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 642": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "Human-Computer Interaction",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 645": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "Computer Networks",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 647": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "Introduction to Quantum Computing and Quantum Information Science",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 648": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "Software Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 651": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1898,
+  "title": "System Administration",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 652": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "Introduction to Security and Data Privacy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 653": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "Network Security",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 656": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "Computer Organization",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 659": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "AI Explainability and Ethics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 664": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "Multimedia Systems",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 665": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "Artificial Intelligence",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 667": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "Internet Application Design and Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 668": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "Advanced Object Oriented Software Design and Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 671": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1900,
+  "title": "Deep Learning",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 675": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1900,
+  "title": "Introduction to Database Systems",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 676": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1900,
+  "title": "Soft Computing and Decision Support Systems",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 680": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1900,
+  "title": "Application Development for Mobile Devices",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 685": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1900,
+  "title": "Instructional Methods in Computer Science Teaching",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "CSC 686": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1900,
+  "title": "Experiences in Computer Science Teaching",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "CSC 694": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1900,
+  "title": "Cooperative Education: Computer Science",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
+ "CSC 698": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1900,
+  "title": "Topics in Computing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 699": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1901,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
+ "CSC 852": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1903,
+  "title": "Introduction to Security and Data Privacy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 869": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1903,
+  "title": "Data Mining",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 872": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1904,
+  "title": "Pattern Analysis and Machine Intelligence",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 895": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1904,
+  "title": "Applied Research Project",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 897": {
+  "ge_areas": [],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1904,
+  "title": "Research",
+  "units_max": 6.0,
+  "units_min": 3.0
+ },
+ "CSC 898": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1904,
+  "title": "Master's Thesis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 899": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1904,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
+ "ECON 101": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Introduction to Microeconomic Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 474": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "History of Labor in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENG 114": {
+  "ge_areas": [
+   "1A"
+  ],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1106,
+  "title": "Writing the First Year: Finding Your Voice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ERTH 112": {
+  "ge_areas": [
+   "ESCA",
+   "5C",
+   "5A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2002,
+  "title": "Our Dynamic Earth Lecture and Lab",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "ERTH 335": {
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2003,
+  "title": "Global Warming",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 120": {
+  "ge_areas": [
+   "AERM",
+   "4",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1210,
+  "title": "History of the U.S. through Reconstruction",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 130": {
+  "ge_areas": [
+   "USH",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1211,
+  "title": "U.S. History for International Students",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 308": {
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "USG",
+   "CSLG",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1212,
+  "title": "Engaging Democracy: Participating in Historical Debates",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 470": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "SJ",
+   "USG",
+   "CSLG",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1222,
+  "title": "The U.S. Constitution to 1896",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 197": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2091,
+  "title": "Prelude to Calculus I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 198": {
+  "ge_areas": [
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2091,
+  "title": "Prelude to Calculus II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 225": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2091,
+  "title": "Introduction to Linear Algebra",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 226": {
+  "ge_areas": [
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Calculus I",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "MATH 227": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Calculus II",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "MATH 324": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Probability and Statistics with Computing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 400": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Numerical Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 425": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Applied and Computational Linear Algebra",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 448": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2094,
+  "title": "Introduction to Statistical Learning and Data Mining",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 101": {
+  "ge_areas": [
+   "3B"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1584,
+  "title": "Introduction to Philosophy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 110": {
+  "ge_areas": [
+   "1B"
+  ],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1584,
+  "title": "Introduction to Critical Thinking I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 301": {
+  "ge_areas": [
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1585,
+  "title": "Ancient Philosophy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 304": {
+  "ge_areas": [
+   "3UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1585,
+  "title": "Ethics Bowl",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHYS 220": {
+  "ge_areas": [
+   "5A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2161,
+  "title": "General Physics with Calculus I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHYS 222": {
+  "ge_areas": [
+   "5C"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2161,
+  "title": "General Physics with Calculus I Laboratory",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "PHYS 230": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2161,
+  "title": "General Physics with Calculus II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHYS 232": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2161,
+  "title": "General Physics with Calculus II Laboratory",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "PLSI 200": {
+  "ge_areas": [
+   "USG",
+   "CSLG"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1625,
+  "title": "Introduction to American Politics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 355": {
+  "ge_areas": [
+   "SJ",
+   "ESCA",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Politics and Ethics of the Consumer Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 200": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2225,
+  "title": "General Psychology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 105": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 845,
+  "title": "Sociological Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ }
+}

@@ -56,20 +56,22 @@ report.
 
 ## Phase 2 — Rules: BS CS + GE + university requirements, roadmaps, audit
 
-- [ ] `rules/programs/2026-27/bs-cs.yaml` from Bulletin p.1905 (all 4 groups, global grade
+- [x] `rules/programs/2026-27/bs-cs.yaml` from Bulletin p.1905 (all 4 groups, global grade
   rules, page sources)
-- [ ] `rules/university/2026-27.yaml`: GE areas (43 units, p.2311 table), SF State Studies,
+- [x] `rules/university/2026-27.yaml`: GE areas (43 units, p.2311 table), SF State Studies,
   American Institutions, GWAR (C-), unit/residence/CR/GPA totals (p.2313)
-- [ ] `rules/roadmaps/2026-27/bs-cs.yaml`: variants `qr-1-2`, `qr-3-4`, `transfer-2yr`, `adt`
-- [ ] Second person double-checks both files against the PDF → set `verified: true`
-- [ ] `engine/rules.py`: load YAML, evaluate `all_of`, `choose_units`, `from` filters, `except`,
-  `max_courses`, `min_units_from`, `min_grade`, `no_cr_nc`
-- [ ] Double-counting per ARCHITECTURE §6.2 (once within the major; GE/SFSS/AI may overlap;
-  major↔UD GE allowed with ⚠️ until §16.7 is answered)
-- [ ] Repeats: best attempt counts, units once, ⚠️ on 2nd/3rd attempt (§16.5)
-- [ ] University totals: 120 units, upper-division units, residence, CR cap, GPA
-- [ ] 10 synthetic student profiles in `evals/profiles/` with hand-computed audits (major + GE) →
-  tests
+- [x] `rules/roadmaps/2026-27/bs-cs.yaml`: variants `qr-1-2`, `qr-3-4`, `adt` (the Bulletin's
+  "Transfer Student Roadmap (2 Year)" is the ADT roadmap, p.1906 → p.1912)
+- [ ] Second person double-checks all three files against the PDF → set `verified: true`
+- [x] `engine/rules.py`: load YAML, evaluate `all_of`, `choose_units`, `from` filters, `except`,
+  `max_courses`, `min_units_from`, `min_grade`, `no_cr_nc` (+ `waived_if`, `distinct_subjects`)
+- [x] Double-counting per ARCHITECTURE §6.2 (once within the major; GE/SFSS/AI may overlap;
+  major↔GE allowed, p.2352, so §16.7 is closed)
+- [x] Repeats: best attempt counts, units once, ⚠️ on 2nd/3rd attempt (§16.5)
+- [x] University totals: 120 units, upper-division units, residence, CR cap, GPA
+- [x] 10 synthetic student profiles in `evals/profiles/` with hand-computed audits (major + GE) →
+  tests (`tests/test_rules.py`, catalog rows in `evals/catalog-2026-27.json`)
+- [x] Fix from phase 1: paired notes with "[formerly …]" (CSC 852/652) weren't linked
 
 **Done when:** all 10 audits (major and GE) match the hand-computed answers.
 

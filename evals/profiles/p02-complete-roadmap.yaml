@@ -1,0 +1,58 @@
+# Finished the QR 1/2 roadmap: 120 units, all A except the five electives (B).
+# GPA: (105 * 4.0 + 15 * 3.0) / 120 = 3.875; major (59 * 4.0 + 15 * 3.0) / 74 = 3.797.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  qr_pathway: "1/2"
+  completed:
+    - {code: CSC 101, grade: A, term: 2022-fall}
+    - {code: MATH 226, grade: A, term: 2022-fall}
+    - {code: PHIL 110, grade: A, term: 2022-fall}
+    - {code: COMM 150, grade: A, term: 2022-fall}
+    - {code: AA S 210, grade: A, term: 2022-fall}
+    - {code: CSC 215, grade: A, term: 2023-spring}
+    - {code: MATH 227, grade: A, term: 2023-spring}
+    - {code: PHYS 220, grade: A, term: 2023-spring}
+    - {code: PHYS 222, grade: A, term: 2023-spring}
+    - {code: ENG 114, grade: A, term: 2023-spring}
+    - {code: CSC 220, grade: A, term: 2023-fall}
+    - {code: CSC 230, grade: A, term: 2023-fall}
+    - {code: PHYS 230, grade: A, term: 2023-fall}
+    - {code: PHYS 232, grade: A, term: 2023-fall}
+    - {code: ARTH 201, grade: A, term: 2023-fall}
+    - {code: ECON 101, grade: A, term: 2023-fall}
+    - {code: CSC 256, grade: A, term: 2024-spring}
+    - {code: CSC 340, grade: A, term: 2024-spring}
+    - {code: MATH 225, grade: A, term: 2024-spring}
+    - {code: MATH 324, grade: A, term: 2024-spring}
+    - {code: BIOL 100, grade: A, term: 2024-spring}
+    - {code: CSC 300GW, grade: A, term: 2024-fall}
+    - {code: CSC 317, grade: A, term: 2024-fall}
+    - {code: CSC 510, grade: A, term: 2024-fall}
+    - {code: PHIL 101, grade: A, term: 2024-fall}
+    - {code: AFRS 202, grade: A, term: 2024-fall}
+    - {code: CSC 413, grade: A, term: 2025-spring}
+    - {code: CSC 415, grade: A, term: 2025-spring}
+    - {code: PHIL 301, grade: A, term: 2025-spring}
+    - {code: PLSI 355, grade: A, term: 2025-spring}
+    - {code: ERTH 335, grade: A, term: 2025-spring}
+    - {code: CSC 600, grade: B, term: 2025-fall}
+    - {code: CSC 652, grade: B, term: 2025-fall}
+    - {code: CSC 653, grade: B, term: 2025-fall}
+    - {code: PLSI 200, grade: A, term: 2025-fall}
+    - {code: PSY 200, grade: A, term: 2025-fall}
+    - {code: CSC 648, grade: A, term: 2026-spring}
+    - {code: CSC 665, grade: B, term: 2026-spring}
+    - {code: CSC 675, grade: B, term: 2026-spring}
+    - {code: SOC 105, grade: A, term: 2026-spring}
+    - {code: BIOL 101, grade: A, term: 2026-spring}
+  in_progress: []
+expected:
+  complete: true
+  groups: {"*": satisfied}
+  counted:
+    senior_electives: [CSC 600, CSC 652, CSC 653, CSC 665, CSC 675]
+    ge_4: [AA S 210, ECON 101]
+  totals: {units: 120, upper_division_units: 48, residence_major_units: 74, cr_units: 0,
+           gpa_sf_state: 3.875, gpa_major: 3.797}
+  warnings_exactly: 1           # only "rules are not verified yet"

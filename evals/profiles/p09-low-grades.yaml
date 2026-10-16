@@ -1,0 +1,31 @@
+# D, F, W and I. D passes where there's no minimum (electives, GE 3B) but not for core (C) or GE 1A (C-).
+# CSC 300GW C- meets GWAR (C-) but not the core's C.
+# Units earned: 300GW, 340, 600, 101, ENG 114, PHIL 101 = 18. F/W/I earn none.
+# GPA: (5.1 + 3 + 3 + 0 + 12 + 3 + 3) / 21 = 1.386; major (300GW, 340, 600, 101) 23.1 / 12 = 1.925.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  completed:
+    - {code: CSC 101, grade: A, term: 2025-fall}
+    - {code: ENG 114, grade: D, term: 2025-fall}
+    - {code: PHIL 101, grade: D, term: 2025-fall}
+    - {code: CSC 300GW, grade: C-, term: 2026-fall}
+    - {code: CSC 340, grade: D, term: 2026-fall}
+    - {code: CSC 600, grade: D, term: 2027-spring}
+    - {code: CSC 665, grade: F, term: 2027-spring}
+    - {code: CSC 675, grade: W, term: 2027-spring}
+    - {code: CSC 645, grade: I, term: 2027-spring}
+  in_progress: []
+expected:
+  complete: false
+  groups: {"*": remaining, gwar: satisfied, ge_3b: satisfied}
+  counted: {core_cs: [CSC 101], senior_electives: [CSC 600]}
+  totals: {units: 18, upper_division_units: 9, gpa_sf_state: 1.386, gpa_major: 1.925}
+  totals_ok: {gpa_sf_state: false, gpa_major: false}
+  warnings_include:
+    - "CSC 300GW: grade C- doesn't count toward Core Computer Science Requirements (28 units); needs C or better"
+    - "CSC 340: grade D doesn't count toward Core Computer Science Requirements (28 units)"
+    - "ENG 114: grade D doesn't count toward GE 1A English Composition; needs C- or better"
+    - "CSC 665: grade F doesn't count toward Electives (15 units)"
+    - "CSC 675: grade W doesn't count"
+    - "CSC 645: grade I doesn't count"

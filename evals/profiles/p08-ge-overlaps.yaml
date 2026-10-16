@@ -1,0 +1,32 @@
+# GE overlaps: ERTH 112 is a lecture+lab (5A, 5C, ESCA). All three Area 4 courses are HIST, which breaks
+# "at least two different disciplines" (p.2317). HIST 308 covers 4UD + US/CA Government.
+# GPA: (12 + 12 + 9 + 12 + 9) / 16 = 3.375.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  completed:
+    - {code: ERTH 112, grade: B, term: 2026-fall}
+    - {code: HIST 120, grade: A, term: 2026-fall}
+    - {code: HIST 130, grade: B, term: 2027-spring}
+    - {code: HIST 308, grade: A, term: 2027-fall}
+    - {code: HIST 470, grade: B, term: 2027-fall}
+  in_progress: []
+expected:
+  complete: false
+  groups:
+    "*": remaining
+    ge_4: satisfied
+    ge_4ud: satisfied
+    ge_4_disciplines: remaining
+    ge_5a: satisfied
+    ge_5c: satisfied
+    ge_3ud: satisfied
+    sfss_aerm: satisfied
+    sfss_esca: satisfied
+    sfss_gp: satisfied
+    sfss_sj: satisfied
+    ai_ush: satisfied
+    ai_usg: satisfied
+    ai_cslg: satisfied
+  counted: {ge_5a: [ERTH 112], ge_5c: [ERTH 112], ge_4: [HIST 120, HIST 130]}
+  totals: {units: 16, upper_division_units: 6, gpa_sf_state: 3.375, gpa_major: null}

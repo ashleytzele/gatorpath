@@ -1,0 +1,58 @@
+# Senior electives edge cases (p.1905-1906), every required course done with B.
+# CSC 852 is paired with CSC 652, so it can't be the grad elective. Only one 700+ course counts (CSC 869, not CSC 872).
+# CSC 601 is excluded by name. CSC 685 with D counts (no grade minimum for electives).
+# Counted: CSC 600, 652, 685, 869 (10 CSC units) + MATH 400, 425 = 16 units, but CSC < 12, so CSC 665 in
+# progress is what finishes it.
+# GPA: (59*3 + 9+9+1+12+12+12+9+9+9) / 84 = 3.083; major (177 + 9+9+1+12+9+9) / 75 = 3.013.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  qr_pathway: "1/2"
+  completed:
+    - {code: MATH 225, grade: B, term: 2025-fall}
+    - {code: MATH 226, grade: B, term: 2024-fall}
+    - {code: MATH 227, grade: B, term: 2025-spring}
+    - {code: MATH 324, grade: B, term: 2025-fall}
+    - {code: PHYS 220, grade: B, term: 2025-spring}
+    - {code: PHYS 222, grade: B, term: 2025-spring}
+    - {code: PHYS 230, grade: B, term: 2025-fall}
+    - {code: PHYS 232, grade: B, term: 2025-fall}
+    - {code: CSC 101, grade: B, term: 2024-fall}
+    - {code: CSC 215, grade: B, term: 2025-spring}
+    - {code: CSC 220, grade: B, term: 2025-fall}
+    - {code: CSC 230, grade: B, term: 2025-fall}
+    - {code: CSC 256, grade: B, term: 2026-spring}
+    - {code: CSC 300GW, grade: B, term: 2026-fall}
+    - {code: CSC 317, grade: B, term: 2026-fall}
+    - {code: CSC 340, grade: B, term: 2026-spring}
+    - {code: CSC 413, grade: B, term: 2027-spring}
+    - {code: CSC 415, grade: B, term: 2027-spring}
+    - {code: CSC 510, grade: B, term: 2026-fall}
+    - {code: CSC 648, grade: B, term: 2027-fall}
+    - {code: CSC 600, grade: B, term: 2027-spring}
+    - {code: CSC 601, grade: CR, term: 2027-spring}
+    - {code: CSC 652, grade: B, term: 2027-fall}
+    - {code: CSC 685, grade: D, term: 2027-fall}
+    - {code: CSC 852, grade: A, term: 2027-fall}
+    - {code: CSC 869, grade: A, term: 2028-spring}
+    - {code: CSC 872, grade: A, term: 2028-spring}
+    - {code: MATH 400, grade: B, term: 2026-fall}
+    - {code: MATH 425, grade: B, term: 2027-spring}
+    - {code: MATH 448, grade: B, term: 2027-fall}
+  in_progress: [CSC 665]
+expected:
+  complete: false
+  groups:
+    "*": remaining
+    math_physics: satisfied
+    core_cs: satisfied
+    advanced_cs: satisfied
+    senior_electives: in_progress
+    ge_2: satisfied             # MATH 226
+    ge_5a: satisfied            # PHYS 220
+    ge_5c: satisfied            # PHYS 222
+    gwar: satisfied             # CSC 300GW
+  counted: {senior_electives: [CSC 600, CSC 652, CSC 685, CSC 869, MATH 400, MATH 425]}
+  in_progress: {senior_electives: [CSC 665]}
+  totals: {units: 85, upper_division_units: 50, residence_major_units: 75, cr_units: 1,
+           gpa_sf_state: 3.083, gpa_major: 3.013}

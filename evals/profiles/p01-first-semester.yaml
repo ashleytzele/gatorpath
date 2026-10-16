@@ -1,0 +1,18 @@
+# First semester (QR 1/2), nothing graded yet; everything in progress.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  qr_pathway: "1/2"
+  completed: []
+  in_progress: [CSC 101, MATH 226, ENG 114, COMM 150, AA S 210]
+expected:
+  complete: false
+  groups:
+    "*": remaining
+    ge_1a: in_progress
+    ge_1c: in_progress
+    ge_2: in_progress           # MATH 226 counts for the major and GE 2 (p.2352)
+    sfss_aerm: in_progress      # AA S 210 (Area 4, AERM, USH)
+    ai_ush: in_progress
+  counted: {ge_4: []}           # AA S 210 is 3 of 6 units, so still remaining
+  totals: {units: 0, units_in_progress: 16, gpa_sf_state: null}

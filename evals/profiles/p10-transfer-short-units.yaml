@@ -1,0 +1,46 @@
+# Non-ADT transfer (70 units, LD GE + American Institutions met in transfer). Everything is done except
+# total units: 70 + 48 = 118 < 120. SF State Studies still required and met by UD GE courses.
+# GPA: (24*3 + 15*3 + 12 + 12) / 45 = 3.133 (PHIL 304 is CR); major 39 units of B = 3.0.
+profile:
+  catalog_year: 2026-27
+  program: bs-cs
+  transfer_units: 70
+  gpa: 3.4
+  ge_done: [1A, 1B, 1C, "2", 3A, 3B, "4", 5A, 5B, 5C, "6", USH, USG, CSLG]
+  completed:
+    - {code: MATH 225, grade: A, transfer: true}
+    - {code: MATH 226, grade: A, transfer: true}
+    - {code: MATH 227, grade: A, transfer: true}
+    - {code: PHYS 220, grade: A, transfer: true}
+    - {code: PHYS 222, grade: A, transfer: true}
+    - {code: PHYS 230, grade: A, transfer: true}
+    - {code: PHYS 232, grade: A, transfer: true}
+    - {code: CSC 101, grade: A, transfer: true}
+    - {code: CSC 215, grade: A, transfer: true}
+    - {code: CSC 220, grade: A, transfer: true}
+    - {code: CSC 230, grade: A, transfer: true}
+    - {code: CSC 256, grade: A, transfer: true}
+    - {code: MATH 324, grade: B, term: 2025-fall}
+    - {code: CSC 300GW, grade: B, term: 2025-fall}
+    - {code: CSC 317, grade: B, term: 2025-fall}
+    - {code: CSC 340, grade: B, term: 2025-fall}
+    - {code: ERTH 335, grade: A, term: 2025-fall}
+    - {code: CSC 413, grade: B, term: 2026-spring}
+    - {code: CSC 415, grade: B, term: 2026-spring}
+    - {code: CSC 510, grade: B, term: 2026-spring}
+    - {code: PHIL 304, grade: CR, term: 2026-spring}
+    - {code: ECON 474, grade: A, term: 2026-spring}
+    - {code: CSC 600, grade: B, term: 2026-fall}
+    - {code: CSC 642, grade: B, term: 2026-fall}
+    - {code: CSC 645, grade: B, term: 2026-fall}
+    - {code: CSC 648, grade: B, term: 2027-spring}
+    - {code: CSC 651, grade: B, term: 2027-spring}
+    - {code: CSC 656, grade: B, term: 2027-spring}
+  in_progress: []
+expected:
+  complete: false
+  groups: {"*": satisfied}
+  totals: {units: 118, residence_units: 48, upper_division_units: 48, residence_major_units: 39, cr_units: 3,
+           gpa_all: 3.4, gpa_sf_state: 3.133, gpa_major: 3.0}
+  totals_ok: {units: false, residence_units: true}
+  warnings_include: ["GE Area 4 in two or more disciplines: can't check"]
