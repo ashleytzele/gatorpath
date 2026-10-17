@@ -11,6 +11,7 @@ from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
 from gatorpath import db
+from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number
 
@@ -51,6 +52,23 @@ class Profile(TypedDict):
     ge_done: NotRequired[list[str]]
     transfer_units: NotRequired[float]
     adt: NotRequired[bool]
+    max_units_per_term: NotRequired[float]
+    include_summer: NotRequired[bool]
+
+
+class Slot(TypedDict):
+    slot: str
+    units: float
+    upper_division: NotRequired[bool]
+
+
+class Semester(TypedDict):
+    term: str
+    courses: list[str | Slot]
+
+
+class Plan(TypedDict):
+    semesters: list[Semester]
 
 
 @cache
@@ -182,6 +200,21 @@ def get_roadmap(program: str, variant: str | None = None) -> dict:
     return {"catalog_year": YEAR, "program": program, "variant": variant, **rm["variants"][variant], "warnings": warnings}
 
 
+def normalized(profile: dict) -> dict:
+    return profile | {"catalog_year": YEAR,
+                      "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
+                      "in_progress": [norm_code(c) for c in profile.get("in_progress", [])]}
+
+
+def profile_error(profile: dict) -> dict | None:
+    if profile.get("catalog_year", YEAR) != YEAR:
+        return {"catalog_year": YEAR, "error": "unsupported_catalog_year",
+                "warnings": [f"only the {YEAR} Bulletin is loaded; {profile['catalog_year']} isn't"]}
+    if profile["program"] not in programs():
+        return unknown_program(profile["program"])
+    return None
+
+
 @mcp.tool(annotations=READ_ONLY)
 def audit_progress(profile: Profile) -> dict:
     """Degree audit: per requirement group satisfied / in_progress / remaining / waived and which courses counted,
@@ -192,18 +225,33 @@ def audit_progress(profile: Profile) -> dict:
     ge_done: GE areas met by transfer/AP/IB credit (e.g. ["1A", "2"], also USH/USG/CSLG); transfer_units: total
     transfer units; adt: true for a verified AA-T/AS-T (waives SF State Studies); gpa optional.
     """
-    if profile.get("catalog_year", YEAR) != YEAR:
-        return {"catalog_year": YEAR, "error": "unsupported_catalog_year",
-                "warnings": [f"only the {YEAR} Bulletin is loaded; {profile['catalog_year']} isn't"]}
-    if profile["program"] not in programs():
-        return unknown_program(profile["program"])
+    if err := profile_error(profile):
+        return err
     program, university = load_rules(YEAR, profile["program"])
     assumed = [] if "catalog_year" in profile else [
         f"catalog_year not given, so this audit uses the {YEAR} Bulletin. Students are held to the year on their DPR "
         "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
-    profile = profile | {"catalog_year": YEAR,
-                         "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
-                         "in_progress": [norm_code(c) for c in profile.get("in_progress", [])]}
-    out = audit(profile, program, university, catalog(DB, YEAR))
+    out = audit(normalized(profile), program, university, catalog(DB, YEAR))
     out["warnings"] = assumed + out["warnings"] + unverified(university, "University (GE and graduation)")
+    return out
+
+
+@mcp.tool(annotations=READ_ONLY)
+def check_plan(profile: Profile, plan: Plan) -> dict:
+    """Validate a term-by-term plan. **Call this before presenting any plan, fix every error, and re-check until
+    valid.** Errors (with Bulletin text/pages): prereq not met by that term, course already passed or planned twice,
+    unknown course, units over max_units_per_term, requirement or 120/upper-division units not covered. Warnings:
+    unverifiable prereqs (GPA not given, permission), loads above the normal 15 (p.2393), unfilled slots.
+
+    plan: {semesters: [{term: '2027-fall', courses: ['CSC 413', {slot: 'senior_electives', units: 3}]}]}. A slot is an
+    unfilled pick for a requirement group (group ids from get_program_requirements), or {slot: 'elective', units: 3,
+    upper_division?: true} for free units. Terms are YYYY-spring/summer/fall, after the profile's completed terms.
+    """
+    if err := profile_error(profile):
+        return err
+    program, university = load_rules(YEAR, profile["program"])
+    plan = {"semesters": [s | {"courses": [norm_code(c) if isinstance(c, str) else c for c in s.get("courses", [])]}
+                          for s in plan.get("semesters", [])]}
+    out = engine_check_plan(normalized(profile), plan, program, university, catalog(DB, YEAR), prereqs(DB, YEAR))
+    out["warnings"] += [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
     return out

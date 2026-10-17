@@ -125,3 +125,18 @@ def test_fixture_rows_match_catalog_db():
     con.close()
     assert {r["code"]: (r["title"], r["description"], r["source_page"], r["prereq_text"]) for r in ROWS} == \
            {r["code"]: real[r["code"]] for r in ROWS}
+
+
+def test_check_plan_tool():
+    profile = yaml.safe_load((ROOT / "evals/profiles/p07-adt-transfer.yaml").read_text())["profile"]
+    plan = {"semesters": [
+        {"term": "2027-fall", "courses": ["csc648", "CSC 653", "CSC 665", {"slot": "ge_ud_sci", "units": 3},
+                                          {"slot": "ge_4ud", "units": 3}]},
+        {"term": "2028-spring", "courses": ["CSC 671", "CSC 620", {"slot": "senior_electives", "units": 3},
+                                            {"slot": "elective", "units": 3}, {"slot": "elective", "units": 3}]},
+        {"term": "2028-fall", "courses": [{"slot": "elective", "units": 3}]}]}
+    got = server.check_plan(profile, plan)
+    assert got["valid"], got["errors"]
+    plan["semesters"][0]["courses"][0] = "CSC 999"
+    bad = server.check_plan(profile, plan)
+    assert not bad["valid"] and {"unknown_course", "requirement_not_covered"} <= {e["error"] for e in bad["errors"]}

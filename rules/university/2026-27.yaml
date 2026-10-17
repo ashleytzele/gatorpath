@@ -11,6 +11,11 @@ totals:
   max_cr_units: 24                 # SF State units graded CR; "Major courses only offered as CR/NC are not included"
   min_gpa: {all: 2.0, sf_state: 2.0, major: 2.0}
   source: "p.2313"
+# "The class level of students is determined according to units completed (earned units)":
+# Freshman 0-29, Sophomore 30-59, Junior 60-89 (upper division), Senior 90 or more. Graduate = holds a degree.
+class_level: {sophomore: 30, upper: 60, senior: 90, source: "p.2390"}
+# "the normal academic load for undergraduates is 12 to 15 units per semester and 8 units in the summer"
+academic_load: {normal_max: 15, summer_normal_max: 8, source: "p.2393"}
 repeats:
   forgiveness_units: 16            # lower grade leaves the GPA for up to 16 SF State units; past that both count
   source: "p.2392, p.2406"

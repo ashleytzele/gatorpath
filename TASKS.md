@@ -99,7 +99,10 @@ degree?" and get correct, sourced answers.
 
 ## Phase 4 — Planner
 
-- [ ] `engine/planner.py::check_plan`: all errors/warnings from ARCHITECTURE §7.3
+- [x] `engine/planner.py::check_plan` + `check_plan` tool: prereqs by term (tri-state: ok / not met /
+  can't verify; "or permission" never rescues a plan), corequisites, class level (p.2390), restrictions,
+  repeats/duplicates, unit cap + normal load (p.2393), requirement coverage with slots, 120/UD totals.
+  Offering-season checks wait for phase 5
 - [ ] `build_plan`: critical-path priority + term-by-term greedy (ARCHITECTURE §8)
 - [ ] Return `needs_input: qr_pathway` when it's missing
 - [ ] `list_eligible_electives` with readiness (`ready` / `ready_by` / `blocked_by`)
