@@ -57,7 +57,7 @@ These become the seed of the evaluation set (§12).
 
 | Project | What it does | Gap we fill |
 |---|---|---|
-| SFSU Degree Planner / DPR / What-If | Official audit + manual planner | No career direction, no "why", no switch-cost comparison |
+| SFSU Degree Planner / DPR / What-If (Student Center) | Official audit + planner: preferences (units per term), arrange plan, What-If report, refresh suggestions (seen 2026-10-16) | Shows only required/suggested classes, with no reasoning visible: no "why this term", no career direction, no switch-cost comparison. **Complement, don't replace:** it's official, so GatorPath explores and explains, the student records the plan there, and an advisor confirms |
 | **Plan-Ed** (2nd place, SF Hacks × GDG 2026) | Gemini 4-yr plan + rules engine, web app | Web app only; no offering data; not reusable by other tools |
 | **GatorWay** (`dixisouls/gatorway`, MIT) | Transcript → interest-based electives, FastMCP + pgvector | Local hackathon build; no transfer, no switch compare, no offering patterns |
 | Stellic, Transfermatic, TransferAI | Commercial requirement / transfer planners | Not SFSU-specific career pathways |
@@ -69,6 +69,8 @@ These become the seed of the evaluation set (§12).
 2. **Verified data.** Every rule cites a Bulletin page. There's a public eval score.
 3. **Offering-aware.** Real historical schedule data ("CSC 653 is fall-only").
 4. **Privacy by design.** The server stores no student data. Transcripts are parsed locally.
+5. **Explains itself.** Every placed course says why it's in that term and what it unlocks, and advisor
+   handoffs say who to see and how to book (§7.4, §7.5).
 
 ---
 

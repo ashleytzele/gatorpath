@@ -112,6 +112,8 @@ degree?" and get correct, sourced answers.
   (CS department, Senior Advisor, CoSE team). Booking is Navigator (sfsu.campus.eab.com)
 - [ ] (?) Who is the CS Senior Advisor? The department page requires one for substitutions but doesn't
   name them. Ask cs-dept@sfsu.edu
+- [ ] Present a passing plan as a term-by-term list in Degree Planner entry order, so the student can
+  record it in the official planner (ARCHITECTURE §3: complement, don't replace)
 - [ ] `save_profile` / `load_profile` (ARCHITECTURE §7.3, D13): student-chosen path, default
   `~/.gatorpath/profile.yaml`, refuses repo paths, stale-DPR warning. Test: no tool writes a file
   unless `save_profile` is called
