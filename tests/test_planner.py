@@ -54,7 +54,9 @@ def test_standing_gpa_and_permission():
     assert "upper standing" in e["message"] and "or instructor permission" in e["message"]
     low_gpa = FRESHMAN | {"gpa": 2.5, "transfer_units": 60}
     assert "GPA 3.0" in errors(check(low_gpa, ("2027-spring", ["CSC 415"]), ("2027-fall", ["CSC 653"])), "prereq_not_met")[-1]["message"]
-    no_gpa = check(FRESHMAN | {"transfer_units": 60}, ("2027-spring", ["CSC 415"]), ("2027-fall", ["CSC 653"]))
+    transfer_only = [r | {"transfer": True} for r in FRESHMAN["completed"]]  # no SF State grades -> no GPA to fall back on
+    no_gpa = check(FRESHMAN | {"transfer_units": 60, "completed": transfer_only},
+                   ("2027-spring", ["CSC 415"]), ("2027-fall", ["CSC 653"]))
     assert not any(e["course"] == "CSC 653" for e in errors(no_gpa))
     assert any("CSC 653 in 2027-fall: GatorPath can't check GPA 3.0" in w for w in no_gpa["warnings"])
     # no `gpa` given, but SF State grades exist: their GPA is used, and said so
