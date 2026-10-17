@@ -42,6 +42,7 @@ class CourseTaken(TypedDict):
     term: NotRequired[str]
     units: NotRequired[float]
     transfer: NotRequired[bool]
+    credit: NotRequired[str]
 
 
 class Profile(TypedDict):
@@ -55,6 +56,9 @@ class Profile(TypedDict):
     ge_done: NotRequired[list[str]]
     dpr_met: NotRequired[list[str]]
     not_on_dpr: NotRequired[list[str]]
+    first_time: NotRequired[bool]
+    ge_certified: NotRequired[bool]
+    prior_bachelors: NotRequired[bool]
     transfer_units: NotRequired[float]
     adt: NotRequired[bool]
     max_units_per_term: NotRequired[float]
@@ -221,7 +225,9 @@ def year_warning(profile: dict) -> list[str]:
     if str(given).strip() == YEAR:
         return []
     return [f"The student's catalog year is {given}, but GatorPath only has {YEAR} rules, so this uses them. "
-            "Requirements may differ (older catalogs use GE Areas A-E). Where the DPR disagrees, the DPR wins"]
+            "Requirements may differ (older catalogs use GE Areas A-E). Where the DPR disagrees, the DPR wins. In "
+            "continuous attendance a student may elect the graduation requirements in effect when they began their "
+            "study, when they entered SF State, or when they graduate (p.2390); ask an advisor before relying on that"]
 
 
 def prepare(profile: dict, university: dict) -> tuple[dict, list[str]]:
@@ -264,12 +270,15 @@ def audit_progress(profile: Profile) -> dict:
 
     profile: program (e.g. 'bs-cs'); catalog_year (the DPR's "Requirement (Catalog) Term"; another year than
     2026-27 is planned with 2026-27 rules and a warning); completed: [{code, grade, term?, units? (variable-unit
-    courses), transfer? (articulated transfer course)}], grades as SF State symbols (A..F, CR, NC, W, I);
+    courses), transfer? (articulated transfer course), credit? ('extension' | 'exam' | 'evaluation': counts for
+    units, never residence)}], grades as SF State symbols (A..F, CR, NC, W, I);
     in_progress: [codes]; ge_done: GE areas met by transfer/AP/IB credit, as the DPR writes them (e.g. "1A", or an
     older catalog's "A2", "D", "UD-D": translated automatically), also USH/USG/CSLG; dpr_met: required courses the
     DPR shows met by a substitution or exception (e.g. MATH 225 met by MATH 325); not_on_dpr: requirements the
     tools list but the student's DPR doesn't have at all (an older catalog, e.g. GE "6" Ethnic Studies): left out and
-    flagged for an advisor to confirm; transfer_units: total transfer
+    flagged for an advisor to confirm; first_time (began at SF State as a first-time college student; default: no
+    transfer work); ge_certified (Cal-GETC certification of lower-division GE, p.2304); prior_bachelors (already holds
+    a bachelor's degree: GE and graduation requirements waived, p.2313); transfer_units: total transfer
     units; adt: true for a verified AA-T/AS-T (waives SF State Studies); gpa optional.
     """
     if err := profile_error(profile):
@@ -381,7 +390,11 @@ defaults (15 units per term, no summer) instead of asking.
    - dpr_met: required courses the DPR shows met by a different course (MATH 325 listed under "MATH 225").
    - not_on_dpr: requirements audit_progress lists that the DPR doesn't have at all (older catalogs, e.g. GE "6"
      Ethnic Studies). Compare after step 3's audit and re-run with them; tell the student to confirm.
-   - gpa from the DPR; transfer_units; adt: true for a verified AA-T/AS-T.
+   - gpa from the DPR; transfer_units; adt: true for a verified AA-T/AS-T; ge_certified: true for Cal-GETC
+     certification of lower-division GE; first_time: false for transfer students; prior_bachelors: true if they
+     already hold a bachelor's degree.
+   - exam credit (AP / CLEP): put US History and US Government in ge_done as USH / USG only when the DPR shows them;
+     no AP or CLEP exam meets California government (CSLG), p.2350.
 3. `audit_progress`, then `build_plan` (with graduate_by if given). If build_plan returns needs_input, ask for
    just that.
 4. Fill every slot: `list_eligible_electives` with group_id = the slot, plan = the current plan, by_term = the slot's

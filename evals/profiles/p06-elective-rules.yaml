@@ -3,6 +3,7 @@
 # CSC 601 is excluded by name. CSC 685 with D counts (no grade minimum for electives).
 # Counted: CSC 600, 652, 685, 869 (10 CSC units) + MATH 400, 425 = 16 units, but CSC < 12, so CSC 665 in
 # progress is what finishes it.
+# Upper-division units count courses numbered 300-699 (p.2391), so CSC 852, 869, 872 (9 units) don't: 41, not 50.
 # GPA: (59*3 + 9+9+1+12+12+12+9+9+9) / 84 = 3.083; major (177 + 9+9+1+12+9+9) / 75 = 3.013.
 profile:
   catalog_year: 2026-27
@@ -54,5 +55,5 @@ expected:
     gwar: satisfied             # CSC 300GW
   counted: {senior_electives: [CSC 600, CSC 652, CSC 685, CSC 869, MATH 400, MATH 425]}
   in_progress: {senior_electives: [CSC 665]}
-  totals: {units: 85, upper_division_units: 50, residence_major_units: 75, cr_units: 1,
+  totals: {units: 85, upper_division_units: 41, residence_major_units: 75, cr_units: 1,
            gpa_sf_state: 3.083, gpa_major: 3.013}

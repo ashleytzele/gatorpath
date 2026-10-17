@@ -238,15 +238,48 @@ def coverage_report(db_path: str | Path, catalog_year: str, subjects: list[str])
     return "\n".join(lines)
 
 
+LEGACY_GE = re.compile(r"• ((?:GE-)?[A-F][1-5]?(?: or [A-F][1-5])?|UD-[B-D]): ")
+CURRENT_GE = re.compile(r"• (\d[A-C]?|\dUD): ")
+
+
+def legacy_ge_report(pages: list[str]) -> str:
+    """For each older GE code in "Course Attributes:" (A2, C1, UD-D, GE-F, ...), which current codes the same courses
+    carry and how often. The evidence behind rules/university legacy_ge_areas; rerun it for each new Bulletin."""
+    old_new: dict[str, Counter] = {}
+    seen: Counter = Counter()
+    attrs: list[str] | None = None
+    for line in (l.strip() for page in pages for l in page.splitlines()):
+        if line == "Course Attributes:":
+            attrs = []
+        elif attrs is not None and line.startswith("• "):
+            attrs.append(line)
+        elif attrs is not None:
+            olds = {m.group(1) for a in attrs if (m := LEGACY_GE.match(a))}
+            news = {m.group(1) for a in attrs if (m := CURRENT_GE.match(a))}
+            for o in olds:
+                seen[o] += 1
+                old_new.setdefault(o, Counter()).update(news)
+            attrs = None
+    rows = [f"{o:9} on {n:4} course entries; with: "
+            + (", ".join(f"{c} {k}" for c, k in old_new[o].most_common(3)) or "no current GE code")
+            for o, n in seen.most_common()]
+    return "\n".join(["Older GE code -> current codes on the same courses (entries, incl. department + A-Z listings)", *rows])
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Build data/catalog.db from the Bulletin PDF and print prereq coverage.")
     ap.add_argument("pdf")
     ap.add_argument("--db", default="data/catalog.db")
     ap.add_argument("--year", help="catalog year, e.g. 2026-27 (default: read from the file name)")
     ap.add_argument("--subjects", default="CSC,MATH,PHYS", help="subjects for the coverage report")
+    ap.add_argument("--legacy-ge", action="store_true", help="only print the older-GE-code report (writes nothing)")
     args = ap.parse_args()
     year = args.year or re.search(r"\d{4}-\d{2}", Path(args.pdf).name).group()
-    courses, warnings = parse_courses(extract_pages(args.pdf))
+    pages = extract_pages(args.pdf)
+    if args.legacy_ge:
+        print(legacy_ge_report(pages))
+        return
+    courses, warnings = parse_courses(pages)
     write_catalog(args.db, year, courses)
     print(f"{len(courses)} courses -> {args.db} ({year}); {len(warnings)} dedupe warnings")
     print("\n".join(f"  {w}" for w in warnings))

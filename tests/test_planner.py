@@ -187,3 +187,53 @@ def test_see_advisor_for_permission_and_overload():
     assert any(w.startswith("CSC 653 in 2027-fall: GPA 3.0 or higher (have 2.5)") for w in advisor["why"])
     assert any("17 units is above the normal load of 15" in w for w in advisor["why"])
     assert any(a["role"] == "dpr" for a in got["see_advisor"])
+
+
+def test_semester_unit_maximum_and_part_time_note():
+    # p.2392: max 19 units fall/spring, 14 summer; more needs a cumulative SF State GPA of 3.0+ and a petition
+    twenty = ["CSC 215", "MATH 227", "PHYS 220", "PHYS 222", "ENG 114", "COMM 150", "ERTH 112"]
+    units = sum(CATALOG[c]["units_min"] for c in twenty)
+    assert units > 19
+    roomy = FRESHMAN | {"max_units_per_term": 25}
+    got = check(roomy, ("2027-spring", twenty))  # SF State GPA 3.43 (A in CSC 101, B in MATH 226)
+    assert not errors(got, "over_max_units") and any("Exceed Maximum Units Petition" in w for w in got["warnings"])
+    low = roomy | {"completed": [{"code": "CSC 101", "grade": "C", "term": "2026-fall"}, {"code": "MATH 226", "grade": "C", "term": "2026-fall"}]}
+    assert errors(check(low, ("2027-spring", twenty)), "over_max_units")
+    # p.2393: "the normal academic load for undergraduates is 12 to 15 units"
+    light = check(FRESHMAN, ("2027-spring", ["CSC 215", "MATH 227"]))
+    assert any("8 units is below the normal 12-15 load" in w for w in light["warnings"])
+
+
+def test_incomplete_blocks_a_retake():
+    # p.2392: "A student cannot repeat a course that has a grade of I (Incomplete) unless the I grade has been converted"
+    inc = FRESHMAN | {"completed": FRESHMAN["completed"] + [{"code": "CSC 215", "grade": "I", "term": "2026-fall"}]}
+    assert [e["error"] for e in errors(check(inc, ("2027-spring", ["CSC 215"])))] == ["incomplete"]
+
+
+def test_upper_division_ge_waits_for_ge_1a_1b_1c_2():
+    # p.2319: upper-division GE courses "have a prerequisite of English Composition (1A), Critical Thinking (1B), Oral
+    # Communication (1C), and Mathematical Concepts and Quantitative Reasoning (2)"
+    senior = FRESHMAN | {"transfer_units": 60}
+    early = check(senior, ("2027-spring", [{"slot": "ge_4ud", "units": 3}]))
+    assert any("GE 4UD" in w and "require GE 1A, 1B, 1C and 2" in w for w in early["warnings"])
+    ready = check(senior | {"ge_done": ["1A", "1B", "1C", "2"]}, ("2027-spring", [{"slot": "ge_4ud", "units": 3}]))
+    assert not any("require GE 1A, 1B, 1C and 2" in w for w in ready["warnings"])
+    # build_plan never puts a UD GE slot before those areas are done or slotted
+    for path in sorted((ROOT / "evals/profiles").glob("*.yaml")):
+        got = plan_for(eval_profile(path))
+        assert not any("require GE 1A, 1B, 1C and 2" in w for w in got["warnings"]), path.stem
+
+
+def test_upper_division_is_300_to_699():
+    from gatorpath.engine.planner import upper_only
+    groups = {g["id"]: g for g in PROGRAM["groups"] + UNIVERSITY["groups"]}
+    assert upper_only(groups["senior_electives"]) and upper_only(groups["ge_4ud"]) and not upper_only(groups["ge_4"])
+    assert not upper_only({"from": {"subject": "CSC", "level": "700+"}})  # graduate courses aren't upper division (p.2391)
+
+
+def test_major_courses_older_than_seven_years_are_flagged():
+    # p.2393: departments may require retaking a major course "taken more than seven years prior to graduation"
+    old = FRESHMAN | {"completed": [{"code": "CSC 101", "grade": "A", "term": "2018-fall"}, {"code": "MATH 226", "grade": "B", "term": "2018-fall"}]}
+    got = check(old, ("2027-spring", ["CSC 215"]))
+    assert any(w.startswith("CSC 101, MATH 226: taken more than 7 years before graduation") for w in got["warnings"])
+    assert not any("7 years" in w for w in check(FRESHMAN, ("2027-spring", ["CSC 215"]))["warnings"])

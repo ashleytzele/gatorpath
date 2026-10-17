@@ -238,3 +238,17 @@ def test_coverage_report_lists_every_non_ok_string(tmp_path):
     assert "CSC" in report and "4/5 ok (80.0%)" in report
     assert "CSC 699 [unparsed] Formal commitment to a thesis." in report
     assert "CSC 300GW -> CSC 210" in report  # referenced code missing from this catalog (renumbered)
+
+
+
+def test_legacy_ge_report_counts_co_tagged_codes():
+    from gatorpath.ingest.bulletin import legacy_ge_report
+
+    page = "\n".join(["ECON 474 History of Labor (Units: 3)", "Course Attributes:", "• Social Justice",
+                      "• UD-D: Social Sciences", "• 4UD: Social/Behavioral Science", "ECON 500 Money (Units: 3)",
+                      "Course Attributes:", "• C1: Arts", "• 3A: Arts", "BIOL 100 Life (Units: 3)",
+                      "Course Attributes:", "• E: Lifelong Learning", "next line"])
+    report = legacy_ge_report([page])
+    assert "UD-D      on    1 course entries; with: 4UD 1" in report
+    assert "C1        on    1 course entries; with: 3A 1" in report
+    assert "E         on    1 course entries; with: no current GE code" in report

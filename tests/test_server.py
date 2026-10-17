@@ -250,3 +250,11 @@ def test_not_on_dpr_leaves_a_requirement_out_and_sends_to_an_advisor():
                for w in plan_without["warnings"])
     uac = next(a for a in plan_without["see_advisor"] if a["role"] == "general_advising")
     assert "GE 6 Ethnic Studies isn't required for your catalog year" in uac["why"][0]
+
+
+def test_program_requirements_include_transfer_notes():
+    notes = server.get_program_requirements("bs-cs")["program"]["transfer_notes"]
+    assert len(notes) >= 8 and all(n["source"].startswith("p.190") for n in notes)
+    assert any("ASSIST" in n["text"] for n in notes)
+    adt = server.get_roadmap("bs-cs", "adt")["notes"]
+    assert any("cannot be guaranteed" in n for n in adt) and any("Upon verification" in n for n in adt)

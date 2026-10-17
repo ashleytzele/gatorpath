@@ -63,6 +63,12 @@ report.
 - [x] `rules/roadmaps/2026-27/bs-cs.yaml`: variants `qr-1-2`, `qr-3-4`, `adt` (the Bulletin's
   "Transfer Student Roadmap (2 Year)" is the ADT roadmap, p.1906 → p.1912)
 - [ ] Second person double-checks all three files against the PDF → set `verified: true`
+  - 2026-10-17: Codex (read-only, independent) reviewed the three files against the PDF in 6 rounds; error rate
+    (MISMATCH + MISSING + WRONG-PAGE / items) 19.6% → 16.9% → 10.9% → 15.4% → 12.7% → 6.0%. Each finding was
+    re-checked in the PDF before fixing (round 1's two WRONG-PAGE claims were wrong). Open from round 6: ADT admission
+    note (p.1906), totals source + p.2391, CR-cap exclusion for CR/NC-only major courses (p.2313), academic_load
+    source + p.2390. UNCLEAR (for an advisor): "five 3-unit senior electives" vs 1-unit CSC 685/686; what the adt and
+    prior_bachelors flags must mean. A person still flips `verified`
 - [x] `engine/rules.py`: load YAML, evaluate `all_of`, `choose_units`, `from` filters, `except`,
   `max_courses`, `min_units_from`, `min_grade`, `no_cr_nc` (+ `waived_if`, `distinct_subjects`)
 - [x] Double-counting per ARCHITECTURE §6.2 (once within the major; GE/SFSS/AI may overlap;

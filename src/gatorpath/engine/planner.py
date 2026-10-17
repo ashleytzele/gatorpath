@@ -13,7 +13,7 @@ import math
 import re
 
 from gatorpath.engine.prereq import leaves, prereq_warnings, reverse_index
-from gatorpath.engine.rules import GRADE_POINTS, audit, number, rank
+from gatorpath.engine.rules import GRADE_POINTS, audit, blocks_repeat, number, rank
 
 SEASONS = {"spring": 0, "summer": 1, "fall": 2}
 TERM = re.compile(r"(\d{4})-(spring|summer|fall)")
@@ -123,10 +123,14 @@ def upper_only(g: dict) -> bool:
             areas = f["ge_area"] if isinstance(f["ge_area"], list) else [f["ge_area"]]
             return all(str(a).endswith("UD") for a in areas)
         if "list" in f:
-            return all(number(c) >= 300 for c in f["list"])
-        return int(str(f.get("level", "0")).rstrip("+")) >= 300
+            return all(300 <= number(c) <= 699 for c in f["list"])  # upper division = 300-699 (p.2391)
+        level = str(f.get("level", "0"))
+        return 300 <= int(level.rstrip("+")) <= 699 and not level.endswith("+")
 
-    return bool(filters) and all(map(up, filters))
+    # A capped option ("one CSC graduate course", max_courses: 1) doesn't decide it: 700+ isn't upper division
+    # (p.2391), and check_plan re-counts real units once the slot holds a course.
+    main = [f for f in filters if "max_courses" not in f]
+    return bool(main) and all(map(up, main))
 
 
 def slot_ge_areas(slot: dict, groups: dict) -> set[str]:
@@ -152,6 +156,17 @@ def see_advisor(triggers: list[tuple[str, str]], program: dict, university: dict
     return sorted(out.values(), key=lambda e: urgency.index(e["role"]) if e["role"] in urgency else len(urgency))
 
 
+def ud_ge_ready(ctx: dict, university: dict) -> tuple[bool, list[str]]:
+    """Upper-division GE needs GE 1A, 1B, 1C and 2 first (p.2319), checked like a prereq: done, ge_done, or slotted earlier."""
+    ud = university.get("upper_division_ge")
+    if not ud:
+        return True, []
+    groups = {g["id"]: g for g in university["groups"]}
+    expr = {"all": [{"ge_area": a} for gid in ud["prerequisites"] for a in slot_ge_areas({"slot": gid}, groups)]}
+    state, why = evaluate(expr, ctx)
+    return state != NO, why
+
+
 def check_plan(profile: dict, plan: dict, program: dict, university: dict, catalog: dict, prereqs: dict) -> dict:
     """{valid, errors, warnings, terms, remaining}. Errors make a plan invalid; warnings don't."""
     errors: list[dict] = []
@@ -160,6 +175,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     err = lambda kind, msg, **kw: errors.append({"error": kind, "message": msg, **kw})
     load, levels = university["academic_load"], university["class_level"]
     cap = profile.get("max_units_per_term", load["normal_max"])
+    reps, most = university["repeats"], university["max_units"]
 
     completed = [r for r in profile.get("completed", []) if r["code"] in catalog]
     grades: dict[str, str] = {}
@@ -170,6 +186,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     now = audit(profile, program, university, catalog)["totals"]  # repeats, transfer duplicates handled there
     units = now["units"]["value"] + now["units_in_progress"]
     gpa = profile.get("gpa", now["gpa_sf_state"]["value"])
+    sfsu_gpa = now["gpa_sf_state"]["value"]
 
     groups = {g["id"]: g for g in program["groups"] + university["groups"]}
     last_taken = max((term_key(r["term"]) for r in completed if TERM.fullmatch(str(r.get("term", "")))), default=None)
@@ -199,8 +216,12 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             if not catalog[c]["repeatable"]:
                 if codes.count(c) > 1 or c in done and (c in profile.get("in_progress", []) or c in {p["code"] for p in planned}):
                     err("duplicate", f"{c} is already in progress or planned earlier", term=term, course=c)
-                elif c in grades and (rank(grades[c]) or 0) >= GRADE_POINTS["C"] or grades.get(c) == "CR":
-                    err("already_passed", f"{c} was passed with {grades[c]}; it may not be repeated (p.2392)", term=term, course=c)
+                elif c in grades and blocks_repeat(grades[c], reps):
+                    err("already_passed", f"{c} was passed with {grades[c]}; it may not be repeated ({reps['source']})",
+                        term=term, course=c)
+                elif grades.get(c) in reps["no_repeat_while"]:
+                    err("incomplete", f"{c} has an I (Incomplete); it can't be repeated until the I is converted to a "
+                        f"grade ({reps['source']})", term=term, course=c)
         for s in term_slots:
             if s.get("slot") == "elective":
                 slots.append(s | {"term": term})
@@ -234,13 +255,39 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                     advise.append(("major_advisor", f"{c} in {term}: {'; '.join(low_gpa) or why[0]}; it needs the "
                                    "instructor's permission (ask the instructor, or plan another course)"))
             warnings.extend(w for w in prereq_warnings(c, row) if "partial" in w or "unparsed" in w)
+        ud = university.get("upper_division_ge", {})
+        for x in term_slots:
+            if x.get("slot") in ud.get("groups", ()):
+                ready, why = ud_ge_ready(ctx, university)
+                if not ready:
+                    warnings.append(f"{term}: {groups[x['slot']]['title']} slot before {'; '.join(why)} ({ud['source']}: "
+                                    "upper-division GE courses require GE 1A, 1B, 1C and 2)")
+                elif units < ud["recommended_after_units"]:
+                    warnings.append(f"{term}: {groups[x['slot']]['title']} at {units:g} units; upper-division GE is designed "
+                                    f"to be taken after {ud['recommended_after_units']} units ({ud['source']})")
         if ctx.get("gpa_used") and "gpa" not in profile:
             warnings.append(f"GPA-gated prereqs were checked with your SF State GPA ({gpa}); pass `gpa` if your overall GPA differs")
 
         summer = term.endswith("summer")
         if term_units > cap:
             err("over_cap", f"{term}: {term_units:g} units is over max_units_per_term ({cap:g})", term=term)
-        normal = load["summer_normal_max" if summer else "normal_max"]
+        ceiling = most["summer" if summer else "fall_spring"]
+        if term_units > ceiling:
+            why = (f"{term}: {term_units:g} units is over the {ceiling:g}-unit {'summer ' if summer else ''}maximum; more "
+                   f"needs a cumulative SF State GPA of {most['above_needs_sf_state_gpa']:g} or better and an Exceed Maximum "
+                   f"Units Petition signed by your major advisor, department chair and college dean ({most['source']})")
+            if term_units >= most["dean_approval_from"]:
+                why += f"; {most['dean_approval_from']:g}+ units need the {most['at_25_or_more']}"
+            if sfsu_gpa is not None and sfsu_gpa < most["above_needs_sf_state_gpa"]:
+                err("over_max_units", why + f" (SF State GPA {sfsu_gpa})", term=term)
+            else:
+                warnings.append(why)
+                advise.append(("major_advisor", why))
+        if not summer and 0 < term_units < load["normal_min"]:
+            warnings.append(f"{term}: {term_units:g} units is below the normal {load['normal_min']:g}-{load['normal_max']:g} "
+                            f"load, so it's part-time; F-1 visa students need at least {load['f1_min']['undergraduate']:g} "
+                            f"in spring and fall, and it can matter for financial aid ({load['source']})")
+        normal = load["summer_normal" if summer else "normal_max"]
         if term_units > normal:
             warnings.append(f"{term}: {term_units:g} units is above the normal load of {normal:g} ({load['source']}); "
                             "see an advisor before planning an overload")
@@ -295,6 +342,15 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                 f"{t[key]['needed']:g} needed ({t['source']})", total=key)
     warnings.extend(w for w in result["warnings"] if "not verified" in w or "DPR" in w)  # incl. not_on_dpr / dpr_met
     left_out = [g["title"] for g in program["groups"] + university["groups"] if g["id"] in profile.get("not_on_dpr", ())]
+    years = university.get("major_course_currency_years")
+    if years and seen_terms:
+        last = term_key(seen_terms[-1])[0]
+        major = {c for g in program["groups"] for c in g.get("all_of", [])}
+        old = sorted({r["code"] for r in completed if r["code"] in major and TERM.fullmatch(str(r.get("term", "")))
+                      and last - term_key(r["term"])[0] > years})
+        if old:
+            warnings.append(f"{', '.join(old)}: taken more than {years} years before graduation; the department may require "
+                            "retaking it or showing currency in the subject (p.2393)")
     if left_out:
         advise.append(("general_advising", f"Confirm that {', '.join(left_out)} isn't required for your catalog year "
                        "(GatorPath left it out because your DPR doesn't list it)"))
@@ -382,8 +438,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     for r in profile.get("completed", []):
         if r["code"] not in best or (rank(r["grade"]) or -1) > (rank(best[r["code"]]) or -1):
             best[r["code"]] = r["grade"]
-    stuck = [c for c in required if not catalog[c]["repeatable"]
-             and (best.get(c) == "CR" or (rank(best.get(c)) or 0) >= GRADE_POINTS["C"])]
+    stuck = [c for c in required if not catalog[c]["repeatable"] and blocks_repeat(best.get(c), university["repeats"])]
     warnings = [f"{c}: passed with {best[c]}, which doesn't count toward this requirement, and a course passed with CR "
                 "or C or better can't be repeated (p.2392); see an advisor about a substitution or petition" for c in stuck]
     required = [c for c in required if c not in stuck]
@@ -455,7 +510,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         if term.endswith("summer") and not summer:
             term = next_term(term, summer)
             continue
-        limit = min(cap, load["summer_normal_max"]) if term.endswith("summer") else cap
+        limit = min(cap, load["summer_normal"]) if term.endswith("summer") else cap
         placed: list[str] = []
         used = 0.0
         ctx = {"done": done, "grades": grades, "units": units, "profile": profile, "gpa": gpa,
@@ -487,9 +542,13 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         left = [c for c in left if c not in placed]
         ready_electives = units >= levels["upper"] and before_electives & set(todo) <= done
         term_slots = []
+        ud = university.get("upper_division_ge", {})
+        ud_ok = units >= ud.get("recommended_after_units", levels["upper"]) and ud_ge_ready(ctx | {"same_term": set()}, university)[0]
         for kind in ("tag", "ge", "ud_ge", "major", "elective"):
             for s in [s for s in slots if s["_kind"] == kind]:
-                if kind in ("ud_ge", "major") and units < levels["upper"]:
+                if kind == "ud_ge" and not ud_ok:
+                    continue
+                if kind == "major" and units < levels["upper"]:
                     continue
                 if kind == "major" and not ready_electives:
                     continue

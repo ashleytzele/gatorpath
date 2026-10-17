@@ -30,7 +30,11 @@ groups:
     title: Electives (15 units)
     # "All students must complete five 3-unit senior electives. At least 12 units must be CSC courses."
     # "Exceptions must be approved in advance by a senior advisor."
+    # The same list names CSC 685 and CSC 686 (1 unit each) and CSC 699 (1-3): units count toward the 15, and a
+    # course under 3 units is flagged for a senior advisor (`course_units`), since "five 3-unit" doesn't say how.
     choose_units: 15
+    course_units: 3
+    exceptions: "Exceptions must be approved in advance by a senior advisor."
     from:
       - list: [CSC 520, CSC 600, CSC 603, CSC 615, CSC 620, CSC 621, CSC 630, CSC 631, CSC 641, CSC 642,
                CSC 645, CSC 647, CSC 651, CSC 652, CSC 653, CSC 656, CSC 659, CSC 664, CSC 665, CSC 667,
@@ -42,6 +46,29 @@ groups:
       - {subject: CSC, level: "700+", paired: false, except: [CSC 895, CSC 897, CSC 898, CSC 899], max_courses: 1}
     min_units_from: {subject: CSC, units: 12}
     source: "p.1905-1906"
+
+# Advice for transfer students, printed with the program (not requirements; shown by get_program_requirements).
+transfer_notes:
+  - text: "Equivalents of all lower-division courses (course numbers below 300) in the degree requirements are available at many community colleges in California; students transferring from a community college are encouraged to fulfill as many lower-division requirements prior to transfer as possible."
+    source: "p.1905"
+  - text: "Before transfer, complete as many lower-division requirements or electives for this major as possible."
+    source: "p.1907"
+  - text: "Students who have earned an ADT should seek advising in the major department during the first semester of attendance."
+    source: "p.1907"
+  - text: "A course in U.S. History and a course in U.S. & California Government are not required for admission but are required for graduation; students are strongly encouraged to complete them before transfer."
+    source: "p.1907"
+  - text: "Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements, CSU GE, US History, and US & CA Government."
+    source: "p.1907"
+  - text: "Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division transfer."
+    source: "p.1907"
+  - text: "Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer."
+    source: "p.1907"
+  - text: "AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered to SF State, under the Bulletin in effect the year of the exam."
+    source: "p.1907"
+  - text: "STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing an associate degree before transfer)."
+    source: "p.1907"
+  - text: "From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course that meets both US and CA/local government may be an option, particularly from outside California."
+    source: "p.1907"
 
 # Advising handoff (ARCHITECTURE §7.5). From the CS department's advising page; recheck yearly.
 advising:

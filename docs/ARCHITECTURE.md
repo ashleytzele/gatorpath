@@ -267,6 +267,24 @@ Rule vocabulary (keep it small; add only when a real major needs it):
 disciplines", p.2317).
 `min_grade` compares letter grades; CR counts as C- ("equivalent to grades A through C-", p.2403), so CR
 meets a C- minimum but not a C.
+Added after the 2026-10-17 second review (Codex, against the PDF):
+- `ge_area_all` (filter): the course must carry **every** listed area. US History for first-time students is
+  "a Lower-Division Area 4 course with USH" (pp.2313, 2317, 2350) = `{ge_area_all: ["4", USH]}`.
+- `first_time_from` (group): the filter used instead of `from` for students who began at SF State as first-time
+  college students. `profile.first_time` says so; when it's missing, a profile with transfer units, transfer rows
+  or `adt` counts as a transfer student.
+- `level: lower | upper` on a GE filter: the course number must be below 300 / 300-699 (p.2391).
+- `waiver` (text) next to `waived_if`, and `exam_credit` / `exam_note` on American Institutions groups: the
+  Bulletin's exact conditions, returned with the requirements.
+- Completed rows may carry `credit: extension | exam | evaluation`: they count toward units but never residence
+  (`totals.residence.no_residence_credit`, p.2391).
+- `course_units` (choose-group): the unit size the Bulletin names ("five 3-unit senior electives", p.1905). A
+  counted course with fewer units gets a ⚠️ (the same list names 1-unit CSC 685/686), never a silent pass or fail.
+- University keys: `transfer.certified_ld_ge` (group ids met by Cal-GETC certification, `profile.ge_certified`,
+  p.2304), `totals.max_units_from` (70 community college, 90 all transfer, 30 exam, 4 "Projects in Teaching" 685,
+  pp.2304, 2313), `max_units` per term (19 fall/spring, 14 summer; more needs a 3.0 SF State GPA and a petition,
+  p.2392), `academic_load.normal_min` (12, p.2393), and the repeat policy in `repeats` (p.2392).
+
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo
 3/12/25 (quoted on DPRs)"}`. It's applied on top of the group and reported in the audit with its source.
@@ -365,6 +383,8 @@ not_on_dpr: ["6"]                  # requirements the 2026-27 rules have but the
                                    # catalog): left out ("waived", not "done"), with a UAC see_advisor to confirm
 transfer_units: 0                  # total transfer units (from the transcript)
 adt: false                         # verified AA-T/AS-T in a similar major → SF State Studies waived
+first_time: true                   # began at SF State as a first-time college student (default: no transfer work)
+ge_certified: false                # Cal-GETC certification of lower-division GE from a CCC (p.2304)
 # completed rows may add `units` (variable-unit courses) and `transfer: true` (articulated
 # transfer course: counts for requirements, not residence or GPA; its units are in transfer_units)
 max_units_per_term: 15

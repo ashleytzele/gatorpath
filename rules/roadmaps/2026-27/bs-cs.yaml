@@ -14,19 +14,24 @@ variants:
     total_units: 120
     source: "p.1908-1909"
     notes:
+      - "This roadmap is a suggested plan of study and does not replace meeting with an advisor. Students may need to adjust the actual sequence of courses based on course availability; consult your Degree Planner and an advisor."
+      - "To avoid taking additional units, meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major."
       - "GE 2: use your Pathway/Category to pick the GE 2 course option (footnote 1)."
       - "First-time freshmen must take one lower-division Area 4 course that meets US History (USH) (footnote 2)."
+      - "GE 1A: use your Pathway/Category to pick the GE 1A course option (footnote 3)."
+      - "Find your Pathway/Category at https://gatorsmartstart.sfsu.edu/pathways (directions: https://gatorsmartstart.sfsu.edu/howtofindyourpathways); questions go to Gator Smart Start, https://gatorsmartstart.sfsu.edu/ (footnotes 1, 3)."
+      - "Major electives: the full list is in the Degree Requirements, p.1905 (footnote 4)."
       - "CSC 648 serves as the major capstone course (footnote 5)."
     semesters:
       - units: 16
         source: "p.1908"
-        items: [CSC 101, MATH 226, {slot: GE, area: "1", units: 6, note: "Take Two"}, {slot: GE, area: "4", units: 3, note: USH}]
+        items: [CSC 101, MATH 226, {slot: GE, area: "1", units: 6, note: "Take Two"}, {slot: GE, area: "4", units: 3, note: "footnote 2: one of the two lower-division Area 4 courses must meet USH"}]
       - units: 15
         source: "p.1908"
         items: [CSC 215, MATH 227, PHYS 220, PHYS 222, {slot: GE, area: 1A, units: 3}]
       - units: 16
         source: "p.1908"
-        items: [CSC 220, CSC 230, PHYS 230, PHYS 232, {slot: GE, area: "3", units: 3}, {slot: GE, area: "4", units: 3, note: USH}]
+        items: [CSC 220, CSC 230, PHYS 230, PHYS 232, {slot: GE, area: "3", units: 3}, {slot: GE, area: "4", units: 3, note: "footnote 2: one of the two lower-division Area 4 courses must meet USH"}]
       - units: 15
         source: "p.1908"
         items: [CSC 256, CSC 340, MATH 225, MATH 324, {slot: GE, area: 5B, units: 3}]
@@ -49,19 +54,25 @@ variants:
     total_units: 120
     source: "p.1910-1911"
     notes:
-      - "MATH 197 and MATH 198 are prerequisites for MATH 226; MATH 198 meets GE 2 (footnote 1)."
+      - "This roadmap is a suggested plan of study and does not replace meeting with an advisor. Students may need to adjust the actual sequence of courses based on course availability; consult your Degree Planner and an advisor."
+      - "To avoid taking additional units, meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major."
+      - "MATH 197 (Prelude to Calculus I) is a prerequisite for MATH 198 and MATH 226; MATH 198 (Prelude to Calculus II) is a prerequisite for MATH 226 and meets GE 2."
+      - "GE 2: use your Pathway/Category to pick the GE 2 course option (footnote 1)."
       - "First-time freshmen must take one lower-division Area 4 course that meets US History (USH) (footnote 2)."
+      - "GE 1A: use your Pathway/Category to pick the GE 1A course option (footnote 3)."
+      - "Find your Pathway/Category at https://gatorsmartstart.sfsu.edu/pathways (directions: https://gatorsmartstart.sfsu.edu/howtofindyourpathways); questions go to Gator Smart Start, https://gatorsmartstart.sfsu.edu/ (footnotes 1, 3)."
+      - "Major electives: the full list is in the Degree Requirements, p.1905 (footnote 4)."
       - "CSC 648 serves as the major capstone course (footnote 5)."
     semesters:
       - units: 15
         source: "p.1910"
-        items: [CSC 101, MATH 197, {slot: GE, area: "1", units: 6, note: "Take Two"}, {slot: GE, area: "4", units: 3, note: USH}]
+        items: [CSC 101, MATH 197, {slot: GE, area: "1", units: 6, note: "Take Two"}, {slot: GE, area: "4", units: 3, note: "footnote 2: one of the two lower-division Area 4 courses must meet USH"}]
       - units: 16
         source: "p.1910"
         items: [CSC 215, MATH 198, {slot: GE, area: 1A, units: 3}, {slot: GE, area: "3", units: 3}, {slot: GE, area: 5B, units: 3}]
       - units: 16
         source: "p.1910"
-        items: [CSC 220, MATH 225, MATH 226, {slot: GE, area: "3", units: 3}, {slot: GE, area: "4", units: 3, note: USH}]
+        items: [CSC 220, MATH 225, MATH 226, {slot: GE, area: "3", units: 3}, {slot: GE, area: "4", units: 3, note: "footnote 2: one of the two lower-division Area 4 courses must meet USH"}]
       - units: 17
         source: "p.1910"
         items: [CSC 230, MATH 227, PHYS 220, PHYS 222, {slot: GE, area: "6", units: 3}, {slot: ai, area: USG/CSLG, units: 3}]
@@ -86,8 +97,11 @@ variants:
     met_in_transfer: [MATH 225, MATH 226, MATH 227, PHYS 220, PHYS 222, PHYS 230, PHYS 232,
                       CSC 101, CSC 215, CSC 220, CSC 230, CSC 256]
     notes:
-      - "Students entering the major with the AS-T in Computer Science are not required to fulfill SF State Studies requirements."
-      - "Degree completion guaranteed in 60 units (p.2304)."
+      - "For students who transfer in the current Bulletin year with an AS-T in Computer Science, with 35 units in the major (MATH 225, MATH 226, MATH 227, PHYS 220/222, PHYS 230/232, CSC 101, CSC 215, CSC 220, CSC 230, CSC 256) and all lower-division GE requirements satisfied. Additional units in the major may have been satisfied: check with a major advisor about the course sequence (p.1912)."
+      - "Students entering the major with the AS-T in Computer Science are not required to fulfill SF State Studies requirements (p.1912)."
+      - "Upon verification that the ADT has been awarded prior to matriculation at SF State, students are guaranteed B.A. or B.S. completion in 60 units if pursuing a 'similar' major after transfer (p.1906; see p.2304)."
+      - "Degree completion in 60 units cannot be guaranteed when a student simultaneously pursues an additional major, a minor, certificate, or credential (p.1906)."
+      - "University-wide requirements 9-15 units: American Institutions 0-6 (if not met in transfer) and upper-division GE 9; courses may satisfy US History or US/CA Government and UD GE at the same time if approved for multiple areas. Major at SF State: 39 units (Mathematics 3, Core 12, Advanced 9, Electives 15). University electives: 6 or more units (p.1912)."
     semesters:
       - units: 15
         source: "p.1912"

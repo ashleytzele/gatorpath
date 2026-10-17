@@ -4,31 +4,165 @@
 catalog_year: 2026-27
 verified: false
 verified_by: null
+# Catalog rights (p.2390): "A student ... who remains in continuous attendance ... may, for purposes of meeting
+# graduation requirements, elect to meet the graduation requirements ... in effect (1) at the time they began their
+# study, (2) at the time they entered the CSU campus from which they graduate, or (3) at the time they graduate".
+# Changing or declaring a major: "must meet the major requirements in effect at the time they change or declare".
+# Not in continuous attendance (at least one semester or two quarters each calendar year): the Bulletin in effect at
+# the time of filing. "All students may be required to meet new requirements imposed by the Trustees ... or by the
+# California State Legislature." Substitutions for discontinued courses may be authorized or required.
+catalog_rights:
+  applies_to: "students except classified graduate students"
+  continuous_attendance: "matriculated attendance in at least one semester or two quarters each calendar year"
+  with_continuous_attendance: "may elect the SF State graduation requirements in effect when they began their study (at any CSU campus, any California Community College, or a combination), when they entered the CSU campus they graduate from, or when they graduate"
+  without_continuous_attendance: "the Bulletin requirements in effect at the time of filing for the degree"
+  major_change: "students who change or declare a major meet the major requirements in effect at the time they change or declare it"
+  substitutions: "substitutions for discontinued courses may be authorized or required by the appropriate campus authority"
+  new_requirements: "all students may be required to meet new requirements imposed by the CSU Trustees or the California State Legislature"
+  source: "p.2390"
+# Time limit (p.2393): "if any course required for the major, minor, or certificate was taken more than seven years
+# prior to graduation, then departments and programs may require students to retake that course or demonstrate
+# currency in that subject."
+major_course_currency_years: 7
 totals:
-  min_units: 120                   # "B.S. = 120 units minimum"
-  min_upper_division_units: 30     # "Upper-Division Requirement: 30 units minimum." Upper division = 300+ (p.1905)
-  residence: {units: 30, upper_division: 24, major: 12}   # "30 units minimum at SF State, including 24 units upper-division, and 12 units in the major"
+  min_units: 120                   # "B.S. = 120 units minimum" (p.2313); "a total of 120 semester units" (p.2391)
+  # "a minimum of 30 upper-division units (courses numbered 300-699 at SF State). Twenty-four of these upper-division
+  # units must be completed at SF State, and nine of these upper-division units must be completed in the
+  # Upper-Division portion of the General Education program" (p.2391)
+  min_upper_division_units: 30
+  upper_division_numbers: [300, 699]
+  # "Of the 30 unit residency requirement, 24 units must be upper-division courses, and 12 units, upper-division or
+  # lower-division, must be in the major. Nine of these residence units must be earned in the Upper Division portion
+  # of the General Education program. Units earned for courses awarding extension credit or credit by examination or
+  # evaluation do not carry residence credit." (p.2391)
+  residence: {units: 30, upper_division: 24, major: 12, upper_division_ge: 9,
+              no_residence_credit: [extension, exam, evaluation], prior_experiential_learning_max: 6}
   max_cr_units: 24                 # SF State units graded CR; "Major courses only offered as CR/NC are not included"
   min_gpa: {all: 2.0, sf_state: 2.0, major: 2.0}
+  # "Maximum Units for Community College Work: 70 units." "Maximum Units by Examination or Evaluation: 30 units."
+  # "Maximum Units for Courses Numbered '685' and Titled 'Projects in Teaching ...' That may be Applied to the
+  # Baccalaureate Degree: 4 units." (p.2313). "no more than a total of 90 semester (135 quarter) units may be
+  # transferred into the university from all sources" (p.2304).
+  # Over the cap: "Credits and grades earned after the student has the maximum allowable may be used on approval
+  # only to satisfy subject and grade point requirements, but under no circumstances may they be applied toward the
+  # total units required for graduation" (p.2304).
+  # "a maximum of 24 semester units of extension credit and correspondence courses" incl. Open University extension
+  # units and military programs (MCI, Dantes); "Credit earned through SF State Winter Sessions and Special Sessions is
+  # not included in the 24 unit limitation." Credit for Prior Experiential Learning: "a maximum limit of 30 units, 6
+  # of which can be earned for residence credit." Credit by examination "may not be counted towards the residence
+  # requirement" (p.2391).
+  # ponytail: exam, extension and CPEL aren't checked (profiles don't say which units came that way); the DPR applies them.
+  max_units_from: {community_college: 70, all_transfer: 90, exam: 30, projects_in_teaching_685: 4,
+                   extension_correspondence: 24, prior_experiential_learning: {units: 30, residence: 6},
+                   over_cap: "on approval, for subject and grade point requirements only; never toward the 120",
+                   source: "p.2304, p.2313, p.2391"}
   source: "p.2313"
 # "The class level of students is determined according to units completed (earned units)":
-# Freshman 0-29, Sophomore 30-59, Junior 60-89 (upper division), Senior 90 or more. Graduate = holds a degree.
+# Freshman 0-29, Sophomore 30-59, Junior 60-89 (upper division), Senior 90 or more. "Graduate: Holding a
+# baccalaureate or master's degree from an accredited university or college."
 class_level: {sophomore: 30, upper: 60, senior: 90, source: "p.2390"}
-# "the normal academic load for undergraduates is 12 to 15 units per semester and 8 units in the summer"
-academic_load: {normal_max: 15, summer_normal_max: 8, source: "p.2393"}
+# "During spring and fall, the normal academic load for undergraduates is 12 to 15 units per semester and 8 units in
+# the summer. For graduates, the normal load during spring and fall is from 9 to 12 units per semester and 7 units
+# during the summer." Graduate loads are recorded for completeness; GatorPath plans undergraduate degrees.
+# "For international students in F1 visa status, immigration regulations require a minimum academic load of 12 units
+# for undergraduates and 8 units for graduates for spring and fall semesters."
+# The summer figures are the normal load, not a cap (the caps are under max_units).
+academic_load: {normal_min: 12, normal_max: 15, summer_normal: 8, f1_min: {undergraduate: 12, graduate: 8},
+                graduate: {normal_min: 9, normal_max: 12, summer_normal: 7}, source: "p.2393"}
+# "During priority registration, students may register for a maximum of 19 units ... a maximum of 14 units in any
+# combination of summer semester sessions ... Undergraduate students who want to enroll in more than the maximum units
+# listed above must have a cumulative SF State grade point average of 3.0 or better and secure approval via the
+# Exceed Maximum Units Petition ... signed by the student's major advisor, department chair, and college dean."
+# 25 or more units also need the Dean of Undergraduate Education. Academic notice: 13. Summer: "7 units in a
+# five-week summer session, 9 units in an eight-week session, 12 units in a ten-week summer session" (14 combined).
+# The caps count wait-listed units: "a maximum of 19 units of enrolled, including 12 units of wait-listed courses";
+# summer "including 5 units of wait-listed courses". "Registration will not permit students to enroll in more than the
+# above unit maximums without prior approval of the relevant dean."
+max_units: {fall_spring: 19, summer: 14, summer_sessions: {five_week: 7, eight_week: 9, ten_week: 12},
+            includes_waitlisted: {fall_spring: 12, summer: 5},
+            academic_notice: {units: 13, applies_from: "the student's second semester on academic notice"},
+            above_needs_sf_state_gpa: 3.0, dean_approval_from: 25,
+            at_25_or_more: "approval of their advisor, their college dean, and the Dean of Undergraduate Education and Academic Planning",
+            petition: "Exceed Maximum Units Petition, signed by the major advisor, department chair and college dean, to the Registrar (One Stop or records@sfsu.edu) before the add deadline. Undeclared and special majors need the Dean of Undergraduate Education and Academic Planning or designee. Courses completed in auditor status, at another university, or through SF State's College of Professional & Global Education must be included on the petition.",
+            source: "p.2392"}
+# Upper-division GE: "Minimally, all of these courses have a prerequisite of English Composition (1A), Critical
+# Thinking (1B), Oral Communication (1C), and Mathematical Concepts and Quantitative Reasoning (2)" (p.2319); they
+# "are still designed and recommended to be taken after" 60 units (p.2320).
+upper_division_ge: {groups: [ge_ud_sci, ge_3ud, ge_4ud], prerequisites: [ge_1a, ge_1b, ge_1c, ge_2],
+                    recommended_after_units: 60, source: "p.2319-2320",
+                    notes: ["Students studying abroad through the CSU can petition to have appropriate courses taken abroad count for upper-division GE (p.2320)"]}
+# "Students who have previously earned a baccalaureate or higher degree from an institution accredited by a regional
+# accrediting association will not have to complete any GE or additional graduation requirements. These students will
+# only be held to completing courses specifically required for the secondary major." (profile.prior_bachelors)
+prior_degree: {waives: university_groups_and_totals, source: "p.2313"}
+# Grade points (p.2405) and CR: "equivalent to grades A through C-" (p.2403). The engine's GRADE_POINTS must equal
+# these (tests/test_rules.py checks).
+grading:
+  points: {A: 4.0, A-: 3.7, B+: 3.3, B: 3.0, B-: 2.7, C+: 2.3, C: 2.0, C-: 1.7, D+: 1.3, D: 1.0, D-: 0.7, F: 0.0, IC: 0.0, WU: 0.0}
+  cr_counts_as: C-
+  # "No other grading symbol, including W, I, AU, RP, RD, CR, and NC, carries grade point credit." "All temporary
+  # grades, including those of I (Incomplete Authorized), RD (Report Delayed), and RP (Report in Progress) ... must all
+  # be changed to appropriate final grades" before degree requirements are confirmed (p.2405). An I not completed in
+  # time becomes IC, equivalent to an F (p.2403).
+  temporary: [I, RD, RP]
+  source: "p.2403, p.2405"
 # Older GE area codes (on DPRs of earlier catalog years) -> this Bulletin's areas, used to read a DPR's ge_done.
-# Evidence: every 2026-27 course that carries the old tag also carries the new one (all "Course Attributes:"
-# counted 2026-10-17, e.g. C2 + 3B on 199 of 199 courses, UD-C + 3UD on 549 of 549), and prereqs pair them
-# ("GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4*", A U 101 p.2449; "5A/B1" PHYS 305 p.2162; "5B/B2" DANC 304
-# p.1667; "6/F" SOC 479 p.848). No current course carries E, D3 or A4.
+# The GE section's own headings say so: "Area 1A: English Composition ... [Formerly A2]", 1B [Formerly A3] (p.2314);
+# 1C [Formerly A1], 2 [Formerly B4], 3A [Formerly Area C1] (p.2315); 3B [Formerly Area C2] (p.2316); 4 [Formerly
+# Area D] (p.2317); 5A [Formerly B1], 5B [Formerly B2], 5C [Formerly B3] (p.2319); 5UD [Formerly UD-B] (p.2320);
+# 3UD [Formerly UD-C] (p.2321); 4UD [Formerly UD-D] (p.2324). F -> 6 has no heading; it rests on prereq wording
+# ("GE Area 6/F*", SOC 479 p.848) and course tags: all 120 course entries tagged GE-F are also tagged 6. D1 (116 of
+# 116 with 4), D2 (40/40 with 4) and "C3 or C2" (34/34 with 3B) are sub-codes. D3 (12 course entries) and A4 (8)
+# appear only without a current GE code, and no course carries E: none has a current equivalent.
+# Reproduce the counts: uv run python -m gatorpath.ingest.bulletin data/raw/bulletin-2026-27.pdf --legacy-ge
 legacy_ge_areas:
   map: {A1: 1C, A2: 1A, A3: 1B, B1: 5A, B2: 5B, B3: 5C, B4: "2", C1: 3A, C2: 3B, "C3 OR C2": 3B,
         D: "4", D1: "4", D2: "4", F: "6", GE-F: "6", UD-B: 5UD, UD-C: 3UD, UD-D: 4UD}
   none: [E, D3, A4]
-  source: "co-tagged Course Attributes in the 2026-27 Bulletin; prereq pairings p.2449, p.2162, p.1667, p.848"
+  source: "\"[Formerly ...]\" GE headings pp.2314-2324; 6/F: SOC 479 p.848"
+# "An undergraduate student who has received a grade of C or better, or a grade of CR, may not repeat a course unless
+# the course is described in the Bulletin as repeatable for credit." "... lower than C, including AU, IC, RD, RP, W,
+# and WU, may repeat that course only once more." "Exceptions to repeat a course for 3 or more times require the
+# consent of the instructor and department chair." "... cannot repeat any courses once they have repeated 28 units of
+# SF State units ..." "A student cannot repeat a course that has a grade of I (Incomplete) unless the I grade has been
+# converted to a grade." Forgiveness: the lower grade leaves the GPA for up to 16 SF State units.
+# Graduate students: "lower than B ... may repeat that course only once more" (recorded, not used: undergraduate
+# planning only). "courses repeated as a result of a student withdrawing from a full semester of coursework do not
+# count towards the 28 unit limit" (ponytail: not checked; profiles don't mark full-semester withdrawals).
+# "Some repeat exceptions also require approval from the college dean and/or the Board of Appeals and Review"
+# (pp.2392-2393). Forgiveness "went into effect at the end of fall 2017 and does not apply retroactively"; earlier
+# repeats go through Academic Renewal (pp.2398-2399), and the 16 units are a total for both. "Grade forgiveness
+# shall not be applicable to courses for which the original grade was the result of a finding of academic dishonesty"
+# (p.2392, p.2406; not knowable from a profile, so the DPR decides). "(Variable topic courses are excluded only when
+# topics vary.)" "Once a bachelor's degree has been granted, repeating courses for any reason (as a visitor,
+# post-baccalaureate, or Open University student) will not affect the GPA or content of the degree already granted."
 repeats:
-  forgiveness_units: 16            # lower grade leaves the GPA for up to 16 SF State units; past that both count
-  source: "p.2392, p.2406"
+  no_repeat_at_or_above: C
+  except_repeatable_for_credit: true
+  cr_blocks_repeat: true
+  attempts_without_consent: 2
+  max_repeated_units: 28
+  no_repeat_while: [I]
+  forgiveness_units: 16
+  graduate: {repeat_once_more_below: B}
+  full_semester_withdrawals_count_toward_28: false
+  more_approvals: "some exceptions also need the college dean and/or the Board of Appeals and Review"
+  forgiveness_from_term: 2017-fall
+  forgiveness_not_for: academic dishonesty
+  variable_topic_excluded_when_topics_vary: true
+  after_degree: "repeats don't affect the GPA or content of a degree already granted"
+  source: "p.2392, p.2393, p.2398-2399, p.2406"
+# "California Community Colleges can certify up to 34 semester (45 quarter) units of General Education Transfer
+# Curriculum (Cal-GETC) for transfer students to fulfill lower-division general education requirements for any CSU"
+# (p.2304). The lower-division areas below add up to those 34 units (p.2311 table).
+# "Transfer students are subject to different GE requirements than are students admitted to SF State as first-time
+# freshmen" (p.2313). How GatorPath applies that: Cal-GETC certification meets the lower-division areas below
+# (profile.ge_certified); otherwise each area the DPR shows met by transfer credit goes in ge_done; upper-division GE,
+# SF State Studies (unless a verified AA-T/AS-T) and American Institutions still apply; US History via Area 4 is a
+# first-time-student rule only (ai_ush.first_time_from).
+transfer:
+  certified_ld_ge: [ge_1a, ge_1b, ge_1c, ge_2, ge_3a, ge_3b, ge_4, ge_5a, ge_5b, ge_5c, ge_6]
+  source: "p.2304, p.2313"
 groups:
   # General Education, 43 units (table p.2311-2312). Area minimums below add up to 43.
   - {id: ge_1a, title: "GE 1A English Composition", choose_units: 3, from: {ge_area: 1A}, min_grade: C-, source: "p.2314"}
@@ -37,7 +171,7 @@ groups:
   # "Area 1 courses must be completed with a grade of CR or C– or better" (p.2314); same wording for Area 2 (p.2315)
   - {id: ge_2, title: "GE 2 Mathematical Concepts and Quantitative Reasoning", choose_units: 3, from: {ge_area: "2"}, min_grade: C-, source: "p.2315"}
   - {id: ge_3a, title: "GE 3A Arts", choose_units: 3, from: {ge_area: 3A}, source: "p.2315"}
-  - {id: ge_3b, title: "GE 3B Humanities", choose_units: 3, from: {ge_area: 3B}, source: "p.2315"}
+  - {id: ge_3b, title: "GE 3B Humanities", choose_units: 3, from: {ge_area: 3B}, source: "p.2315-2316"}
   - {id: ge_4, title: "GE 4 Social and Behavioral Sciences", choose_units: 6, from: {ge_area: "4"}, source: "p.2317"}
   - {id: ge_5a, title: "GE 5A Physical Science", choose_units: 3, from: {ge_area: 5A}, source: "p.2319"}
   - {id: ge_5b, title: "GE 5B Biological Science", choose_units: 3, from: {ge_area: 5B}, source: "p.2319"}
@@ -51,14 +185,27 @@ groups:
   # GWAR: "identified with a GW after the course number and must be completed with a grade of C- or better"
   - {id: gwar, title: "Graduation Writing Assessment Requirement", choose_n: 1, from: {ge_area: GW}, min_grade: C-, source: "p.2313"}
   # SF State Studies. Waived for a verified AA-T/AS-T in a similar major (p.2313).
-  - {id: sfss_aerm, title: "SF State Studies: American Ethnic and Racial Minorities", choose_n: 1, from: {ge_area: AERM}, waived_if: adt, source: "p.2313"}
-  - {id: sfss_esca, title: "SF State Studies: Environmental Sustainability and Climate Action", choose_n: 1, from: {ge_area: ESCA}, waived_if: adt, source: "p.2313"}
-  - {id: sfss_gp, title: "SF State Studies: Global Perspectives", choose_n: 1, from: {ge_area: GP}, waived_if: adt, source: "p.2313"}
-  - {id: sfss_sj, title: "SF State Studies: Social Justice", choose_n: 1, from: {ge_area: SJ}, waived_if: adt, source: "p.2313"}
+  - {id: sfss_aerm, title: "SF State Studies: American Ethnic and Racial Minorities", choose_n: 1, from: {ge_area: AERM}, waived_if: adt, waiver: "verified AA-T or AS-T from a California Community College, pursuing a similar approved major (p.2313)", source: "p.2313"}
+  - {id: sfss_esca, title: "SF State Studies: Environmental Sustainability and Climate Action", choose_n: 1, from: {ge_area: ESCA}, waived_if: adt, waiver: "verified AA-T or AS-T from a California Community College, pursuing a similar approved major (p.2313)", source: "p.2313"}
+  - {id: sfss_gp, title: "SF State Studies: Global Perspectives", choose_n: 1, from: {ge_area: GP}, waived_if: adt, waiver: "verified AA-T or AS-T from a California Community College, pursuing a similar approved major (p.2313)", source: "p.2313",
+     notes: ["Students studying abroad can petition to have the Global Perspectives area of the SF State Studies requirement met with a study abroad course (p.2313)"]}
+  - {id: sfss_sj, title: "SF State Studies: Social Justice", choose_n: 1, from: {ge_area: SJ}, waived_if: adt, waiver: "verified AA-T or AS-T from a California Community College, pursuing a similar approved major (p.2313)", source: "p.2313"}
   # American Institutions: U.S. History, and U.S. and California Government (USG/CSLG courses cover both parts).
-  - {id: ai_ush, title: "American Institutions: U.S. History", choose_n: 1, from: {ge_area: USH}, source: "p.2313, p.2350"}
-  - {id: ai_usg, title: "American Institutions: U.S. Government", choose_n: 1, from: {ge_area: USG}, source: "p.2313, p.2350"}
-  - {id: ai_cslg, title: "American Institutions: California State and Local Government", choose_n: 1, from: {ge_area: CSLG}, source: "p.2313, p.2350"}
+  # "Students who begin at SF State as first-time college students will satisfy US History by completing a
+  # Lower-Division Area 4 course with USH in the General Education program." (p.2313; also p.2317, p.2350)
+  - {id: ai_ush, title: "American Institutions: U.S. History", choose_n: 1, from: {ge_area: USH},
+     first_time_from: {ge_area_all: ["4", USH], level: lower}, source: "p.2313, p.2317, p.2350",
+     exam_credit: ["AP U.S. History, score 3 or higher", "CLEP U.S. History I or II, score 50", "SF State competency exam"]}
+  - {id: ai_usg, title: "American Institutions: U.S. Government", choose_n: 1, from: {ge_area: USG}, source: "p.2313, p.2350",
+     exam_credit: ["AP U.S. Government and Politics, score 3 or higher", "CLEP American Government, score 50"]}
+  - {id: ai_cslg, title: "American Institutions: California State and Local Government", choose_n: 1, from: {ge_area: CSLG}, source: "p.2313, p.2350-2351",
+     exam_credit: [], exam_note: "No AP examination will satisfy the requirement in California state and local government. No CLEP examination will satisfy the requirement in California state and local government. (p.2350)",
+     notes: ["Transfer students who need ONLY the California Government component may take a course from the CSLG list (p.2351)"]}
+  # By examination (p.2350): US History "may be met either by examination (AP, CLEP, or SF State competency exam) or by
+  # taking a course". AP U.S. History 3+, or CLEP U.S. History I or II (50) -> US History; AP U.S. Government
+  # and Politics 3+, or CLEP American Government (50) -> the U.S. government part. "No AP examination [and] No CLEP
+  # examination will satisfy the requirement in California state and local government." Exam credit goes in ge_done as
+  # USH / USG, never CSLG; AP/CLEP U.S. government students "will need to take a course" for California government.
 
 # Advising handoff (ARCHITECTURE §7.5). Copied from the pages named in each `source`; recheck yearly.
 # `role` is what the planner asks for; a program's entry with the same role wins.
