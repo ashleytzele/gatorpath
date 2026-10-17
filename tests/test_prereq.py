@@ -277,3 +277,16 @@ def test_prereq_chain_cycles_and_missing_codes():
     assert [e["code"] for e in got["chain"]] == ["MATH 226", "PHYS 222", "PHYS 220"]
     assert got["warnings"] == ["MATH 199 (needed by MATH 226) is not in this catalog; it may have been renumbered"]
     assert any("cycle" in w for w in prereq_chain("X 100", rows)["warnings"])
+
+
+def test_reverse_index_lists_what_a_course_unlocks():
+    from gatorpath.engine.prereq import reverse_index
+
+    rows = {c: parse_prereq(t) for c, t in {
+        "CSC 220": "CSC 210 or CSC 215 with a grade of C or better.",
+        "CSC 230": "CSC 210 or CSC 215 or ENGR 213, and MATH 227 (may be taken concurrently) with grades of C or better.",
+        "MATH 226": "MATH 198 or MATH 199 or equivalent with a grade of C or better; or MATH 226 or equivalent with a grade of C- or lower.",
+    }.items()}
+    got = reverse_index(rows)
+    assert got["CSC 215"] == ["CSC 220", "CSC 230"] and got["MATH 227"] == ["CSC 230"]
+    assert "MATH 226" not in got  # its own retake branch isn't "unlocking" itself

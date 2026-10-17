@@ -119,10 +119,12 @@ degree?" and get correct, sourced answers.
 - [x] Test: every `build_plan` output passes `check_plan` for all eval profiles (p05 is invalid by
   design: CR in MATH 226/CSC 101, which the major rejects and which can't be repeated; it says why)
 - [x] Test: the cybersecurity case schedules CSC 415 before CSC 652/653 (p03 plan, slots filled, re-checked)
-- [ ] `unlocks` in `get_course` (reverse prereq index) and `why` on every course `build_plan` places
+- [x] `unlocks` in `get_course` (reverse prereq index) and `why` on every course `build_plan` places
   ("CSC 413 in term 3: CSC 665, CSC 620, CSC 648 need it")
 - [ ] Pace options in `plan_my_degree`: `build_plan` at ≈18 + summer / 15 / 12 units, compare
-  `est_graduation_term`. Test: an impossible 3-year plan says what blocks it (chain or units)
+  `est_graduation_term`.
+  - [x] `build_plan` `pace` (prereq-chain floor vs units floor) + `graduate_by` → `on_time` / `why_not`.
+    Test: an impossible 3-year plan says what blocks it (chain or units)
 - [ ] What-if workflows in the prompt (ARCHITECTURE §7.4): earlier graduation, new direction
 - [ ] Advisor handoff (ARCHITECTURE §7.5): `see_advisor` items for exceptions, GPA-gated
   permission, overloads, DPR disagreements, unverified rules

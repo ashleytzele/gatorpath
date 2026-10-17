@@ -184,3 +184,9 @@ def test_cybersecurity_electives_come_after_csc_415():
     assert checked["valid"], checked["errors"]
     term_of = {c: s["term"] for s in plan["semesters"] for c in s["courses"] if isinstance(c, str)}
     assert term_key(term_of["CSC 415"]) < min(term_key(term_of["CSC 652"]), term_key(term_of["CSC 653"]))
+
+
+def test_get_course_unlocks():
+    got = server.get_course("CSC 413")["unlocks"]
+    assert {"CSC 620", "CSC 642", "CSC 648", "CSC 665", "CSC 675"} <= set(got)  # all "CSC 413* with a grade of C"
+    assert server.get_course("CSC 653")["unlocks"] == []

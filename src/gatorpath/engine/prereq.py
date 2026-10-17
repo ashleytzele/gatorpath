@@ -370,3 +370,13 @@ def prereq_chain(code: str, prereqs: dict[str, dict]) -> dict:
         warnings.append(f"Prereq text of {', '.join(starred)} {STAR}; see each raw_text")
     return {"code": code, "requires": chain[-1]["requires"] if chain else None, "chain": chain,
             "conditions": conditions, "warnings": warnings}
+
+
+def reverse_index(prereqs: dict[str, dict]) -> dict[str, list[str]]:
+    """{code: courses whose prereqs name it (as a requirement or one of the alternatives)}: what a course unlocks."""
+    out: dict[str, set[str]] = {}
+    for c, row in prereqs.items():
+        for leaf in leaves(row["expr"]):
+            if "course" in leaf and leaf["course"] != c:
+                out.setdefault(leaf["course"], set()).add(c)
+    return {k: sorted(v) for k, v in out.items()}

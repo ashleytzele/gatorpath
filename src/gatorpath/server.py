@@ -14,7 +14,7 @@ from gatorpath import db
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import eligible_options
-from gatorpath.engine.prereq import prereq_chain, prereq_warnings
+from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number
 
 YEAR = "2026-27"  # ponytail: one catalog year. Take it from the profile/tool input once a second year is ingested.
@@ -57,6 +57,7 @@ class Profile(TypedDict):
     adt: NotRequired[bool]
     max_units_per_term: NotRequired[float]
     include_summer: NotRequired[bool]
+    graduate_by: NotRequired[str]
 
 
 class Slot(TypedDict):
@@ -82,6 +83,11 @@ def prereqs(path: Path, year: str) -> dict[str, dict]:
 @cache
 def catalog(path: Path, year: str) -> dict[str, dict]:
     return db.load_catalog(path, year)
+
+
+@cache
+def unlocks(path: Path, year: str) -> dict[str, list[str]]:
+    return reverse_index(prereqs(path, year))
 
 
 @cache
@@ -144,12 +150,14 @@ def search_courses(query: str, subject: str | None = None, level: str | None = N
 @mcp.tool(annotations=READ_ONLY)
 def get_course(code: str) -> dict:
     """Full Bulletin record for one course: description, units, grading, GE areas, prereq (raw text + parsed tree +
-    status), paired/cross-listed links, source_page."""
+    status), paired/cross-listed links, source_page, and `unlocks`: courses whose prereqs name it (as a requirement or
+    one of the alternatives), so a student sees what skipping or delaying it holds up."""
     code = norm_code(code)
     course = db.get_course(DB, YEAR, code)
     if course is None:
         return unknown_course(code)
-    return course | {"offered_terms": "unknown", "warnings": prereq_warnings(code, course["prereq"]) + [NO_OFFERINGS]}
+    return course | {"offered_terms": "unknown", "unlocks": unlocks(DB, YEAR).get(code, []),
+                     "warnings": prereq_warnings(code, course["prereq"]) + [NO_OFFERINGS]}
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -271,7 +279,10 @@ def build_plan(profile: Profile) -> dict:
 
     Fill each slot with list_eligible_electives + the student's goal, then call check_plan again before presenting.
     Uses max_units_per_term (default 15, the normal load, p.2393) and include_summer. Returns needs_input
-    (qr_pathway, start_term) instead of guessing. For "3, 4 or 5 years", call it at different max_units_per_term.
+    (qr_pathway, start_term) instead of guessing. Each semester has `why`: per course, what it's needed before, the
+    chain it starts, and whether delaying it pushes back graduation. `pace` says what sets the length: the longest
+    prereq chain vs the units per term; with profile.graduate_by it says whether that term is reachable and, if
+    not, why_not. For "3, 4 or 5 years", call it at different max_units_per_term / include_summer.
     """
     if err := profile_error(profile):
         return err

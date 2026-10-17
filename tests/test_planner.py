@@ -155,3 +155,22 @@ def test_build_plan_needs_inputs_and_pace():
     normal, light = plan_for(profile), plan_for(profile | {"max_units_per_term": 12})
     assert light["check"]["valid"] and all(s["units"] <= 12 for s in light["semesters"])
     assert len(light["semesters"]) > len(normal["semesters"])
+
+
+def test_build_plan_explains_itself_and_its_pace():
+    profile = eval_profile(ROOT / "evals/profiles/p01-first-semester.yaml")  # QR 1/2, first semester in progress
+    got = plan_for(profile)
+    why = {c: w for s in got["semesters"] for c, w in s["why"].items()}
+    assert "CSC 215 → CSC 220 → CSC 317 → CSC 413 → CSC 648" in why["CSC 215"] and "no slack" in why["CSC 215"]
+    assert why["PHYS 222"].startswith("Corequisite of PHYS 220")
+    assert "Needed before CSC 648" in why["CSC 413"]
+    assert got["pace"]["min_terms_by_prereqs"] == 5 and got["pace"]["longest_chain"][-1] == "CSC 648"
+    # 3 years from a fall 2026 start = spring 2029: 5 terms left, but ~104 units at 15/term need 7
+    late = plan_for(profile | {"graduate_by": "2029-spring"})["pace"]
+    assert late["on_time"] is False and late["terms_available"] == 5
+    assert any("units at 15 per term needs 7 terms" in w for w in late["why_not"])
+    # by spring 2028 even the prereq chain can't fit
+    soon = plan_for(profile | {"graduate_by": "2028-spring"})["pace"]
+    assert any(w.startswith("the prereq chain alone needs 5 terms") for w in soon["why_not"])
+    on_time = plan_for(profile | {"graduate_by": "2030-spring"})["pace"]
+    assert on_time["on_time"] is True and "why_not" not in on_time

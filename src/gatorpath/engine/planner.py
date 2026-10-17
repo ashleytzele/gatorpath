@@ -12,7 +12,7 @@ Assumptions, reported as a warning on every check:
 import math
 import re
 
-from gatorpath.engine.prereq import leaves, prereq_warnings
+from gatorpath.engine.prereq import leaves, prereq_warnings, reverse_index
 from gatorpath.engine.rules import GRADE_POINTS, audit, number, rank
 
 SEASONS = {"spring": 0, "summer": 1, "fall": 2}
@@ -302,6 +302,15 @@ def first_term(profile: dict) -> str | None:
     return next_term(t, profile.get("include_summer", False)) if profile.get("in_progress") else t
 
 
+def terms_through(start: str, end: str, summer: bool) -> int:
+    """How many terms from start to end, inclusive (summers only when they're planned)."""
+    n, t = 0, start
+    while term_key(t) <= term_key(end) and n < 40:
+        n += 1
+        t = next_term(t, summer)
+    return n
+
+
 def chunks(units: float, size: float = 3) -> list[float]:
     out = [size] * int(units // size)
     return out + [units - size * len(out)] if units % size else out
@@ -402,6 +411,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     units = status["totals"]["units"]["value"]
     gpa = profile.get("gpa", status["totals"]["gpa_sf_state"]["value"])
     left = sorted(todo, key=rank_of)
+    first_ok: dict[str, str] = {}  # the first term a course could have gone in
     semesters, term = [], start
     slot_areas: set[str] = set()
     for _ in range(20):
@@ -431,7 +441,10 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 bundle = [c] + [d for d in needs[c] if d in left and d not in placed and c in needs.get(d, ()) and d not in hard[c]]
                 u = sum(catalog[b]["units_min"] for b in bundle)
                 same = set(placed) | set(bundle)
-                if used + u <= limit and all(ok(b, same) for b in bundle):
+                if not all(ok(b, same) for b in bundle):
+                    continue
+                first_ok.setdefault(c, term)
+                if used + u <= limit:
                     placed += bundle
                     used += u
                     changed = True
@@ -468,8 +481,77 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         term = next_term(term, summer)
     plan = {"semesters": semesters}
     check = check_plan(profile, plan, program, university, catalog, prereqs)
+
+    # Why each course is where it is, and what sets the pace.
+    from gatorpath.engine.rules import matches
+
+    term_of = {c: i for i, s in enumerate(semesters) for c in s["courses"] if isinstance(c, str)}
+    dependents = {c: sorted((d for d in todo if c in hard[d]), key=rank_of) for c in todo}
+    coreqs = {c: sorted(d for d in needs[c] - hard[c] if c in needs.get(d, ())) for c in todo}
+    elective_filters = [f for g in program["groups"] if "from" in g
+                        for f in (g["from"] if isinstance(g["from"], list) else [g["from"]])]
+    opens = {c: [d for d in reverse_index(prereqs).get(c, []) if d in catalog and d not in have and d not in todo
+                 and any(matches(f, d, catalog[d]) for f in elective_filters)] for c in todo}
+
+    def longest(c: str) -> list[str]:
+        path = [c]
+        while nxt := [d for d in dependents[path[-1]] if depth[d] == depth[path[-1]] - 1 and d not in path]:
+            path.append(nxt[0])
+        return path
+
+    for s in semesters:
+        notes = {}
+        for c in (x for x in s["courses"] if isinstance(x, str)):
+            path, parts = longest(c), []
+            if c not in required:
+                parts.append(f"on the {variant} roadmap for your QR pathway")
+            if dependents[c]:
+                parts.append(f"needed before {', '.join(dependents[c])} in this plan")
+            if coreqs[c]:
+                parts.append(f"corequisite of {', '.join(coreqs[c])}: take them in the same term")
+            if opens[c]:
+                more = f", +{len(opens[c]) - 5} more" if len(opens[c]) > 5 else ""
+                parts.append(f"opens {len(opens[c])} senior-elective option(s): {', '.join(opens[c][:5])}{more}")
+            if not (dependents[c] or coreqs[c] or opens[c]):
+                parts.append("no later course in this plan needs it, so it can move if needed")
+            if len(path) >= 3:
+                parts.append(f"starts a {len(path)}-term chain: {' → '.join(path)}")
+            if len(path) >= 2 and all(term_of.get(path[k + 1]) == term_of[path[k]] + 1 for k in range(len(path) - 1)):
+                parts.append(f"no slack: delaying it pushes back {path[-1]}")
+            if first_ok.get(c, s["term"]) != s["term"]:
+                parts.append(f"could have started in {first_ok[c]}; waited for room under {cap:g} units per term")
+            notes[c] = parts[0][0].upper() + "; ".join(parts)[1:]
+        s["why"] = notes
+
+    plan_units = sum(s["units"] for s in semesters)
+    critical = min(todo, key=rank_of) if todo else None
+    pace = {"terms": len(semesters), "units_per_term": cap, "include_summer": summer, "planned_units": plan_units,
+            "min_terms_by_prereqs": depth[critical] if critical else 0,
+            "longest_chain": longest(critical) if critical else [],
+            "min_terms_by_units": math.ceil(plan_units / cap) if cap else 0}
+    target = profile.get("graduate_by")
+    if target and TERM.fullmatch(str(target)) and semesters:
+        available = terms_through(start, target, summer)
+        pace |= {"graduate_by": target, "terms_available": available,
+                 "on_time": check["valid"] and term_key(semesters[-1]["term"]) <= term_key(target)}
+        if not pace["on_time"]:
+            why_not = []
+            if pace["min_terms_by_prereqs"] > available:
+                why_not.append(f"the prereq chain alone needs {pace['min_terms_by_prereqs']} terms "
+                               f"({' → '.join(pace['longest_chain'])}); only {available} until {target}")
+            if pace["min_terms_by_units"] > available:
+                why_not.append(f"{plan_units:g} units at {cap:g} per term needs {pace['min_terms_by_units']} terms; only "
+                               f"{available}: add summers or raise max_units_per_term (above {load['normal_max']:g} is "
+                               f"an overload, {load['source']})")
+            if not why_not:
+                last = semesters[-1]
+                held = [c if isinstance(c, str) else c["slot"] for c in last["courses"] if isinstance(c, str) or c["units"]]
+                why_not.append(f"the plan needs {len(semesters)} terms; the last ({last['term']}) holds {', '.join(held)}. "
+                               "Senior electives wait for the core courses the roadmap puts first, and upper-division GE "
+                               f"for {levels['upper']} units" + ("" if summer else "; try include_summer"))
+            pace["why_not"] = why_not
     return {"catalog_year": program["catalog_year"], "variant": variant, **plan,
-            "est_graduation_term": semesters[-1]["term"] if semesters and check["valid"] else None,
+            "est_graduation_term": semesters[-1]["term"] if semesters and check["valid"] else None, "pace": pace,
             "warnings": warnings + check["warnings"], "check": {"valid": check["valid"], "errors": check["errors"]}}
 
 
