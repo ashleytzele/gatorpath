@@ -103,11 +103,14 @@ degree?" and get correct, sourced answers.
   can't verify; "or permission" never rescues a plan), corequisites, class level (p.2390), restrictions,
   repeats/duplicates, unit cap + normal load (p.2393), requirement coverage with slots, 120/UD totals.
   Offering-season checks wait for phase 5
-- [ ] `build_plan`: critical-path priority + term-by-term greedy (ARCHITECTURE §8)
-- [ ] Return `needs_input: qr_pathway` when it's missing
+- [x] `build_plan`: critical-path priority + term-by-term greedy (ARCHITECTURE §8); corequisites together;
+  roadmap pathway courses (QR 3/4: MATH 197 → 198 → 226); slots for GE / senior electives / free units;
+  CR or C-or-better major courses that can't count or be repeated → ⚠️ see an advisor
+- [x] Return `needs_input: qr_pathway` (and `start_term`) when it's missing
 - [ ] `list_eligible_electives` with readiness (`ready` / `ready_by` / `blocked_by`)
 - [ ] MCP prompt `plan_my_degree` (ARCHITECTURE §7.4)
-- [ ] Test: every `build_plan` output passes `check_plan` for all eval profiles
+- [x] Test: every `build_plan` output passes `check_plan` for all eval profiles (p05 is invalid by
+  design: CR in MATH 226/CSC 101, which the major rejects and which can't be repeated; it says why)
 - [ ] Test: the cybersecurity case schedules CSC 415 before CSC 652/653
 - [ ] `unlocks` in `get_course` (reverse prereq index) and `why` on every course `build_plan` places
   ("CSC 413 in term 3: CSC 665, CSC 620, CSC 648 need it")

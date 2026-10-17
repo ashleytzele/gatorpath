@@ -57,6 +57,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
             return OK, []
         state = UNVERIFIED if any(s == UNVERIFIED for s, _ in parts) else NO
         reasons = [r for _, rs in parts for r in rs]
+        if state == NO and perm and all(r.startswith("GPA ") for r in reasons):
+            state = UNVERIFIED  # ordering can't fix a GPA: the student needs permission (or a higher GPA)
         if len(parts) > 1:
             reasons = ["one of: " + "; ".join(reasons)]
         return state, reasons + [f"or {x['permission']} permission" for x in perm]
@@ -68,6 +70,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
             return (OK, []) if ok else (NO, [f"{c} taken with {e['max_grade']} or lower"])
         if c in ctx["done"] or (e.get("concurrent_ok") and c in ctx["same_term"]):
             g = ctx["grades"].get(c)  # None for planned / in-progress: assumed passed well enough
+            if g == "CR" and "min_grade" in e and GRADE_POINTS[e["min_grade"]] > GRADE_POINTS["C-"]:
+                return UNVERIFIED, [f"{c} with {e['min_grade']} or better (have CR, which means A through C-, p.2403)"]
             if g is not None and "min_grade" in e and (rank(g) or -1) < GRADE_POINTS[e["min_grade"]]:
                 return NO, [f"{c} with {e['min_grade']} or better (have {g})"]
             return OK, []
@@ -75,7 +79,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         return NO, [f"{c}{' with ' + e['min_grade'] + ' or better' if 'min_grade' in e else ''} before this term{when}"]
     if "ge_area" in e:
         area = str(e["ge_area"])
-        ok = area in ctx["ge_done"] or any(area in ctx["catalog"][c]["ge_areas"] for c in ctx["done"] if c in ctx["catalog"])
+        ok = (area in ctx["ge_done"] or area in ctx.get("slot_areas", ())
+              or any(area in ctx["catalog"][c]["ge_areas"] for c in ctx["done"] if c in ctx["catalog"]))
         return (OK, []) if ok else (NO, [f"a GE Area {area} course"])
     if "qr_category" in e:
         qr = ctx["profile"].get("qr_pathway")
@@ -123,6 +128,13 @@ def upper_only(g: dict) -> bool:
     return bool(filters) and all(map(up, filters))
 
 
+def slot_ge_areas(slot: dict, groups: dict) -> set[str]:
+    """GE areas a filled slot will carry (assumed for later "GE Area X" prereqs)."""
+    f = groups.get(slot.get("slot"), {}).get("from", {})
+    areas = f.get("ge_area", []) if isinstance(f, dict) else []
+    return {str(a) for a in (areas if isinstance(areas, list) else [areas])}
+
+
 def check_plan(profile: dict, plan: dict, program: dict, university: dict, catalog: dict, prereqs: dict) -> dict:
     """{valid, errors, warnings, terms, remaining}. Errors make a plan invalid; warnings don't."""
     errors: list[dict] = []
@@ -145,6 +157,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     last_taken = max((term_key(r["term"]) for r in completed if TERM.fullmatch(str(r.get("term", "")))), default=None)
     planned: list[dict] = []
     slots: list[dict] = []
+    slot_areas: set[str] = set()
     seen_terms, terms_out = [], []
     for sem in plan.get("semesters", []):
         term = str(sem.get("term", ""))
@@ -187,7 +200,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
 
         ctx = {"done": done, "same_term": set(codes), "grades": grades, "units": units, "profile": profile, "gpa": gpa,
                "ge_done": {str(a).upper() for a in profile.get("ge_done", [])}, "catalog": catalog,
-               "program": program, "class_level": levels}
+               "program": program, "class_level": levels, "slot_areas": slot_areas}
         for c in codes:
             if c not in catalog:
                 continue
@@ -216,6 +229,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         done = done | {c for c in codes if c in catalog}
         for c in codes:  # a planned retake replaces the old grade for later prereqs
             grades.pop(c, None)
+        slot_areas |= {a for x in term_slots for a in slot_ge_areas(x, groups)}
         units += term_units
 
     # Requirement coverage: audit as if everything in progress and planned is passed, then let slots fill the gaps.
@@ -238,7 +252,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             continue
         if "courses_needed" in g and len(g["counted"]) + slot_count.get(g["id"], 0) >= g["courses_needed"]:
             continue
-        if "subjects" in g and any(i in slot_count for i in groups[g["id"]]["across"]):
+        if "subjects" in g and (g["id"] in slot_count or any(i in slot_count for i in groups[g["id"]]["across"])):
             warnings.append(f"{g['title']}: depends on which courses fill the slots ({g['source']})")
             continue
         remaining.append(g["id"])
@@ -258,3 +272,201 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     warnings.extend(w for w in result["warnings"] if "not verified" in w)
     return {"catalog_year": program["catalog_year"], "valid": not errors, "errors": errors,
             "warnings": list(dict.fromkeys(warnings)), "terms": terms_out, "remaining": remaining}
+
+
+def next_term(term: str, summer: bool) -> str:
+    y, s = term_key(term)
+    order = ["spring", "summer", "fall"] if summer else ["spring", "fall"]
+    season = list(SEASONS)[s]
+    if season not in order:  # a summer start when summers are off
+        season = "spring"
+    i = order.index(season) + 1
+    return f"{y + i // len(order)}-{order[i % len(order)]}"
+
+
+def pick_variant(profile: dict, roadmap: dict) -> str | None:
+    if profile.get("adt") and "adt" in roadmap["variants"]:
+        return "adt"
+    qr = profile.get("qr_pathway")
+    return next((k for k, v in roadmap["variants"].items() if qr and v.get("qr_pathway") == str(qr)), None)
+
+
+def first_term(profile: dict) -> str | None:
+    if profile.get("start_term"):
+        return profile["start_term"]
+    terms = [r["term"] for r in profile.get("completed", []) if TERM.fullmatch(str(r.get("term", "")))]
+    if not terms:
+        return None
+    t = next_term(max(terms, key=term_key), profile.get("include_summer", False))
+    return next_term(t, profile.get("include_summer", False)) if profile.get("in_progress") else t
+
+
+def chunks(units: float, size: float = 3) -> list[float]:
+    out = [size] * int(units // size)
+    return out + [units - size * len(out)] if units % size else out
+
+
+def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, catalog: dict, prereqs: dict) -> dict:
+    """Deterministic baseline plan (ARCHITECTURE §8): required courses by critical path, then slots. Passes check_plan."""
+    from gatorpath.engine.prereq import prereq_chain
+
+    summer = profile.get("include_summer", False)
+    load, levels = university["academic_load"], university["class_level"]
+    cap = profile.get("max_units_per_term", load["normal_max"])
+    start = first_term(profile)
+    if start is None:
+        return {"catalog_year": program["catalog_year"], "needs_input": "start_term",
+                "warnings": ["Give start_term (e.g. 2027-spring): no completed course has a term to plan from"]}
+    if not TERM.fullmatch(str(start)):
+        return {"catalog_year": program["catalog_year"], "error": "bad_term", "warnings": [f"{start!r} is not a term like 2027-fall"]}
+    variant = pick_variant(profile, roadmap)
+    in_prog = [c for c in profile.get("in_progress", []) if c in catalog]
+    base = profile | {"completed": profile.get("completed", []) + [{"code": c, "grade": ASSUMED} for c in in_prog],
+                      "in_progress": []}
+    status = audit(base, program, university, catalog)
+    required = [c for g in status["groups"] for c in g.get("remaining", []) if c in catalog]
+    if variant is None and any(number(c) < 300 for c in required):
+        return {"catalog_year": program["catalog_year"], "needs_input": "qr_pathway",
+                "warnings": ["The roadmap (and the math courses before MATH 226) depends on the QR pathway / math "
+                             "placement: give qr_pathway ('1/2' or '3/4'), or adt: true for a verified AA-T/AS-T"]}
+
+    # Roadmap courses for this pathway that lead to a required course (QR 3/4: MATH 197, MATH 198 before MATH 226).
+    items = [i for sem in roadmap["variants"][variant]["semesters"] for i in sem["items"]] if variant else []
+    order = {c: n for n, c in enumerate(i for i in items if isinstance(i, str))}
+    have = {r["code"] for r in profile.get("completed", []) if passed(r["grade"])} | set(in_prog)
+    best = {}
+    for r in profile.get("completed", []):
+        if r["code"] not in best or (rank(r["grade"]) or -1) > (rank(best[r["code"]]) or -1):
+            best[r["code"]] = r["grade"]
+    stuck = [c for c in required if not catalog[c]["repeatable"]
+             and (best.get(c) == "CR" or (rank(best.get(c)) or 0) >= GRADE_POINTS["C"])]
+    warnings = [f"{c}: passed with {best[c]}, which doesn't count toward this requirement, and a course passed with CR "
+                "or C or better can't be repeated (p.2392); see an advisor about a substitution or petition" for c in stuck]
+    required = [c for c in required if c not in stuck]
+    closure = {e["code"] for c in required if c in prereqs for e in prereq_chain(c, prereqs)["chain"]}
+    todo = required + [c for c in order if c in closure and c not in have and c not in required and c in catalog]
+
+    # Priority: longest chain of plan courses that depend on it (critical path), then roadmap order.
+    needs = {c: {l["course"] for l in leaves(prereqs.get(c, {}).get("expr")) if "course" in l and l["course"] in todo and l["course"] != c}
+             for c in todo}
+    hard = {c: {l["course"] for l in leaves(prereqs.get(c, {}).get("expr"))
+                if "course" in l and l["course"] in todo and not l.get("concurrent_ok") and l["course"] != c} for c in todo}
+    depth: dict[str, int] = {}
+
+    def chain(c: str, seen: frozenset = frozenset()) -> int:
+        if c not in depth:
+            depth[c] = 1 + max((chain(d, seen | {c}) for d in todo if c in hard[d] and d not in seen), default=0)
+        return depth[c]
+
+    rank_of = lambda c: (-chain(c), order.get(c, len(order)), c)
+
+    # Slots for what the courses leave open, plus free electives up to the unit totals.
+    sim = base | {"completed": base["completed"] + [{"code": c, "grade": ASSUMED} for c in todo]}
+    after = audit(sim, program, university, catalog)
+    slots: list[dict] = []
+    groups = {g["id"]: g for g in program["groups"] + university["groups"]}
+    for g in after["groups"]:
+        if g["status"] in ("satisfied", "waived"):
+            continue
+        if "subjects" in g:  # GE Area 4 "in at least two different disciplines": one more course from another subject
+            slots.append({"slot": g["id"], "units": 3, "_kind": "ge",
+                          "note": f"a course for {', '.join(groups[g['id']]['across'])} in a subject other than "
+                                  f"{', '.join(g['subjects'])} ({g['source']})"})
+            continue
+        if "units_needed" in g:
+            kind = "major" if g["kind"] == "major" else "ud_ge" if upper_only(groups[g["id"]]) else "ge"
+            slots += [{"slot": g["id"], "units": u, "_kind": kind} for u in chunks(g["units_needed"] - g["units_done"])]
+        elif "courses_needed" in g:
+            slots += [{"slot": g["id"], "units": 0, "_kind": "tag",
+                       "note": "usually met by a GE or elective course that also carries this designation"}
+                      for _ in range(g["courses_needed"] - len(g["counted"]))]
+    t = after["totals"]
+    slot_units = sum(s["units"] for s in slots)
+    ud_slot_units = sum(s["units"] for s in slots if s["_kind"] in ("major", "ud_ge"))
+    free = max(0, t["units"]["needed"] - t["units"]["value"] - slot_units)
+    ud_short = max(0, t["upper_division_units"]["needed"] - t["upper_division_units"]["value"] - ud_slot_units)
+    for u in chunks(free):
+        upper = ud_short > 0
+        ud_short -= u if upper else 0
+        slots.append({"slot": "elective", "units": u, "_kind": "elective"} | ({"upper_division": True} if upper else {}))
+
+    # Senior-elective slots wait for the courses the roadmap places before its first senior_elective slot.
+    first_elective = next((n for n, sem in enumerate(roadmap["variants"][variant]["semesters"])
+                           if any(isinstance(i, dict) and i.get("slot") == "senior_elective" for i in sem["items"])), None) if variant else None
+    before_electives = {i for sem in roadmap["variants"][variant]["semesters"][:first_elective] for i in sem["items"]
+                        if isinstance(i, str)} if first_elective is not None else set()
+
+    done = set(have)
+    grades = {r["code"]: r["grade"] for r in profile.get("completed", [])}
+    units = status["totals"]["units"]["value"]
+    gpa = profile.get("gpa", status["totals"]["gpa_sf_state"]["value"])
+    left = sorted(todo, key=rank_of)
+    semesters, term = [], start
+    slot_areas: set[str] = set()
+    for _ in range(20):
+        if not left and not slots:
+            break
+        if term.endswith("summer") and not summer:
+            term = next_term(term, summer)
+            continue
+        limit = min(cap, load["summer_normal_max"]) if term.endswith("summer") else cap
+        placed: list[str] = []
+        used = 0.0
+        ctx = {"done": done, "grades": grades, "units": units, "profile": profile, "gpa": gpa,
+               "ge_done": {str(a).upper() for a in profile.get("ge_done", [])}, "catalog": catalog,
+               "program": program, "class_level": levels, "slot_areas": slot_areas}
+
+        def ok(c: str, same: set) -> bool:
+            state, _ = evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": same})
+            # An unverifiable branch ("or equivalent", high-school courses) doesn't let a course jump ahead of a
+            # prereq that's still in the plan: wait for it, in an earlier term (or this one, for corequisites).
+            waiting = (hard[c] - done) | (needs[c] - hard[c] - done - same)
+            return state == OK or (state == UNVERIFIED and not waiting)
+
+        changed = True
+        while changed:
+            changed = False
+            for c in [c for c in left if c not in placed]:
+                bundle = [c] + [d for d in needs[c] if d in left and d not in placed and c in needs.get(d, ()) and d not in hard[c]]
+                u = sum(catalog[b]["units_min"] for b in bundle)
+                same = set(placed) | set(bundle)
+                if used + u <= limit and all(ok(b, same) for b in bundle):
+                    placed += bundle
+                    used += u
+                    changed = True
+                    break
+        left = [c for c in left if c not in placed]
+        ready_electives = units >= levels["upper"] and before_electives & set(todo) <= done
+        term_slots = []
+        for kind in ("tag", "ge", "ud_ge", "major", "elective"):
+            for s in [s for s in slots if s["_kind"] == kind]:
+                if kind in ("ud_ge", "major") and units < levels["upper"]:
+                    continue
+                if kind == "major" and not ready_electives:
+                    continue
+                if kind == "elective" and s.get("upper_division") and units < levels["upper"]:
+                    continue
+                if used + s["units"] <= limit:
+                    term_slots.append(s)
+                    slots.remove(s)
+                    used += s["units"]
+        if not placed and not any(s["units"] for s in term_slots):
+            blocked = {c: evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[1] for c in left}
+            warnings.append(f"Stopped at {term}: nothing more can be scheduled. Blocked: "
+                            + "; ".join(f"{c} needs {', '.join(w) or 'more units per term'}" for c, w in blocked.items())
+                            + ("; slots waiting: " + ", ".join(sorted({s['slot'] for s in slots})) if slots else ""))
+            semesters += [{"term": term, "courses": [{k: v for k, v in s.items() if k != "_kind"} for s in term_slots], "units": 0}] if term_slots else []
+            break
+        semesters.append({"term": term, "units": used,
+                          "courses": placed + [{k: v for k, v in s.items() if k != "_kind"} for s in term_slots]})
+        done |= set(placed)
+        for c in placed:  # a planned retake replaces the old grade
+            grades.pop(c, None)
+        slot_areas = slot_areas | {a for x in term_slots for a in slot_ge_areas(x, groups)}
+        units += used
+        term = next_term(term, summer)
+    plan = {"semesters": semesters}
+    check = check_plan(profile, plan, program, university, catalog, prereqs)
+    return {"catalog_year": program["catalog_year"], "variant": variant, **plan,
+            "est_graduation_term": semesters[-1]["term"] if semesters and check["valid"] else None,
+            "warnings": warnings + check["warnings"], "check": {"valid": check["valid"], "errors": check["errors"]}}

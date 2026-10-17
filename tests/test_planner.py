@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+import pytest
 import yaml
 
 from gatorpath.engine.planner import check_plan
@@ -52,8 +53,11 @@ def test_standing_gpa_and_permission():
     early = check(FRESHMAN | {"gpa": 3.5}, ("2027-spring", ["CSC 653"]))
     [e] = errors(early)
     assert "upper standing" in e["message"] and "or instructor permission" in e["message"]
-    low_gpa = FRESHMAN | {"gpa": 2.5, "transfer_units": 60}
-    assert "GPA 3.0" in errors(check(low_gpa, ("2027-spring", ["CSC 415"]), ("2027-fall", ["CSC 653"])), "prereq_not_met")[-1]["message"]
+    # A GPA below the bar can't be fixed by ordering: the course needs instructor permission -> warning, not error
+    low_gpa = check(FRESHMAN | {"gpa": 2.5, "transfer_units": 60}, ("2027-spring", ["CSC 415"]), ("2027-fall", ["CSC 653"]))
+    assert not any(e["course"] == "CSC 653" for e in errors(low_gpa))
+    assert any("CSC 653 in 2027-fall: GatorPath can't check GPA 3.0 or higher (have 2.5)" in w and "permission" in w
+               for w in low_gpa["warnings"])
     transfer_only = [r | {"transfer": True} for r in FRESHMAN["completed"]]  # no SF State grades -> no GPA to fall back on
     no_gpa = check(FRESHMAN | {"transfer_units": 60, "completed": transfer_only},
                    ("2027-spring", ["CSC 415"]), ("2027-fall", ["CSC 653"]))
@@ -100,3 +104,54 @@ def test_complete_plan_for_adt_transfer_is_valid():
     short = check(profile, ("2027-fall", ["CSC 648", "CSC 653"]))
     assert {e["group"] for e in short["errors"] if e["error"] == "requirement_not_covered"} == {"senior_electives", "ge_ud_sci", "ge_4ud"}
     assert {e["total"] for e in short["errors"] if e["error"] == "units_short"} == {"units"}
+
+
+ROADMAP = yaml.safe_load((ROOT / "rules/roadmaps/2026-27/bs-cs.yaml").read_text())
+
+
+def plan_for(profile):
+    from gatorpath.engine.planner import build_plan
+    return build_plan(profile, PROGRAM, UNIVERSITY, ROADMAP, CATALOG, PREREQS)
+
+
+def eval_profile(path):
+    profile = yaml.safe_load(path.read_text())["profile"]
+    profile.setdefault("qr_pathway", "1/2")
+    if not any("term" in r for r in profile.get("completed", [])):
+        profile["start_term"] = "2027-spring"
+    return profile
+
+
+@pytest.mark.parametrize("path", sorted((ROOT / "evals/profiles").glob("*.yaml")), ids=lambda p: p.stem)
+def test_build_plan_passes_check_plan(path):
+    profile = eval_profile(path)
+    got = plan_for(profile)
+    recheck = check_plan(profile, {"semesters": got["semesters"]}, PROGRAM, UNIVERSITY, CATALOG, PREREQS)
+    assert recheck["valid"] == got["check"]["valid"]
+    if path.stem == "p05-cr-grades":
+        # MATH 226 and CSC 101 passed with CR: the major doesn't accept CR, and CR courses can't be repeated (p.2392)
+        assert not got["check"]["valid"] and got["est_graduation_term"] is None
+        assert {e["group"] for e in got["check"]["errors"]} == {"math_physics", "core_cs"}
+        assert sum("passed with CR" in w and "see an advisor" in w for w in got["warnings"]) == 2
+        return
+    assert got["check"]["valid"], got["check"]["errors"]
+    assert all(s["units"] <= 15 for s in got["semesters"])
+
+
+def test_build_plan_qr_3_4_takes_the_math_path_first():
+    freshman = {"catalog_year": "2026-27", "program": "bs-cs", "qr_pathway": "3/4", "start_term": "2027-fall"}
+    got = plan_for(freshman)
+    assert got["variant"] == "qr-3-4" and got["check"]["valid"], got["check"]["errors"]
+    term_of = {c: n for n, s in enumerate(got["semesters"]) for c in s["courses"] if isinstance(c, str)}
+    assert term_of["MATH 197"] < term_of["MATH 198"] < term_of["MATH 226"] < term_of["MATH 227"]
+    assert term_of["CSC 101"] < term_of["CSC 215"] < term_of["CSC 220"] < term_of["CSC 340"] < term_of["CSC 415"]
+    assert term_of["PHYS 220"] == term_of["PHYS 222"]  # corequisites together
+
+
+def test_build_plan_needs_inputs_and_pace():
+    assert plan_for({"catalog_year": "2026-27", "program": "bs-cs", "start_term": "2027-fall"})["needs_input"] == "qr_pathway"
+    assert plan_for({"catalog_year": "2026-27", "program": "bs-cs", "qr_pathway": "1/2"})["needs_input"] == "start_term"
+    profile = eval_profile(ROOT / "evals/profiles/p03-sophomore-qr34.yaml")
+    normal, light = plan_for(profile), plan_for(profile | {"max_units_per_term": 12})
+    assert light["check"]["valid"] and all(s["units"] <= 12 for s in light["semesters"])
+    assert len(light["semesters"]) > len(normal["semesters"])

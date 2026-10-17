@@ -11,6 +11,7 @@ from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
 from gatorpath import db
+from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number
@@ -46,6 +47,7 @@ class Profile(TypedDict):
     program: str
     catalog_year: NotRequired[str]
     qr_pathway: NotRequired[str]
+    start_term: NotRequired[str]
     completed: NotRequired[list[CourseTaken]]
     in_progress: NotRequired[list[str]]
     gpa: NotRequired[float]
@@ -206,6 +208,12 @@ def normalized(profile: dict) -> dict:
                       "in_progress": [norm_code(c) for c in profile.get("in_progress", [])]}
 
 
+def year_warning(profile: dict) -> list[str]:
+    return [] if "catalog_year" in profile else [
+        f"catalog_year not given, so this uses the {YEAR} Bulletin. Students are held to the year on their DPR "
+        "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
+
+
 def profile_error(profile: dict) -> dict | None:
     if profile.get("catalog_year", YEAR) != YEAR:
         return {"catalog_year": YEAR, "error": "unsupported_catalog_year",
@@ -228,11 +236,8 @@ def audit_progress(profile: Profile) -> dict:
     if err := profile_error(profile):
         return err
     program, university = load_rules(YEAR, profile["program"])
-    assumed = [] if "catalog_year" in profile else [
-        f"catalog_year not given, so this audit uses the {YEAR} Bulletin. Students are held to the year on their DPR "
-        "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
     out = audit(normalized(profile), program, university, catalog(DB, YEAR))
-    out["warnings"] = assumed + out["warnings"] + unverified(university, "University (GE and graduation)")
+    out["warnings"] = year_warning(profile) + out["warnings"] + unverified(university, "University (GE and graduation)")
     return out
 
 
@@ -253,5 +258,25 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     plan = {"semesters": [s | {"courses": [norm_code(c) if isinstance(c, str) else c for c in s.get("courses", [])]}
                           for s in plan.get("semesters", [])]}
     out = engine_check_plan(normalized(profile), plan, program, university, catalog(DB, YEAR), prereqs(DB, YEAR))
-    out["warnings"] += [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
+    out["warnings"] = year_warning(profile) + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
+    return out
+
+
+@mcp.tool(annotations=READ_ONLY)
+def build_plan(profile: Profile) -> dict:
+    """Deterministic baseline plan to graduation: required courses ordered by the prereq chain (critical path first,
+    corequisites together), then slots for what's open (GE areas, senior electives, free electives) to reach the 120
+    and upper-division totals. Already run through check_plan: see `check`.
+
+    Fill each slot with list_eligible_electives + the student's goal, then call check_plan again before presenting.
+    Uses max_units_per_term (default 15, the normal load, p.2393) and include_summer. Returns needs_input
+    (qr_pathway, start_term) instead of guessing. For "3, 4 or 5 years", call it at different max_units_per_term.
+    """
+    if err := profile_error(profile):
+        return err
+    program, university = load_rules(YEAR, profile["program"])
+    path = RULES_DIR / "roadmaps" / YEAR / f"{profile['program']}.yaml"
+    out = engine_build_plan(normalized(profile), program, university, yaml.safe_load(path.read_text()),
+                            catalog(DB, YEAR), prereqs(DB, YEAR))
+    out["warnings"] = year_warning(profile) + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
     return out

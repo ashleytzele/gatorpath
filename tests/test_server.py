@@ -140,3 +140,12 @@ def test_check_plan_tool():
     plan["semesters"][0]["courses"][0] = "CSC 999"
     bad = server.check_plan(profile, plan)
     assert not bad["valid"] and {"unknown_course", "requirement_not_covered"} <= {e["error"] for e in bad["errors"]}
+
+
+def test_build_plan_tool():
+    profile = yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"]
+    got = server.build_plan(profile)
+    assert got["check"]["valid"], got["check"]["errors"]
+    assert got["variant"] == "qr-3-4" and got["est_graduation_term"] == got["semesters"][-1]["term"]
+    assert server.check_plan(profile, {"semesters": got["semesters"]})["valid"]
+    assert server.build_plan(profile | {"qr_pathway": None})["needs_input"] == "qr_pathway"
