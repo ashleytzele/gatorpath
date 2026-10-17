@@ -444,7 +444,7 @@ pass it (tested).
 
 | Situation | Behavior |
 |---|---|
-| Unknown course code | `error: unknown_course` with close matches from FTS |
+| Unknown course code | `error: unknown_course` with close matches (same subject, nearest numbers: CSC 210 → CSC 215, CSC 220) |
 | Unverified program | Works, but every response has `verified: false` + warning |
 | Prereq `unparsed`/`partial` | Course allowed; ⚠️ with raw Bulletin text so the student/AI can read it |
 | Missing GPA when a prereq needs it | ⚠️ "requires GPA ≥ 3.0 — not provided" |

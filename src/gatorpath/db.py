@@ -17,7 +17,7 @@ def connect(db_path: str | Path) -> sqlite3.Connection:
     """Read-only; a plain connect would silently create an empty file."""
     if not Path(db_path).exists():
         raise FileNotFoundError(f"{db_path} not built; run: uv run python -m gatorpath.ingest.bulletin data/raw/bulletin-2026-27.pdf")
-    return sqlite3.connect(f"file:{Path(db_path).resolve()}?mode=ro", uri=True)
+    return sqlite3.connect(Path(db_path).resolve().as_uri() + "?mode=ro", uri=True)  # as_uri escapes '#', '?', '%'
 
 
 def load_catalog(db_path: str | Path, catalog_year: str, codes: set[str] | None = None) -> dict[str, dict]:
