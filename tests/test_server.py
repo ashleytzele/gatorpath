@@ -195,3 +195,18 @@ def test_get_course_unlocks():
 def test_audit_progress_points_to_the_dpr_and_an_advisor():
     got = server.audit_progress({"program": "bs-cs", "catalog_year": "2026-27"})
     assert [a["role"] for a in got["see_advisor"]] == ["major_advisor", "dpr"]
+
+
+def test_plan_my_degree_prompt_names_only_real_tools():
+    import asyncio
+    import re as regex
+
+    text = server.plan_my_degree(goal="AI / machine learning", graduate_by="2029-spring")
+    assert "The student's goal: AI / machine learning." in text and "graduate by 2029-spring" in text
+    tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
+    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor"}  # data, not tools
+    named = set(regex.findall(r"`([a-z_]+)`", text)) - fields
+    assert named <= tools, named - tools
+    assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named
+    prompts = asyncio.run(server.mcp.list_prompts())
+    assert [p.name for p in prompts] == ["plan_my_degree"]

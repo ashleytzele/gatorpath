@@ -115,17 +115,17 @@ degree?" and get correct, sourced answers.
   a plan) and the Bulletin description of each option
   - [x] Rank options by how many **open** requirements one course covers ("triple duty": ENVS 401 /
     LS 401 = 4UD + ESCA + GP), so GE/SF State Studies slots collapse into fewer courses
-- [ ] MCP prompt `plan_my_degree` (ARCHITECTURE §7.4)
+- [x] MCP prompt `plan_my_degree` (ARCHITECTURE §7.4), args `goal`, `graduate_by`. Test: it names only real tools
 - [x] Test: every `build_plan` output passes `check_plan` for all eval profiles (p05 is invalid by
   design: CR in MATH 226/CSC 101, which the major rejects and which can't be repeated; it says why)
 - [x] Test: the cybersecurity case schedules CSC 415 before CSC 652/653 (p03 plan, slots filled, re-checked)
 - [x] `unlocks` in `get_course` (reverse prereq index) and `why` on every course `build_plan` places
   ("CSC 413 in term 3: CSC 665, CSC 620, CSC 648 need it")
-- [ ] Pace options in `plan_my_degree`: `build_plan` at ≈18 + summer / 15 / 12 units, compare
+- [x] Pace options in `plan_my_degree`: `build_plan` at ≈18 + summer / 15 / 12 units, compare
   `est_graduation_term`.
   - [x] `build_plan` `pace` (prereq-chain floor vs units floor) + `graduate_by` → `on_time` / `why_not`.
     Test: an impossible 3-year plan says what blocks it (chain or units)
-- [ ] What-if workflows in the prompt (ARCHITECTURE §7.4): earlier graduation, new direction
+- [x] What-if workflows in the prompt (ARCHITECTURE §7.4): earlier graduation, new direction
 - [x] Advisor handoff (ARCHITECTURE §7.5): `see_advisor` items for substitutions (CR in a major course),
   GPA-gated permission, overloads, unverified rules, in check_plan / build_plan / audit_progress.
   DPR disagreements join when the cross-check exists (phase 6)
@@ -134,7 +134,7 @@ degree?" and get correct, sourced answers.
   (CS department, Senior Advisor, CoSE team). Booking is Navigator (sfsu.campus.eab.com)
 - [ ] (?) Who is the CS Senior Advisor? The department page requires one for substitutions but doesn't
   name them. Ask cs-dept@sfsu.edu
-- [ ] Present a passing plan as a term-by-term list in Degree Planner entry order, so the student can
+- [x] Present a passing plan as a term-by-term list in Degree Planner entry order (prompt step 8), so the student can
   record it in the official planner (ARCHITECTURE §3: complement, don't replace)
 - [ ] `save_profile` / `load_profile` (ARCHITECTURE §7.3, D13): student-chosen path, default
   `~/.gatorpath/profile.yaml`, refuses repo paths, stale-DPR warning. Test: no tool writes a file

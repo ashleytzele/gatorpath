@@ -324,3 +324,53 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     out["catalog_year"] = YEAR
     out["warnings"] = year_warning(profile) + out.get("warnings", []) + [NO_OFFERINGS]
     return out
+
+
+PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath ({year} Bulletin). Every course, prereq,
+requirement and date comes from the tools: never add one they didn't return, and never present a plan check_plan
+hasn't passed.{goal}{deadline}
+
+1. Profile. Ask only for what's missing, one short question at a time:
+   - program (`list_programs`) and catalog year, the "Requirement (Catalog) Term" on their DPR. If it isn't {year},
+     say the plan uses {year} rules and theirs may differ.
+   - completed courses (code, grade, term) and in-progress courses. Don't ask them to upload a transcript or DPR PDF
+     into the chat: that sends their name and ID to the AI provider. Ask them to type or paste just the course rows.
+   - transfer students: courses the DPR lists under a requirement count as that course with `transfer: true` (DPR
+     row "MATH 100TR" under "MATH 226" = MATH 226). Use the grade from the other school's transcript. If they only
+     have the DPR's "T", use the requirement's minimum (C for the major) and tell them you assumed it. Transfer GE
+     areas go in `ge_done`, total transfer units in `transfer_units`. Never guess what transfer credit covers.
+   - qr_pathway (math placement "1/2" or "3/4") unless they're done with lower-division math or have an ADT
+     (`adt: true`); gpa if they know it; max_units_per_term (default 15) and include_summer.
+2. `audit_progress`: summarize done / in progress / left, with Bulletin pages and every warning.
+3. `build_plan`. If it returns needs_input, ask for it. Use each semester's `why` to explain key placements
+   ("CSC 413 opens 13 senior electives; delaying it pushes back CSC 648").
+4. Fill every slot. For each one call `list_eligible_electives` with group_id = the slot, plan = the current plan
+   and by_term = the slot's term. Pick by the student's goal: 'ready' first; 'check' only after saying what can't be
+   checked (cannot_check). Prefer options whose also_covers clears other open requirements: one course can cover
+   upper-division GE and SF State Studies at once. Senior electives: at least 12 of the 15 units in CSC. A 0-unit tag
+   slot (SF State Studies, American Institutions) is met by a chosen course whose also_covers includes it: then drop
+   the tag. Otherwise fill it from its own group and add the units. Free `elective` slots: any course; suggest ones
+   that fit the goal.
+5. `check_plan` the filled plan. Fix every error and re-check until valid.
+6. Pace ("3, 4 or 5 years?", "graduate early?"): call `build_plan` with graduate_by and at 12, 15 and 18 units per
+   term + include_summer. Show a table: load, est_graduation_term, on_time, why_not. Over 15 units is above the
+   normal load (p.2393), so it needs an advisor.
+7. What-ifs: earlier graduation → step 6. New direction (AI, security, …) → steps 4-5 with the new goal; required
+   courses don't change. Switching majors isn't supported yet: say so.
+8. Present:
+   - one table per term, in the order to enter it in Student Center → Degree Planner: course, units, what it counts
+     for, why
+   - warnings and Bulletin pages
+   - every `see_advisor` item: who, why, link, and how to book
+   - a checklist: confirm each course is offered that term in Class Search (GatorPath has no schedule data yet),
+     compare with the DPR, and see the advisor
+Keep it short; offer details instead of dumping them."""
+
+
+@mcp.prompt(title="Plan my degree")
+def plan_my_degree(goal: str = "", graduate_by: str = "") -> str:
+    """Step-by-step workflow: profile → audit → plan → electives by goal → check_plan → pace/what-ifs → advisor."""
+    # ponytail: no load_profile / import_dpr steps yet. Add them to the workflow when those tools land (TASKS phase 4, 6).
+    return PLAN_MY_DEGREE.format(year=YEAR, goal=f"\n\nThe student's goal: {goal}." if goal else "",
+                                 deadline=f" They'd like to graduate by {graduate_by} (pass it as graduate_by)."
+                                 if graduate_by else "")

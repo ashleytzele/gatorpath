@@ -477,6 +477,10 @@ deterministic (D6). The prompt gives the client its workflow:
    and how to book (§7.5).
 9. Offer `save_profile` so goal, pace and chosen electives carry over to the next session.
 
+As built (2026-10-17): steps 1-2 ask for typed course rows, never an uploaded PDF, until `load_profile` and
+`import_dpr` exist. Transfer rows the DPR lists under a requirement become that course with `transfer: true`.
+A test fails if the prompt names a tool that doesn't exist.
+
 What-ifs map to tools, not to new server logic:
 - "Graduate a year early" → step 5 with a heavier load, and say what has to give.
 - "Different direction" (AI, cybersecurity, …) → step 6 with the new goal. Required courses don't change.
