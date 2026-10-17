@@ -357,7 +357,10 @@ chosen_electives: [CSC 652, CSC 653]   # decisions kept between sessions (save_p
 plan: []                           # last plan that passed check_plan, if saved
 dpr_imported: 2026-10-16           # set by import_dpr; load_profile warns when it's before the current term
 ge_done: ["1A", "1B", "2"]         # only for transfer/AP/IB credit; SF State courses are
-                                   # matched by their own ge_areas. Also USH/USG/CSLG
+                                   # matched by their own ge_areas. Also USH/USG/CSLG. Older-catalog DPR codes
+                                   # ("A2", "D", "UD-D") are translated via rules/university legacy_ge_areas
+dpr_met: [MATH 225]                # required courses the DPR shows met another way (substitution/exception);
+                                   # count for the requirement, not for prereqs. One student's record, never a rule
 transfer_units: 0                  # total transfer units (from the transcript)
 adt: false                         # verified AA-T/AS-T in a similar major → SF State Studies waived
 # completed rows may add `units` (variable-unit courses) and `transfer: true` (articulated
@@ -477,9 +480,14 @@ deterministic (D6). The prompt gives the client its workflow:
    and how to book (§7.5).
 9. Offer `save_profile` so goal, pace and chosen electives carry over to the next session.
 
-As built (2026-10-17): steps 1-2 ask for typed course rows, never an uploaded PDF, until `load_profile` and
-`import_dpr` exist. Transfer rows the DPR lists under a requirement become that course with `transfer: true`.
-A test fails if the prompt names a tool that doesn't exist.
+As built (2026-10-17, revised after Desktop trial 3): ask **once**, in one message, for everything missing; the
+fastest path is the student's DPR. Say once that an attached PDF carries their name and ID to the AI provider
+(black them out, or paste the requirement sections), then accept what they share; `import_dpr` will make this
+local. Defaults instead of questions (15 units, no summer). A catalog year other than 2026-27 is planned with
+2026-27 rules and a warning, not refused (the DPR wins on disagreements). Transfer rows the DPR lists under a
+requirement become that course with `transfer: true`; substitutions go in `dpr_met`; GE areas in the DPR's own
+codes. Then run through to a checked plan without confirmation stops. A test fails if the prompt names a tool that
+doesn't exist.
 
 What-ifs map to tools, not to new server logic:
 - "Graduate a year early" → step 5 with a heavier load, and say what has to give.

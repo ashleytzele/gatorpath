@@ -94,6 +94,11 @@ report.
     claims checked against the Bulletin (ENVS 401 = ESCA + 4UD + GP, CSC 656 with CSC 415 concurrently).
     Gaps: validated against 2026-27 while the student is on Spring 2025; no offering data; GEOG 575's
     "GE Area E" prereq vs the 3/12/25 Area E waiver went unflagged
+  - Trial 3 (plan_my_degree prompt): asked one question at a time, wouldn't take the DPR, and the Spring 2025
+    catalog hit `unsupported_catalog_year`, so it sent the student elsewhere. Fixed: ask once; the DPR is the
+    fast path (with a one-time PII note); other catalog years are planned with a warning; old GE codes
+    translated (`legacy_ge_areas`, from co-tagged courses); `dpr_met` for substitutions; QR pathway asked only
+    while lower-division math is left
 - [ ] Also try Gemini CLI (proves "works with any client")
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my

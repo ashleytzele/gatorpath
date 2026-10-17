@@ -16,6 +16,16 @@ totals:
 class_level: {sophomore: 30, upper: 60, senior: 90, source: "p.2390"}
 # "the normal academic load for undergraduates is 12 to 15 units per semester and 8 units in the summer"
 academic_load: {normal_max: 15, summer_normal_max: 8, source: "p.2393"}
+# Older GE area codes (on DPRs of earlier catalog years) -> this Bulletin's areas, used to read a DPR's ge_done.
+# Evidence: every 2026-27 course that carries the old tag also carries the new one (all "Course Attributes:"
+# counted 2026-10-17, e.g. C2 + 3B on 199 of 199 courses, UD-C + 3UD on 549 of 549), and prereqs pair them
+# ("GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4*", A U 101 p.2449; "5A/B1" PHYS 305 p.2162; "5B/B2" DANC 304
+# p.1667; "6/F" SOC 479 p.848). No current course carries E, D3 or A4.
+legacy_ge_areas:
+  map: {A1: 1C, A2: 1A, A3: 1B, B1: 5A, B2: 5B, B3: 5C, B4: "2", C1: 3A, C2: 3B, "C3 OR C2": 3B,
+        D: "4", D1: "4", D2: "4", F: "6", GE-F: "6", UD-B: 5UD, UD-C: 3UD, UD-D: 4UD}
+  none: [E, D3, A4]
+  source: "co-tagged Course Attributes in the 2026-27 Bulletin; prereq pairings p.2449, p.2162, p.1667, p.848"
 repeats:
   forgiveness_units: 16            # lower grade leaves the GPA for up to 16 SF State units; past that both count
   source: "p.2392, p.2406"

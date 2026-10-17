@@ -362,13 +362,16 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                       "in_progress": []}
     status = audit(base, program, university, catalog)
     required = [c for g in status["groups"] for c in g.get("remaining", []) if c in catalog]
-    if variant is None and any(number(c) < 300 for c in required):
+    # The QR pathway only changes the math before MATH 226, so ask for it only while lower-division math is left.
+    # ponytail: "MATH below 300" stands for the placement-dependent courses; read it from the roadmaps if a program differs.
+    if variant is None and any(c.startswith("MATH ") and number(c) < 300 for c in required):
         return {"catalog_year": program["catalog_year"], "needs_input": "qr_pathway",
                 "warnings": ["The roadmap (and the math courses before MATH 226) depends on the QR pathway / math "
                              "placement: give qr_pathway ('1/2' or '3/4'), or adt: true for a verified AA-T/AS-T"]}
 
     # Roadmap courses for this pathway that lead to a required course (QR 3/4: MATH 197, MATH 198 before MATH 226).
-    items = [i for sem in roadmap["variants"][variant]["semesters"] for i in sem["items"]] if variant else []
+    ref = variant or next(iter(roadmap["variants"]))  # no pathway needed: any variant still orders the rest
+    items = [i for sem in roadmap["variants"][ref]["semesters"] for i in sem["items"]]
     order = {c: n for n, c in enumerate(i for i in items if isinstance(i, str))}
     have = {r["code"] for r in profile.get("completed", []) if passed(r["grade"])} | set(in_prog)
     best = {}
@@ -381,7 +384,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 "or C or better can't be repeated (p.2392); see an advisor about a substitution or petition" for c in stuck]
     required = [c for c in required if c not in stuck]
     closure = {e["code"] for c in required if c in prereqs for e in prereq_chain(c, prereqs)["chain"]}
-    todo = required + [c for c in order if c in closure and c not in have and c not in required and c in catalog]
+    todo = required + ([c for c in order if c in closure and c not in have and c not in required and c in catalog]
+                       if variant else [])
 
     # Priority: longest chain of plan courses that depend on it (critical path), then roadmap order.
     needs = {c: {l["course"] for l in leaves(prereqs.get(c, {}).get("expr")) if "course" in l and l["course"] in todo and l["course"] != c}
@@ -428,9 +432,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         slots.append({"slot": "elective", "units": u, "_kind": "elective"} | ({"upper_division": True} if upper else {}))
 
     # Senior-elective slots wait for the courses the roadmap places before its first senior_elective slot.
-    first_elective = next((n for n, sem in enumerate(roadmap["variants"][variant]["semesters"])
-                           if any(isinstance(i, dict) and i.get("slot") == "senior_elective" for i in sem["items"])), None) if variant else None
-    before_electives = {i for sem in roadmap["variants"][variant]["semesters"][:first_elective] for i in sem["items"]
+    first_elective = next((n for n, sem in enumerate(roadmap["variants"][ref]["semesters"])
+                           if any(isinstance(i, dict) and i.get("slot") == "senior_elective" for i in sem["items"])), None)
+    before_electives = {i for sem in roadmap["variants"][ref]["semesters"][:first_elective] for i in sem["items"]
                         if isinstance(i, str)} if first_elective is not None else set()
 
     done = set(have)

@@ -15,7 +15,7 @@ from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import eligible_options, see_advisor
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
-from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number
+from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number, translate_ge
 
 YEAR = "2026-27"  # ponytail: one catalog year. Take it from the profile/tool input once a second year is ingested.
 DB = Path(__file__).parents[2] / "data/catalog.db"
@@ -53,6 +53,7 @@ class Profile(TypedDict):
     in_progress: NotRequired[list[str]]
     gpa: NotRequired[float]
     ge_done: NotRequired[list[str]]
+    dpr_met: NotRequired[list[str]]
     transfer_units: NotRequired[float]
     adt: NotRequired[bool]
     max_units_per_term: NotRequired[float]
@@ -211,22 +212,33 @@ def get_roadmap(program: str, variant: str | None = None) -> dict:
     return {"catalog_year": YEAR, "program": program, "variant": variant, **rm["variants"][variant], "warnings": warnings}
 
 
-def normalized(profile: dict) -> dict:
-    return profile | {"catalog_year": YEAR,
-                      "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
-                      "in_progress": [norm_code(c) for c in profile.get("in_progress", [])]}
-
-
 def year_warning(profile: dict) -> list[str]:
-    return [] if "catalog_year" in profile else [
-        f"catalog_year not given, so this uses the {YEAR} Bulletin. Students are held to the year on their DPR "
-        "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
+    given = profile.get("catalog_year")
+    if given is None:
+        return [f"catalog_year not given, so this uses the {YEAR} Bulletin. Students are held to the year on their DPR "
+                "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
+    if str(given).strip() == YEAR:
+        return []
+    return [f"The student's catalog year is {given}, but GatorPath only has {YEAR} rules, so this uses them. "
+            "Requirements may differ (older catalogs use GE Areas A-E). Where the DPR disagrees, the DPR wins"]
+
+
+def prepare(profile: dict, university: dict) -> tuple[dict, list[str]]:
+    """Normalize what a client sends (codes, DPR GE area names) and say what was assumed or translated."""
+    ge_done, ge_warnings = translate_ge(profile.get("ge_done", []), university)
+    clean = profile | {"catalog_year": YEAR, "ge_done": ge_done,
+                       "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
+                       "in_progress": [norm_code(c) for c in profile.get("in_progress", [])],
+                       "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])]}
+    return clean, year_warning(profile) + ge_warnings
+
+
+def normalized_plan(plan: dict | None) -> dict | None:
+    return plan and {"semesters": [s | {"courses": [norm_code(c) if isinstance(c, str) else c for c in s.get("courses", [])]}
+                                   for s in plan.get("semesters", [])]}
 
 
 def profile_error(profile: dict) -> dict | None:
-    if profile.get("catalog_year", YEAR) != YEAR:
-        return {"catalog_year": YEAR, "error": "unsupported_catalog_year",
-                "warnings": [f"only the {YEAR} Bulletin is loaded; {profile['catalog_year']} isn't"]}
     if profile["program"] not in programs():
         return unknown_program(profile["program"])
     return None
@@ -237,16 +249,20 @@ def audit_progress(profile: Profile) -> dict:
     """Degree audit: per requirement group satisfied / in_progress / remaining / waived and which courses counted,
     plus university totals (120 units, upper-division, residence, CR cap, GPAs). Nothing is stored.
 
-    profile: program (e.g. 'bs-cs'); completed: [{code, grade, term?, units? (variable-unit courses), transfer?
-    (articulated transfer course)}], grades as SF State symbols (A..F, CR, NC, W, I); in_progress: [codes];
-    ge_done: GE areas met by transfer/AP/IB credit (e.g. ["1A", "2"], also USH/USG/CSLG); transfer_units: total
-    transfer units; adt: true for a verified AA-T/AS-T (waives SF State Studies); gpa optional.
+    profile: program (e.g. 'bs-cs'); catalog_year (the DPR's "Requirement (Catalog) Term"; another year than
+    2026-27 is planned with 2026-27 rules and a warning); completed: [{code, grade, term?, units? (variable-unit
+    courses), transfer? (articulated transfer course)}], grades as SF State symbols (A..F, CR, NC, W, I);
+    in_progress: [codes]; ge_done: GE areas met by transfer/AP/IB credit, as the DPR writes them (e.g. "1A", or an
+    older catalog's "A2", "D", "UD-D": translated automatically), also USH/USG/CSLG; dpr_met: required courses the
+    DPR shows met by a substitution or exception (e.g. MATH 225 met by MATH 325); transfer_units: total transfer
+    units; adt: true for a verified AA-T/AS-T (waives SF State Studies); gpa optional.
     """
     if err := profile_error(profile):
         return err
     program, university = load_rules(YEAR, profile["program"])
-    out = audit(normalized(profile), program, university, catalog(DB, YEAR))
-    out["warnings"] = year_warning(profile) + out["warnings"] + unverified(university, "University (GE and graduation)")
+    clean, notes = prepare(profile, university)
+    out = audit(clean, program, university, catalog(DB, YEAR))
+    out["warnings"] = notes + out["warnings"] + unverified(university, "University (GE and graduation)")
     out["see_advisor"] = see_advisor([("dpr", "Your DPR is the official audit; compare it with this one")]
                                      + ([("major_advisor", f"GatorPath's {profile['program']} rules aren't verified yet")]
                                         if not program.get("verified") else []), program, university)
@@ -267,10 +283,9 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     if err := profile_error(profile):
         return err
     program, university = load_rules(YEAR, profile["program"])
-    plan = {"semesters": [s | {"courses": [norm_code(c) if isinstance(c, str) else c for c in s.get("courses", [])]}
-                          for s in plan.get("semesters", [])]}
-    out = engine_check_plan(normalized(profile), plan, program, university, catalog(DB, YEAR), prereqs(DB, YEAR))
-    out["warnings"] = year_warning(profile) + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
+    clean, notes = prepare(profile, university)
+    out = engine_check_plan(clean, normalized_plan(plan), program, university, catalog(DB, YEAR), prereqs(DB, YEAR))
+    out["warnings"] = notes + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
     return out
 
 
@@ -291,9 +306,9 @@ def build_plan(profile: Profile) -> dict:
         return err
     program, university = load_rules(YEAR, profile["program"])
     path = RULES_DIR / "roadmaps" / YEAR / f"{profile['program']}.yaml"
-    out = engine_build_plan(normalized(profile), program, university, yaml.safe_load(path.read_text()),
-                            catalog(DB, YEAR), prereqs(DB, YEAR))
-    out["warnings"] = year_warning(profile) + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
+    clean, notes = prepare(profile, university)
+    out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), catalog(DB, YEAR), prereqs(DB, YEAR))
+    out["warnings"] = notes + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
     return out
 
 
@@ -313,16 +328,14 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     if err := profile_error(profile):
         return err
     program, university = load_rules(YEAR, profile["program"])
-    if plan:
-        plan = {"semesters": [s | {"courses": [norm_code(c) if isinstance(c, str) else c for c in s.get("courses", [])]}
-                              for s in plan.get("semesters", [])]}
-    out = eligible_options(normalized(profile), group_id, program, university, catalog(DB, YEAR), prereqs(DB, YEAR),
-                           plan, by_term, max(1, min(limit, 100)))
+    clean, notes = prepare(profile, university)
+    out = eligible_options(clean, group_id, program, university, catalog(DB, YEAR), prereqs(DB, YEAR),
+                           normalized_plan(plan), by_term, max(1, min(limit, 100)))
     if "options" in out:
         desc = db.descriptions(DB, YEAR, [o["code"] for o in out["options"]])
         out["options"] = [o | {"description": desc.get(o["code"])} for o in out["options"]]
     out["catalog_year"] = YEAR
-    out["warnings"] = year_warning(profile) + out.get("warnings", []) + [NO_OFFERINGS]
+    out["warnings"] = notes + out.get("warnings", []) + [NO_OFFERINGS]
     return out
 
 
@@ -330,41 +343,47 @@ PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with Ga
 requirement and date comes from the tools: never add one they didn't return, and never present a plan check_plan
 hasn't passed.{goal}{deadline}
 
-1. Profile. Ask only for what's missing, one short question at a time:
-   - program (`list_programs`) and catalog year, the "Requirement (Catalog) Term" on their DPR. If it isn't {year},
-     say the plan uses {year} rules and theirs may differ.
-   - completed courses (code, grade, term) and in-progress courses. Don't ask them to upload a transcript or DPR PDF
-     into the chat: that sends their name and ID to the AI provider. Ask them to type or paste just the course rows.
-   - transfer students: courses the DPR lists under a requirement count as that course with `transfer: true` (DPR
-     row "MATH 100TR" under "MATH 226" = MATH 226). Use the grade from the other school's transcript. If they only
-     have the DPR's "T", use the requirement's minimum (C for the major) and tell them you assumed it. Transfer GE
-     areas go in `ge_done`, total transfer units in `transfer_units`. Never guess what transfer credit covers.
-   - qr_pathway (math placement "1/2" or "3/4") unless they're done with lower-division math or have an ADT
-     (`adt: true`); gpa if they know it; max_units_per_term (default 15) and include_summer.
-2. `audit_progress`: summarize done / in progress / left, with Bulletin pages and every warning.
-3. `build_plan`. If it returns needs_input, ask for it. Use each semester's `why` to explain key placements
-   ("CSC 413 opens 13 senior electives; delaying it pushes back CSC 648").
-4. Fill every slot. For each one call `list_eligible_electives` with group_id = the slot, plan = the current plan
-   and by_term = the slot's term. Pick by the student's goal: 'ready' first; 'check' only after saying what can't be
-   checked (cannot_check). Prefer options whose also_covers clears other open requirements: one course can cover
-   upper-division GE and SF State Studies at once. Senior electives: at least 12 of the 15 units in CSC. A 0-unit tag
-   slot (SF State Studies, American Institutions) is met by a chosen course whose also_covers includes it: then drop
-   the tag. Otherwise fill it from its own group and add the units. Free `elective` slots: any course; suggest ones
-   that fit the goal.
-5. `check_plan` the filled plan. Fix every error and re-check until valid.
-6. Pace ("3, 4 or 5 years?", "graduate early?"): call `build_plan` with graduate_by and at 12, 15 and 18 units per
-   term + include_summer. Show a table: load, est_graduation_term, on_time, why_not. Over 15 units is above the
-   normal load (p.2393), so it needs an advisor.
-7. What-ifs: earlier graduation → step 6. New direction (AI, security, …) → steps 4-5 with the new goal; required
-   courses don't change. Switching majors isn't supported yet: say so.
-8. Present:
+Keep it fast. Ask once, in one message, for everything still missing, then work through to a finished plan without
+stopping for confirmation. Never ask one question at a time or re-ask what they gave. Fill optional gaps with stated
+defaults (15 units per term, no summer) instead of asking.
+
+1. Ask for their record. The fastest is their DPR (Student Center → Degree Progress Report, printed or saved as a
+   PDF, or its text pasted). Say once that an attached PDF includes their name and student ID, which go to the AI
+   provider, so they may black those out or paste only the requirement sections. Then accept whatever they share; a
+   typed course list works too. In the same message, ask only for what a DPR can't show and isn't given above: the
+   goal, a graduation target, and the math placement (QR "1/2" or "3/4") if lower-division math isn't done.
+2. Build the profile:
+   - catalog_year: the DPR's "Requirement (Catalog) Term", e.g. "Spring 2025". If it isn't {year}, keep going:
+     the tools plan with {year} rules and warn. Where the DPR and the tools disagree, the DPR wins: say so.
+   - completed: each course with a grade (code, grade, term). A course with a term and no grade is in_progress.
+   - transfer: "MATH 100TR" listed under the "MATH 226" requirement means MATH 226 met by transfer:
+     {{code: "MATH 226", grade, transfer: true}}. Use the other school's grade; with only the DPR's "T", use the
+     requirement's minimum (C for the major) and say you assumed it. Never guess what transfer credit covers
+     beyond what the DPR shows.
+   - ge_done: GE areas the DPR shows complete, in the DPR's own codes ("A2", "D", "UD-D", or "1A"); the tools
+     translate older codes. Plus USH / USG / CSLG when American Institutions are met.
+   - dpr_met: required courses the DPR shows met by a different course (MATH 325 listed under "MATH 225").
+   - gpa from the DPR; transfer_units; adt: true for a verified AA-T/AS-T.
+3. `audit_progress`, then `build_plan` (with graduate_by if given). If build_plan returns needs_input, ask for
+   just that.
+4. Fill every slot: `list_eligible_electives` with group_id = the slot, plan = the current plan, by_term = the slot's
+   term. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
+   also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies).
+   Senior electives: at least 12 of the 15 units in CSC. A 0-unit tag slot is met by a chosen course whose
+   also_covers includes it (then drop the tag); otherwise fill it from its own group and add the units. Free
+   `elective` slots: suggest courses that fit the goal.
+5. `check_plan` the filled plan; fix every error and re-check until valid.
+6. A graduation target or "3, 4 or 5 years?": `build_plan` at 12, 15 and 18 units per term + include_summer, then a
+   table: load, est_graduation_term, on_time, why_not. Over 15 units is above the normal load (p.2393): advisor.
+7. Present, briefly:
+   - done / left, with Bulletin pages, and every point where the DPR and the tools disagree
    - one table per term, in the order to enter it in Student Center → Degree Planner: course, units, what it counts
      for, why
-   - warnings and Bulletin pages
-   - every `see_advisor` item: who, why, link, and how to book
-   - a checklist: confirm each course is offered that term in Class Search (GatorPath has no schedule data yet),
-     compare with the DPR, and see the advisor
-Keep it short; offer details instead of dumping them."""
+   - warnings, and every `see_advisor` item: who, why, link, how to book
+   - a checklist: confirm each course is offered that term in Class Search (no schedule data yet), compare with the
+     DPR, see the advisor
+   Then offer what-ifs: graduating earlier (step 6), a new direction (steps 4-5 with the new goal; required courses
+   don't change). Switching majors isn't supported yet."""
 
 
 @mcp.prompt(title="Plan my degree")

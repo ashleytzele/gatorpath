@@ -30,6 +30,30 @@ def load_rules(catalog_year: str, program: str) -> tuple[dict, dict]:
     return read(f"programs/{catalog_year}/{program}.yaml"), read(f"university/{catalog_year}.yaml")
 
 
+def translate_ge(areas: list, university: dict) -> tuple[list[str], list[str]]:
+    """GE areas as a DPR writes them ("A2", "Area D", "UD-D", "1A") -> this catalog's areas, plus warnings."""
+    legacy = university.get("legacy_ge_areas", {})
+    table, none = {str(k).upper(): str(v) for k, v in legacy.get("map", {}).items()}, set(legacy.get("none", []))
+    out, mapped, dropped = [], [], []
+    for a in areas:
+        key = re.sub(r"^(GE\s+)?(AREA\s+)?", "", str(a).strip().upper())
+        if key in table:
+            out.append(table[key])
+            mapped.append(f"{key} → {table[key]}")
+        elif key in none:
+            dropped.append(key)
+        else:
+            out.append(key)
+    warnings = []
+    if mapped:
+        warnings.append(f"GE areas from an older catalog were read as this Bulletin's areas: {', '.join(mapped)} "
+                        f"({legacy['source']})")
+    if dropped:
+        warnings.append(f"GE {', '.join(dropped)}: no {university['catalog_year']} equivalent, so nothing is planned "
+                        "for it; your DPR shows its status")
+    return list(dict.fromkeys(out)), warnings
+
+
 def rank(grade: str | None) -> float | None:
     """Comparable grade value if the grade earns credit, else None (F, NC, W, I, AU, RP, …)."""
     if grade == "CR":
@@ -128,7 +152,13 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
             warnings.append(f"{c}: grade {taken[c]['grade']} doesn't count toward {out['title']}; {why} ({g['source']})")
 
     if "all_of" in g:
-        done = [c for c in g["all_of"] if ok(c)]
+        # dpr_met: required courses the student's DPR shows met another way (a substitution such as MATH 325 for
+        # MATH 225, or an exception). One student's record, never a rule; prereqs still need the real course.
+        met = [c for c in g["all_of"] if c in profile.get("dpr_met", ()) and not ok(c)]
+        for c in met:
+            warnings.append(f"{c}: counted for {out['title']} because the DPR shows it met (substitution or "
+                            f"exception); GatorPath can't verify that ({g['source']})")
+        done = [c for c in g["all_of"] if ok(c) or c in met]
         prog = [c for c in g["all_of"] if c not in done and c in in_progress and free(c)]
         left = [c for c in g["all_of"] if c not in done and c not in prog]
         for c in left:
@@ -136,7 +166,8 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
         if claimed is not None:
             claimed.update(done + prog)
         status = "remaining" if left else "in_progress" if prog else "satisfied"
-        return out | {"status": status, "counted": done, "in_progress": prog, "remaining": left}
+        return out | {"status": status, "counted": done, "in_progress": prog, "remaining": left} | (
+            {"met_per_dpr": met} if met else {})
 
     filters = g["from"] if isinstance(g["from"], list) else [g["from"]]
     ge_areas = {str(a) for f in filters if "ge_area" in f for a in (f["ge_area"] if isinstance(f["ge_area"], list) else [f["ge_area"]])}

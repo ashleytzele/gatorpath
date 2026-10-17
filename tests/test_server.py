@@ -106,9 +106,31 @@ def test_audit_progress_warns_about_assumed_year_and_uncredited_transfer():
     assert not any("catalog_year not given" in w or "toward the 120 only" in w for w in with_year["warnings"])
 
 
-def test_audit_progress_rejects_unknown_program_and_year():
+def test_audit_progress_unknown_program_and_other_catalog_years():
     assert server.audit_progress({"program": "bs-art"})["error"] == "unknown_program"
-    assert server.audit_progress({"program": "bs-cs", "catalog_year": "2025-26"})["error"] == "unsupported_catalog_year"
+    # a Spring 2025 student is planned with 2026-27 rules and told so, not turned away
+    got = server.audit_progress({"program": "bs-cs", "catalog_year": "Spring 2025"})
+    assert "error" not in got and got["warnings"][0].startswith("The student's catalog year is Spring 2025")
+
+
+def test_a_dpr_shaped_profile():
+    # Spring 2025 transfer student, as their DPR reads: old GE codes, transfer rows under requirements, MATH 325
+    # listed under the MATH 225 requirement
+    dpr = {"program": "bs-cs", "catalog_year": "Spring 2025", "transfer_units": 46, "gpa": 4.0,
+           "ge_done": ["A1", "Area A2", "A3", "B1", "B2", "B3", "B4", "C1", "C2", "D", "E", "USH"],
+           "dpr_met": ["math 225"],
+           "completed": [{"code": "MATH 226", "grade": "C", "transfer": True}, {"code": "MATH 227", "grade": "C", "transfer": True},
+                         {"code": "CSC 101", "grade": "C", "transfer": True}, {"code": "CSC 215", "grade": "A", "term": "2025-spring"}]}
+    got = server.audit_progress(dpr)
+    groups = {g["id"]: g for g in got["groups"]}
+    assert groups["math_physics"]["met_per_dpr"] == ["MATH 225"] and "MATH 225" in groups["math_physics"]["counted"]
+    for gid in ("ge_1a", "ge_1b", "ge_1c", "ge_2", "ge_3a", "ge_3b", "ge_4", "ge_5a", "ge_5b", "ge_5c"):
+        assert groups[gid]["status"] == "satisfied", gid
+    w = "\n".join(got["warnings"])
+    assert "A1 → 1C" in w and "UD" not in w.split("read as this Bulletin's areas")[1].split("(")[0]
+    assert "GE E: no 2026-27 equivalent" in w and "MATH 225: counted for Mathematics and Physics" in w
+    plan = server.build_plan(dpr)
+    assert "MATH 225" not in {c for s in plan["semesters"] for c in s["courses"] if isinstance(c, str)}
 
 
 @pytest.mark.skipif(not REAL_DB.exists(), reason="catalog.db not built (git-ignored)")
@@ -204,7 +226,7 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     text = server.plan_my_degree(goal="AI / machine learning", graduate_by="2029-spring")
     assert "The student's goal: AI / machine learning." in text and "graduate by 2029-spring" in text
     tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
-    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor"}  # data, not tools
+    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met"}  # data
     named = set(regex.findall(r"`([a-z_]+)`", text)) - fields
     assert named <= tools, named - tools
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named
