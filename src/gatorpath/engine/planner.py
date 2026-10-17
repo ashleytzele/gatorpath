@@ -293,7 +293,11 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         if t[key]["value"] + add < t[key]["needed"]:
             err("units_short", f"{key.replace('_', ' ')}: {t[key]['value'] + add:g} after the plan, "
                 f"{t[key]['needed']:g} needed ({t['source']})", total=key)
-    warnings.extend(w for w in result["warnings"] if "not verified" in w)
+    warnings.extend(w for w in result["warnings"] if "not verified" in w or "DPR" in w)  # incl. not_on_dpr / dpr_met
+    left_out = [g["title"] for g in program["groups"] + university["groups"] if g["id"] in profile.get("not_on_dpr", ())]
+    if left_out:
+        advise.append(("general_advising", f"Confirm that {', '.join(left_out)} isn't required for your catalog year "
+                       "(GatorPath left it out because your DPR doesn't list it)"))
     if not program.get("verified"):
         advise += [("major_advisor", f"GatorPath's {program['program']} rules aren't verified yet: review this plan "
                     "with an advisor before registering"), ("dpr", "Check what counts toward each requirement")]

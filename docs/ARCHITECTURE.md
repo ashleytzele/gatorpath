@@ -361,6 +361,8 @@ ge_done: ["1A", "1B", "2"]         # only for transfer/AP/IB credit; SF State co
                                    # ("A2", "D", "UD-D") are translated via rules/university legacy_ge_areas
 dpr_met: [MATH 225]                # required courses the DPR shows met another way (substitution/exception);
                                    # count for the requirement, not for prereqs. One student's record, never a rule
+not_on_dpr: ["6"]                  # requirements the 2026-27 rules have but the student's DPR doesn't (older
+                                   # catalog): left out ("waived", not "done"), with a UAC see_advisor to confirm
 transfer_units: 0                  # total transfer units (from the transcript)
 adt: false                         # verified AA-T/AS-T in a similar major → SF State Studies waived
 # completed rows may add `units` (variable-unit courses) and `transfer: true` (articulated

@@ -145,6 +145,12 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
            "counted": [], "in_progress": []}
     if g.get("waived_if") and profile.get(g["waived_if"]):
         return out | {"status": "waived"}
+    if g["id"] in profile.get("not_on_dpr", ()):
+        # DPR-first: an older catalog the student is held to may not have this requirement at all (GE 6 for a
+        # Spring 2025 transfer GE pattern). Left out, flagged, never silently.
+        warnings.append(f"{out['title']}: left out because the student's DPR doesn't list it (their catalog year); "
+                        f"confirm with an advisor that it isn't required ({g['source']})")
+        return out | {"status": "waived", "waived_by": "not on the student's DPR"}
     if "distinct_subjects" in g:
         return out | distinct_subjects(g, done_groups, warnings)
 

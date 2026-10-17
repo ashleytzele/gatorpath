@@ -54,6 +54,7 @@ class Profile(TypedDict):
     gpa: NotRequired[float]
     ge_done: NotRequired[list[str]]
     dpr_met: NotRequired[list[str]]
+    not_on_dpr: NotRequired[list[str]]
     transfer_units: NotRequired[float]
     adt: NotRequired[bool]
     max_units_per_term: NotRequired[float]
@@ -226,7 +227,19 @@ def year_warning(profile: dict) -> list[str]:
 def prepare(profile: dict, university: dict) -> tuple[dict, list[str]]:
     """Normalize what a client sends (codes, DPR GE area names) and say what was assumed or translated."""
     ge_done, ge_warnings = translate_ge(profile.get("ge_done", []), university)
-    clean = profile | {"catalog_year": YEAR, "ge_done": ge_done,
+    # not_on_dpr: group ids, or GE areas in the DPR's or this Bulletin's codes ("6", "F", "Area 6")
+    groups = {g["id"]: g for g in university["groups"]}
+    by_area = {str(a): gid for gid, g in groups.items() if isinstance(g.get("from"), dict)
+               for a in ([g["from"]["ge_area"]] if not isinstance(g["from"].get("ge_area"), list) else g["from"]["ge_area"])}
+    left_out = []
+    for x in profile.get("not_on_dpr", []):
+        if str(x) in groups or str(x) in {g["id"] for g in load_rules(YEAR, profile["program"])[0]["groups"]}:
+            left_out.append(str(x))
+        else:
+            areas, w = translate_ge([x], university)
+            left_out += [by_area[a] for a in areas if a in by_area]
+            ge_warnings += [m for m in w if "not recognized" in m]
+    clean = profile | {"catalog_year": YEAR, "ge_done": ge_done, "not_on_dpr": list(dict.fromkeys(left_out)),
                        "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
                        "in_progress": [norm_code(c) for c in profile.get("in_progress", [])],
                        "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])]}
@@ -254,7 +267,9 @@ def audit_progress(profile: Profile) -> dict:
     courses), transfer? (articulated transfer course)}], grades as SF State symbols (A..F, CR, NC, W, I);
     in_progress: [codes]; ge_done: GE areas met by transfer/AP/IB credit, as the DPR writes them (e.g. "1A", or an
     older catalog's "A2", "D", "UD-D": translated automatically), also USH/USG/CSLG; dpr_met: required courses the
-    DPR shows met by a substitution or exception (e.g. MATH 225 met by MATH 325); transfer_units: total transfer
+    DPR shows met by a substitution or exception (e.g. MATH 225 met by MATH 325); not_on_dpr: requirements the
+    tools list but the student's DPR doesn't have at all (an older catalog, e.g. GE "6" Ethnic Studies): left out and
+    flagged for an advisor to confirm; transfer_units: total transfer
     units; adt: true for a verified AA-T/AS-T (waives SF State Studies); gpa optional.
     """
     if err := profile_error(profile):
@@ -363,6 +378,8 @@ defaults (15 units per term, no summer) instead of asking.
    - ge_done: GE areas the DPR shows complete, in the DPR's own codes ("A2", "D", "UD-D", or "1A"); the tools
      translate older codes. Plus USH / USG / CSLG when American Institutions are met.
    - dpr_met: required courses the DPR shows met by a different course (MATH 325 listed under "MATH 225").
+   - not_on_dpr: requirements audit_progress lists that the DPR doesn't have at all (older catalogs, e.g. GE "6"
+     Ethnic Studies). Compare after step 3's audit and re-run with them; tell the student to confirm.
    - gpa from the DPR; transfer_units; adt: true for a verified AA-T/AS-T.
 3. `audit_progress`, then `build_plan` (with graduate_by if given). If build_plan returns needs_input, ask for
    just that.

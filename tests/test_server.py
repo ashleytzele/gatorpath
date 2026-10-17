@@ -232,3 +232,21 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named
     prompts = asyncio.run(server.mcp.list_prompts())
     assert [p.name for p in prompts] == ["plan_my_degree"]
+
+
+def test_not_on_dpr_leaves_a_requirement_out_and_sends_to_an_advisor():
+    # Spring 2025 transfer GE pattern: the DPR lists Areas A-E + UD, no Ethnic Studies
+    profile = TRANSFER_SENIOR | {"catalog_year": "Spring 2025", "qr_pathway": "1/2",
+                                 "ge_done": [a for a in TRANSFER_SENIOR["ge_done"] if a != "6"]}
+    plan_with = server.build_plan(profile | {"start_term": "2027-spring"})
+    slots = lambda p: {c["slot"] for s in p["semesters"] for c in s["courses"] if isinstance(c, dict)}
+    assert "ge_6" in slots(plan_with)
+    without = profile | {"start_term": "2027-spring", "not_on_dpr": ["Area 6"]}
+    audit = {g["id"]: g for g in server.audit_progress(without)["groups"]}
+    assert audit["ge_6"]["status"] == "waived" and audit["ge_6"]["waived_by"] == "not on the student's DPR"
+    plan_without = server.build_plan(without)
+    assert "ge_6" not in slots(plan_without) and plan_without["check"]["valid"]
+    assert any(w.startswith("GE 6 Ethnic Studies: left out because the student's DPR doesn't list it")
+               for w in plan_without["warnings"])
+    uac = next(a for a in plan_without["see_advisor"] if a["role"] == "general_advising")
+    assert "GE 6 Ethnic Studies isn't required for your catalog year" in uac["why"][0]

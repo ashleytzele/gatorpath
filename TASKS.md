@@ -99,6 +99,11 @@ report.
     fast path (with a one-time PII note); other catalog years are planned with a warning; old GE codes
     translated (`legacy_ge_areas`, from co-tagged courses); `dpr_met` for substitutions; QR pathway asked only
     while lower-division math is left
+  - Trial 4 (same student, prompt + DPR): valid plan to Spring 2028, but it added GE 6 Ethnic Studies (2026-27
+    rule) that the student's Spring 2025 transfer-GE DPR doesn't have. The 2026-27 Bulletin lists Area 6 in the
+    GE table (p.2311) and says transfer students have different GE requirements (p.2313); the DPR wins. Fixed:
+    `not_on_dpr` leaves such a requirement out with a UAC see_advisor to confirm. Without GE 6 the same courses
+    finish in Fall 2027 (12 + 15 units, CSC 656 alongside CSC 415), checked with check_plan
 - [ ] Also try Gemini CLI (proves "works with any client")
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
