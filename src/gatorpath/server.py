@@ -26,6 +26,8 @@ mcp = MCPServer(
         f"SF State degree-planning tools for the {YEAR} Bulletin. Answers come only from the Bulletin and reviewed rules: "
         "don't add courses, prereqs or requirements the tools didn't return. Cite the `source`/`source_page` Bulletin "
         "pages, show every warning, and remind the student that the DPR and an advisor are the final word. "
+        "Never guess what transfer credit covers or when a student will graduate: ask for the DPR, and use the planner "
+        "tools when they exist. "
         "Student profiles are passed in per call and never stored."
     ),
 )
@@ -196,9 +198,12 @@ def audit_progress(profile: Profile) -> dict:
     if profile["program"] not in programs():
         return unknown_program(profile["program"])
     program, university = load_rules(YEAR, profile["program"])
+    assumed = [] if "catalog_year" in profile else [
+        f"catalog_year not given, so this audit uses the {YEAR} Bulletin. Students are held to the year on their DPR "
+        "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
     profile = profile | {"catalog_year": YEAR,
                          "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
                          "in_progress": [norm_code(c) for c in profile.get("in_progress", [])]}
     out = audit(profile, program, university, catalog(DB, YEAR))
-    out["warnings"] += unverified(university, "University (GE and graduation)")
+    out["warnings"] = assumed + out["warnings"] + unverified(university, "University (GE and graduation)")
     return out

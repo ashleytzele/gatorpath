@@ -274,6 +274,10 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
     profile = profile | {"completed": [r | {"grade": norm(r["grade"])} for r in profile.get("completed", [])],
                          "ge_done": [norm(a) for a in profile.get("ge_done", [])]}
     taken = best_attempts(profile, catalog, warnings)
+    if profile.get("transfer_units") and not profile["ge_done"] and not any(r.get("transfer") for r in profile["completed"]):
+        warnings.append(f"{profile['transfer_units']:g} transfer units count toward the 120 only: no transfer courses or ge_done "
+                        "were given, so no requirement is credited for them. Don't assume which requirements they cover; "
+                        "the DPR shows how each transfer course was applied")
     for c in profile.get("in_progress", []):
         if c not in catalog:
             warnings.append(f"{c}: unknown_course, not in the catalog; ignored")

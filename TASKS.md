@@ -83,7 +83,13 @@ report.
   `list_programs`, `get_program_requirements`, `get_roadmap`, `audit_progress`. Tested over a fixture
   catalog.db of real Bulletin rows (`tests/fixtures/catalog_rows.json`) and end to end over stdio
 - [x] FTS5 index for `search_courses` (`course_fts`, built by `ingest.bulletin`; rebuild catalog.db once)
-- [ ] Add to Claude Desktop config; try 10 real questions; write down what felt wrong
+- [x] Add to Claude Desktop config (done 2026-10-16)
+- [ ] Try 10 real questions; write down what felt wrong. Found so far (1, a transfer student's transcript):
+  - [x] Audit silently used 2026-27 for a Spring 2025 student → ⚠️ when `catalog_year` is missing
+  - [x] Model guessed what 46 transfer units covered → audit ⚠️ + server instructions: never guess
+    transfer coverage or graduation terms
+  - [ ] Model estimated "finish Spring/Fall 2027" with no planner → phase 4 `build_plan`
+  - [ ] Transcript was attached to the chat directly (PII to the provider) → phase 6 `import_transcript` / `import_dpr`
 - [ ] Also try Gemini CLI (proves "works with any client")
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my

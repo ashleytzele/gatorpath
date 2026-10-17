@@ -97,6 +97,14 @@ def test_audit_progress_matches_engine(path):
     assert got["warnings"][:len(want["warnings"])] == want["warnings"]
 
 
+def test_audit_progress_warns_about_assumed_year_and_uncredited_transfer():
+    got = server.audit_progress({"program": "bs-cs", "transfer_units": 46, "completed": [{"code": "CSC 215", "grade": "A"}]})
+    assert "catalog_year not given" in got["warnings"][0]
+    assert any("46 transfer units count toward the 120 only" in w for w in got["warnings"])
+    with_year = server.audit_progress({"program": "bs-cs", "catalog_year": "2026-27", "transfer_units": 46, "ge_done": ["1A"]})
+    assert not any("catalog_year not given" in w or "toward the 120 only" in w for w in with_year["warnings"])
+
+
 def test_audit_progress_rejects_unknown_program_and_year():
     assert server.audit_progress({"program": "bs-art"})["error"] == "unknown_program"
     assert server.audit_progress({"program": "bs-cs", "catalog_year": "2025-26"})["error"] == "unsupported_catalog_year"
