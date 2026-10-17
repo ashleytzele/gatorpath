@@ -111,13 +111,14 @@ degree?" and get correct, sourced answers.
   roadmap pathway courses (QR 3/4: MATH 197 → 198 → 226); slots for GE / senior electives / free units;
   CR or C-or-better major courses that can't count or be repeated → ⚠️ see an advisor
 - [x] Return `needs_input: qr_pathway` (and `start_term`) when it's missing
-- [ ] `list_eligible_electives` with readiness (`ready` / `ready_by` / `blocked_by`)
-  - [ ] Rank options by how many **open** requirements one course covers ("triple duty": ENVS 401 /
+- [x] `list_eligible_electives` with readiness (`ready` / `check` / `blocked` + `blocked_by`, `ready_by` from
+  a plan) and the Bulletin description of each option
+  - [x] Rank options by how many **open** requirements one course covers ("triple duty": ENVS 401 /
     LS 401 = 4UD + ESCA + GP), so GE/SF State Studies slots collapse into fewer courses
 - [ ] MCP prompt `plan_my_degree` (ARCHITECTURE §7.4)
 - [x] Test: every `build_plan` output passes `check_plan` for all eval profiles (p05 is invalid by
   design: CR in MATH 226/CSC 101, which the major rejects and which can't be repeated; it says why)
-- [ ] Test: the cybersecurity case schedules CSC 415 before CSC 652/653
+- [x] Test: the cybersecurity case schedules CSC 415 before CSC 652/653 (p03 plan, slots filled, re-checked)
 - [ ] `unlocks` in `get_course` (reverse prereq index) and `why` on every course `build_plan` places
   ("CSC 413 in term 3: CSC 665, CSC 620, CSC 648 need it")
 - [ ] Pace options in `plan_my_degree`: `build_plan` at ≈18 + summer / 15 / 12 units, compare

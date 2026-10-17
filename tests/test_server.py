@@ -9,6 +9,7 @@ import pytest
 import yaml
 
 from gatorpath import server
+from gatorpath.engine.planner import term_key
 from gatorpath.engine.rules import audit, load_rules
 from gatorpath.ingest.bulletin import write_catalog
 
@@ -149,3 +150,37 @@ def test_build_plan_tool():
     assert got["variant"] == "qr-3-4" and got["est_graduation_term"] == got["semesters"][-1]["term"]
     assert server.check_plan(profile, {"semesters": got["semesters"]})["valid"]
     assert server.build_plan(profile | {"qr_pathway": None})["needs_input"] == "qr_pathway"
+
+
+TRANSFER_SENIOR = {"catalog_year": "2026-27", "program": "bs-cs", "transfer_units": 70, "gpa": 4.0,
+                   "ge_done": ["1A", "1B", "1C", "2", "3A", "3B", "4", "5A", "5B", "5C", "6", "USH", "USG", "CSLG"],
+                   "completed": [{"code": "AA S 213", "grade": "A", "term": "2026-fall"}]}
+
+
+def test_eligible_electives_rank_triple_duty_courses_first():
+    got = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-spring")
+    top = got["options"][:2]
+    # ENVS 401 / LS 401: 4UD + Environmental Sustainability + Global Perspectives (SJ is already met by AA S 213)
+    assert {o["code"] for o in top} == {"ENVS 401", "LS 401"}
+    assert all(o["readiness"] == "ready" and set(o["also_covers"]) == {"sfss_esca", "sfss_gp"} for o in top)
+    assert top[0]["description"]
+    geog = next(o for o in got["options"] if o["code"] == "GEOG 575")
+    assert geog["readiness"] == "check" and any("E" in w for w in geog["cannot_check"])  # "... 2/B4*, and E"
+    assert server.list_eligible_electives(TRANSFER_SENIOR, "core_cs")["error"] == "not_a_choice"
+
+
+def test_cybersecurity_electives_come_after_csc_415():
+    profile = yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"]
+    plan = {"semesters": server.build_plan(profile)["semesters"]}
+    t415 = next(s["term"] for s in plan["semesters"] if "CSC 415" in s["courses"])
+    got = {o["code"]: o for o in server.list_eligible_electives(profile, "senior_electives", plan, t415, limit=100)["options"]}
+    assert got["CSC 656"]["readiness"] == "ready"  # "CSC 415* (may be taken concurrently)"
+    for c in ("CSC 652", "CSC 653"):
+        assert got[c]["readiness"] == "blocked" and term_key(got[c]["ready_by"]) > term_key(t415)
+    picks = iter(["CSC 652", "CSC 653", "CSC 656", "CSC 665", "CSC 620"])
+    for s in plan["semesters"]:
+        s["courses"] = [next(picks) if isinstance(c, dict) and c["slot"] == "senior_electives" else c for c in s["courses"]]
+    checked = server.check_plan(profile, plan)
+    assert checked["valid"], checked["errors"]
+    term_of = {c: s["term"] for s in plan["semesters"] for c in s["courses"] if isinstance(c, str)}
+    assert term_key(term_of["CSC 415"]) < min(term_key(term_of["CSC 652"]), term_key(term_of["CSC 653"]))

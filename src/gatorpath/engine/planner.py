@@ -9,6 +9,7 @@ Assumptions, reported as a warning on every check:
 - in-progress courses finish before the first planned term.
 """
 
+import math
 import re
 
 from gatorpath.engine.prereq import leaves, prereq_warnings
@@ -470,3 +471,95 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     return {"catalog_year": program["catalog_year"], "variant": variant, **plan,
             "est_graduation_term": semesters[-1]["term"] if semesters and check["valid"] else None,
             "warnings": warnings + check["warnings"], "check": {"valid": check["valid"], "errors": check["errors"]}}
+
+
+def eligible_options(profile: dict, group_id: str, program: dict, university: dict, catalog: dict, prereqs: dict,
+                     plan: dict | None = None, by_term: str | None = None, limit: int = 25) -> dict:
+    """Courses that can fill a choose-group, with readiness at `by_term` and the other open requirements each covers.
+
+    Ranked: ready first, then courses that also cover the most other open requirements (ENVS 401 = 4UD + ESCA + GP),
+    then the preferred subject while a `min_units_from` minimum is short (12 CSC units of senior electives).
+    """
+    from gatorpath.engine.rules import matches, subject
+
+    groups = {g["id"]: g for g in program["groups"] + university["groups"]}
+    kind = {g["id"]: k for k, rules in (("major", program), ("university", university)) for g in rules["groups"]}
+    g = groups.get(group_id)
+    if g is None:
+        return {"error": "unknown_group", "groups": list(groups)}
+    if "all_of" in g or "from" not in g:
+        return {"error": "not_a_choice", "warnings": [f"{group_id} isn't a choose-group; see get_program_requirements"]}
+    filters = g["from"] if isinstance(g["from"], list) else [g["from"]]
+
+    in_prog = [c for c in profile.get("in_progress", []) if c in catalog]
+    semesters = (plan or {}).get("semesters", [])
+    planned = [(s["term"], c) for s in semesters for c in s.get("courses", []) if isinstance(c, str) and c in catalog]
+    sim = profile | {"completed": profile.get("completed", []) + [{"code": c, "grade": ASSUMED} for c in in_prog]
+                     + [{"code": c, "grade": ASSUMED, "term": t} for t, c in planned], "in_progress": []}
+    after = audit(sim, program, university, catalog)
+    status = {x["id"]: x for x in after["groups"]}
+    open_groups = [i for i, x in status.items() if x["status"] not in ("satisfied", "waived") and i != group_id
+                   and "from" in groups[i]]
+    taken = {r["code"] for r in profile.get("completed", []) if passed(r["grade"])} | set(in_prog) | {c for _, c in planned}
+
+    first = by_term or (semesters[0]["term"] if semesters else first_term(profile))
+    if first is None or not TERM.fullmatch(str(first)):
+        return {"error": "needs_input", "needs_input": "by_term",
+                "warnings": ["Give by_term (e.g. 2027-fall), a plan, or completed courses with terms"]}
+    now = audit(profile, program, university, catalog)["totals"]
+    base_units = now["units"]["value"] + now["units_in_progress"]
+    terms = sorted({first} | {s["term"] for s in semesters if term_key(s["term"]) >= term_key(first)}, key=term_key)
+    gpa = profile.get("gpa", now["gpa_sf_state"]["value"])
+    grades = {r["code"]: r["grade"] for r in profile.get("completed", [])}
+
+    def ctx_at(term: str) -> dict:
+        before = [s for s in semesters if term_key(s["term"]) < term_key(term)]
+        done = taken - {c for t, c in planned if term_key(t) >= term_key(term)}
+        units = base_units + sum(sum(catalog[c]["units_min"] if isinstance(c, str) and c in catalog
+                                     else c.get("units", 0) if isinstance(c, dict) else 0 for c in s["courses"])
+                                 for s in before)
+        return {"done": done, "same_term": {c for t, c in planned if t == term}, "grades": grades, "units": units,
+                "profile": profile, "gpa": gpa, "ge_done": {str(a).upper() for a in profile.get("ge_done", [])},
+                "catalog": catalog, "program": program, "class_level": university["class_level"],
+                "slot_areas": {a for s in semesters if term_key(s["term"]) < term_key(term)
+                               for x in s["courses"] if isinstance(x, dict) for a in slot_ge_areas(x, groups)}}
+
+    ctxs = {t: ctx_at(t) for t in terms}
+    target = status[group_id]
+    pref = g.get("min_units_from", {})
+    pref_short = bool(pref) and target.get("min_units_from", {}).get("done", 0) < pref.get("units", 0)
+    used = {i: sum(1 for c in target["counted"] + target["in_progress"] if matches(f, c, catalog[c]))
+            for i, f in enumerate(filters)}
+    options = []
+    for code, course in catalog.items():
+        if code in taken:
+            continue
+        hit = [i for i, f in enumerate(filters) if matches(f, code, course) and used[i] < f.get("max_courses", math.inf)]
+        if not hit:
+            continue
+        expr = prereqs.get(code, {}).get("expr")
+        state, why = evaluate(expr, ctxs[first])
+        option = {"code": code, "title": course["title"], "units": course["units_min"], "source_page": course["source_page"],
+                  "readiness": {OK: "ready", UNVERIFIED: "check", NO: "blocked"}[state],
+                  "also_covers": [i for i in open_groups if not (kind[i] == kind[group_id] == "major")
+                                  and any(matches(f, code, course) for f in (groups[i]["from"] if isinstance(groups[i]["from"], list) else [groups[i]["from"]]))],
+                  "offered": "unknown"}
+        if state != OK:
+            option["blocked_by" if state == NO else "cannot_check"] = why
+        if state == NO:
+            later = next((t for t in terms[1:] if evaluate(expr, ctxs[t])[0] != NO), None)
+            if later:
+                option["ready_by"] = later
+        if any("max_courses" in filters[i] for i in hit):
+            option["note"] = f"at most {min(filters[i]['max_courses'] for i in hit)} course(s) from this part of the list"
+        options.append(option)
+    order = {"ready": 0, "check": 1, "blocked": 2}
+    options.sort(key=lambda o: (order[o["readiness"]], -len(o["also_covers"]),
+                                not (pref_short and subject(o["code"]) == pref.get("subject")), o["code"]))
+    need = {k: target[k] for k in ("units_needed", "units_done", "courses_needed", "min_units_from") if k in target}
+    return {"catalog_year": program["catalog_year"], "group": group_id, "title": g.get("title", group_id),
+            "source": g["source"], "by_term": first, "status": target["status"], **need,
+            "options": options[:max(1, limit)], "total_options": len(options),
+            "warnings": [f"also_covers lists other open requirements a course would count for (GE, SF State Studies and "
+                         f"American Institutions may overlap with each other and the major, p.2352)"]}
+

@@ -17,6 +17,24 @@
   "crosslisted_with": []
  },
  {
+  "code": "AA S 213",
+  "title": "Asian Americans and American Ideals and Institutions",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "The Asian American experience in the U.S. focusing on basic governmental ideals and institutions. Impact of Asians on legal-constitutional America and the countervailing impact of political-legal structures imposed on Asians.",
+  "grading": null,
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "USG",
+   "CSLG"
+  ],
+  "source_page": 431,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
   "code": "AFRS 202",
   "title": "Black Men's Studies",
   "units_min": 3.0,
@@ -920,6 +938,25 @@
   "crosslisted_with": []
  },
  {
+  "code": "ENVS 401",
+  "title": "International Development and Resource Justice",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "An interdisciplinary study of international development, focusing on resources, community impacts, and environmental sustainability. Discussion of the key questions and concepts from history, economics, geography, and political science that are central to the study of socio-environmental issues. Exploration of several case studies of international environmental problems. Analysis of complex issues such as oil and mineral extraction, deforestation, agricultural production, and climate change. Includes a research project focusing on the development of a resource and location of the student's choice. (This course is offered as LS 401 and ENVS 401. Students may not repeat the course under an alternate prefix.)",
+  "grading": null,
+  "ge_areas": [
+   "ESCA",
+   "4UD",
+   "GP"
+  ],
+  "source_page": 2009,
+  "prereq_text": "GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": [
+   "LS 401"
+  ]
+ },
+ {
   "code": "ERTH 112",
   "title": "Our Dynamic Earth Lecture and Lab",
   "units_min": 4.0,
@@ -950,6 +987,24 @@
   ],
   "source_page": 2003,
   "prereq_text": "GE Areas 1A/A2*, 1B/A3*, 1C/A1*, 2/B4* all with grades of C- or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "GEOG 575",
+  "title": "Emerging China",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Examination of China's geographical conditions for development focusing on climate change, landforms, and natural resources. Focus on the patterns of human-environmental interactions that engender cultural institutions, economic development, and political changes. Discussion of the environmental sustainability of development strategies and feasible alternatives. Build a geographical framework for critically assessing the impact of China's economic emergence on the environment and natural resources within and beyond its borders.",
+  "grading": null,
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "SJ",
+   "4UD"
+  ],
+  "source_page": 2013,
+  "prereq_text": "Restricted to upper-division standing; GE Areas 1A/A2*, 1B/A3*, 1C/A1*, 2/B4*, and E all with grades of C- or better; or permission of the instructor.",
   "paired_with": [],
   "crosslisted_with": []
  },
@@ -1026,6 +1081,41 @@
   "prereq_text": "Restricted to upper-division standing; GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better; or permission of the instructor.",
   "paired_with": [],
   "crosslisted_with": []
+ },
+ {
+  "code": "IBUS 330",
+  "title": "International Business and Multicultural Relations",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "International business and the social, political, cultural, and economic environments and their effects on functional management. Emphasis on trade, global strategy, foreign direct investment, economic integration, foreign exchange, and the multinational enterprise.",
+  "grading": null,
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "source_page": 235,
+  "prereq_text": "Upper-division standing; GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* with a C- or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "LS 401",
+  "title": "International Development and Resource Justice",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "An interdisciplinary study of international development, focusing on resources, community impacts, and environmental sustainability. Discussion of the key questions and concepts from history, economics, geography, and political science that are central to the study of socio-environmental issues. Exploration of several case studies of international environmental problems. Analysis of complex issues such as oil and mineral extraction, deforestation, agricultural production, and climate change. Includes a research project focusing on the development of a resource and location of the student's choice. (This course is offered as LS 401 and ENVS 401. Students may not repeat the course under an alternate prefix.)",
+  "grading": null,
+  "ge_areas": [
+   "ESCA",
+   "4UD",
+   "GP"
+  ],
+  "source_page": 1398,
+  "prereq_text": "GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": [
+   "ENVS 401"
+  ]
  },
  {
   "code": "MATH 197",

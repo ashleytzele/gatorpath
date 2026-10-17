@@ -73,6 +73,14 @@ def get_course(db_path: str | Path, catalog_year: str, code: str) -> dict | None
     return course
 
 
+def descriptions(db_path: str | Path, catalog_year: str, codes: list[str]) -> dict[str, str]:
+    con = connect(db_path)
+    rows = con.execute("select code, description from course where catalog_year = ? and code in (select value from json_each(?))",
+                       (catalog_year, json.dumps(codes))).fetchall()
+    con.close()
+    return dict(rows)
+
+
 def search_courses(db_path: str | Path, catalog_year: str, query: str) -> list[dict]:
     """FTS5 keyword search over code/title/description, best first. Any word may match; title hits rank highest."""
     words = re.findall(r"\w+", query)

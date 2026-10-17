@@ -13,6 +13,7 @@ from mcp.types import ToolAnnotations
 from gatorpath import db
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
+from gatorpath.engine.planner import eligible_options
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number
 
@@ -279,4 +280,33 @@ def build_plan(profile: Profile) -> dict:
     out = engine_build_plan(normalized(profile), program, university, yaml.safe_load(path.read_text()),
                             catalog(DB, YEAR), prereqs(DB, YEAR))
     out["warnings"] = year_warning(profile) + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
+    return out
+
+
+@mcp.tool(annotations=READ_ONLY)
+def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None = None, by_term: str | None = None,
+                            limit: int = 25) -> dict:
+    """Courses that can fill one requirement group's slot (e.g. 'senior_electives', 'ge_4ud', 'sfss_esca'), with the
+    Bulletin description, so you can pick by the student's goal.
+
+    Each option has readiness at by_term (default: the plan's first term, or the next term): 'ready' (prereqs met),
+    'check' (met except what GatorPath can't verify: GPA, permission, unparsed text: see cannot_check), or 'blocked'
+    (blocked_by, plus ready_by: the first plan term it opens up, when a plan is given). Pass the build_plan output as
+    `plan` and the slot's term as by_term, so planned courses count. Options are ranked ready-first, then by
+    also_covers: other open requirements the same course would satisfy (one course can do triple duty, e.g. 4UD +
+    Environmental Sustainability + Global Perspectives). Re-run check_plan after filling slots.
+    """
+    if err := profile_error(profile):
+        return err
+    program, university = load_rules(YEAR, profile["program"])
+    if plan:
+        plan = {"semesters": [s | {"courses": [norm_code(c) if isinstance(c, str) else c for c in s.get("courses", [])]}
+                              for s in plan.get("semesters", [])]}
+    out = eligible_options(normalized(profile), group_id, program, university, catalog(DB, YEAR), prereqs(DB, YEAR),
+                           plan, by_term, max(1, min(limit, 100)))
+    if "options" in out:
+        desc = db.descriptions(DB, YEAR, [o["code"] for o in out["options"]])
+        out["options"] = [o | {"description": desc.get(o["code"])} for o in out["options"]]
+    out["catalog_year"] = YEAR
+    out["warnings"] = year_warning(profile) + out.get("warnings", []) + [NO_OFFERINGS]
     return out
