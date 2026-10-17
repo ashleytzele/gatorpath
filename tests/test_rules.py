@@ -132,3 +132,13 @@ def test_numeric_ge_done_and_transfer_upper_division_units():
     assert next(g for g in got["groups"] if g["id"] == "ge_2")["status"] == "satisfied"
     assert got["totals"]["upper_division_units"]["value"] == 3
     assert got["totals"]["residence_upper_division_units"]["value"] == 0
+
+
+def test_translate_ge_reads_dpr_wording():
+    from gatorpath.engine.rules import translate_ge
+
+    got, warnings = translate_ge(["Area D - Social Sciences", "GE D/USH", "UD-D", "A2", "1B", "E", "Area Q"], UNIVERSITY)
+    assert got == ["4", "USH", "4UD", "1A", "1B"]
+    assert "D → 4" in warnings[0] and "UD-D → 4UD" in warnings[0]
+    assert "GE E: no 2026-27 equivalent" in warnings[1]
+    assert warnings[2] == "ge_done entries not recognized as GE areas, ignored: Area Q"

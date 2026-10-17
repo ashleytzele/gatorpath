@@ -31,19 +31,28 @@ def load_rules(catalog_year: str, program: str) -> tuple[dict, dict]:
 
 
 def translate_ge(areas: list, university: dict) -> tuple[list[str], list[str]]:
-    """GE areas as a DPR writes them ("A2", "Area D", "UD-D", "1A") -> this catalog's areas, plus warnings."""
+    """GE areas as a DPR writes them ("A2", "Area D - Social Sciences", "GE D/USH", "UD-D", "1A") -> this catalog's
+    areas, plus warnings for what was translated, has no equivalent, or isn't a known area."""
     legacy = university.get("legacy_ge_areas", {})
     table, none = {str(k).upper(): str(v) for k, v in legacy.get("map", {}).items()}, set(legacy.get("none", []))
-    out, mapped, dropped = [], [], []
+    known = {str(a).upper() for g in university["groups"] if "from" in g
+             for f in (g["from"] if isinstance(g["from"], list) else [g["from"]]) if "ge_area" in f
+             for a in (f["ge_area"] if isinstance(f["ge_area"], list) else [f["ge_area"]])}
+    out, mapped, dropped, unknown = [], [], [], []
     for a in areas:
-        key = re.sub(r"^(GE\s+)?(AREA\s+)?", "", str(a).strip().upper())
-        if key in table:
-            out.append(table[key])
-            mapped.append(f"{key} → {table[key]}")
-        elif key in none:
-            dropped.append(key)
-        else:
-            out.append(key)
+        text = re.sub(r"^(GE\s+)?(AREA\s+)?", "", str(a).strip().upper())
+        text = re.split(r"\s+[-–:]\s+|:\s*", text)[0]  # "D - SOCIAL SCIENCES" -> "D"; keeps "UD-D"
+        for key in [text] if text in table else text.split("/"):  # "D/USH" -> D, USH; but "C3 OR C2" stays whole
+            key = key.strip()
+            if key in table:
+                out.append(table[key])
+                mapped.append(f"{key} → {table[key]}")
+            elif key in none:
+                dropped.append(key)
+            elif key in known:
+                out.append(key)
+            else:
+                unknown.append(str(a))
     warnings = []
     if mapped:
         warnings.append(f"GE areas from an older catalog were read as this Bulletin's areas: {', '.join(mapped)} "
@@ -51,6 +60,8 @@ def translate_ge(areas: list, university: dict) -> tuple[list[str], list[str]]:
     if dropped:
         warnings.append(f"GE {', '.join(dropped)}: no {university['catalog_year']} equivalent, so nothing is planned "
                         "for it; your DPR shows its status")
+    if unknown:
+        warnings.append(f"ge_done entries not recognized as GE areas, ignored: {', '.join(unknown)}")
     return list(dict.fromkeys(out)), warnings
 
 
