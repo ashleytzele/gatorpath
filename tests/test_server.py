@@ -190,3 +190,8 @@ def test_get_course_unlocks():
     got = server.get_course("CSC 413")["unlocks"]
     assert {"CSC 620", "CSC 642", "CSC 648", "CSC 665", "CSC 675"} <= set(got)  # all "CSC 413* with a grade of C"
     assert server.get_course("CSC 653")["unlocks"] == []
+
+
+def test_audit_progress_points_to_the_dpr_and_an_advisor():
+    got = server.audit_progress({"program": "bs-cs", "catalog_year": "2026-27"})
+    assert [a["role"] for a in got["see_advisor"]] == ["major_advisor", "dpr"]

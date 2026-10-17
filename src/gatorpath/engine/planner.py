@@ -136,10 +136,27 @@ def slot_ge_areas(slot: dict, groups: dict) -> set[str]:
     return {str(a) for a in (areas if isinstance(areas, list) else [areas])}
 
 
+def see_advisor(triggers: list[tuple[str, str]], program: dict, university: dict, into: list[dict] | None = None) -> list[dict]:
+    """[(role, why)] -> who to see, with link and how to book, from the rules' `advising:` (ARCHITECTURE §7.5).
+    A program's entry overrides the university's for the same role; reasons are merged per person."""
+    entries = {a["role"]: a for a in university.get("advising", []) + program.get("advising", [])}
+    out = {e["role"]: e for e in into or []}
+    for role, why in triggers:
+        a = entries.get(role) or entries.get("general_advising")
+        if a is None:
+            continue
+        e = out.setdefault(a["role"], {k: v for k, v in a.items() if k != "when"} | {"why": []})
+        if why not in e["why"]:
+            e["why"].append(why)
+    urgency = ["substitutions", "major_advisor", "college_advising", "general_advising", "directory", "dpr"]
+    return sorted(out.values(), key=lambda e: urgency.index(e["role"]) if e["role"] in urgency else len(urgency))
+
+
 def check_plan(profile: dict, plan: dict, program: dict, university: dict, catalog: dict, prereqs: dict) -> dict:
     """{valid, errors, warnings, terms, remaining}. Errors make a plan invalid; warnings don't."""
     errors: list[dict] = []
     warnings: list[str] = ["Assumes in-progress and planned courses are passed with the grades their requirements need"]
+    advise: list[tuple[str, str]] = []
     err = lambda kind, msg, **kw: errors.append({"error": kind, "message": msg, **kw})
     load, levels = university["academic_load"], university["class_level"]
     cap = profile.get("max_units_per_term", load["normal_max"])
@@ -212,6 +229,10 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                     raw_text=row["raw_text"], source_page=catalog[c]["source_page"])
             elif state == UNVERIFIED:
                 warnings.append(f"{c} in {term}: GatorPath can't check {'; '.join(why)}. Bulletin text: {row['raw_text']!r}")
+                low_gpa = [r for r in why if r.startswith("GPA ") and "(have" in r]
+                if low_gpa or why and all(r.startswith("needs ") and "permission" in r for r in why):
+                    advise.append(("major_advisor", f"{c} in {term}: {'; '.join(low_gpa) or why[0]}; it needs the "
+                                   "instructor's permission (ask the instructor, or plan another course)"))
             warnings.extend(w for w in prereq_warnings(c, row) if "partial" in w or "unparsed" in w)
         if ctx.get("gpa_used") and "gpa" not in profile:
             warnings.append(f"GPA-gated prereqs were checked with your SF State GPA ({gpa}); pass `gpa` if your overall GPA differs")
@@ -223,6 +244,8 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         if term_units > normal:
             warnings.append(f"{term}: {term_units:g} units is above the normal load of {normal:g} ({load['source']}); "
                             "see an advisor before planning an overload")
+            advise.append(("major_advisor", f"{term}: {term_units:g} units is above the normal load of {normal:g} "
+                           f"({load['source']})"))
         if summer and not profile.get("include_summer", False):
             warnings.append(f"{term}: summer term planned but include_summer is false")
         terms_out.append({"term": term, "units": term_units, "units_before": units})
@@ -271,8 +294,12 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             err("units_short", f"{key.replace('_', ' ')}: {t[key]['value'] + add:g} after the plan, "
                 f"{t[key]['needed']:g} needed ({t['source']})", total=key)
     warnings.extend(w for w in result["warnings"] if "not verified" in w)
+    if not program.get("verified"):
+        advise += [("major_advisor", f"GatorPath's {program['program']} rules aren't verified yet: review this plan "
+                    "with an advisor before registering"), ("dpr", "Check what counts toward each requirement")]
     return {"catalog_year": program["catalog_year"], "valid": not errors, "errors": errors,
-            "warnings": list(dict.fromkeys(warnings)), "terms": terms_out, "remaining": remaining}
+            "warnings": list(dict.fromkeys(warnings)), "see_advisor": see_advisor(advise, program, university),
+            "terms": terms_out, "remaining": remaining}
 
 
 def next_term(term: str, summer: bool) -> str:
@@ -552,7 +579,11 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             pace["why_not"] = why_not
     return {"catalog_year": program["catalog_year"], "variant": variant, **plan,
             "est_graduation_term": semesters[-1]["term"] if semesters and check["valid"] else None, "pace": pace,
-            "warnings": warnings + check["warnings"], "check": {"valid": check["valid"], "errors": check["errors"]}}
+            "warnings": warnings + check["warnings"],
+            "see_advisor": see_advisor([("substitutions", f"{c}: passed with {best[c]}, which this requirement doesn't "
+                                         "accept, and it can't be repeated; ask about a substitution or petition")
+                                        for c in stuck], program, university, check["see_advisor"]),
+            "check": {"valid": check["valid"], "errors": check["errors"]}}
 
 
 def eligible_options(profile: dict, group_id: str, program: dict, university: dict, catalog: dict, prereqs: dict,

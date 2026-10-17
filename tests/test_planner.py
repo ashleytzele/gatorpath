@@ -133,6 +133,8 @@ def test_build_plan_passes_check_plan(path):
         assert not got["check"]["valid"] and got["est_graduation_term"] is None
         assert {e["group"] for e in got["check"]["errors"]} == {"math_physics", "core_cs"}
         assert sum("passed with CR" in w and "see an advisor" in w for w in got["warnings"]) == 2
+        first = got["see_advisor"][0]
+        assert first["role"] == "substitutions" and first["who"] == "CS Senior Advisor" and len(first["why"]) == 2
         return
     assert got["check"]["valid"], got["check"]["errors"]
     assert all(s["units"] <= 15 for s in got["semesters"])
@@ -174,3 +176,14 @@ def test_build_plan_explains_itself_and_its_pace():
     assert any(w.startswith("the prereq chain alone needs 5 terms") for w in soon["why_not"])
     on_time = plan_for(profile | {"graduate_by": "2030-spring"})["pace"]
     assert on_time["on_time"] is True and "why_not" not in on_time
+
+
+def test_see_advisor_for_permission_and_overload():
+    heavy = ["CSC 415", "MATH 227", "PHYS 220", "PHYS 222", "ENG 114", "COMM 150"]  # 3+4+3+1+3+3 = 17
+    got = check(FRESHMAN | {"gpa": 2.5, "transfer_units": 60, "max_units_per_term": 18},
+                ("2027-spring", heavy), ("2027-fall", ["CSC 653"]))
+    advisor = next(a for a in got["see_advisor"] if a["role"] == "major_advisor")
+    assert advisor["link"] == "https://cs.sfsu.edu/undergrads/advising" and "Navigator" in advisor["how_to_book"]
+    assert any(w.startswith("CSC 653 in 2027-fall: GPA 3.0 or higher (have 2.5)") for w in advisor["why"])
+    assert any("17 units is above the normal load of 15" in w for w in advisor["why"])
+    assert any(a["role"] == "dpr" for a in got["see_advisor"])

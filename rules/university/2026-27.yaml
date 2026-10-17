@@ -51,8 +51,10 @@ groups:
   - {id: ai_cslg, title: "American Institutions: California State and Local Government", choose_n: 1, from: {ge_area: CSLG}, source: "p.2313, p.2350"}
 
 # Advising handoff (ARCHITECTURE §7.5). Copied from the pages named in each `source`; recheck yearly.
+# `role` is what the planner asks for; a program's entry with the same role wins.
 advising:
-  - who: Undergraduate Advising Center (UAC)
+  - role: general_advising
+    who: Undergraduate Advising Center (UAC)
     when: GE, university requirements, graduation questions, any undergraduate
     link: "https://advising.sfsu.edu/"
     how_to_book: "Book in-person or virtual appointments online at https://sfsu.campus.eab.com/. No same-day online appointments; use drop-in hours for urgent needs. Booking help: (415) 338-2101."
@@ -60,11 +62,13 @@ advising:
     location: Admin 203
     contact: uacadvising@sfsu.edu
     source: "advising.sfsu.edu and advisinghub.sfsu.edu/node/4, checked 2026-10-16"
-  - who: Advising Hub (directory of all advising offices)
+  - role: directory
+    who: Advising Hub (directory of all advising offices)
     when: finding the right office
     link: "https://advisinghub.sfsu.edu/"
     source: "linked from the Student Center DPR page; checked 2026-10-16"
-  - who: Your DPR (official degree audit)
+  - role: dpr
+    who: Your DPR (official degree audit)
     when: confirming what counts, after any exception or transfer evaluation
     link: "Student Center → Degree Progress Report (cmsweb.sfsu.edu, sign-in required)"
     contact: "Registrar's Office, for AP/IB/CLEP credit or petitions missing from the DPR (per the DPR's Important Alerts)"

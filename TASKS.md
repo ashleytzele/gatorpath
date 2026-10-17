@@ -126,8 +126,9 @@ degree?" and get correct, sourced answers.
   - [x] `build_plan` `pace` (prereq-chain floor vs units floor) + `graduate_by` → `on_time` / `why_not`.
     Test: an impossible 3-year plan says what blocks it (chain or units)
 - [ ] What-if workflows in the prompt (ARCHITECTURE §7.4): earlier graduation, new direction
-- [ ] Advisor handoff (ARCHITECTURE §7.5): `see_advisor` items for exceptions, GPA-gated
-  permission, overloads, DPR disagreements, unverified rules
+- [x] Advisor handoff (ARCHITECTURE §7.5): `see_advisor` items for substitutions (CR in a major course),
+  GPA-gated permission, overloads, unverified rules, in check_plan / build_plan / audit_progress.
+  DPR disagreements join when the cross-check exists (phase 6)
 - [x] Collect the official advising links + how to book, with sources → `advising:` in
   `rules/university/2026-27.yaml` (UAC, Advising Hub, DPR) and `rules/programs/2026-27/bs-cs.yaml`
   (CS department, Senior Advisor, CoSE team). Booking is Navigator (sfsu.campus.eab.com)

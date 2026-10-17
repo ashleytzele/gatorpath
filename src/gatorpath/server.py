@@ -13,7 +13,7 @@ from mcp.types import ToolAnnotations
 from gatorpath import db
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
-from gatorpath.engine.planner import eligible_options
+from gatorpath.engine.planner import eligible_options, see_advisor
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number
 
@@ -247,6 +247,9 @@ def audit_progress(profile: Profile) -> dict:
     program, university = load_rules(YEAR, profile["program"])
     out = audit(normalized(profile), program, university, catalog(DB, YEAR))
     out["warnings"] = year_warning(profile) + out["warnings"] + unverified(university, "University (GE and graduation)")
+    out["see_advisor"] = see_advisor([("dpr", "Your DPR is the official audit; compare it with this one")]
+                                     + ([("major_advisor", f"GatorPath's {profile['program']} rules aren't verified yet")]
+                                        if not program.get("verified") else []), program, university)
     return out
 
 

@@ -494,7 +494,9 @@ disclaimer, tool responses carry `see_advisor: [{why, who, link, how_to_book, so
 - the program's rules are `verified: false`
 
 Links and booking steps live under `advising:` in `rules/university/<year>.yaml` (UAC, Advising Hub,
-DPR) and in each program's YAML (department advisor, senior advisor). Each has a `source` (Bulletin
+DPR) and in each program's YAML (department advisor, senior advisor). Each has a `role` (`major_advisor`,
+`substitutions`, `college_advising`, `general_advising`, `directory`, `dpr`; a program's entry overrides the
+university's for the same role, so the engine never names a department) and a `source` (Bulletin
 page, DPR link, or department page + date checked). Never from memory. All SF State advising is booked in
 Navigator (`sfsu.campus.eab.com`, checked 2026-10-16).
 
