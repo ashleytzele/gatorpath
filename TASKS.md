@@ -79,9 +79,10 @@ report.
 
 ## Phase 3 — MCP server v0 (read-only)
 
-- [ ] `server.py` with FastMCP: `search_courses`, `get_course`, `get_prereq_chain`,
-  `list_programs`, `get_program_requirements`, `get_roadmap`, `audit_progress`
-- [ ] FTS5 index for `search_courses`
+- [x] `server.py` (mcp 2.x renamed FastMCP to `MCPServer`): `search_courses`, `get_course`, `get_prereq_chain`,
+  `list_programs`, `get_program_requirements`, `get_roadmap`, `audit_progress`. Tested over a fixture
+  catalog.db of real Bulletin rows (`tests/fixtures/catalog_rows.json`) and end to end over stdio
+- [x] FTS5 index for `search_courses` (`course_fts`, built by `ingest.bulletin`; rebuild catalog.db once)
 - [ ] Add to Claude Desktop config; try 10 real questions; write down what felt wrong
 - [ ] Also try Gemini CLI (proves "works with any client")
 

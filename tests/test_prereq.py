@@ -260,3 +260,20 @@ def test_admin_text_is_not_ok(text):
 
 def test_only_unknown_is_unparsed():
     assert parse_prereq("Formal commitment to write an MA thesis or expository paper.")["status"] == "unparsed"
+
+
+def test_prereq_chain_cycles_and_missing_codes():
+    from gatorpath.engine.prereq import prereq_chain
+
+    row = lambda text: {"raw_text": text, **parse_prereq(text)}
+    rows = {
+        "PHYS 220": row("MATH 226 with a grade of C or better; concurrent enrollment in PHYS 222."),
+        "PHYS 222": row("Concurrent enrollment in PHYS 220."),
+        "MATH 226": row("MATH 199 with a grade of C or better; or MATH 226 or equivalent with a grade of C- or lower."),
+        "X 100": row("X 200."),
+        "X 200": row("X 100."),
+    }
+    got = prereq_chain("PHYS 220", rows)
+    assert [e["code"] for e in got["chain"]] == ["MATH 226", "PHYS 222", "PHYS 220"]
+    assert got["warnings"] == ["MATH 199 (needed by MATH 226) is not in this catalog; it may have been renumbered"]
+    assert any("cycle" in w for w in prereq_chain("X 100", rows)["warnings"])

@@ -178,6 +178,8 @@ create table if not exists prereq(catalog_year text, code text, raw_text text, e
   needs_permission integer, primary key (catalog_year, code));
 create table if not exists course_link(catalog_year text, code_a text, code_b text, kind text,
   primary key (catalog_year, code_a, code_b, kind));
+create virtual table if not exists course_fts using fts5(catalog_year unindexed, code, title, description,
+  tokenize = 'porter unicode61');
 """
 
 
@@ -186,7 +188,7 @@ def write_catalog(db_path: str | Path, catalog_year: str, courses: list[dict]) -
     con = sqlite3.connect(db_path)
     with con:
         con.executescript(SCHEMA)
-        for table in ("course", "prereq", "course_link"):
+        for table in ("course", "prereq", "course_link", "course_fts"):
             con.execute(f"delete from {table} where catalog_year = ?", (catalog_year,))
         for c in courses:
             con.execute(
@@ -204,6 +206,8 @@ def write_catalog(db_path: str | Path, catalog_year: str, courses: list[dict]) -
                 for other in others:
                     con.execute("insert or ignore into course_link values (?,?,?,?)",
                                 (catalog_year, *sorted((c["code"], other)), kind))
+        con.execute("insert into course_fts select catalog_year, code, title, description from course where catalog_year = ?",
+                    (catalog_year,))
     con.close()
 
 

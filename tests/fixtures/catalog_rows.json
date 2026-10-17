@@ -1,0 +1,1348 @@
+[
+ {
+  "code": "AA S 210",
+  "title": "History of Asians in the United States",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Comparative analysis of the experience of different Asian American groups and their place in the general history and development of American society.",
+  "grading": null,
+  "ge_areas": [
+   "AERM",
+   "4",
+   "USH"
+  ],
+  "source_page": 430,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "AFRS 202",
+  "title": "Black Men's Studies",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Exploration of diverse lives, experiences, and development of Black men and boys within the context of their families, communities, and society at large, and of the experience and development of Black manhood and masculinity from a cultural and historical lens within several societal dimensions.",
+  "grading": null,
+  "ge_areas": [
+   "AERM",
+   "6",
+   "SJ"
+  ],
+  "source_page": 396,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ARTH 201",
+  "title": "Global Art History I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introductory survey of art produced globally, from the prehistoric period through the 15th century CE with an emphasis on global encounter and exchange, and practices in the digital humanities. Includes art from Asia, Africa, the Middle East, Europe, and the Americas.",
+  "grading": null,
+  "ge_areas": [
+   "3A"
+  ],
+  "source_page": 906,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "BIOL 100",
+  "title": "Human Biology",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Principles of human biology including body structure and function, reproduction, development, heredity, and evolution. Aspects of modern biology impacting the human species. Intended for non-Biology majors.",
+  "grading": null,
+  "ge_areas": [
+   "5B"
+  ],
+  "source_page": 1769,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "BIOL 101",
+  "title": "Human Biology Laboratory",
+  "units_min": 1.0,
+  "units_max": 1.0,
+  "description": "Laboratory exercises demonstrating scientific processes, including the scientific method, analysis of data, and drawing appropriate conclusions. Extra fee required.",
+  "grading": null,
+  "ge_areas": [
+   "5C"
+  ],
+  "source_page": 1769,
+  "prereq_text": "BIOL 100* (may be taken concurrently).",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "COMM 150",
+  "title": "Fundamentals of Oral Communication",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to communication in interpersonal relationships, group interactions, and formal speaking. Skill development in listening, speech preparation, and oral presentation. (Plus-minus ABC/NC, CR/NC allowed)",
+  "grading": "letter_or_cr_nc",
+  "ge_areas": [
+   "1C"
+  ],
+  "source_page": 1029,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 101",
+  "title": "Introduction to Computing",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "A comprehensive introduction to computing and programming. No prior programming experience is required. Explore the use of computing in everyday life and its impact on our society, and apply foundational ideas of computing to frame a problem and devise a solution using Java programming language.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1895,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 215",
+  "title": "Intermediate Computer Programming",
+  "units_min": 4.0,
+  "units_max": 4.0,
+  "description": "Design, implementation, testing, debugging, maintenance, and documentation of Java programs. Algorithms, programming concepts, and data types in Java. Concepts of object-oriented programming. Numerical and non-numerical problems. Hands-on exercises in programming, and the use of basic software development tools.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1895,
+  "prereq_text": "CSC 101 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 220",
+  "title": "Data Structures",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Linear and non-linear data structures in Java, including lists, stacks, queues, trees, tables, and graphs. Recursion, iteration over collections, Big O notation, and hash tables.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1895,
+  "prereq_text": "CSC 210 or CSC 215 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 230",
+  "title": "Discrete Mathematical Structures for Computer Science",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Review of set algebra, relations and functions, permutations, propositional logic, proof techniques, introduction to graph theory, and infinite sets, and their applications to computer science.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1895,
+  "prereq_text": "CSC 210 or CSC 215 or ENGR 213, and MATH 227 (may be taken concurrently) with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 256",
+  "title": "Machine Structures",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Digital logic circuits, data representation, assembly language programming, subroutine linkage, machine language encoding, interrupt and exception handling, memory system concepts, and CPU organization and performance.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1896,
+  "prereq_text": "CSC 230 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 300GW",
+  "title": "Ethics, Communication, and Tools for Software Development - GWAR",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Privacy, security, legal, and ethical issues in Software development. Communication relevant to SW development (e.g., reports, contracts, requirements, documentation, collaboration, e-mail, presentations). Study and use of basic tools for SW development and collaboration. (ABC/NC grading only)",
+  "grading": "letter",
+  "ge_areas": [
+   "GW"
+  ],
+  "source_page": 1896,
+  "prereq_text": "Restricted to upper-division Computer Science majors and minors; GE Area 1A/A2; CSC 210 or CSC 215.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 317",
+  "title": "Introduction to Web Software Development",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to topics in UNIX and creating web pages including reading and processing user input submitted through web pages, client side and server side programming, connecting a web page to a database, and building an e-commerce site or Internet Application.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1896,
+  "prereq_text": "CSC 220 or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 340",
+  "title": "Programming Methodology",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Advanced data structures and algorithms for manipulation in C++ with an emphasis on design and implementation, practical applications, and algorithms for sorting, searching, and graphs.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1896,
+  "prereq_text": "CSC 220 and CSC 230 with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 413",
+  "title": "Software Development",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Modern software applications. Object-oriented techniques: encapsulation, inheritance, and polymorphism as a mechanism for data design and problem solution. Software design, debugging, testing, and UI design. Software maintenance. Software development tools. Extra fee required. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1896,
+  "prereq_text": "CSC 220 and CSC 317 with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 415",
+  "title": "Operating System Principles",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Operating system concepts: concurrent processes, basic synchronization techniques, deadlock, memory management, file systems, security, networks, and distributed processing. Extra fee required.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1896,
+  "prereq_text": "CSC 256, CSC 340*, MATH 324, and PHYS 230 with grades of C or better or graduate standing*.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 510",
+  "title": "Analysis of Algorithms I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Notions of main algorithm design methods. Measures of algorithm complexity in space and time. Algorithms of classic problems including sorting and scheduling and complexity analysis of such algorithms. (Plus/minus ABC/NC, CR/NC allowed)",
+  "grading": "letter_or_cr_nc",
+  "ge_areas": [],
+  "source_page": 1897,
+  "prereq_text": "CSC 340* and MATH 324* with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 520",
+  "title": "Theory of Computing",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Examination of automata, formal languages, and the notion of computability. Discussion of sequential machines as language acceptors and context-free and context-sensitive grammars. Exploration of recursive functions, universal Turing machines, and unsolvable problems.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1897,
+  "prereq_text": "CSC 220 and CSC 230; MATH 225 or MATH 325 with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 600",
+  "title": "Programming Paradigms and Languages",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Concepts for high-level programming languages. Procedural, logic, functional, and object-oriented programming paradigms. Comparative study of several languages and an introduction to grammars and parsing techniques. Extra fee required.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1897,
+  "prereq_text": "CSC 413* and CSC 510* with grades of C or better or graduate-level standing*.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 601",
+  "title": "Data Science and Machine Learning for Biotechnology Seminar Series",
+  "units_min": 1.0,
+  "units_max": 1.0,
+  "description": "Featuring scientists in related areas from Genentech or other biotechnology industry or academia, explore a broad view of the topics on Drug design, modeling to predict drug performance, or new drug approval processes. (CR/NC grading only)",
+  "grading": "cr_nc",
+  "ge_areas": [],
+  "source_page": 1897,
+  "prereq_text": "CSC 408* or CSC 411* or CSC 509*.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 602",
+  "title": "Interview Preparation for Data Science and Machine Learning for Biotechnology Opportunities",
+  "units_min": 2.0,
+  "units_max": 2.0,
+  "description": "Preparation for interviews for data science-related internships and full-time positions in industry. Emphasis on oral and written communication common in coding interviews for problem-solving. Development of interview skills such as how to communicate about technical aspects, describe a problem, and articulate issues. Practice of key problem-solving strategies specific to technical/coding interviews in Biotechnology. (CR/NC grading only)",
+  "grading": "cr_nc",
+  "ge_areas": [],
+  "source_page": 1897,
+  "prereq_text": "CSC 408 or CSC 411 or CSC 509.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 603",
+  "title": "Generative AI: Fundamentals and Applications",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to Generative AI, covering its fundamental concepts, models, and real-world applications. Explore key techniques for generating text, images, and multimodal content using state-of-the-art models such as transformers, GANs, and diffusion models. Focus on both theory and hands-on practice, including prompt engineering, API usage, and AI-powered application development. Gain experience building AI-driven applications such as chatbots, media generation tools, and productivity applications. (CSC 803/CSC 603 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1897,
+  "prereq_text": "CSC 413 with a grade of C or better; GPA of 3.0 or better; or permission of the instructor.",
+  "paired_with": [
+   "CSC 803"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 615",
+  "title": "Embedded Linux Systems and Physical Computing",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Exploration of embedded Linux programming in C, threads and synchronization, resource limits, working with sensors and motors, programming various communication protocols, and building a physical computing device. Extra fee required. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1897,
+  "prereq_text": "CSC 415* with a grade of C or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 620",
+  "title": "Natural Language Technologies",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to the fundamental concepts and techniques of Natural Language Processing (NLP). In-depth understanding of the computational properties of natural language and the commonly used algorithms for processing language data. Illustration of the pervasiveness of natural language technologies through real-world applications. Practical experience in NLP through hands-on exercises. Extra fee required. (Plus-minus letter grade only) (CSC 820/CSC 620 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1897,
+  "prereq_text": "Upper-division standing; CSC 413* with a grade of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 820"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 621",
+  "title": "Biomedical Imaging and Analysis",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to medical and biological imaging, imaging physics, 3D image formats, and visualization. Basic digital image processing and analysis, filtering, registration, segmentation, quantification, and performance evaluation. (Plus-minus letter grade only) (CSC 821/CSC 621 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "Upper-division standing; CSC 510*; MATH 225* or MATH 325* with grades of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 821"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 630",
+  "title": "Computer Graphics Systems Design",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Graphics system design and GPU pipeline architecture and Generative AI on graphics. Overview of device-independent graphic systems such as OpenGL, 2- & 3-dimensional viewing pipelines, hidden line and surface removal algorithms, raster graphics techniques, and color space models. Topics on generative AI for graphics such as StyleGAN are covered. Course fee required. (Plus-minus letter grade only) (CSC 830/CSC 630 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "CSC 413* and either MATH 225* or MATH 325* with grades of C or better; a GPA of 3.0 or better; or permission of the instructor.",
+  "paired_with": [
+   "CSC 830"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 631",
+  "title": "Multiplayer Game Development",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Computer graphics and network characteristics of multiplayer games. Design and development of a game as a team project. (CSC 831/CSC 631 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "Upper-division standing; CSC 413*; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 831"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 641",
+  "title": "Computer Performance Evaluation",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Computer performance analysis problems related to system design, selection, and tuning. Modeling using stochastic and operational queuing models. Workload characterization, design, and performance measurement methods. Design of simulation models for computer systems. Extra fee required. (Plus-minus letter grade only) (CSC 841/CSC 641 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "Upper-division standing; CSC 415*; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 841"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 642",
+  "title": "Human-Computer Interaction",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "The design, implementation, and evaluation of human-computer interfaces. Topics include interface devices, interface metaphors, interaction styles, user-centered design, testing, and quality assessment. Extra fee required. (CSC 842/CSC 642 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "Upper-division standing; CSC 413* with a grade of C or better or permission of the instructor.",
+  "paired_with": [
+   "CSC 842"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 645",
+  "title": "Computer Networks",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Computer network design, evaluation, and testing. Computer network standards and implementation. Hardware and software design and compatibility issues. Extra fee required.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "Upper-division standing; CSC 415* with a grade of C or better; GPA of 3.0 or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 647",
+  "title": "Introduction to Quantum Computing and Quantum Information Science",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to quantum computing and quantum information science. Comparison of classical and quantum computing architectures and organization. Quantum algorithm design and implementation on circuit-based and annealing quantum platforms. Program execution and performance analysis on quantum platform simulators and actual quantum hardware, subject to availability. Survey of research topics in quantum computing ranging from algorithms (e.g., Grover's Search) and their application to problems in quantum cryptography, quantum machine learning, and hybrid classical/quantum algorithms. (CSC 647/CSC 747 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "Upper-division standing; CSC 415* and either MATH 225* or MATH 325* with a grade of C or better; CSC 308, CSC 309, and CSC 656 recommended; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 747"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 648",
+  "title": "Software Engineering",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Practical methods and tools for SW engineering including organizational teamwork. (CSC 848/CSC 648 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "Upper-division standing; CSC 317* and CSC 413* with grades of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 848"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 651",
+  "title": "System Administration",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "User administration. Operating system installation, tuning, and control. Network administration. Security management. Performance tuning and management. Extra fee required. (ABC/NC grading only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1898,
+  "prereq_text": "CSC 413* and CSC 415* with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 652",
+  "title": "Introduction to Security and Data Privacy",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to fundamental concepts in cybersecurity, cryptography, and data privacy. Practice different privacy mechanisms in databases and present applications to a wide range of data analysis tasks. Extra fee required. (CSC 852/CSC 652 [formerly CSC 650] is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "CSC 415* with a grade of C or better or permission of the instructor.",
+  "paired_with": [
+   "CSC 852"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 653",
+  "title": "Network Security",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to the fundamental concepts of computer network security as well as standard security mechanisms and protocols. (CSC 853/CSC 653 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "Upper-division standing; CSC 415* with a grade of C or better; GPA of 3.0 or better; or permission of the instructor.",
+  "paired_with": [
+   "CSC 853"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 656",
+  "title": "Computer Organization",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Instruction set design. Pipelined datapath and control. Cache and memory system design. Input and output subsystems. Parallel processing. Software and hardware interactions. Extra fee required.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "CSC 415* (may be taken concurrently) or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 659",
+  "title": "AI Explainability and Ethics",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Overview of AI and GenAI technologies, their usage (including prompt engineering), and methods for their accuracy evaluations and optimization. Analysis of AI/GenAI limitations like hallucinations, bias, and errors. Overview of AI/GenAI explainability. Definitions, best practices and tools for auditing AI/GenAI for ethics and trustworthiness. Implementation of full AI pipeline and trustworthiness audit of selected AI application. (Plus-minus letter grade RP only) (CSC 859/CSC 659 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "Restricted to upper-division students; CSC 413 with C or better; GPA of 3.0 or better; or permission of the instructor.",
+  "paired_with": [
+   "CSC 859"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 664",
+  "title": "Multimedia Systems",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Comprehensive topics in multimedia such as basics of image and video processing, compression, multimedia databases, standard, synchronization, formats in the perspective of systems, and algorithms. Extra fee required. (Plus-minus letter grade only) (CSC 864/CSC 664 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "Upper-division standing; CSC 413* with a grade of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 864"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 665",
+  "title": "Artificial Intelligence",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Overview of algorithms and approaches to artificial intelligence. Study of fundamental concepts needed to attain human-level intelligence in computer systems, and gain experience in working with these concepts through assignments and programming exercises. Topics include problem-solving methods, heuristic search, game playing, agent architectures, machine learning, and various topics selected from knowledge representation, symbolic reasoning, computational models of virtual humans, neural networks, and genetic algorithms. Extra fee required. (CSC 665/CSC 865 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "Restricted to upper-division standing; CSC 413* with a grade of C or better; or permission of the instructor.",
+  "paired_with": [
+   "CSC 865"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 667",
+  "title": "Internet Application Design and Development",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Fundamental technologies on which the World Wide Web is based. Extra fee required. (CSC 867/CSC 667 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "Upper-division standing; CSC 413* with a grade of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 867"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 668",
+  "title": "Advanced Object Oriented Software Design and Development",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Object-oriented analysis and design utilizing UML, design patterns, frameworks, and toolkits. Agile software design processes. Development of a mid-size programming project working in teams. Extra fee required. (Plus-minus letter grade only) (CSC 868/CSC 668 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "Senior standing; CSC 413* with a grade of C or better; GPA of 3.0 or better; or permission of the instructor.",
+  "paired_with": [
+   "CSC 868"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 671",
+  "title": "Deep Learning",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Exploration of the major technology trends that drive Deep Learning. Discussion of concepts and technologies to build, train, and apply fully connected deep neural networks. Focus on understanding the key parameters in a neural network's architecture and learning how Deep Learning actually works. (Plus-minus letter grade only) (CSC 871/CSC 671 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "Upper-division standing; CSC 510*; MATH 225 or MATH 325 with a grade of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 871"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 675",
+  "title": "Introduction to Database Systems",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Relational query languages. Semantic data models. Logical and physical database design. Privacy issues. Implementation techniques (catalogs, query optimization, concurrency control, security, and integrity enforcement). Extra fee required. (CSC 775/CSC 675 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "Upper-division standing; CSC 413* with a grade of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 775"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 676",
+  "title": "Soft Computing and Decision Support Systems",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Development of software systems for decision support including applications of soft computing. Topics include fuzzy sets, fuzzy logic, fuzzy systems, fuzzy decision-making, fuzzy controllers, approximate reasoning, possibility theory, rough sets, graded evaluation logic, logic aggregation operators, information fusion models, decision engineering methods, computing with words, perceptual computing, granular computing, and the LSP method for evaluation and optimization of complex systems. (Plus-minus letter grade only) (CSC 876/CSC 676 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "Upper-division standing; GPA of 3.0 or better; or permission of the instructor.",
+  "paired_with": [
+   "CSC 876"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 680",
+  "title": "Application Development for Mobile Devices",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to, and comparison of, different popular mobile application frameworks. Conceptual and hands-on experience in writing mobile applications using native and cross-platform tools. (Plus-minus letter grade only) (CSC 780/CSC 680 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "Restricted to senior Computer Science majors; CSC 415* with a grade of C or better; 3.0 GPA or higher; or permission of the instructor.",
+  "paired_with": [
+   "CSC 780"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 685",
+  "title": "Instructional Methods in Computer Science Teaching",
+  "units_min": 1.0,
+  "units_max": 1.0,
+  "description": "Research-based pedagogical strategies and principles of teaching and learning in STEM. Seminar for students in their first Learning Assistant (LA) position or other interest in STEM teaching and learning.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "CSC 215 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 686",
+  "title": "Experiences in Computer Science Teaching",
+  "units_min": 1.0,
+  "units_max": 1.0,
+  "description": "Activity practicum for students who are Learning Assistants (LAs) in STEM courses. Under the supervision of a STEM course instructor, LAs participate in an active, inclusive learning community in a section of a STEM course. LAs meet with the course instructor to review upcoming activities. May be repeated for a total of 2 units.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "CSC 215 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 694",
+  "title": "Cooperative Education: Computer Science",
+  "units_min": 1.0,
+  "units_max": 3.0,
+  "description": "Projects in a business, government, or industrial position of at least one semester's duration. May be repeated for a total of 3 units. (This course is not eligible for certification for enrollment with the VA.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "Permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 698",
+  "title": "Topics in Computing",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Current topics in computer hardware and software technologies. Topics to be specified in the Class Schedule. May be repeated for a total of 9 units when topics vary. Topics: 1. Generative AI 2. Information Visualization: Tools and Techniques 3. Software Design, Development, and Pedagogy 4. Principles of Information Security and Privacy 5. Real-Time Cross-Platform Application Development 6. Applications of Parallel Computations 7. Advanced Topics in Computing Applications 8. Research Topics in Computing Applications 9. Interactive Multimedia Development 10. Augmented Reality Software Systems",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "Upper-division standing or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 699",
+  "title": "Independent Study",
+  "units_min": 1.0,
+  "units_max": 3.0,
+  "description": "Library and laboratory research and development projects. A final report must be approved by the instructor and filed with the department. May be repeated for a total of 9 units. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1901,
+  "prereq_text": "Permission of the department and instructor. An approved study proposal must be on file by the time of registration.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 852",
+  "title": "Introduction to Security and Data Privacy",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to fundamental concepts in cybersecurity, cryptography, and data privacy. Practice different privacy mechanisms in databases and present applications to a wide range of data analysis tasks. Extra fee required. (CSC 852/CSC 652 [formerly CSC 650] is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1903,
+  "prereq_text": "Graduate standing or permission of the instructor.",
+  "paired_with": [
+   "CSC 652"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 853",
+  "title": "Network Security",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to the fundamental concepts of computer network security as well as standard security mechanisms and protocols. (CSC 853/CSC 653 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1903,
+  "prereq_text": "Graduate standing or permission of the instructor.",
+  "paired_with": [
+   "CSC 653"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 869",
+  "title": "Data Mining",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Knowledge discovery process, basic data mining concepts, key mining algorithms, and data mining in practical domains such as bioinformatics. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1903,
+  "prereq_text": "Graduate standing or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 871",
+  "title": "Deep Learning",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Exploration of the major technology trends that drive Deep Learning. Discussion of concepts and technologies to build, train, and apply fully connected deep neural networks. Focus on understanding the key parameters in a neural network's architecture and learning how Deep Learning actually works. (Plus-minus letter grade only) (CSC 871/CSC 671 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1904,
+  "prereq_text": "Graduate standing or permission of the instructor.",
+  "paired_with": [
+   "CSC 671"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 872",
+  "title": "Pattern Analysis and Machine Intelligence",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Foundation of pattern analysis and machine intelligence. Artificial intelligence: agent, logic, and search. Machine learning: Bayesian classification. Neural network: simulated annealing. Imaging: image segmentation and object recognition. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1904,
+  "prereq_text": "Graduate standing or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 895",
+  "title": "Applied Research Project",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "(CR/NC grading only)",
+  "grading": "cr_nc",
+  "ge_areas": [],
+  "source_page": 1904,
+  "prereq_text": "Permission of the instructor and approval of Advancement to Candidacy (ATC) for the MS in CS and Culminating Experience (CE) forms by Graduate Studies. Advancement to candidacy and Proposal for Culminating Experience Requirement forms must be approved by the Graduate Division before registration.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 897",
+  "title": "Research",
+  "units_min": 3.0,
+  "units_max": 6.0,
+  "description": "Independent and original investigation under the supervision of a faculty member. May be repeated for a total of 6 units. (Plus-minus letter grade, CR/NC, RP)",
+  "grading": "letter_or_cr_nc",
+  "ge_areas": [],
+  "source_page": 1904,
+  "prereq_text": "Permission of the Computer Science Department.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 898",
+  "title": "Master's Thesis",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "(CR/NC grading only)",
+  "grading": "cr_nc",
+  "ge_areas": [],
+  "source_page": 1904,
+  "prereq_text": "Permission of the instructor and graduate adviser and approval of Advancement to Candidacy (ATC) for the Master of Science in Computer Science and Culminating Experience (CE) forms by Graduate Studies. Advancement to Candidacy (ATC) and Proposal for Culminating Experience Requirement forms must be approved by the Graduate Division before registration.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 899",
+  "title": "Independent Study",
+  "units_min": 1.0,
+  "units_max": 3.0,
+  "description": "Special study of a particular problem under the direction of a faculty member. A written, detailed report of the work accomplished must be submitted to the staff of the department. May be repeated for a total of 6 units. Bachelor of Science in Computer Science Students intending to enter this program at the freshman level should have completed two years of algebra and one semester of trigonometry in high school. One year each of high school geometry and physics, as well as basic knowledge of computer organization and programming, are strongly encouraged. Equivalents of all lower-division courses (course numbers below 300) in the degree requirements are available at many community colleges in California. Students intending to enter the program upon transferring to San Francisco State University from a community college are encouraged to try to fulfill as many lower-division requirements prior to transfer as possible. Students should plan their program of study in the major with the help of a departmental advisor as soon as possible so that the correct sequence of courses is taken. Students are recommended to consult with an advisor before selecting courses to meet the General Education requirements. Several endowed scholarship funds offer annual awards to computer science majors who show scholarly accomplishment and demonstrate financial need. An Entrepreneurship Program and Developers Prize, funded by our alumni, encourage and support innovation and entrepreneurship among students. Program Learning Outcomes 1. Students will be able to design, develop, document, and test software using current techniques. 2. Students will understand the fundamentals of computer architecture and computing theory. 3. Students will be able to solve problems working in group settings. 4. Students will demonstrate the ability to give presentations and write technical reports. 5. Students will demonstrate an understanding of the importance of social and ethical issues related to the profession. Computer Science (B.S.) – 74 units • CR/NC grades are not accepted in courses for the Computer Science major. • Grades of C or better are required for Mathematics and Physics, Core Computer Science Requirements, and Advanced Computer Science Requirements courses. Mathematics and Physics (22 units) Code Title Units MATH 225 Introduction to Linear Algebra 3 MATH 226 Calculus I 4 MATH 227 Calculus II 4 MATH 324 Probability and Statistics with Computing 3 PHYS 220 General Physics with Calculus I 3 PHYS 222 General Physics with Calculus I Laboratory 1 PHYS 230 General Physics with Calculus II 3 PHYS 232 General Physics with Calculus II Laboratory 1 Core Computer Science Requirements (28 units) Code Title Units CSC 101 Introduction to Computing 3 CSC 215 Intermediate Computer Programming 4 CSC 220 Data Structures 3 CSC 230 Discrete Mathematical Structures for Computer Science 3 CSC 256 Machine Structures 3 CSC 300GW Ethics, Communication, and Tools for Software Development - GWAR 3 CSC 317 Introduction to Web Software Development 3 CSC 340 Programming Methodology 3 CSC 413 Software Development 3 Advanced Computer Science Requirements (9 units) Code Title Units CSC 415 Operating System Principles 3 CSC 510 Analysis of Algorithms I 3 CSC 648 Software Engineering 3 Electives (15 units) All students must complete five 3-unit senior electives. At least 12 units must be CSC courses. In addition to the courses listed below, any 600-level CSC course, with the exception of CSC 601, CSC 602, CSC 648, and CSC 694 can be used as an elective. The department also allows one CSC graduate course to be used as a senior elective (700-level or higher, and non-paired excluding CSC 895, CSC 898, CSC 897, CSC 899). Exceptions must be approved in advance by a senior advisor. Code Title Units CSC 520 Theory of Computing 3 CSC 600 Programming Paradigms and Languages 3 CSC 603 Generative AI: Fundamentals and Applications 3 CSC 615 Embedded Linux Systems and Physical Computing 3 CSC 620 Natural Language Technologies 3 CSC 621 Biomedical Imaging and Analysis 3 CSC 630 Computer Graphics Systems Design 3 CSC 631 Multiplayer Game Development 3 CSC 641 Computer Performance Evaluation 3 CSC 642 Human-Computer Interaction 3 CSC 645 Computer Networks 3 CSC 647 Introduction to Quantum Computing and Quantum Information Science 3 CSC 651 System Administration 3 CSC 652 Introduction to Security and Data Privacy 3 CSC 653 Network Security 3 CSC 656 Computer Organization 3 CSC 659 AI Explainability and Ethics 3 CSC 664 Multimedia Systems 3 CSC 665 Artificial Intelligence 3 CSC 667 Internet Application Design and Development 3 CSC 668 Advanced Object Oriented Software Design and Development 3 CSC 671 Deep Learning 3 CSC 675 Introduction to Database Systems 3 CSC 676 Soft Computing and Decision Support Systems 3 CSC 680 Application Development for Mobile Devices 3 CSC 685 Instructional Methods in Computer Science Teaching 1 CSC 686 Experiences in Computer Science Teaching 1 CSC 698 Topics in Computing 3 CSC 699 Independent Study 1-3 MATH 400 Numerical Analysis 3 MATH 425 Applied and Computational Linear Algebra 3 MATH 448 Introduction to Statistical Learning and Data Mining 3 General Education Requirements Requirement Course Level Units Area Designation English Composition LD 3 1A Critical Thinking LD 3 1B Oral Communication LD 3 1C Mathematical Concepts and Quantitative Reasoning LD 3 2 Arts LD 3 3A Humanities LD 3 3B Social and Behavioral Sciences* LD 6 4 Physical Science LD 3 5A Biological Science LD 3 5B Laboratory LD 1 5C Ethnic Studies LD or UD 3 6 Science or Math/Quantitative Reasoning UD 3 5UD or 2UD Arts or Humanities UD 3 3UD Social and Behavioral Sciences UD 3 4UD *Students will fulfill USH through their Area 4 courses SF State Studies Courses certified as meeting the SF State Studies requirements may be upper or lower division in General Education (GE), a major or minor, or an elective. American Ethnic and Racial Minorities LD or UD 3 AERM Environmental Sustainability and Climate Action LD or UD 3 ESCA Global Perspectives LD or UD 3 GP Social Justice LD or UD 3 SJ American Institutions US and California Government (p. 2350) LD or UD 3 USG/CSLG Note: LD = Lower-Division; UD = Upper-Division. First-Time Student Roadmap (4 Year) The roadmaps presented in this Bulletin are intended as suggested plans of study and do not replace meeting with an advisor. For a more personalized roadmap, please use the Degree Planner (https://registrar.sfsu.edu/degreeplanner) tool found in your Student Center. Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine which roadmap to follow. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) First-Time Student Roadmap – QR Pathway 1/2 (p. 1908) First-Time Student Roadmap – QR Pathway 3/4 (p. 1910) Transfer Student Roadmap (2 Year) For students with an AS-T in Computer Science. COMP ADT Roadmap (p. 1912) This degree program is an approved pathway (“similar” major) for students earning the ADT in Computer Science California legislation SB 1440 (2009) mandated the creation of the Associate Degree for Transfer (ADT) to be awarded by the California Community Colleges. Two types of ADTs are awarded: Associate in Arts for Transfer (AA-T) and Associate in Science for Transfer (AS-T). Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation for the major. An ADT totals 60 units and in most cases includes completion of all lower-division General Education requirements and at least 18 units in a specific major. (The Biology, Chemistry, and Environmental Science AS-T degrees defer 3 units in lower-division GE area 3 and 3 units in lower-division GE area 4 until after transfer.) Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not necessarily to the CSU campus of primary choice. Upon verification that the ADT has been awarded prior to matriculation at SF State, students are guaranteed B.A. or B.S. completion in 60 units if pursuing a “similar” major after transfer. Determinations about “similar” majors at SF State are made by faculty in the discipline. Degree completion in 60 units cannot be guaranteed when a student simultaneously pursues an additional major, a minor, certificate, or credential. A sample advising roadmap for students who have earned an ADT and continue in a \"similar\" major at SF State is available on the Roadmaps tab on the degree requirements page for the major. The roadmap displays: • How many lower-division units required for the major have been completed upon entry based on the award of a specific ADT; • Which lower-division requirements are considered complete upon entry based on the award of a specific ADT; • How to complete the remaining 60 units for the degree in four semesters. Students who have earned an ADT should seek advising in the major department during the first semester of attendance. General Advising Information for Transfer Students 1. Before transfer, complete as many lower-division requirements or electives for this major as possible. 2. The following courses are not required for admission but are required for graduation. Students are strongly encouraged to complete these units before transfer; doing so will provide more flexibility in course selection after transfer. • a course in U.S. History • a course in U.S. & California Government For information about satisfying the requirements described in (1) and (2) above at a California Community College (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options include more than one college. Use ASSIST to determine: • Which courses at a CCC satisfy any lower-division major requirements for this major; • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements. Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer (for example, if a course was not passed on the first attempt or was taken to earn a better grade). Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State does not require delivery of this certification to Admissions, but students should retain this document for verifying degree progress after transfer. Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when an official score report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP. Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree completion before transfer. Transferring From Institutions Other Than CCCs or CSUs Review SF State's lower-division General Education requirements. Note that, as described below, the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State GE pattern. Courses that fulfill the remaining areas of SF State’s lower-division GE pattern are available at most two-year and four-year colleges and universities. Of the four required basic skills courses, a course in critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems. Students should attempt to identify and take an appropriate course no later than the term of application to the CSU. To review more information about the 1B/A3 requirement, please visit bulletin.sfsu.edu/undergraduate-education/general-education/lower-division/#AAEL. Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements may be an appropriate option, particularly if transferring from outside of California. Category 1/2 Bachelor of Science in Computer Science Roadmap - Quantitative Reasoning Category 1/2 120 Total Units Required Minimum Number of Units in the Major: 74 This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner) and an advisor for further guidance. To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major. Course Title Units First Semester CSC 101 Introduction to Computing (Core Computer Science Requirement) 3 MATH 226 Calculus I (Major Mathematics and Physics, GE 2) 1 4 GE Area 1: English Communication - Take Two 6 GE Area 4: Social and Behavioral Sciences 2 3 Units 16 Second Semester CSC 215 Intermediate Computer Programming (Core Computer Science Requirement) 4 MATH 227 Calculus II (Major Mathematics and Physics) 4 PHYS 220 & PHYS 222 General Physics with Calculus I and General Physics with Calculus I Laboratory (Major Mathematics and Physics, GE 5A, GE 5C) 4 GE Area 1A: English Composition 3 3 Units 15 Third Semester CSC 220 Data Structures (Core Computer Science Requirement) 3 CSC 230 Discrete Mathematical Structures for Computer Science (Core Computer Science Requirement) 3 PHYS 230 & PHYS 232 General Physics with Calculus II and General Physics with Calculus II Laboratory (Major Mathematics and Physics) 4 GE Area 3: Arts and Humanities 3 GE Area 4: Social and Behavioral Sciences 2 3 Units 16 Fourth Semester CSC 256 Machine Structures (Core Computer Science Requirement) 3 CSC 340 Programming Methodology (Core Computer Science Requirement) 3 MATH 225 Introduction to Linear Algebra (Major Mathematics and Physics) 3 MATH 324 Probability and Statistics with Computing (Major Mathematics and Physics) 3 GE Area 5B: Biological Science 3 Units 15 Bachelor of Science in Computer Science Roadmap - Quantitative Reasoning Category 1/2 Fifth Semester CSC 300GW Ethics, Communication, and Tools for Software Development - GWAR (Core Computer Science Requirement) 3 CSC 317 Introduction to Web Software Development (Core Computer Science Requirement) 3 CSC 510 Analysis of Algorithms I (Advanced Computer Science Requirement) 3 GE Area 3: Arts and Humanities 3 GE Area 6: Ethnic Studies (p. 2328) 3 Units 15 Sixth Semester CSC 413 Software Development (Core Computer Science Requirement) 3 CSC 415 Operating System Principles (Advanced Computer Science Requirement) 3 GE Area 3UD: Upper-Division Arts or Humanities 3 GE Area 4UD: Upper-Division Social and Behavioral Sciences 3 GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3 Units 15 Seventh Semester Major Elective (15 Units Total) - Take Three 4 9 US and California Government (p. 2351) 3 SF State Studies or University Elective 3 Units 15 Eighth Semester CSC 648 Software Engineering (Advanced Computer Science Requirement) 5 3 Major Elective (15 Units Total) - Take Two 4 6 SF State Studies or University Elective 4 Units 13 Total Units 120 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) 2 First-time freshmen must take one lower-division Area 4 course that meets US History (USH). 3 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) 4 Major Electives (15 units) A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 1905). 5 CSC 648 serves as the major capstone course. Category 3/4 Bachelor of Science in Computer Science Roadmap Quantitative Reasoning Category 3/4 120 Total Units Required Minimum Number of Units in the Major: 74 This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner) and an advisor for further guidance. To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major. Course Title Units First Semester CSC 101 Introduction to Computing (Core Computer Science Requirement) 3 MATH 197 Prelude to Calculus I (Prerequisite for MATH 198 and MATH 226) 1 3 GE Area 1: English Communication - Take Two 6 GE Area 4: Social and Behavioral Sciences 2 3 Units 15 Second Semester CSC 215 Intermediate Computer Programming (Core Computer Science Requirement) 4 MATH 198 Prelude to Calculus II (Prerequisite for MATH 226, GE 2) 1 3 GE Area 1A: English Composition 3 3 GE Area 3: Arts and Humanities 3 GE Area 5B: Biological Science 3 Units 16 Third Semester CSC 220 Data Structures (Core Computer Science Requirement) 3 MATH 225 Introduction to Linear Algebra (Major Mathematics and Physics) 3 MATH 226 Calculus I (Major Mathematics and Physics, GE 2) 1 4 GE Area 3: Arts and Humanities 3 GE Area 4: Social and Behavioral Sciences 2 3 Units 16 Fourth Semester CSC 230 Discrete Mathematical Structures for Computer Science (Core Computer Science Requirement) 3 MATH 227 Calculus II (Major Mathematics and Physics) 4 PHYS 220 & PHYS 222 General Physics with Calculus I and General Physics with Calculus I Laboratory (Major Mathematics and Physics, GE 5A, GE 5C) 4 GE Area 6: Ethnic Studies (p. 2328) 3 US and California Government (p. 2351) 3 Units 17 Fifth Semester CSC 256 Machine Structures (Core Computer Science Requirement) 3 Bachelor of Science in Computer Science Roadmap Quantitative Reasoning Category 3/4 CSC 300GW Ethics, Communication, and Tools for Software Development - GWAR (Core Computer Science Requirement) 3 CSC 340 Programming Methodology (Core Computer Science Requirement) 3 MATH 324 Probability and Statistics with Computing (Major Mathematics and Physics) 3 PHYS 230 & PHYS 232 General Physics with Calculus II and General Physics with Calculus II Laboratory (Major Mathematics and Physics) 4 Units 16 Sixth Semester CSC 317 Introduction to Web Software Development 3 CSC 415 Operating System Principles (Advanced Computer Science Requirement) 3 CSC 510 Analysis of Algorithms I 3 GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3 GE Area 3UD: Upper-Division Arts or Humanities 3 Units 15 Seventh Semester CSC 413 Software Development (Core Computer Science Requirement) 3 Major Elective (15 Units Total) - Take Two 4 6 GE Area 4UD: Upper-Division Social and Behavioral Sciences 3 SF State Studies or University Elective 1 Units 13 Eighth Semester CSC 648 Software Engineering (Advanced Computer Science Requirement) 5 3 Major Elective (15 Units Total) - Take Three 4 9 Units 12 Total Units 120 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) 2 First-time freshmen must take one lower-division Area 4 course that meets US History (USH). 3 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) 4 Major Electives (15 units) A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 1905). 5 CSC 648 serves as the major capstone course. Transfer (ADT) Roadmap Bachelor of Science in Computer Science – COMP Associate Degree for Transfer (ADT) Roadmap This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with an AS-T in Computer Science. 35 units in the major (MATH 225, MATH 226, MATH 227, PHYS 220/PHYS 222, PHYS 230/PHYS 232, CSC 101, CSC 215, CSC 220, CSC 230, CSC 256) and all lower-division GE requirements have been satisfied. Additional units in the major may have been satisfied. Check with a major advisor about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for more information (p. 2304). To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper division level; to include the following: University-Wide Requirements: 9-15 Units • American Institutions (0-6 units): US History, US Government, CA Government. If not met in transfer, see next bullet. • Upper-division GE (9 units): Courses may satisfy the US History or US/CA Government requirements and UD-C or UD-D at the same time if approved for multiple areas. • Students entering the major with the AS-T in Computer Science are not required to fulfill SF State Studies requirements. Computer Science Major: 39 Units MATH 225, MATH 226, MATH 227, PHYS 220, PHYS 222, PHYS 230, PHYS 232, CSC 101, CSC 215, CSC 220, CSC 230, and CSC 256 met in transfer. • Mathematics: 3 units • Core Computer Science Requirements: 12 units • Advanced Computer Science requirements: 9 units • Major Electives: 15 units University Electives: 6 or More Units Depends on course choices made at the community college, how transferred units are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement, e.g., in both UD GE and in the major. Course Title Units First Semester CSC 300GW Ethics, Communication, and Tools for Software Development - GWAR (Core Computer Science Requirement) 3 CSC 317 Introduction to Web Software Development (Core Computer Science Requirement) 3 CSC 340 Programming Methodology (Core Computer Science Requirement) 3 MATH 324 Probability and Statistics with Computing (Major Mathematics and Physics) 3 US History (p. 2350) 3 or University Elective if US History met in transfer Units 15 Second Semester CSC 413 Software Development (Core Computer Science Requirement) 3 CSC 415 Operating System Principles (Advanced Computer Science Requirement) 3 CSC 510 Analysis of Algorithms I (Advanced Computer Science Requirement) 3 GE Area 3UD: Upper-Division Arts or Humanities 3 US and California Government (p. 2351) 3 or University Elective if US/CA Government met in transfer Units 15 Bachelor of Science in Computer Science – COMP Associate Degree for Transfer (ADT) Roadmap Third Semester Major Electives (15 Units Total) - Take Three 1 9 GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3 University Elective 3 Units 15 Fourth Semester CSC 648 Software Engineering 3 Major Electives (15 Units Total) – Take Two 1 6 GE Area 4UD: Upper-Division Social and Behavioral Sciences 3 University Elective 3 Units 15 Total Units 60 1 Major Electives (15 units) A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 1905). Certificate in Data Science and Machine Learning for Biotechnology The interdisciplinary field of Data Science (DS) has emerged as one of the fastest growing fields of our times. One of the most impactful applications of Data Science has been for the field of biotechnology. Statistical modelling and Machine Learning (ML) is being increasingly used to investigate long standing problems in biotechnology and to develop solutions to some of the most critical challenges of our times. The certificate program is designed to provide a strong foundation in theory, tools, and techniques of machine learning and data science for biotechnology. Students will learn and practice the skills involved in synthesizing machine learning and data science concepts around the big questions in biotechnology to solve real-life problems. Students will also gain experience in effective scientific communication skills that are needed to convey information to multidisciplinary audiences from different functional areas of the biotechnology field. Admission to this undergraduate certificate program requires a grade of C or higher in BIOL 230 or BIOL 100 and a grade of C or higher in CSC 220 or CSC 311. CSC 408, CSC 411, CSC 509, and CSC 511 have to be enrolled with letter grade grading option. Credit/No Credit (CR/NC) grading option is not acceptable for these courses for this program. Program Learning Outcomes 1. Demonstrate proficiency in the fundamentals of data science and machine learning for biotechnology: theory, tools, and techniques. 2. Demonstrate ability to synthesize machine learning and data science concepts around the big questions in biotechnology to develop solutions to real-life problems. 3. Demonstrate effective scientific communication skills, verbal and written, to convey information to multidisciplinary audiences from different functional areas of the biotechnology field. Certificate in Data Science and Machine Learning for Biotechnology – 12 units CSC 408, CSC 411, CSC 509, and CSC 511 must be taken for a letter grade. Code Title Units CSC 408 Machine Learning and Data Science for Personalized Medicine 3 CSC 411 Intermediate Machine Learning for Interdisciplinary Data Scientists 3 Select One: 3 CSC 509 Data Science and Machine Learning for Medical Image Analysis CSC 511 Protein Modeling with Deep Learning CSC 601 Data Science and Machine Learning for Biotechnology Seminar Series 1 CSC 602 Interview Preparation for Data Science and Machine Learning for Biotechnology Opportunities 2 Certificate in Generative Artificial Intelligence (GenAI) for Computer Scientists Generative AI (GenAI) encompasses a suite of advanced machine learning models and techniques capable of creating novel content across diverse modalities, including text, images, audio, and code. Its transformative potential is poised to reshape industries, research, jobs, and daily life, establishing a long-lasting impact on all facets of society. This certificate program provides students with a comprehensive understanding of the theoretical foundation of GenAI and its underlying technologies, its limitations, equipping them with both practical and marketable skills as well as critical insights. It prepares students to excel in the rapidly evolving AI-driven workforce, where GenAI skills like the use of prompt engineering in software engineering are increasingly vital. Upon completion of this program, students will be equipped to contribute meaningfully to the development and use of GenAI technologies, fostering innovation and positively impacting society at large. Admissions Requirements The certificate is open to current undergraduate students with a grade of C or better in CSC 413 (or equivalent) and a grade point average of at least 3.0. Additional prerequisites may need to be met depending on the elective a student wishes to take. Program Learning Outcomes 1. Explain the core principles and the underlying technologies/algorithms, encompassing diverse data modalities, prompt engineering, and fine-tuning techniques. 2. Apply core AI concepts, ranging from traditional algorithms to modern deep learning and NLP. 3. Apply generative AI platforms and technologies to practical, hands-on projects, demonstrating the ability to analyze and implement GenAI solutions. 4. Critically analyze and address ethical considerations related to generative AI, including issues of privacy, security, and transparency. Certificate in Generative Artificial Intelligence (GenAI) for Computer Scientists – 12 units Core Courses (6 units) Code Title Units CSC 603 Generative AI: Fundamentals and Applications 3 CSC 659 AI Explainability and Ethics 3 Electives (6 units) Select Two: Code Title Units CSC 620 Natural Language Technologies 3 CSC 665 Artificial Intelligence 3 CSC 671 Deep Learning 3 CSC 676 Soft Computing and Decision Support Systems 3 Graduate Certificate in Cybersecurity Cybersecurity is an essential discipline focused on protecting digital systems, networks, and sensitive data from unauthorized access, disruption, and emerging threats. As technology becomes more integrated into every aspect of society, the need for robust cybersecurity strategies continues to grow. This graduate certificate program provides students with a solid foundation in core cybersecurity principles, secure system and network design, and the application of machine learning to cyber defense. It equips students with both practical and marketable skills to build and defend systems against real-world attacks, while also developing critical insights into data privacy, adversarial threats, and secure AI integration. Upon completion, students will be prepared to contribute meaningfully to the protection of digital infrastructure and to meet the growing demand for cybersecurity expertise in the modern workforce. Admissions Requirements For matriculated students we will use standard prerequisites as defined in our bulletin and syllabi. For non-matriculated students we will let instructors determine the qualifications to attend each course. Admission to this program requires a bachelor’s degree from an accredited institution, with a major in the appropriate field(s) of study, as well as a grade point average of at least 3.0 in the last 60-semester (90 quarter) units attempted. Students must have the equivalent of CSC 415 and CSC 665. Program Learning Outcomes 1. Design and evaluate secure systems and networks using core cybersecurity and cryptographic principles. 2. Apply machine learning techniques to detect, analyze, and mitigate modern cyber threats, including adversarial and privacy attacks. 3. Build and defend practical cybersecurity solutions through hands-on exercises and real-world projects. 4. Effectively communicate technical cybersecurity findings through reports, presentations, and collaborative work. Graduate Certificate in Cybersecurity – 9 units Core Courses (9 units) Code Title Units CSC 852 Introduction to Security and Data Privacy 3 CSC 853 Network Security 3 CSC 854 Machine Learning for Cybersecurity 3 Graduate Certificate in Software Engineering For more information, including advice on how to apply and obtain the certificate, please visit the department's website (https://cs.sfsu.edu/graduate-certificates). Admissions Requirements and Procedure Selection for admission to the program will be based on applicants’ academic background, work experience, and personal recommendations. We have two distinctive admissions procedures: one for matriculated graduate students at SF State and another for area professionals and non-SF State students who have completed a minimum of a Bachelor’s degree from an accredited university or college with a 3.0 GPA or better. A continuing SF State graduate student wishing to be admitted to a graduate certificate program at San Francisco State University is expected to follow the University requirements and procedures outlined herein. Such requirements and procedures may include a supplementary application, a defined set of prerequisite courses, a designated GPA, written recommendations, etc., as may be appropriate for the program in question. To start the admission process please compete the form Certificate Admissions Application for Continuing SF State Graduate Students (https://powerforms.docusign.net/b79b4024-2cad-4b1e-bc17-b5f4d844d8fa?env=na3&acct=223bf8e1-bc14-478b-8607-15b5be78981f&accountId=223bf8e1-bc14-478b-8607-15b5be78981f) and sign it with DocuSign application. Student will be then be contacted by graduate office and/or designated advisor. For non-matriculated SF State students, the certificate is available through application to CalState Apply (https://www.calstate.edu/apply) for any student applicant who is eligible to take the required courses and has earned a Bachelor’s degree. Program Learning Outcomes 1. Learn modern software engineering technologies used to develop, test, deploy, and manage software (SW) applications. 2. Learn best practices of modern software engineering processes and organization including those applicable to global (distributed) organization of SW projects. 3. Learn to apply modern tools for team-based SW development. 4. Learn to apply best practices of effective SE teamwork in locally and globally organized projects. 5. Learn selected advanced SE technologies and topics via elective course offerings. Graduate Certificate in Software Engineering -12 units Core Requirements (6 units) Code Title Units CSC 847 Cloud and Distributed Computing: Concepts and Applications 3 CSC 848 Software Engineering 3 Core Options (3 units) Select one: Code Title Units CSC 780 Application Development for Mobile Devices 3 CSC 867 Internet Application Design and Development 3 Elective (3 units) Select one: Code Title Units CSC 720 Advanced Operating Systems 3 CSC 746 High-Performance Computing 3 CSC 841 Computer Performance Evaluation 3 CSC 842 Human-Computer Interaction 3 CSC 847 Cloud and Distributed Computing: Concepts and Applications 3 CSC 868 Advanced Object Oriented Software Design and Development 3 CSC 874 Topics in Big Data Analysis 3 CSC 899 Independent Study 3 Master of Science in Computer Science Program Description All students share breadth requirements in the areas of computing foundations, computer systems, and software development. Students focusing on different areas then differ in the choice of courses that provide depth in the chosen area and the work done for the culminating experience. Students are expected to decide on a focus area prior to enrollment in the second semester. Integrated into the curriculum are significant team and project experiences. There are two options for the mandatory culminating experience, the master’s thesis or the applied research project. The grading method CR/NC is allowed only for CSC 895 or CSC 898. All other courses listed on the Advancement to Candidacy (ATC) form must be a letter grade. Program Learning Outcomes 1. Students will demonstrate a breadth of knowledge in Computer Science, as exemplified in the areas of systems, theory, and software development. 2. Students will demonstrate the ability to conduct a research or applied Computer Science project, requiring writing and presentation skills which exemplify scholarly style in Computer Science. Elective Requirements All students are required to include elective credits in their program. Electives include: • All upper-division or graduate courses offered by the Computer Science Department, including breadth requirement courses and CSC 897 and CSC 899. CSC 893 may not count as an elective course. • Courses from other programs such as biology, engineering, business, or mathematics may be accepted with the approval of the graduate advisor and culminating experience supervisor. Note: A maximum of 6 units of upper-division courses (numbered below 700) may be applied to the degree with the consent of the course instructor and graduate advisor. Graduate Seminar Requirement In addition to curricular requirements, prior to enrolling in CSC 895/CSC 898, all graduate students are required to attend the Department Graduate Seminar series during one semester of their studies. These weekly seminars explore current topics in computer science research and assist students with choosing a topic for the culminating experience. Details for meeting this requirement may be found in the Graduate Studies Policy section (p. 2358). Practicum This 1-3 unit option is chosen by students who wish to enhance their master’s degree by completing an industrial practicum. After finding the job in the local industry, the student will submit a research proposal to the department’s supervisor (normally the department chair) that describes the expected work and learning outcome. The department’s supervisor must approve the proposal before the student begins the research. Once approved, the student will enroll in 1 unit of CSC 893. At the conclusion of the work experience, the student must file a written report outlining the research and work experience. The report is submitted to the department’s supervisor. Students may repeat CSC 893 for a maximum of 3 units. The total number of units for the degree for students who complete the CSC 893 practicum option will be 33 units. It is recommended that this option be pursued only during the summer. Note: CSC 893 allows international students to obtain permission to work off-campus for the duration of the course. Admission to Program Admission to the graduate program in Computer Science is a two-step process that should be completed simultaneously: 1. Apply to San Francisco State University: Complete the on-line CSU Mentor application. Follow all other requirements for admission to the University by accessing www.sfsu.edu/~gradstdy/ (http://www.sfsu.edu/~gradstdy/). 2. Apply to the Department of Computer Science graduate program: Full details can be found at https://cs.sfsu.edu/grads/prospective-graduates We encourage students with four-year degrees other than Computer Science to apply to our program as conditional applicants. Please check the link in Step 2 above for details. Financial Assistance Graduate assistantships are occasionally available for qualified master's students. These opportunities include participating in funded research projects, assisting with the management of departmental and university computer laboratories as well as lecturer positions for beginning undergraduate computer science courses. Frequently, there are internship opportunities available for work at local companies. International students should address all questions related to their visa status and eligibility for practical training (off-campus work) to the Office of International Programs (p. 2431). Written English Proficiency Requirement Level One Computer science students admitted to the M.S. program are required to satisfy English Level One prior to the end of their first year of study at SF State. Level One is satisfied by obtaining either a score of 4 or better on the GRE Analytical Writing Exam or a passing grade in SCI 614. SCI 614 is strongly recommended for all students who wish to develop their skills in professional writing. Level Two The second level of proficiency in written English must be demonstrated before graduation. At this time, the student must demonstrate writing skills that exemplify scholarly style in computer science. This is demonstrated by the master's thesis or the research project report. Policy on Enrollment While Conducting Directed Research Pursuant to Policy F89-165 adopted by the Academic Senate in 1989, the Computer Science Department has adopted the policy that all graduate students who are working with a research advisor (above and beyond general advising during office hours) and/or having his/her thesis or project reviewed, must enroll in at least 1 unit of CSC 895, CSC 897, CSC 898, or CSC 899. Registered students will have priority for departmental computing resources. Computer Science (M.S.) – 30 units minimum Core Requirements (9 units) Computing Foundations (3 units) Select one: Code Title Units CSC 810 Analysis of Algorithms II 3 CSC 825 Advanced Automata Theory 3 Computer Systems (3 units) Select one: Code Title Units CSC 720 Advanced Operating Systems 3 CSC 746 High-Performance Computing 3 CSC 845 Advanced Computer Networks 3 Software Development (3 units) Select one: Code Title Units CSC 780 Application Development for Mobile Devices 3 CSC 831 Multiplayer Game Development 3 CSC 848 Software Engineering 3 CSC 868 Advanced Object Oriented Software Design and Development 3 General Requirement (9 units) Three 3-unit courses drawn from any 700-800 level Computer Science courses not used to meet a core or elective requirement. 700-800 level courses paired with 600 level courses require an advisor’s approval. CSC 899 may not count towards this requirement. Electives (6 units) Two upper-division/graduate 3-unit electives selected on advisement. Practicum Option (0-3 units) Up to 3 units of CSC 893 Supervised Industrial Research on advisement. Culminating Experience (6 units) Select one: Code Title Units CSC 897 Research 3 CSC 899 Independent Study 3 Select one: Code Title Units CSC 895 Applied Research Project 3 CSC 898 Master's Thesis 3 Master of Science in Data Science and Artificial Intelligence The Master of Science in Data Science and Artificial Intelligence (DS&AI) program prepares students for high-demand industry positions in DS&AI and for doctoral programs that require a solid knowledge base in computer science, statistics, machine learning, and artificial intelligence. The program combines a broad and in-depth core curriculum in theory and applications. Students will receive rigorous and hands-on training through high-quality research activities to gain software system-building experiences in interdisciplinary settings. Through this program students with and without a Computer Science background will advance their careers by acquiring computational, statistical and system-building skills in this increasingly data-driven society. Admission requirements Successful applicants to the program must • Hold a baccalaureate degree from a regionally accredited 4-year institution or shall have completed equivalent academic preparation as determined by the appropriate campus authority in a quantitative/computing field, including but not limited to computer science, mathematics, physics, statistics, engineering or relevant fields. Successful applicants are expected to demonstrate knowledge by having satisfactorily completed courses or worked in the information technology industry in the following areas: data structures, programming, analysis of algorithms, database systems, software engineering, calculus, probability, and/or statistics. However, an applicant who is deficient in these areas may be admitted conditionally on passing a set of undergraduate courses during the first calendar year of study. • Have a 3.0 GPA or higher in their earned undergraduate degree or have earned a post-baccalaureate degree. • Submit a general GRE score that has been taken within the last 3 years. • Submit a TOEFL score (minimum 550/80) or IELTS score (minimum 7.0) obtained within the past two years if their undergraduate degree is from a country where the official language is not English. • Furnish 2 Letters of Recommendation. • Submit a Statement of Purpose • Submit a copy of CV or resume. Culminating Experience Requirements Each student in this program is required to complete a culminating experience project/thesis by enrolling in either CSC 895 Applied Research Project or CSC 898 Master's Thesis. Under the supervision of a tenured/tenure-track faculty member, a student employs concepts and methods learned in this program to solve a problem of significant importance from a practical or research standpoint. Through this culminating experience project, a student will synthesize and apply concepts and methods learned in more than one course, analyze and compare existing work in the area of study, create a software solution, evaluate this software, and present the major findings in the forms of an oral defense and written thesis/report. CSC 895 and CSC 898 are equivalent options. The project or thesis will also add a prominent component to a student's portfolio and lay the foundation for a future career in data science and AI, be it a Ph.D. program or a leadership position in the industry. Each student will work with a tenured/tenure-track faculty member to decide whether to register for CSC 895 or CSC 898. Before enrolling in CSC 895 or CSC 898, the student and his/her faculty advisor will be required to assemble a committee of multiple faculty members to maximize a student’s learning outcomes through working on his/her culminating experience project. A culminating experience project in this program will produce the following three major deliverables: (1) a software system that utilizes relevant data to address an important problem; (2) a written report or Master’s thesis; and (3) an oral presentation to argue/explain/demonstrate the software solution and convince the committee of the solution’s efficacy and effectiveness. Written English Proficiency Requirement Level One A candidate is considered to have fulfilled the Level 1 Writing Proficiency requirement if this candidate has earned a score of 4.0 or above in their recent GRE’s analytic writing assessment. In the case a candidate scored below 4.0, this candidate may be conditionally admitted. In such a case, this student is required to successfully finish SCI 614: Graduate Writing Skills (3 units) within one year after starting their studies in this program. Level Two The written report or the Master's thesis resulted from a student's culminating experience project will be utilized to determine a student's Level 2 writing proficiency. Each student in this Master's program is required to carry out a culminating experience (CE) project by enrolling in either CSC 895 or CSC 898. To successfully complete one's CE project, each student is in turn required, among several other mandatory requirements, to write a written project report for CSC 895 or a written Master's thesis for CSC 898. Program Learning Outcomes 1. Design and develop software systems to tackle problems throughout the life cycle of data science and Artificial Intelligence. Major components in this life cycle include: data collection/acquisition, data storage/management, data preprocessing, data modeling and machine learning, and visualization. 2. Obtain an in-depth understanding of a host of machine learning/data mining algorithms; apply, implement, and evaluate such algorithms to extract knowledge from both structured and unstructured data. 3. Utilize distributed and parallel computing platforms that are capable of managing and processing big data using computing facilities on premise or in the cloud. 4. Analyze potentially unethical practices in data science and AI and adopt best practices to become a socially and ethically responsible professional. 5. Communicate the data systems effectively with multidisciplinary audiences using verbal, written, and visual forms. Master of Science in Data Science and Artificial Intelligence – 30 units minimum Students may count a maximum of three paired courses (9 units) towards these degree requirements. A paired course is a graduate course paired with an undergraduate course covering similar content and are identified in the course description, e.g., \"CSC 865/665 is a paired course offering.\" Algorithms, AI & Machine Learning (6-9 units) Select one: Code Title Units CSC 865 Artificial Intelligence 3 CSC 869 Data Mining 3 CSC 872 Pattern Analysis and Machine Intelligence 3 Select one or two: Code Title Units CSC 803 Generative AI: Fundamentals and Applications 3 CSC 810 Analysis of Algorithms II 3 CSC 865 Artificial Intelligence 3 CSC 869 Data Mining 3 CSC 871 Deep Learning 3 CSC 872 Pattern Analysis and Machine Intelligence 3 CSC 876 Soft Computing and Decision Support Systems 3 Big Data Platforms & Systems (3 units) Select one: Code Title Units CSC 746 High-Performance Computing 3 CSC 847 Cloud and Distributed Computing: Concepts and Applications 3 CSC 848 Software Engineering 3 CSC 864 Multimedia Systems 3 CSC 874 Topics in Big Data Analysis 3 CSC 878 Big Data Platforms and Systems 3 Probability, Statistics, and Statistical Learning (6 units) Code Title Units MATH 440 Probability and Statistics I 3 MATH 448 Introduction to Statistical Learning and Data Mining 3 Data Visualization and Visual Data Analytics (3 units) Code Title Units CSC 805 Data Visualization: Concepts, Tools, Techniques, and Paradigms 3 Applications and Best Practices (3-6 units) Select one or two: Code Title Units CSC 820 Natural Language Technologies 3 CSC 821 Biomedical Imaging and Analysis 3 CSC 842 Human-Computer Interaction 3 CSC 847 Cloud and Distributed Computing: Concepts and Applications 3 CSC 852 Introduction to Security and Data Privacy 3 CSC 857 Bioinformatics Computing 3 CSC 859 AI Explainability and Ethics 3 CSC 890 Graduate Seminar 3 CSC 897 Research 3-6 CSC 899 Independent Study 1-3 ISYS 850 Seminar in Business Intelligence 3 MATH 741 Probability and Statistics II 3 MGMT 850 Ethics and Compliance in Business 3 MKTG 886 Seminar in Marketing Analytics 3 Supervised Research and Culminating Experience (6 units) Code Title Units Select One: 3 CSC 895 Applied Research Project CSC 898 Master's Thesis Select One: 3 CSC 897 Research CSC 899 Independent Study Optional: Supervised Industrial Research (1-3 units) Code Title Units CSC 893 Supervised Industrial Research 1 Minor in Computer Science Many university students wish to acquire sufficient background in computer science to enable them to use computers effectively in their major areas or to provide an alternative source of income after graduation, but do not want to study computer science at the depth required for the B.S. degree. For such students, a minor consisting of the most central courses in the B.S. program, and some electives, is ideal. Program Learning Outcomes 1. Students will be able to design, develop, document, and test software using current techniques. 2. Students will be able to solve problems working in group settings. This translates to the following outcomes. 3. Students will demonstrate the ability to give presentations and write technical reports. Computer Science Minor — 22 units A minimum of 6 upper-division units are required to complete the minor. All coursework used to satisfy the requirements of the minor must be completed with a minimum grade point average of 2.0. Students are advised that CR/NC grades are not acceptable in courses to be counted for the Computer Science Minor. Requirements (16 units) Code Title Units CSC 101 Introduction to Computing 3 CSC 215 Intermediate Computer Programming 4 CSC 220 Data Structures 3 CSC 317 Introduction to Web Software Development 3 CSC 413 Software Development 3 Electives (6 units) Upper-division computer-related electives by approval of the minor advisor. Minor in Computing Applications Applications of computing have become all-pervasive, impacting every aspect of our lives and our society. As a result, the demand for computational skills has skyrocketed in non-computational fields ranging from agriculture to biology. To meet this demand, the Computing Application Minor offers a curriculum specifically designed for non-CS majors. Through this minor, students will learn the fundamentals of computer programming and receive hands-on experience in applying computing skills to real-life problems from diverse fields. Please review course descriptions for prerequisite courses and consult a computer science department advisor for further information. Admission to the minor is open to all students with upper-division standing. Courses are three units unless otherwise indicated. Program Learning Outcomes 1. Students will demonstrate foundational knowledge of computational skills and their application to multidisciplinary problems. 2. Students will demonstrate functional knowledge of machine learning concepts, tools, and techniques. 3. Students will demonstrate the ability to synthesize computational and machine learning skills around the big questions in diverse fields (e.g., biotechnology) to develop solutions to real-life problems. Computing Applications Minor – 15 units minimum • A minimum of 6 upper-division units are required to complete the minor. • All coursework used to satisfy the requirements of the minor must be completed with a minimum grade point average of 2.0. CSC 408, CSC 411, CSC 509, and CSC 511 must be taken for a letter grade. Code Title Units Select One: 3-6 CSC 101 & CSC 215 Introduction to Computing and Intermediate Computer Programming 1 CSC 306 An Interdisciplinary Approach to Computer Programming 2 Select One: 3 CSC 220 Data Structures 1 CSC 311 Data Structures for Data Science Application Development 2 CSC 408 Machine Learning and Data Science for Personalized Medicine 3 CSC 411 Intermediate Machine Learning for Interdisciplinary Data Scientists 3 Select One: 3 CSC 509 Data Science and Machine Learning for Medical Image Analysis CSC 511 Protein Modeling with Deep Learning 1 Recommended for non-life science majors. 2 Recommended for life science majors. Cooperative Education College of Science and Engineering Dean: Dr. Carmen Domingo Cooperative Education Program SCI 248 (415) 338-1050 Director: Lannie Nguyen-Tang The Cooperative Education Program enables students of all majors within the University to integrate academe with real-world problems through alternating academically relevant work experiences with class studies. Cooperative positions are arranged with the help of the program director and supervised by both the immediate work supervisor and a faculty coordinator from the student's area of academic interest. Participation in the Cooperative Education Program expands and enhances career opportunities through experience gained with employers and often helps focus academic objectives. Students receive competitive wages and earn academic credit while involved in their field assignments. Employment periods may be either full- or part-time. Participants begin the program by completing the preparatory Cooperative Education Colloquium course. Additional information may be obtained from the Cooperative Education Office. Program Scope This supplemental 25-unit certificate program is designed to give students the opportunity to develop educational objectives and career opportunities. Enrollment in the cooperative education colloquium course is a requirement for all students and is used as the basis for evaluation of student potential and interest. The certificate indicates to the employer that the University validates the student's work experience in cooperative education and substantiates the experience as professional development and job training. Students receive academic credit and salaried compensation. All placements are academically relevant. Since the certificate program is tailored to the student's needs and specific major, information about various degrees and programs offered may be found under the appropriate department or center. Career Outlook Students who complete the certificate program typically have greater employment options and benefits. Additional benefits include better starting salaries and greater responsibilities for starting level positions. Cooperative education placements usually lead to permanent job placements with private and public sector employers. Cooperative Education Certificate — 25 Units Admission Requirements To be admitted to the program students must comply with all criteria as outlined in the description of certificate programs of this University Bulletin. Additionally, students must: • Be a resident student at the University • Maintain at least a 2.5 GPA in all course work within the student's major course of study. • Complete the prerequisite course, Cooperative Education Colloquium. • Be of upper division standing (completed 56 semester units of undergraduate work) Course credits are to be assigned through SCI 693. Accumulated units do not count toward general education or major curricular requirements. Full-time summer placements are available and may earn six units of credit. Two major academic year placement options exist and are illustrated below. Prerequisite (1 unit) Code Title Units SCI 693 Cooperative Education Program 1 Required Course (24 units) Plan A: Parallel Pattern Part-Time (to be taken over four semesters, 6 units per semester) Code Title Units SCI 693 Cooperative Education Program 24 Plan B: Alternating Pattern Full-Time (to be taken over two semesters, 12 units per semester) Code Title Units SCI 693 Cooperative Education Program 24 Graduate Certificate in Data Science for Biology and Chemistry Modern biological and chemical sciences increasingly requires strong computational skills to conduct cutting-edge research. The Data Science for Biology and Chemistry Certificate will enable students to learn computational and programming skills that are relevant to their work in biology and chemistry. This certificate program is a 2-year, 12- unit certificate program that students can complete in line with their Master’s degree program requirements. There are 4 core required courses and 1 elective. Of the 4 core courses, one 3+ unit classes is devoted to learning data and computer science, using assignments and examples drawn from biology and chemistry. One one-unit course is a support courses that provide inclusive environments for students to master coding and data science skills. One one-unit course is a professional development course to connect students to opportunities in basic data science with professionals in academics and industry. There is also 3 units required for research, in which students utilize their computational skills in their research projects required for their MS degrees in Biology and Chemistry. Students also select one elective course (3-4 units) that uses computational analysis. Learning Outcomes 1. Develop computational skills needed to create, debug, and run a computer program to perform data analyses. 2. Obtain, store, manage and share data in a distributed environment through practical, hands-on experience with programming languages and big data tools. 3. Evaluate data, as well as to apply key technologies data science analysis including statistical analysis, machine learning, and data visualizations. 4. Develop data science as an aspect of their professional identity, effectively communicate their data analyses and results, and will connect with professionals outside of the University to further their data science careers. 5. Apply their data science skills to discipline-specific data and questions to solve real-world problems of high complexity. Graduate Certificate in Data Science for Biology and Chemistry – 12 units minimum Core Courses (9 units) Code Title Units BIOL/CHEM 806 Exploratory Data Science for Scientists 4 BIOL/CHEM 807 Coding Community for Data Science Components of Independent Research Projects 1 BIOL/CHEM 808 Professional Prospects for Quantitative Biologists, Data Scientists, and Bioinformaticians 1 Select One: 3 BIOL 897 Research CHEM 897 Research Application Course (3-4 units) Select one discipline-specific application of data science: Code Title Units BIOL 446 Microbial Genomics 4 BIOL 458 Biostatistics 4 BIOL 490 Ecology of Infectious Diseases 4 BIOL 710 Advanced Biostatistics 3 BIOL 738 Bioinformatics and Sequence Analysis 4 BIOL 815 Advanced Phylogenetic Analysis 4 CHEM 370 Computer Applications in Chemistry and Biochemistry 3 CHEM 870 Computational Methods in Chemistry 3 CSC 306 An Interdisciplinary Approach to Computer Programming 3 Engineering College of Science and Engineering Dean: Dr. Carmen Domingo School of Engineering 1600 Holloway Avenue, SEIC 311 Phone: (415) 338-1228 Email: engrasst@sfsu.edu Website: https://engineering.sfsu.edu/Director and Associate Director • Director: Dr. Kwok Siong Teh • Associate Director: Dr. A.S. (Ed) Cheng Program Heads • Civil Engineering: Dr. Cheng Chen • Computer Engineering: Dr. Xiaorong Zhang • Electrical Engineering: Dr. Xiaorong Zhang • Mechanical Engineering: Dr. Mojtaba Azadi Coordinators of Graduate Programs and SF State Scholars (4+1 Blended BS/MS) Programs • Civil Engineering: Dr. Zhaoshuo Jiang • Electrical and Computer Engineering: Dr. Hamid Mahmoodi • Mechanical Engineering: Dr. David Quintero Mission and Goal The mission of the School of Engineering is to educate students from a diverse and multicultural population to become productive members of the engineering profession and society at large. Educational objectives in support of this mission depend upon the major program and are stated below in the description of each program. Program Scope The School of Engineering offers Bachelor of Science programs in Civil, Computer, Electrical, and Mechanical Engineering, as well as a minor program in each discipline. Descriptions of the four major and minor programs follow this general introduction. Civil engineering is concerned with the building of civil and environmental facilities, which are essential for the commerce of our society. Civil engineers design and construct bridges, buildings, wastewater treatment plants, water supply facilities, hazardous waste facilities, and transportation systems. The program at San Francisco State University provides a broad and practical education which prepares students for civil engineering employment and (for those who qualify) for graduate studies. Computer engineering combines electrical engineering and computer science and deals with the design and application of computer systems. These computer systems can range from supercomputers to tiny microprocessors that are embedded in all kinds of apparatus such as automobiles, appliances, cellular phones, medical devices, office equipment, etc. The computer engineering program teaches students about computer hardware, software, integration, interfacing, and applications with a strong emphasis on analysis and design. Hence, students pursuing a computer engineering degree must have a solid foundation in mathematics and physical sciences. Students develop problem-solving and decision-making skills as well as an appreciation for the impact of technology in society. Graduates of the program can seek employment immediately or can continue studies for an advanced degree in computer engineering, computer science, electrical engineering, or other areas such as business, law, or medicine. Electrical engineering is the profession that deals with the design and analysis of electrical and electronic devices and systems. This branch of engineering covers many diverse areas, including electrical power generation and distribution, the design and fabrication of electronic semiconductor devices, and the creation of components and systems for consumer, medical, telecommunications, and many other applications. Graduates with a B.S. in Electrical Engineering have a number of options available to them. They may engage in the analysis, modeling, simulation, design, testing, manufacturing, or field services of electrical, electronic, or magnetic equipment. Persons interested in research, development, or college-level teaching may pursue advanced degrees in a specified area of electrical engineering. Mechanical engineering is the field responsible for the design of machines and devices used throughout society. Industries involved in the generation of electricity or renewable energy, in the design and manufacture of electronics, biomedical devices, aircraft, automobiles, consumer, HVAC systems, and industrial products typically employ large numbers of mechanical engineers. Mechanical engineers are also employed by companies involved in automated manufacturing as well as robotics and control. The program at San Francisco State prepares the student to enter into professional employment directly after graduation in addition to providing the needed foundation for graduate study. Recognizing the value to certain students majoring in science broadening their education to include applications of their backgrounds in science to real-world physical systems, four minors in engineering are offered. The master’s program includes primary curricular areas of specialization in civil/structural, electrical/computer, and mechanical/energy engineering from which the student may choose a program of study upon advisement. The objectives of the program are to provide students with the advanced engineering education necessary for solving complex problems in engineering practice and to provide opportunities for updating and upgrading the skills of practicing engineers. These objectives are accomplished by a flexible program to meet individual student needs. Career Outlook Graduates with a B.S. in Civil Engineering may engage in the design and construction of buildings, bridges, roads, dams, water supply facilities, and environmental facilities for treating wastewater and hazardous wastes. Civil engineers find employment with industrial firms, government agencies, utilities, and public works departments, as well as engineering firms which consult for these enterprises. After gaining practical experience, some civil engineers form their own consulting firms. Graduates with a B.S. in Computing Engineering may engage in the design, integration, interfacing, and application of computer hardware and software. Computer engineering is the fastest-growing engineering profession, and it impacts all aspects of our lives. Since computers are everywhere, from supercomputers to embedded microprocessors, computer engineers are needed in design, development, testing, marketing, and technical support of a wide variety of industries. Examples of major industries that employ computer engineers include computers, semiconductors, instrumentation, communications, networks, medical equipment, and manufacturing. Graduates with a B.S. in Electrical Engineering may engage in the analysis, modeling, simulation, design, testing, manufacturing, or field services of electrical, electronic, or magnetic equipment. They may also engage in the operation and maintenance of facilities for electrical power generation or telecommunication. High technology companies employ electrical engineers in the fields of electronic and computer manufacturing, as well as in power generation and communications. Graduates with a B.S. in Mechanical Engineering may immediately engage in the design, analysis, testing, production, and maintenance of machines and mechanical systems. Most industries, including aerospace, electronics, manufacturing, automotive, chemical, power generation, agriculture, food processing, textile, and mining, employ mechanical engineers. Engineers interested in research, development, or college-level teaching return to college for an M.S. or Ph.D. in their specified field. Engineers interested in management and business aspects may return to college for a Master of Business Administration. Professor Cheng Chen (2009), Professor in Engineering. Ph.D. Lehigh University. A. S. (Ed) Cheng (2004), Professor in Engineering. Ph.D. University of California, Berkeley. Timothy B. D'orazio (1984), Professor in Engineering. Ph.D. University of California, Berkeley. Ahmad R. Ganji (1987), Professor in Engineering. Ph.D. University of California, Berkeley. Thomas Holton (1989), Professor in Engineering. Ph.D. Massachusetts Institute of Technology. Hao Jiang (2007), Professor in Engineering. Ph.D. University of California, San Diego. Zhaoshuo Jiang (2014), Professor in Engineering. Ph.D. University of Connecticut. Hamid Mahmoodi (2005), Professor in Engineering. Ph.D. Purdue University. Wenshen Pong (1998), Professor in Engineering. Ph.D. State University of New York at Buffalo. Hamid Shahnasser (1989), Professor in Engineering. Ph.D. Drexel University. Dipendra Sinha (1987), Professor in Engineering. Ph.D. University of Manchester, Institute of Science and Technology. Gus Tarakji (1986), Professor in Engineering. Ph.D. Clemson University. Kwok-Siong Teh (2006), Professor in Engineering. Ph.D. University of California, Berkeley. Xiaorong Zhang (2013), Professor in Engineering. Ph.D. University of Rhode Island. Associate Professor Mojtaba Azadi (2015), Associate Professor in Engineering. Ph.D. University of Alberta. Elahe Enssani (1998), Associate Professor in Engineering. Ph.D. University of California, Berkeley. Fatemeh Khalkhal (2018), Associate Professor in Engineering. Ph.D. École Polytechnique de Montréal. David Quintero (2018), Associate Professor in Engineering. Ph.D. University of Texas at Dallas. Yiyi Wang (2019), Associate Professor in Engineering. Ph.D. University of Texas at Austin. Jenna Wong (2016), Associate Professor in Engineering. Ph.D. University of California, Berkeley. Assistant Professor Stephanie Claussen (2021), Assistant Professor in Engineering. Ph.D. Stanford University. Kenya Z. Mejia (2024), Assistant Professor in Engineering. Ph.D. University of Washington. Zhuwei Qin (2020), Assistant Professor in Engineering. Ph.D. George Mason University. Fhazhil Wamalwa (2024), Assistant Professor in Engineering. Ph.D. Rochester Institute of Technology. Majors • Bachelor of Science in Civil Engineering (p. 1939) • Bachelor of Science in Computer Engineering (p. 1951) • Bachelor of Science in Electrical Engineering (p. 1965) • Bachelor of Science in Mechanical Engineering (p. 1978) Minors • Minor in Civil Engineering (p. 1997) • Minor in Computer Engineering (p. 1998) • Minor in Electrical Engineering (p. 1999) • Minor in Mechanical Engineering (p. 2000) Masters • Master of Science in Civil Engineering (p. 1991) • Master of Science in Electrical and Computer Engineering (p. 1993) • Master of Science in Mechanical Engineering (p. 1995)",
+  "grading": "cr_nc",
+  "ge_areas": [],
+  "source_page": 1904,
+  "prereq_text": "Approval of the department and instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ECON 101",
+  "title": "Introduction to Microeconomic Analysis",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Basic analysis of prices and markets; consumer behavior; behavior of the firm; factor markets.",
+  "grading": null,
+  "ge_areas": [
+   "4"
+  ],
+  "source_page": 128,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ECON 474",
+  "title": "History of Labor in the United States",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Development of the workforce and organized labor in the U.S. with an emphasis on the social and economic characteristics of work and the workforce and characteristics of labor organizations at different times. (This course is offered as HIST 474, ECON 474, and LABR 474. Students may not repeat the course under an alternate prefix.)",
+  "grading": null,
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "source_page": 128,
+  "prereq_text": "Upper-division standing; GE Areas A1*, A2*, A3*, and B4* all with grades of C- or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": [
+   "HIST 474",
+   "LABR 474"
+  ]
+ },
+ {
+  "code": "ENG 114",
+  "title": "Writing the First Year: Finding Your Voice",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Practice academic success strategies and habits of mind, learn about campus resources, and learn and practice written academic inquiry, information literacy, the writing process, and critical reading in a variety of rhetorical genres. (Plus-minus ABC/NC, CR/NC allowed) [CSL may be available]",
+  "grading": "letter_or_cr_nc",
+  "ge_areas": [
+   "1A"
+  ],
+  "source_page": 1106,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ENGR 104",
+  "title": "Engineering Design and Digital Fabrication",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to Mechanical Engineering, specifically design and prototyping as well as the engineering design process and its iterative nature. Focus on Computer Aided Design (CAD) skills, including creating parts and assemblies, reading and making 2D engineering drawings, and applying standards of dimensioning and tolerancing. Discussion of basic machine shop safety and rapid prototyping skills. Lecture, 2 units; Laboratory, 1 unit. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1928,
+  "prereq_text": "High school algebra and trigonometry.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ENGR 212",
+  "title": "Introduction to Unix and Linux for Engineers",
+  "units_min": 2.0,
+  "units_max": 2.0,
+  "description": "Introduction to software development and program development in the Unix/Linux environment. File system organization and management, editors, utilities, network environment, pattern and file searching, command line interface, scripting languages. Lecture, 1 unit; laboratory, 1 unit. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1928,
+  "prereq_text": "Restricted to Engineering majors and minors. Other majors are admitted on a space-available basis by permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ENGR 213",
+  "title": "Introduction to C Programming for Engineers",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to C programming; defining and analyzing problems; design of algorithms; implementation, testing, debugging, maintenance, and documentation of programs; coverage of basic algorithms, programming concepts, and data types; C programming of microcontrollers. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1928,
+  "prereq_text": "MATH 226* or equivalent with a grade of C or better; either ENGR 104 or ENGR 212* with a grade of C- or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ERTH 112",
+  "title": "Our Dynamic Earth Lecture and Lab",
+  "units_min": 4.0,
+  "units_max": 4.0,
+  "description": "Investigate the geologic processes that are continually shaping our planet with an emphasis on the connections between humans and nature and the process of scientific discovery. Designed for non-science majors. Lecture, 3 units; laboratory, 1 unit. Extra fee required.",
+  "grading": null,
+  "ge_areas": [
+   "ESCA",
+   "5C",
+   "5A"
+  ],
+  "source_page": 2002,
+  "prereq_text": "Not open to students who have completed ERTH 110 or ERTH 111.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ERTH 335",
+  "title": "Global Warming",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Scientific understanding of global warming. Greenhouse gases, records of past climate change, warming of the recent past, human impact on climate, projections of future climate, and the impact on society. Critical evaluation of popular media coverage of climate change.",
+  "grading": null,
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "5UD"
+  ],
+  "source_page": 2003,
+  "prereq_text": "GE Areas 1A/A2*, 1B/A3*, 1C/A1*, 2/B4* all with grades of C- or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "HIST 120",
+  "title": "History of the U.S. through Reconstruction",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "A multicultural history of the US through the 1870s emphasizing both the structural oppression of and the agency asserted by native peoples, enslaved and free African Americans, women, immigrants, and workers. Topics include Native American history, European colonization, slavery, gender, sexuality, ability/disability, religion, region, capitalism, urbanization, social movements, political developments, the environment, and war. Engage with the American past, including debates about democracy and freedom, to understand present struggles for equality and justice while strengthening critical thinking, problem-solving, and communication skills.",
+  "grading": null,
+  "ge_areas": [
+   "AERM",
+   "4",
+   "USH"
+  ],
+  "source_page": 1210,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "HIST 130",
+  "title": "U.S. History for International Students",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "high school. The American people from colonial times to the present; the development of American political, social, and economic institutions.",
+  "grading": null,
+  "ge_areas": [
+   "USH",
+   "4"
+  ],
+  "source_page": 1211,
+  "prereq_text": "Not open to students who completed U.S. history in a U.S.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "HIST 308",
+  "title": "Engaging Democracy: Participating in Historical Debates",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Explore the history of democracy through participation in multiple historically-embedded live-action role-playing games (\"Reacting to the Past\") set in different societies and eras. Two games per semester; one based on the construction or implementation of the US Constitution, the other based on the construction or implementation of the constitution of another country. Games are contextualized through lectures outlining the nature of democracy and its evolution. Written, oral debates, and negotiations to solve the issues with which democratic societies wrestle. (This course is offered as HIST 308/PLSI 451. Students may not repeat the course under an alternate prefix.)",
+  "grading": null,
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "USG",
+   "CSLG",
+   "4UD"
+  ],
+  "source_page": 1212,
+  "prereq_text": "GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better or graduate standing or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": [
+   "PLSI 451"
+  ]
+ },
+ {
+  "code": "HIST 470",
+  "title": "The U.S. Constitution to 1896",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "History of the U.S. Constitution from its origins in the late 1700s to the landmark Plessy v. Ferguson decision in 1896. Special attention to the changing structures of governance, powers of the courts, debates about African American slavery and Native American sovereignty, the struggles of women and minority groups for equal rights and social justice, and the reconstruction of the Constitution after the Civil War.",
+  "grading": null,
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "SJ",
+   "USG",
+   "CSLG",
+   "USH"
+  ],
+  "source_page": 1222,
+  "prereq_text": "Restricted to upper-division standing; GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 197",
+  "title": "Prelude to Calculus I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Review of numbers and operations, exponents, and radicals. Linear, quadratic, polynomial, and rational functions. Exponential growth and exponential functions. Logarithmic functions. The transcendental number e and natural logarithms. The first semester of a year-long stretch pre-calculus course.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2091,
+  "prereq_text": "First-Year Math Advising Module; Category III* and IV* placement for QR/Math.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 198",
+  "title": "Prelude to Calculus II",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Trigonometry, trigonometric identities, trigonometric and inverse trigonometric functions, sequences and series, and limits. (Note: Successful completion of MATH 197 and MATH 198 will culminate in satisfying the Quantitative Reasoning requirement (GE Area 2/B4). For this course to satisfy General Education, students must earn a grade of C- or CR or higher.)",
+  "grading": null,
+  "ge_areas": [
+   "2"
+  ],
+  "source_page": 2091,
+  "prereq_text": "MATH 197 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 199",
+  "title": "Pre-Calculus",
+  "units_min": 4.0,
+  "units_max": 4.0,
+  "description": "Functions, graphing techniques, exponentials and logarithms, trigonometry.",
+  "grading": null,
+  "ge_areas": [
+   "2"
+  ],
+  "source_page": 2091,
+  "prereq_text": "First-Year Math Advising Module. For students who want to take pre-calculus in one semester.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 225",
+  "title": "Introduction to Linear Algebra",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to the solution to system of linear equations using Gaussian elimination, matrix algebra, subspaces of R^n and their bases, matrix transformations, eigenvalues and eigenvectors, diagonalization and applications, dot product, orthogonality, orthogonal bases, Gram-Schmidt orthogonalization, and using MATLAB to solve linear algebra problems.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2091,
+  "prereq_text": "MATH 198* or MATH 199* or MATH 226* with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 226",
+  "title": "Calculus I",
+  "units_min": 4.0,
+  "units_max": 4.0,
+  "description": "Graphs. Differentiation: theory, techniques, and applications. Integration: Fundamental Theorem of Calculus and applications. Transcendental functions. Lecture, 3 units; laboratory, 1 unit.",
+  "grading": null,
+  "ge_areas": [
+   "2"
+  ],
+  "source_page": 2092,
+  "prereq_text": "One of the following: MATH 198 or MATH 199 or equivalent with a grade of C or better; or MATH 226 or equivalent with a grade of C- or lower; or high school pre-calculus with B or better; or high school calculus with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 227",
+  "title": "Calculus II",
+  "units_min": 4.0,
+  "units_max": 4.0,
+  "description": "Techniques of integration, analytic geometry, polar coordinates, vectors, improper integrals, and sequences and series.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2092,
+  "prereq_text": "MATH 226* with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 324",
+  "title": "Probability and Statistics with Computing",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Data analysis, probability distributions, confidence intervals, and hypothesis testing. Students use computer software to do statistical analyses.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2092,
+  "prereq_text": "MATH 227* with a grade of C or better; computer experience that meets the approval of the instructor; basic concepts of probability and statistics.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 400",
+  "title": "Numerical Analysis",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Numerical solution of algebra and calculus problems. Interpolation and approximations; direct and iterative methods for solutions of linear equations. Gaussian elimination. Numerical differentiation and integration; solution of ordinary differential equations.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2093,
+  "prereq_text": "MATH 228; MATH 225 or MATH 325; and CSC 210 or CSC 215 or MATH 209 or MATH 309, all with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 425",
+  "title": "Applied and Computational Linear Algebra",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Explore techniques for solving huge linear systems, covering both the theory behind the techniques and the computation. Review and further develop earlier concepts and use them to efficiently solve problems across the natural and social sciences. Problems are drawn from numerical analysis, mathematical biology, data analysis and machine learning, imaging and signal processing, chemistry, physics, economics, computer science, engineering, and other disciplines.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2093,
+  "prereq_text": "MATH 225 or MATH 325; and MATH 209 or MATH 309 or CSC 210 or CSC 215; all with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 448",
+  "title": "Introduction to Statistical Learning and Data Mining",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Modern techniques in the statistical analysis of data, including regression, classification, regularization methods, model selection, non-parametric methods, dimensionality reduction, and clustering; employ statistical software to analyze real data using advanced methods from statistics, machine learning, data mining, and pattern recognition.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2094,
+  "prereq_text": "MATH 228*, MATH 325*, and MATH 440* all with grades of C or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHIL 101",
+  "title": "Introduction to Philosophy",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Reflection on basic aspects of human experience, thought, and activity inspired by the writings of philosophers.",
+  "grading": null,
+  "ge_areas": [
+   "3B"
+  ],
+  "source_page": 1584,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHIL 110",
+  "title": "Introduction to Critical Thinking I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Skills involved in understanding, criticizing, and constructing arguments. Provides the foundation for further work not only in philosophy but in other fields as well. (Plus-minus ABC/NC, CR/NC allowed)",
+  "grading": "letter_or_cr_nc",
+  "ge_areas": [
+   "1B"
+  ],
+  "source_page": 1584,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHIL 301",
+  "title": "Ancient Philosophy",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Origins of Western philosophy in the Eastern Mediterranean region: from the Presocratics to the Stoics, Epicureans and Neo-Platonists, emphasizing Socrates, Plato, and Aristotle. Connections and contrasts between philosophy, natural science, myth, and religion.",
+  "grading": null,
+  "ge_areas": [
+   "3UD"
+  ],
+  "source_page": 1585,
+  "prereq_text": "GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHIL 304",
+  "title": "Ethics Bowl",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "The Intercollegiate Ethics Bowl (IEB) combines a competitive tournament with a valuable educational experience. The competition provides practice in applying moral theories and principles of argument in an interactive format. Case studies in the competition involve ethical issues in practical contexts, including engineering, law, medicine, personal relationships, education, and both domestic and international politics. Specific questions may concern a wide range of topics, including but not limited to plagiarism, dating and friendship, gun control, and environmental policy. May be repeated for a total of 12 units.",
+  "grading": null,
+  "ge_areas": [
+   "3UD",
+   "SJ"
+  ],
+  "source_page": 1585,
+  "prereq_text": "GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHYS 220",
+  "title": "General Physics with Calculus I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to classical mechanics, including vectors, kinematics in one & two dimensions, Newton's Laws of Motion, force & acceleration, linear momentum & impulse, work & kinetic energy, potential energy & conservation of energy, elastic & inelastic collisions, torque & angular momentum, static equilibrium, fixed-axis rotational dynamics, oscillatory motion, gravitation & planetary motion.",
+  "grading": null,
+  "ge_areas": [
+   "5A"
+  ],
+  "source_page": 2161,
+  "prereq_text": "MATH 226 with a grade of C or better; concurrent enrollment in PHYS 222; concurrent enrollment in MATH 227 recommended.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHYS 222",
+  "title": "General Physics with Calculus I Laboratory",
+  "units_min": 1.0,
+  "units_max": 1.0,
+  "description": "Experiments in mechanics. Extra fee required.",
+  "grading": null,
+  "ge_areas": [
+   "5C"
+  ],
+  "source_page": 2161,
+  "prereq_text": "Concurrent enrollment in PHYS 220.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHYS 230",
+  "title": "General Physics with Calculus II",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to electricity and magnetism, including electric charge and Coulomb's Law, electric field and Gauss's Law, electric potential and electrical potential energy, capacitance, current and resistance, DC circuits, magnetic force and magnetic field, Biot-Savart Law and Ampere's Law, electromagnetic induction and Faraday's Law, inductance, RLC circuits and AC circuits, electromagnetic waves, and Maxwell's equations.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2161,
+  "prereq_text": "PHYS 220 and MATH 227 with grades of C or better; concurrent enrollment in PHYS 232; concurrent enrollment in MATH 228 recommended.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHYS 232",
+  "title": "General Physics with Calculus II Laboratory",
+  "units_min": 1.0,
+  "units_max": 1.0,
+  "description": "Experiments in electricity and magnetism. Extra fee required.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2161,
+  "prereq_text": "Concurrent enrollment in PHYS 230.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PLSI 200",
+  "title": "Introduction to American Politics",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to contemporary American politics and institutions of government, including California. Study of the structure, functions, and politics of Congress, the presidency, Supreme Court; examination of principles of federalism, the U.S. Constitution and Bill of Rights; the role of public opinion, elections, political parties, interest groups.",
+  "grading": null,
+  "ge_areas": [
+   "USG",
+   "CSLG"
+  ],
+  "source_page": 1625,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PLSI 355",
+  "title": "Politics and Ethics of the Consumer Society",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Politics and ethics of consumption-oriented society; nature of industrial society; its structures, values, and consumption practices. (This course is offered as PLSI 355 and PHIL 355. Students may not repeat the course under an alternate prefix.)",
+  "grading": null,
+  "ge_areas": [
+   "SJ",
+   "ESCA",
+   "4UD"
+  ],
+  "source_page": 1627,
+  "prereq_text": "GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": [
+   "PHIL 355"
+  ]
+ },
+ {
+  "code": "PSY 200",
+  "title": "General Psychology",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Basic methods and concepts of psychology which have broad academic relevance and can be applied to the study of psychology as well as other academic disciplines. Psychology majors must take for a letter grade and earn a C or better to continue in the major. [CSL may be available]",
+  "grading": null,
+  "ge_areas": [
+   "4"
+  ],
+  "source_page": 2225,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "SOC 105",
+  "title": "Sociological Perspectives",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Major ideas, concepts, and methods in the study of society: social structure, social interaction, culture, social policy and social change.",
+  "grading": null,
+  "ge_areas": [
+   "4"
+  ],
+  "source_page": 845,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ }
+]

@@ -312,3 +312,61 @@ def parse_prereq(text: str) -> dict:
     else:
         status = "ok" if not unknown else "unparsed" if unknown == len(found) else "partial"
     return {"expr": expr, "status": status, "needs_permission": any("permission" in leaf for leaf in found)}
+
+
+UNVERIFIABLE = {"permission", "restricted_to", "equivalent", "requirement", "high_school", "unknown"}
+STAR = "marks items with '*' and the Bulletin has no legend for it; ask the department (ARCHITECTURE §16.1)"
+
+
+def prereq_warnings(code: str, row: dict) -> list[str]:
+    """⚠️ for prereq text the tree can't fully vouch for. Raw Bulletin text is quoted so the reader can check."""
+    out = []
+    if row["status"] in ("partial", "unparsed"):
+        out.append(f"{code}: prereq is {row['status']}, only partly machine-readable; Bulletin text: {row['raw_text']!r}")
+    if "*" in (row["raw_text"] or ""):
+        out.append(f"{code}: prereq text {STAR}. Bulletin text: {row['raw_text']!r}")
+    return out
+
+
+def prereq_chain(code: str, prereqs: dict[str, dict]) -> dict:
+    """Everything that must come before `code`, from {code: {raw_text, expr, status, …}} for one catalog year.
+
+    `chain` lists every course the prereqs mention, alternatives included, each before the courses that need it
+    and `code` last; each entry's `requires` says which are and/or. `conditions` are the non-course leaves.
+    Corequisites ("concurrent enrollment in PHYS 222" both ways) point at each other, so a back edge through a
+    `concurrent_ok` leaf is expected; any other back edge is a ⚠️.
+    """
+    chain, conditions, warnings, state = [], [], [], {}
+    missing: dict[str, list[str]] = {}
+    starred: list[str] = []
+
+    def visit(c: str, needed_by: str | None, concurrent: bool) -> None:
+        if state.get(c) == "open" and not concurrent:
+            warnings.append(f"{c}: prerequisite cycle through {needed_by}; stopped there")
+        if c in state:
+            return
+        row = prereqs.get(c)
+        state[c] = "open"
+        if row is None:
+            missing.setdefault(c, []).append(needed_by)
+            return
+        for leaf in leaves(row["expr"]):
+            if "course" not in leaf:
+                conditions.append({"for": c, **leaf, "verifiable": not UNVERIFIABLE & leaf.keys()})
+            elif leaf["course"] in missing:
+                missing[leaf["course"]].append(c)
+            elif leaf["course"] != c:  # MATH 226 lists itself "with a grade of C- or lower": a retake rule, not a cycle
+                visit(leaf["course"], c, leaf.get("concurrent_ok", False))
+        if row["status"] in ("partial", "unparsed"):
+            warnings.append(prereq_warnings(c, row)[0])
+        if "*" in (row["raw_text"] or ""):
+            starred.append(c)
+        state[c] = "done"
+        chain.append({"code": c, "requires": row["expr"], **{k: v for k, v in row.items() if k != "expr"}})
+
+    visit(code, None, False)
+    warnings += [f"{c} (needed by {', '.join(by)}) is not in this catalog; it may have been renumbered" for c, by in missing.items()]
+    if starred:
+        warnings.append(f"Prereq text of {', '.join(starred)} {STAR}; see each raw_text")
+    return {"code": code, "requires": chain[-1]["requires"] if chain else None, "chain": chain,
+            "conditions": conditions, "warnings": warnings}
