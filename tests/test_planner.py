@@ -57,6 +57,10 @@ def test_standing_gpa_and_permission():
     no_gpa = check(FRESHMAN | {"transfer_units": 60}, ("2027-spring", ["CSC 415"]), ("2027-fall", ["CSC 653"]))
     assert not any(e["course"] == "CSC 653" for e in errors(no_gpa))
     assert any("CSC 653 in 2027-fall: GatorPath can't check GPA 3.0" in w for w in no_gpa["warnings"])
+    # no `gpa` given, but SF State grades exist: their GPA is used, and said so
+    graded = FRESHMAN | {"transfer_units": 60, "completed": FRESHMAN["completed"] + [{"code": "CSC 415", "grade": "C", "term": "2026-fall"}]}
+    got = check(graded, ("2027-spring", ["CSC 653"]))
+    assert errors(got) == [] and any("SF State GPA (3.0)" in w for w in got["warnings"])  # (12 + 12 + 6) / 10
 
 
 def test_restricted_to_major_and_standing():
@@ -70,6 +74,7 @@ def test_restricted_to_major_and_standing():
 def test_repeats_duplicates_cap_and_terms():
     got = check(FRESHMAN, ("2027-spring", ["CSC 101", "CSC 215"]), ("2027-fall", ["CSC 215"]))
     assert [e["error"] for e in errors(got)] == ["already_passed", "duplicate"]
+    assert [e["error"] for e in errors(check(FRESHMAN, ("2027-spring", ["CSC 215", "CSC 215"])))] == ["duplicate", "duplicate"]
     retake = FRESHMAN | {"completed": FRESHMAN["completed"] + [{"code": "CSC 215", "grade": "D", "term": "2026-fall"}]}
     assert errors(check(retake, ("2027-spring", ["CSC 215"]), ("2027-fall", ["CSC 220"]))) == []
     heavy = ["CSC 215", "MATH 227", "PHYS 220", "PHYS 222", "ENG 114", "COMM 150"]  # 4+4+3+1+3+3 = 18

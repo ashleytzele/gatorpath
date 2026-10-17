@@ -87,9 +87,10 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         ok = standing_ok(e["standing"], ctx["units"], ctx["class_level"])
         return (OK, []) if ok else (NO, [f"{e['standing']} standing ({ctx['units']:g} units earned by then)"])
     if "gpa" in e:
-        g = ctx["profile"].get("gpa")
+        g = ctx["gpa"]
         if g is None:
             return UNVERIFIED, [f"GPA {e['gpa']} or higher (GPA not provided)"]
+        ctx["gpa_used"] = True
         return (OK, []) if g >= e["gpa"] else (NO, [f"GPA {e['gpa']} or higher (have {g})"])
     if "restricted_to" in e:
         # ponytail: word match on the restriction text. Upgrade to a parsed {majors, standing, level} leaf if it misfires.
@@ -138,6 +139,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     done = {c for c, g in grades.items() if passed(g)} | {c for c in profile.get("in_progress", []) if c in catalog}
     now = audit(profile, program, university, catalog)["totals"]  # repeats, transfer duplicates handled there
     units = now["units"]["value"] + now["units_in_progress"]
+    gpa = profile.get("gpa", now["gpa_sf_state"]["value"])
 
     groups = {g["id"]: g for g in program["groups"] + university["groups"]}
     last_taken = max((term_key(r["term"]) for r in completed if TERM.fullmatch(str(r.get("term", "")))), default=None)
@@ -164,7 +166,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                 continue
             term_units += catalog[c]["units_min"]
             if not catalog[c]["repeatable"]:
-                if c in done and (c in profile.get("in_progress", []) or c in {p["code"] for p in planned}):
+                if codes.count(c) > 1 or c in done and (c in profile.get("in_progress", []) or c in {p["code"] for p in planned}):
                     err("duplicate", f"{c} is already in progress or planned earlier", term=term, course=c)
                 elif c in grades and (rank(grades[c]) or 0) >= GRADE_POINTS["C"] or grades.get(c) == "CR":
                     err("already_passed", f"{c} was passed with {grades[c]}; it may not be repeated (p.2392)", term=term, course=c)
@@ -183,7 +185,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             slots.append(s | {"term": term})
             term_units += s.get("units", 0)
 
-        ctx = {"done": done, "same_term": set(codes), "grades": grades, "units": units, "profile": profile,
+        ctx = {"done": done, "same_term": set(codes), "grades": grades, "units": units, "profile": profile, "gpa": gpa,
                "ge_done": {str(a).upper() for a in profile.get("ge_done", [])}, "catalog": catalog,
                "program": program, "class_level": levels}
         for c in codes:
@@ -197,6 +199,8 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             elif state == UNVERIFIED:
                 warnings.append(f"{c} in {term}: GatorPath can't check {'; '.join(why)}. Bulletin text: {row['raw_text']!r}")
             warnings.extend(w for w in prereq_warnings(c, row) if "partial" in w or "unparsed" in w)
+        if ctx.get("gpa_used") and "gpa" not in profile:
+            warnings.append(f"GPA-gated prereqs were checked with your SF State GPA ({gpa}); pass `gpa` if your overall GPA differs")
 
         summer = term.endswith("summer")
         if term_units > cap:
