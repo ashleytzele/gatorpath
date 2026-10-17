@@ -339,7 +339,7 @@ Status: `ok` means no `unknown` leaf; `partial` means some; `unparsed` means onl
 …") are not requirements; a prereq that is only advice is `expr: null`, `ok`. How the clause grammar reads SFSU's wording is documented at the top of
 `engine/prereq.py`.
 
-### 6.4 Student profile (never stored, passed in per call)
+### 6.4 Student profile (passed in per call; saved only to the student's own file, on request)
 
 ```yaml
 catalog_year: 2026-27
@@ -351,6 +351,9 @@ completed:
 in_progress: [CSC 220, MATH 227]
 gpa: 3.2                           # optional; needed for GPA-gated prereqs
 goal: "cybersecurity"              # optional free text; used by the AI client, not the server
+chosen_electives: [CSC 652, CSC 653]   # decisions kept between sessions (save_profile), so they aren't re-discussed
+plan: []                           # last plan that passed check_plan, if saved
+dpr_imported: 2026-10-16           # set by import_dpr; load_profile warns when it's before the current term
 ge_done: ["1A", "1B", "2"]         # only for transfer/AP/IB credit; SF State courses are
                                    # matched by their own ge_areas. Also USH/USG/CSLG
 transfer_units: 0                  # total transfer units (from the transcript)
@@ -373,7 +376,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | Tool | Input | Output |
 |---|---|---|
 | `search_courses` | `query`, `subject?`, `level?` (`lower`/`upper`/`600`…), `limit=10` | `[{code, title, units, ge_areas, offered: "fall-only"\|"both"\|"rare"\|"unknown"}]` (FTS5 keyword search; embeddings later if needed) |
-| `get_course` | `code` | Full record: description, units, grading, `prereq: {raw_text, expr, status, needs_permission}`, `links`, `offered_terms`, `source_page` |
+| `get_course` | `code` | Full record: description, units, grading, `prereq: {raw_text, expr, status, needs_permission}`, `links`, `offered_terms`, `unlocks` (courses whose prereqs name it: "CSC 340 → CSC 413, CSC 415, CSC 510"), `source_page` |
 | `get_prereq_chain` | `code` | Everything that must come before it, as a tree plus a flat ordered list, with min grades and non-course conditions. Answers "what do I need before CSC 653?" |
 
 ### 7.2 Programs
@@ -389,10 +392,20 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | Tool | Input | Output |
 |---|---|---|
 | `audit_progress` | `profile` | Per group: `satisfied`/`in_progress`/`remaining`, which courses counted where, units done vs needed; university totals (120 total, upper-division units, GWAR) |
-| `build_plan` | `profile` | Deterministic baseline plan: `semesters: [{term, courses, units}]`, unfilled `slots` (e.g. 5× senior_elective), `warnings`, `est_graduation_term` |
+| `build_plan` | `profile` | Deterministic baseline plan: `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`. When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
 | `list_eligible_electives` | `profile`, `group_id`, `by_term?` | Options that satisfy that group, each with description, prereq readiness (`ready` / `ready_by: term` / `blocked_by`), and offering pattern. **The AI picks from this list using the student's goal.** |
 | `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
+| `import_dpr` | `pdf_path` (local file) | `{catalog_year, completed, in_progress, transfer (row → requirement it meets), remaining: [{requirement, units_needed / courses}], dpr_imported, warnings}`. Personal info dropped; raw text never returned, logged or stored. Layout below |
+| `save_profile` / `load_profile` | `profile`, `path` / `path` | Writes or reads the student's profile as YAML at a path **the student chose**, only when they ask. Default `~/.gatorpath/profile.yaml`; refuses paths inside the repo. `load_profile` warns when `dpr_imported` is before the current term |
 | `import_transcript` | `pdf_path` (local file) | `{completed: [...], in_progress: [...], transfer_units, warnings}`, with **only** course code, grade, units and term. Name, student ID, birthdate and address are dropped. Raw text is never returned, logged or stored |
+
+**DPR-first (decided 2026-10-16).** For "where do I stand?" the DPR beats both our audit and the
+transcript. It includes the student's catalog year, transfer evaluations, substitutions and waivers.
+So with a DPR, what's done and what's left come from the DPR, and `audit_progress` becomes the
+**cross-check** (each disagreement → ⚠️). GatorPath still needs the student's catalog-year rules for the
+choose-from groups ("Electives: 15 units needed" prints only a "View Course List" link). It also needs
+prereqs and offerings to *order* what's left. The transcript is optional and adds only attempt history
+(W, repeats) for the repeat/forgiveness rules. Merge it only when a real student needs that.
 
 **Unofficial transcript layout (`SSR_TSRPT.pdf`, Oracle Analytics Publisher, confirmed
 2026-10-15 from a real sample, which was not kept).** Read it with `pdftotext -layout`.
@@ -446,15 +459,40 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 
 ### 7.4 MCP prompt: `plan_my_degree`
 
-Gives the client its workflow:
+The AI client is the agent: it holds the conversation and handles the what-ifs. The server stays
+deterministic (D6). The prompt gives the client its workflow:
 
-1. Get courses (typed or `import_transcript`).
-2. Ask for the math placement / QR pathway if it's unknown.
-3. Call `audit_progress`.
-4. Call `build_plan`.
-5. Fill elective slots using `list_eligible_electives` plus the student's goal.
-6. **Call `check_plan`. Fix any errors and re-check until `valid`.**
-7. Present the plan with warnings and sources, and suggest confirming with an advisor and the DPR.
+1. `load_profile` if the student has one. If `dpr_imported` is stale, ask them to re-import.
+2. Get courses: `import_dpr` (preferred), `import_transcript`, or typed.
+3. Ask for the math placement / QR pathway if it's unknown.
+4. Call `audit_progress` (with a DPR: as the cross-check).
+5. Call `build_plan`. For "3, 4 or 5 years", call it at three loads (≈18 units + summer, 15, 12)
+   and compare `est_graduation_term`. Say why a faster pace can't work when it can't (the prereq chain or
+   the units per term).
+6. Fill elective slots using `list_eligible_electives` plus the student's goal.
+7. **Call `check_plan`. Fix any errors and re-check until `valid`.**
+8. Present the plan with `why`, warnings and sources. Show every `see_advisor` item with its link
+   and how to book (§7.5).
+9. Offer `save_profile` so goal, pace and chosen electives carry over to the next session.
+
+What-ifs map to tools, not to new server logic:
+- "Graduate a year early" → step 5 with a heavier load, and say what has to give.
+- "Different direction" (AI, cybersecurity, …) → step 6 with the new goal. Required courses don't change.
+- "Switch major" → `compare_programs` (phase 8).
+
+### 7.5 Advisor handoff
+
+GatorPath is for getting a direction. An advisor and the DPR are the final word. Instead of a generic
+disclaimer, tool responses carry `see_advisor: [{why, who, link, how_to_book, source}]` when:
+- an exception or substitution is needed ("Exceptions must be approved in advance by a senior advisor",
+  BS CS senior electives, p.1905-1906)
+- a GPA-gated course would need permission (CSC 620/648/671: "GPA of 3.0 or higher; or permission")
+- a semester goes over the normal unit load (fast pace)
+- the DPR cross-check disagrees with our audit
+- the program's rules are `verified: false`
+
+Links and booking steps live in `rules/university/<year>.yaml` under `advising:`, each with a
+`source` (Bulletin page, DPR link, or department page + date checked). Never from memory.
 
 ---
 
@@ -488,8 +526,11 @@ pass it (tested).
 
 ## 9. Privacy & responsible AI
 
-- **No student data at rest.** The profile lives in the conversation, and the server keeps no
-  database of students and no logs of profiles.
+- **No student data at rest, except a file the student asks for.** The profile lives in the
+  conversation. The server keeps no database of students and no logs of profiles. `save_profile` writes
+  one YAML file at a path the student chose, on their own machine, only when they ask. It's plain
+  text they can read or delete, and the server refuses to write it inside the repo. This beats AI-client memory: the
+  data stays exact (no half-remembered grades), stays local, and works with any client (D13).
 - **Local transcript parsing.** `import_transcript` runs on the student's machine and returns only
   code, grade and term. The PDF and personal info never go to the AI provider *through our
   tool*. (If a student attaches the PDF directly to the chat, that's the client's
@@ -603,6 +644,9 @@ students; 0 hallucinated courses."*
 | D10 | Commit `evals/catalog-2026-27.json` (the catalog rows the eval profiles use) | CI has no PDF; a test keeps it equal to `catalog.db` | 2026-10-16 |
 | D11 | Automate detection and rebuilds; a human approves rule changes | Manual upkeep goes stale, but auto-written rules can be confidently wrong (§5 "Keeping it current") | 2026-10-16 |
 | D12 | Audit each student against their own catalog year; post-publication changes are cited `amendments` | DPRs keep the entry-year Bulletin plus memo waivers (sample: Spring 2025 + 3/12/25 GE waiver) | 2026-10-16 |
+| D13 | Memory = a profile file the student owns (`save_profile`/`load_profile`), not client memory, not none | Exact and local, works with any client; saves goal/pace/elective decisions so they aren't re-discussed; one small tool call per session | 2026-10-16 |
+| D14 | DPR-first: what's done/left comes from the DPR; our audit cross-checks it | The DPR includes transfer evaluations, substitutions and waivers we can't know | 2026-10-16 |
+| D15 | The AI client is the agent; what-ifs and advisor handoff go through the prompt + tool fields | Keeps the server deterministic (D6); advisor links are sourced data, not model memory | 2026-10-16 |
 
 ---
 

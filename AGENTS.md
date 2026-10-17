@@ -19,8 +19,10 @@ Full design: `docs/ARCHITECTURE.md`. Current work: `TASKS.md` (work phase by pha
 3. **Flag, don't guess.** If prereq text can't be parsed, store it with `status: unparsed` and
    surface a warning. Never drop it and never approximate it silently.
 4. **No LLM calls in the server.** Tools are deterministic. The AI client does the talking.
-5. **No student data at rest.** Don't store, log, cache, or print student profiles or transcript
-   text. Never commit a real transcript or any real student data. Test fixtures are synthetic.
+5. **No student data at rest.** Don't store, log, cache, or print student profiles, transcript or
+   DPR text. The only exception is `save_profile`: one file, at a path the student chose, on their
+   machine, only when they ask, never inside the repo. Never commit a real transcript, DPR or any real
+   student data. Test fixtures are synthetic.
 6. **`check_plan` is the source of truth.** Anything that produces a plan must pass it in tests.
 
 ## Commands

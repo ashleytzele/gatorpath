@@ -100,9 +100,22 @@ degree?" and get correct, sourced answers.
 - [ ] MCP prompt `plan_my_degree` (ARCHITECTURE §7.4)
 - [ ] Test: every `build_plan` output passes `check_plan` for all eval profiles
 - [ ] Test: the cybersecurity case schedules CSC 415 before CSC 652/653
+- [ ] `unlocks` in `get_course` (reverse prereq index) and `why` on every course `build_plan` places
+  ("CSC 413 in term 3: CSC 665, CSC 620, CSC 648 need it")
+- [ ] Pace options in `plan_my_degree`: `build_plan` at ≈18 + summer / 15 / 12 units, compare
+  `est_graduation_term`. Test: an impossible 3-year plan says what blocks it (chain or units)
+- [ ] What-if workflows in the prompt (ARCHITECTURE §7.4): earlier graduation, new direction
+- [ ] Advisor handoff (ARCHITECTURE §7.5): `see_advisor` items for exceptions, GPA-gated
+  permission, overloads, DPR disagreements, unverified rules
+- [ ] (?) Collect the official advising links + how to book (Advising Hub, CS department senior
+  advisor) with sources → `rules/university/<year>.yaml` `advising:`
+- [ ] `save_profile` / `load_profile` (ARCHITECTURE §7.3, D13): student-chosen path, default
+  `~/.gatorpath/profile.yaml`, refuses repo paths, stale-DPR warning. Test: no tool writes a file
+  unless `save_profile` is called
 
 **Done when:** "I'm a CS sophomore, I want cybersecurity, plan my next 3 years" produces a plan
-that passes `check_plan`, with sensible electives.
+that passes `check_plan`, with sensible electives, and "what if I graduate a year early?" gets a
+comparison that says what has to give.
 
 ---
 
@@ -141,6 +154,8 @@ that passes `check_plan`, with sensible electives.
 - [ ] `dpr.py` + `import_dpr` tool: local PDF → `completed` (SF State + `transfer: true` rows),
   `in_progress`, `ge_done`, `transfer_units`; PII dropped, raw text never returned/logged/stored.
   No live login to the Student Center: the student downloads the PDF and re-imports each term
+- [ ] DPR-first (ARCHITECTURE §7.3, D14): `import_dpr` returns `remaining` from the DPR, and
+  `build_plan` plans from it when present
 - [ ] DPR cross-check: compare `audit_progress` against the DPR's own per-requirement status;
   every disagreement → ⚠️ naming the group (catches rule bugs while rules are `verified: false`)
 - [ ] Test: the fake name/ID strings in the DPR fixture never appear in the output
