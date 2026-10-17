@@ -14,7 +14,8 @@ Full design: `docs/ARCHITECTURE.md`. Current work: `TASKS.md` (work phase by pha
    requirements come only from `rules/**/*.yaml`. Never hard-code course codes, units, or
    prerequisites from memory. Courses get renumbered (e.g. CSC 210 → CSC 215).
 2. **Every rule cites its source.** Each YAML group has `source: "p.<page>"`. Every `course`
-   row has `source_page`.
+   row has `source_page`. An `amendment` (a change after publication) cites its memo and date.
+   One student's exception never goes into `rules/`.
 3. **Flag, don't guess.** If prereq text can't be parsed, store it with `status: unparsed` and
    surface a warning. Never drop it and never approximate it silently.
 4. **No LLM calls in the server.** Tools are deterministic. The AI client does the talking.

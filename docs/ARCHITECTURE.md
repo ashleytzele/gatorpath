@@ -122,6 +122,35 @@ human review, never at question time.
 | **Class Search** `webapps.sfsu.edu/public/classservices/classsearch` | Sections per term: days/times, mode, seats, GE attributes. History back to 2000 | Polite scraper: HTML form POST with CSRF token, cached, a few requests per term | Check SFSU terms of use; later ask SFSU IT for an official feed |
 | **Hand-written rules** `rules/` | Major requirement logic + roadmap variants | Humans translate Bulletin text → YAML, cite page | Reviewed like code |
 
+### Keeping it current (decided 2026-10-16)
+
+Automate everything that is **detection or rebuilding**. A human approves every change to
+**requirement rules**, because a wrong rule silently tells a student they're on track when they aren't.
+
+| Change | Example | How it gets in | Who acts |
+|---|---|---|---|
+| New Bulletin (yearly) | 2027-28 | Scheduled job: fetch the PDF, rebuild `catalog.db`, diff against the last year, open a PR | Job drafts; a human approves the rule diff |
+| Course offerings (per term) | Fall 2027 sections | Scheduled scrape, once per term (§5 etiquette) | Job only |
+| Campus-wide change after publication | "Area C/E waived 3/12/25 to align with Fall 2025 CSU GE … via Dean's Memo" | Seen on DPRs first; added as an `amendment` (§6.2) citing the memo | Human |
+| Personal exception | Petition, substitution (MATH 325 for MATH 225), transfer evaluation | The student's DPR import only. **Never in `rules/`** | Student re-imports each term |
+
+- **Catalog rights:** a student is audited against **their own** catalog year (the DPR's
+  `Requirement (Catalog) Term`, or `profile.catalog_year`), not the newest Bulletin. So
+  `rules/<kind>/<year>/` folders are added and never replaced.
+- **Rule diff, not rule rewrite:** each program keeps the Bulletin text its YAML was written from
+  (`rules/programs/<year>/<program>.source.txt`, public text). The yearly job finds each group's
+  heading in the new Bulletin and compares normalized text. Unchanged groups are copied to the new year
+  with the new page number and keep `verified`. Changed groups are listed in the PR with old/new text,
+  and that program is `verified: false` until reviewed. In a quiet year the PR is just page numbers.
+- **The job never merges its own PR** and never edits rule logic. AI drafting (phase 8) may propose
+  YAML for a changed group inside that PR, still human-reviewed.
+- **Amendments are found through the DPR cross-check** (§7.3). The server keeps no student data, so
+  it can't count how many students hit the same disagreement. Instead, the cross-check ⚠️ names the requirement and
+  links a GitHub issue template that asks only for program, catalog year, requirement name and what the
+  DPR says, with no grades, names or IDs. Several reports of the same thing → amendment; one → probably personal.
+- **Getting updates to users:** the job attaches the rebuilt `catalog.db` to a GitHub release, so
+  `git pull` + downloading the release is enough. Nobody needs the PDF.
+
 ### Known Bulletin quirks (found 2026-10-15)
 
 - **Paired courses:** CSC 671's prereqs are printed inside the CSC 871 entry ("Prerequisites for
@@ -236,6 +265,10 @@ Rule vocabulary (keep it small; add only when a real major needs it):
 disciplines", p.2317).
 `min_grade` compares letter grades; CR counts as C- ("equivalent to grades A through C-", p.2403), so CR
 meets a C- minimum but not a C.
+`amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
+each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo
+3/12/25 (quoted on DPRs)"}`. It's applied on top of the group and reported in the audit with its source.
+Never use it for one student's exception.
 
 **`rules/university/2026-27.yaml`:** the graduation requirements every bachelor's degree shares,
 in the same vocabulary. GE areas are matched with `from: {ge_area: ...}` against
@@ -568,6 +601,8 @@ students; 0 hallucinated courses."*
 | D8 | Offering patterns from public class-search history | Bulletin lacks term offerings; history shows fall-only/spring-only | 2026-10-15 |
 | D9 | GE + university requirements in v1, not phase 8 | "What's left?" is wrong without GE; GE tags are already on every course entry | 2026-10-15 |
 | D10 | Commit `evals/catalog-2026-27.json` (the catalog rows the eval profiles use) | CI has no PDF; a test keeps it equal to `catalog.db` | 2026-10-16 |
+| D11 | Automate detection and rebuilds; a human approves rule changes | Manual upkeep goes stale, but auto-written rules can be confidently wrong (§5 "Keeping it current") | 2026-10-16 |
+| D12 | Audit each student against their own catalog year; post-publication changes are cited `amendments` | DPRs keep the entry-year Bulletin plus memo waivers (sample: Spring 2025 + 3/12/25 GE waiver) | 2026-10-16 |
 
 ---
 
@@ -582,13 +617,14 @@ students; 0 hallucinated courses."*
 - **Phase 6, Transcript import**
 - **Phase 7, Evals + demo + first real users**
 - **Phase 8, Expand:** Math + `compare_programs` (switch-major cost), AI-drafted rules for more majors
+- **Phase 9, Keeping it current:** catalog year per student, yearly Bulletin diff job, per-term
+  offerings job, `amendments`, released `catalog.db`
 
 **Later:**
 - transfer credit (ASSIST for CA community colleges; similarity + Course Equivalency
   Request drafting for out-of-state)
 - week-level schedule builder from live sections
 - web roadmap UI on top of the same server
-- additional catalog years
 
 ---
 

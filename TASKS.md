@@ -174,11 +174,36 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
 
 ---
 
+## Phase 9 — Keeping it current (ARCHITECTURE §5 "Keeping it current", D11, D12)
+
+Robots detect and rebuild; a human approves rule changes; students re-import their DPR each term.
+
+- [ ] Catalog year per student: the server takes the year from `profile.catalog_year` / the DPR's
+  requirement term and loads `rules/<kind>/<year>/` (removes the `YEAR` ponytail in `server.py`).
+  First real case: 2024-25 rules (needs the 2024-25 Bulletin PDF), see the Phase 6 `(?)`
+- [ ] Source snapshots: `rules/programs/<year>/<program>.source.txt` holds the Bulletin text each
+  group was written from
+- [ ] Bulletin diff: new Bulletin vs snapshots → unchanged groups copied to the new year (new page
+  numbers, `verified` kept); changed groups listed with old/new text, program set `verified: false`
+- [ ] (?) Find the Bulletin PDF's download URL pattern so a job can fetch it
+- [ ] Yearly GitHub Action (cron + manual trigger): fetch Bulletin if new → ingest → diff → open a
+  PR. Never merges itself, never edits rule logic
+- [ ] Per-term GitHub Action: offerings scrape (phase 5), once per term, cached
+- [ ] Attach the rebuilt `catalog.db` to a GitHub release; README says how to download it
+- [ ] `amendments` rule type in `engine/rules.py` + tests; first use: the 3/12/25 Area C/E waivers
+  in the 2024-25 rules (needs the memo or its DPR wording as the source)
+- [ ] DPR cross-check ⚠️ links a GitHub issue template: program, catalog year, requirement, what
+  the DPR says. No grades, names or IDs
+
+**Done when:** a dry run with a second Bulletin year opens a PR whose diff a reviewer can approve
+in under an hour, and an unchanged program needs no edits.
+
+---
+
 ## Later (not planned yet)
 
 - Transfer credit: ASSIST (CA community colleges); out-of-state similarity + Course Equivalency
   Request drafting
 - Week-level schedule builder from live class-search sections
 - Web roadmap UI on top of the same MCP server
-- Other catalog years (2025-26, 2027-28)
 - Pitch to SFSU Advising / Registrar for a pilot
