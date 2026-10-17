@@ -129,8 +129,24 @@ that passes `check_plan`, with sensible electives.
 - [ ] In-progress courses (no grade yet) → `in_progress`
 - [ ] Test: the fake name/ID strings in the fixture never appear in the output
 - [ ] `import_transcript` tool
+- [x] Get the DPR (Degree Progress Report) layout from a real sample (not kept); synthetic fixture
+  `tests/fixtures/dpr_synthetic.txt`, layout in ARCHITECTURE §7.3. The DPR, not the transcript,
+  shows which requirement each transfer course meets, so it's the import for transfer students
+- [ ] (?) Catalog year: the sample DPR holds the student to **Spring 2025 (2024-25 Bulletin)**, with
+  the old GE scheme (A1-E, UD-B/C/D, 48 → 42 units after the 3/12/25 waivers). Our rules are 2026-27
+  only. Decide: add 2024-25 rules (needs that Bulletin PDF), or have `import_dpr` refuse to audit
+  across years. Mapping old GE areas to new ones must come from a Bulletin table, never from memory
+- [ ] (?) DPR `Notes` codes (`02`, `03`, `04` on transfer rows) have no legend in the print; ask
+  the Registrar or an advisor
+- [ ] `dpr.py` + `import_dpr` tool: local PDF → `completed` (SF State + `transfer: true` rows),
+  `in_progress`, `ge_done`, `transfer_units`; PII dropped, raw text never returned/logged/stored.
+  No live login to the Student Center: the student downloads the PDF and re-imports each term
+- [ ] DPR cross-check: compare `audit_progress` against the DPR's own per-requirement status;
+  every disagreement → ⚠️ naming the group (catches rule bugs while rules are `verified: false`)
+- [ ] Test: the fake name/ID strings in the DPR fixture never appear in the output
 
-**Done when:** importing the synthetic transcript gives the same audit as typing the courses.
+**Done when:** importing the synthetic transcript gives the same audit as typing the courses, and
+importing the synthetic DPR gives an audit with no unexplained disagreements with the DPR.
 
 ---
 

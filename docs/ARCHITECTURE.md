@@ -378,6 +378,39 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
   yet. If a row doesn't match, emit a ⚠️ with the row position, never the row text.
 - Fixture: `tests/fixtures/transcript_synthetic.txt` (fake name/ID, same layout).
 
+**DPR layout (Student Center → Degree Progress Report, printed from the browser to PDF; confirmed
+2026-10-16 from a real transfer student's DPR, which was not kept).** It's Chrome's print of
+`cmsweb.sfsu.edu … SSS_STUDENT_CENTER` ("My Academic Requirements"), not a report file. Read it with
+`pdftotext -layout`.
+- Page header: name (top right and again before `ID nnnnnnnnn`). Drop them. Every page has a
+  date line and a `cmsweb.sfsu.edu` footer with `n/N`.
+- `Requirement (Catalog) Term` block: `Plan: Computer Science-BS   Spring 2025` is the
+  **catalog year the student is held to**. Spring 2025 is the 2024-25 Bulletin, which uses the old GE scheme:
+  48 units, Areas A1-A3, B1-B4, C1/C2, D, E, UD-B/C/D, with waivers like
+  "Area C/E waived 3/12/25 to align with Fall 2025 CSU GE … Min Units Changed from 48 to 42".
+  A DPR on another catalog year than the loaded rules → ⚠️, never audit it against the wrong year.
+- Requirement tree: group headings, `[R10742]`-style ids, one line per requirement (`MATH 226`,
+  `CSC 101 and CSC 215`, `Area A2 - Written Communication I`), then a table of the courses
+  "used to" / "may be used to" satisfy it.
+- Table row: `CODE  DESCRIPTION  Units  When  Grade  [Notes]  [Requirement Designation]`. Long
+  descriptions wrap onto the line above and below the code. `When` is `Spring 2025` / `Fall 2026`.
+- **The status icons don't survive printing.** Status comes from the rows instead: a grade means
+  done, a blank grade with a term means in progress, and `When` = `Fall, Spring[, Summer]` means not
+  taken (that's the course's typical offering pattern). `Units: 3.00 required, 0.00 taken, 3.00 needed` /
+  `Courses: 1 required, 0 taken, 1 needed` lines appear mainly on unmet requirements.
+- **Transfer credit:** `SUBJ 100TR  Transfer Credit … T` (grade `T`), plus an optional designation like `GE A2/WER 1`,
+  `GE D/USH`, `GE B1/B3`. The DPR doesn't name a course equivalent; the **requirement line the row sits
+  under** is the mapping (`MATH 100TR` under `MATH 226` → MATH 226 met by transfer;
+  `CSC 100TR` under `CSC 101 and CSC 215`). `Notes` codes (`02`, `03`, `04`) have no legend in the print.
+  `TRFX 50NTR` 0-unit rows appear under "Courses Not Used".
+- Substitutions show up as rows under another course's requirement (`MATH 325` under `MATH 225`).
+  The 2026-27 program page (p.1905) lists only MATH 225, so an audit against our rules would disagree. That's what the DPR cross-check is for.
+- **Tables paginate even in print:** `View All | First 1-10 of 33 Last`. Per-requirement tables
+  were complete in the sample (`1 of 1`, `1-3 of 3`); the long summary lists (120 units, residence,
+  GE minimum units) were cut at 10. If `1-10 of N` (N > 10) appears in a table the import needs, emit a ⚠️ asking the student to
+  click "View All" before printing. The summary lists aren't needed: use their `Units:` lines.
+- Fixture: `tests/fixtures/dpr_synthetic.txt` (fake name/ID, invented courses, same layout).
+
 ### 7.4 MCP prompt: `plan_my_degree`
 
 Gives the client its workflow:

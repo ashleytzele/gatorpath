@@ -1,0 +1,295 @@
+01/20/27, 10:05 AM                                                                   My Academic Requirements
+                                                                                                                              Zzfake Testperson
+
+    Zzfake Testperson Qqq                                                   ID 900000001
+
+
+
+                                                                   Go To go to ...
+
+
+     Search      Degree Planner       Degree Progress Report     Enroll      My Academics       My Test Scores
+
+
+
+
+                                                                                           Print Report
+
+  Current Academic Objective                                              1 of 1     Current Academic Summary
+
+                                            Requirement (Catalog) Term
+                                                                                     Last Term Registered:    Spring 2027
+  Career:        Undergraduate                     Fall 2024
+  Program:       Undergrad Degree-FA               Fall 2019                         Academic Standing:       Good Standing
+  Plan:          Computer Science-BS               Fall 2024
+
+   Graduation                                                                        Overall GPA:            3.215
+                  Not Applied
+   Status:                                                                           SF State GPA:           3.150
+
+
+      General Education Requirements - Transfer
+
+
+   The University requires students to complete 48 units of General Education requirements.
+
+   [G10027]
+
+       Area A - English Language Communication and Critical Thinking
+
+       Complete one course in each area.
+
+       [R10059]
+
+         Area A1 - Oral Communication
+
+           Units Required = 3 Units (2.68 converted quarter units) with a grade of C-/CR or higher.)
+
+           [R10059 / L0010]
+
+        The following courses were used to satisfy this requirement:
+                                                                                              Requirement
+         Course        Description                    Units       When                Grade                       Status
+                                                                                              Designation
+         COMM 100TR Transfer Credit                3.00           Fall 2024           T       GE A1
+                                                                         View All |            First    1 of 1     Last
+
+
+         Area A2 - Written Communication I
+
+           Units Required = 3 Units (2.68 converted quarter units) with a grade of C-/CR or higher.)
+
+           [R10059 / L0030]
+
+        The following courses were used to satisfy this requirement:
+                                                                                              Requirement
+         Course        Description                    Units       When                Grade                       Status
+                                                                                              Designation
+         ENG 100TR     Transfer Credit             3.00           Fall 2024           T       GE A2/WER 1
+                                                                         View All |            First    1 of 1     Last
+
+
+         Area A3 - Critical Thinking
+
+           Units Required = 3 Units (2.68 converted quarter units) with a grade of C-/CR or higher.)
+
+           [R10059 / L0050]
+
+        The following courses were used to satisfy this requirement:
+         Course            Description                               Units        When                  Grade Status
+                           INTRO TO CRITICAL
+         PHIL 110                                             3.00                Fall 2025            B+
+                           THINKING I
+                                                                         View All |            First    1 of 1     Last
+
+
+       Area D - Social Sciences
+
+       Complete a minimum of 9 units (8.7 converted quarter units). Some courses that satisfy
+       the U.S. History and Government requirement may also apply to this area.
+
+       [R10111]
+
+         Area D - Social Sciences
+
+           Units Required = 9 Units (8.7 Converted Quarter Units)
+
+           [R10111 / L0010]
+
+        The following courses were used to satisfy this requirement:
+                                                                                              Requirement
+         Course        Description                    Units     When                  Grade                         Status
+                                                                                              Designation
+         HIST 100TR    Transfer Credit             3.00         Fall 2024             T       GE D/USH
+         SOC 100TR     Transfer Credit             3.00         Fall 2024             T       GE D
+                                                                       View All |             First      1-2 of 2    Last
+
+                       Units: 9.00 required, 6.00 taken, 3.00 needed
+
+
+       Area E - Lifelong Learning and Self-Development
+
+       [R10064]
+
+         Area E - Lifelong Learning and Self-Development
+
+           Units Required = 3 Units (2.68 Converted Quarter Units)
+
+           [R10064 / L0030]
+
+                  Area E: Requirement waived 3/12/25 to align with Fall 2025 CSU GE.
+               Approved by the Division of Undergraduate Education and Academic Planning
+               via Dean's Memo.
+
+https://cmsweb.sfsu.edu/psp/CSFPRDS/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?gsmobile=0                     1/3
+01/20/27, 10:05 AM                                                                   My Academic Requirements
+
+       Minimum Units GE Coursework
+
+       [R10067]
+
+         Minimum Units of General Education Coursework
+
+           Units Required = 48 Units
+
+           [R10067 / L0010]
+
+              - Area E and/or Area C waived 3/12/25 to align with Fall 2025 CSU GE.
+           Approved by the Division of Undergraduate Education and Academic Planning via
+           Dean's Memo.
+           Min Units Changed from 48 to 42
+
+                       Units: 42.00 required, 31.00 taken, 11.00 needed
+
+
+        The following courses were used to satisfy this requirement:
+                                                                                             Requirement
+         Course        Description                    Units     When                 Grade                         Status
+                                                                                             Designation
+         COMM 100TR Transfer Credit                3.00         Fall 2024            T       GE A1
+         ENG 100TR     Transfer Credit             3.00         Fall 2024            T       GE A2/WER 1
+         HIST 100TR    Transfer Credit             3.00         Fall 2024            T       GE D/USH
+         SOC 100TR     Transfer Credit             3.00         Fall 2024            T       GE D
+         PHIL 110      INTRO TO CRITICAL THINKING I 3.00        Fall 2025            B+
+         BIOL 100      HUMAN AND SOCIAL BIOLOGY    3.00         Fall 2025            A-
+         ARTH 201      ART HISTORY I               3.00         Spring 2026          B
+         MUS 110       MUSIC APPRECIATION          3.00         Spring 2026          A
+         GEOG 101      OUR PHYSICAL ENVIRONMENT    3.00         Spring 2026          B-
+         KIN 355       SCIENCE, SPORT, AND FITNESS 3.00         Fall 2026            A
+                                                                     View All |            First     1-10 of 12     Last
+
+
+      University Requirements
+
+       Graduation Writing Assessment Requirement (GWAR)
+
+       [R10001]
+
+         Graduation Writing Assessment Requirement (GWAR)
+
+           [R10001 / L0030]
+
+        The following courses were used to satisfy this requirement:
+         Course            Description                               Units          When                 Grade Status
+                           ETHICS, COMM, & SW DEV -
+         CSC 300GW                                            3.00                  Spring 2027
+                           GWAR
+                                                                         View All |             First     1 of 1   Last
+
+
+      120 Minimum Units Required for Degree
+
+           [R10947 / L0080]
+
+                        Units: 120.00 required, 74.00 taken, 46.00 needed
+
+
+      B.S. in Computer Science
+   Total Units Required = 74 Units
+   [G10253]
+
+                     Units: 74.00 required, 26.00 taken, 48.00 needed
+                     GPA: 2.000 required, 3.400 actual
+
+
+       Mathematics and Physics Requirement
+       Units Required = 22 Units (19.36 w/ Converted Quarter Units)
+       [R10742]
+
+         MATH 225
+
+           Units Required = 3 Units
+
+           [R10742 / L0020]
+
+        The following courses may be used to satisfy this requirement:
+         Course          Description                   Units     When           Grade                        Status
+         MATH 325        LINEAR ALGEBRA            3.00          Spring 2026    B
+                                                                         View All |           First    1 of 1      Last
+
+https://cmsweb.sfsu.edu/psp/CSFPRDS/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?gsmobile=0                     2/3
+01/20/27, 10:05 AM                                                                   My Academic Requirements
+
+         MATH 226
+
+           Units Required = 4 Units (3.33 Converted Quarter Units)
+
+           [R10742 / L0030]
+
+        The following courses may be used to satisfy this requirement:
+                                                                                              Requirement
+         Course       Description                 Units     When              Grade Notes                         Status
+                                                                                              Designation
+         MATH 100TR Transfer Credit            4.00         Fall 2024         T       02      GE B4
+                                                                         View All |           First    1 of 1      Last
+
+
+         MATH 227
+
+           Units Required = 4 Units (3.33 Converted Quarter Units)
+
+           [R10742 / L0040]
+
+        The following courses may be used to satisfy this requirement:
+         Course          Description                             Units       When                 Grade Notes    Status
+         MATH 227        CALCULUS II                      4.00               Fall 2025           C+
+                                                                         View All |           First    1 of 1      Last
+
+
+       Core Computer Science Requirements
+       Units Required = 28 Units (26.05 w/ Converted Quarter Units)
+       [R10744]
+
+         CSC 101 and CSC 215
+
+           Units Required = 7 Units (6.01 Converted Quarter Units)
+
+           [R10744 / L0020]
+
+        The following courses may be used to satisfy this requirement:
+         Course          Description                            Units        When                    Grade Notes    Status
+         CSC 100TR       Transfer Credit                 3.00                Fall 2024               T       04
+                         INTERMED COMPUTER
+         CSC 215                                         4.00                Fall 2025               B
+                         PROGRAMMING
+                                                                        View All |           First       1-2 of 2     Last
+
+
+         CSC 220
+
+           Units Required = 3 Units (2.68 Converted Quarter Units)
+
+           [R10744 / L0040]
+
+        The following courses may be used to satisfy this requirement:
+         Course            Description                              Units            When                 Grade Status
+         CSC 220           DATA STRUCTURES                   3.00                    Spring 2027
+                                                                          View All |             First     1 of 1     Last
+
+
+         CSC 413
+
+           Units Required = 3 Units
+
+           [R10744 / L0100]
+
+                      Units: 3.00 required, 0.00 taken, 3.00 needed
+
+        The following courses may be used to satisfy this requirement:
+         Course            Description                              Units        When                Grade Status
+                                                                                 Fall, Spring,
+         CSC 413           SOFTWARE DEVELOPMENT              3.00
+                                                                                 Summer
+                                                                         View All |          First   1 of 1   Last
+
+
+      Additional Course Information
+
+          Additional Course Information
+           Courses Not Used
+         The following courses were used to satisfy this requirement:
+         Course             Description                               Units          When              Grade Status
+         TRFX 50NTR         Transfer Credit                    0.00                  Fall 2024        T
+                                                                        View All |           First    1-1 of 1   Last
+      Go to top
+https://cmsweb.sfsu.edu/psp/CSFPRDS/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?gsmobile=0                     3/3
