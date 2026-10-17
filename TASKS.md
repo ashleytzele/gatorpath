@@ -90,6 +90,10 @@ report.
     transfer coverage or graduation terms
   - [ ] Model estimated "finish Spring/Fall 2027" with no planner → phase 4 `build_plan`
   - [ ] Transcript was attached to the chat directly (PII to the provider) → phase 6 `import_transcript` / `import_dpr`
+  - Trial 2 (same student, DPR + build/check_plan): two-semester plan matched the student's own;
+    claims checked against the Bulletin (ENVS 401 = ESCA + 4UD + GP, CSC 656 with CSC 415 concurrently).
+    Gaps: validated against 2026-27 while the student is on Spring 2025; no offering data; GEOG 575's
+    "GE Area E" prereq vs the 3/12/25 Area E waiver went unflagged
 - [ ] Also try Gemini CLI (proves "works with any client")
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
@@ -108,6 +112,8 @@ degree?" and get correct, sourced answers.
   CR or C-or-better major courses that can't count or be repeated → ⚠️ see an advisor
 - [x] Return `needs_input: qr_pathway` (and `start_term`) when it's missing
 - [ ] `list_eligible_electives` with readiness (`ready` / `ready_by` / `blocked_by`)
+  - [ ] Rank options by how many **open** requirements one course covers ("triple duty": ENVS 401 /
+    LS 401 = 4UD + ESCA + GP), so GE/SF State Studies slots collapse into fewer courses
 - [ ] MCP prompt `plan_my_degree` (ARCHITECTURE §7.4)
 - [x] Test: every `build_plan` output passes `check_plan` for all eval profiles (p05 is invalid by
   design: CR in MATH 226/CSC 101, which the major rejects and which can't be repeated; it says why)
