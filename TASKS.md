@@ -107,8 +107,11 @@ degree?" and get correct, sourced answers.
 - [ ] What-if workflows in the prompt (ARCHITECTURE §7.4): earlier graduation, new direction
 - [ ] Advisor handoff (ARCHITECTURE §7.5): `see_advisor` items for exceptions, GPA-gated
   permission, overloads, DPR disagreements, unverified rules
-- [ ] (?) Collect the official advising links + how to book (Advising Hub, CS department senior
-  advisor) with sources → `rules/university/<year>.yaml` `advising:`
+- [x] Collect the official advising links + how to book, with sources → `advising:` in
+  `rules/university/2026-27.yaml` (UAC, Advising Hub, DPR) and `rules/programs/2026-27/bs-cs.yaml`
+  (CS department, Senior Advisor, CoSE team). Booking is Navigator (sfsu.campus.eab.com)
+- [ ] (?) Who is the CS Senior Advisor? The department page requires one for substitutions but doesn't
+  name them. Ask cs-dept@sfsu.edu
 - [ ] `save_profile` / `load_profile` (ARCHITECTURE §7.3, D13): student-chosen path, default
   `~/.gatorpath/profile.yaml`, refuses repo paths, stale-DPR warning. Test: no tool writes a file
   unless `save_profile` is called

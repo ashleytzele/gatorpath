@@ -42,3 +42,24 @@ groups:
       - {subject: CSC, level: "700+", paired: false, except: [CSC 895, CSC 897, CSC 898, CSC 899], max_courses: 1}
     min_units_from: {subject: CSC, units: 12}
     source: "p.1905-1906"
+
+# Advising handoff (ARCHITECTURE §7.5). From the CS department's advising page; recheck yearly.
+advising:
+  - who: Computer Science department advisor
+    when: planning the major, "as soon as possible"; transfer students bring transcripts and a list of major-related courses
+    link: "https://cs.sfsu.edu/undergrads/advising"
+    how_to_book: "Schedule through Navigator at https://sfsu.campus.eab.com/. Email cs-dept@sfsu.edu if you can't access Navigator."
+    guide: "https://sfsu.box.com/shared/static/9c7otro8xto3gn9ufhwu7rpdxm9269jw.pdf"
+    location: "Thornton Hall 323, Mon-Fri 9 a.m.-4 p.m."
+    contact: "cs-dept@sfsu.edu, (415) 338-1244"
+    source: "cs.sfsu.edu/undergrads/advising, checked 2026-10-16"
+  - who: CS Senior Advisor
+    when: any course substitution or senior-elective exception ("must be approved in advance by a Senior Advisor")
+    link: "https://cs.sfsu.edu/undergrads/advising"
+    how_to_book: "Not named on the page; ask cs-dept@sfsu.edu or a department advisor via Navigator who the senior advisor is."
+    source: "cs.sfsu.edu/undergrads/advising (quote), Bulletin p.1905-1906; checked 2026-10-16"
+  - who: College of Science & Engineering Advising Team
+    when: CS majors are routed to this team in Navigator for college-level advising
+    link: "https://advising.sfsu.edu/advising-services"
+    how_to_book: "Navigator, https://sfsu.campus.eab.com/"
+    source: "advising.sfsu.edu/advising-services, checked 2026-10-16"
