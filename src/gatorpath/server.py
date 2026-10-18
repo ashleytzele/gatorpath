@@ -515,7 +515,8 @@ def import_dpr(pdf_path: str) -> dict:
     """Read the student's Degree Progress Report on their own machine (Student Center → Degree Progress Report,
     printed to PDF; click View All on long lists first) and return a ready `profile` (completed SF State and transfer
     courses, in_progress, ge_done, dpr_met substitutions, gpa, catalog_year from the DPR's "Requirement (Catalog)
-    Term") plus `remaining`: what the DPR itself says is still needed. Name, ID and the PDF text never leave this tool,
+    Term") plus `remaining`: what the DPR itself says is still needed, and `cross_check`: where GatorPath's audit
+    disagrees with the DPR (the DPR wins). Name, ID and the PDF text never leave this tool,
     so the student doesn't need to attach the PDF to the chat; ask for the file's path. Add qr_pathway, goal and
     start_term, then use the profile with the other tools."""
     path = local_pdf(pdf_path, "~/Downloads/Degree Progress Report.pdf")
@@ -542,8 +543,13 @@ def import_dpr(pdf_path: str) -> dict:
     profile["completed"] = [r | {"code": norm_code(r["code"])} for r in profile["completed"]]
     profile["in_progress"] = [norm_code(c) for c in profile["in_progress"]]
     profile["dpr_met"] = [norm_code(c) for c in profile["dpr_met"]]
-    return {"catalog_year": YEAR, "profile": profile, "remaining": got["remaining"],
-            "warnings": warnings + got["warnings"] + year_warning(profile)}
+    university = load_rules(YEAR, program)[1]
+    ours = audit_progress(profile)
+    disagree = dpr.cross_check(parsed, ours, university)
+    return {"catalog_year": YEAR, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,
+            "warnings": warnings + got["warnings"] + disagree + year_warning(profile),
+            "see_advisor": see_advisor([("dpr", "GatorPath's audit and your DPR disagree on what's listed in cross_check; "
+                                         "the DPR is the official one")] if disagree else [], rules, university)}
 
 
 PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath ({year} Bulletin). Every course, prereq,
@@ -565,8 +571,9 @@ defaults (15 units per term, no summer) instead of asking.
    ask only for what a DPR can't show and isn't given above: the
    goal, a graduation target, whether they're on an F-1 student visa (it sets a 12-unit minimum every spring and
    fall), and the math placement (QR "1/2" or "3/4") if lower-division math isn't done.
-2. Build the profile. From import_dpr, use its `profile` as is and read its warnings to the student (grades it had
-   to assume for transfer rows, Notes codes); otherwise build it from what they shared:
+2. Build the profile. From import_dpr, use its `profile` as is, and tell the student its warnings (grades it had
+   to assume for transfer rows, Notes codes) and every cross_check line (where GatorPath disagrees with the DPR; the
+   DPR wins). Otherwise build it from what they shared:
    - catalog_year: the DPR's "Requirement (Catalog) Term", e.g. "Spring 2025". If it isn't {year}, keep going:
      the tools plan with {year} rules and warn. Where the DPR and the tools disagree, the DPR wins: say so.
    - completed: each course with a grade (code, grade, term). A course with a term and no grade is in_progress.
@@ -578,7 +585,8 @@ defaults (15 units per term, no summer) instead of asking.
      translate older codes. Plus USH / USG / CSLG when American Institutions are met.
    - dpr_met: required courses the DPR shows met by a different course (MATH 325 listed under "MATH 225").
    - not_on_dpr: requirements audit_progress lists that the DPR doesn't have at all (older catalogs, e.g. GE "6"
-     Ethnic Studies). Compare after step 3's audit and re-run with them; tell the student to confirm.
+     Ethnic Studies); import_dpr's cross_check names them ("Not found on this DPR"). Add only those the student
+     confirms their DPR lacks, re-run, and tell them to confirm with an advisor.
    - gpa from the DPR; transfer_units; adt: true only for a verified AA-T/AS-T from a California Community College
      in a similar approved major; ge_certified: true for Cal-GETC certification of lower-division GE; first_time:
      false for transfer students; prior_bachelors: true if they already hold a bachelor's or higher degree from a

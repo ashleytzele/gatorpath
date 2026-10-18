@@ -10,7 +10,7 @@ import re
 import subprocess
 from pathlib import Path
 
-from gatorpath.engine.rules import GRADE_SYMBOLS
+from gatorpath.engine.rules import GRADE_SYMBOLS, translate_ge
 
 CODE = r"[A-Z]{1,5}(?: [A-Z]{1,3})? \d{2,3}[A-Z]{0,4}"  # 'MATH 226', 'CSC 300GW', 'COMM 100TR', 'TRFX 50NTR'
 COURSE_TITLE = re.compile(rf"[A-Z]{{1,5}}(?: [A-Z]{{1,3}})? \d{{3}}[A-Z]{{0,3}}(?: (?:and|or|,) [A-Z]{{1,5}}(?: [A-Z]{{1,3}})? \d{{3}}[A-Z]{{0,3}})*")
@@ -139,6 +139,60 @@ def to_profile(dpr: dict, min_grade: dict[str, str], units: dict[str, float]) ->
     return {"catalog_year": dpr["catalog_term"], "completed": list(completed.values()), "in_progress": in_progress,
             "ge_done": ge_done, "dpr_met": dpr_met, "transfer_units": transfer_units,
             **({"gpa": dpr["gpa"]} if dpr["gpa"] is not None else {}), "remaining": remaining, "warnings": warnings}
+
+
+def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
+    """The DPR's status vs GatorPath's audit for every DPR requirement GatorPath also tracks: course requirements by
+    code, GE areas through translate_ge, GWAR, and units toward the 120. One warning per disagreement, saying the DPR
+    wins (catches rule bugs while the rules are verified: false); plus GE areas GatorPath has that the DPR doesn't list."""
+    word = {"satisfied": "done", "remaining": "needed"}
+    groups = {g["id"]: g for g in audit["groups"]}
+    code_status: dict[str, str] = {}
+    for g in audit["groups"]:
+        code_status |= {c: "in_progress" for c in g.get("in_progress", []) if c not in code_status}
+        code_status |= {c: "done" for c in g.get("counted", [])}
+    by_area = {str(a): g["id"] for g in university["groups"] if isinstance(g.get("from"), dict)
+               for a in (g["from"]["ge_area"] if isinstance(g["from"].get("ge_area"), list) else [g["from"].get("ge_area")])}
+    out, seen = [], set()
+    for b in dpr["requirements"]:
+        if b["status"] in ("info", "waived"):
+            if b["kind"] == "ge":
+                seen.update(by_area[a] for a in translate_ge([b["title"]], university)[0] if a in by_area)
+            continue
+        if b["kind"] == "course":
+            codes = re.findall(r"[A-Z]{1,5}(?: [A-Z]{1,3})? \d{3}[A-Z]{0,3}", b["title"])
+            states = [code_status.get(c, "needed") for c in codes]
+            ours = "done" if all(x == "done" for x in states) else "needed" if "needed" in states else "in_progress"
+        elif b["kind"] == "ge" or "GWAR" in b["title"]:
+            ids = ["gwar"] if "GWAR" in b["title"] else [by_area[a] for a in translate_ge([b["title"]], university)[0]
+                                                           if a in by_area]
+            if not ids or any(i not in groups for i in ids):
+                continue
+            seen.update(ids)
+            states = [word.get(groups[i]["status"], groups[i]["status"]) for i in ids]
+            ours = "done" if all(x == "done" for x in states) else "needed" if "needed" in states else "in_progress"
+        elif b["title"].startswith("120 Minimum Units") and b["needed"]:
+            t = audit["totals"]
+            ours_units = t["units"]["value"] + t.get("units_in_progress", 0)
+            if abs(ours_units - b["needed"]["taken"]) > 0.5:
+                out.append(f"Units toward the 120: the DPR counts {b['needed']['taken']:g} taken, GatorPath "
+                           f"{ours_units:g} (with in-progress). Transfer units the DPR doesn't list under a requirement "
+                           "are the usual reason: set transfer_units from your transcript's Transfer Totals")
+            continue
+        else:
+            continue
+        if ours != b["status"]:
+            out.append(f"{b['title']}: the DPR says {b['status'].replace('_', ' ')}, GatorPath says "
+                       f"{ours.replace('_', ' ')}. The DPR wins; ask an advisor if it looks wrong, and tell GatorPath "
+                       "if its rule is the one that's off")
+    if any(b["kind"] == "ge" for b in dpr["requirements"]):
+        # GE areas only: SF State Studies and American Institutions aren't "Area …" titles on a DPR
+        missing = [g["title"] for g in university["groups"]
+                   if g["id"].startswith("ge_") and g["id"] in by_area.values() and g["id"] not in seen]
+        if missing:
+            out.append(f"Not found on this DPR: {', '.join(missing)}. If the DPR really doesn't have one (an older "
+                       "catalog), add it to not_on_dpr; if the print was cut, print it again with View All")
+    return out
 
 
 def read_pdf(path: Path) -> str:

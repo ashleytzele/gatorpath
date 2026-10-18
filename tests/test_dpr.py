@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from gatorpath.dpr import parse, to_profile
+from gatorpath.dpr import cross_check, parse, to_profile
 
 DPR = parse((Path(__file__).parent / "fixtures/dpr_synthetic.txt").read_text())
 by_title = {r["title"]: r for r in DPR["requirements"] if r["kind"] != "group"}
@@ -30,3 +30,23 @@ def test_transfer_rows_meet_the_course_they_sit_under_and_substitutions_become_d
     assert got["transfer_units"] == 19 and any("no legend" in w for w in got["warnings"])
     assert [r["requirement"] for r in got["remaining"]] == ["Area D - Social Sciences", "Minimum Units of General Education Coursework",
                                                            "120 Minimum Units Required for Degree", "CSC 413"]
+
+
+def test_cross_check_flags_only_real_disagreements():
+    # Phase 6 done-when: the synthetic DPR's courses and GE areas agree with an audit of what it lists; what's left
+    # is explained (unlisted transfer units; GE areas this partial DPR doesn't show)
+    from gatorpath.engine.rules import load_rules
+    _, university = load_rules("2026-27", "bs-cs")
+    group = lambda i, status, counted=(), going=(): {"id": i, "status": status, "counted": list(counted), "in_progress": list(going)}
+    audit = {"groups": [group("ge_1c", "satisfied"), group("ge_1a", "satisfied"), group("ge_1b", "satisfied"),
+                        group("ge_4", "remaining"), group("gwar", "in_progress"),
+                        group("math_physics", "remaining", ["MATH 225", "MATH 226", "MATH 227"]),
+                        group("core_cs", "remaining", ["CSC 101", "CSC 215"], ["CSC 220", "CSC 300GW"])],
+             "totals": {"units": {"value": 46.0}, "units_in_progress": 6.0}}
+    got = cross_check(DPR, audit, university)
+    assert got[0].startswith("Units toward the 120: the DPR counts 74 taken, GatorPath 52")
+    assert got[1].startswith("Not found on this DPR: GE 2 Mathematical") and "SF State Studies" not in got[1]
+    assert len(got) == 2
+    audit["groups"][0]["status"] = "remaining"
+    assert cross_check(DPR, audit, university)[0].startswith(
+        "Area A1 - Oral Communication: the DPR says done, GatorPath says needed. The DPR wins")

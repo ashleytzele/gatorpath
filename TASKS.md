@@ -243,14 +243,18 @@ comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see
   (substitutions), `gpa`, `catalog_year`, and `remaining` (the DPR's own "needed"); transfer rows get the
   requirement's minimum grade, said in a warning; a "needed" line beats waiver wording; `plan_my_degree` asks for the
   DPR's path first
-- [ ] DPR-first (ARCHITECTURE §7.3, D14): `import_dpr` returns `remaining` from the DPR, and
-  `build_plan` plans from it when present
-- [ ] DPR cross-check: compare `audit_progress` against the DPR's own per-requirement status;
-  every disagreement → ⚠️ naming the group (catches rule bugs while rules are `verified: false`)
+- [x] DPR-first (ARCHITECTURE §7.3, D14): `import_dpr` returns `remaining` from the DPR, and
+  `build_plan` plans from it when present. As built: build_plan plans from the profile import_dpr builds (transfer
+  rows, dpr_met, ge_done), and the cross-check flags wherever that differs from the DPR. ponytail: no separate "plan
+  from remaining" path; add one if a trial finds a DPR requirement the profile can't express
+- [x] DPR cross-check: compare `audit_progress` against the DPR's own per-requirement status;
+  every disagreement → ⚠️ naming the group (catches rule bugs while rules are `verified: false`). Course
+  requirements by code, GE areas via legacy_ge_areas, GWAR, units toward 120, and GE areas missing from the DPR
+  (→ not_on_dpr); `see_advisor` the DPR when anything disagrees
 - [x] Test: the fake name/ID strings in the DPR fixture never appear in the output
 
 **Done when:** importing the synthetic transcript gives the same audit as typing the courses, and
-importing the synthetic DPR gives an audit with no unexplained disagreements with the DPR.
+importing the synthetic DPR gives an audit with no unexplained disagreements with the DPR. **Met 2026-10-17**: the transcript test in `tests/test_server.py`; for the DPR every course and GE area agrees, and the two left (unlisted transfer units, GE areas the partial fixture doesn't show) come with their reason (`tests/test_dpr.py`).
 
 ---
 

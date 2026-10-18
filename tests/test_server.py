@@ -357,3 +357,5 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
     assert any("catalog year is Fall 2024" in w for w in got["warnings"])
     audit = {g["id"]: g for g in server.audit_progress(p)["groups"]}
     assert audit["ge_1c"]["status"] == "satisfied"  # "Area A1 - Oral Communication" done on the DPR -> GE 1C
+    assert [w.split(":")[0] for w in got["cross_check"]] == ["Units toward the 120", "Not found on this DPR"]
+    assert [a["role"] for a in got["see_advisor"]] == ["dpr"]
