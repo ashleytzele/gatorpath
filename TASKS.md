@@ -164,9 +164,10 @@ degree?" and get correct, sourced answers.
   name them. Ask cs-dept@sfsu.edu
 - [x] Present a passing plan as a term-by-term list in Degree Planner entry order (prompt step 8), so the student can
   record it in the official planner (ARCHITECTURE §3: complement, don't replace)
-- [ ] `save_profile` / `load_profile` (ARCHITECTURE §7.3, D13): student-chosen path, default
+- [x] `save_profile` / `load_profile` (ARCHITECTURE §7.3, D13): student-chosen path, default
   `~/.gatorpath/profile.yaml`, refuses repo paths, stale-DPR warning. Test: no tool writes a file
-  unless `save_profile` is called
+  unless `save_profile` is called (every tool the server lists is run against an empty HOME and cwd).
+  `plan_my_degree` starts with `load_profile` and offers `save_profile` at the end
 
 **Done when:** "I'm a CS sophomore, I want cybersecurity, plan my next 3 years" produces a plan
 that passes `check_plan`, with sensible electives, and "what if I graduate a year early?" gets a

@@ -1,7 +1,10 @@
 """MCP tools (ARCHITECTURE §7). Thin: check input, read catalog.db and rules/, call engine/, add catalog_year + warnings."""
 
 import difflib
+import json
+import os
 import re
+from datetime import date
 from functools import cache
 from pathlib import Path
 from typing import NotRequired, TypedDict
@@ -18,10 +21,13 @@ from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number, translate_ge
 
 YEAR = "2026-27"  # ponytail: one catalog year. Take it from the profile/tool input once a second year is ingested.
-DB = Path(__file__).parents[2] / "data/catalog.db"
+REPO = Path(__file__).parents[2]
+DB = REPO / "data/catalog.db"
+PROFILE_PATH = "~/.gatorpath/profile.yaml"
 LEVELS = {"lower": (100, 300), "upper": (300, 700), "graduate": (700, 1000)}
 NO_OFFERINGS = "Offering history isn't loaded yet (TASKS phase 5), so `offered` is 'unknown'; check Class Search"
 READ_ONLY = ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False)
+WRITES_FILE = ToolAnnotations(readOnlyHint=False, destructiveHint=True, idempotentHint=True, openWorldHint=False)
 
 mcp = MCPServer(
     "gatorpath",
@@ -31,7 +37,8 @@ mcp = MCPServer(
         "pages, show every warning, and remind the student that the DPR and an advisor are the final word. "
         "Never guess what transfer credit covers or when a student will graduate: ask for the DPR, and use the planner "
         "tools when they exist. "
-        "Student profiles are passed in per call and never stored."
+        "Student profiles are passed in per call and never stored, except by save_profile: one file on the student's "
+        "machine, only when they ask."
     ),
 )
 
@@ -64,6 +71,10 @@ class Profile(TypedDict):
     max_units_per_term: NotRequired[float]
     include_summer: NotRequired[bool]
     graduate_by: NotRequired[str]
+    goal: NotRequired[str]
+    chosen_electives: NotRequired[list[str]]
+    plan: NotRequired["Plan"]
+    dpr_imported: NotRequired[str]
 
 
 class Slot(TypedDict):
@@ -364,6 +375,91 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     return out
 
 
+def profile_file(path: str | None) -> tuple[Path | None, str | None]:
+    """The student's chosen profile file, or why it's refused (golden rule 5: never inside the repo)."""
+    given = Path(path or PROFILE_PATH).expanduser()
+    if not given.is_absolute():
+        return None, f"give a full path, like {PROFILE_PATH}"
+    resolved = given.resolve()  # follows symlinks, so the checks below see the real file
+    if resolved.suffix not in (".yaml", ".yml"):
+        return None, "the profile file must end in .yaml or .yml"
+    if resolved.is_relative_to(REPO.resolve()):
+        return None, "that path is inside the GatorPath folder, where student data never goes; pick one in your home folder"
+    return resolved, None
+
+
+def read_profile(path: Path) -> dict | None:
+    """A saved GatorPath profile (a YAML mapping with a program), else None. Other files are never returned."""
+    try:
+        data = yaml.safe_load(path.read_text())
+    except (OSError, UnicodeDecodeError, yaml.YAMLError):
+        return None
+    return json.loads(json.dumps(data, default=str)) if isinstance(data, dict) and "program" in data else None  # dates -> str
+
+
+def term_start(day: date) -> tuple[str, date]:
+    # ponytail: month boundaries (spring Jan, summer Jun, fall Aug), not SF State's academic calendar.
+    season, month = ("fall", 8) if day.month >= 8 else ("summer", 6) if day.month >= 6 else ("spring", 1)
+    return f"{day.year}-{season}", date(day.year, month, 1)
+
+
+def path_error(path: str | None, why: str, error: str = "bad_path") -> dict:
+    return {"catalog_year": YEAR, "error": error, "path": path or PROFILE_PATH, "warnings": [why]}
+
+
+@mcp.tool(annotations=WRITES_FILE)
+def save_profile(profile: Profile, path: str | None = None) -> dict:
+    """Save the student's profile so the next session starts from it. **Only when the student asks to save.**
+
+    Writes one YAML file on the student's machine at `path` (default ~/.gatorpath/profile.yaml): plain text they can
+    read, edit or delete, readable only by them. Replaces an earlier GatorPath profile at that path, never any other
+    file; refuses paths inside the GatorPath folder. Keeps everything in the profile, plus goal, chosen_electives and
+    the plan that last passed check_plan. Nothing else is stored anywhere.
+    """
+    file, why = profile_file(path)
+    if why:
+        return path_error(path, why)
+    if file.exists() and read_profile(file) is None:
+        return path_error(path, f"{file} exists and isn't a GatorPath profile, so it wasn't replaced", "not_a_profile")
+    file.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    tmp = file.with_name(file.name + ".tmp")
+    try:
+        with os.fdopen(os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600), "w") as f:
+            f.write("# GatorPath student profile, saved at your request. Yours to read, edit or delete.\n")
+            yaml.safe_dump(dict(profile), f, sort_keys=False, allow_unicode=True)
+        os.replace(tmp, file)  # all or nothing: an earlier profile survives a failed write
+    except BaseException:
+        tmp.unlink(missing_ok=True)  # no half-written copy of the student's grades left behind
+        raise
+    return {"catalog_year": YEAR, "saved": str(file),
+            "warnings": [f"Saved to {file}. It holds your grades: delete it when you no longer need it"]}
+
+
+@mcp.tool(annotations=READ_ONLY)
+def load_profile(path: str | None = None) -> dict:
+    """Read the profile the student saved with save_profile (default ~/.gatorpath/profile.yaml), to start a session
+    from it. Returns `profile`, or error not_found. Warns when dpr_imported is before the current term: ask for a fresh
+    DPR before planning."""
+    file, why = profile_file(path)
+    if why:
+        return path_error(path, why)
+    if not file.exists():
+        return path_error(path, f"No saved profile at {file}", "not_found")
+    if (profile := read_profile(file)) is None:
+        return path_error(path, f"{file} isn't a GatorPath profile", "not_a_profile")
+    warnings = []
+    if imported := profile.get("dpr_imported"):
+        term, start = term_start(date.today())
+        try:
+            stale = date.fromisoformat(imported) < start
+        except (TypeError, ValueError):
+            stale, warnings = False, [f"dpr_imported {imported!r} isn't a date (YYYY-MM-DD)"]
+        if stale:
+            warnings.append(f"The DPR was imported {imported}, before the current term ({term}): ask for a fresh DPR "
+                            "(Student Center → Degree Progress Report) so new grades and courses are included")
+    return {"catalog_year": YEAR, "profile": profile, "path": str(file), "warnings": warnings}
+
+
 PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath ({year} Bulletin). Every course, prereq,
 requirement and date comes from the tools: never add one they didn't return, and never present a plan check_plan
 hasn't passed.{goal}{deadline}
@@ -372,7 +468,9 @@ Keep it fast. Ask once, in one message, for everything still missing, then work 
 stopping for confirmation. Never ask one question at a time or re-ask what they gave. Fill optional gaps with stated
 defaults (15 units per term, no summer) instead of asking.
 
-1. Ask for their record. The fastest is their DPR (Student Center → Degree Progress Report, printed or saved as a
+1. Start with `load_profile` (no path: the default file). If it returns a profile, start from it and ask only what's
+   missing or changed; if it warns the DPR is stale, ask for a fresh one. Otherwise ask for their record. The
+   fastest is their DPR (Student Center → Degree Progress Report, printed or saved as a
    PDF, or its text pasted). In that same request, before they share anything, say once that an attached PDF includes
    their name and student ID, which go to the AI provider, so they may black those out or paste only the requirement
    sections. Never repeat it after they share. Then accept whatever they share; a
@@ -416,13 +514,16 @@ defaults (15 units per term, no summer) instead of asking.
    - a checklist: confirm each course is offered that term in Class Search (no schedule data yet), compare with the
      DPR, see the advisor
    Then offer what-ifs: graduating earlier (step 6), a new direction (steps 4-5 with the new goal; required courses
-   don't change). Switching majors isn't supported yet."""
+   don't change). Switching majors isn't supported yet.
+8. Offer once to save their profile so the next session starts here: `save_profile` with the goal, chosen_electives
+   and the plan that passed check_plan. Only if they say yes; it writes one file on their machine (default
+   ~/.gatorpath/profile.yaml, or a path they choose)."""
 
 
 @mcp.prompt(title="Plan my degree")
 def plan_my_degree(goal: str = "", graduate_by: str = "") -> str:
     """Step-by-step workflow: profile → audit → plan → electives by goal → check_plan → pace/what-ifs → advisor."""
-    # ponytail: no load_profile / import_dpr steps yet. Add them to the workflow when those tools land (TASKS phase 4, 6).
+    # ponytail: no import_dpr step yet. Add it to the workflow when the tool lands (TASKS phase 6).
     return PLAN_MY_DEGREE.format(year=YEAR, goal=f"\n\nThe student's goal: {goal}." if goal else "",
                                  deadline=f" They'd like to graduate by {graduate_by} (pass it as graduate_by)."
                                  if graduate_by else "")

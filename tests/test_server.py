@@ -258,3 +258,61 @@ def test_program_requirements_include_transfer_notes():
     assert any("ASSIST" in n["text"] for n in notes)
     adt = server.get_roadmap("bs-cs", "adt")["notes"]
     assert any("cannot be guaranteed" in n for n in adt) and any("Upon verification" in n for n in adt)
+
+
+def test_only_save_profile_writes_a_file(tmp_path, monkeypatch):
+    # Golden rule 5: no student data at rest except the one file save_profile writes when the student asks
+    import asyncio
+
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.chdir(tmp_path)
+    profile = {"program": "bs-cs", "catalog_year": "2026-27", "qr_pathway": "1/2", "start_term": "2027-spring",
+               "completed": [{"code": "CSC 101", "grade": "A", "term": "2026-fall"}]}
+    plan = server.build_plan(profile)
+    calls = {
+        "search_courses": lambda: server.search_courses("data"), "get_course": lambda: server.get_course("CSC 653"),
+        "get_prereq_chain": lambda: server.get_prereq_chain("CSC 653"), "list_programs": server.list_programs,
+        "get_program_requirements": lambda: server.get_program_requirements("bs-cs"),
+        "get_roadmap": lambda: server.get_roadmap("bs-cs"), "audit_progress": lambda: server.audit_progress(profile),
+        "build_plan": lambda: plan, "check_plan": lambda: server.check_plan(profile, plan),
+        "list_eligible_electives": lambda: server.list_eligible_electives(profile, "senior_electives", plan),
+        "load_profile": server.load_profile,
+    }
+    assert set(calls) == {t.name for t in asyncio.run(server.mcp.list_tools())} - {"save_profile"}
+    for call in calls.values():
+        call()
+    server.plan_my_degree()
+    assert list(tmp_path.rglob("*")) == []
+    got = server.save_profile(profile | {"goal": "security", "chosen_electives": ["CSC 652"]})
+    file = tmp_path / ".gatorpath/profile.yaml"
+    assert got["saved"] == str(file.resolve()) and sorted(tmp_path.rglob("*")) == [file.parent, file]
+    assert file.stat().st_mode & 0o777 == 0o600
+    assert server.load_profile()["profile"] == profile | {"goal": "security", "chosen_electives": ["CSC 652"]}
+
+
+def test_profile_paths_are_the_students_and_never_the_repo(tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    p = {"program": "bs-cs"}
+    assert server.save_profile(p, str(ROOT / "evals/me.yaml"))["error"] == "bad_path"
+    assert server.save_profile(p, "profile.yaml")["error"] == "bad_path"  # relative: the server's folder
+    assert server.save_profile(p, "~/notes.txt")["error"] == "bad_path"
+    other = tmp_path / "config.yaml"
+    other.write_text("theme: dark\n")
+    assert server.save_profile(p, str(other))["error"] == "not_a_profile" and other.read_text() == "theme: dark\n"
+    assert server.load_profile(str(other))["error"] == "not_a_profile"  # never echoes another file
+    assert server.load_profile("~/missing.yaml")["error"] == "not_found"
+    (tmp_path / "link.yaml").symlink_to(other)  # a .yaml name pointing at another file is still refused
+    assert server.save_profile(p, "~/link.yaml")["error"] == "not_a_profile" and other.read_text() == "theme: dark\n"
+
+
+def test_load_profile_warns_when_the_dpr_is_from_an_earlier_term(tmp_path):
+    from datetime import date
+
+    file = tmp_path / "p.yaml"
+    file.write_text("program: bs-cs\ndpr_imported: 2020-01-15\n")  # unquoted: YAML reads a date
+    got = server.load_profile(str(file))
+    assert got["profile"]["dpr_imported"] == "2020-01-15" and "ask for a fresh DPR" in got["warnings"][0]
+    file.write_text(f"program: bs-cs\ndpr_imported: '{date.today()}'\n")
+    assert server.load_profile(str(file))["warnings"] == []
+    file.write_text("program: bs-cs\ndpr_imported: 2026\n")
+    assert "isn't a date" in server.load_profile(str(file))["warnings"][0]
