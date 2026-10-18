@@ -360,3 +360,44 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
     assert audit["ge_1c"]["status"] == "satisfied"  # "Area A1 - Oral Communication" done on the DPR -> GE 1C
     assert [w.split(":")[0] for w in got["cross_check"]] == ["Units toward the 120", "Not found on this DPR"]
     assert [a["role"] for a in got["see_advisor"]] == ["dpr"]
+
+
+FRESH = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall"}
+SCENARIOS = {
+    "new freshman, QR 1/2": FRESH | {"qr_pathway": "1/2"},
+    "new freshman, QR 3/4, F-1": FRESH | {"qr_pathway": "3/4", "f1": True},
+    "freshman with AP credit": FRESH | {"qr_pathway": "1/2", "first_time": True, "transfer_units": 8, "ge_done": ["USH", "2"]},
+    "sophomore": yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"],
+    "ADT transfer": FRESH | {"adt": True, "ge_certified": True, "first_time": False, "transfer_units": 60,
+                             "completed": [{"code": c, "grade": "B", "transfer": True} for c in ("CSC 101", "CSC 215", "MATH 226")]},
+    "Cal-GETC transfer, no ADT": FRESH | {"qr_pathway": "1/2", "ge_certified": True, "first_time": False, "transfer_units": 60},
+    "prior bachelor's": FRESH | {"qr_pathway": "1/2", "prior_bachelors": True, "transfer_units": 90},
+    "fast, with summers": FRESH | {"qr_pathway": "1/2", "include_summer": True, "max_units_per_term": 18},
+    "part-time with a deadline": FRESH | {"qr_pathway": "1/2", "max_units_per_term": 12, "graduate_by": "2031-spring"},
+    "retaking a D": {"program": "bs-cs", "catalog_year": "2026-27", "qr_pathway": "1/2",
+                     "completed": [{"code": "CSC 101", "grade": "A", "term": "2026-fall"},
+                                   {"code": "MATH 226", "grade": "B", "term": "2026-fall"},
+                                   {"code": "CSC 215", "grade": "D", "term": "2027-spring"}]},
+    "older-catalog DPR": FRESH | {"catalog_year": "Spring 2025", "first_time": False, "transfer_units": 45,
+                                  "ge_done": ["Area A1 - Oral Communication", "A2", "A3", "B4", "GE D/USH"],
+                                  "not_on_dpr": ["6"], "dpr_met": ["MATH 225"], "qr_pathway": "1/2"},
+}
+
+
+@pytest.mark.parametrize("name", SCENARIOS)
+def test_every_kind_of_student_gets_a_checked_plan_and_ge_ways(name):
+    import time
+
+    p = SCENARIOS[name]
+    assert "error" not in server.audit_progress(p)
+    plan = server.build_plan(p)
+    assert plan.get("semesters") and plan["check"]["valid"], (plan.get("needs_input"), plan.get("check"))
+    assert server.check_plan(p, {"semesters": plan["semesters"]})["valid"]  # golden rule 6, as the client re-checks it
+    start = time.time()
+    ways = server.ge_combinations(p, {"semesters": plan["semesters"]})
+    assert time.time() - start < 5 and "error" not in ways
+    assert ways["ways"] or not ways["open"] or any("No eligible course" in w for w in ways["warnings"])
+    for s in plan["semesters"]:
+        for slot in {c["slot"] for c in s["courses"] if isinstance(c, dict) and c["slot"] != "elective"}:
+            got = server.list_eligible_electives(p, slot, {"semesters": plan["semesters"]}, by_term=s["term"])
+            assert "error" not in got, (slot, got.get("error"))

@@ -152,6 +152,15 @@ report.
     limit (3 units); (4) the model called courses optional while also saying upper-division units were short: the
     prompt now says to re-check before calling a course optional; (5) GE slots got one pick: the prompt now lists 3-5
     options that cover the same requirements (9 triple-duty 4UD courses exist for 4UD + ESCA + GP)
+  - Trial 8 (Desktop, "I'm an incoming freshman, nothing done, plan everything"): ge_combinations hung (17 open
+    requirements, brute-force combinations). Fixed: greedy cover + bounded exact-cover search (0.3 s), `overlaps`.
+    Asked next: use the Bulletin roadmap as the foundation (GE Area 1A in term 2, …). build_plan is now roadmap-led:
+    a new QR 1/2 freshman gets 8 terms at 15 units (was 9), following the roadmap's GE layout. Scenario matrix
+    (`tests/test_server.py`, 11 kinds of students: new freshmen, AP credit, sophomore, ADT and Cal-GETC transfers,
+    prior bachelor's, summers, part-time, a retake, an older-catalog DPR) found: Cal-GETC certification didn't count
+    for prereqs ("GE Area 1A" for CSC 300GW, UD GE), so transfer plans stalled; the Area 4 two-subjects rule booked an
+    extra 3-unit course and wasn't fillable through list_eligible_electives. All fixed; every scenario gets a valid
+    plan on the real catalog
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
 degree?" and get correct, sourced answers.

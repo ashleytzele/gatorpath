@@ -572,6 +572,13 @@ The input is the profile, the program rules, the prereq graph and `offered_terms
      checked term, is allowed with a ⚠️ (rare isn't never)
    - fill by priority up to `max_units_per_term`; leave remaining capacity to slots
    - standing (`upper`/`senior`) is computed from cumulative units
+   - **Roadmap-led (2026-10-18):** each term first takes its Bulletin roadmap semester's items: its courses, its GE
+     areas (a roadmap label maps to the groups taking that area: "1" → 1A/1B/1C, "5UD/2UD" → either), senior electives,
+     the US/CA Government course, SF State Studies or electives. Items already done are skipped, items not ready carry
+     to the next term, and the greedy fills what's left. Both plans are built; the roadmap-led one is kept unless the
+     plain greedy finishes sooner. The cap stays the student's (default 15), so the plan passes check_plan as given;
+     `pace.roadmap_load` reports when the roadmap's own loads (16-17-unit terms) would finish sooner. Free-elective
+     units split to fill a term.
 4. Stop when nothing remains. Report `est_graduation_term`.
 5. If no progress is possible in a term (a blocked prereq), stop and emit an error saying
    which condition blocks it. Never loop forever.

@@ -105,6 +105,9 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         area = str(e["ge_area"])
         ok = (area in ctx["ge_done"] or area in ctx.get("slot_areas", ())
               or any(area in ctx["catalog"][c]["ge_areas"] for c in ctx["done"] if c in ctx["catalog"]))
+        if not ok and ctx["profile"].get("prior_bachelors"):  # GE is waived for them (p.2313); a prereq isn't
+            return UNVERIFIED, [f"GE Area {area} (your prior bachelor's degree waives GE; confirm it covers this "
+                                "prerequisite)"]
         return (OK, []) if ok else (NO, [f"a GE Area {area} course"])
     if "qr_category" in e:
         qr = ctx["profile"].get("qr_pathway")
@@ -177,6 +180,16 @@ def see_advisor(triggers: list[tuple[str, str]], program: dict, university: dict
             e["why"].append(why)
     urgency = ["substitutions", "major_advisor", "international", "college_advising", "general_advising", "directory", "dpr"]
     return sorted(out.values(), key=lambda e: urgency.index(e["role"]) if e["role"] in urgency else len(urgency))
+
+
+def ge_done_areas(profile: dict, university: dict) -> set[str]:
+    """GE areas met outside SF State courses: ge_done, plus every lower-division area when Cal-GETC certified (p.2304)."""
+    done = {str(a).upper() for a in profile.get("ge_done", [])}
+    if profile.get("ge_certified"):
+        groups = {g["id"]: g for g in university["groups"]}
+        done |= {str(a).upper() for gid in university.get("transfer", {}).get("certified_ld_ge", [])
+                 for a in slot_ge_areas({"slot": gid}, groups)}
+    return done
 
 
 def ud_ge_ready(ctx: dict, university: dict) -> tuple[bool, list[str]]:
@@ -263,7 +276,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             term_units += s.get("units", 0)
 
         ctx = {"done": done, "same_term": set(codes), "grades": grades, "units": units, "profile": profile, "gpa": gpa,
-               "ge_done": {str(a).upper() for a in profile.get("ge_done", [])}, "catalog": catalog,
+               "ge_done": ge_done_areas(profile, university), "catalog": catalog,
                "program": program, "class_level": levels, "slot_areas": slot_areas}
         for c in codes:
             if c not in catalog:
@@ -543,10 +556,13 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     for g in after["groups"]:
         if g["status"] in ("satisfied", "waived"):
             continue
-        if "subjects" in g:  # GE Area 4 "in at least two different disciplines": one more course from another subject
-            slots.append({"slot": g["id"], "units": 3, "_kind": "ge",
-                          "note": f"a course for {', '.join(groups[g['id']]['across'])} in a subject other than "
-                                  f"{', '.join(g['subjects'])} ({g['source']})"})
+        if "subjects" in g:  # GE Area 4 "in at least two different disciplines"
+            # A rule on which subjects the Area 4 courses come from; an extra course only once they're all done.
+            extra = all(x["status"] in ("satisfied", "waived") for x in after["groups"] if x["id"] in groups[g["id"]]["across"])
+            slots.append({"slot": g["id"], "units": 3 if extra else 0, "_kind": "ge" if extra else "tag",
+                          "note": f"{'a course' if extra else 'pick the courses'} for {', '.join(groups[g['id']]['across'])} "
+                                  f"from at least two subjects{' other than ' + ', '.join(g['subjects']) if g['subjects'] else ''} "
+                                  f"({g['source']})"})
             continue
         if "units_needed" in g:
             kind = "major" if g["kind"] == "major" else "ud_ge" if upper_only(groups[g["id"]]) else "ge"
@@ -571,98 +587,201 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     before_electives = {i for sem in roadmap["variants"][ref]["semesters"][:first_elective] for i in sem["items"]
                         if isinstance(i, str)} if first_elective is not None else set()
 
-    done = set(have)
-    grades = {r["code"]: r["grade"] for r in profile.get("completed", [])}
-    units = status["totals"]["units"]["value"]
+    grades0 = {r["code"]: r["grade"] for r in profile.get("completed", [])}
+    units0 = status["totals"]["units"]["value"]
     gpa = profile.get("gpa", status["totals"]["gpa_sf_state"]["value"])
-    left = sorted(todo, key=rank_of)
-    first_ok: dict[str, str] = {}  # the first term a course could have gone in
-    semesters, term = [], start
-    slot_areas: set[str] = set()
-    for _ in range(20):
-        if not left and not slots:
-            break
-        if term.endswith("summer") and not summer:
-            term = next_term(term, summer)
-            continue
-        limit = min(cap, load["summer_normal"]) if term.endswith("summer") else cap
-        placed: list[str] = []
-        used = 0.0
-        ctx = {"done": done, "grades": grades, "units": units, "profile": profile, "gpa": gpa,
-               "ge_done": {str(a).upper() for a in profile.get("ge_done", [])}, "catalog": catalog,
-               "program": program, "class_level": levels, "slot_areas": slot_areas}
+    slots0 = slots
 
-        def ok(c: str, same: set) -> bool:
-            state, _ = evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": same})
-            # An unverifiable branch ("or equivalent", high-school courses) doesn't let a course jump ahead of a
-            # prereq that's still in the plan: wait for it, in an earlier term (or this one, for corequisites).
-            waiting = (hard[c] - done) | (needs[c] - hard[c] - done - same)
-            return (state == OK or (state == UNVERIFIED and not waiting)) and season_ok(c, term, catalog, seasons)[0]
+    # The Bulletin roadmap as the foundation (its GE areas by semester, e.g. "GE Area 1A" in term 2): a roadmap label
+    # maps to the university groups taking that GE area ("1" -> 1A/1B/1C, preferring areas the roadmap doesn't name
+    # elsewhere; "5UD/2UD" -> the group taking either), or an American Institutions / SF State Studies designation.
+    road = roadmap["variants"][ref]["semesters"]
+    named = {str(i.get("area")) for sem in road for i in sem["items"] if isinstance(i, dict)}
+    areas_of = lambda g: [str(a) for f in ([g["from"]] if isinstance(g.get("from"), dict) else g.get("from") or [])
+                          for a in ([f.get("ge_area")] if not isinstance(f.get("ge_area"), list) else f["ge_area"]) if a]
 
-        changed = True
-        while changed:
-            changed = False
-            for c in [c for c in left if c not in placed]:
-                bundle = [c] + [d for d in needs[c] if d in left and d not in placed and c in needs.get(d, ()) and d not in hard[c]]
-                u = sum(catalog[b]["units_min"] for b in bundle)
-                same = set(placed) | set(bundle)
-                if not all(ok(b, same) for b in bundle):
+    def groups_for(label: str) -> list[str]:
+        labels = label.split("/")
+        hit = [g["id"] for g in university["groups"] if any(a == l or (len(l) == 1 and a[0] == l and len(a) == 2)
+                                                             for a in areas_of(g) for l in labels)]
+        return sorted(hit, key=lambda i: any(a in named for a in areas_of(groups[i])))
+
+    def take(item: dict, pool: list[dict]) -> list[dict]:
+        """The open slots a roadmap item stands for (removed from `pool` by the caller once placed)."""
+        free = lambda u: [x for x in pool if x["_kind"] == "elective"][:max(1, math.ceil(u / 3))] if u else []
+        if item["slot"] == "GE":
+            ids = groups_for(str(item["area"]))
+            out = [x for i in ids for x in pool if x["slot"] == i][:max(1, item["units"] // 3)]
+            if str(item["area"]) == "4":  # footnote 2: one of the lower-division Area 4 courses meets USH
+                out += [x for x in pool if x["_kind"] == "tag" and x["slot"] in groups_for("USH")][:1]
+            return out
+        if item["slot"] == "senior_elective":
+            return [x for x in pool if x["_kind"] == "major"][:item.get("count", 1)]
+        if item["slot"] == "ai":
+            tags = [x for x in pool if x["_kind"] == "tag" and x["slot"] in groups_for(str(item["area"]))]
+            return tags + free(item["units"]) if tags else []
+        if item["slot"] == "sfss_or_elective":
+            return [x for x in pool if x["_kind"] == "tag" and x["slot"].startswith("sfss_")] + free(item["units"])
+        return free(item.get("units", 3))
+
+    def schedule(queue: list[list], cap: float) -> tuple[list, dict, list]:
+        """Term by term from `start`: a term first takes its roadmap semester's items (still needed and ready; the
+        rest carry to the next term), then the greedy fills what's left under `cap`, critical path first."""
+        slots = [dict(x) for x in slots0]
+        done, grades, units = set(have), dict(grades0), units0
+        left = sorted(todo, key=rank_of)
+        first_ok: dict[str, str] = {}  # the first term a course could have gone in
+        semesters, notes, term, slot_areas, carry, queue = [], [], start, set(), [], list(queue)
+        for _ in range(20):
+            if not left and not slots:
+                break
+            if term.endswith("summer") and not summer:
+                term = next_term(term, summer)
+                continue
+            limit = min(cap, load["summer_normal"]) if term.endswith("summer") else cap
+            placed: list[str] = []
+            term_slots: list[dict] = []
+            used = 0.0
+            ctx = {"done": done, "grades": grades, "units": units, "profile": profile, "gpa": gpa,
+                   "ge_done": ge_done_areas(profile, university), "catalog": catalog,
+                   "program": program, "class_level": levels, "slot_areas": slot_areas}
+
+            def ok(c: str, same: set) -> bool:
+                state, _ = evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": same})
+                # An unverifiable branch ("or equivalent", high-school courses) doesn't let a course jump ahead of a
+                # prereq that's still in the plan: wait for it, in an earlier term (or this one, for corequisites).
+                waiting = (hard[c] - done) | (needs[c] - hard[c] - done - same)
+                return (state == OK or (state == UNVERIFIED and not waiting)) and season_ok(c, term, catalog, seasons)[0]
+
+            ready_electives = units >= levels["upper"] and before_electives & set(todo) <= done
+            ud = university.get("upper_division_ge", {})
+            ud_ok = units >= ud.get("recommended_after_units", levels["upper"]) and ud_ge_ready(ctx | {"same_term": set()}, university)[0]
+
+            def allowed(x: dict) -> bool:
+                return not ((x["_kind"] == "ud_ge" and not ud_ok) or (x["_kind"] == "major" and not ready_electives)
+                            or (x["_kind"] == "major" and units < levels["upper"])
+                            or (x["_kind"] == "elective" and x.get("upper_division") and units < levels["upper"]))
+
+            # Roadmap semester first (skipping semesters with nothing left); what can't go now carries over.
+            while queue and not any((i in left) if isinstance(i, str) else take(i, slots) for i in queue[0]):
+                queue.pop(0)
+            pins, carry = carry + (queue.pop(0) if queue else []), []
+            for item in pins:
+                if isinstance(item, str):
+                    if item not in left or item in placed:
+                        continue
+                    # corequisites go together or not at all (PHYS 220 with PHYS 222)
+                    bundle = [item] + [d for d in needs[item] if d in left and d not in placed
+                                       and item in needs.get(d, ()) and d not in hard[item]]
+                    u = sum(catalog[b]["units_min"] for b in bundle)
+                    if all(ok(b, set(placed) | set(bundle)) for b in bundle) and used + u <= limit:
+                        placed += bundle
+                        used += u
+                    else:
+                        carry += [b for b in bundle if b not in carry]
                     continue
+                picked = take(item, slots)
+                if not picked:
+                    continue
+                if all(allowed(x) for x in picked) and used + sum(x["units"] for x in picked) <= limit:
+                    for x in picked:
+                        slots.remove(x)
+                    term_slots += picked
+                    used += sum(x["units"] for x in picked)
+                else:
+                    carry.append(item)
+            for c in placed:
                 first_ok.setdefault(c, term)
-                if used + u <= limit:
-                    placed += bundle
-                    used += u
-                    changed = True
-                    break
-        left = [c for c in left if c not in placed]
-        ready_electives = units >= levels["upper"] and before_electives & set(todo) <= done
-        term_slots = []
-        ud = university.get("upper_division_ge", {})
-        ud_ok = units >= ud.get("recommended_after_units", levels["upper"]) and ud_ge_ready(ctx | {"same_term": set()}, university)[0]
-        for kind in ("tag", "ge", "ud_ge", "major", "elective"):
-            for s in [s for s in slots if s["_kind"] == kind]:
-                if kind == "ud_ge" and not ud_ok:
+
+            changed = True
+            while changed:
+                changed = False
+                for c in [c for c in left if c not in placed]:
+                    bundle = [c] + [d for d in needs[c] if d in left and d not in placed and c in needs.get(d, ()) and d not in hard[c]]
+                    u = sum(catalog[b]["units_min"] for b in bundle)
+                    same = set(placed) | set(bundle)
+                    if not all(ok(b, same) for b in bundle):
+                        continue
+                    first_ok.setdefault(c, term)
+                    if used + u <= limit:
+                        placed += bundle
+                        used += u
+                        changed = True
+                        break
+            left = [c for c in left if c not in placed]
+            guided = bool(queue or carry)  # while the roadmap still guides, designation tags wait for its items
+            for kind in ("tag", "ge", "ud_ge", "major", "elective"):
+                if kind == "tag" and guided:
                     continue
-                if kind == "major" and units < levels["upper"]:
-                    continue
-                if kind == "major" and not ready_electives:
-                    continue
-                if kind == "elective" and s.get("upper_division") and units < levels["upper"]:
-                    continue
-                if used + s["units"] <= limit:
-                    term_slots.append(s)
-                    slots.remove(s)
-                    used += s["units"]
-        # F-1 (pp.2390, 2393): a spring/fall term with more to come is filled toward the minimum with elective slots
-        # that would otherwise wait for the roadmap's order; check_plan flags what still falls short.
-        f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") and not term.endswith("summer") else 0
-        if used < f1_min and (left or slots):
-            for s in [s for s in slots if s["_kind"] in ("major", "elective")]:
-                if units >= levels["upper"] or not (s["_kind"] == "major" or s.get("upper_division")):
-                    if used < f1_min and used + s["units"] <= limit:
-                        term_slots.append(s)
-                        slots.remove(s)
-                        used += s["units"]
-        off_season = [c for c in left if not season_ok(c, term, catalog, seasons)[0]]
-        if not placed and not any(s["units"] for s in term_slots) and off_season:
-            warnings.append(f"{term}: nothing left runs in {term[5:]}; {', '.join(off_season)} wait for a term they run in")
+                for x in [x for x in slots if x["_kind"] == kind]:
+                    if allowed(x) and used + x["units"] <= limit:
+                        term_slots.append(x)
+                        slots.remove(x)
+                        used += x["units"]
+                    elif kind == "elective" and allowed(x) and limit - used >= 1:
+                        # free units are any course's units: fill the term, keep the rest for later
+                        part = x | {"units": float(int(limit - used))}
+                        x["units"] -= part["units"]
+                        term_slots.append(part)
+                        used += part["units"]
+            # F-1 (pp.2390, 2393): a spring/fall term with more to come is filled toward the minimum with elective slots
+            # that would otherwise wait for the roadmap's order; check_plan flags what still falls short.
+            f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") and not term.endswith("summer") else 0
+            if used < f1_min and (left or slots):
+                for x in [x for x in slots if x["_kind"] in ("major", "elective")]:
+                    if units >= levels["upper"] or not (x["_kind"] == "major" or x.get("upper_division")):
+                        if used < f1_min and used + x["units"] <= limit:
+                            term_slots.append(x)
+                            slots.remove(x)
+                            used += x["units"]
+            off_season = [c for c in left if not season_ok(c, term, catalog, seasons)[0]]
+            if not placed and not any(x["units"] for x in term_slots) and off_season:
+                notes.append(f"{term}: nothing left runs in {term[5:]}; {', '.join(off_season)} wait for a term they run in")
+                term = next_term(term, summer)
+                continue
+            if not placed and not any(x["units"] for x in term_slots):
+                blocked = {c: evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[1] for c in left}
+                notes.append(f"Stopped at {term}: nothing more can be scheduled. Blocked: "
+                             + "; ".join(f"{c} needs {', '.join(w) or 'more units per term'}" for c, w in blocked.items())
+                             + ("; slots waiting: " + ", ".join(sorted({x['slot'] for x in slots})) if slots else ""))
+                semesters += [{"term": term, "courses": [{k: v for k, v in x.items() if k != "_kind"} for x in term_slots], "units": 0}] if term_slots else []
+                break
+            free: dict[bool, dict] = {}  # one free-elective slot per term (per upper-division flag)
+            for x in [x for x in term_slots if x["slot"] == "elective"]:
+                key = bool(x.get("upper_division"))
+                free[key] = free[key] | {"units": free[key]["units"] + x["units"]} if key in free else dict(x)
+            term_slots = [x for x in term_slots if x["slot"] != "elective"] + list(free.values())
+            semesters.append({"term": term, "units": used,
+                              "courses": placed + [{k: v for k, v in x.items() if k != "_kind"} for x in term_slots]})
+            done |= set(placed)
+            for c in placed:  # a planned retake replaces the old grade
+                grades.pop(c, None)
+            slot_areas = slot_areas | {a for x in term_slots for a in slot_ge_areas(x, groups)}
+            units += used
             term = next_term(term, summer)
-            continue
-        if not placed and not any(s["units"] for s in term_slots):
-            blocked = {c: evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[1] for c in left}
-            warnings.append(f"Stopped at {term}: nothing more can be scheduled. Blocked: "
-                            + "; ".join(f"{c} needs {', '.join(w) or 'more units per term'}" for c, w in blocked.items())
-                            + ("; slots waiting: " + ", ".join(sorted({s['slot'] for s in slots})) if slots else ""))
-            semesters += [{"term": term, "courses": [{k: v for k, v in s.items() if k != "_kind"} for s in term_slots], "units": 0}] if term_slots else []
-            break
-        semesters.append({"term": term, "units": used,
-                          "courses": placed + [{k: v for k, v in s.items() if k != "_kind"} for s in term_slots]})
-        done |= set(placed)
-        for c in placed:  # a planned retake replaces the old grade
-            grades.pop(c, None)
-        slot_areas = slot_areas | {a for x in term_slots for a in slot_ge_areas(x, groups)}
-        units += used
-        term = next_term(term, summer)
+        return semesters, first_ok, notes
+
+    # Build both and keep the roadmap-led plan unless the plain greedy finishes sooner. Both use the same cap (the
+    # roadmap's 16-unit terms carry an item over under the normal 15), so the plan always passes check_plan as given.
+    semesters, first_ok, notes = schedule([], cap)
+    if not summer:
+        led = schedule([list(sem["items"]) for sem in road], cap)
+        led_check = check_plan(profile, {"semesters": led[0]}, program, university, catalog, prereqs)
+        if led_check["valid"] and len(led[0]) <= len(semesters):
+            semesters, first_ok, notes = led
+            notes.append(f"Laid out on the Bulletin's {roadmap['variants'][ref]['title']} ({roadmap['variants'][ref]['source']}): "
+                         "each term starts from that roadmap semester's courses and GE areas, adjusted for what's done")
+    # The roadmap's own loads (two 16-unit terms in the first-time roadmaps) can finish sooner than the normal 15.
+    road_cap = max(sem["units"] for sem in road)
+    road_pace = None
+    if not summer and "max_units_per_term" not in profile and road_cap > cap:
+        fast = schedule([list(sem["items"]) for sem in road], road_cap)[0]
+        if fast and len(fast) < len(semesters) and check_plan(profile | {"max_units_per_term": road_cap}, {"semesters": fast},
+                                                              program, university, catalog, prereqs)["valid"]:
+            road_pace = {"max_units_per_term": road_cap, "terms": len(fast), "est_graduation_term": fast[-1]["term"],
+                         "note": f"the Bulletin roadmap's own loads (up to {road_cap:g} units, above the normal "
+                                 f"{load['normal_max']:g}); pass max_units_per_term: {road_cap:g} to plan that way"}
+    warnings += notes
     plan = {"semesters": semesters}
     check = check_plan(profile, plan, program, university, catalog, prereqs)
 
@@ -710,6 +829,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     plan_units = sum(s["units"] for s in semesters)
     critical = min(todo, key=rank_of) if todo else None
     pace = {"terms": len(semesters), "units_per_term": cap, "include_summer": summer, "planned_units": plan_units,
+            **({"roadmap_load": road_pace} if road_pace else {}),
             "min_terms_by_prereqs": depth[critical] if critical else 0,
             "longest_chain": longest(critical) if critical else [],
             "min_terms_by_units": math.ceil(plan_units / cap) if cap else 0}
@@ -855,6 +975,15 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
     g = groups.get(group_id)
     if g is None:
         return {"error": "unknown_group", "groups": list(groups)}
+    if "across" in g:  # "GE Area 4 in at least two disciplines": the options are its groups', picked across subjects
+        parts = [eligible_options(profile, a, program, university, catalog, prereqs, plan, by_term, limit) for a in g["across"]]
+        parts = [r for r in parts if "options" in r]
+        if not parts:
+            return {"error": "not_a_choice", "warnings": [f"{group_id}: none of {', '.join(g['across'])} is open"]}
+        return parts[0] | {"group": group_id, "title": g.get("title", group_id), "source": g["source"],
+                           "options": [o for r in parts for o in r["options"]][:max(1, limit)],
+                           "warnings": [f"{g.get('title', group_id)}: choose the {', '.join(g['across'])} courses from at "
+                                        f"least {g['distinct_subjects']} different subjects ({g['source']})"]}
     if "all_of" in g or "from" not in g:
         return {"error": "not_a_choice", "warnings": [f"{group_id} isn't a choose-group; see get_program_requirements"]}
     filters = g["from"] if isinstance(g["from"], list) else [g["from"]]
@@ -887,7 +1016,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
                                      else c.get("units", 0) if isinstance(c, dict) else 0 for c in s["courses"])
                                  for s in before)
         return {"done": done, "same_term": {c for t, c in planned if t == term}, "grades": grades, "units": units,
-                "profile": profile, "gpa": gpa, "ge_done": {str(a).upper() for a in profile.get("ge_done", [])},
+                "profile": profile, "gpa": gpa, "ge_done": ge_done_areas(profile, university),
                 "catalog": catalog, "program": program, "class_level": university["class_level"],
                 "slot_areas": {a for s in semesters if term_key(s["term"]) < term_key(term)
                                for x in s["courses"] if isinstance(x, dict) for a in slot_ge_areas(x, groups)}}
