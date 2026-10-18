@@ -284,6 +284,9 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   p.2304), `totals.max_units_from` (70 community college, 90 all transfer, 30 exam, 4 "Projects in Teaching" 685,
   pp.2304, 2313), `max_units` per term (19 fall/spring, 14 summer; more needs a 3.0 SF State GPA and a petition,
   p.2392), `academic_load.normal_min` (12, p.2393), and the repeat policy in `repeats` (p.2392).
+  `totals.community_college_upper_division: {allowed: false}` (p.2304): a transfer row numbered 300-699 still counts
+  as upper division but gets a ⚠️, since a profile doesn't say which transfer rows were community college work.
+  A CR course that counts in the major and is CR/NC-only in the catalog stays out of `max_cr_units` (p.2313).
 
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo
@@ -382,9 +385,11 @@ dpr_met: [MATH 225]                # required courses the DPR shows met another 
 not_on_dpr: ["6"]                  # requirements the 2026-27 rules have but the student's DPR doesn't (older
                                    # catalog): left out ("waived", not "done"), with a UAC see_advisor to confirm
 transfer_units: 0                  # total transfer units (from the transcript)
-adt: false                         # verified AA-T/AS-T in a similar major → SF State Studies waived
+adt: false                         # verified AA-T/AS-T from a CCC in a similar approved major → SF State Studies waived
 first_time: true                   # began at SF State as a first-time college student (default: no transfer work)
 ge_certified: false                # Cal-GETC certification of lower-division GE from a CCC (p.2304)
+prior_bachelors: false             # bachelor's or higher from a regionally accredited institution → GE and
+                                   # graduation requirements waived, major courses still required (p.2313)
 # completed rows may add `units` (variable-unit courses) and `transfer: true` (articulated
 # transfer course: counts for requirements, not residence or GPA; its units are in transfer_units)
 max_units_per_term: 15

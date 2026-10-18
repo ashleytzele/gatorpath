@@ -338,13 +338,17 @@ def totals(profile: dict, taken: dict, groups: list[dict], university: dict, cat
     major_gpa = major | {c for g in major_groups for c in g["in_progress"] + g.get("remaining", [])}
     lo, hi = t.get("upper_division_numbers", [300, 999])
     upper = lambda c: lo <= number(c) <= hi  # "courses numbered 300-699 at SF State" (p.2391)
+    if (ccc := t.get("community_college_upper_division")) and not ccc["allowed"]:
+        if ud_transfer := [c for c, r in taken.items() if r["transfer"] and upper(c)]:
+            warnings.append(f"{', '.join(ud_transfer)}: transfer credit counted as upper division, but community college "
+                            f"work never is ({ccc['source']}); check how the DPR applied it")
     sfsu_units = sum(r["units"] for r in sfsu.values())
     sfsu_ud_units = sum(r["units"] for c, r in resident.items() if upper(c))
     ud_ge_ids = set(university.get("upper_division_ge", {}).get("groups", []))
     sfsu_ud_ge = sum(resident[c]["units"] for g in groups if g["id"] in ud_ge_ids for c in g["counted"] if c in resident)
-    # ponytail: "Major courses only offered as CR/NC are not included in the 24 unit maximum" isn't applied;
-    # no BS CS course is CR/NC-only. Add it with the first program that has one.
-    cr_units = sum(r["units"] for r in sfsu.values() if r["grade"] == "CR")
+    # "Major courses only offered as CR/NC are not included in the 24 unit maximum" (p.2313)
+    cr_units = sum(r["units"] for c, r in sfsu.items()
+                   if r["grade"] == "CR" and not (c in major and catalog[c].get("grading") == "cr_nc"))
     rows = [r for r in profile.get("completed", []) if r["code"] in catalog and not r.get("transfer")]
     skip = forgiven(rows, university["repeats"], catalog)
     gpa_sfsu = gpa(rows, skip, catalog)

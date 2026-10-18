@@ -132,6 +132,7 @@ def test_numeric_ge_done_and_transfer_upper_division_units():
     assert next(g for g in got["groups"] if g["id"] == "ge_2")["status"] == "satisfied"
     assert got["totals"]["upper_division_units"]["value"] == 3
     assert got["totals"]["residence_upper_division_units"]["value"] == 0
+    assert any(w.startswith("CSC 317: transfer credit counted as upper division") for w in got["warnings"])  # p.2304
 
 
 def test_translate_ge_reads_dpr_wording():
@@ -163,7 +164,7 @@ def test_first_time_students_meet_us_history_only_with_lower_division_area_4():
 def test_cal_getc_certification_meets_lower_division_ge():
     # p.2304: CCCs "can certify up to 34 semester ... units of ... (Cal-GETC) ... to fulfill lower-division general education"
     ld = UNIVERSITY["transfer"]["certified_ld_ge"]
-    assert sum(g["choose_units"] for g in UNIVERSITY["groups"] if g["id"] in ld) == 34
+    assert sum(g["choose_units"] for g in UNIVERSITY["groups"] if g["id"] in ld) == UNIVERSITY["transfer"]["certified_units"] == 34
     got = groups_of(audit(BASE | {"transfer_units": 60, "ge_certified": True}, PROGRAM, UNIVERSITY, CATALOG))
     assert all(got[i]["status"] == "satisfied" and got[i]["met_by"] == "ge_certification" for i in ld)
     assert got["ge_4_disciplines"]["status"] == "satisfied"
@@ -206,6 +207,14 @@ def test_projects_in_teaching_685_cap():
     rows = [{"code": "C J 685", "grade": "A", "units": 3, "term": t} for t in ("2025-fall", "2026-spring")]
     got = audit(BASE | {"completed": rows}, PROGRAM, UNIVERSITY, cat)
     assert got["totals"]["units"]["value"] == 4 and any("only 4 units of" in w for w in got["warnings"])
+
+
+def test_cr_nc_only_major_courses_are_outside_the_cr_cap():
+    # p.2313: "Major courses only offered as CR/NC are not included in the 24 unit maximum"
+    seminar = PROGRAM | {"global": {}, "groups": [{"id": "seminar", "all_of": ["CSC 601"], "source": "p.0"}]}
+    rows = [{"code": "CSC 601", "grade": "CR", "term": "2026-fall"}, {"code": "CSC 602", "grade": "CR", "term": "2026-fall"}]
+    got = audit(BASE | {"completed": rows}, seminar, UNIVERSITY, CATALOG)
+    assert got["totals"]["cr_units"]["value"] == 2  # CSC 602 (CR/NC-only, not in this major) still counts
 
 
 def test_engine_grade_points_match_the_bulletin():

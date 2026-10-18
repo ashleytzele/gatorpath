@@ -14,7 +14,7 @@ verified_by: null
 catalog_rights:
   applies_to: "students except classified graduate students"
   continuous_attendance: "matriculated attendance in at least one semester or two quarters each calendar year"
-  with_continuous_attendance: "may elect the SF State graduation requirements in effect when they began their study (at any CSU campus, any California Community College, or a combination), when they entered the CSU campus they graduate from, or when they graduate"
+  with_continuous_attendance: "a student in continuous attendance in regular sessions and continuing in the same curriculum may elect the SF State graduation requirements in effect when they began their study (at any CSU campus, any California Community College, or a combination), when they entered the CSU campus they graduate from, or when they graduate"
   without_continuous_attendance: "the Bulletin requirements in effect at the time of filing for the degree"
   major_change: "students who change or declare a major meet the major requirements in effect at the time they change or declare it"
   substitutions: "substitutions for discontinued courses may be authorized or required by the appropriate campus authority"
@@ -30,6 +30,9 @@ totals:
   # units must be completed at SF State, and nine of these upper-division units must be completed in the
   # Upper-Division portion of the General Education program" (p.2391)
   min_upper_division_units: 30
+  # "No upper-division credit may be allowed for community college work." (p.2304) Profiles don't say which transfer
+  # rows came from a community college, so a transfer row numbered 300-699 is counted and flagged.
+  community_college_upper_division: {allowed: false, source: "p.2304"}
   upper_division_numbers: [300, 699]
   # "Of the 30 unit residency requirement, 24 units must be upper-division courses, and 12 units, upper-division or
   # lower-division, must be in the major. Nine of these residence units must be earned in the Upper Division portion
@@ -37,7 +40,10 @@ totals:
   # evaluation do not carry residence credit." (p.2391)
   residence: {units: 30, upper_division: 24, major: 12, upper_division_ge: 9,
               no_residence_credit: [extension, exam, evaluation], prior_experiential_learning_max: 6}
-  max_cr_units: 24                 # SF State units graded CR; "Major courses only offered as CR/NC are not included"
+  # "No more than 24 units earned at SF State and applied toward the undergraduate degree may be taken for a grade of
+  # CR. Major courses only offered as CR/NC are not included in the 24 unit maximum." (p.2313; also p.2391)
+  # The engine leaves out a CR course that counts in the major and whose catalog grading is CR/NC only.
+  max_cr_units: 24
   min_gpa: {all: 2.0, sf_state: 2.0, major: 2.0}
   # "Maximum Units for Community College Work: 70 units." "Maximum Units by Examination or Evaluation: 30 units."
   # "Maximum Units for Courses Numbered '685' and Titled 'Projects in Teaching ...' That may be Applied to the
@@ -53,22 +59,28 @@ totals:
   # requirement" (p.2391).
   # ponytail: exam, extension and CPEL aren't checked (profiles don't say which units came that way); the DPR applies them.
   max_units_from: {community_college: 70, all_transfer: 90, exam: 30, projects_in_teaching_685: 4,
-                   extension_correspondence: 24, prior_experiential_learning: {units: 30, residence: 6},
+                   extension_correspondence: {units: 24, excludes: [sf_state_winter_session, sf_state_special_session]},
+                   prior_experiential_learning: {units: 30, residence: 6},
                    over_cap: "on approval, for subject and grade point requirements only; never toward the 120",
                    source: "p.2304, p.2313, p.2391"}
-  source: "p.2313"
+  source: "p.2313, p.2391"
 # "The class level of students is determined according to units completed (earned units)":
 # Freshman 0-29, Sophomore 30-59, Junior 60-89 (upper division), Senior 90 or more. "Graduate: Holding a
 # baccalaureate or master's degree from an accredited university or college."
-class_level: {sophomore: 30, upper: 60, senior: 90, source: "p.2390"}
+class_level: {sophomore: 30, upper: 60, senior: 90,
+              graduate: "holding a baccalaureate or master's degree from an accredited university or college",
+              source: "p.2390"}
 # "During spring and fall, the normal academic load for undergraduates is 12 to 15 units per semester and 8 units in
 # the summer. For graduates, the normal load during spring and fall is from 9 to 12 units per semester and 7 units
 # during the summer." Graduate loads are recorded for completeness; GatorPath plans undergraduate degrees.
 # "For international students in F1 visa status, immigration regulations require a minimum academic load of 12 units
-# for undergraduates and 8 units for graduates for spring and fall semesters."
+# for undergraduates and 8 units for graduates for spring and fall semesters." (p.2393) Also p.2390: "Per immigration
+# regulations, foreign students are required to be continuously enrolled every semester. Undergraduates must carry a
+# minimum of 12 units and graduate students must carry a minimum of 8 units."
 # The summer figures are the normal load, not a cap (the caps are under max_units).
 academic_load: {normal_min: 12, normal_max: 15, summer_normal: 8, f1_min: {undergraduate: 12, graduate: 8},
-                graduate: {normal_min: 9, normal_max: 12, summer_normal: 7}, source: "p.2393"}
+                f1_continuous_enrollment: true,
+                graduate: {normal_min: 9, normal_max: 12, summer_normal: 7}, source: "p.2390, p.2393"}
 # "During priority registration, students may register for a maximum of 19 units ... a maximum of 14 units in any
 # combination of summer semester sessions ... Undergraduate students who want to enroll in more than the maximum units
 # listed above must have a cumulative SF State grade point average of 3.0 or better and secure approval via the
@@ -143,7 +155,16 @@ repeats:
   attempts_without_consent: 2
   max_repeated_units: 28
   no_repeat_while: [I]
+  # "When a course is repeated, up to the 16 unit limit, the lower of the two grades is 'forgiven' from the GPA
+  # calculation." "All units attempted, and all grade points after the repeat limit has been reached, will be included
+  # in the student's cumulative totals"; past the limit a passed course repeated counts in the GPA but its units
+  # "will be applied to the calculation of total units earned only once" (p.2392)
   forgiveness_units: 16
+  forgiveness_drops: lower_grade
+  after_forgiveness_limit: "all units attempted and grade points count in the GPA; units earned count once"
+  # "Students transferring from other institutions where courses were taken and repeated are held to the policy of
+  # the institution where the course was repeated." (p.2398)
+  transfer_repeats: "held to the policy of the institution where the course was repeated"
   graduate: {repeat_once_more_below: B}
   full_semester_withdrawals_count_toward_28: false
   more_approvals: "some exceptions also need the college dean and/or the Board of Appeals and Review"
@@ -161,6 +182,7 @@ repeats:
 # SF State Studies (unless a verified AA-T/AS-T) and American Institutions still apply; US History via Area 4 is a
 # first-time-student rule only (ai_ush.first_time_from).
 transfer:
+  certified_units: 34
   certified_ld_ge: [ge_1a, ge_1b, ge_1c, ge_2, ge_3a, ge_3b, ge_4, ge_5a, ge_5b, ge_5c, ge_6]
   source: "p.2304, p.2313"
 groups:

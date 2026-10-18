@@ -65,10 +65,16 @@ report.
 - [ ] Second person double-checks all three files against the PDF → set `verified: true`
   - 2026-10-17: Codex (read-only, independent) reviewed the three files against the PDF in 6 rounds; error rate
     (MISMATCH + MISSING + WRONG-PAGE / items) 19.6% → 16.9% → 10.9% → 15.4% → 12.7% → 6.0%. Each finding was
-    re-checked in the PDF before fixing (round 1's two WRONG-PAGE claims were wrong). Open from round 6: ADT admission
-    note (p.1906), totals source + p.2391, CR-cap exclusion for CR/NC-only major courses (p.2313), academic_load
-    source + p.2390. UNCLEAR (for an advisor): "five 3-unit senior electives" vs 1-unit CSC 685/686; what the adt and
-    prior_bachelors flags must mean. A person still flips `verified`
+    re-checked in the PDF before fixing (round 1's two WRONG-PAGE claims were wrong). Round 6's four findings fixed (ADT
+    admission note, totals + academic_load pages, CR cap leaves out CR/NC-only major courses); the adt / prior_bachelors
+    flags now state the Bulletin's conditions (p.2313).
+  - Round 7: 0 MISMATCH, 0 WRONG-PAGE, 9 MISSING / 67 (13.4%), all confirmed in the PDF and fixed: "no specific degree"
+    note (p.1906), catalog rights "regular sessions … same curriculum" (p.2390), no UD credit for community college
+    work (p.2304, transfer rows numbered 300+ now ⚠️), Winter/Special Sessions outside the 24-unit extension cap
+    (p.2391), graduate class level and F-1 continuous enrollment (p.2390), which grade forgiveness drops and what
+    happens past 16 units (p.2392), transfer repeats follow the other school's policy (p.2398), Cal-GETC 34 units
+    (p.2304). UNCLEAR (for an advisor): "five 3-unit senior electives" vs 1-unit CSC 685/686. A person still flips
+    `verified`
 - [x] `engine/rules.py`: load YAML, evaluate `all_of`, `choose_units`, `from` filters, `except`,
   `max_courses`, `min_units_from`, `min_grade`, `no_cr_nc` (+ `waived_if`, `distinct_subjects`)
 - [x] Double-counting per ARCHITECTURE §6.2 (once within the major; GE/SFSS/AI may overlap;

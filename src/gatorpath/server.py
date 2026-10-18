@@ -278,8 +278,9 @@ def audit_progress(profile: Profile) -> dict:
     tools list but the student's DPR doesn't have at all (an older catalog, e.g. GE "6" Ethnic Studies): left out and
     flagged for an advisor to confirm; first_time (began at SF State as a first-time college student; default: no
     transfer work); ge_certified (Cal-GETC certification of lower-division GE, p.2304); prior_bachelors (already holds
-    a bachelor's degree: GE and graduation requirements waived, p.2313); transfer_units: total transfer
-    units; adt: true for a verified AA-T/AS-T (waives SF State Studies); gpa optional.
+    a bachelor's or higher degree from a regionally accredited institution: GE and graduation requirements waived,
+    p.2313); transfer_units: total transfer units; adt: true only for a verified AA-T/AS-T from a California Community
+    College in a similar approved major (waives SF State Studies, p.2313); gpa optional.
     """
     if err := profile_error(profile):
         return err
@@ -390,9 +391,10 @@ defaults (15 units per term, no summer) instead of asking.
    - dpr_met: required courses the DPR shows met by a different course (MATH 325 listed under "MATH 225").
    - not_on_dpr: requirements audit_progress lists that the DPR doesn't have at all (older catalogs, e.g. GE "6"
      Ethnic Studies). Compare after step 3's audit and re-run with them; tell the student to confirm.
-   - gpa from the DPR; transfer_units; adt: true for a verified AA-T/AS-T; ge_certified: true for Cal-GETC
-     certification of lower-division GE; first_time: false for transfer students; prior_bachelors: true if they
-     already hold a bachelor's degree.
+   - gpa from the DPR; transfer_units; adt: true only for a verified AA-T/AS-T from a California Community College
+     in a similar approved major; ge_certified: true for Cal-GETC certification of lower-division GE; first_time:
+     false for transfer students; prior_bachelors: true if they already hold a bachelor's or higher degree from a
+     regionally accredited institution.
    - exam credit (AP / CLEP): put US History and US Government in ge_done as USH / USG only when the DPR shows them;
      no AP or CLEP exam meets California government (CSLG), p.2350.
 3. `audit_progress`, then `build_plan` (with graduate_by if given). If build_plan returns needs_input, ask for

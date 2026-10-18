@@ -86,7 +86,7 @@ def test_repeats_duplicates_cap_and_terms():
     heavy = ["CSC 215", "MATH 227", "PHYS 220", "PHYS 222", "ENG 114", "COMM 150"]  # 4+4+3+1+3+3 = 18
     assert [e["error"] for e in errors(check(FRESHMAN, ("2027-spring", heavy)))] == ["over_cap"]
     ok18 = check(FRESHMAN | {"max_units_per_term": 18}, ("2027-spring", heavy))
-    assert errors(ok18) == [] and any("above the normal load of 15 (p.2393)" in w for w in ok18["warnings"])
+    assert errors(ok18) == [] and any("above the normal load of 15 (p.2390, p.2393)" in w for w in ok18["warnings"])
     bad = check(FRESHMAN, ("Fall 2027", ["CSC 215"]), ("2026-fall", ["CSC 999"]))
     assert [e["error"] for e in errors(bad)] == ["bad_term", "term_in_past", "unknown_course"]
 
