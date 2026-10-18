@@ -179,8 +179,8 @@ degree?" and get correct, sourced answers.
 - [x] Collect the official advising links + how to book, with sources → `advising:` in
   `rules/university/2026-27.yaml` (UAC, Advising Hub, DPR) and `rules/programs/2026-27/bs-cs.yaml`
   (CS department, Senior Advisor, CoSE team). Booking is Navigator (sfsu.campus.eab.com)
-- [ ] (?) Who is the CS Senior Advisor? The department page requires one for substitutions but doesn't
-  name them. Ask cs-dept@sfsu.edu
+- [x] Who is the CS Senior Advisor? Decided 2026-10-17: don't name one (ARCHITECTURE D15). Substitutions go to the
+  CS department (cs-dept@sfsu.edu, or Navigator), which routes them; other majors fall back to the UAC
 - [x] Present a passing plan as a term-by-term list in Degree Planner entry order (prompt step 8), so the student can
   record it in the official planner (ARCHITECTURE §3: complement, don't replace)
 - [x] `save_profile` / `load_profile` (ARCHITECTURE §7.3, D13): student-chosen path, default
@@ -190,8 +190,7 @@ degree?" and get correct, sourced answers.
 
 **Done when:** "I'm a CS sophomore, I want cybersecurity, plan my next 3 years" produces a plan
 that passes `check_plan`, with sensible electives, and "what if I graduate a year early?" gets a
-comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see Phase 3).** Still open: the
-Senior Advisor question (needs the department).
+comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see Phase 3).**
 
 ---
 

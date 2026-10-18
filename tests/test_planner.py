@@ -134,7 +134,7 @@ def test_build_plan_passes_check_plan(path):
         assert {e["group"] for e in got["check"]["errors"]} == {"math_physics", "core_cs"}
         assert sum("passed with CR" in w and "see an advisor" in w for w in got["warnings"]) == 2
         first = got["see_advisor"][0]
-        assert first["role"] == "substitutions" and first["who"] == "CS Senior Advisor" and len(first["why"]) == 2
+        assert first["role"] == "substitutions" and first["contact"].startswith("cs-dept@sfsu.edu") and len(first["why"]) == 2
         return
     assert got["check"]["valid"], got["check"]["errors"]
     assert all(s["units"] <= 15 for s in got["semesters"])
@@ -275,3 +275,11 @@ def test_in_progress_courses_hold_the_next_spring_or_fall_even_with_summers():
     p = {"completed": [{"code": "CSC 101", "grade": "A", "term": "2026-spring"}], "in_progress": ["CSC 215"]}
     assert first_term(p) == first_term(p | {"include_summer": True}) == "2027-spring"
     assert first_term(p | {"in_progress": [], "include_summer": True}) == "2026-summer"
+
+
+def test_advisor_handoff_falls_back_to_the_uac_without_program_contacts():
+    # ARCHITECTURE D15: a new major needs no advisor names; the UAC routes students to their department
+    from gatorpath.engine.planner import see_advisor
+    [e] = see_advisor([("substitutions", "CSC 699 for a senior elective")],
+                      {k: v for k, v in PROGRAM.items() if k != "advising"}, UNIVERSITY)
+    assert e["role"] == "general_advising" and e["why"] == ["CSC 699 for a senior elective"]

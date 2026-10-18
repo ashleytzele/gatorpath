@@ -85,11 +85,13 @@ advising:
     location: "Thornton Hall 323, Mon-Fri 9 a.m.-4 p.m."
     contact: "cs-dept@sfsu.edu, (415) 338-1244"
     source: "cs.sfsu.edu/undergrads/advising, checked 2026-10-16"
+  # Offices, never named people (they change): the department routes the request to its senior advisor.
   - role: substitutions
-    who: CS Senior Advisor
+    who: Computer Science department (a senior advisor approves)
     when: any course substitution or senior-elective exception ("must be approved in advance by a Senior Advisor")
     link: "https://cs.sfsu.edu/undergrads/advising"
-    how_to_book: "Not named on the page; ask cs-dept@sfsu.edu or a department advisor via Navigator who the senior advisor is."
+    how_to_book: "Email cs-dept@sfsu.edu, or book a department advisor in Navigator (https://sfsu.campus.eab.com/), and ask for a senior advisor's approval before taking the course."
+    contact: "cs-dept@sfsu.edu, (415) 338-1244"
     source: "cs.sfsu.edu/undergrads/advising (quote), Bulletin p.1905-1906; checked 2026-10-16"
   - role: college_advising
     who: College of Science & Engineering Advising Team

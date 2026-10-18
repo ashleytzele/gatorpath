@@ -537,11 +537,16 @@ disclaimer, tool responses carry `see_advisor: [{why, who, link, how_to_book, so
 - the program's rules are `verified: false`
 
 Links and booking steps live under `advising:` in `rules/university/<year>.yaml` (UAC, Advising Hub,
-DPR) and in each program's YAML (department advisor, senior advisor). Each has a `role` (`major_advisor`,
+DPR) and in each program's YAML (the department's contact). Each has a `role` (`major_advisor`,
 `substitutions`, `college_advising`, `general_advising`, `directory`, `dpr`; a program's entry overrides the
 university's for the same role, so the engine never names a department) and a `source` (Bulletin
 page, DPR link, or department page + date checked). Never from memory. All SF State advising is booked in
 Navigator (`sfsu.campus.eab.com`, checked 2026-10-16).
+
+Entries name offices, never people (D15): a program gives at most its department's general contact (page,
+email, Navigator), and the department routes a request to the right advisor (e.g. the senior advisor who approves
+CS substitutions). A program with no `advising:` entry for a role falls back to `general_advising` (the UAC),
+which routes students to their department, so adding a major never needs advisor names.
 
 ---
 
@@ -695,6 +700,7 @@ students; 0 hallucinated courses."*
 | D12 | Audit each student against their own catalog year; post-publication changes are cited `amendments` | DPRs keep the entry-year Bulletin plus memo waivers (sample: Spring 2025 + 3/12/25 GE waiver) | 2026-10-16 |
 | D13 | Memory = a profile file the student owns (`save_profile`/`load_profile`), not client memory, not none | Exact and local, works with any client; saves goal/pace/elective decisions so they aren't re-discussed; one small tool call per session | 2026-10-16 |
 | D14 | DPR-first: what's done/left comes from the DPR; our audit cross-checks it | The DPR includes transfer evaluations, substitutions and waivers we can't know | 2026-10-16 |
+| D15 | Advisor handoffs name offices (department contact, UAC), never individual advisors | Names change and every major would need its own; the department and the UAC route students to the right advisor | 2026-10-17 |
 | D15 | The AI client is the agent; what-ifs and advisor handoff go through the prompt + tool fields | Keeps the server deterministic (D6); advisor links are sourced data, not model memory | 2026-10-16 |
 
 ---
