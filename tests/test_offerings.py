@@ -15,11 +15,11 @@ ROOT = Path(__file__).parents[1]
 ROWS = json.loads((ROOT / "tests/fixtures/catalog_rows.json").read_text())
 
 
-def row(term: str, course: str, component: str = "LEC", summer: bool = False) -> list[str]:
+def row(term: str, course: str, component: str = "LEC", summer: bool = False, mode: str = "In-Person") -> list[str]:
     link = f'<a href="/public/classservices/classsearch/detail/{term_code(term)}/REG/7557" class="underline" >{course}</a>'
     cells = [link, component, "Network Security", "3", "7557", "<span>Upper-Division</span>",
              "<div class='row'><div>We </div><div>7:00 PM - 9:45 PM</div><div>Hensill Hall 543</div></div>",
-             'In-Person<div><span class="description-toggle">(see description)</span></div>',
+             f'{mode}<div><span class="description-toggle">(see description)</span></div>',
              "<div> Pat Example</div>", "0", "0", course.split("[")[1].rstrip("]"), "40", ""]
     return cells[:7] + ["Jun 2, 2025 - Aug 8, 2025"] + cells[7:] if summer else cells
 
@@ -51,3 +51,18 @@ def test_offering_history_counts_runs_per_season(tmp_path):
                                          "since": "2024-fall", "until": "2026-spring", "last": "2025-fall"}
     assert cat["CSC 101"]["offered"]["spring"] == [2, 2]
     assert "offered" not in cat["MATH 226"]  # MATH wasn't scraped: unknown, not "never"
+
+
+def test_offering_history_marks_seasons_whose_last_run_was_only_online(tmp_path):
+    # F-1: "only one course (or 3 units) will count toward the enrollment requirement" (international.sfsu.edu/rcl)
+    path = tmp_path / "catalog.db"
+    write_catalog(path, "2026-27", ROWS)
+    sections = {"2024-fall": [row("2024-fall", "CSC 653 [01]"), row("2024-fall", "CSC 101 [01]", mode="Online synchronous")],
+                "2025-spring": [row("2025-spring", "CSC 653 [01]", mode="Hybrid (Online synchronous with occasional in-person)")],
+                "2025-fall": [row("2025-fall", "CSC 653 [01]", mode="Online asynchronous"),
+                              row("2025-fall", "CSC 101 [01]", mode="Online synchronous"), row("2025-fall", "CSC 101 [02]")]}
+    for term, rows in sections.items():
+        write_offerings(path, term, "CSC", parse(rows, term))
+    cat = db.load_catalog(path, "2026-27")
+    assert cat["CSC 653"]["offered"]["online_only"] == ["fall"]  # the latest fall run; hybrid isn't fully online
+    assert "online_only" not in cat["CSC 101"]["offered"]  # one in-person section in its last run is enough

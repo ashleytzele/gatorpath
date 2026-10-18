@@ -241,7 +241,9 @@ offering_scrape(term TEXT, subject TEXT, sections INTEGER, scraped_at TEXT)   --
 -- Days, times and instructors stay in the cached JSON (data/cache/offerings/) until a schedule builder needs them.
 
 -- db.load_catalog adds `offered` to each course of a scraped subject (offered_terms):
--- {fall: [terms it ran, terms checked], spring: […], summer: […], since: '2023-spring', until: '2026-fall'}.
+-- {fall: [terms it ran, terms checked], spring: […], summer: […], since: '2023-spring', until: '2026-fall',
+--  online_only?: ['spring']}: seasons whose latest run had only fully online sections (hybrid isn't). check_plan
+-- warns an F-1 student when a spring/fall term would count under 12 with only 3 online units counted (f1_final_term).
 -- A subject never scraped has no `offered` (unknown, not "never").
 
 course_fts  -- SQLite FTS5 over code/title/description for search_courses

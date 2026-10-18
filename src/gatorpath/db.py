@@ -30,17 +30,25 @@ def offered(con: sqlite3.Connection) -> dict[str, dict]:
     for term, subject in con.execute("select term, subject from offering_scrape"):
         checked.setdefault(subject, []).append(term)
     ran: dict[str, set[str]] = {}
-    for term, code in con.execute("select distinct term, code from offering"):
+    modes: dict[tuple[str, str], set[str]] = {}
+    for term, code, mode in con.execute("select term, code, mode from offering"):
         ran.setdefault(code, set()).add(term)
+        modes.setdefault((code, term), set()).add(mode or "")
     out = {}
     for (code,) in con.execute("select distinct code from course"):
         terms = checked.get(code.rsplit(" ", 1)[0])
         if terms:
             runs = ran.get(code, set())
+            # Seasons whose latest run had only fully online sections ("Online synchronous", …; hybrid isn't): F-1
+            # students can count only 3 such units (f1_final_term.online_units_count).
+            latest = {s: max((t for t in runs if t.endswith(s)), key=term_key, default=None) for s in ("fall", "spring", "summer")}
+            online = [s for s, t in latest.items() if t and all(m.startswith("Online") for m in modes[code, t])]
             out[code] = {s: [sum(t in runs for t in terms if t.endswith(s)), sum(t.endswith(s) for t in terms)]
                          for s in ("fall", "spring", "summer")} | {"since": min(terms, key=term_key),
                                                                     "until": max(terms, key=term_key),
                                                                     "last": max(runs, key=term_key, default=None)}
+            if online:
+                out[code]["online_only"] = online
     return out
 
 

@@ -623,6 +623,8 @@ defaults (15 units per term, no summer) instead of asking.
    term. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
    also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and
    options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
+   For an F-1 student, prefer options without that season in `offered.online_only` (its last run was fully online,
+   and only 3 online units count toward their 12).
    GE and SF State Studies slots are the student's choice: call `ge_combinations` (with the plan) and show its ways
    as a short table, fewest courses first, with 2-3 example courses per part (one course can cover several, or they
    can split them, e.g. 4UD + Environmental Sustainability this term and Global Perspectives the next). Put the

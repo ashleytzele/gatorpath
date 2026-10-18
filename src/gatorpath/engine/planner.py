@@ -213,6 +213,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     cap = profile.get("max_units_per_term", load["normal_max"])
     reps, most = university["repeats"], university["max_units"]
     f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") else 0
+    rcl = university.get("f1_final_term")
     last_term = str((plan.get("semesters") or [{}])[-1].get("term", ""))
 
     completed = [r for r in profile.get("completed", []) if r["code"] in catalog]
@@ -326,7 +327,6 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         if not summer and term_units < f1_min:
             why = (f"{term}: {term_units:g} units; F-1 visa students must carry at least {f1_min:g} units every spring "
                    f"and fall ({load['source']})")
-            rcl = university.get("f1_final_term")
             if term == last_term and rcl:
                 warnings.append(why + f". As the last term it's {rcl['reduced_load']}: {rcl['apply']} "
                                 f"({rcl['source']}). Not for {rcl['not_for']}, so don't add courses only to reach "
@@ -343,6 +343,14 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             warnings.append(f"{term}: {term_units:g} units is below the normal {load['normal_min']:g}-{load['normal_max']:g} "
                             f"load, so it's part-time; F-1 visa students need at least {load['f1_min']['undergraduate']:g} "
                             f"in spring and fall, and it can matter for financial aid ({load['source']})")
+        online = [c for c in codes if c in catalog and term[5:] in (catalog[c].get("offered") or {}).get("online_only", ())]
+        if f1_min and rcl and online and not summer and term != last_term:  # the last term has the Reduced Course Load
+            counted = term_units - max(0, sum(catalog[c]["units_min"] for c in online) - rcl["online_units_count"])
+            if counted < f1_min <= term_units:
+                warnings.append(f"{term}: {', '.join(online)} ran only fully online the last time they ran in {term[5:]}; "
+                                f"only {rcl['online_units_count']:g} units of online classes count for F-1, so this term "
+                                f"counts as {counted:g} of the {f1_min:g} if they stay online. Look for in-person or "
+                                f"hybrid sections in Class Search, or swap one ({rcl['source']})")
         normal = load["summer_normal" if summer else "normal_max"]
         if term_units > normal:
             warnings.append(f"{term}: {term_units:g} units is above the normal load of {normal:g} ({load['source']}); "
@@ -359,7 +367,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         slot_areas |= {a for x in term_slots for a in slot_ge_areas(x, groups)}
         units += term_units
 
-    if f1_min and (rcl := university.get("f1_final_term")):
+    if f1_min and rcl:
         warnings.append(f"F-1: a fully online class counts for only {rcl['online_units_count']:g} units toward the "
                         f"{f1_min:g}-unit minimum each spring and fall, so pick in-person or hybrid sections "
                         f"({rcl['source']})")

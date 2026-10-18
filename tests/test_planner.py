@@ -271,6 +271,23 @@ def test_f1_light_or_skipped_term_is_an_error():
     assert errors(check(f1_senior(), ("2027-spring", ["CSC 413", "CSC 415"]), ("2027-fall", ["CSC 648"]))) == []
 
 
+def test_f1_term_that_leans_on_online_only_courses_gets_a_warning():
+    # international.sfsu.edu/rcl: "only one course (or 3 units) will count toward the enrollment requirement"
+    both = {"fall": [4, 4], "spring": [4, 4], "summer": [0, 4], "since": "2023-spring", "until": "2026-fall",
+            "last": "2026-fall", "online_only": ["spring"]}
+    online = lambda *codes: {c: CATALOG[c] | {"offered": both} for c in codes}
+    terms = [("2027-spring", ["CSC 413", "CSC 415"] + 2 * [{"slot": "senior_electives", "units": 3}]),
+             ("2027-fall", ["CSC 648"] + 3 * [{"slot": "senior_electives", "units": 3}])]
+    plan = {"semesters": [{"term": t, "courses": c} for t, c in terms]}
+    run = lambda p, cat: check_plan(p, plan, PROGRAM, UNIVERSITY, CATALOG | cat, PREREQS)
+    got = run(f1_senior(f1=True), online("CSC 413", "CSC 415"))
+    # a warning, not an error: past sections don't promise future ones
+    assert any(w.startswith("2027-spring: CSC 413, CSC 415 ran only fully online") and "counts as 9 of the 12" in w
+               for w in got["warnings"])
+    for quiet in (run(f1_senior(f1=True), online("CSC 413")), run(f1_senior(), online("CSC 413", "CSC 415"))):
+        assert not any("ran only fully online" in w for w in quiet["warnings"])  # 3 online units count; not F-1
+
+
 def test_in_progress_courses_hold_the_next_spring_or_fall_even_with_summers():
     # Trial 6: last completed 2026-spring, courses in progress (fall 2026): the plan starts 2027-spring, not on top of them
     from gatorpath.engine.planner import first_term
