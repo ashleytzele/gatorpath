@@ -253,8 +253,9 @@ def test_f1_students_get_full_spring_and_fall_terms():
     assert [s["units"] for s in plan_for(f1_senior())["semesters"]] == [9, 12, 6]  # electives wait for the roadmap order
     got = plan_for(f1_senior(f1=True))
     assert [s["units"] for s in got["semesters"]] == [12, 12, 3] and got["check"]["valid"]
-    assert any(w.startswith("2028-spring: 3 units; F-1 visa students must carry at least 12") and "last term" in w
-               for w in got["warnings"])
+    assert any(w.startswith("2028-spring: 3 units; F-1 visa students must carry at least 12") and "Completion of Study"
+               in w and "international.sfsu.edu/rcl" in w for w in got["warnings"])  # final-semester RCL
+    assert any(w.startswith("F-1: a fully online class counts for only 3 units") for w in got["warnings"])
     assert any(a["role"] == "international" and a["link"].startswith("https://international.sfsu.edu")
                for a in got["see_advisor"])
 
@@ -310,3 +311,19 @@ def test_rare_and_summer_only_courses_are_flagged_not_blocked():
     never = {"CSC 668": {"offered": {"fall": [0, 4], "spring": [0, 4], "summer": [0, 4], "last": None} | span}}
     assert season_ok("CSC 668", "2027-fall", never) == (True, "CSC 668: not offered in any term checked (Class Search "
                                                              "2023-spring to 2026-fall); ask the department when it runs")
+
+
+def test_finished_math_adds_no_pathway_courses():
+    # Trial 7: MATH 226 met by transfer, QR 3/4: the plan added MATH 197 and 198 from the chain below MATH 226
+    p = {"catalog_year": "2026-27", "program": "bs-cs", "qr_pathway": "3/4", "start_term": "2027-spring",
+         "completed": [{"code": "CSC 101", "grade": "A", "term": "2026-fall"}, {"code": "MATH 226", "grade": "B", "transfer": True}]}
+    planned = {c for s in plan_for(p)["semesters"] for c in s["courses"] if isinstance(c, str)}
+    assert "MATH 227" in planned and not planned & {"MATH 197", "MATH 198"}
+
+
+def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():
+    # Trial 7: MATH 325 met MATH 225 on the DPR; electives needing MATH 225 showed as blocked
+    from gatorpath.engine.planner import UNVERIFIED, evaluate
+    ctx = {"done": set(), "grades": {}, "same_term": set(), "profile": {"dpr_met": ["MATH 225"]}}
+    state, why = evaluate({"course": "MATH 225", "min_grade": "C"}, ctx)
+    assert state == UNVERIFIED and why[0].startswith("MATH 225, which your DPR shows met by a substitution")

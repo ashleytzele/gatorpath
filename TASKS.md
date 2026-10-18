@@ -142,6 +142,16 @@ report.
     the in-progress courses were in (Fall 2026), so a direct build_plan wrongly said 18 + summers reaches Spring 2028:
     in-progress courses now hold the next spring/fall; (3) Codex read "a year early" against the 3-year horizon:
     the prompt now says it's a year before est_graduation_term
+  - Trial 7 (Desktop, a real F-1 transfer student's DPR + transcript via import_dpr / import_transcript; nothing kept):
+    valid plan at 12 units a term; the model noticed the two PDFs disagreed on a current course and went with the
+    newer DPR. Found: (1) build_plan added MATH 197/198 for a student whose math was done (the pathway walk followed
+    "one of" branches below finished courses); fixed, it stops at done or DPR-met courses; (2) electives needing
+    MATH 225 showed blocked though the DPR met it by substitution: now "check" (ask the instructor); (3) the last
+    term was padded with three courses only to reach 12 units: SF State allows a one-time final-semester Reduced
+    Course Load (international.sfsu.edu/rcl), now in the rules and in check_plan's warning, plus F-1's online-class
+    limit (3 units); (4) the model called courses optional while also saying upper-division units were short: the
+    prompt now says to re-check before calling a course optional; (5) GE slots got one pick: the prompt now lists 3-5
+    options that cover the same requirements (9 triple-duty 4UD courses exist for 4UD + ESCA + GP)
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
 degree?" and get correct, sourced answers.

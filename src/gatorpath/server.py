@@ -599,10 +599,15 @@ defaults (15 units per term, no summer) instead of asking.
    term. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
    also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and
    options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
-   Senior electives: at least 12 of the 15 units in CSC. A 0-unit tag slot is met by a chosen course whose
-   also_covers includes it (then drop the tag); otherwise fill it from its own group and add the units. Free
-   `elective` slots: suggest courses that fit the goal.
-5. `check_plan` the filled plan; fix every error and re-check until valid.
+   GE and SF State Studies slots are the student's choice: put your top pick in the plan, and list 3-5 other options
+   that cover the same requirements (what each counts for, ready or not, when it ran), so they can swap.
+   Senior electives: at least 12 of the 15 units in CSC; name a backup for each. A 0-unit tag slot is met by a
+   chosen course whose also_covers includes it (then drop the tag); otherwise fill it from its own group and add the
+   units. Free `elective` slots: suggest courses that fit the goal.
+5. `check_plan` the filled plan; fix every error and re-check until valid. Before calling a course optional, take
+   it out and re-check: it's optional only if the plan stays valid (units_short means it's needed). For an F-1
+   student, don't add courses only to keep the last term at 12: the final-semester Reduced Course Load covers it
+   (check_plan's warning says how to request it).
 6. A graduation target or "3, 4 or 5 years?": `build_plan` at 12, 15 and 18 units per term + include_summer, then a
    table: load, est_graduation_term, on_time, why_not. Over 15 units is above the normal load (p.2393): advisor.
 7. Present, briefly:

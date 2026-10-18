@@ -96,6 +96,9 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
             if g is not None and "min_grade" in e and (rank(g) or -1) < GRADE_POINTS[e["min_grade"]]:
                 return NO, [f"{c} with {e['min_grade']} or better (have {g})"]
             return OK, []
+        if c in ctx["profile"].get("dpr_met", ()):
+            return UNVERIFIED, [f"{c}, which your DPR shows met by a substitution; ask the instructor whether that "
+                                "counts for this prerequisite"]
         when = " (or the same term)" if e.get("concurrent_ok") else ""
         return NO, [f"{c}{' with ' + e['min_grade'] + ' or better' if 'min_grade' in e else ''} before this term{when}"]
     if "ge_area" in e:
@@ -310,9 +313,16 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         if not summer and term_units < f1_min:
             why = (f"{term}: {term_units:g} units; F-1 visa students must carry at least {f1_min:g} units every spring "
                    f"and fall ({load['source']})")
-            if term == last_term:
-                warnings.append(why + ". This is the plan's last term: the Bulletin gives no exception for it, so ask "
-                                "the international office before planning a lighter final term")
+            rcl = university.get("f1_final_term")
+            if term == last_term and rcl:
+                warnings.append(why + f". As the last term it's {rcl['reduced_load']}: {rcl['apply']} "
+                                f"({rcl['source']}). Not for {rcl['not_for']}, so don't add courses only to reach "
+                                f"{f1_min:g}")
+                advise.append(("international", f"{term}: request a final-semester Reduced Course Load before the "
+                                                "add/drop deadline"))
+            elif term == last_term:
+                warnings.append(why + ". This is the plan's last term: ask the international office before planning "
+                                "a lighter final term")
                 advise.append(("international", why + "; ask whether a lighter final term is allowed"))
             else:
                 err("below_f1_minimum", why, term=term)
@@ -336,6 +346,10 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         slot_areas |= {a for x in term_slots for a in slot_ge_areas(x, groups)}
         units += term_units
 
+    if f1_min and (rcl := university.get("f1_final_term")):
+        warnings.append(f"F-1: a fully online class counts for only {rcl['online_units_count']:g} units toward the "
+                        f"{f1_min:g}-unit minimum each spring and fall, so pick in-person or hybrid sections "
+                        f"({rcl['source']})")
     if f1_min and load.get("f1_continuous_enrollment") and len(seen_terms) > 1 and all(TERM.fullmatch(t) for t in seen_terms):
         term, skipped = seen_terms[0], []
         while term_key(term := next_term(term, False)) < term_key(seen_terms[-1]):
@@ -448,8 +462,6 @@ def chunks(units: float, size: float = 3) -> list[float]:
 
 def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, catalog: dict, prereqs: dict) -> dict:
     """Deterministic baseline plan (ARCHITECTURE §8): required courses by critical path, then slots. Passes check_plan."""
-    from gatorpath.engine.prereq import prereq_chain
-
     summer = profile.get("include_summer", False)
     seasons = ("spring", "summer", "fall") if summer else ("spring", "fall")  # a course waits only for these
     load, levels = university["academic_load"], university["class_level"]
@@ -486,7 +498,26 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     warnings = [f"{c}: passed with {best[c]}, which doesn't count toward this requirement, and a course passed with CR "
                 "or C or better can't be repeated (p.2392); see an advisor about a substitution or petition" for c in stuck]
     required = [c for c in required if c not in stuck]
-    closure = {e["code"] for c in required if c in prereqs for e in prereq_chain(c, prereqs)["chain"]}
+    met = have | set(profile.get("dpr_met", ()))
+
+    def still_needed(e: dict | None) -> list[str]:
+        """Courses a prereq tree still needs: a chain stops at what's done or met, and "one of" stops at a done one."""
+        if not e:
+            return []
+        if "all" in e or "any" in e:
+            parts = e.get("all") or e["any"]
+            if "any" in e and any(x.get("course") in met for x in parts):
+                return []
+            return [c for x in parts for c in still_needed(x)]
+        return [e["course"]] if "course" in e and e["course"] not in met and "max_grade" not in e else []
+
+    closure: set[str] = set()  # courses still needed below a required one
+    stack = list(required)
+    while stack:
+        for d in still_needed(prereqs.get(stack.pop(), {}).get("expr")):
+            if d not in closure:
+                closure.add(d)
+                stack.append(d)
     todo = required + ([c for c in order if c in closure and c not in have and c not in required and c in catalog]
                        if variant else [])
 

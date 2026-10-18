@@ -82,6 +82,21 @@ class_level: {sophomore: 30, upper: 60, senior: 90,
 academic_load: {normal_min: 12, normal_max: 15, summer_normal: 8, f1_min: {undergraduate: 12, graduate: 8},
                 f1_continuous_enrollment: true, prep_hours_per_class_hour: 2,
                 graduate: {normal_min: 9, normal_max: 12, summer_normal: 7}, source: "p.2390, p.2393"}
+# F-1 exceptions come from the Division of International Education, not the Bulletin (international.sfsu.edu/rcl,
+# checked 2026-10-18): "There are very few exceptions to the full-time course load rule"; approval from an F-1 advisor
+# is needed "before dropping below full-time during the Fall and Spring semesters"; no minimum in summer or winter.
+# Completion of Study: "Undergraduate students in their last semester to complete the remaining required courses";
+# a "one-time exception"; "The program end date of the I-20 will be shortened"; at least one remaining course must be
+# an SF State graduation requirement, and extra non-required courses are not approved; all remaining courses at SF
+# State; a Spring RCL means graduating in Spring, not Summer. Apply with the "RCL Completion of Study form", signed by
+# the Undergraduate Advising Center, emailed to f1@sfsu.edu from the SF State email, before the add/drop deadline.
+# Fully online classes: "only one course (or 3 units) will count toward the enrollment requirement."
+f1_final_term:
+  reduced_load: "allowed once, in the last semester, for the remaining required courses, with a Reduced Course Load (Completion of Study) approved before the add/drop deadline"
+  apply: "RCL Completion of Study form, signed by the Undergraduate Advising Center, emailed to f1@sfsu.edu from your SF State email"
+  not_for: "extra courses that aren't graduation requirements"
+  online_units_count: 3
+  source: "international.sfsu.edu/rcl, checked 2026-10-18"
 # "During priority registration, students may register for a maximum of 19 units ... a maximum of 14 units in any
 # combination of summer semester sessions ... Undergraduate students who want to enroll in more than the maximum units
 # listed above must have a cumulative SF State grade point average of 3.0 or better and secure approval via the
