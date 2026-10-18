@@ -1,0 +1,94 @@
+# End-to-end eval questions (ARCHITECTURE §12, TASKS Phase 7), run by evals/run_evals.py through a real AI client.
+#
+# profile: an eval profile ("p03") or a tests/test_server.py scenario ("scenario: sophomore"), or inline. Its terms are
+#   shifted so the student is mid-way through fall 2026, then written into the question the way a student would type it.
+# prompt: true starts the conversation with the plan_my_degree prompt (README: plans start from it).
+# expect: properties scored from the transcript. Facts (prereqs, what's left, offerings) are computed from the tools
+#   at scoring time, never written here (golden rule 1). Every answer is also checked for course codes that neither the
+#   catalog nor a tool output has, for the profile the client passed (it must match the question), and for save_profile.
+#   tools: tools that must be called · mention: prereqs_of / remaining / unlocks_of / seasons_of / close_match_of /
+#   areas_of (a computed fact the answer must state) · mention_any: wording one of which must appear · plan_valid: the
+#   last check_plan input re-checked here · goal_fit: picked senior electives match the goal keywords · pace_compared:
+#   build_plan at two or more loads · build_plan_with: a build_plan call whose profile has these values
+# followup: a second turn in the same session, with its own expect.
+
+# Goal-fit rubric: words in a course's Bulletin title or description. A rubric, not an academic rule.
+goals:
+  cybersecurity: [secur, crypt, network, privacy]
+  artificial intelligence: [intelligen, machine learning, learning, neural, vision, natural language, robot]
+  web development: [web, internet, user interface, mobile, software engineering]
+  data science: [data, database, statistic, mining, machine learning]
+  game development: [game, graphic, animation, visual]
+  systems programming: [operating, compil, parallel, distributed, architecture, embedded, systems]
+
+questions:
+  # Catalog questions: no profile, no prompt
+  - {id: prereq-653, ask: "What do I need before CSC 653?", expect: {tools: [get_prereq_chain], mention: {prereqs_of: CSC 653}}}
+  - {id: prereq-648, ask: "What are the prerequisites for CSC 648?", expect: {mention: {prereqs_of: CSC 648}}}
+  - {id: prereq-415, ask: "Can I take CSC 415 next semester if CSC 340 is the only one of its prereqs I've done?",
+     expect: {mention: {prereqs_of: CSC 415}}}
+  - {id: prereq-m324, ask: "What does MATH 324 require?", expect: {mention: {prereqs_of: MATH 324}}}
+  - {id: prereq-510, ask: "What do I need before CSC 510?", expect: {mention: {prereqs_of: CSC 510}}}
+  - {id: unlocks-340, ask: "Which required BS CS courses does CSC 340 unlock?", expect: {mention: {unlocks_of: CSC 340}}}
+  - {id: offered-652, ask: "Is CSC 652 usually offered in the fall?", expect: {mention: {seasons_of: CSC 652}}}
+  - {id: offered-653, ask: "When is CSC 653 usually offered?", expect: {mention: {seasons_of: CSC 653}}}
+  - {id: renumbered-210, ask: "I took CSC 210 at SF State a few years ago. Does it count for the 2026-27 BS CS?",
+     expect: {mention: {close_match_of: CSC 210}, mention_any: [advisor, DPR]}}
+  - {id: ge-envs-401, ask: "What GE or SF State Studies requirements does ENVS 401 count for?",
+     expect: {mention: {areas_of: ENVS 401}}}
+
+  # "What's left?": a profile, no prompt
+  - {id: left-p01, profile: p01, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p02, profile: p02, ask: "Am I done with my degree requirements?", expect: {tools: [audit_progress]}}
+  - {id: left-p03, profile: p03, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p04, profile: p04, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p05, profile: p05, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p06, profile: p06, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p07, profile: p07, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p08, profile: p08, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p09, profile: p09, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p10, profile: p10, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+
+  # Plans: the plan_my_degree prompt, a goal, everything the prompt would ask for given up front
+  - {id: plan-p01, profile: p01, prompt: true, goal: artificial intelligence, ask: "Plan the rest of my degree.",
+     expect: {plan_valid: true, goal_fit: true}}
+  - {id: plan-p03, profile: p03, prompt: true, goal: cybersecurity, ask: "I'm a CS sophomore. Plan my next 3 years.",
+     expect: {plan_valid: true, goal_fit: true},
+     followup: {ask: "What if I graduate a year early?", expect: {pace_compared: true}}}
+  - {id: plan-fresh-12, profile: "scenario: new freshman, QR 1/2", prompt: true, goal: web development,
+     ask: "I'm an incoming freshman. Plan my whole degree.", expect: {plan_valid: true, goal_fit: true},
+     followup: {ask: "Can I finish in 3 years?", expect: {pace_compared: true}}}
+  - {id: plan-fresh-34-f1, profile: "scenario: new freshman, QR 3/4, F-1", prompt: true, goal: data science,
+     ask: "I'm an incoming freshman. Plan my whole degree.", expect: {plan_valid: true, goal_fit: true},
+     followup: {ask: "Can I take a lighter last semester?", expect: {mention_any: [Reduced Course Load, RCL]}}}
+  - {id: plan-ap, profile: "scenario: freshman with AP credit", prompt: true, goal: game development,
+     ask: "I'm an incoming freshman with some AP credit. Plan my degree.", expect: {plan_valid: true, goal_fit: true}}
+  - {id: plan-adt, profile: "scenario: ADT transfer", prompt: true, goal: cybersecurity,
+     ask: "I'm transferring in with an AS-T. Plan my remaining semesters.", expect: {plan_valid: true, goal_fit: true}}
+  - {id: plan-calgetc, profile: "scenario: Cal-GETC transfer, no ADT", prompt: true, goal: artificial intelligence,
+     ask: "I'm a transfer student. Plan my remaining semesters.", expect: {plan_valid: true, goal_fit: true}}
+  - {id: plan-part-time, profile: "scenario: part-time with a deadline", prompt: true, goal: systems programming,
+     ask: "I work, so I can only go part-time. Plan my degree.", expect: {plan_valid: true, goal_fit: true},
+     followup: {ask: "What if I take summer classes too?", expect: {build_plan_with: {include_summer: true}}}}
+  - {id: plan-junior, profile: "scenario: junior, on track", prompt: true, goal: artificial intelligence,
+     ask: "Plan my last two years.", expect: {plan_valid: true, goal_fit: true},
+     followup: {ask: "Actually I'd rather focus on cybersecurity. What changes?", goal: cybersecurity,
+                expect: {plan_valid: true, goal_fit: true}}}
+  - {id: plan-retake, profile: "scenario: retaking a D", prompt: true, goal: web development,
+     ask: "I got a D in CSC 215. Plan the rest of my degree.", expect: {plan_valid: true, goal_fit: true}}
+  - {id: plan-ccc, profile: "scenario: CCC transfer from another major", prompt: true, goal: data science,
+     ask: "I'm transferring from a community college. Plan my remaining semesters.", expect: {plan_valid: true, goal_fit: true}}
+  - {id: plan-fast, profile: "scenario: fast, with summers", prompt: true, goal: artificial intelligence,
+     ask: "I want to finish as fast as I can. Plan my degree.", expect: {plan_valid: true, goal_fit: true}}
+  - {id: plan-p10, profile: p10, prompt: true, ask: "Plan my last semester.", expect: {plan_valid: true}}
+
+  # Honesty: what the tools can't answer, or shouldn't be guessed
+  - {id: transfer-guess, profile: {program: bs-cs, catalog_year: 2026-27, transfer_units: 46, first_time: false},
+     ask: "Which GE areas do I still need?", expect: {mention_any: [DPR, Degree Progress Report]}}
+  - {id: no-415, ask: "Can I take CSC 653 without CSC 415?", expect: {mention_any: [permission]}}
+  - {id: when-graduate, profile: p03, ask: "When will I graduate?", expect: {tools: [build_plan]}}
+  - {id: opt, profile: "scenario: new freshman, QR 3/4, F-1",
+     ask: "Can I work on OPT after I graduate, and for how long?", expect: {mention_any: [international, International]}}
+  - {id: fake-course, ask: "Is CSC 999 a good senior elective?", expect: {mention_any: ["not in", "isn't in", "doesn't exist",
+     "does not exist", "no CSC 999", "not a", "isn't a", "no such"]}}
+  - {id: cr-major, ask: "Can I take MATH 226 CR/NC and still count it for the CS major?", expect: {mention_any: ["1905"]}}

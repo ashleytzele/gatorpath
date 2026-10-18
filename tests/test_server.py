@@ -436,3 +436,11 @@ def test_every_kind_of_student_gets_a_checked_plan_and_ge_ways(name):
         for slot in {c["slot"] for c in s["courses"] if isinstance(c, dict) and c["slot"] != "elective"}:
             got = server.list_eligible_electives(p, slot, {"semesters": plan["semesters"]}, by_term=s["term"])
             assert "error" not in got, (slot, got.get("error"))
+
+
+def test_qr_pathway_is_read_however_the_student_writes_it():
+    # Eval run 2026-10-18: a client passed "QR 3/4" and build_plan asked for qr_pathway again
+    university = server.load_rules("2026-27", "bs-cs")[1]
+    read = lambda qr: server.prepare({"program": "bs-cs", "qr_pathway": qr}, university)[0]["qr_pathway"]
+    assert [read(q) for q in ("QR 3/4", "Category 1/2", "3-4", "1/2")] == ["3/4", "1/2", "3/4", "1/2"]
+    assert read("not sure") == "not sure"  # left as given: build_plan then asks for it

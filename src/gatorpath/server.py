@@ -278,7 +278,11 @@ def prepare(profile: dict, university: dict) -> tuple[dict, list[str]]:
             areas, w = translate_ge([x], university)
             left_out += [by_area[a] for a in areas if a in by_area]
             ge_warnings += [m for m in w if "not recognized" in m]
-    clean = profile | {"catalog_year": YEAR, "ge_done": ge_done, "not_on_dpr": list(dict.fromkeys(left_out)),
+    # "QR 3/4", "Category 1/2", "3-4" -> the roadmaps' "3/4" / "1/2". ponytail: digits only; add "III/IV" if a client sends it
+    digits = set(re.findall(r"[1-4]", str(profile.get("qr_pathway", ""))))
+    qr = next((k for k in ("1/2", "3/4") if digits and digits <= set(k[::2])), profile.get("qr_pathway"))
+    clean = profile | ({"qr_pathway": qr} if qr else {}) | {
+                       "catalog_year": YEAR, "ge_done": ge_done, "not_on_dpr": list(dict.fromkeys(left_out)),
                        "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
                        "in_progress": [norm_code(c) for c in profile.get("in_progress", [])],
                        "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])]}
