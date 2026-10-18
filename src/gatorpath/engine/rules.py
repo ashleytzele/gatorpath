@@ -419,6 +419,15 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
             done[g["id"]] = eval_group(g, kind, taken, profile, catalog, claimed if kind == "major" else None,
                                        no_cr_nc and kind == "major", done, warnings, certified)
     groups = list(done.values())
+    # A major course counts for GE too (p.2352): name the required ones still ahead that carry an open area, so the
+    # client doesn't guess which open area a course meets.
+    ahead = [c for g in groups if g["kind"] == "major" for c in g.get("remaining", []) if c in catalog]
+    for g, rule in ((done[r["id"]], r) for r in university["groups"] if "from" in r):
+        if g["status"] in ("remaining", "in_progress"):
+            src = rule["first_time_from"] if "first_time_from" in rule and first_time(profile) else rule["from"]
+            hit = [c for c in ahead if any(matches(f, c, catalog[c]) for f in (src if isinstance(src, list) else [src]))]
+            if hit:
+                g["major_courses"] = hit
     tot = totals(profile, taken, groups, university, catalog, warnings)
     prior = bool(profile.get("prior_bachelors"))
     if prior:

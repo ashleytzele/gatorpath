@@ -9,7 +9,10 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ---
 
-## Next up — Design-consistency audit (Codex, read-only)
+## Done 2026-10-18 — Design-consistency audit (Codex, read-only)
+
+Next: Phase 7 (eval questions). Still open in earlier phases, each waiting on a person or a document: Phase 2's
+second reviewer, Phase 6's CR/W/repeat sample and the DPR Notes legend.
 
 The pivots since 2026-10-16 came from real trial feedback, but they've outrun the design docs. Codex only sees the
 repo, so a change whose reason lives only in a chat would rightly be flagged as a conflict. Write the reasons down
@@ -142,7 +145,8 @@ report.
   - [x] Model guessed what 46 transfer units covered → audit ⚠️ + server instructions: never guess
     transfer coverage or graduation terms
   - [x] Model estimated "finish Spring/Fall 2027" with no planner → phase 4 `build_plan` (used from trial 2 on)
-  - [ ] Transcript was attached to the chat directly (PII to the provider) → phase 6 `import_transcript` / `import_dpr`
+  - [x] Transcript was attached to the chat directly (PII to the provider) → phase 6 `import_transcript` / `import_dpr`
+    (built; trial 7 imported a real DPR and transcript locally)
   - Trial 2 (same student, DPR + build/check_plan): two-semester plan matched the student's own;
     claims checked against the Bulletin (ENVS 401 = ESCA + 4UD + GP, CSC 656 with CSC 415 concurrently).
     Gaps: validated against 2026-27 while the student is on Spring 2025; no offering data; GEOG 575's
@@ -204,10 +208,18 @@ report.
     (`test_a_freshman_plan_is_the_roadmap_adjusted`). Fixed on the way: a 0-unit tag made a term of its own; tags
     dumped into term 1; senior electives waited for the roadmap's order instead of their real prereqs (they now go in
     once an option is ready that term); F-1 fill splits free units
+  - Trial 9 (2026-10-18, Claude Code headless, `claude -p` with only the gatorpath tools and no prompt; synthetic p03
+    shifted a year): the two Done-when questions as written. "What do I need before CSC 653?" → get_prereq_chain:
+    upper-division standing, CSC 415 with C or better, GPA 3.0, or instructor permission (p.1899), plus the chain to
+    CSC 101 with pages; every prereq matched the Bulletin text. "What's left for my degree?" (typed courses) →
+    audit_progress: every group, GE area and total matched p03's hand-checked audit. Found: GE claims from memory
+    (PHYS 220 meets 5A: right; "AA S 210 might count for GE 6": wrong, it carries AERM, 4, USH). Fixed: an open GE /
+    SF State Studies / American Institutions group names the required major courses still ahead that carry it
+    (`major_courses`, p.2352), and the server instructions say a course meets an area only where a tool shows it.
+    Re-run: 5A, 5C and GWAR came from major_courses, and GE 6 was checked with get_course instead of guessed
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
-degree?" and get correct, sourced answers. **Not marked met yet:** trials 2-8 answered "what's left" from a DPR or a
-course list; ask both questions as written in the next trial.
+degree?" and get correct, sourced answers. **Met 2026-10-18** (trial 9).
 
 ---
 

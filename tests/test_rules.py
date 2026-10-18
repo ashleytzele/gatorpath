@@ -270,3 +270,13 @@ def test_ge_filter_level_and_waiver_text():
     assert not matches(area4_ush, "AA S 410", fake_ud)  # same tags, but numbered 410: not lower division
     adt = groups_of(audit(BASE | {"adt": True, "transfer_units": 60}, PROGRAM, UNIVERSITY, CATALOG))
     assert adt["sfss_sj"]["status"] == "waived" and "similar approved major" in adt["sfss_sj"]["waived_by"]
+
+
+def test_open_ge_areas_name_the_major_courses_still_ahead_that_carry_them():
+    # Trial 9: the model guessed AA S 210 might meet GE 6 and recalled PHYS 220 = 5A from memory. Major courses count for
+    # GE too (p.2352), so the audit names them: PHYS 220 (5A), PHYS 222 (5C), CSC 300GW (GWAR); nothing for GE 6
+    p03 = yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"]
+    groups = {g["id"]: g for g in audit(p03, PROGRAM, UNIVERSITY, CATALOG)["groups"]}
+    assert (groups["ge_5a"]["major_courses"], groups["ge_5c"]["major_courses"]) == (["PHYS 220"], ["PHYS 222"])
+    assert groups["gwar"]["major_courses"] == ["CSC 300GW"]
+    assert "major_courses" not in groups["ge_6"] and "major_courses" not in groups["ge_1a"]  # none; ge_1a is satisfied
