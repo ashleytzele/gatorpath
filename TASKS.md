@@ -1,7 +1,9 @@
 # GatorPath — Tasks
 
-Phased checklist. Each phase has a **Done when**. Finish phases in order; don't start a phase
-until the previous one's "Done when" is true. Design details: `docs/ARCHITECTURE.md`.
+Phased checklist. Each phase has a **Done when**. Work phases in order, with two exceptions (ARCHITECTURE D22):
+trial feedback can pull work forward from a later phase (trial 1 needed `build_plan`), and an item waiting on a
+person or a real document (Phase 2's second reviewer, Phase 6's CR/W sample) stays open while later phases go on.
+Such an item says what it waits for. Design details: `docs/ARCHITECTURE.md`.
 
 Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
@@ -13,7 +15,9 @@ The pivots since 2026-10-16 came from real trial feedback, but they've outrun th
 repo, so a change whose reason lives only in a chat would rightly be flagged as a conflict. Write the reasons down
 first, then audit.
 
-- [ ] 1. Record the pivots in `docs/ARCHITECTURE.md` (decisions log + the sections they change):
+- [x] 1. Record the pivots in `docs/ARCHITECTURE.md` (decisions log + the sections they change). Done 2026-10-18:
+  D17-D22, §8 rewritten roadmap-first, §5 "What may come from where" (+ AGENTS.md golden rules 1-2), the duplicate
+  D15 renumbered D16, §16.8 (keep `import_transcript`?)
   - Planning is roadmap-led (§8 still describes critical-path greedy). The default cap stays 15 even though the
     first-time roadmaps have 16-17-unit terms (`pace.roadmap_load` reports them)
   - Senior electives wait for real readiness (an option ready that term), not the roadmap's course order
@@ -194,7 +198,8 @@ report.
     once an option is ready that term); F-1 fill splits free units
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
-degree?" and get correct, sourced answers.
+degree?" and get correct, sourced answers. **Not marked met yet:** trials 2-8 answered "what's left" from a DPR or a
+course list; ask both questions as written in the next trial.
 
 ---
 

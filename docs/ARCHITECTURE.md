@@ -1,6 +1,6 @@
 # GatorPath — Architecture & Design
 
-> Status: **Approved 2026-10-15** · Last updated: 2026-10-15 · Catalog year in scope: **2026-27**
+> Status: **Approved 2026-10-15** · Last updated: 2026-10-18 · Catalog year in scope: **2026-27**
 >
 > GatorPath is an **MCP server** that gives any AI assistant (Claude, Gemini CLI, ChatGPT, …)
 > accurate, checkable tools for planning an SF State degree. The AI talks to the student and
@@ -23,7 +23,8 @@ Help an SF State student answer, correctly:
 
 - SF State only, **BS Computer Science** first (verified), then Math.
 - 4-year roadmap / pathway planning, career-direction elective picks.
-- Course history (typed list **or** local transcript PDF import).
+- Course history: the student's DPR (local PDF import, the main one), a typed list, or the local transcript PDF
+  (D14, D20).
 - Course offering patterns from the public class search.
 
 ### Not in scope yet (see §14 Roadmap)
@@ -86,25 +87,28 @@ These become the seed of the evaluation set (§12).
 │  Class Search ──▶ ingest/offerings.py ──▶ offering ──▶ offered_terms   │
 │  (public, HTML)                                                        │
 │                                                       ▼                │
-│  rules/programs/*.yaml  ─┐                     data/catalog.db         │
-│  rules/roadmaps/*.yaml  ─┴─ hand-written, reviewed in git, cite pages  │
+│  rules/programs/*.yaml   ─┐                    data/catalog.db         │
+│  rules/roadmaps/*.yaml   ─┼─ hand-written, reviewed in git, cite pages │
+│  rules/university/*.yaml ─┘  (+ office pages: URL + date checked, §5)  │
 └────────────────────────────────────────────────────────────────────────┘
                                      │ read-only
 ┌──────────── MCP SERVER  (gatorpath, runs locally over stdio) ──────────┐
 │                                                                        │
 │  catalog tools      program tools        student tools                 │
 │  search_courses     list_programs        audit_progress                │
-│  get_course         get_program_req.     build_plan                    │
-│  get_prereq_chain   get_roadmap          check_plan                    │
-│                                          list_eligible_electives       │
+│  get_course         get_program_req.     build_plan · check_plan       │
+│  get_prereq_chain   get_roadmap          list_eligible_electives       │
+│                                          ge_combinations               │
+│                                          import_dpr (local, preferred) │
 │                                          import_transcript (local)     │
+│                                          save_profile · load_profile   │
 │                                                                        │
 │  engine/: rules.py (requirement eval) · prereq.py · planner.py         │
 │  NO LLM calls · NO student data stored · deterministic                 │
 └────────────────────────────────────────────────────────────────────────┘
                                      ▲ MCP (tools + one prompt)
 ┌──────────── AI CLIENT (Claude Desktop, Gemini CLI, …) ─────────────────┐
-│  conversation · interprets career goal · picks electives · explains   │
+│  conversation · interprets career goal · picks electives · explains    │
 │  MUST call check_plan before presenting a plan                         │
 └────────────────────────────────────────────────────────────────────────┘
 ```
@@ -123,6 +127,23 @@ human review, never at question time.
 | **SF State Bulletin 2026-27 PDF** (2,932 pp) | Courses, units, grading, prereqs, program requirements, roadmaps, GE & graduation rules | `pdftotext -raw` (the default mode interleaves the two-column course pages) → NFKC (ligatures) → parse | Official, frozen per year → solves "catalog year" versioning |
 | **Class Search** `webapps.sfsu.edu/public/classservices/classsearch` | Sections per term: days/times, mode, seats, GE attributes. History back to 2000 | Polite scraper: HTML form POST with CSRF token, cached, a few requests per term | Check SFSU terms of use; later ask SFSU IT for an official feed |
 | **Hand-written rules** `rules/` | Major requirement logic + roadmap variants | Humans translate Bulletin text → YAML, cite page | Reviewed like code |
+| **SF State office pages** (`international.sfsu.edu/rcl`, `advising.sfsu.edu`, `cs.sfsu.edu/undergrads/advising`, …) | Only what the Bulletin leaves to that office: the F-1 final-term Reduced Course Load (`f1_final_term`) and who to see / how to book (`advising:`) | Humans copy it into `rules/` with `source: "<page>, checked <date>"` and the page's words quoted in a comment | Re-check with each Bulletin year (D21) |
+
+### What may come from where (decided 2026-10-18, D21)
+
+AGENTS.md golden rule 1 in full:
+
+- **Bulletin PDF:** everything academic. Courses, units, grading, prereqs and GE tags (`catalog.db`), and the
+  program, university and roadmap rules (`rules/`, `source: "p.<page>"`). It wins over every other source.
+- **Class search:** only when a course ran (`offering`). Never units, prereqs or requirements.
+- **SF State office pages:** only a policy the Bulletin leaves to that office (the F-1 final-term Reduced Course
+  Load, from the Division of International Education; the Bulletin gives only the 12-unit minimum and continuous
+  enrollment, pp.2390, 2393) and advising contacts. If a page disagrees with the Bulletin, the Bulletin's rule stays and
+  the student is sent to that office; the page's version doesn't go into `rules/`.
+- **A memo after publication:** only as an `amendment` (§6.2), citing the memo (or the DPR that quotes it) and its date.
+- **The student's DPR:** that student's record (transfer evaluations, substitutions, waivers) in their profile, never
+  in `rules/` (§5 "Keeping it current").
+- **Never:** model memory, unofficial pages, or another year's Bulletin inside `rules/<kind>/<this year>/`.
 
 ### Keeping it current (decided 2026-10-16)
 
@@ -288,6 +309,10 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   p.2304), `totals.max_units_from` (70 community college, 90 all transfer, 30 exam or evaluation, 4 "Projects in Teaching" 685,
   pp.2304, 2313), `max_units` per term (19 fall/spring, 14 summer; more needs a 3.0 SF State GPA and a petition,
   p.2392), `academic_load.normal_min` (12, p.2393), and the repeat policy in `repeats` (p.2392).
+  `f1_final_term` (added 2026-10-18, trial 7) is the one key from an office page instead of the Bulletin (§5 "What may
+  come from where"): the one-time final-semester Reduced Course Load, how to apply, and the 3 units of online classes
+  that count toward the F-1 load (`international.sfsu.edu/rcl`). check_plan's warning on an F-1 student's light
+  last term quotes it.
   `totals.community_college_upper_division: {allowed: false}` (p.2304): a transfer row numbered 300-699 still counts
   as upper division but gets a ⚠️, since a profile doesn't say which transfer rows were community college work.
   A CR course that counts in the major and is CR/NC-only in the catalog stays out of `max_cr_units` (p.2313).
@@ -430,7 +455,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | Tool | Input | Output |
 |---|---|---|
 | `audit_progress` | `profile` | Per group: `satisfied`/`in_progress`/`remaining`, which courses counted where, units done vs needed; university totals (120 total, upper-division units, GWAR) |
-| `build_plan` | `profile` | Deterministic baseline plan: `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`. When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
+| `build_plan` | `profile` | Deterministic baseline plan laid out on the Bulletin roadmap (§8): `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`, `pace` (prereq-chain floor vs units floor, `roadmap_load` when the roadmap's own 16-17-unit terms finish sooner, `graduate_by` → `on_time` / `why_not`). When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
 | `list_eligible_electives` | `profile`, `group_id`, `by_term?` | Options that satisfy that group, each with description, prereq readiness (`ready` / `ready_by: term` / `blocked_by`), and offering pattern. **The AI picks from this list using the student's goal.** |
 | `ge_combinations` | `profile`, `plan?`, `by_term?` | Every minimal way to finish the open GE / SF State Studies / American Institutions requirements one course can fill, fewest courses first (one course for 4UD + ESCA + GP, two that split them, or one each); each part: what it covers, how many courses fit, examples (ready first, recently offered first). Requirements the major's own courses cover (GWAR via CSC 300GW) are left out |
 | `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
@@ -445,6 +470,8 @@ So with a DPR, what's done and what's left come from the DPR, and `audit_progres
 choose-from groups ("Electives: 15 units needed" prints only a "View Course List" link). It also needs
 prereqs and offerings to *order* what's left. The transcript is optional and adds only attempt history
 (W, repeats) for the repeat/forgiveness rules. Merge it only when a real student needs that.
+As built (D20, 2026-10-18): `import_dpr` is the main import and `plan_my_degree` asks for the DPR first;
+`import_transcript` stays as the fallback for a student who has only the transcript. Whether to keep it: §16.8.
 
 **Unofficial transcript layout (`SSR_TSRPT.pdf`, Oracle Analytics Publisher, confirmed
 2026-10-15 from a real sample, which was not kept).** Read it with `pdftotext -layout`.
@@ -508,8 +535,8 @@ deterministic (D6). The prompt gives the client its workflow:
 3. Ask for the math placement / QR pathway if it's unknown.
 4. Call `audit_progress` (with a DPR: as the cross-check).
 5. Call `build_plan`. For "3, 4 or 5 years", call it at three loads (≈18 units + summer, 15, 12)
-   and compare `est_graduation_term`. Say why a faster pace can't work when it can't (the prereq chain or
-   the units per term).
+   and compare `est_graduation_term`, plus the roadmap's own loads when `pace.roadmap_load` is there. Say why a
+   faster pace can't work when it can't (the prereq chain or the units per term).
 6. Fill elective slots using `list_eligible_electives` plus the student's goal.
 7. **Call `check_plan`. Fix any errors and re-check until `valid`.**
 8. Present the plan with `why`, warnings and sources. Show every `see_advisor` item with its link
@@ -559,36 +586,47 @@ which routes students to their department, so adding a major never needs advisor
 
 The input is the profile, the program rules, the prereq graph and `offered_terms`.
 
-1. **Remaining work:** from `audit_progress`, the concrete required courses still needed, plus
-   **slots** for choose-groups (e.g. 5 × senior elective) and GE areas.
-2. **Priority:** for each course, the **longest downstream prerequisite chain** (critical path).
-   For example, CSC 415 unlocks CSC 653, so it gets scheduled early. Ties are broken by its
-   position in the official roadmap variant.
-3. **Term-by-term greedy fill**, starting at `start_term`:
-   - eligible = prereqs satisfied by courses completed in *earlier* terms (or in this term if
-     `concurrent_ok`)
+Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in step 3 was the whole planner.
+
+1. **Remaining work:** from `audit_progress`, the concrete required courses still needed, plus the roadmap
+   variant's pathway courses on the way (QR 3/4: MATH 197 → 198 → 226), plus **slots** for choose-groups
+   (e.g. 5 × senior elective), GE areas and free electives up to the unit totals.
+2. **Roadmap first:** each term, starting at `start_term`, first takes its Bulletin roadmap semester's items: its
+   courses, its GE areas (a roadmap label maps to the groups taking that area: "1" → 1A/1B/1C, "5UD/2UD" →
+   either), senior electives, the US/CA Government course, SF State Studies or electives. Items already done are
+   skipped, and items not ready (prereqs, season, room under the cap) carry to the next term.
+3. **Greedy fill** of what's left in that term:
+   - priority: the **longest downstream prerequisite chain** (critical path; CSC 415 unlocks CSC 653, so it goes
+     early), ties broken by position in the roadmap variant
+   - eligible = prereqs satisfied by courses completed in *earlier* terms (or in this term if `concurrent_ok`);
+     corequisites go together or not at all
    - offered this season according to `offered_terms`: a course that ran in other seasons but in none of the
      checked terms of this one waits (check_plan warns if a plan puts it there); unknown, or never seen in any
      checked term, is allowed with a ⚠️ (rare isn't never)
-   - fill by priority up to `max_units_per_term`; leave remaining capacity to slots
+   - fill up to `max_units_per_term`, then slots; free-elective units split to fill a term
+   - **senior electives wait for real readiness (D19):** a senior-elective slot goes in once the student has
+     upper-division standing and an option of that group is ready that term (prereqs met, offered that season),
+     one ready option per slot in the term. Not at the roadmap's position for it
+   - F-1 (`f1: true`): a spring/fall term with more terms to come is filled toward 12 units with elective slots
    - standing (`upper`/`senior`) is computed from cumulative units
-   - **Roadmap-led (2026-10-18):** each term first takes its Bulletin roadmap semester's items: its courses, its GE
-     areas (a roadmap label maps to the groups taking that area: "1" → 1A/1B/1C, "5UD/2UD" → either), senior electives,
-     the US/CA Government course, SF State Studies or electives. Items already done are skipped, items not ready carry
-     to the next term, and the greedy fills what's left. Both plans are built; the roadmap-led one is kept unless the
-     plain greedy finishes sooner. The cap stays the student's (default 15), so the plan passes check_plan as given;
-     `pace.roadmap_load` reports when the roadmap's own loads (16-17-unit terms) would finish sooner. Free-elective
-     units split to fill a term.
-4. Stop when nothing remains. Report `est_graduation_term`.
-5. If no progress is possible in a term (a blocked prereq), stop and emit an error saying
+4. **Two plans, one kept:** the roadmap-led plan (steps 2 + 3) and the plain greedy (step 3 alone) are built at
+   the same cap. The roadmap-led one is kept when it passes check_plan and has no more terms. With
+   `include_summer`, only the greedy runs: the roadmaps have no summer terms.
+5. **The cap stays the student's (D18):** `max_units_per_term`, default 15, the normal load (p.2393), even though
+   the first-time roadmaps have 16- and 17-unit terms (qr-1-2: 16, 16; qr-3-4: 16, 16, 17, 16). A roadmap item that
+   doesn't fit carries over, so the plan passes check_plan as given. When the student set no cap and the roadmap's
+   own loads finish sooner, `pace.roadmap_load` says so (terms, `est_graduation_term`, the `max_units_per_term` to
+   pass), and `plan_my_degree` offers it as a pace option.
+6. Stop when nothing remains. Report `est_graduation_term`.
+7. If no progress is possible in a term (a blocked prereq), stop and emit an error saying
    which condition blocks it. Never loop forever.
 
 The plan is a **baseline**: elective slots stay open for the AI to fill with goal-matched picks.
 `check_plan` is the single source of truth for validity, and `build_plan`'s own output must
 pass it (tested).
 
-> ponytail: greedy + critical-path priority, not an optimizer. Upgrade to a constraint solver
-> (OR-Tools CP-SAT) only if evals show greedy producing late graduations that a better order fixes.
+> ponytail: roadmap-led greedy, not an optimizer. Upgrade to a constraint solver (OR-Tools CP-SAT) only if
+> evals show it producing late graduations that a better order fixes.
 
 ---
 
@@ -599,9 +637,9 @@ pass it (tested).
   one YAML file at a path the student chose, on their own machine, only when they ask. It's plain
   text they can read or delete, and the server refuses to write it inside the repo. This beats AI-client memory: the
   data stays exact (no half-remembered grades), stays local, and works with any client (D13).
-- **Local transcript parsing.** `import_transcript` runs on the student's machine and returns only
-  code, grade and term. The PDF and personal info never go to the AI provider *through our
-  tool*. (If a student attaches the PDF directly to the chat, that's the client's
+- **Local DPR and transcript parsing.** `import_dpr` and `import_transcript` run on the student's machine and
+  return only course rows (code, grade, units, term) and requirement status. The PDF and personal info never go to
+  the AI provider *through our tool*. (If a student attaches the PDF directly to the chat, that's the client's
   behavior. The prompt advises using the import tool instead.)
 - **Repo hygiene.** `*.pdf`, `data/`, `transcripts/` are git-ignored. Eval profiles are
   **synthetic** only.
@@ -657,6 +695,7 @@ gatorpath/
 │   ├── ingest/
 │   │   ├── bulletin.py  # PDF → course/prereq/course_link
 │   │   └── offerings.py # class search → offering
+│   ├── dpr.py           # local DPR PDF → profile + what's left (PII dropped)
 │   └── transcript.py    # local PDF → completed courses (PII dropped)
 ├── rules/
 │   ├── programs/2026-27/bs-cs.yaml
@@ -703,7 +742,7 @@ students; 0 hallucinated courses."*
 | D1 | MCP server first, UI later | Most differentiated; testable immediately in Claude/Gemini CLI | 2026-10-15 |
 | D2 | SFSU only; CS → Math → all majors | Every answer must be checkable; wrong-but-confident is the worst failure | 2026-10-15 |
 | D3 | Python + official `mcp` SDK + SQLite | Simplest stack; no DB server; one-file catalog | 2026-10-15 |
-| D4 | Bulletin **PDF** as the source, not website scraping | Official, frozen per catalog year, clean text extraction | 2026-10-15 |
+| D4 | Bulletin **PDF** as the source, not website scraping (exceptions: offerings, D8; office policies, D21) | Official, frozen per catalog year, clean text extraction | 2026-10-15 |
 | D5 | Requirements hand-translated to YAML; later AI-drafted + human-reviewed | Bulletin prose has exceptions a parser would get wrong | 2026-10-15 |
 | D6 | No LLM inside the server | Client brings the model; server stays free, testable, non-hallucinating | 2026-10-15 |
 | D7 | Course input: typed list **and** local transcript import | Easy start + smooth UX, PII never leaves the machine via our tool | 2026-10-15 |
@@ -715,7 +754,13 @@ students; 0 hallucinated courses."*
 | D13 | Memory = a profile file the student owns (`save_profile`/`load_profile`), not client memory, not none | Exact and local, works with any client; saves goal/pace/elective decisions so they aren't re-discussed; one small tool call per session | 2026-10-16 |
 | D14 | DPR-first: what's done/left comes from the DPR; our audit cross-checks it | The DPR includes transfer evaluations, substitutions and waivers we can't know | 2026-10-16 |
 | D15 | Advisor handoffs name offices (department contact, UAC), never individual advisors | Names change and every major would need its own; the department and the UAC route students to the right advisor | 2026-10-17 |
-| D15 | The AI client is the agent; what-ifs and advisor handoff go through the prompt + tool fields | Keeps the server deterministic (D6); advisor links are sourced data, not model memory | 2026-10-16 |
+| D16 | The AI client is the agent; what-ifs and advisor handoff go through the prompt + tool fields (numbered D15 until 2026-10-18, a duplicate) | Keeps the server deterministic (D6); advisor links are sourced data, not model memory | 2026-10-16 |
+| D17 | Planning is roadmap-led: each term starts from its Bulletin roadmap semester, and the critical-path greedy fills the rest; the plain greedy is kept only if it finishes sooner (§8) | Trial 8: the student asked for the Bulletin roadmap as the foundation (GE Area 1A in term 2, …). It's the official suggested order (§3: complement, don't replace), and a new QR 1/2 freshman went from 9 terms to 8 at 15 units | 2026-10-18 |
+| D18 | The default cap stays 15 though the first-time roadmaps have 16-17-unit terms; `pace.roadmap_load` reports the roadmap's own loads as an option | 15 is the normal load (p.2393): above it is an overload with an advisor handoff (§7.5), which a default plan shouldn't need. The plan must pass check_plan as given | 2026-10-18 |
+| D19 | Senior electives go in once an option is ready that term, not at the roadmap's position | Trial 5 left Spring 2027 at 9 units while the slots waited for the roadmap's order; the scenario review found them waiting for the roadmap instead of their prereqs | 2026-10-18 |
+| D20 | `import_dpr` is the main import; `import_transcript` is the fallback (D7 kept, D14 as built) | The DPR has the catalog year, transfer evaluations and substitutions; the transcript's transfer blocks are totals only (§7.3). In trial 7 the two PDFs disagreed on a current course and the newer DPR was used | 2026-10-18 |
+| D21 | Office policies the Bulletin leaves to an office (F-1 final-term Reduced Course Load) and advising contacts may come from that office's page, cited as page + date checked; the Bulletin wins on any conflict (§5 "What may come from where") | Trial 7: an F-1 student's last term was padded to 12 units, but the international office allows a one-time final-semester RCL (`international.sfsu.edu/rcl`). The Bulletin states only the 12-unit minimum | 2026-10-18 |
+| D22 | Work phases in order, but trial feedback can pull work forward, and an item waiting on a person or a real document stays open while later phases go on (TASKS.md header) | Trial 1 needed `build_plan` (Phase 4) to answer "when do I finish?"; Phase 2's `verified: true` needs a second person; Phase 6's CR/W/repeat sample and the DPR Notes legend need real documents. Phases 5 and 6 were done with those open | 2026-10-18 |
 
 ---
 
@@ -781,3 +826,6 @@ students; 0 hallucinated courses."*
 6. **License:** MIT proposed when the repo goes public.
 7. ~~Major course ↔ GE double-counting~~ **Resolved 2026-10-16:** p.2352 "Duplicate Use of Credit
    Between the Major and GE": unlimited, units counted once.
+8. **Keep `import_transcript`?** (D20) The DPR covers what's done and left; the transcript adds only attempt
+   history (W, repeats), and no sample with those rows has been seen yet (TASKS Phase 6). Decide in Phase 7 from
+   real users: keep it as the fallback, or drop it.

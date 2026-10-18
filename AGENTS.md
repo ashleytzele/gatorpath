@@ -10,12 +10,14 @@ Full design: `docs/ARCHITECTURE.md`. Current work: `TASKS.md` (work phase by pha
 
 ## Golden rules (do not break these)
 
-1. **Never invent academic rules.** Course data comes from the Bulletin PDF. Program
-   requirements come only from `rules/**/*.yaml`. Never hard-code course codes, units, or
+1. **Never invent academic rules.** Course data comes from the Bulletin PDF (offering history from the
+   class search). Requirements come only from `rules/**/*.yaml`, written from the Bulletin; a policy the
+   Bulletin leaves to an office (the F-1 final-term Reduced Course Load) or an advising contact may come from
+   that office's page. What may come from where: ARCHITECTURE §5. Never hard-code course codes, units, or
    prerequisites from memory. Courses get renumbered (e.g. CSC 210 → CSC 215).
-2. **Every rule cites its source.** Each YAML group has `source: "p.<page>"`. Every `course`
-   row has `source_page`. An `amendment` (a change after publication) cites its memo and date.
-   One student's exception never goes into `rules/`.
+2. **Every rule cites its source.** Each YAML group has `source: "p.<page>"`; a rule from an office page
+   cites `"<page>, checked <date>"`. Every `course` row has `source_page`. An `amendment` (a change after
+   publication) cites its memo and date. One student's exception never goes into `rules/`.
 3. **Flag, don't guess.** If prereq text can't be parsed, store it with `status: unparsed` and
    surface a warning. Never drop it and never approximate it silently.
 4. **No LLM calls in the server.** Tools are deterministic. The AI client does the talking.
@@ -62,6 +64,7 @@ uv run python evals/plan_review.py # build_plan for every test scenario at 12/15
 | `src/gatorpath/server.py` | MCP tool/prompt definitions only. Keep it thin and call the engine |
 | `src/gatorpath/engine/` | `prereq.py`, `rules.py`, `planner.py`: all logic, pure functions |
 | `src/gatorpath/ingest/` | Offline builders: Bulletin PDF and class search → `data/catalog.db` |
+| `src/gatorpath/dpr.py` | Local DPR PDF → profile + what's left (PII dropped); the main import |
 | `src/gatorpath/transcript.py` | Local transcript PDF → course list (PII dropped) |
 | `rules/programs/<year>/` | Hand-written requirement YAML (reviewed) |
 | `rules/university/<year>.yaml` | GE, SF State Studies, American Institutions, GWAR, unit totals |
