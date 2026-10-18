@@ -309,7 +309,7 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   p.2304), `totals.max_units_from` (70 community college, 90 all transfer, 30 exam or evaluation, 4 "Projects in Teaching" 685,
   pp.2304, 2313), `max_units` per term (19 fall/spring, 14 summer; more needs a 3.0 SF State GPA and a petition,
   p.2392), `academic_load.normal_min` (12, p.2393), and the repeat policy in `repeats` (p.2392).
-  `f1_final_term` (added 2026-10-18, trial 7) is the one key from an office page instead of the Bulletin (§5 "What may
+  `f1_final_term` (added 2026-10-18, trial 7) is the only rule from an office page instead of the Bulletin (§5 "What may
   come from where"): the one-time final-semester Reduced Course Load, how to apply, and the 3 units of online classes
   that count toward the F-1 load (`international.sfsu.edu/rcl`). check_plan's warning on an F-1 student's light
   last term quotes it.
