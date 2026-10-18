@@ -7,6 +7,29 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ---
 
+## Next up — Design-consistency audit (Codex, read-only)
+
+The pivots since 2026-10-16 came from real trial feedback, but they've outrun the design docs. Codex only sees the
+repo, so a change whose reason lives only in a chat would rightly be flagged as a conflict. Write the reasons down
+first, then audit.
+
+- [ ] 1. Record the pivots in `docs/ARCHITECTURE.md` (decisions log + the sections they change):
+  - Planning is roadmap-led (§8 still describes critical-path greedy). The default cap stays 15 even though the
+    first-time roadmaps have 16-17-unit terms (`pace.roadmap_load` reports them)
+  - Senior electives wait for real readiness (an option ready that term), not the roadmap's course order
+  - The DPR is the main import (`import_dpr`); the transcript could become optional
+  - Some rules come from websites, not the Bulletin: the F-1 Reduced Course Load page (`f1_final_term`) and the
+    advising offices. Golden rule 1 still says course data comes from the Bulletin PDF: say what's allowed from where
+  - Phases ran out of order: 5 and 6 were done while Phase 2 verification and Phase 3 trials are still open, though
+    this file says to finish phases in order
+- [ ] 2. Run Codex read-only (as in the rules reviews), on design consistency, not Bulletin accuracy. Inputs:
+  `AGENTS.md`, `docs/ARCHITECTURE.md` (with the decisions log), `TASKS.md`, the `plan_my_degree` prompt and the tool
+  docstrings in `src/gatorpath/server.py`, and `src/gatorpath/engine/planner.py`. Output: a table with columns
+  conflict | where (file:line) | which decision or rule it breaks | suggested fix
+- [ ] 3. Check each finding in the code before fixing it; commit the fixes, then review the commit
+
+---
+
 ## Phase 0 — Foundation
 
 - [x] Create repo `~/Projects/gatorpath`
