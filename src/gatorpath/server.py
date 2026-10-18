@@ -35,7 +35,8 @@ mcp = MCPServer(
     instructions=(
         f"SF State degree-planning tools for the {YEAR} Bulletin. Answers come only from the Bulletin and reviewed rules: "
         "don't add courses, prereqs or requirements the tools didn't return. Cite the `source`/`source_page` each answer "
-        "comes with (Bulletin pages; a few office policies cite that office's page), show every warning, and remind the student that the DPR and an advisor are the final word. "
+        "comes with (Bulletin pages; a few office policies cite that office's page), show every warning, and remind "
+        "the student that the DPR and an advisor are the final word. "
         "Never guess what transfer credit covers or when a student will graduate: ask for the DPR, and use the planner "
         "tools when they exist. "
         "Student profiles are passed in per call and never stored, except by save_profile: one file on the student's "
