@@ -743,13 +743,54 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             "check": {"valid": check["valid"], "errors": check["errors"]}}
 
 
+def minimal_covers(need: frozenset, covers: list[frozenset], ways: int = 10, budget: int = 20000) -> list[list]:
+    """Sets of covers whose union is `need`, none redundant, fewest first. A greedy cover sets the size; an exact-cover
+    search (branch on the requirement with the fewest covers, only over covers that contain it) finds others up to that
+    size (with 5 or fewer open, up to one course each). `budget` caps the steps, so 17 open requirements still answer
+    at once. Not a proof of the minimum."""
+    if not need or not all(any(r in c for c in covers) for r in need):
+        return []
+    lean = lambda chosen: [x for i, x in enumerate(chosen)  # drop parts the others already cover
+                           if frozenset().union(*(c for j, c in enumerate(chosen) if j != i)) != need] or chosen
+    chosen, covered = [], frozenset()
+    while covered != need:
+        c = max(covers, key=lambda c: (len(c - covered), -len(c), sorted(c)))
+        chosen.append(c)
+        covered |= c
+    greedy = lean(chosen)
+    while len(lean(greedy)) < len(greedy):
+        greedy = lean(greedy)
+    count = {r: sum(r in c for c in covers) for r in need}
+    size = len(need) if len(need) <= 5 else len(greedy)  # few open: every shape up to one course each
+    found, seen, steps = [greedy], {frozenset(greedy)}, 0
+
+    def search(chosen: list, covered: frozenset) -> None:
+        nonlocal steps
+        steps += 1
+        if steps > budget or len(found) >= ways:
+            return
+        if covered == need:
+            key = frozenset(chosen)
+            if key not in seen and not any(frozenset().union(*(c for c in chosen if c is not x)) == need for x in chosen):
+                seen.add(key)
+                found.append(list(chosen))
+            return
+        if len(chosen) == size:
+            return
+        r = min(need - covered, key=lambda x: count[x])
+        for c in sorted((c for c in covers if r in c), key=lambda c: (-len(c - covered), sorted(c))):
+            search(chosen + [c], covered | c)
+
+    search([], frozenset())
+    return sorted(found, key=len)
+
+
 def cover_combinations(profile: dict, program: dict, university: dict, catalog: dict, prereqs: dict,
-                       plan: dict | None = None, by_term: str | None = None, examples: int = 4, ways: int = 10) -> dict:
+                       plan: dict | None = None, by_term: str | None = None, examples: int = 4, ways: int = 8) -> dict:
     """Ways to finish the open university requirements that one course can fill (a GE area, an SF State Studies area,
     an American Institutions part): one course covering several, or separate courses, fewest courses first. Each way's
-    parts say which requirements one course covers, with example courses (ready first, then recently offered)."""
-    from itertools import combinations
-
+    parts say which requirements one course covers, with example courses (ready first, then recently offered).
+    `overlaps` lists the course kinds that cover two or more open requirements (the double-dips to look for)."""
     from gatorpath.engine.rules import matches
 
     required = [c for g in program["groups"] for c in g.get("all_of", []) if c in catalog]
@@ -763,10 +804,11 @@ def cover_combinations(profile: dict, program: dict, university: dict, catalog: 
         if r.get("error"):
             return r
         left = r.get("units_needed", 0) - r.get("units_done", 0) if "units_needed" in r else r.get("courses_needed", 0)
-        # ponytail: a requirement one course can finish (3-4 units, or one course); bigger ones stay as plan slots
+        # ponytail: a requirement one course can finish (3-4 units, or one course); bigger ones (GE 4's 6 units) stay
+        # as plan slots. Upgrade: one token per course needed.
         if r["status"] not in ("satisfied", "waived") and 0 < left <= (4 if "units_needed" in r else 1):
             results[g["id"]] = r
-    open_ids = set(results)
+    open_ids = frozenset(results)
     by_cover: dict[frozenset, dict[str, dict]] = {}
     for gid, r in results.items():
         for o in r["options"]:
@@ -774,28 +816,29 @@ def cover_combinations(profile: dict, program: dict, university: dict, catalog: 
             by_cover.setdefault(cover, {}).setdefault(o["code"], o)
     rank = {"ready": 0, "check": 1, "blocked": 2}
     recent = lambda c: term_key(catalog[c]["offered"]["last"]) if (catalog[c].get("offered") or {}).get("last") else (0, 0)
-    covers = sorted(by_cover, key=lambda k: (-len(k), sorted(k)))
-    found = []
-    for n in range(1, len(open_ids) + 1):
-        for combo in combinations(covers, n):
-            if set().union(*combo) != open_ids or any(set().union(*(c for c in combo if c is not x)) == open_ids
-                                                      for x in combo):
-                continue  # doesn't cover everything, or a part isn't needed
-            found.append({"courses": n, "parts": [{
-                "covers": sorted(results[i]["title"] for i in part),
-                "options": len(by_cover[part]),
-                "examples": [{k: o[k] for k in ("code", "title", "units", "readiness")}
-                             for o in sorted(by_cover[part].values(), key=lambda o: (rank[o["readiness"]],
-                                             tuple(-x for x in recent(o["code"])), o["code"]))[:examples]]}
-                for part in combo]})
-            if len(found) >= ways:
-                break
-        if len(found) >= ways:
-            break
+
+    def part(cover: frozenset) -> dict:
+        best = sorted(by_cover[cover].values(), key=lambda o: (rank[o["readiness"]], tuple(-x for x in recent(o["code"])),
+                                                               o["code"]))
+        return {"covers": sorted(results[i]["title"] for i in cover), "options": len(by_cover[cover]),
+                "examples": [{k: o[k] for k in ("code", "title", "units", "readiness")} for o in best[:examples]]}
+
+    many = len(open_ids) > 5
+    examples = 3 if many else examples
+    found = minimal_covers(open_ids, list(by_cover), 3 if many else ways)
+    overlaps = sorted((c for c in by_cover if len(c) > 1), key=lambda c: (-len(c), -len(by_cover[c]), sorted(c)))
+    missing = [results[i]["title"] for i in open_ids if not any(i in c for c in by_cover)]
+    warnings = []
+    if found:
+        warnings.append(f"{len(found[0])} courses can cover these {len(open_ids)} requirements (the fewest found). Any "
+                        "way works, and the parts can go in different terms: pick one, put its courses in the plan, "
+                        "and check_plan it. `overlaps` lists the courses that count for two or more")
+    if missing:
+        warnings.append(f"No eligible course found for: {', '.join(missing)}")
     return {"catalog_year": program["catalog_year"], "open": [results[i]["title"] for i in sorted(open_ids)],
-            "ways": found,
-            "warnings": ["Any way works; the parts can go in different terms. Pick one, put its courses in the plan, and "
-                         "check_plan it"] if found else []}
+            "fewest_courses": len(found[0]) if found else None,
+            "ways": [{"courses": len(w), "parts": [part(c) for c in w]} for w in found],
+            "overlaps": [part(c) for c in overlaps[:10]], "warnings": warnings}
 
 
 def eligible_options(profile: dict, group_id: str, program: dict, university: dict, catalog: dict, prereqs: dict,
