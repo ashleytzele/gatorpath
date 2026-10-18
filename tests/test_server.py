@@ -16,6 +16,7 @@ from gatorpath.ingest.bulletin import write_catalog
 ROOT = Path(__file__).parents[1]
 ROWS = json.loads((ROOT / "tests/fixtures/catalog_rows.json").read_text())
 TRANSCRIPT = (ROOT / "tests/fixtures/transcript_synthetic.txt").read_text()
+DPR = (ROOT / "tests/fixtures/dpr_synthetic.txt").read_text()
 REAL_DB = ROOT / "data/catalog.db"
 
 
@@ -227,7 +228,7 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     text = server.plan_my_degree(goal="AI / machine learning", graduate_by="2029-spring")
     assert "The student's goal: AI / machine learning." in text and "graduate by 2029-spring" in text
     tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
-    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last"}  # data
+    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last", "profile"}  # data
     named = set(regex.findall(r"`([a-z_]+)`", text)) - fields
     assert named <= tools, named - tools
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named
@@ -273,6 +274,7 @@ def test_only_save_profile_writes_a_file(tmp_path, tmp_path_factory, monkeypatch
     pdf = tmp_path_factory.mktemp("downloads") / "SSR_TSRPT.pdf"  # *.pdf is git-ignored: stub the PDF text
     pdf.write_bytes(b"%PDF-1.4")
     monkeypatch.setattr(server.transcript, "read_pdf", lambda path: TRANSCRIPT)
+    monkeypatch.setattr(server.dpr, "read_pdf", lambda path: DPR)
     calls = {
         "search_courses": lambda: server.search_courses("data"), "get_course": lambda: server.get_course("CSC 653"),
         "get_prereq_chain": lambda: server.get_prereq_chain("CSC 653"), "list_programs": server.list_programs,
@@ -281,6 +283,7 @@ def test_only_save_profile_writes_a_file(tmp_path, tmp_path_factory, monkeypatch
         "build_plan": lambda: plan, "check_plan": lambda: server.check_plan(profile, plan),
         "list_eligible_electives": lambda: server.list_eligible_electives(profile, "senior_electives", plan),
         "load_profile": server.load_profile, "import_transcript": lambda: server.import_transcript(str(pdf)),
+        "import_dpr": lambda: server.import_dpr(str(pdf)),
     }
     assert set(calls) == {t.name for t in asyncio.run(server.mcp.list_tools())} - {"save_profile"}
     for call in calls.values():
@@ -338,3 +341,19 @@ def test_import_transcript_gives_the_same_audit_as_typing_and_drops_pii(tmp_path
     imported = {k: got[k] for k in ("completed", "in_progress", "transfer_units")}
     assert server.audit_progress(base | imported) == server.audit_progress(base | typed)
     assert server.import_transcript("SSR_TSRPT.pdf")["error"] == "bad_path"  # relative: the server's folder
+
+
+def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
+    pdf = tmp_path / "Degree Progress Report.pdf"
+    pdf.write_bytes(b"%PDF-1.4")
+    monkeypatch.setattr(server.dpr, "read_pdf", lambda path: DPR)
+    got = server.import_dpr(str(pdf))
+    for pii in ("Zzfake", "Testperson", "900000001"):
+        assert pii not in json.dumps(got)
+    p = got["profile"]
+    assert (p["program"], p["catalog_year"], p["gpa"]) == ("bs-cs", "Fall 2024", 3.215)
+    assert {"code": "MATH 226", "grade": "C", "transfer": True} in p["completed"]  # MATH 100TR under "MATH 226"; min C
+    assert p["dpr_met"] == ["MATH 225"] and p["in_progress"] == ["CSC 300GW", "CSC 220"]
+    assert any("catalog year is Fall 2024" in w for w in got["warnings"])
+    audit = {g["id"]: g for g in server.audit_progress(p)["groups"]}
+    assert audit["ge_1c"]["status"] == "satisfied"  # "Area A1 - Oral Communication" done on the DPR -> GE 1C

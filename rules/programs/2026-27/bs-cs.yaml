@@ -6,6 +6,7 @@ catalog_year: 2026-27
 verified: false                    # a second person checks every rule against the PDF, then flips this
 verified_by: null
 total_units: 74                    # "Computer Science (B.S.) – 74 units"
+dpr_plan: Computer Science-BS     # how the DPR's "Plan:" line names this program (DPR sample, 2026-10-16)
 source: "p.1905"
 global:
   no_cr_nc: true                   # "CR/NC grades are not accepted in courses for the Computer Science major."

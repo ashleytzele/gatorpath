@@ -14,7 +14,7 @@ import yaml
 from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
-from gatorpath import db, transcript
+from gatorpath import db, dpr, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import eligible_options, see_advisor
@@ -489,10 +489,9 @@ def import_transcript(pdf_path: str) -> dict:
     transfer_units. Name, ID, birthdate and the PDF text never leave this tool, so the student doesn't need to attach
     the PDF to the chat; ask for the file's path instead. Merge the result into the profile. Transfer courses show as
     totals only: their requirements come from the DPR."""
-    path = Path(pdf_path).expanduser()
-    if not path.is_absolute() or path.suffix.lower() != ".pdf" or not path.is_file():
-        return {"catalog_year": YEAR, "error": "bad_path",
-                "warnings": ["Give the full path to the transcript PDF on this computer, e.g. ~/Downloads/SSR_TSRPT.pdf"]}
+    path = local_pdf(pdf_path, "~/Downloads/SSR_TSRPT.pdf")
+    if isinstance(path, dict):
+        return path
     try:
         out = transcript.parse(transcript.read_pdf(path))
     except (OSError, subprocess.CalledProcessError):
@@ -501,6 +500,50 @@ def import_transcript(pdf_path: str) -> dict:
         out["completed"] = [r | {"code": norm_code(r["code"])} for r in out["completed"]]
         out["in_progress"] = [norm_code(c) for c in out["in_progress"]]
     return {"catalog_year": YEAR} | out
+
+
+def local_pdf(pdf_path: str, example: str) -> Path | dict:
+    path = Path(pdf_path).expanduser()
+    if not path.is_absolute() or path.suffix.lower() != ".pdf" or not path.is_file():
+        return {"catalog_year": YEAR, "error": "bad_path",
+                "warnings": [f"Give the full path to the PDF on this computer, e.g. {example}"]}
+    return path
+
+
+@mcp.tool(annotations=READ_ONLY)
+def import_dpr(pdf_path: str) -> dict:
+    """Read the student's Degree Progress Report on their own machine (Student Center → Degree Progress Report,
+    printed to PDF; click View All on long lists first) and return a ready `profile` (completed SF State and transfer
+    courses, in_progress, ge_done, dpr_met substitutions, gpa, catalog_year from the DPR's "Requirement (Catalog)
+    Term") plus `remaining`: what the DPR itself says is still needed. Name, ID and the PDF text never leave this tool,
+    so the student doesn't need to attach the PDF to the chat; ask for the file's path. Add qr_pathway, goal and
+    start_term, then use the profile with the other tools."""
+    path = local_pdf(pdf_path, "~/Downloads/Degree Progress Report.pdf")
+    if isinstance(path, dict):
+        return path
+    try:
+        parsed = dpr.parse(dpr.read_pdf(path))
+    except (OSError, subprocess.CalledProcessError):
+        return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF"]}
+    if not parsed["requirements"]:
+        return {"catalog_year": YEAR, "error": "unrecognized_dpr_format",
+                "warnings": ["No requirements found: is this the Degree Progress Report printed from Student Center?"]}
+    program = next((k for k, p in programs().items() if p.get("dpr_plan") == parsed["plan"]), None)
+    warnings = list(parsed["warnings"])
+    if program is None:
+        return {"catalog_year": YEAR, "error": "unknown_program", "programs": list(programs()),
+                "warnings": warnings + [f"The DPR's plan isn't one GatorPath has rules for; it covers {', '.join(programs())}"]}
+    rules = load_rules(YEAR, program)[0]
+    loose = "C-" if rules.get("global", {}).get("no_cr_nc") else "CR"
+    min_grade = {c: g.get("min_grade", loose) for g in rules["groups"] for c in g.get("all_of", [])}
+    units = {c: r["units_min"] for c, r in catalog(DB, YEAR).items()}
+    got = dpr.to_profile(parsed, min_grade, units)
+    profile = {"program": program, **{k: v for k, v in got.items() if k not in ("remaining", "warnings")}}
+    profile["completed"] = [r | {"code": norm_code(r["code"])} for r in profile["completed"]]
+    profile["in_progress"] = [norm_code(c) for c in profile["in_progress"]]
+    profile["dpr_met"] = [norm_code(c) for c in profile["dpr_met"]]
+    return {"catalog_year": YEAR, "profile": profile, "remaining": got["remaining"],
+            "warnings": warnings + got["warnings"] + year_warning(profile)}
 
 
 PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath ({year} Bulletin). Every course, prereq,
@@ -512,17 +555,18 @@ stopping for confirmation. Never ask one question at a time or re-ask what they 
 defaults (15 units per term, no summer) instead of asking.
 
 1. Start with `load_profile` (no path: the default file). If it returns a profile, start from it and ask only what's
-   missing or changed; if it warns the DPR is stale, ask for a fresh one. Otherwise ask for their record. The
-   fastest is their DPR (Student Center → Degree Progress Report, printed or saved as a
-   PDF, or its text pasted). In that same request, before they share anything, say once that an attached PDF includes
-   their name and student ID, which go to the AI provider, so they may black those out or paste only the requirement
-   sections. Never repeat it after they share. Then accept whatever they share; a
-   typed course list works too, and so does the path to their unofficial transcript PDF on this computer:
-   `import_transcript` reads it locally and returns only codes, grades, units and terms (no name or ID reaches you).
-   A transcript doesn't say which requirements transfer credit meets; the DPR does. In the same message, ask only for what a DPR can't show and isn't given above: the
+   missing or changed; if it warns the DPR is stale, ask for a fresh one. Otherwise ask for their record. Best is the
+   path to their DPR saved as a PDF on this computer (Student Center → Degree Progress Report → View All on long
+   lists → print to PDF): `import_dpr` reads it locally and returns a ready profile, and no name or ID reaches you.
+   The unofficial transcript PDF works the same way (`import_transcript`), but it doesn't say which requirements
+   transfer credit meets. If they'd rather attach or paste instead, say once, before they share, that an attached
+   PDF includes their name and student ID, which go to the AI provider, so they may black those out or paste only
+   the requirement sections; never repeat it after they share. A typed course list works too. In the same message,
+   ask only for what a DPR can't show and isn't given above: the
    goal, a graduation target, whether they're on an F-1 student visa (it sets a 12-unit minimum every spring and
    fall), and the math placement (QR "1/2" or "3/4") if lower-division math isn't done.
-2. Build the profile:
+2. Build the profile. From import_dpr, use its `profile` as is and read its warnings to the student (grades it had
+   to assume for transfer rows, Notes codes); otherwise build it from what they shared:
    - catalog_year: the DPR's "Requirement (Catalog) Term", e.g. "Spring 2025". If it isn't {year}, keep going:
      the tools plan with {year} rules and warn. Where the DPR and the tools disagree, the DPR wins: say so.
    - completed: each course with a grade (code, grade, term). A course with a term and no grade is in_progress.
@@ -573,7 +617,6 @@ defaults (15 units per term, no summer) instead of asking.
 @mcp.prompt(title="Plan my degree")
 def plan_my_degree(goal: str = "", graduate_by: str = "") -> str:
     """Step-by-step workflow: profile → audit → plan → electives by goal → check_plan → pace/what-ifs → advisor."""
-    # ponytail: no import_dpr step yet. Add it to the workflow when the tool lands (TASKS phase 6).
     return PLAN_MY_DEGREE.format(year=YEAR, goal=f"\n\nThe student's goal: {goal}." if goal else "",
                                  deadline=f" They'd like to graduate by {graduate_by} (pass it as graduate_by)."
                                  if graduate_by else "")
