@@ -58,7 +58,7 @@ totals:
   # of which can be earned for residence credit." Credit by examination "may not be counted towards the residence
   # requirement" (p.2391).
   # ponytail: exam, extension and CPEL aren't checked (profiles don't say which units came that way); the DPR applies them.
-  max_units_from: {community_college: 70, all_transfer: 90, exam: 30, projects_in_teaching_685: 4,
+  max_units_from: {community_college: 70, all_transfer: 90, exam_or_evaluation: 30, projects_in_teaching_685: 4,
                    extension_correspondence: {units: 24, excludes: [sf_state_winter_session, sf_state_special_session]},
                    prior_experiential_learning: {units: 30, residence: 6},
                    over_cap: "on approval, for subject and grade point requirements only; never toward the 120",
@@ -78,8 +78,9 @@ class_level: {sophomore: 30, upper: 60, senior: 90,
 # regulations, foreign students are required to be continuously enrolled every semester. Undergraduates must carry a
 # minimum of 12 units and graduate students must carry a minimum of 8 units."
 # The summer figures are the normal load, not a cap (the caps are under max_units).
+# "Students are expected to include two hours of preparation for each hour of regular coursework." (p.2393)
 academic_load: {normal_min: 12, normal_max: 15, summer_normal: 8, f1_min: {undergraduate: 12, graduate: 8},
-                f1_continuous_enrollment: true,
+                f1_continuous_enrollment: true, prep_hours_per_class_hour: 2,
                 graduate: {normal_min: 9, normal_max: 12, summer_normal: 7}, source: "p.2390, p.2393"}
 # "During priority registration, students may register for a maximum of 19 units ... a maximum of 14 units in any
 # combination of summer semester sessions ... Undergraduate students who want to enroll in more than the maximum units
@@ -90,13 +91,18 @@ academic_load: {normal_min: 12, normal_max: 15, summer_normal: 8, f1_min: {under
 # The caps count wait-listed units: "a maximum of 19 units of enrolled, including 12 units of wait-listed courses";
 # summer "including 5 units of wait-listed courses". "Registration will not permit students to enroll in more than the
 # above unit maximums without prior approval of the relevant dean."
+# Academic notice (p.2397): "Undergraduate students who are on academic notice can enroll in a maximum of 13 units per
+# semester while their GPA is below 2.0 ... On rare occasions, individual exceptions to this unit limit may be granted
+# with approval from an advisor in the Undergraduate Advising Center ... or in the Educational Opportunity and Pathway
+# Programs" (petition on the Registrar's website).
 max_units: {fall_spring: 19, summer: 14, summer_sessions: {five_week: 7, eight_week: 9, ten_week: 12},
             includes_waitlisted: {fall_spring: 12, summer: 5},
-            academic_notice: {units: 13, applies_from: "the student's second semester on academic notice"},
+            academic_notice: {units: 13, applies_from: "the student's second semester on academic notice",
+                              while_gpa_below: 2.0, exception: "UAC or EOPP advisor approval, by petition"},
             above_needs_sf_state_gpa: 3.0, dean_approval_from: 25,
             at_25_or_more: "approval of their advisor, their college dean, and the Dean of Undergraduate Education and Academic Planning",
             petition: "Exceed Maximum Units Petition, signed by the major advisor, department chair and college dean, to the Registrar (One Stop or records@sfsu.edu) before the add deadline. Undeclared and special majors need the Dean of Undergraduate Education and Academic Planning or designee. Courses completed in auditor status, at another university, or through SF State's College of Professional & Global Education must be included on the petition.",
-            source: "p.2392"}
+            source: "p.2392, p.2397"}
 # Upper-division GE: "Minimally, all of these courses have a prerequisite of English Composition (1A), Critical
 # Thinking (1B), Oral Communication (1C), and Mathematical Concepts and Quantitative Reasoning (2)" (p.2319); they
 # "are still designed and recommended to be taken after" 60 units (p.2320).
@@ -163,13 +169,22 @@ repeats:
   forgiveness_drops: lower_grade
   after_forgiveness_limit: "all units attempted and grade points count in the GPA; units earned count once"
   # "Students transferring from other institutions where courses were taken and repeated are held to the policy of
-  # the institution where the course was repeated." (p.2398)
+  # the institution where the course was repeated." (p.2399)
   transfer_repeats: "held to the policy of the institution where the course was repeated"
   graduate: {repeat_once_more_below: B}
   full_semester_withdrawals_count_toward_28: false
   more_approvals: "some exceptions also need the college dean and/or the Board of Appeals and Review"
   forgiveness_from_term: 2017-fall
   forgiveness_not_for: academic dishonesty
+  # Academic Renewal, for repeats before fall 2017: "This provision is applicable only if it enables the student to
+  # meet the 2.0 minimum grade point average required for graduation"; the Registrar can apply it at graduation; only
+  # where "in the prior attempt the students earned a grade of C-, D, F or WU" (p.2398). "This 16-unit maximum is a
+  # total for all grade forgiveness applied via both the Course Repeat Policy ... and via individual course Academic
+  # Renewal" (p.2399). The engine keeps pre-fall-2017 repeats in the GPA (the Registrar decides on renewal).
+  # ponytail: renewal already used isn't subtracted from the 16; add a profile field if a DPR shows "Acad Renewal".
+  academic_renewal: {before_term: 2017-fall, only_if: "it lets the student meet the 2.0 GPA for graduation",
+                     prior_grades: [C-, D, F, WU], shares_forgiveness_units: true,
+                     applied_by: "the Registrar, at graduation, on advisor or student request"}
   variable_topic_excluded_when_topics_vary: true
   after_degree: "repeats don't affect the GPA or content of a degree already granted"
   source: "p.2392, p.2393, p.2398-2399, p.2406"
@@ -189,7 +204,7 @@ groups:
   # General Education, 43 units (table p.2311-2312). Area minimums below add up to 43.
   - {id: ge_1a, title: "GE 1A English Composition", choose_units: 3, from: {ge_area: 1A}, min_grade: C-, source: "p.2314"}
   - {id: ge_1b, title: "GE 1B Critical Thinking", choose_units: 3, from: {ge_area: 1B}, min_grade: C-, source: "p.2314"}
-  - {id: ge_1c, title: "GE 1C Oral Communication", choose_units: 3, from: {ge_area: 1C}, min_grade: C-, source: "p.2314"}
+  - {id: ge_1c, title: "GE 1C Oral Communication", choose_units: 3, from: {ge_area: 1C}, min_grade: C-, source: "p.2314-2315"}
   # "Area 1 courses must be completed with a grade of CR or C– or better" (p.2314); same wording for Area 2 (p.2315)
   - {id: ge_2, title: "GE 2 Mathematical Concepts and Quantitative Reasoning", choose_units: 3, from: {ge_area: "2"}, min_grade: C-, source: "p.2315"}
   - {id: ge_3a, title: "GE 3A Arts", choose_units: 3, from: {ge_area: 3A}, source: "p.2315"}
@@ -200,8 +215,8 @@ groups:
   - {id: ge_5c, title: "GE 5C Laboratory", choose_units: 1, from: {ge_area: 5C}, source: "p.2319"}
   - {id: ge_6, title: "GE 6 Ethnic Studies", choose_units: 3, from: {ge_area: "6"}, source: "p.2312"}
   - {id: ge_ud_sci, title: "GE 5UD or 2UD Upper-Division Science or Math/QR", choose_units: 3, from: {ge_area: [5UD, 2UD]}, source: "p.2320"}
-  - {id: ge_3ud, title: "GE 3UD Upper-Division Arts or Humanities", choose_units: 3, from: {ge_area: 3UD}, source: "p.2320"}
-  - {id: ge_4ud, title: "GE 4UD Upper-Division Social and Behavioral Sciences", choose_units: 3, from: {ge_area: 4UD}, source: "p.2320"}
+  - {id: ge_3ud, title: "GE 3UD Upper-Division Arts or Humanities", choose_units: 3, from: {ge_area: 3UD}, source: "p.2320-2321"}
+  - {id: ge_4ud, title: "GE 4UD Upper-Division Social and Behavioral Sciences", choose_units: 3, from: {ge_area: 4UD}, source: "p.2320, p.2324"}
   # "The three courses taken in Area 4 (one upper-division and two lower-division) must be in at least two different disciplines."
   - {id: ge_4_disciplines, title: "GE Area 4 in two or more disciplines", distinct_subjects: 2, across: [ge_4, ge_4ud], source: "p.2317"}
   # GWAR: "identified with a GW after the course number and must be completed with a grade of C- or better"

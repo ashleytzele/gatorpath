@@ -281,7 +281,7 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
 - `course_units` (choose-group): the unit size the Bulletin names ("five 3-unit senior electives", p.1905). A
   counted course with fewer units gets a ⚠️ (the same list names 1-unit CSC 685/686), never a silent pass or fail.
 - University keys: `transfer.certified_ld_ge` (group ids met by Cal-GETC certification, `profile.ge_certified`,
-  p.2304), `totals.max_units_from` (70 community college, 90 all transfer, 30 exam, 4 "Projects in Teaching" 685,
+  p.2304), `totals.max_units_from` (70 community college, 90 all transfer, 30 exam or evaluation, 4 "Projects in Teaching" 685,
   pp.2304, 2313), `max_units` per term (19 fall/spring, 14 summer; more needs a 3.0 SF State GPA and a petition,
   p.2392), `academic_load.normal_min` (12, p.2393), and the repeat policy in `repeats` (p.2392).
   `totals.community_college_upper_division: {allowed: false}` (p.2304): a transfer row numbered 300-699 still counts

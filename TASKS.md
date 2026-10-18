@@ -72,9 +72,15 @@ report.
     note (p.1906), catalog rights "regular sessions … same curriculum" (p.2390), no UD credit for community college
     work (p.2304, transfer rows numbered 300+ now ⚠️), Winter/Special Sessions outside the 24-unit extension cap
     (p.2391), graduate class level and F-1 continuous enrollment (p.2390), which grade forgiveness drops and what
-    happens past 16 units (p.2392), transfer repeats follow the other school's policy (p.2398), Cal-GETC 34 units
-    (p.2304). UNCLEAR (for an advisor): "five 3-unit senior electives" vs 1-unit CSC 685/686. A person still flips
-    `verified`
+    happens past 16 units (p.2392), transfer repeats follow the other school's policy (p.2399), Cal-GETC 34 units
+    (p.2304).
+  - Round 8: 1 MISMATCH, 3 MISSING, 3 WRONG-PAGE / 66 (10.6%). Fixed after checking the PDF: `exam` cap is
+    "examination or evaluation" (p.2313); GE 1C / 3UD / 4UD also cite their headings (pp.2315, 2321, 2324; the
+    p.2320 summary stays); 2 hours of preparation per class hour (p.2393); the 13-unit academic-notice cap holds while
+    the GPA is below 2.0, with a UAC/EOPP exception (p.2397, Codex said 2398); Academic Renewal for pre-fall-2017
+    repeats (only to reach the 2.0, prior C-/D/F/WU, shares the 16 units, pp.2398-2399). UNCLEAR legacy GE counts:
+    `--legacy-ge` reproduces every count in the comment. Own round-7 slip fixed: transfer repeats are p.2399.
+    UNCLEAR (for an advisor): "five 3-unit senior electives" vs 1-unit CSC 685/686. A person still flips `verified`
 - [x] `engine/rules.py`: load YAML, evaluate `all_of`, `choose_units`, `from` filters, `except`,
   `max_courses`, `min_units_from`, `min_grade`, `no_cr_nc` (+ `waived_if`, `distinct_subjects`)
 - [x] Double-counting per ARCHITECTURE §6.2 (once within the major; GE/SFSS/AI may overlap;
