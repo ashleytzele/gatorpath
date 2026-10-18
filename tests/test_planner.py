@@ -237,3 +237,33 @@ def test_major_courses_older_than_seven_years_are_flagged():
     got = check(old, ("2027-spring", ["CSC 215"]))
     assert any(w.startswith("CSC 101, MATH 226: taken more than 7 years before graduation") for w in got["warnings"])
     assert not any("7 years" in w for w in check(FRESHMAN, ("2027-spring", ["CSC 215"]))["warnings"])
+
+
+def f1_senior(**extra):
+    """Desktop trial 5: 27 units left (CSC 413, 415, 648, one upper-division GE, 15 senior-elective units) at 12 per term."""
+    p02 = yaml.safe_load((ROOT / "evals/profiles/p02-complete-roadmap.yaml").read_text())["profile"]
+    left = {"CSC 413", "CSC 415", "CSC 648", "CSC 600", "CSC 652", "CSC 653", "CSC 665", "CSC 675", "PLSI 355"}
+    return p02 | {"completed": [r for r in p02["completed"] if r["code"] not in left], "start_term": "2027-spring",
+                  "max_units_per_term": 12, **extra}
+
+
+def test_f1_students_get_full_spring_and_fall_terms():
+    # p.2393: "For international students in F1 visa status, immigration regulations require a minimum academic load of
+    # 12 units for undergraduates ... for spring and fall semesters"
+    assert [s["units"] for s in plan_for(f1_senior())["semesters"]] == [9, 12, 6]  # electives wait for the roadmap order
+    got = plan_for(f1_senior(f1=True))
+    assert [s["units"] for s in got["semesters"]] == [12, 12, 3] and got["check"]["valid"]
+    assert any(w.startswith("2028-spring: 3 units; F-1 visa students must carry at least 12") and "last term" in w
+               for w in got["warnings"])
+    assert any(a["role"] == "international" and a["link"].startswith("https://international.sfsu.edu")
+               for a in got["see_advisor"])
+
+
+def test_f1_light_or_skipped_term_is_an_error():
+    p = f1_senior(f1=True)
+    light = check(p, ("2027-spring", ["CSC 413", "CSC 415"]), ("2027-fall", ["CSC 648"] + 3 * [{"slot": "senior_electives", "units": 3}]))
+    assert [e["error"] for e in errors(light)] == ["below_f1_minimum"] and errors(light)[0]["term"] == "2027-spring"
+    gap = check(p, ("2027-spring", ["CSC 413", "CSC 415"] + 2 * [{"slot": "senior_electives", "units": 3}]),
+                ("2028-spring", ["CSC 648"] + 3 * [{"slot": "senior_electives", "units": 3}]))
+    assert [e["error"] for e in errors(gap)] == ["f1_gap"] and "2027-fall" in errors(gap)[0]["message"]  # p.2390
+    assert errors(check(f1_senior(), ("2027-spring", ["CSC 413", "CSC 415"]), ("2027-fall", ["CSC 648"]))) == []

@@ -152,7 +152,7 @@ def see_advisor(triggers: list[tuple[str, str]], program: dict, university: dict
         e = out.setdefault(a["role"], {k: v for k, v in a.items() if k != "when"} | {"why": []})
         if why not in e["why"]:
             e["why"].append(why)
-    urgency = ["substitutions", "major_advisor", "college_advising", "general_advising", "directory", "dpr"]
+    urgency = ["substitutions", "major_advisor", "international", "college_advising", "general_advising", "directory", "dpr"]
     return sorted(out.values(), key=lambda e: urgency.index(e["role"]) if e["role"] in urgency else len(urgency))
 
 
@@ -176,6 +176,8 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     load, levels = university["academic_load"], university["class_level"]
     cap = profile.get("max_units_per_term", load["normal_max"])
     reps, most = university["repeats"], university["max_units"]
+    f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") else 0
+    last_term = str((plan.get("semesters") or [{}])[-1].get("term", ""))
 
     completed = [r for r in profile.get("completed", []) if r["code"] in catalog]
     grades: dict[str, str] = {}
@@ -283,7 +285,16 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             else:
                 warnings.append(why)
                 advise.append(("major_advisor", why))
-        if not summer and 0 < term_units < load["normal_min"]:
+        if not summer and term_units < f1_min:
+            why = (f"{term}: {term_units:g} units; F-1 visa students must carry at least {f1_min:g} units every spring "
+                   f"and fall ({load['source']})")
+            if term == last_term:
+                warnings.append(why + ". This is the plan's last term: the Bulletin gives no exception for it, so ask "
+                                "the international office before planning a lighter final term")
+                advise.append(("international", why + "; ask whether a lighter final term is allowed"))
+            else:
+                err("below_f1_minimum", why, term=term)
+        elif not summer and 0 < term_units < load["normal_min"]:
             warnings.append(f"{term}: {term_units:g} units is below the normal {load['normal_min']:g}-{load['normal_max']:g} "
                             f"load, so it's part-time; F-1 visa students need at least {load['f1_min']['undergraduate']:g} "
                             f"in spring and fall, and it can matter for financial aid ({load['source']})")
@@ -303,6 +314,14 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         slot_areas |= {a for x in term_slots for a in slot_ge_areas(x, groups)}
         units += term_units
 
+    if f1_min and load.get("f1_continuous_enrollment") and len(seen_terms) > 1 and all(TERM.fullmatch(t) for t in seen_terms):
+        term, skipped = seen_terms[0], []
+        while term_key(term := next_term(term, False)) < term_key(seen_terms[-1]):
+            if term not in seen_terms:
+                skipped.append(term)
+        if skipped:
+            err("f1_gap", f"{', '.join(skipped)}: no courses planned; F-1 visa students must be continuously enrolled "
+                f"every semester ({load['source']})")
     # Requirement coverage: audit as if everything in progress and planned is passed, then let slots fill the gaps.
     sim = profile | {"completed": profile.get("completed", []) + planned
                      + [{"code": c, "grade": ASSUMED} for c in profile.get("in_progress", []) if c in catalog],
@@ -558,6 +577,16 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                     term_slots.append(s)
                     slots.remove(s)
                     used += s["units"]
+        # F-1 (pp.2390, 2393): a spring/fall term with more to come is filled toward the minimum with elective slots
+        # that would otherwise wait for the roadmap's order; check_plan flags what still falls short.
+        f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") and not term.endswith("summer") else 0
+        if used < f1_min and (left or slots):
+            for s in [s for s in slots if s["_kind"] in ("major", "elective")]:
+                if units >= levels["upper"] or not (s["_kind"] == "major" or s.get("upper_division")):
+                    if used < f1_min and used + s["units"] <= limit:
+                        term_slots.append(s)
+                        slots.remove(s)
+                        used += s["units"]
         if not placed and not any(s["units"] for s in term_slots):
             blocked = {c: evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[1] for c in left}
             warnings.append(f"Stopped at {term}: nothing more can be scheduled. Blocked: "

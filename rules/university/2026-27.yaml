@@ -256,6 +256,14 @@ advising:
     location: Admin 203
     contact: uacadvising@sfsu.edu
     source: "advising.sfsu.edu and advisinghub.sfsu.edu/node/4, checked 2026-10-16"
+  - role: international
+    who: Division of International Education (F-1 advising)
+    when: F-1 visa students, on the full-time load, a lighter final term, I-20 dates and OPT
+    link: "https://international.sfsu.edu/node/52"
+    how_to_book: "No appointment needed: walk-in advising (sign up at the front desk) or Zoom advising during the posted hours; check the page for current hours."
+    location: Village at Centennial Square, Building C
+    contact: "f1@sfsu.edu, (415) 338-1293"
+    source: "international.sfsu.edu/node/52, checked 2026-10-17"
   - role: directory
     who: Advising Hub (directory of all advising offices)
     when: finding the right office

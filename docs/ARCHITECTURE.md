@@ -387,6 +387,8 @@ not_on_dpr: ["6"]                  # requirements the 2026-27 rules have but the
 transfer_units: 0                  # total transfer units (from the transcript)
 adt: false                         # verified AA-T/AS-T from a CCC in a similar approved major → SF State Studies waived
 first_time: true                   # began at SF State as a first-time college student (default: no transfer work)
+f1: false                          # F-1 visa: spring/fall terms of 12+ units, none skipped (pp.2390, 2393); the
+                                   # last term under 12 is a warning + the international office
 ge_certified: false                # Cal-GETC certification of lower-division GE from a CCC (p.2304)
 prior_bachelors: false             # bachelor's or higher from a regionally accredited institution → GE and
                                    # graduation requirements waived, major courses still required (p.2313)

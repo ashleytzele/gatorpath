@@ -68,6 +68,7 @@ class Profile(TypedDict):
     prior_bachelors: NotRequired[bool]
     transfer_units: NotRequired[float]
     adt: NotRequired[bool]
+    f1: NotRequired[bool]
     max_units_per_term: NotRequired[float]
     include_summer: NotRequired[bool]
     graduate_by: NotRequired[str]
@@ -311,6 +312,8 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     valid.** Errors (with Bulletin text/pages): prereq not met by that term, course already passed or planned twice,
     unknown course, units over max_units_per_term, requirement or 120/upper-division units not covered. Warnings:
     unverifiable prereqs (GPA not given, permission), loads above the normal 15 (p.2393), unfilled slots.
+    profile.f1: true for an F-1 visa student: a spring/fall term under 12 units is an error (the plan's last term: a
+    warning and the international office), and so is a skipped spring/fall term (pp.2390, 2393).
 
     plan: {semesters: [{term: '2027-fall', courses: ['CSC 413', {slot: 'senior_electives', units: 3}]}]}. A slot is an
     unfilled pick for a requirement group (group ids from get_program_requirements), or {slot: 'elective', units: 3,
@@ -332,7 +335,8 @@ def build_plan(profile: Profile) -> dict:
     and upper-division totals. Already run through check_plan: see `check`.
 
     Fill each slot with list_eligible_electives + the student's goal, then call check_plan again before presenting.
-    Uses max_units_per_term (default 15, the normal load, p.2393) and include_summer. Returns needs_input
+    Uses max_units_per_term (default 15, the normal load, p.2393), include_summer and f1 (F-1 visa: spring/fall
+    terms filled toward 12 units, pp.2390, 2393). Returns needs_input
     (qr_pathway, start_term) instead of guessing. Each semester has `why`: per course, what it's needed before, the
     chain it starts, and whether delaying it pushes back graduation. `pace` says what sets the length: the longest
     prereq chain vs the units per term; with profile.graduate_by it says whether that term is reachable and, if
@@ -475,7 +479,8 @@ defaults (15 units per term, no summer) instead of asking.
    their name and student ID, which go to the AI provider, so they may black those out or paste only the requirement
    sections. Never repeat it after they share. Then accept whatever they share; a
    typed course list works too. In the same message, ask only for what a DPR can't show and isn't given above: the
-   goal, a graduation target, and the math placement (QR "1/2" or "3/4") if lower-division math isn't done.
+   goal, a graduation target, whether they're on an F-1 student visa (it sets a 12-unit minimum every spring and
+   fall), and the math placement (QR "1/2" or "3/4") if lower-division math isn't done.
 2. Build the profile:
    - catalog_year: the DPR's "Requirement (Catalog) Term", e.g. "Spring 2025". If it isn't {year}, keep going:
      the tools plan with {year} rules and warn. Where the DPR and the tools disagree, the DPR wins: say so.
@@ -492,7 +497,7 @@ defaults (15 units per term, no summer) instead of asking.
    - gpa from the DPR; transfer_units; adt: true only for a verified AA-T/AS-T from a California Community College
      in a similar approved major; ge_certified: true for Cal-GETC certification of lower-division GE; first_time:
      false for transfer students; prior_bachelors: true if they already hold a bachelor's or higher degree from a
-     regionally accredited institution.
+     regionally accredited institution; f1: true for an F-1 visa student.
    - exam credit (AP / CLEP): put US History and US Government in ge_done as USH / USG only when the DPR shows them;
      no AP or CLEP exam meets California government (CSLG), p.2350.
 3. `audit_progress`, then `build_plan` (with graduate_by if given). If build_plan returns needs_input, ask for
@@ -510,7 +515,9 @@ defaults (15 units per term, no summer) instead of asking.
    - done / left, with Bulletin pages, and every point where the DPR and the tools disagree
    - one table per term, in the order to enter it in Student Center → Degree Planner: course, units, what it counts
      for, why
-   - warnings, and every `see_advisor` item: who, why, link, how to book
+   - warnings, and every `see_advisor` item: who, why, link, how to book. For F-1 students, GatorPath knows only the
+     Bulletin's 12-unit minimum and continuous enrollment: send every other visa question (I-20 dates, OPT, a
+     lighter final term) to the international office without stating visa rules yourself
    - a checklist: confirm each course is offered that term in Class Search (no schedule data yet), compare with the
      DPR, see the advisor
    Then offer what-ifs: graduating earlier (step 6), a new direction (steps 4-5 with the new goal; required courses

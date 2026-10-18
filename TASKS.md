@@ -122,6 +122,15 @@ report.
     GE table (p.2311) and says transfer students have different GE requirements (p.2313); the DPR wins. Fixed:
     `not_on_dpr` leaves such a requirement out with a UAC see_advisor to confirm. Without GE 6 the same courses
     finish in Fall 2027 (12 + 15 units, CSC 656 alongside CSC 415), checked with check_plan
+  - Trial 5 (prompt with load_profile / save_profile, cybersecurity, F-1): load_profile found none, the DPR was asked
+    once, and the cybersecurity re-pick (CSC 645/651/652/653/656) passed check_plan; save_profile was offered at the end.
+    Gaps: F-1 status wasn't asked, so two plans had part-time spring terms (9 and 6 units, only a generic "F-1 students
+    need 12" note) until the student said so; the planner left Spring 2027 at 9 units because senior-elective slots wait
+    for the roadmap's order; the model gave visa advice the tools don't have (STEM OPT). Fixed: the prompt asks about
+    F-1 in its one question; `f1: true` makes a spring/fall term under 12 a `below_f1_minimum` error and a skipped one
+    `f1_gap` (pp.2390, 2393); a last term under 12 is a warning + the new `international` advising entry (Division of
+    International Education); build_plan fills an F-1 student's light terms with waiting elective slots (the trial's
+    9/12/6 → 12/12/3, `tests/test_planner.py`); other visa questions go to the international office
 - [ ] Also try Gemini CLI (proves "works with any client")
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
