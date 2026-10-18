@@ -26,11 +26,19 @@ first, then audit.
     advising offices. Golden rule 1 still says course data comes from the Bulletin PDF: say what's allowed from where
   - Phases ran out of order: 5 and 6 were done while Phase 2 verification and Phase 3 trials are still open, though
     this file says to finish phases in order
-- [ ] 2. Run Codex read-only (as in the rules reviews), on design consistency, not Bulletin accuracy. Inputs:
+- [x] 2. Run Codex read-only (as in the rules reviews), on design consistency, not Bulletin accuracy. Inputs:
   `AGENTS.md`, `docs/ARCHITECTURE.md` (with the decisions log), `TASKS.md`, the `plan_my_degree` prompt and the tool
   docstrings in `src/gatorpath/server.py`, and `src/gatorpath/engine/planner.py`. Output: a table with columns
   conflict | where (file:line) | which decision or rule it breaks | suggested fix
-- [ ] 3. Check each finding in the code before fixing it; commit the fixes, then review the commit
+  - 2026-10-18: 6 findings, all confirmed in the code: (1) the prompt's "re-check until valid" had no way out when no
+    plan change fixes an error (p05's CR in a major course; F-1 at a 12-unit cap is invalid, 13 is valid); (2)
+    ge_combinations said "every" / "fewest" though its search is bounded (8 ways, 3 past 5 open; "not a proof of
+    the minimum"); (3) the server instructions said to cite Bulletin pages only (D21 allows office pages); (4) §7.3's
+    readiness shape lacked `check`; (5) the build_plan docstring and this file's Phase 4 item said critical-path
+    first (D17); (6) §7.4 asked for the QR pathway unconditionally. Codex missed 3 the step-1 read found: the planner's
+    build_plan docstring (D17), the prompt telling F-1 students the final-term RCL is outside GatorPath (D21), and
+    why_not saying senior electives wait for the roadmap's order (D19)
+- [x] 3. Check each finding in the code before fixing it; commit the fixes, then review the commit
 
 ---
 
@@ -209,7 +217,8 @@ course list; ask both questions as written in the next trial.
   can't verify; "or permission" never rescues a plan), corequisites, class level (p.2390), restrictions,
   repeats/duplicates, unit cap + normal load (p.2393), requirement coverage with slots, 120/UD totals.
   Offering-season checks wait for phase 5
-- [x] `build_plan`: critical-path priority + term-by-term greedy (ARCHITECTURE §8); corequisites together;
+- [x] `build_plan`: critical-path priority + term-by-term greedy (ARCHITECTURE §8; roadmap-led since 2026-10-18,
+  D17); corequisites together;
   roadmap pathway courses (QR 3/4: MATH 197 → 198 → 226); slots for GE / senior electives / free units;
   CR or C-or-better major courses that can't count or be repeated → ⚠️ see an advisor
 - [x] Return `needs_input: qr_pathway` (and `start_term`) when it's missing

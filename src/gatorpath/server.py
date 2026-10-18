@@ -34,8 +34,8 @@ mcp = MCPServer(
     "gatorpath",
     instructions=(
         f"SF State degree-planning tools for the {YEAR} Bulletin. Answers come only from the Bulletin and reviewed rules: "
-        "don't add courses, prereqs or requirements the tools didn't return. Cite the `source`/`source_page` Bulletin "
-        "pages, show every warning, and remind the student that the DPR and an advisor are the final word. "
+        "don't add courses, prereqs or requirements the tools didn't return. Cite the `source`/`source_page` each answer "
+        "comes with (Bulletin pages; a few office policies cite that office's page), show every warning, and remind the student that the DPR and an advisor are the final word. "
         "Never guess what transfer credit covers or when a student will graduate: ask for the DPR, and use the planner "
         "tools when they exist. "
         "Student profiles are passed in per call and never stored, except by save_profile: one file on the student's "
@@ -348,9 +348,10 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
 
 @mcp.tool(annotations=READ_ONLY)
 def build_plan(profile: Profile) -> dict:
-    """Deterministic baseline plan to graduation: required courses ordered by the prereq chain (critical path first,
-    corequisites together), then slots for what's open (GE areas, senior electives, free electives) to reach the 120
-    and upper-division totals. Already run through check_plan: see `check`.
+    """Deterministic baseline plan to graduation, laid out on the Bulletin roadmap: each term starts from its roadmap
+    semester (what's done is skipped, what isn't ready carries over), then the remaining required courses by prereq
+    chain (critical path first, corequisites together), then slots for what's open (GE areas, senior electives, free
+    electives) to reach the 120 and upper-division totals. Already run through check_plan: see `check`.
 
     Fill each slot with list_eligible_electives + the student's goal, then call check_plan again before presenting.
     Uses max_units_per_term (default 15, the normal load, p.2393), include_summer and f1 (F-1 visa: spring/fall
@@ -399,8 +400,9 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
 
 @mcp.tool(annotations=READ_ONLY)
 def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | None = None) -> dict:
-    """Every way to finish the open GE, SF State Studies and American Institutions requirements that one course can
-    fill, fewest courses first: one course covering several (4UD + Environmental Sustainability + Global
+    """Up to 8 ways (3 when more than 5 are open) to finish the open GE, SF State Studies and American Institutions
+    requirements that one course can fill, fewest courses first; the first is the fewest a bounded search found, not
+    a proven minimum: one course covering several (4UD + Environmental Sustainability + Global
     Perspectives), two that split them, or one each. Each part says what one course covers, how many courses fit, and
     examples (ready first, then recently offered). Show the student the ways; the parts can go in different terms.
     Pass the build_plan output as plan so planned courses count."""
@@ -623,14 +625,17 @@ defaults (15 units per term, no summer) instead of asking.
    GE and SF State Studies slots are the student's choice: call `ge_combinations` (with the plan) and show its ways
    as a short table, fewest courses first, with 2-3 example courses per part (one course can cover several, or they
    can split them, e.g. 4UD + Environmental Sustainability this term and Global Perspectives the next). Put the
-   fewest-course way in the plan by default and say any other way works.
+   first way (the fewest courses found) in the plan by default and say any other way works.
    Senior electives: at least 12 of the 15 units in CSC; name a backup for each. A 0-unit tag slot is met by a
    chosen course whose also_covers includes it (then drop the tag); otherwise fill it from its own group and add the
    units. Free `elective` slots: suggest courses that fit the goal.
 5. `check_plan` the filled plan; fix every error and re-check until valid. Before calling a course optional, take
    it out and re-check: it's optional only if the plan stays valid (units_short means it's needed). For an F-1
    student, don't add courses only to keep the last term at 12: the final-semester Reduced Course Load covers it
-   (check_plan's warning says how to request it).
+   (check_plan's warning says how to request it). If an error stays that no change to the plan fixes (a major
+   course passed with CR that can't be repeated; a limit the student set, like F-1 with a 12-unit cap), stop
+   re-checking: present no plan as final, say what causes it and what would lift it (a petition, a higher
+   max_units_per_term, a summer), and show its see_advisor.
 6. A graduation target or "3, 4 or 5 years?": `build_plan` at 12, 15 and 18 units per term + include_summer, then a
    table: load, est_graduation_term, on_time, why_not. Over 15 units is above the normal load (p.2393): advisor.
    build_plan lays a plan on the Bulletin roadmap; when pace.roadmap_load is there, the roadmap's own loads (some
@@ -640,8 +645,9 @@ defaults (15 units per term, no summer) instead of asking.
    - one table per term, in the order to enter it in Student Center → Degree Planner: course, units, what it counts
      for, why
    - warnings, and every `see_advisor` item: who, why, link, how to book. For F-1 students, GatorPath knows only the
-     Bulletin's 12-unit minimum and continuous enrollment: send every other visa question (I-20 dates, OPT, a
-     lighter final term) to the international office without stating visa rules yourself
+     Bulletin's 12-unit minimum and continuous enrollment, and the international office's final-semester Reduced
+     Course Load (check_plan's warning): send every other visa question (I-20 dates, OPT) to the international
+     office without stating visa rules yourself
    - a checklist: confirm each course is offered that term in Class Search (GatorPath's history covers only some
      subjects, and past terms don't promise future ones), compare with the DPR, see the advisor
    Then offer what-ifs: graduating earlier (step 6; "a year early" means a year before the plan's

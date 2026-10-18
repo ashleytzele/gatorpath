@@ -474,7 +474,8 @@ def chunks(units: float, size: float = 3) -> list[float]:
 
 
 def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, catalog: dict, prereqs: dict) -> dict:
-    """Deterministic baseline plan (ARCHITECTURE §8): required courses by critical path, then slots. Passes check_plan."""
+    """Deterministic baseline plan (ARCHITECTURE §8): roadmap semester first, then required courses by critical path,
+    then slots. Passes check_plan."""
     summer = profile.get("include_summer", False)
     seasons = ("spring", "summer", "fall") if summer else ("spring", "fall")  # a course waits only for these
     load, levels = university["academic_load"], university["class_level"]
@@ -867,8 +868,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 last = semesters[-1]
                 held = [c if isinstance(c, str) else c["slot"] for c in last["courses"] if isinstance(c, str) or c["units"]]
                 why_not.append(f"the plan needs {len(semesters)} terms; the last ({last['term']}) holds {', '.join(held)}. "
-                               "Senior electives wait for the core courses the roadmap puts first, and upper-division GE "
-                               f"for {levels['upper']} units" + ("" if summer else "; try include_summer"))
+                               "Senior electives wait for upper-division standing and an option that's ready (its "
+                               f"prereqs), and upper-division GE for {levels['upper']} units" + ("" if summer else "; try include_summer"))
             pace["why_not"] = why_not
     return {"catalog_year": program["catalog_year"], "variant": variant, **plan,
             "est_graduation_term": semesters[-1]["term"] if semesters and check["valid"] else None, "pace": pace,
