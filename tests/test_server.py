@@ -54,7 +54,7 @@ def test_get_course_record():
     assert (got["code"], got["title"], got["source_page"]) == ("CSC 671", "Deep Learning", 1900)
     assert got["links"] == [{"code": "CSC 871", "kind": "paired"}]
     assert got["prereq"]["status"] == "ok" and got["prereq"]["needs_permission"] is True
-    assert got["offered_terms"] == "unknown" and any("phase 5" in w for w in got["warnings"])
+    assert got["offered_terms"] == "unknown" and any("isn't loaded" in w for w in got["warnings"])
 
 
 def test_unknown_course_suggests_nearest_numbers():
@@ -226,7 +226,7 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     text = server.plan_my_degree(goal="AI / machine learning", graduate_by="2029-spring")
     assert "The student's goal: AI / machine learning." in text and "graduate by 2029-spring" in text
     tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
-    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met"}  # data
+    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last"}  # data
     named = set(regex.findall(r"`([a-z_]+)`", text)) - fields
     assert named <= tools, named - tools
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named

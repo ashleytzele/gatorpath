@@ -196,14 +196,20 @@ comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see
 
 ## Phase 5 — Offering history
 
-- [ ] (?) Check SFSU class-search terms of use
-- [ ] `ingest/offerings.py`: session + CSRF token, one search per subject per term, cache HTML,
-  ≥ 2 s between requests
-- [ ] Scrape CSC, MATH and PHYS for the last 4 years (fall/spring/summer)
-- [ ] `offered_terms` view; planner uses it; `get_course` shows it
-- [ ] Spot-check 5 courses by hand against the website
+- [x] Check SFSU class-search terms of use (2026-10-17): no terms on the page, robots.txt allows all, CSU Responsible
+  Use Policy satisfied by the etiquette in AGENTS.md; decision: scrape politely (ARCHITECTURE §16.2)
+- [x] `ingest/offerings.py`: one search per subject per term, cached (`data/cache/offerings/`), ≥ 2 s between requests,
+  honest User-Agent. No CSRF token needed: the search form redirects to a GET `results?term=2257&classCategory=REG&
+  subject=CSC`, and `searchresultsjson` returns that session's sections. Regular session (REG) only, not CPaGE
+- [x] Scrape CSC, MATH and PHYS for the last 4 years: 2023-spring to 2026-fall, 36 searches (2026-10-17)
+- [x] `offered` (offered_terms) on catalog rows: [terms it ran, terms checked] per season + `last`; build_plan waits
+  for a season the course runs in (only seasons the plan has), check_plan warns (wrong season, not run in the last
+  year, never run); get_course / search_courses / list_eligible_electives show it
+- [x] Spot-check 5 courses against the live site (fresh fetch vs stored): CSC 653 2024-summer, CSC 648 2026-fall,
+  MATH 324 2025-spring, PHYS 222 2025-fall (labs), CSC 300GW 2026-spring: all match; the CSC 653 detail page agrees.
+  Found: CSC 652 last ran 2023-summer and CSC 653 2024-summer (summers only), so trial 6's security picks now warn
 
-**Done when:** the planner never places a fall-only course in spring without a warning.
+**Done when:** the planner never places a fall-only course in spring without a warning. **Met 2026-10-17** (`tests/test_planner.py`).
 
 ---
 

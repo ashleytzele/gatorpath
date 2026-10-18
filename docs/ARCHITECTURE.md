@@ -211,15 +211,17 @@ course_link(
   PRIMARY KEY (catalog_year, code_a, code_b, kind)
 )
 
-offering(
+offering(                                  -- ingest/offerings.py, Class Search "Academic Regular Session" (REG)
   term TEXT, code TEXT, section TEXT,      -- term like '2026-fall'
-  days TEXT, start_time TEXT, end_time TEXT,
-  mode TEXT, instructor TEXT, capacity INTEGER, enrolled INTEGER,
-  scraped_at TEXT
+  component TEXT, mode TEXT, enrolled INTEGER,   -- LEC/LAB/SEM/ACT/SUP; In-Person/Online synchronous/…
+  PRIMARY KEY (term, code, section, component)
 )
+offering_scrape(term TEXT, subject TEXT, sections INTEGER, scraped_at TEXT)   -- what was checked, even if empty
+-- Days, times and instructors stay in the cached JSON (data/cache/offerings/) until a schedule builder needs them.
 
--- view: how often a course runs per season over the last N years
-offered_terms(code, fall_count, spring_count, summer_count, years_checked)
+-- db.load_catalog adds `offered` to each course of a scraped subject (offered_terms):
+-- {fall: [terms it ran, terms checked], spring: […], summer: […], since: '2023-spring', until: '2026-fall'}.
+-- A subject never scraped has no `offered` (unknown, not "never").
 
 course_fts  -- SQLite FTS5 over code/title/description for search_courses
 ```
@@ -562,7 +564,9 @@ The input is the profile, the program rules, the prereq graph and `offered_terms
 3. **Term-by-term greedy fill**, starting at `start_term`:
    - eligible = prereqs satisfied by courses completed in *earlier* terms (or in this term if
      `concurrent_ok`)
-   - offered this season according to `offered_terms`; if unknown, allow it and add a ⚠️
+   - offered this season according to `offered_terms`: a course that ran in other seasons but in none of the
+     checked terms of this one waits (check_plan warns if a plan puts it there); unknown, or never seen in any
+     checked term, is allowed with a ⚠️ (rare isn't never)
    - fill by priority up to `max_units_per_term`; leave remaining capacity to slots
    - standing (`upper`/`senior`) is computed from cumulative units
 4. Stop when nothing remains. Report `est_graduation_term`.
@@ -743,8 +747,14 @@ students; 0 hallucinated courses."*
 ## 16. Open questions
 
 1. ~~**Asterisk meaning** in prereqs (`CSC 510*`)~~ Closed 2026-10-17: enforced at registration (p.2436), see §5.
-2. **Class search terms of use / rate limits:** confirm scraping is acceptable; consider asking
-   SFSU for a data feed.
+2. ~~**Class search terms of use / rate limits**~~ **Decided 2026-10-17: scrape politely.** The class search page
+   has no terms of use (footer: privacy notice only); `webapps.sfsu.edu/robots.txt` is `User-agent: *` with no
+   Disallow; the privacy notice says nothing about automated access. The CSU Responsible Use Policy (ICSUAM 8105,
+   campus copy revised 2013-06-05) asks for mission-consistent use (3.2), no misrepresented identity (4.4.4), and use
+   "within the limits of system capacities" that doesn't "interfere with the operation ... or ... use ... by others"
+   (4.5). The etiquette in AGENTS.md meets those: honest User-Agent, cache, ≥ 2 s apart, once per term, stop if asked.
+   Not found: SF State's own IT acceptable-use page. Still to do: ask SF State ITS/Registrar for a data feed, and
+   decide before phase 9 whether a released `catalog.db` may carry the offering history.
 3. ~~Transcript format~~ **Resolved 2026-10-15**, see §7.3. Still unseen: CR, W, I, repeat
    markings, summer code.
 4. ~~GE in v1~~ **Resolved 2026-10-15:** GE, SF State Studies, American Institutions and GWAR are

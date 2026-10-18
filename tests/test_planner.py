@@ -283,3 +283,30 @@ def test_advisor_handoff_falls_back_to_the_uac_without_program_contacts():
     [e] = see_advisor([("substitutions", "CSC 699 for a senior elective")],
                       {k: v for k, v in PROGRAM.items() if k != "advising"}, UNIVERSITY)
     assert e["role"] == "general_advising" and e["why"] == ["CSC 699 for a senior elective"]
+
+
+def test_a_fall_only_course_waits_for_fall():
+    # Phase 5 done-when: never a fall-only course in spring without a warning (Class Search history, ingest.offerings)
+    fall_only = {"fall": [4, 4], "spring": [0, 4], "summer": [0, 4], "since": "2023-spring", "until": "2026-fall",
+                 "last": "2026-fall"}
+    cat = CATALOG | {"CSC 220": CATALOG["CSC 220"] | {"offered": fall_only}}
+    plan = {"semesters": [{"term": "2027-spring", "courses": ["CSC 215", "CSC 220"]}]}
+    got = check_plan(FRESHMAN, plan, PROGRAM, UNIVERSITY, cat, PREREQS)
+    assert any(w.startswith("CSC 220 in 2027-spring: not offered in any of the last 4 spring terms (ran fall 4 of 4")
+               for w in got["warnings"])
+    from gatorpath.engine.planner import build_plan
+    built = build_plan(FRESHMAN | {"start_term": "2027-spring"}, PROGRAM, UNIVERSITY, ROADMAP, cat, PREREQS)
+    where = {c: s["term"] for s in built["semesters"] for c in s["courses"] if isinstance(c, str)}
+    assert where["CSC 215"] == "2027-spring" and where["CSC 220"].endswith("fall") and built["check"]["valid"]
+
+
+def test_rare_and_summer_only_courses_are_flagged_not_blocked():
+    from gatorpath.engine.planner import season_ok
+    span = {"since": "2023-spring", "until": "2026-fall"}
+    summer_only = {"CSC 653": {"offered": {"fall": [0, 4], "spring": [0, 4], "summer": [2, 4], "last": "2024-summer"} | span}}
+    assert season_ok("CSC 653", "2027-fall", summer_only)[0] is False                          # summers exist: wait
+    ok, why = season_ok("CSC 653", "2027-fall", summer_only, ("spring", "fall"))                # a plan without summers
+    assert ok and why.startswith("CSC 653: last offered 2024-summer")
+    never = {"CSC 668": {"offered": {"fall": [0, 4], "spring": [0, 4], "summer": [0, 4], "last": None} | span}}
+    assert season_ok("CSC 668", "2027-fall", never) == (True, "CSC 668: not offered in any term checked (Class Search "
+                                                             "2023-spring to 2026-fall); ask the department when it runs")

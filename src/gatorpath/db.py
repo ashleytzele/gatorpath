@@ -7,6 +7,7 @@ import sqlite3
 import sys
 from pathlib import Path
 
+from gatorpath.engine.planner import term_key
 from gatorpath.ingest.bulletin import CODE
 
 # ponytail: wording match on the description. Upgrade: parse "for a total of N units" and cap repeats.
@@ -20,9 +21,33 @@ def connect(db_path: str | Path) -> sqlite3.Connection:
     return sqlite3.connect(Path(db_path).resolve().as_uri() + "?mode=ro", uri=True)  # as_uri escapes '#', '?', '%'
 
 
+def offered(con: sqlite3.Connection) -> dict[str, dict]:
+    """{code: {fall: [ran, checked], spring: …, summer: …, since, until, last}} from Class Search history (ingest.offerings),
+    for every catalog course whose subject was scraped. Subjects never scraped are left out: unknown, not "never"."""
+    if not con.execute("select 1 from sqlite_master where name = 'offering_scrape'").fetchone():
+        return {}
+    checked: dict[str, list[str]] = {}
+    for term, subject in con.execute("select term, subject from offering_scrape"):
+        checked.setdefault(subject, []).append(term)
+    ran: dict[str, set[str]] = {}
+    for term, code in con.execute("select distinct term, code from offering"):
+        ran.setdefault(code, set()).add(term)
+    out = {}
+    for (code,) in con.execute("select distinct code from course"):
+        terms = checked.get(code.rsplit(" ", 1)[0])
+        if terms:
+            runs = ran.get(code, set())
+            out[code] = {s: [sum(t in runs for t in terms if t.endswith(s)), sum(t.endswith(s) for t in terms)]
+                         for s in ("fall", "spring", "summer")} | {"since": min(terms, key=term_key),
+                                                                    "until": max(terms, key=term_key),
+                                                                    "last": max(runs, key=term_key, default=None)}
+    return out
+
+
 def load_catalog(db_path: str | Path, catalog_year: str, codes: set[str] | None = None) -> dict[str, dict]:
-    """{code: {title, units_min, units_max, grading, ge_areas, paired, repeatable, source_page}}"""
+    """{code: {title, units_min, units_max, grading, ge_areas, paired, repeatable, source_page, offered?}}"""
     con = connect(db_path)
+    history = offered(con)
     paired = {c for row in con.execute(
         "select code_a, code_b from course_link where catalog_year = ? and kind = 'paired'", (catalog_year,)) for c in row}
     rows = con.execute("select code, title, units_min, units_max, grading, ge_areas, description, source_page from course "
@@ -35,7 +60,7 @@ def load_catalog(db_path: str | Path, catalog_year: str, codes: set[str] | None 
             "paired": code in paired,
             "repeatable": bool(REPEATABLE.search(description or "")),
             "source_page": page,
-        }
+        } | ({"offered": history[code]} if code in history else {})
         for code, title, lo, hi, grading, ge, description, page in rows
     }
 
@@ -103,7 +128,8 @@ def main() -> None:
     ap.add_argument("--year", default="2026-27")
     args = ap.parse_args()
     codes = {c for f in args.files for c in re.findall(CODE, Path(f).read_text())}
-    json.dump(load_catalog(args.db, args.year, codes), sys.stdout, indent=1, sort_keys=True)
+    rows = {c: {k: v for k, v in r.items() if k != "offered"} for c, r in load_catalog(args.db, args.year, codes).items()}
+    json.dump(rows, sys.stdout, indent=1, sort_keys=True)  # evals stay independent of each term's scrape
     print()
 
 

@@ -25,7 +25,7 @@ REPO = Path(__file__).parents[2]
 DB = REPO / "data/catalog.db"
 PROFILE_PATH = "~/.gatorpath/profile.yaml"
 LEVELS = {"lower": (100, 300), "upper": (300, 700), "graduate": (700, 1000)}
-NO_OFFERINGS = "Offering history isn't loaded yet (TASKS phase 5), so `offered` is 'unknown'; check Class Search"
+NO_OFFERINGS = "Offering history isn't loaded (run ingest.offerings), so `offered` is 'unknown'; check Class Search"
 READ_ONLY = ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False)
 WRITES_FILE = ToolAnnotations(readOnlyHint=False, destructiveHint=True, idempotentHint=True, openWorldHint=False)
 
@@ -104,6 +104,22 @@ def catalog(path: Path, year: str) -> dict[str, dict]:
 
 
 @cache
+def offering_note(path: Path, year: str) -> str:
+    """What the Class Search history covers, said once per answer."""
+    rows = [(c.rsplit(" ", 1)[0], r["offered"]) for c, r in catalog(path, year).items() if "offered" in r]
+    if not rows:
+        return NO_OFFERINGS
+    spans = sorted({f"{o['since']} to {o['until']}" for _, o in rows})
+    return (f"Offering history (Class Search, {', '.join(spans)}) covers {', '.join(sorted({s for s, _ in rows}))}; "
+            "`offered` gives [terms it ran, terms checked] per season. Other subjects are unknown, and past terms don't "
+            "promise future ones: check Class Search")
+
+
+def offered(code: str) -> dict | str:
+    return catalog(DB, YEAR).get(code, {}).get("offered", "unknown")
+
+
+@cache
 def unlocks(path: Path, year: str) -> dict[str, list[str]]:
     return reverse_index(prereqs(path, year))
 
@@ -158,11 +174,11 @@ def search_courses(query: str, subject: str | None = None, level: str | None = N
     lo, hi = LEVELS.get(level or "") or ((int(level), int(level) + 100) if level else (0, 1000))
     want = "".join((subject or "").upper().split())
     exact = norm_code(query)
-    rows = [r | {"offered": "unknown"} for r in db.search_courses(DB, YEAR, query)
+    rows = [r | {"offered": offered(r["code"])} for r in db.search_courses(DB, YEAR, query)
             if (not want or r["code"].rsplit(" ", 1)[0].replace(" ", "") == want) and lo <= number(r["code"]) < hi]
     rows.sort(key=lambda r: r["code"] != exact)  # stable: an exact code hit first, then FTS rank
     return {"catalog_year": YEAR, "results": rows[:max(1, min(limit, 50))], "total_matches": len(rows),
-            "warnings": [NO_OFFERINGS]}
+            "warnings": [offering_note(DB, YEAR)]}
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -175,8 +191,8 @@ def get_course(code: str) -> dict:
     course = db.get_course(DB, YEAR, code)
     if course is None:
         return unknown_course(code)
-    return course | {"offered_terms": "unknown", "unlocks": unlocks(DB, YEAR).get(code, []),
-                     "warnings": prereq_warnings(code, course["prereq"]) + [NO_OFFERINGS]}
+    return course | {"offered_terms": offered(code), "unlocks": unlocks(DB, YEAR).get(code, []),
+                     "warnings": prereq_warnings(code, course["prereq"]) + [offering_note(DB, YEAR)]}
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -325,7 +341,7 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     program, university = load_rules(YEAR, profile["program"])
     clean, notes = prepare(profile, university)
     out = engine_check_plan(clean, normalized_plan(plan), program, university, catalog(DB, YEAR), prereqs(DB, YEAR))
-    out["warnings"] = notes + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
+    out["warnings"] = notes + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
     return out
 
 
@@ -349,7 +365,7 @@ def build_plan(profile: Profile) -> dict:
     path = RULES_DIR / "roadmaps" / YEAR / f"{profile['program']}.yaml"
     clean, notes = prepare(profile, university)
     out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), catalog(DB, YEAR), prereqs(DB, YEAR))
-    out["warnings"] = notes + out["warnings"] + [NO_OFFERINGS] + unverified(university, "University (GE and graduation)")
+    out["warnings"] = notes + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
     return out
 
 
@@ -374,9 +390,9 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
                            normalized_plan(plan), by_term, max(1, min(limit, 100)))
     if "options" in out:
         desc = db.descriptions(DB, YEAR, [o["code"] for o in out["options"]])
-        out["options"] = [o | {"description": desc.get(o["code"])} for o in out["options"]]
+        out["options"] = [o | {"description": desc.get(o["code"]), "offered": offered(o["code"])} for o in out["options"]]
     out["catalog_year"] = YEAR
-    out["warnings"] = notes + out.get("warnings", []) + [NO_OFFERINGS]
+    out["warnings"] = notes + out.get("warnings", []) + [offering_note(DB, YEAR)]
     return out
 
 
@@ -505,7 +521,8 @@ defaults (15 units per term, no summer) instead of asking.
    just that.
 4. Fill every slot: `list_eligible_electives` with group_id = the slot, plan = the current plan, by_term = the slot's
    term. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
-   also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies).
+   also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and
+   options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
    Senior electives: at least 12 of the 15 units in CSC. A 0-unit tag slot is met by a chosen course whose
    also_covers includes it (then drop the tag); otherwise fill it from its own group and add the units. Free
    `elective` slots: suggest courses that fit the goal.
@@ -519,8 +536,8 @@ defaults (15 units per term, no summer) instead of asking.
    - warnings, and every `see_advisor` item: who, why, link, how to book. For F-1 students, GatorPath knows only the
      Bulletin's 12-unit minimum and continuous enrollment: send every other visa question (I-20 dates, OPT, a
      lighter final term) to the international office without stating visa rules yourself
-   - a checklist: confirm each course is offered that term in Class Search (no schedule data yet), compare with the
-     DPR, see the advisor
+   - a checklist: confirm each course is offered that term in Class Search (GatorPath's history covers only some
+     subjects, and past terms don't promise future ones), compare with the DPR, see the advisor
    Then offer what-ifs: graduating earlier (step 6; "a year early" means a year before the plan's
    est_graduation_term: say the term you used, and give why_not when it can't be reached), a new direction
    (steps 4-5 with the new goal; required courses don't change). Switching majors isn't supported yet.

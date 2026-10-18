@@ -27,6 +27,26 @@ def term_key(term: str) -> tuple[int, int]:
     return int(y), SEASONS[s]
 
 
+def season_ok(c: str, term: str, catalog: dict, seasons=tuple(SEASONS)) -> tuple[bool, str | None]:
+    """Class Search history (catalog[c]["offered"], ingest.offerings): False with a reason when the course ran in another
+    of `seasons` but in none of the checked terms of this one. Never ran, or not in the last year: allowed with a note
+    (rare isn't never)."""
+    o = catalog.get(c, {}).get("offered")
+    if not o:
+        return True, None
+    season, span = term[5:], f"Class Search {o['since']} to {o['until']}"
+    if not o["last"]:
+        return True, f"{c}: not offered in any term checked ({span}); ask the department when it runs"
+    ran = [f"{s} {o[s][0]} of {o[s][1]}" for s in SEASONS if o[s][0]]
+    if o[season][1] and not o[season][0] and any(o[s][0] for s in seasons if s != season):
+        return False, (f"{c} in {term}: not offered in any of the last {o[season][1]} {season} terms (ran {', '.join(ran)}; "
+                       f"{span}); check Class Search")
+    y, s = term_key(o["until"])
+    if term_key(o["last"]) <= (y - 1, s):
+        return True, f"{c}: last offered {o['last']} ({span}); it may not run soon, so ask the department"
+    return True, None
+
+
 def passed(grade: str | None) -> bool:
     return rank(grade) is not None
 
@@ -257,6 +277,8 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                     advise.append(("major_advisor", f"{c} in {term}: {'; '.join(low_gpa) or why[0]}; it needs the "
                                    "instructor's permission (ask the instructor, or plan another course)"))
             warnings.extend(w for w in prereq_warnings(c, row) if "partial" in w or "unparsed" in w)
+            if note := season_ok(c, term, catalog)[1]:
+                warnings.append(note)
         ud = university.get("upper_division_ge", {})
         for x in term_slots:
             if x.get("slot") in ud.get("groups", ()):
@@ -429,6 +451,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     from gatorpath.engine.prereq import prereq_chain
 
     summer = profile.get("include_summer", False)
+    seasons = ("spring", "summer", "fall") if summer else ("spring", "fall")  # a course waits only for these
     load, levels = university["academic_load"], university["class_level"]
     cap = profile.get("max_units_per_term", load["normal_max"])
     start = first_term(profile)
@@ -543,7 +566,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             # An unverifiable branch ("or equivalent", high-school courses) doesn't let a course jump ahead of a
             # prereq that's still in the plan: wait for it, in an earlier term (or this one, for corequisites).
             waiting = (hard[c] - done) | (needs[c] - hard[c] - done - same)
-            return state == OK or (state == UNVERIFIED and not waiting)
+            return (state == OK or (state == UNVERIFIED and not waiting)) and season_ok(c, term, catalog, seasons)[0]
 
         changed = True
         while changed:
@@ -589,6 +612,11 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                         term_slots.append(s)
                         slots.remove(s)
                         used += s["units"]
+        off_season = [c for c in left if not season_ok(c, term, catalog, seasons)[0]]
+        if not placed and not any(s["units"] for s in term_slots) and off_season:
+            warnings.append(f"{term}: nothing left runs in {term[5:]}; {', '.join(off_season)} wait for a term they run in")
+            term = next_term(term, summer)
+            continue
         if not placed and not any(s["units"] for s in term_slots):
             blocked = {c: evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[1] for c in left}
             warnings.append(f"Stopped at {term}: nothing more can be scheduled. Blocked: "
