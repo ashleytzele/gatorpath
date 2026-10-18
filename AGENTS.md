@@ -37,6 +37,7 @@ uv run python -m gatorpath.db evals/profiles/*.yaml rules/programs/2026-27/*.yam
 uv run python -m gatorpath.ingest.offerings --subjects CSC,MATH,PHYS        # offering history
 uv run gatorpath                   # start MCP server (stdio)
 uv run python evals/run_evals.py   # eval report
+uv run python evals/plan_review.py # build_plan for every test scenario at 12/15/18/18+summer units
 ```
 
 (These commands get added as each phase lands. If one doesn't exist yet, check `TASKS.md`.)

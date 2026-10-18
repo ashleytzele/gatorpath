@@ -161,6 +161,14 @@ report.
     for prereqs ("GE Area 1A" for CSC 300GW, UD GE), so transfer plans stalled; the Area 4 two-subjects rule booked an
     extra 3-unit course and wasn't fillable through list_eligible_electives. All fixed; every scenario gets a valid
     plan on the real catalog
+  - Scenario review (2026-10-18, `evals/plan_review.py`): 15 kinds of students × 12 / 15 / 18 / 18+summer units on the
+    real catalog. Now: every plan valid except QR 3/4 + F-1 at a 12-unit cap (4-unit courses leave 10-11-unit terms the
+    F-1 minimum can't accept: an honest error), at or within a term of the lower bound, laid out on the roadmap almost
+    everywhere; more units or summers graduate sooner. A freshman at 15 has 18 of 20 roadmap courses in their roadmap
+    semester (the rest one term later, from its 16-unit terms); at 18 courses move earlier, never later
+    (`test_a_freshman_plan_is_the_roadmap_adjusted`). Fixed on the way: a 0-unit tag made a term of its own; tags
+    dumped into term 1; senior electives waited for the roadmap's order instead of their real prereqs (they now go in
+    once an option is ready that term); F-1 fill splits free units
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
 degree?" and get correct, sourced answers.

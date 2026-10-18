@@ -250,7 +250,8 @@ def f1_senior(**extra):
 def test_f1_students_get_full_spring_and_fall_terms():
     # p.2393: "For international students in F1 visa status, immigration regulations require a minimum academic load of
     # 12 units for undergraduates ... for spring and fall semesters"
-    assert [s["units"] for s in plan_for(f1_senior())["semesters"]] == [9, 12, 6]  # electives wait for the roadmap order
+    # A senior elective goes in as soon as one is ready (CSC 656 in spring 2027), so the plain plan is full too
+    assert [s["units"] for s in plan_for(f1_senior())["semesters"]] == [12, 12, 3]
     got = plan_for(f1_senior(f1=True))
     assert [s["units"] for s in got["semesters"]] == [12, 12, 3] and got["check"]["valid"]
     assert any(w.startswith("2028-spring: 3 units; F-1 visa students must carry at least 12") and "Completion of Study"

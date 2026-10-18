@@ -201,9 +201,15 @@ def test_cybersecurity_electives_come_after_csc_415():
     assert got["CSC 656"]["readiness"] == "ready"  # "CSC 415* (may be taken concurrently)"
     for c in ("CSC 652", "CSC 653"):
         assert got[c]["readiness"] == "blocked" and term_key(got[c]["ready_by"]) > term_key(t415)
-    picks = iter(["CSC 652", "CSC 653", "CSC 656", "CSC 665", "CSC 620"])
+    # Fill each slot the way the client does: from what list_eligible_electives says is ready in that slot's term,
+    # cybersecurity first
+    goal = ["CSC 652", "CSC 653", "CSC 656", "CSC 665", "CSC 620"]
     for s in plan["semesters"]:
-        s["courses"] = [next(picks) if isinstance(c, dict) and c["slot"] == "senior_electives" else c for c in s["courses"]]
+        for i, c in enumerate(s["courses"]):
+            if isinstance(c, dict) and c["slot"] == "senior_electives":
+                ready = [o["code"] for o in server.list_eligible_electives(profile, "senior_electives", plan, s["term"],
+                                                                           limit=200)["options"] if o["readiness"] == "ready"]
+                s["courses"][i] = next((g for g in goal if g in ready), ready[0])
     checked = server.check_plan(profile, plan)
     assert checked["valid"], checked["errors"]
     term_of = {c: s["term"] for s in plan["semesters"] for c in s["courses"] if isinstance(c, str)}
@@ -381,7 +387,36 @@ SCENARIOS = {
     "older-catalog DPR": FRESH | {"catalog_year": "Spring 2025", "first_time": False, "transfer_units": 45,
                                   "ge_done": ["Area A1 - Oral Communication", "A2", "A3", "B4", "GE D/USH"],
                                   "not_on_dpr": ["6"], "dpr_met": ["MATH 225"], "qr_pathway": "1/2"},
+    "CCC transfer from another major": FRESH | {"qr_pathway": "1/2", "ge_certified": True, "first_time": False,
+        "transfer_units": 62, "completed": [{"code": c, "grade": "B", "transfer": True}
+                                            for c in ("CSC 101", "CSC 215", "MATH 226", "MATH 227", "PHYS 220", "PHYS 222")]},
+    "junior, on track": {"program": "bs-cs", "catalog_year": "2026-27", "qr_pathway": "1/2", "completed": [
+        {"code": c, "grade": "B", "term": t} for t, cs in {
+            "2025-fall": ["CSC 101", "MATH 226", "ENG 114", "COMM 150", "AA S 210"],
+            "2026-spring": ["CSC 215", "MATH 227", "PHYS 220", "PHYS 222", "PHIL 110"],
+            "2026-fall": ["CSC 220", "CSC 230", "PHYS 230", "PHYS 232", "ARTH 201", "ECON 101"],
+            "2027-spring": ["CSC 256", "CSC 340", "MATH 225", "MATH 324", "BIOL 100"]}.items() for c in cs]},
+    "failed MATH 226": {"program": "bs-cs", "catalog_year": "2026-27", "qr_pathway": "1/2",
+                        "completed": [{"code": "CSC 101", "grade": "A", "term": "2026-fall"},
+                                      {"code": "MATH 226", "grade": "F", "term": "2026-fall"}]},
+    "freshman at 18 units": FRESH | {"qr_pathway": "1/2", "max_units_per_term": 18},
 }
+
+
+def test_a_freshman_plan_is_the_roadmap_adjusted():
+    # 15 units: the roadmap's own semesters, a term later at most (its 16-unit terms); 18 units: earlier, never later
+    road = {c: n for n, sem in enumerate(yaml.safe_load((ROOT / "rules/roadmaps/2026-27/bs-cs.yaml").read_text())
+                                         ["variants"]["qr-1-2"]["semesters"]) for c in sem["items"] if isinstance(c, str)}
+    for cap, terms in ((15, 8), (18, 7)):
+        plan = server.build_plan(FRESH | {"qr_pathway": "1/2", "max_units_per_term": cap})
+        at = {c: n for n, s in enumerate(plan["semesters"]) for c in s["courses"] if isinstance(c, str)}
+        shift = [at[c] - road[c] for c in road]
+        assert len(plan["semesters"]) == terms and plan["check"]["valid"]
+        assert any(w.startswith("Laid out on the Bulletin's First-Time Student Roadmap") for w in plan["warnings"])
+        if cap == 15:
+            assert shift.count(0) >= 0.85 * len(shift) and max(shift) <= 1 and min(shift) >= 0
+        else:
+            assert max(shift) <= 0 and min(shift) < 0  # the extra units pull courses forward
 
 
 @pytest.mark.parametrize("name", SCENARIOS)

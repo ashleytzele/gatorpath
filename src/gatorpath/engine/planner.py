@@ -581,11 +581,12 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         ud_short -= u if upper else 0
         slots.append({"slot": "elective", "units": u, "_kind": "elective"} | ({"upper_division": True} if upper else {}))
 
-    # Senior-elective slots wait for the courses the roadmap places before its first senior_elective slot.
-    first_elective = next((n for n, sem in enumerate(roadmap["variants"][ref]["semesters"])
-                           if any(isinstance(i, dict) and i.get("slot") == "senior_elective" for i in sem["items"])), None)
-    before_electives = {i for sem in roadmap["variants"][ref]["semesters"][:first_elective] for i in sem["items"]
-                        if isinstance(i, str)} if first_elective is not None else set()
+    # A major choose-slot (senior electives) goes in a term once enough of its real options are ready then: prereqs met
+    # by earlier terms and offered that season. Options already in the plan or done don't count.
+    from gatorpath.engine.rules import matches as _matches
+    choice_options = {g["id"]: [c for c in catalog if c not in have and c not in todo and any(
+        _matches(f, c, catalog[c]) for f in (g["from"] if isinstance(g["from"], list) else [g["from"]]))]
+        for g in program["groups"] if "from" in g}
 
     grades0 = {r["code"]: r["grade"] for r in profile.get("completed", [])}
     units0 = status["totals"]["units"]["value"]
@@ -653,13 +654,22 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 waiting = (hard[c] - done) | (needs[c] - hard[c] - done - same)
                 return (state == OK or (state == UNVERIFIED and not waiting)) and season_ok(c, term, catalog, seasons)[0]
 
-            ready_electives = units >= levels["upper"] and before_electives & set(todo) <= done
+            def ready_options(gid: str) -> int:
+                return sum(1 for c in choice_options.get(gid, ())
+                           if evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[0] == OK
+                           and season_ok(c, term, catalog, seasons)[0])
+
+            ready_count: dict[str, int] = {}
             ud = university.get("upper_division_ge", {})
             ud_ok = units >= ud.get("recommended_after_units", levels["upper"]) and ud_ge_ready(ctx | {"same_term": set()}, university)[0]
 
             def allowed(x: dict) -> bool:
-                return not ((x["_kind"] == "ud_ge" and not ud_ok) or (x["_kind"] == "major" and not ready_electives)
-                            or (x["_kind"] == "major" and units < levels["upper"])
+                if x["_kind"] == "major":
+                    if x["slot"] not in ready_count:
+                        ready_count[x["slot"]] = ready_options(x["slot"])
+                    taken_now = sum(1 for y in term_slots if y["slot"] == x["slot"])
+                    return units >= levels["upper"] and ready_count[x["slot"]] > taken_now
+                return not ((x["_kind"] == "ud_ge" and not ud_ok)
                             or (x["_kind"] == "elective" and x.get("upper_division") and units < levels["upper"]))
 
             # Roadmap semester first (skipping semesters with nothing left); what can't go now carries over.
@@ -709,10 +719,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                         changed = True
                         break
             left = [c for c in left if c not in placed]
-            guided = bool(queue or carry)  # while the roadmap still guides, designation tags wait for its items
-            for kind in ("tag", "ge", "ud_ge", "major", "elective"):
-                if kind == "tag" and guided:
-                    continue
+            for kind in ("ge", "ud_ge", "major", "elective"):  # designation tags wait: a roadmap item or the last term
                 for x in [x for x in slots if x["_kind"] == kind]:
                     if allowed(x) and used + x["units"] <= limit:
                         term_slots.append(x)
@@ -725,7 +732,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                         term_slots.append(part)
                         used += part["units"]
             # F-1 (pp.2390, 2393): a spring/fall term with more to come is filled toward the minimum with elective slots
-            # that would otherwise wait for the roadmap's order; check_plan flags what still falls short.
+            # that fit (free units split); check_plan flags what still falls short.
             f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") and not term.endswith("summer") else 0
             if used < f1_min and (left or slots):
                 for x in [x for x in slots if x["_kind"] in ("major", "elective")]:
@@ -734,6 +741,12 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                             term_slots.append(x)
                             slots.remove(x)
                             used += x["units"]
+                        elif used < f1_min and x["_kind"] == "elective":  # free units fill to the minimum exactly
+                            part = x | {"units": float(min(x["units"], f1_min - used, int(limit - used)))}
+                            if part["units"] >= 1:
+                                x["units"] -= part["units"]
+                                term_slots.append(part)
+                                used += part["units"]
             off_season = [c for c in left if not season_ok(c, term, catalog, seasons)[0]]
             if not placed and not any(x["units"] for x in term_slots) and off_season:
                 notes.append(f"{term}: nothing left runs in {term[5:]}; {', '.join(off_season)} wait for a term they run in")
@@ -746,6 +759,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                              + ("; slots waiting: " + ", ".join(sorted({x['slot'] for x in slots})) if slots else ""))
                 semesters += [{"term": term, "courses": [{k: v for k, v in x.items() if k != "_kind"} for x in term_slots], "units": 0}] if term_slots else []
                 break
+            if not left and slots and all(x["units"] == 0 for x in slots):
+                term_slots += slots  # designation tags never make a term of their own
+                slots = []
             free: dict[bool, dict] = {}  # one free-elective slot per term (per upper-division flag)
             for x in [x for x in term_slots if x["slot"] == "elective"]:
                 key = bool(x.get("upper_division"))
