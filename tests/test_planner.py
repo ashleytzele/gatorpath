@@ -327,3 +327,20 @@ def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():
     ctx = {"done": set(), "grades": {}, "same_term": set(), "profile": {"dpr_met": ["MATH 225"]}}
     state, why = evaluate({"course": "MATH 225", "min_grade": "C"}, ctx)
     assert state == UNVERIFIED and why[0].startswith("MATH 225, which your DPR shows met by a substitution")
+
+
+def test_ge_combinations_list_every_minimal_way():
+    # One course for 4UD + ESCA + GP, or two that split them, or one each (ENVS 401's Bulletin tags; the rest are real rows)
+    from gatorpath.engine.planner import cover_combinations
+    cat = CATALOG | {"ENVS 401": CATALOG["PLSI 355"] | {"title": "International Development and Resource Justice",
+                                                        "ge_areas": ["4UD", "ESCA", "GP"]}}
+    p = {"catalog_year": "2026-27", "program": "bs-cs", "transfer_units": 60,
+         "ge_done": ["1A", "1B", "1C", "2", "3A", "3B", "4", "5A", "5B", "5C", "6", "3UD", "5UD", "USH", "USG", "CSLG", "AERM", "SJ"]}
+    got = cover_combinations(p, PROGRAM, UNIVERSITY, cat, PREREQS, by_term="2027-spring")
+    assert [t.split(":")[-1].strip()[:6] for t in got["open"]] == ["GE 4UD", "Enviro", "Global"]  # not GWAR: CSC 300GW
+    first = got["ways"][0]
+    assert first["courses"] == 1 and [e["code"] for e in first["parts"][0]["examples"]] == ["ENVS 401"]
+    two = [w for w in got["ways"] if w["courses"] == 2]
+    assert any({e["code"] for part in w["parts"] for e in part["examples"]} >= {"PLSI 355", "HIST 308"} for w in two)
+    for w in got["ways"]:  # every way covers all three, and every part is needed
+        assert set().union(*(set(part["covers"]) for part in w["parts"])) == set(got["open"])

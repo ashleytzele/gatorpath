@@ -17,7 +17,7 @@ from mcp.types import ToolAnnotations
 from gatorpath import db, dpr, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
-from gatorpath.engine.planner import eligible_options, see_advisor
+from gatorpath.engine.planner import cover_combinations, eligible_options, see_advisor
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number, translate_ge
 
@@ -397,6 +397,25 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     return out
 
 
+@mcp.tool(annotations=READ_ONLY)
+def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | None = None) -> dict:
+    """Every way to finish the open GE, SF State Studies and American Institutions requirements that one course can
+    fill, fewest courses first: one course covering several (4UD + Environmental Sustainability + Global
+    Perspectives), two that split them, or one each. Each part says what one course covers, how many courses fit, and
+    examples (ready first, then recently offered). Show the student the ways; the parts can go in different terms.
+    Pass the build_plan output as plan so planned courses count."""
+    if err := profile_error(profile):
+        return err
+    program, university = load_rules(YEAR, profile["program"])
+    clean, notes = prepare(profile, university)
+    out = cover_combinations(clean, program, university, catalog(DB, YEAR), prereqs(DB, YEAR), normalized_plan(plan), by_term)
+    for way in out.get("ways", []):
+        for part in way["parts"]:
+            part["examples"] = [e | {"offered": offered(e["code"])} for e in part["examples"]]
+    out["warnings"] = notes + out.get("warnings", []) + [offering_note(DB, YEAR)]
+    return out
+
+
 def profile_file(path: str | None) -> tuple[Path | None, str | None]:
     """The student's chosen profile file, or why it's refused (golden rule 5: never inside the repo)."""
     given = Path(path or PROFILE_PATH).expanduser()
@@ -599,8 +618,10 @@ defaults (15 units per term, no summer) instead of asking.
    term. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
    also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and
    options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
-   GE and SF State Studies slots are the student's choice: put your top pick in the plan, and list 3-5 other options
-   that cover the same requirements (what each counts for, ready or not, when it ran), so they can swap.
+   GE and SF State Studies slots are the student's choice: call `ge_combinations` (with the plan) and show its ways
+   as a short table, fewest courses first, with 2-3 example courses per part (one course can cover several, or they
+   can split them, e.g. 4UD + Environmental Sustainability this term and Global Perspectives the next). Put the
+   fewest-course way in the plan by default and say any other way works.
    Senior electives: at least 12 of the 15 units in CSC; name a backup for each. A 0-unit tag slot is met by a
    chosen course whose also_covers includes it (then drop the tag); otherwise fill it from its own group and add the
    units. Free `elective` slots: suggest courses that fit the goal.

@@ -284,6 +284,7 @@ def test_only_save_profile_writes_a_file(tmp_path, tmp_path_factory, monkeypatch
         "list_eligible_electives": lambda: server.list_eligible_electives(profile, "senior_electives", plan),
         "load_profile": server.load_profile, "import_transcript": lambda: server.import_transcript(str(pdf)),
         "import_dpr": lambda: server.import_dpr(str(pdf)),
+        "ge_combinations": lambda: server.ge_combinations(profile, plan),
     }
     assert set(calls) == {t.name for t in asyncio.run(server.mcp.list_tools())} - {"save_profile"}
     for call in calls.values():

@@ -743,6 +743,61 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             "check": {"valid": check["valid"], "errors": check["errors"]}}
 
 
+def cover_combinations(profile: dict, program: dict, university: dict, catalog: dict, prereqs: dict,
+                       plan: dict | None = None, by_term: str | None = None, examples: int = 4, ways: int = 10) -> dict:
+    """Ways to finish the open university requirements that one course can fill (a GE area, an SF State Studies area,
+    an American Institutions part): one course covering several, or separate courses, fewest courses first. Each way's
+    parts say which requirements one course covers, with example courses (ready first, then recently offered)."""
+    from itertools import combinations
+
+    from gatorpath.engine.rules import matches
+
+    required = [c for g in program["groups"] for c in g.get("all_of", []) if c in catalog]
+    results = {}
+    for g in university["groups"]:
+        filters = g.get("from", [])
+        filters = filters if isinstance(filters, list) else [filters]
+        if not filters or any(matches(f, c, catalog[c]) for f in filters for c in required):
+            continue  # the major's own courses cover it (GWAR via CSC 300GW): not the student's pick
+        r = eligible_options(profile, g["id"], program, university, catalog, prereqs, plan, by_term, limit=10**6)
+        if r.get("error"):
+            return r
+        left = r.get("units_needed", 0) - r.get("units_done", 0) if "units_needed" in r else r.get("courses_needed", 0)
+        # ponytail: a requirement one course can finish (3-4 units, or one course); bigger ones stay as plan slots
+        if r["status"] not in ("satisfied", "waived") and 0 < left <= (4 if "units_needed" in r else 1):
+            results[g["id"]] = r
+    open_ids = set(results)
+    by_cover: dict[frozenset, dict[str, dict]] = {}
+    for gid, r in results.items():
+        for o in r["options"]:
+            cover = frozenset({gid} | (set(o["also_covers"]) & open_ids))
+            by_cover.setdefault(cover, {}).setdefault(o["code"], o)
+    rank = {"ready": 0, "check": 1, "blocked": 2}
+    recent = lambda c: term_key(catalog[c]["offered"]["last"]) if (catalog[c].get("offered") or {}).get("last") else (0, 0)
+    covers = sorted(by_cover, key=lambda k: (-len(k), sorted(k)))
+    found = []
+    for n in range(1, len(open_ids) + 1):
+        for combo in combinations(covers, n):
+            if set().union(*combo) != open_ids or any(set().union(*(c for c in combo if c is not x)) == open_ids
+                                                      for x in combo):
+                continue  # doesn't cover everything, or a part isn't needed
+            found.append({"courses": n, "parts": [{
+                "covers": sorted(results[i]["title"] for i in part),
+                "options": len(by_cover[part]),
+                "examples": [{k: o[k] for k in ("code", "title", "units", "readiness")}
+                             for o in sorted(by_cover[part].values(), key=lambda o: (rank[o["readiness"]],
+                                             tuple(-x for x in recent(o["code"])), o["code"]))[:examples]]}
+                for part in combo]})
+            if len(found) >= ways:
+                break
+        if len(found) >= ways:
+            break
+    return {"catalog_year": program["catalog_year"], "open": [results[i]["title"] for i in sorted(open_ids)],
+            "ways": found,
+            "warnings": ["Any way works; the parts can go in different terms. Pick one, put its courses in the plan, and "
+                         "check_plan it"] if found else []}
+
+
 def eligible_options(profile: dict, group_id: str, program: dict, university: dict, catalog: dict, prereqs: dict,
                      plan: dict | None = None, by_term: str | None = None, limit: int = 25) -> dict:
     """Courses that can fill a choose-group, with readiness at `by_term` and the other open requirements each covers.

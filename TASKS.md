@@ -172,6 +172,9 @@ degree?" and get correct, sourced answers.
   a plan) and the Bulletin description of each option
   - [x] Rank options by how many **open** requirements one course covers ("triple duty": ENVS 401 /
     LS 401 = 4UD + ESCA + GP), so GE/SF State Studies slots collapse into fewer courses
+  - [x] `ge_combinations` (asked after trial 7): every minimal combination for the open GE / SF State Studies /
+    American Institutions requirements, e.g. one triple-duty course, 4UD + ESCA now and GP next term, or one each;
+    the prompt shows them as a table so the student picks (a web UI could draw them later)
 - [x] MCP prompt `plan_my_degree` (ARCHITECTURE §7.4), args `goal`, `graduate_by`. Test: it names only real tools
 - [x] Test: every `build_plan` output passes `check_plan` for all eval profiles (p05 is invalid by
   design: CR in MATH 226/CSC 101, which the major rejects and which can't be repeated; it says why)
