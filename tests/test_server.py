@@ -15,6 +15,7 @@ from gatorpath.ingest.bulletin import write_catalog
 
 ROOT = Path(__file__).parents[1]
 ROWS = json.loads((ROOT / "tests/fixtures/catalog_rows.json").read_text())
+TRANSCRIPT = (ROOT / "tests/fixtures/transcript_synthetic.txt").read_text()
 REAL_DB = ROOT / "data/catalog.db"
 
 
@@ -260,7 +261,7 @@ def test_program_requirements_include_transfer_notes():
     assert any("cannot be guaranteed" in n for n in adt) and any("Upon verification" in n for n in adt)
 
 
-def test_only_save_profile_writes_a_file(tmp_path, monkeypatch):
+def test_only_save_profile_writes_a_file(tmp_path, tmp_path_factory, monkeypatch):
     # Golden rule 5: no student data at rest except the one file save_profile writes when the student asks
     import asyncio
 
@@ -269,6 +270,9 @@ def test_only_save_profile_writes_a_file(tmp_path, monkeypatch):
     profile = {"program": "bs-cs", "catalog_year": "2026-27", "qr_pathway": "1/2", "start_term": "2027-spring",
                "completed": [{"code": "CSC 101", "grade": "A", "term": "2026-fall"}]}
     plan = server.build_plan(profile)
+    pdf = tmp_path_factory.mktemp("downloads") / "SSR_TSRPT.pdf"  # *.pdf is git-ignored: stub the PDF text
+    pdf.write_bytes(b"%PDF-1.4")
+    monkeypatch.setattr(server.transcript, "read_pdf", lambda path: TRANSCRIPT)
     calls = {
         "search_courses": lambda: server.search_courses("data"), "get_course": lambda: server.get_course("CSC 653"),
         "get_prereq_chain": lambda: server.get_prereq_chain("CSC 653"), "list_programs": server.list_programs,
@@ -276,7 +280,7 @@ def test_only_save_profile_writes_a_file(tmp_path, monkeypatch):
         "get_roadmap": lambda: server.get_roadmap("bs-cs"), "audit_progress": lambda: server.audit_progress(profile),
         "build_plan": lambda: plan, "check_plan": lambda: server.check_plan(profile, plan),
         "list_eligible_electives": lambda: server.list_eligible_electives(profile, "senior_electives", plan),
-        "load_profile": server.load_profile,
+        "load_profile": server.load_profile, "import_transcript": lambda: server.import_transcript(str(pdf)),
     }
     assert set(calls) == {t.name for t in asyncio.run(server.mcp.list_tools())} - {"save_profile"}
     for call in calls.values():
@@ -316,3 +320,21 @@ def test_load_profile_warns_when_the_dpr_is_from_an_earlier_term(tmp_path):
     assert server.load_profile(str(file))["warnings"] == []
     file.write_text("program: bs-cs\ndpr_imported: 2026\n")
     assert "isn't a date" in server.load_profile(str(file))["warnings"][0]
+
+
+def test_import_transcript_gives_the_same_audit_as_typing_and_drops_pii(tmp_path, monkeypatch):
+    # Phase 6 done-when (transcript half); golden rule 5: no name, ID or birthdate in the output
+    pdf = tmp_path / "SSR_TSRPT.pdf"
+    pdf.write_bytes(b"%PDF-1.4")
+    monkeypatch.setattr(server.transcript, "read_pdf", lambda path: TRANSCRIPT)
+    got = server.import_transcript(str(pdf))
+    for pii in ("Zzfake", "Testperson", "900000001", "01/01/XXXX", "Example Community College"):
+        assert pii not in json.dumps(got)
+    typed = {"completed": [{"code": "CSC 101", "grade": "B+", "term": "2024-fall"}, {"code": "MATH 226", "grade": "A-", "term": "2024-fall"},
+                           {"code": "ENG 114", "grade": "C", "term": "2024-fall"}, {"code": "CSC 215", "grade": "A", "term": "2025-spring"},
+                           {"code": "MATH 227", "grade": "B", "term": "2025-spring"}],
+             "in_progress": ["CSC 220", "CSC 300GW", "I R 205"], "transfer_units": 12}
+    base = {"program": "bs-cs", "catalog_year": "2026-27"}
+    imported = {k: got[k] for k in ("completed", "in_progress", "transfer_units")}
+    assert server.audit_progress(base | imported) == server.audit_progress(base | typed)
+    assert server.import_transcript("SSR_TSRPT.pdf")["error"] == "bad_path"  # relative: the server's folder

@@ -217,12 +217,15 @@ comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see
 
 - [x] Get the unofficial transcript layout (`SSR_TSRPT`); synthetic fixture at
   `tests/fixtures/transcript_synthetic.txt` (ARCHITECTURE §7.3)
-- [ ] Get a sample with CR / W / I / repeat / summer rows (redacted or rebuilt synthetic)
-- [ ] `transcript.py`: `pdftotext -layout` → extract (term, code, units, grade) rows; drop
+- [ ] Get a sample with CR / W / I / repeat / summer rows (redacted or rebuilt synthetic). None available
+  (2026-10-17): the parser reads any p.2403 grade symbol in the same columns, assumes `SU` for summer (ponytail), and
+  flags unknown term codes and unreadable rows by position. Check against the first real transcript that has them
+- [x] `transcript.py`: `pdftotext -layout` → extract (term, code, units, grade) rows; drop
   everything else; transfer blocks → `transfer_units` + ⚠️
-- [ ] In-progress courses (no grade yet) → `in_progress`
-- [ ] Test: the fake name/ID strings in the fixture never appear in the output
-- [ ] `import_transcript` tool
+- [x] In-progress courses (no grade yet) → `in_progress`
+- [x] Test: the fake name/ID strings in the fixture never appear in the output
+- [x] `import_transcript` tool (a local path, so the PDF isn't attached to the chat); `plan_my_degree` offers it.
+  Test: importing the synthetic transcript gives the same audit as typing the courses
 - [x] Get the DPR (Degree Progress Report) layout from a real sample (not kept); synthetic fixture
   `tests/fixtures/dpr_synthetic.txt`, layout in ARCHITECTURE §7.3. The DPR, not the transcript,
   shows which requirement each transfer course meets, so it's the import for transfer students

@@ -459,7 +459,9 @@ prereqs and offerings to *order* what's left. The transcript is optional and add
 - A term's rows can continue after a page break. `Term GPA`/`Totals`/`Term Honor` lines are
   ignored.
 - Seen so far: letter grades only. CR, W, I and repeat markings haven't appeared in a sample
-  yet. If a row doesn't match, emit a ⚠️ with the row position, never the row text.
+  yet, so `transcript.py` reads any grade symbol (p.2403) in the same column; a repeat is just the same code twice
+  (the engine's repeat rules apply). A term code other than FA/SP/SU keeps its courses without a term, with a ⚠️.
+  If a row doesn't match, emit a ⚠️ with the row position, never the row text.
 - Fixture: `tests/fixtures/transcript_synthetic.txt` (fake name/ID, same layout).
 
 **DPR layout (Student Center → Degree Progress Report, printed from the browser to PDF; confirmed

@@ -4,6 +4,7 @@ import difflib
 import json
 import os
 import re
+import subprocess
 from datetime import date
 from functools import cache
 from pathlib import Path
@@ -13,7 +14,7 @@ import yaml
 from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
-from gatorpath import db
+from gatorpath import db, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import eligible_options, see_advisor
@@ -481,6 +482,27 @@ def load_profile(path: str | None = None) -> dict:
     return {"catalog_year": YEAR, "profile": profile, "path": str(file), "warnings": warnings}
 
 
+@mcp.tool(annotations=READ_ONLY)
+def import_transcript(pdf_path: str) -> dict:
+    """Read the student's SF State unofficial transcript PDF on their own machine (Student Center → Unofficial
+    Transcript, saved as a PDF) and return only course codes, grades, units and terms: completed, in_progress,
+    transfer_units. Name, ID, birthdate and the PDF text never leave this tool, so the student doesn't need to attach
+    the PDF to the chat; ask for the file's path instead. Merge the result into the profile. Transfer courses show as
+    totals only: their requirements come from the DPR."""
+    path = Path(pdf_path).expanduser()
+    if not path.is_absolute() or path.suffix.lower() != ".pdf" or not path.is_file():
+        return {"catalog_year": YEAR, "error": "bad_path",
+                "warnings": ["Give the full path to the transcript PDF on this computer, e.g. ~/Downloads/SSR_TSRPT.pdf"]}
+    try:
+        out = transcript.parse(transcript.read_pdf(path))
+    except (OSError, subprocess.CalledProcessError):
+        return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF"]}
+    if "completed" in out:
+        out["completed"] = [r | {"code": norm_code(r["code"])} for r in out["completed"]]
+        out["in_progress"] = [norm_code(c) for c in out["in_progress"]]
+    return {"catalog_year": YEAR} | out
+
+
 PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath ({year} Bulletin). Every course, prereq,
 requirement and date comes from the tools: never add one they didn't return, and never present a plan check_plan
 hasn't passed.{goal}{deadline}
@@ -495,7 +517,9 @@ defaults (15 units per term, no summer) instead of asking.
    PDF, or its text pasted). In that same request, before they share anything, say once that an attached PDF includes
    their name and student ID, which go to the AI provider, so they may black those out or paste only the requirement
    sections. Never repeat it after they share. Then accept whatever they share; a
-   typed course list works too. In the same message, ask only for what a DPR can't show and isn't given above: the
+   typed course list works too, and so does the path to their unofficial transcript PDF on this computer:
+   `import_transcript` reads it locally and returns only codes, grades, units and terms (no name or ID reaches you).
+   A transcript doesn't say which requirements transfer credit meets; the DPR does. In the same message, ask only for what a DPR can't show and isn't given above: the
    goal, a graduation target, whether they're on an F-1 student visa (it sets a 12-unit minimum every spring and
    fall), and the math placement (QR "1/2" or "3/4") if lower-division math isn't done.
 2. Build the profile:
