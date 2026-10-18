@@ -404,8 +404,10 @@ def first_term(profile: dict) -> str | None:
     terms = [r["term"] for r in profile.get("completed", []) if TERM.fullmatch(str(r.get("term", "")))]
     if not terms:
         return None
-    t = next_term(max(terms, key=term_key), profile.get("include_summer", False))
-    return next_term(t, profile.get("include_summer", False)) if profile.get("in_progress") else t
+    last = max(terms, key=term_key)
+    if profile.get("in_progress"):  # this term's courses: the next spring/fall, not a summer the student may not plan
+        last = next_term(last, False)  # ponytail: in progress in a summer term needs start_term
+    return next_term(last, profile.get("include_summer", False))
 
 
 def terms_through(start: str, end: str, summer: bool) -> int:

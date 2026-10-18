@@ -315,7 +315,8 @@ def parse_prereq(text: str) -> dict:
 
 
 UNVERIFIABLE = {"permission", "restricted_to", "equivalent", "requirement", "high_school", "unknown"}
-STAR = "marks items with '*' and the Bulletin has no legend for it; ask the department (ARCHITECTURE §16.1)"
+# "An \"*\" denotes that a course prerequisite is enforced at the time of registration. Prerequisites without a \"*\"
+# may be enforced by the instructor up to the end of add/drop." (p.2436) So `X*` is the plain prereq X, no warning.
 
 
 def prereq_warnings(code: str, row: dict) -> list[str]:
@@ -323,8 +324,6 @@ def prereq_warnings(code: str, row: dict) -> list[str]:
     out = []
     if row["status"] in ("partial", "unparsed"):
         out.append(f"{code}: prereq is {row['status']}, only partly machine-readable; Bulletin text: {row['raw_text']!r}")
-    if "*" in (row["raw_text"] or ""):
-        out.append(f"{code}: prereq text {STAR}. Bulletin text: {row['raw_text']!r}")
     return out
 
 
@@ -338,7 +337,6 @@ def prereq_chain(code: str, prereqs: dict[str, dict]) -> dict:
     """
     chain, conditions, warnings, state = [], [], [], {}
     missing: dict[str, list[str]] = {}
-    starred: list[str] = []
 
     def visit(c: str, needed_by: str | None, concurrent: bool) -> None:
         if state.get(c) == "open" and not concurrent:
@@ -359,15 +357,11 @@ def prereq_chain(code: str, prereqs: dict[str, dict]) -> dict:
                 visit(leaf["course"], c, leaf.get("concurrent_ok", False))
         if row["status"] in ("partial", "unparsed"):
             warnings.append(prereq_warnings(c, row)[0])
-        if "*" in (row["raw_text"] or ""):
-            starred.append(c)
         state[c] = "done"
         chain.append({"code": c, "requires": row["expr"], **{k: v for k, v in row.items() if k != "expr"}})
 
     visit(code, None, False)
     warnings += [f"{c} (needed by {', '.join(by)}) is not in this catalog; it may have been renumbered" for c, by in missing.items()]
-    if starred:
-        warnings.append(f"Prereq text of {', '.join(starred)} {STAR}; see each raw_text")
     return {"code": code, "requires": chain[-1]["requires"] if chain else None, "chain": chain,
             "conditions": conditions, "warnings": warnings}
 

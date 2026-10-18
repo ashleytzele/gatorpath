@@ -163,8 +163,10 @@ Automate everything that is **detection or rebuilding**. A human approves every 
   Store them as conditions, flag them, and never block on them silently.
 - **GPA conditions:** "GPA of 3.0 or higher" (e.g. CSC 653, 671).
 - **Concurrent enrollment:** "(may be taken concurrently)".
-- **Asterisks:** `CSC 510*`, `ACCT 301*`, even `graduate-level standing*`. **No legend anywhere
-  in the PDF** (searched 2026-10-15). Likely "or equivalent", still unconfirmed. See §16.
+- **Asterisks:** `CSC 510*`, `ACCT 301*`, even `graduate-level standing*`. The legend is in "Course Descriptions,
+  Symbols, and Terms" (p.2436): "An "*" denotes that a course prerequisite is enforced at the time of registration.
+  Prerequisites without a "*" may be enforced by the instructor up to the end of add/drop." So `X*` parses as plain
+  `X`, with no warning (found 2026-10-17; the 2026-10-15 search missed it).
 - **Every course is printed twice:** once in its department section (CSC: PDF pp. 1896–1905) and
   again in the A–Z course catalog (CSC: PDF pp. 2557–2564). **Dedupe on `code`** and keep the
   department-section copy's page. If the two texts differ, store both and add a warning.
@@ -734,8 +736,7 @@ students; 0 hallucinated courses."*
 
 ## 16. Open questions
 
-1. **Asterisk meaning** in prereqs (`CSC 510*`): **there's no legend in the PDF.** Ask the CS
-   department. Until then, parse `X*` as `{course: X}` and add a ⚠️ quoting the raw text.
+1. ~~**Asterisk meaning** in prereqs (`CSC 510*`)~~ Closed 2026-10-17: enforced at registration (p.2436), see §5.
 2. **Class search terms of use / rate limits:** confirm scraping is acceptable; consider asking
    SFSU for a data feed.
 3. ~~Transcript format~~ **Resolved 2026-10-15**, see §7.3. Still unseen: CR, W, I, repeat

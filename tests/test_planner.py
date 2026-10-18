@@ -267,3 +267,11 @@ def test_f1_light_or_skipped_term_is_an_error():
                 ("2028-spring", ["CSC 648"] + 3 * [{"slot": "senior_electives", "units": 3}]))
     assert [e["error"] for e in errors(gap)] == ["f1_gap"] and "2027-fall" in errors(gap)[0]["message"]  # p.2390
     assert errors(check(f1_senior(), ("2027-spring", ["CSC 413", "CSC 415"]), ("2027-fall", ["CSC 648"]))) == []
+
+
+def test_in_progress_courses_hold_the_next_spring_or_fall_even_with_summers():
+    # Trial 6: last completed 2026-spring, courses in progress (fall 2026): the plan starts 2027-spring, not on top of them
+    from gatorpath.engine.planner import first_term
+    p = {"completed": [{"code": "CSC 101", "grade": "A", "term": "2026-spring"}], "in_progress": ["CSC 215"]}
+    assert first_term(p) == first_term(p | {"include_summer": True}) == "2027-spring"
+    assert first_term(p | {"in_progress": [], "include_summer": True}) == "2026-summer"

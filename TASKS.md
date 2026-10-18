@@ -41,8 +41,8 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   - [x] "Restricted to … majors" → `restricted_to` leaf
   - [x] Paired-course entries ("Prerequisites for CSC 671: …" inside CSC 871)
 - [x] `course_link` for paired (671/871) and cross-listed (HUM 690/CWL 680) courses
-- [ ] Asterisk (`CSC 510*`): no legend in the PDF. Parse as the plain course + ⚠️ with raw text;
-  ask the CS department (ARCHITECTURE §16.1)
+- [x] Asterisk (`CSC 510*`): the legend is on p.2436 ("enforced at the time of registration"), found in trial 6;
+  parsed as the plain course, no warning (ARCHITECTURE §16.1 closed)
 - [x] Golden test file: 64 real prereq strings from CSC/MATH/PHYS → expected trees (`tests/test_prereq.py`)
 - [x] Coverage report: printed by `python -m gatorpath.ingest.bulletin <pdf>`; lists every non-ok string
   and every referenced code missing from the catalog (e.g. renumbered CSC 210)
@@ -106,7 +106,7 @@ report.
   - [x] Audit silently used 2026-27 for a Spring 2025 student → ⚠️ when `catalog_year` is missing
   - [x] Model guessed what 46 transfer units covered → audit ⚠️ + server instructions: never guess
     transfer coverage or graduation terms
-  - [ ] Model estimated "finish Spring/Fall 2027" with no planner → phase 4 `build_plan`
+  - [x] Model estimated "finish Spring/Fall 2027" with no planner → phase 4 `build_plan` (used from trial 2 on)
   - [ ] Transcript was attached to the chat directly (PII to the provider) → phase 6 `import_transcript` / `import_dpr`
   - Trial 2 (same student, DPR + build/check_plan): two-semester plan matched the student's own;
     claims checked against the Bulletin (ENVS 401 = ESCA + 4UD + GP, CSC 656 with CSC 415 concurrently).
@@ -131,7 +131,17 @@ report.
     `f1_gap` (pp.2390, 2393); a last term under 12 is a warning + the new `international` advising entry (Division of
     International Education); build_plan fills an F-1 student's light terms with waiting elective slots (the trial's
     9/12/6 → 12/12/3, `tests/test_planner.py`); other visa questions go to the international office
-- [ ] Also try Gemini CLI (proves "works with any client")
+- [x] Also try another client (proves "works with any client"): Codex CLI, since Gemini CLI isn't installed. Trial 6 below
+  - Trial 6 (Codex CLI, synthetic p03 sophomore shifted a year to today, the Phase 4 "Done when" questions): with the
+    server attached but not named, Codex answered from web search, with no check_plan (README now says to start with
+    the prompt). With the plan_my_degree text, it ran load_profile → audit_progress → build_plan →
+    list_eligible_electives → check_plan: valid plan to Spring 2029, electives CSC 652/653/651/645/656, triple-duty
+    GE (ERTH 335, HIST 405, PLSI 451). "A year early" got the pace table: only 18 units + summers reaches Fall 2028.
+    Found: (1) the '*' warning fired on 17 courses, but the legend is on p.2436 ("enforced at the time of
+    registration"): warning removed, Phase 1 item closed; (2) with include_summer, build_plan started in the term
+    the in-progress courses were in (Fall 2026), so a direct build_plan wrongly said 18 + summers reaches Spring 2028:
+    in-progress courses now hold the next spring/fall; (3) Codex read "a year early" against the 3-year horizon:
+    the prompt now says it's a year before est_graduation_term
 
 **Done when:** you can ask Claude "what do I need before CSC 653?" and "what's left for my
 degree?" and get correct, sourced answers.
@@ -180,7 +190,8 @@ degree?" and get correct, sourced answers.
 
 **Done when:** "I'm a CS sophomore, I want cybersecurity, plan my next 3 years" produces a plan
 that passes `check_plan`, with sensible electives, and "what if I graduate a year early?" gets a
-comparison that says what has to give.
+comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see Phase 3).** Still open: the
+Senior Advisor question (needs the department).
 
 ---
 

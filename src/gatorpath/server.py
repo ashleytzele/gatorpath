@@ -169,7 +169,8 @@ def search_courses(query: str, subject: str | None = None, level: str | None = N
 def get_course(code: str) -> dict:
     """Full Bulletin record for one course: description, units, grading, GE areas, prereq (raw text + parsed tree +
     status), paired/cross-listed links, source_page, and `unlocks`: courses whose prereqs name it (as a requirement or
-    one of the alternatives), so a student sees what skipping or delaying it holds up."""
+    one of the alternatives), so a student sees what skipping or delaying it holds up. A '*' after a prereq item means
+    registration enforces it; items without one may be enforced by the instructor up to the end of add/drop (p.2436)."""
     code = norm_code(code)
     course = db.get_course(DB, YEAR, code)
     if course is None:
@@ -520,8 +521,9 @@ defaults (15 units per term, no summer) instead of asking.
      lighter final term) to the international office without stating visa rules yourself
    - a checklist: confirm each course is offered that term in Class Search (no schedule data yet), compare with the
      DPR, see the advisor
-   Then offer what-ifs: graduating earlier (step 6), a new direction (steps 4-5 with the new goal; required courses
-   don't change). Switching majors isn't supported yet.
+   Then offer what-ifs: graduating earlier (step 6; "a year early" means a year before the plan's
+   est_graduation_term: say the term you used, and give why_not when it can't be reached), a new direction
+   (steps 4-5 with the new goal; required courses don't change). Switching majors isn't supported yet.
 8. Offer once to save their profile so the next session starts here: `save_profile` with the goal, chosen_electives
    and the plan that passed check_plan. Only if they say yes; it writes one file on their machine (default
    ~/.gatorpath/profile.yaml, or a path they choose)."""

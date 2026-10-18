@@ -6,8 +6,14 @@ in what order?" Every answer is checked against the official Bulletin.
 
 **The AI suggests, the code verifies.**
 
-> Status: phase 0 (foundation). See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and
-> [`TASKS.md`](TASKS.md).
+> Status: phase 4 (planner) done; offering history (phase 5) next. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+> and [`TASKS.md`](TASKS.md).
+
+## Use
+
+Add the server to your MCP client (Claude Desktop config in [`AGENTS.md`](AGENTS.md)), then start with the
+**Plan my degree** prompt. In a client without MCP prompts, say "use the gatorpath tools": a client that isn't
+pointed at them may answer from web search instead, and nothing checks that plan.
 
 ## Why
 

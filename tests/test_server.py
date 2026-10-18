@@ -46,7 +46,7 @@ def test_prereq_chain_csc_653():
     assert {"for": "CSC 653", "gpa": 3.0, "verifiable": True} in got["conditions"]
     w = "\n".join(got["warnings"])
     assert "CSC 210 (needed by" in w and "renumbered" in w   # CSC 220/230 still name the old CSC 210
-    assert "'*'" in w and "cycle" not in w                   # PHYS 220/222 are corequisites, not a cycle
+    assert "'*'" not in w and "cycle" not in w  # '*' = enforced at registration (p.2436); PHYS 220/222 are corequisites
 
 
 def test_get_course_record():
