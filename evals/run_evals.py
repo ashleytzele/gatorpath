@@ -37,12 +37,14 @@ PROGRAM, UNIVERSITY = server.load_rules(YEAR, "bs-cs")
 REQUIRED = {c for g in PROGRAM["groups"] for c in g.get("all_of", [])}
 SENIOR = next(g for g in PROGRAM["groups"] if g["id"] == "senior_electives")
 SUBJECTS = sorted({c.rsplit(" ", 1)[0] for c in CATALOG}, key=len, reverse=True)
-CODE = re.compile(r"\b(" + "|".join(map(re.escape, SUBJECTS)) + r") ?(\d{3}[A-Z]{0,3})\b")
-MORE = re.compile(r"\s*(?:,\s*(?:and |or )?|and |or |/|&\s*)(\d{3}[A-Z]{0,3})\b(?!\s*units?\b)")  # "CSC 230, 256 and 340"
+CODE = re.compile(r"\b(" + "|".join(map(re.escape, SUBJECTS)) + r") ?(\d{3}[A-Z]{0,3})\b(?!-?level|\+|s\b)")
+MORE = re.compile(r"(?:\s*\([^()]{0,40}\))?\s*(?:,\s*(?:and |or )?|and |or |/|&\s*)(\d{3}[A-Z]{0,3})\b(?!\s*units?\b|-?level|\+)")  # "CSC 230, 256 and 340"
 NOW = ("2026-fall", "Fall 2026")  # ponytail: the eval's "today"; move it when the profiles' terms are shifted again
 LOAD_KEYS = ("max_units_per_term", "include_summer")
 RECORD = ("program", "qr_pathway", "f1", "adt", "ge_certified", "prior_bachelors", "transfer_units")
 PREFS = ("include_summer", "max_units_per_term", "graduate_by")  # checked on build_plan, where they matter
+GRADE_WORDS = {"I": "I (incomplete)", "W": "W (withdrew)", "WU": "WU (unauthorized withdrawal)", "IC": "IC (incomplete charged)",
+               "RD": "RD (report delayed)", "RP": "RP (report in progress)", "AU": "AU (audit)"}
 WORK = Path(tempfile.gettempdir()) / "gatorpath-evals"  # client cwd + Codex home, outside the repo
 
 
@@ -104,11 +106,15 @@ def render(profile: dict | None, goal: str | None, plan: bool) -> str:
     by_term: dict[str, list[str]] = {}
     for r in rows:
         if not r.get("transfer"):
-            by_term.setdefault(r.get("term") or "", []).append(f"{r['code']} {r['grade']}")
+            by_term.setdefault(r.get("term") or "", []).append(f"{r['code']} {GRADE_WORDS.get(r['grade'], r['grade'])}")
     for term in sorted(by_term, key=lambda t: term_key(t) if t else (0, 0)):
         say.append(f"{term_words(term) if term else 'Also completed'}: {', '.join(by_term[term])}.")
     if profile.get("in_progress"):
         say.append(f"This fall ({NOW[0][:4]}) I'm taking {', '.join(profile['in_progress'])}.")
+    elif not (rows or profile.get("ge_done") or profile.get("transfer_units")):
+        say.append("I haven't taken any college courses yet.")
+    elif any(r.get("term") for r in rows) and not profile.get("start_term"):
+        say.append(f"I'm not taking classes this fall ({NOW[0][:4]}).")
     if profile.get("start_term"):
         say.append(f"I start at SF State in {term_words(profile['start_term'])}.")
     if profile.get("gpa"):
@@ -160,8 +166,10 @@ def run_claude(text: str, resume: str | None) -> dict:
                     by_id[b["tool_use_id"]]["result"] = "".join(x.get("text", "") for x in c) if isinstance(c, list) else str(c)
         elif e.get("type") == "result":
             answer, session = e.get("result") or "", e.get("session_id")
+            if e.get("is_error"):
+                out.returncode = out.returncode or 1  # e.g. "You've hit your session limit"
     return {"calls": calls, "answer": answer, "session": session, "other_tools": other,
-            "error": None if out.returncode == 0 else out.stderr[-500:]}
+            "error": None if out.returncode == 0 else (out.stderr[-500:] or answer[:500])}
 
 
 def run_codex(text: str, resume: str | None) -> dict:
@@ -170,7 +178,7 @@ def run_codex(text: str, resume: str | None) -> dict:
     base += ["-c", 'sandbox_mode="read-only"'] if resume else ["-s", "read-only", "-C", str(WORK / "cwd")]
     out = subprocess.run(base + ([resume] if resume else []) + [text], cwd=WORK / "cwd", capture_output=True, text=True,
                          stdin=subprocess.DEVNULL, env=env, timeout=1800)
-    calls, answer, session, other = [], "", resume, []
+    calls, answer, session, other, failed = [], "", resume, [], None
     for line in out.stdout.splitlines():
         try:
             e = json.loads(line)
@@ -179,6 +187,10 @@ def run_codex(text: str, resume: str | None) -> dict:
         item = e.get("item", {})
         if e.get("type") == "thread.started":
             session = e["thread_id"]
+        elif e.get("type") in ("error", "turn.failed"):  # e.g. a usage limit; stderr only says it read stdin
+            failed = e.get("message") or (e.get("error") or {}).get("message") or json.dumps(e)[:300]
+        elif e.get("type") == "item.completed" and item.get("type") == "mcp_tool_call" and item.get("server") != "gatorpath":
+            other.append(f"{item.get('server')}.{item.get('tool')}")
         elif e.get("type") == "item.completed" and item.get("type") == "mcp_tool_call":
             args = item.get("arguments")
             res = item.get("result") or {}
@@ -187,9 +199,9 @@ def run_codex(text: str, resume: str | None) -> dict:
         elif e.get("type") == "item.completed" and item.get("type") == "agent_message":
             answer = item["text"]
         elif e.get("type") == "item.completed" and item.get("type") not in ("reasoning", None):
-            other.append(item["type"])
+            other.append(f"{item['type']}: {item.get('command') or item.get('query') or ''}"[:200])
     return {"calls": calls, "answer": answer, "session": session, "other_tools": other,
-            "error": None if out.returncode == 0 else out.stderr[-500:]}
+            "error": failed or (None if out.returncode == 0 else out.stderr[-500:])}
 
 
 CLIENTS = {"claude": run_claude, "codex": run_codex}
@@ -211,8 +223,10 @@ def setup() -> None:
     except (OSError, ValueError):
         pass
     model = "".join(f'{k} = "{user[k]}"\n' for k in ("model", "model_reasoning_effort") if k in user)
-    (home / "config.toml").write_text(f'{model}web_search = "disabled"\n[mcp_servers.gatorpath]\ncommand = "uv"\n'
-                                      f'args = {json.dumps(server_cfg["args"])}\ntool_timeout_sec = 300\n')
+    off = "".join(f"{f} = false\n" for f in ("apps", "browser_use", "browser_use_external", "in_app_browser", "shell_tool",
+                                             "skill_search"))
+    (home / "config.toml").write_text(f'{model}web_search = "disabled"\n[features]\n{off}[mcp_servers.gatorpath]\n'
+                                      f'command = "uv"\nargs = {json.dumps(server_cfg["args"])}\ntool_timeout_sec = 300\n')
 
 
 # ---- scoring ----
@@ -307,7 +321,7 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
     calls = turn["calls"]
     every = [c for t in earlier for c in t["calls"]] + calls
     names = {c["tool"] for c in every}
-    answer = turn["answer"]
+    answer = turn["answer"].replace("\u2019", "'").replace("\u2018", "'")  # "isn’t" reads as "isn't"
     s, why = {}, {}
     s["answered"] = bool(answer.strip()) and not turn.get("error")
     wild = hallucinated(answer, question + " ".join(c.get("result", "") for c in every))
@@ -315,14 +329,18 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
     if wild:
         why["hallucinated"] = wild
     s["no_save_profile"] = "save_profile" not in names
+    s["only_gatorpath_tools"] = not turn.get("other_tools")
+    if turn.get("other_tools"):
+        why["other_tools"] = turn["other_tools"]
     if profile is not None:
         given = next((c["args"]["profile"] for c in every if isinstance(c.get("args"), dict) and "profile" in c["args"]), None)
-        diffs = profile_diff(profile, given) if given is not None else ["no tool got a profile"]
-        planned = next((c["args"]["profile"] for c in every if c["tool"] == "build_plan" and "profile" in c.get("args", {})), None)
-        diffs += profile_diff(profile, planned, PREFS) if planned is not None else []
-        s["profile_faithful"] = not diffs
-        if diffs:
-            why["profile"] = diffs
+        if given is not None:  # no tool got one: n/a here (expect.tools / plan_valid say when one was needed)
+            diffs = profile_diff(profile, given)
+            planned = next((c["args"]["profile"] for c in every if c["tool"] == "build_plan" and "profile" in c.get("args", {})), None)
+            diffs += profile_diff(profile, planned, PREFS) if planned is not None else []
+            s["profile_faithful"] = not diffs
+            if diffs:
+                why["profile"] = diffs
     if "tools" in expect:
         s["tools"] = set(expect["tools"]) <= names
         if not s["tools"]:
@@ -338,10 +356,18 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
         s["mention_any"] = any(w.lower() in answer.lower() for w in expect["mention_any"])
     # The plan presented: the checked plan the answer lists best (the prompt has clients re-check variants, e.g. with
     # a course taken out to see whether it's optional), the later one on a tie
-    checks = [c["args"] for c in every if c["tool"] == "check_plan" and isinstance(c.get("args"), dict) and "plan" in c["args"]]
+    # On a tie in courses (a variant with fewer free-elective units), the one the client's own check_plan passed: the
+    # prompt lets it present only a passing plan. ponytail: courses only; compare per-term units if a tie still misleads
+    checked = lambda cs: [c for c in cs if c["tool"] == "check_plan" and isinstance(c.get("args"), dict) and "plan" in c["args"]]
+    checks = checked(calls) or checked(every)  # a follow-up presents a plan it checked itself, if it checked one
     said = codes_in(answer)
-    fit = lambda i: (len(set(plan_codes(checks[i]["plan"])) & said) - len(set(plan_codes(checks[i]["plan"])) - said), i)
-    last = checks[max(range(len(checks)), key=fit)] if checks else None
+    passed = lambda c: '"valid": true' in (c.get("result") or "")
+
+    def fit(i):
+        codes = set(plan_codes(checks[i]["args"]["plan"]))
+        return len(codes & said) - len(codes - said), passed(checks[i]), i
+
+    last = checks[max(range(len(checks)), key=fit)]["args"] if checks else None
     if expect.get("plan_valid"):
         # Re-checked for the student in the question, with the client's plan settings: a plan made for a profile the
         # client got wrong doesn't count
@@ -352,6 +378,9 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
             why["plan_errors"] = [e["message"] for e in result["errors"]][:5]
         if last and (sems := last["plan"].get("semesters")):
             why["graduates"] = sems[-1].get("term")
+    if expect.get("summer_tried"):  # a pace run with summers, or a checked plan with a summer term
+        s["summer_tried"] = any(c["tool"] == "build_plan" and c["args"].get("profile", {}).get("include_summer") for c in calls) \
+            or bool(last) and any(str(x.get("term", "")).endswith("summer") for x in last["plan"].get("semesters", []))
     if expect.get("goal_fit") and goal:
         plan = last["plan"] if last else {}
         filters = SENIOR["from"] if isinstance(SENIOR["from"], list) else [SENIOR["from"]]
@@ -365,11 +394,8 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
         why["electives"] = {"picked": picks, "on_goal": hits}
     if expect.get("pace_compared"):
         loads = {tuple(c["args"].get("profile", {}).get(k) for k in LOAD_KEYS) for c in every if c["tool"] == "build_plan"}
-        s["pace_compared"] = len(loads) >= 2 and any(c["tool"] == "build_plan" for c in calls)
+        s["pace_compared"] = len(loads) >= 2  # an earlier turn's runs count: the follow-up can answer from them
         why["loads"] = sorted(map(str, loads))
-    if want := expect.get("build_plan_with"):
-        s["build_plan_with"] = any(c["tool"] == "build_plan" and all(c["args"].get("profile", {}).get(k) == v for k, v in want.items())
-                                   for c in calls)
     return s, why
 
 
@@ -393,13 +419,14 @@ def score(q: dict, turns: list[dict], goals: dict) -> dict:
 def run_one(client: str, q: dict, out_dir: Path) -> dict:
     profile = shift(load_profile(q.get("profile"))) if q.get("profile") else None
     start, turns = time.time(), []
+    asked = first_message(q, profile)
     try:
-        turns.append(CLIENTS[client](first_message(q, profile), None))
+        turns.append(CLIENTS[client](asked, None))
         if q.get("followup") and turns[0]["session"]:
             turns.append(CLIENTS[client](q["followup"]["ask"], turns[0]["session"]))
     except subprocess.TimeoutExpired:
         turns.append({"calls": [], "answer": "", "session": None, "other_tools": [], "error": "timeout"})
-    record = {"id": q["id"], "client": client, "seconds": round(time.time() - start), "turns": turns}
+    record = {"id": q["id"], "client": client, "seconds": round(time.time() - start), "asked": asked, "turns": turns}
     (out_dir / client).mkdir(parents=True, exist_ok=True)
     (out_dir / client / f"{q['id']}.json").write_text(json.dumps(record, indent=1))
     return record
@@ -424,7 +451,8 @@ def report(results: dict, questions: list[dict], run: str) -> str:
                        ("profile_faithful", "Profile matches what the student said"),
                        ("no_hallucinated_codes", "Answers with no unknown course codes"), ("mention", "States the facts"),
                        ("tools", "Called the tools it needed"), ("mention_any", "Honesty wording"),
-                       ("followup.pace_compared", "What-if: compared paces"), ("no_save_profile", "No unasked save_profile")):
+                       ("followup.pace_compared", "What-if: compared paces"), ("no_save_profile", "No unasked save_profile"),
+                       ("only_gatorpath_tools", "Used only the gatorpath tools")):
         lines.append(f"| {label} | " + " | ".join(rate(x, key) for x in clients) + " |")
     wild = {x: sum(len(r["why"].get("hallucinated", [])) + len(r["why"].get("followup.hallucinated", []))
                    for (c, _), r in results.items() if c == x) for x in clients}
@@ -452,6 +480,8 @@ def main() -> None:
     ap.add_argument("--only", default="")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--rescore", type=Path)
+    ap.add_argument("--into", type=Path, help="run into this existing run directory, then score all of it")
+    ap.add_argument("--retry", action="store_true", help="with --into: rerun only the sessions that errored")
     args = ap.parse_args()
     spec = yaml.safe_load((ROOT / "evals/questions.yaml").read_text())
     questions = [q for q in spec["questions"] if not args.only or q["id"] in args.only.split(",")]
@@ -464,11 +494,19 @@ def main() -> None:
         if saved.exists():  # load_profile would hand a real student's profile to the eval (golden rule 5)
             sys.exit(f"{saved} exists; move it away before running evals")
         setup()
-        out_dir = ROOT / "data/evals" / datetime.now().strftime("%Y%m%d-%H%M%S")
+        out_dir = args.into or ROOT / "data/evals" / datetime.now().strftime("%Y%m%d-%H%M%S")
         jobs = [(c, q) for q in questions for c in clients]
+        if args.retry:
+            bad = lambda c, q: (f := out_dir / c / f"{q['id']}.json").exists() and any(
+                t.get("error") for t in json.loads(f.read_text())["turns"])
+            jobs = [(c, q) for c, q in jobs if bad(c, q)]
+            print(f"retrying {len(jobs)}:", ", ".join(c + "/" + q["id"] for c, q in jobs))
         with ThreadPoolExecutor(args.workers * len(clients)) as pool:
             done = list(pool.map(lambda job: run_one(*job, out_dir), jobs))
         records = {(r["client"], r["id"]): r for r in done}
+        if args.into:
+            records = {(p.parent.name, p.stem): json.loads(p.read_text()) for p in out_dir.glob("*/*.json")}
+            questions = spec["questions"]
         if saved.exists():
             saved.unlink()  # written by an eval session (it didn't exist before): synthetic
             print("note: an eval session called save_profile; its file was removed")
@@ -476,8 +514,11 @@ def main() -> None:
                for k, r in records.items() if any(q["id"] == k[1] for q in questions)}
     (out_dir / "scores.json").write_text(json.dumps({f"{c}/{i}": r for (c, i), r in results.items()}, indent=1))
     text = report(results, questions, out_dir.name)
-    if not args.only:
+    if not args.only or args.into:
         (ROOT / "evals/REPORT.md").write_text(text)
+    errored = sorted(f"{c}/{i}" for (c, i), r in records.items() if any(t.get("error") for t in r["turns"]))
+    if errored:
+        print(f"errored (rerun with --into {out_dir} --clients … --only …): {', '.join(errored)}")
     print(text)
 
 

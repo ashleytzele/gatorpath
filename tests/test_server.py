@@ -444,3 +444,10 @@ def test_qr_pathway_is_read_however_the_student_writes_it():
     read = lambda qr: server.prepare({"program": "bs-cs", "qr_pathway": qr}, university)[0]["qr_pathway"]
     assert [read(q) for q in ("QR 3/4", "Category 1/2", "3-4", "1/2")] == ["3/4", "1/2", "3/4", "1/2"]
     assert read("not sure") == "not sure"  # left as given: build_plan then asks for it
+
+
+def test_the_server_never_plans_on_top_of_the_current_term():
+    # Eval plan-p01 (codex): start_term 2026-fall while CSC 101 was in progress in it; today is pinned to 2026-10-18
+    p = {"catalog_year": "2026-27", "program": "bs-cs", "in_progress": ["CSC 101"], "start_term": "2026-fall"}
+    errs = [e["error"] for e in server.check_plan(p, {"semesters": [{"term": "2026-fall", "courses": ["CSC 215"]}]})["errors"]]
+    assert "term_in_progress" in errs

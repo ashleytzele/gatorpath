@@ -362,3 +362,18 @@ def test_ge_combinations_list_every_minimal_way():
     assert any({e["code"] for part in w["parts"] for e in part["examples"]} >= {"PLSI 355", "HIST 308"} for w in two)
     for w in got["ways"]:  # every way covers all three, and every part is needed
         assert set().union(*(set(part["covers"]) for part in w["parts"])) == set(got["open"])
+
+
+def test_the_current_term_is_taken_by_in_progress_courses():
+    # Eval plan-p01 (codex): start_term 2026-fall, the term CSC 101 is in progress, and CSC 215 was planned beside it
+    from gatorpath.engine.planner import first_term
+    now = {"current_term": "2026-fall", "in_progress": ["CSC 101", "MATH 226"]}
+    assert first_term(now) == "2027-spring"  # nothing completed yet: the term after this one, not needs_input
+    assert first_term(now | {"start_term": "2026-fall"}) == "2027-spring"
+    assert first_term(now | {"start_term": "2027-fall"}) == "2027-fall"
+    p = FRESHMAN | now | {"completed": []}
+    same = check(p, ("2026-fall", ["CSC 215"]))
+    assert [e["error"] for e in errors(same)][:1] == ["term_in_progress"]
+    past = check(FRESHMAN | {"current_term": "2026-fall", "completed": []}, ("2026-spring", ["CSC 101"]))
+    assert "term_in_past" in [e["error"] for e in errors(past)]
+    assert not any(e["error"].startswith("term_in") for e in errors(check(p, ("2027-spring", ["CSC 215"]))))

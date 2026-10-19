@@ -282,6 +282,7 @@ def prepare(profile: dict, university: dict) -> tuple[dict, list[str]]:
     digits = set(re.findall(r"[1-4]", str(profile.get("qr_pathway", ""))))
     qr = next((k for k in ("1/2", "3/4") if digits and digits <= set(k[::2])), profile.get("qr_pathway"))
     clean = profile | ({"qr_pathway": qr} if qr else {}) | {
+                       "current_term": term_start(today())[0],  # the term underway: never plan on top of it
                        "catalog_year": YEAR, "ge_done": ge_done, "not_on_dpr": list(dict.fromkeys(left_out)),
                        "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
                        "in_progress": [norm_code(c) for c in profile.get("in_progress", [])],
@@ -313,8 +314,8 @@ def audit_progress(profile: Profile) -> dict:
     older catalog's "A2", "D", "UD-D": translated automatically), also USH/USG/CSLG; dpr_met: required courses the
     DPR shows met by a substitution or exception (e.g. MATH 225 met by MATH 325); not_on_dpr: requirements the
     tools list but the student's DPR doesn't have at all (an older catalog, e.g. GE "6" Ethnic Studies): left out and
-    flagged for an advisor to confirm; first_time (began at SF State as a first-time college student; default: no
-    transfer work); ge_certified (Cal-GETC certification of lower-division GE, p.2304); prior_bachelors (already holds
+    flagged for an advisor to confirm; first_time (began at SF State as a first-time college student; leave it out
+    unless the student says: without it, transfer work decides); ge_certified (Cal-GETC certification of lower-division GE, p.2304); prior_bachelors (already holds
     a bachelor's or higher degree from a regionally accredited institution: GE and graduation requirements waived,
     p.2313); transfer_units: total transfer units; adt: true only for a verified AA-T/AS-T from a California Community
     College in a similar approved major (waives SF State Studies, p.2313); gpa optional.
@@ -447,6 +448,10 @@ def read_profile(path: Path) -> dict | None:
     return json.loads(json.dumps(data, default=str)) if isinstance(data, dict) and "program" in data else None  # dates -> str
 
 
+def today() -> date:
+    return date.today()  # one place for "now": tests pin it (tests/conftest.py)
+
+
 def term_start(day: date) -> tuple[str, date]:
     # ponytail: month boundaries (spring Jan, summer Jun, fall Aug), not SF State's academic calendar.
     season, month = ("fall", 8) if day.month >= 8 else ("summer", 6) if day.month >= 6 else ("spring", 1)
@@ -499,7 +504,7 @@ def load_profile(path: str | None = None) -> dict:
         return path_error(path, f"{file} isn't a GatorPath profile", "not_a_profile")
     warnings = []
     if imported := profile.get("dpr_imported"):
-        term, start = term_start(date.today())
+        term, start = term_start(today())
         try:
             stale = date.fromisoformat(imported) < start
         except (TypeError, ValueError):
@@ -586,10 +591,12 @@ hasn't passed.{goal}{deadline}
 
 Keep it fast. Ask once, in one message, for everything still missing, then work through to a finished plan without
 stopping for confirmation. Never ask one question at a time or re-ask what they gave. Fill optional gaps with stated
-defaults (15 units per term, no summer) instead of asking.
+defaults (15 units per term, no summer) instead of asking. What the student doesn't mention is none: no prior degree,
+no AP / IB or transfer credit, nothing in progress. Say so in one line and plan; don't ask them to confirm it.
 
 1. Start with `load_profile` (no path: the default file). If it returns a profile, start from it and ask only what's
-   missing or changed; if it warns the DPR is stale, ask for a fresh one. Otherwise ask for their record. Best is the
+   missing or changed; if it warns the DPR is stale, ask for a fresh one. If their message already gives their courses
+   (or says they have none yet), use those and don't ask for a record. Otherwise ask for their record. Best is the
    path to their DPR saved as a PDF on this computer (Student Center → Degree Progress Report → View All on long
    lists → print to PDF): `import_dpr` reads it locally and returns a ready profile, and no name or ID reaches you.
    The unofficial transcript PDF works the same way (`import_transcript`), but it doesn't say which requirements

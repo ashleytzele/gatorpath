@@ -426,6 +426,8 @@ prior_bachelors: false             # bachelor's or higher from a regionally accr
 # completed rows may add `units` (variable-unit courses) and `transfer: true` (articulated
 # transfer course: counts for requirements, not residence or GPA; its units are in transfer_units)
 max_units_per_term: 15
+current_term: 2026-fall            # set by the server from today's date (month boundaries), never by the client:
+                                   # the in-progress courses fill it, so plans start after it (eval run 2026-10-18)
 include_summer: false
 ```
 
@@ -460,7 +462,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | `build_plan` | `profile` | Deterministic baseline plan laid out on the Bulletin roadmap (§8): `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`, `pace` (prereq-chain floor vs units floor, `roadmap_load` when the roadmap's own 16-17-unit terms finish sooner, `graduate_by` → `on_time` / `why_not`). When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
 | `list_eligible_electives` | `profile`, `group_id`, `plan?`, `by_term?`, `limit=25` | Options that satisfy that group, each with description, `readiness` (`ready` / `check`: met except what can't be verified, see `cannot_check` / `blocked`: see `blocked_by`, plus `ready_by: term` when a plan opens it up), `also_covers`, and offering pattern. **The AI picks from this list using the student's goal.** |
 | `ge_combinations` | `profile`, `plan?`, `by_term?` | Up to 8 minimal ways (3 when more than 5 are open) to finish the open GE / SF State Studies / American Institutions requirements one course can fill, fewest courses first; the first is the fewest a bounded search found, not a proven minimum (one course for 4UD + ESCA + GP, two that split them, or one each); each part: what it covers, how many courses fit, examples (ready first, recently offered first). Requirements the major's own courses cover (GWAR via CSC 300GW) are left out |
-| `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
+| `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include a term already started (`term_in_past`, or `term_in_progress`: the current term, which the in-progress courses fill), prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
 | `import_dpr` | `pdf_path` (local file) | `{profile: {program, catalog_year, completed (SF State rows + transfer rows as the course they sit under, at its minimum grade), in_progress, ge_done (DPR titles of GE areas it shows done, + USH/USG/CSLG designations), dpr_met, gpa, transfer_units}, remaining: [{requirement, what, needed}], warnings}`. Personal info dropped; raw text never returned, logged or stored. Layout below |
 | `save_profile` / `load_profile` | `profile`, `path` / `path` | Writes or reads the student's profile as YAML at a path **the student chose**, only when they ask. Default `~/.gatorpath/profile.yaml`; refuses paths inside the repo, relative paths and non-`.yaml` names. Replaces only an earlier GatorPath profile (never another file), atomically, mode 600. `load_profile` returns only a GatorPath profile (a mapping with `program`) and warns when `dpr_imported` is before the current term (month boundaries: spring Jan, summer Jun, fall Aug) |
 | `import_transcript` | `pdf_path` (local file) | `{completed: [...], in_progress: [...], transfer_units, warnings}`, with **only** course code, grade, units and term. Name, student ID, birthdate and address are dropped. Raw text is never returned, logged or stored |
@@ -732,6 +734,11 @@ gatorpath/
 | Plans from `build_plan` passing `check_plan` | 100% |
 | End-to-end: 30–50 student questions via a real AI client + our server; plan valid and matches the stated goal (rubric) | Report the number honestly |
 | Hallucinated course codes in final answers | 0 |
+
+As built (2026-10-18): `evals/questions.yaml` (39 questions, 5 with a follow-up) run through Claude Code and Codex CLI by
+`evals/run_evals.py`, each client with only the gatorpath server (no plugins, web search or shell). Facts are computed
+from the tools at scoring time; the presented plan is re-checked for the student in the question. `evals/REPORT.md`
+has the numbers and a Claude vs Codex alignment table.
 
 The end-to-end number is the resume line: *"…produced valid 4-year plans for 47/50 test
 students; 0 hallucinated courses."*

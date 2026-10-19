@@ -339,9 +339,26 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
 
 ## Phase 7 — Evals, demo, first users
 
-- [ ] 30–50 eval questions (`evals/`), each with a profile + goal + expected properties
-- [ ] `run_evals.py`: run through a real AI client + server; score validity, goal-fit (rubric),
-  hallucinated codes
+- [x] 30–50 eval questions (`evals/`), each with a profile + goal + expected properties: `evals/questions.yaml`, 39
+  questions (10 catalog, 10 "what's left", 13 plans with a goal, 6 honesty) + 5 follow-ups. Facts are computed from the
+  tools at scoring time; the goal keywords are the only hand-written rubric
+- [x] `run_evals.py`: run through a real AI client + server; score validity, goal-fit (rubric),
+  hallucinated codes. Claude Code and Codex CLI, each with only the gatorpath server (no user plugins, web search or
+  shell); the presented plan is re-checked for the question's student; `evals/REPORT.md` + an alignment table
+  - Run 2026-10-18 (`data/evals/20261018-175748`): Claude 38/39, Codex 37/39 questions fully passed; plans passing
+    check_plan 13/13 both; 0 unknown course codes; the profile each client passed matched the student every time; same
+    graduation term on 12 of 13 plans (part-time: Codex's lighter terms end a term later). Goal fit 11/12 and 10/12:
+    Claude's game-development picks (CSC 630/631 ran once in 4 years), Codex's data-science and web picks (keyword rubric;
+    CSC 671 Deep Learning doesn't say "machine learning"). Codex is thorough but slow: median 68 tool calls and 11 min
+    per plan vs Claude's 14 and 2.5 min
+  - Fixed from the runs (server/prompt): "QR 3/4" now reads as 3/4; the prompt uses courses already given and takes
+    what isn't mentioned as none (Codex asked to confirm "no prior coursework"); `first_time` is left out unless said
+    (Codex invented false); plans never start on top of the term underway (`current_term` from today's date,
+    check_plan `term_in_progress` / `term_in_past`: Codex had put CSC 215 beside an in-progress CSC 101 and it passed)
+  - Found about the clients: without "SF State" in the question Codex may skip the gatorpath tools; Codex's web search
+    comes through its `apps` feature (not `web_search`); usage limits return as an answer (Claude) or an error event
+    (Codex), so `--retry` reruns them. Scorer bugs fixed with tests: shorthand code lists, the plan the answer presents
+    (not the last check_plan), course levels ("700-level") read as codes
 - [ ] README: problem, demo GIF/video (2 min), setup in 3 commands, eval table, limitations
 - [ ] Make the repo public (MIT); credit GatorWay/Plan-Ed as prior art
 - [ ] 5–10 SFSU classmates try it; collect feedback; fix the top 3 issues

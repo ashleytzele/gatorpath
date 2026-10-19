@@ -67,6 +67,9 @@ def test_shorthand_code_lists_are_read_as_codes(ev):
     assert ev.codes_in("Core: CSC 230, 256, 300GW and 340; PHYS 220/222.") == {
         "CSC 230", "CSC 256", "CSC 300GW", "CSC 340", "PHYS 220", "PHYS 222"}
     assert ev.codes_in("CSC 300GW, 120 units total") == {"CSC 300GW"}
+    # left-p09 (claude): a note in parentheses inside the list
+    assert ev.codes_in("Core: CSC 256, 300GW (C or better), 317, 340 (C or better), 413.") == {
+        "CSC 256", "CSC 300GW", "CSC 317", "CSC 340", "CSC 413"}
 
 
 def test_the_presented_plan_is_the_checked_one_the_answer_lists(ev):
@@ -80,3 +83,35 @@ def test_the_presented_plan_is_the_checked_one_the_answer_lists(ev):
     answer = "Your plan: " + ", ".join(codes)
     calls = [("check_plan", {"profile": profile, "plan": plan}, ""), ("check_plan", {"profile": profile, "plan": smaller}, "")]
     assert ev.score(q, [turn(answer, *calls)], {})["scores"]["plan_valid"]
+
+
+def test_a_course_level_is_not_a_course_code(ev):
+    # left-p06 (claude): "Only one CSC 700-level course can count" was flagged as a made-up CSC 700
+    assert ev.codes_in("Only one CSC 700-level course, any CSC 600+ or CSC 600s course, and CSC 869.") == {"CSC 869"}
+
+
+def test_a_follow_up_is_scored_on_the_plan_it_checked(ev):
+    # plan-part-time (claude): turn 2's summer plan had one course fewer than turn 1's, and the answer named both plans'
+    # courses, so turn 1's plan "fit" the answer better
+    q = {"id": "t", "profile": "scenario: part-time with a deadline", "ask": "Plan it.",
+         "followup": {"ask": "With summers?", "expect": {"summer_tried": True}}}
+    profile = ev.shift(ev.load_profile(q["profile"]))
+    plan = ev.server.build_plan(profile)
+    *rest, last = plan["semesters"]
+    drop = next(c for c in reversed(last["courses"]) if isinstance(c, str))
+    summer = {"semesters": rest + [{"term": last["term"][:5] + "summer", "courses": [c for c in last["courses"] if c != drop]}]}
+    answer = "Plan: " + ", ".join(ev.plan_codes(plan))
+    turns = [turn(answer, ("check_plan", {"profile": profile, "plan": plan}, "")),
+             turn(answer, ("check_plan", {"profile": profile, "plan": summer}, ""))]
+    assert ev.score(q, turns, {})["scores"]["followup.summer_tried"]
+
+
+def test_on_a_tie_the_presented_plan_is_the_one_the_client_saw_pass(ev):
+    # plan-p01 (claude): check 1 passed; check 2 had the same courses with free-elective units taken out (units_short)
+    q = {"id": "t", "profile": "scenario: new freshman, QR 1/2", "ask": "Plan it.", "expect": {"plan_valid": True}}
+    profile = ev.shift(ev.load_profile(q["profile"]))
+    plan = ev.server.build_plan(profile)
+    lean = {"semesters": [s | {"courses": [c for c in s["courses"] if isinstance(c, str)]} for s in plan["semesters"]]}
+    calls = [("check_plan", {"profile": profile, "plan": plan}, '{"valid": true}'),
+             ("check_plan", {"profile": profile, "plan": lean}, '{"valid": false}')]
+    assert ev.score(q, [turn("Plan: " + ", ".join(ev.plan_codes(plan)), *calls)], {})["scores"]["plan_valid"]

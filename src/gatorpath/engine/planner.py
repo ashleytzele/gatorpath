@@ -215,6 +215,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") else 0
     rcl = university.get("f1_final_term")
     last_term = str((plan.get("semesters") or [{}])[-1].get("term", ""))
+    this_term = profile.get("current_term") if TERM.fullmatch(str(profile.get("current_term", ""))) else None  # by the server
 
     completed = [r for r in profile.get("completed", []) if r["code"] in catalog]
     grades: dict[str, str] = {}
@@ -242,6 +243,11 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             err("term_order", f"{term} comes after {seen_terms[-1]} in the plan; list terms in order, once each", term=term)
         if last_taken and term_key(term) <= last_taken:
             err("term_in_past", f"{term} is not after the student's last completed term", term=term)
+        elif this_term and term_key(term) < term_key(this_term):
+            err("term_in_past", f"{term} has already passed (it's {this_term} now)", term=term)
+        elif term == this_term and profile.get("in_progress"):
+            err("term_in_progress", f"{term} is the current term, and the in-progress courses already fill it; plan "
+                f"from {next_term(this_term, False)}", term=term)
         seen_terms.append(term)
 
         codes = [c for c in sem.get("courses", []) if isinstance(c, str)]
@@ -456,15 +462,18 @@ def pick_variant(profile: dict, roadmap: dict) -> str | None:
 
 
 def first_term(profile: dict) -> str | None:
-    if profile.get("start_term"):
-        return profile["start_term"]
+    now = profile.get("current_term")  # set by the server from today's date
+    after = next_term(now, False) if profile.get("in_progress") and TERM.fullmatch(str(now or "")) else None
+    later = lambda t: after if after and t and TERM.fullmatch(str(t)) and term_key(t) < term_key(after) else t
+    if profile.get("start_term"):  # the in-progress courses fill the current term: never plan on top of them
+        return later(profile["start_term"])
     terms = [r["term"] for r in profile.get("completed", []) if TERM.fullmatch(str(r.get("term", "")))]
     if not terms:
-        return None
+        return after
     last = max(terms, key=term_key)
     if profile.get("in_progress"):  # this term's courses: the next spring/fall, not a summer the student may not plan
         last = next_term(last, False)  # ponytail: in progress in a summer term needs start_term
-    return next_term(last, profile.get("include_summer", False))
+    return later(next_term(last, profile.get("include_summer", False)))
 
 
 def terms_through(start: str, end: str, summer: bool) -> int:

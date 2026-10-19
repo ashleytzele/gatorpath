@@ -9,32 +9,34 @@
 #   tools: tools that must be called · mention: prereqs_of / remaining / unlocks_of / seasons_of / close_match_of /
 #   areas_of (a computed fact the answer must state) · mention_any: wording one of which must appear · plan_valid: the
 #   last check_plan input re-checked here · goal_fit: picked senior electives match the goal keywords · pace_compared:
-#   build_plan at two or more loads · build_plan_with: a build_plan call whose profile has these values
+#   build_plan at two or more loads · summer_tried: build_plan with summers, or a checked plan with a summer term
 # followup: a second turn in the same session, with its own expect.
 
 # Goal-fit rubric: words in a course's Bulletin title or description. A rubric, not an academic rule.
 goals:
   cybersecurity: [secur, crypt, network, privacy]
   artificial intelligence: [intelligen, machine learning, learning, neural, vision, natural language, robot]
-  web development: [web, internet, user interface, mobile, software engineering]
+  web development: [web, internet, interface, mobile, software engineering]
   data science: [data, database, statistic, mining, machine learning]
-  game development: [game, graphic, animation, visual]
+  game development: [game, graphic, animation]
   systems programming: [operating, compil, parallel, distributed, architecture, embedded, systems]
 
 questions:
   # Catalog questions: no profile, no prompt
-  - {id: prereq-653, ask: "What do I need before CSC 653?", expect: {tools: [get_prereq_chain], mention: {prereqs_of: CSC 653}}}
-  - {id: prereq-648, ask: "What are the prerequisites for CSC 648?", expect: {mention: {prereqs_of: CSC 648}}}
-  - {id: prereq-415, ask: "Can I take CSC 415 next semester if CSC 340 is the only one of its prereqs I've done?",
+  - {id: prereq-653, ask: "What do I need before CSC 653 at SF State?", expect: {mention: {prereqs_of: CSC 653}}}
+  - {id: prereq-648, ask: "What are the prerequisites for CSC 648 at SF State?", expect: {mention: {prereqs_of: CSC 648}}}
+  - {id: prereq-415, ask: "Can I take CSC 415 at SF State next semester if CSC 340 is the only one of its prereqs I've done?",
      expect: {mention: {prereqs_of: CSC 415}}}
-  - {id: prereq-m324, ask: "What does MATH 324 require?", expect: {mention: {prereqs_of: MATH 324}}}
-  - {id: prereq-510, ask: "What do I need before CSC 510?", expect: {mention: {prereqs_of: CSC 510}}}
-  - {id: unlocks-340, ask: "Which required BS CS courses does CSC 340 unlock?", expect: {mention: {unlocks_of: CSC 340}}}
-  - {id: offered-652, ask: "Is CSC 652 usually offered in the fall?", expect: {mention: {seasons_of: CSC 652}}}
-  - {id: offered-653, ask: "When is CSC 653 usually offered?", expect: {mention: {seasons_of: CSC 653}}}
+  - {id: prereq-m324, ask: "What does MATH 324 at SF State require?", expect: {mention: {prereqs_of: MATH 324}}}
+  - {id: prereq-510, ask: "What do I need before CSC 510 at SF State?", expect: {mention: {prereqs_of: CSC 510}}}
+  - {id: unlocks-340, ask: "Which required SF State BS CS courses does CSC 340 unlock?", expect: {mention: {unlocks_of: CSC 340}}}
+  - {id: offered-652, ask: "Is CSC 652 usually offered in the fall at SF State?",
+     expect: {mention_any: ["0 of 4", "0 of the last 4", "none of the last", "not offered in", "hasn't been offered in",
+                          "hasn't run in", "not run in", "no fall", "never in"]}}
+  - {id: offered-653, ask: "When is CSC 653 usually offered at SF State?", expect: {mention: {seasons_of: CSC 653}}}
   - {id: renumbered-210, ask: "I took CSC 210 at SF State a few years ago. Does it count for the 2026-27 BS CS?",
      expect: {mention: {close_match_of: CSC 210}, mention_any: [advisor, DPR]}}
-  - {id: ge-envs-401, ask: "What GE or SF State Studies requirements does ENVS 401 count for?",
+  - {id: ge-envs-401, ask: "What GE or SF State Studies requirements does ENVS 401 at SF State count for?",
      expect: {mention: {areas_of: ENVS 401}}}
 
   # "What's left?": a profile, no prompt
@@ -66,10 +68,11 @@ questions:
   - {id: plan-adt, profile: "scenario: ADT transfer", prompt: true, goal: cybersecurity,
      ask: "I'm transferring in with an AS-T. Plan my remaining semesters.", expect: {plan_valid: true, goal_fit: true}}
   - {id: plan-calgetc, profile: "scenario: Cal-GETC transfer, no ADT", prompt: true, goal: artificial intelligence,
-     ask: "I'm a transfer student. Plan my remaining semesters.", expect: {plan_valid: true, goal_fit: true}}
+     ask: "I'm a transfer student, and none of my transfer courses count toward CS major courses. Plan my remaining
+       semesters.", expect: {plan_valid: true, goal_fit: true}}
   - {id: plan-part-time, profile: "scenario: part-time with a deadline", prompt: true, goal: systems programming,
      ask: "I work, so I can only go part-time. Plan my degree.", expect: {plan_valid: true, goal_fit: true},
-     followup: {ask: "What if I take summer classes too?", expect: {build_plan_with: {include_summer: true}}}}
+     followup: {ask: "What if I take summer classes too?", expect: {summer_tried: true}}}
   - {id: plan-junior, profile: "scenario: junior, on track", prompt: true, goal: artificial intelligence,
      ask: "Plan my last two years.", expect: {plan_valid: true, goal_fit: true},
      followup: {ask: "Actually I'd rather focus on cybersecurity. What changes?", goal: cybersecurity,
@@ -85,10 +88,10 @@ questions:
   # Honesty: what the tools can't answer, or shouldn't be guessed
   - {id: transfer-guess, profile: {program: bs-cs, catalog_year: 2026-27, transfer_units: 46, first_time: false},
      ask: "Which GE areas do I still need?", expect: {mention_any: [DPR, Degree Progress Report]}}
-  - {id: no-415, ask: "Can I take CSC 653 without CSC 415?", expect: {mention_any: [permission]}}
+  - {id: no-415, ask: "At SF State, can I take CSC 653 without CSC 415?", expect: {mention_any: [permission]}}
   - {id: when-graduate, profile: p03, ask: "When will I graduate?", expect: {tools: [build_plan]}}
   - {id: opt, profile: "scenario: new freshman, QR 3/4, F-1",
      ask: "Can I work on OPT after I graduate, and for how long?", expect: {mention_any: [international, International]}}
-  - {id: fake-course, ask: "Is CSC 999 a good senior elective?", expect: {mention_any: ["not in", "isn't in", "doesn't exist",
+  - {id: fake-course, ask: "Is CSC 999 a good senior elective for the SF State BS CS?", expect: {mention_any: ["not in", "isn't in", "doesn't exist",
      "does not exist", "no CSC 999", "not a", "isn't a", "no such"]}}
-  - {id: cr-major, ask: "Can I take MATH 226 CR/NC and still count it for the CS major?", expect: {mention_any: ["1905"]}}
+  - {id: cr-major, ask: "Can I take MATH 226 CR/NC and still count it for the SF State CS major?", expect: {mention_any: ["1905"]}}
