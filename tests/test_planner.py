@@ -371,6 +371,10 @@ def test_the_current_term_is_taken_by_in_progress_courses():
     assert first_term(now) == "2027-spring"  # nothing completed yet: the term after this one, not needs_input
     assert first_term(now | {"start_term": "2026-fall"}) == "2027-spring"
     assert first_term(now | {"start_term": "2027-fall"}) == "2027-fall"
+    from gatorpath.engine.planner import build_plan
+    moved = build_plan(FRESHMAN | now | {"completed": [], "start_term": "2026-fall"}, PROGRAM, UNIVERSITY, ROADMAP, CATALOG, PREREQS)
+    assert moved["semesters"][0]["term"] == "2027-spring"
+    assert any(w.startswith("start_term 2026-fall is the current term") for w in moved["warnings"])
     p = FRESHMAN | now | {"completed": []}
     same = check(p, ("2026-fall", ["CSC 215"]))
     assert [e["error"] for e in errors(same)][:1] == ["term_in_progress"]

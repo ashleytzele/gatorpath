@@ -528,6 +528,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     stuck = [c for c in required if not catalog[c]["repeatable"] and blocks_repeat(best.get(c), university["repeats"])]
     warnings = [f"{c}: passed with {best[c]}, which doesn't count toward this requirement, and a course passed with CR "
                 "or C or better can't be repeated (p.2392); see an advisor about a substitution or petition" for c in stuck]
+    if profile.get("start_term") and start != profile["start_term"]:
+        warnings.append(f"start_term {profile['start_term']} is the current term, which the in-progress courses fill; "
+                        f"the plan starts in {start}")
     required = [c for c in required if c not in stuck]
     met = have | set(profile.get("dpr_met", ()))
 
