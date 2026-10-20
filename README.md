@@ -15,7 +15,7 @@ SFSU's Degree Planner and DPR show what's required, but not which direction to t
 instead and it answers from memory: renumbered courses (CSC 210 is now CSC 215), prerequisites that don't exist,
 a graduation term nobody checked. GatorPath gives the assistant tools that read the 2026-27 Bulletin, the major's
 roadmaps and SFSU class-search history, and a `check_plan` that every plan has to pass. Each rule cites
-its Bulletin page.
+its source: a Bulletin page, or the SF State office page it came from.
 
 ## Setup (macOS)
 
@@ -24,7 +24,7 @@ You need `gatorpath.zip`, which includes the course catalog (ask the maintainer 
 ```bash
 brew install uv poppler
 unzip gatorpath.zip -d ~ && uv --directory ~/gatorpath sync
-claude mcp add gatorpath -- uv --directory ~/gatorpath run gatorpath
+claude mcp add --scope user gatorpath -- uv --directory ~/gatorpath run gatorpath
 ```
 
 The last line is for Claude Code. For Codex CLI it's `codex mcp add gatorpath -- uv --directory ~/gatorpath run gatorpath`.
