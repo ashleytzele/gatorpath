@@ -360,6 +360,11 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     (Codex), so `--retry` reruns them. Scorer bugs fixed with tests: shorthand code lists, the plan the answer presents
     (not the last check_plan), course levels ("700-level") read as codes
 - [ ] README: problem, demo GIF/video (2 min), setup in 3 commands, eval table, limitations
+  - 2026-10-19: problem, setup in 3 commands (from the zip), eval table and limitations written. Waits on the
+    demo GIF/video, recorded by a person
+- [x] Shareable zip for classmates (2026-10-19): `dist/gatorpath.zip` = the committed code + `data/catalog.db`
+  (command in AGENTS.md), so they don't need the Bulletin PDF or a scrape. Not the raw PDF, cache or eval runs.
+  The PDF importers now say to install poppler when pdftotext is missing
 - [ ] Make the repo public (MIT); credit GatorWay/Plan-Ed as prior art
 - [ ] 5–10 SFSU classmates try it; collect feedback; fix the top 3 issues
 - [ ] Write the resume bullet with real numbers

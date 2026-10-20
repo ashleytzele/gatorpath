@@ -41,6 +41,7 @@ uv run gatorpath                   # start MCP server (stdio)
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
 uv run python evals/plan_review.py # build_plan for every test scenario at 12/15/18/18+summer units
+mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --add-file=data/catalog.db --prefix=gatorpath/ HEAD   # shareable zip (committed code + catalog.db)
 ```
 
 (These commands get added as each phase lands. If one doesn't exist yet, check `TASKS.md`.)

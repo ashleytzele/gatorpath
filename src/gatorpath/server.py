@@ -528,7 +528,7 @@ def import_transcript(pdf_path: str) -> dict:
     try:
         out = transcript.parse(transcript.read_pdf(path))
     except (OSError, subprocess.CalledProcessError):
-        return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF"]}
+        return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF (or isn't installed: brew install poppler)"]}
     if "completed" in out:
         out["completed"] = [r | {"code": norm_code(r["code"])} for r in out["completed"]]
         out["in_progress"] = [norm_code(c) for c in out["in_progress"]]
@@ -558,7 +558,7 @@ def import_dpr(pdf_path: str) -> dict:
     try:
         parsed = dpr.parse(dpr.read_pdf(path))
     except (OSError, subprocess.CalledProcessError):
-        return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF"]}
+        return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF (or isn't installed: brew install poppler)"]}
     if not parsed["requirements"]:
         return {"catalog_year": YEAR, "error": "unrecognized_dpr_format",
                 "warnings": ["No requirements found: is this the Degree Progress Report printed from Student Center?"]}
