@@ -400,7 +400,12 @@ Robots detect and rebuild; a human approves rule changes; students re-import the
   group was written from
 - [ ] Bulletin diff: new Bulletin vs snapshots → unchanged groups copied to the new year (new page
   numbers, `verified` kept); changed groups listed with old/new text, program set `verified: false`
-- [ ] (?) Find the Bulletin PDF's download URL pattern so a job can fetch it
+- [x] Find the Bulletin PDF's download URL so a job can fetch it (2026-10-20): every year is on
+  https://bulletin.sfsu.edu/past-bulletin-archive/ (the current one on https://bulletin.sfsu.edu/). Each year's page has
+  "Download entire Bulletin as a PDF": `/past-bulletin-archive/<yyyy-yyyy>/pdf/<yyyy-yyyy>_SF_State_Bulletin.pdf`
+  for 2018-19 to 2020-21, a Box link with no pattern from 2021-22 on (scrape the link), none for 2016-17 and 2017-18
+  (web pages only). 2024-25 and 2025-26 are in `data/raw/`. The 2025-26 PDF's running headers wrongly say 2026-2027
+  (cover and content are 2025-26), so the year comes from the file name, as the ingest already does
 - [ ] Yearly GitHub Action (cron + manual trigger): fetch Bulletin if new → ingest → diff → open a
   PR. Never merges itself, never edits rule logic
 - [ ] Per-term GitHub Action: offerings scrape (phase 5), once per term, cached
