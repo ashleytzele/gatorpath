@@ -258,19 +258,27 @@ def get_roadmap(program: str, variant: str | None = None, catalog_year: str | No
     return {"catalog_year": year, "program": program, "variant": variant, **rm["variants"][variant], "warnings": warnings}
 
 
-def rules_year(profile: dict) -> str:
-    """The Bulletin year the student is held to: "Fall 2025", "2025-fall" or "2025-26" -> "2025-26" (a Bulletin runs
-    fall to summer), when GatorPath has that year's rules for the program; else the newest (year_warning says so)."""
-    given = str(profile.get("catalog_year", "")).strip().lower()
-    if re.fullmatch(r"\d{4}-\d{2}", given):
-        year = given
-    elif m := re.fullmatch(r"(fall|spring|summer|winter) (\d{4})|(\d{4})-(fall|spring|summer|winter)", given):
+def held_to(given) -> str | None:
+    """A catalog term or year as a Bulletin year: "Fall 2025", "2025-fall", "2025-26" or "2025-2026" -> "2025-26" (a
+    Bulletin runs fall to summer); None when it isn't one."""
+    s = str(given or "").strip().lower()
+    if m := re.fullmatch(r"(\d{4})-(\d{2}|\d{4})", s):
+        start = int(m[1])
+        if int(m[2]) % 100 != (start + 1) % 100:
+            return None
+    elif m := re.fullmatch(r"(fall|spring|summer|winter) (\d{4})|(\d{4})-(fall|spring|summer|winter)", s):
         season, y = (m[1], int(m[2])) if m[1] else (m[4], int(m[3]))
         start = y if season == "fall" else y - 1
-        year = f"{start}-{(start + 1) % 100:02d}"
     else:
-        return YEAR
-    return year if (RULES_DIR / "programs" / year / f"{profile['program']}.yaml").exists() else YEAR
+        return None
+    return f"{start}-{(start + 1) % 100:02d}"
+
+
+def rules_year(profile: dict) -> str:
+    """The Bulletin year the student is held to, when GatorPath has its rules for the program; else the newest
+    (year_warning says so)."""
+    year = held_to(profile.get("catalog_year"))
+    return year if year and (RULES_DIR / "programs" / year / f"{profile['program']}.yaml").exists() else YEAR
 
 
 def year_warning(profile: dict, year: str) -> list[str]:
@@ -278,11 +286,10 @@ def year_warning(profile: dict, year: str) -> list[str]:
     if given is None:
         return [f"catalog_year not given, so this uses the {YEAR} Bulletin. Students are held to the year on their DPR "
                 "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
-    if str(given).strip() == YEAR:
-        return []
-    if year != YEAR:
-        return [f"Requirements are the {year} Bulletin's (the student's catalog year, {given}); courses, prereqs and GE "
-                f"tags are the {YEAR} Bulletin's, the one the remaining courses are taken under"]
+    if held_to(given) == year:  # the student's own year
+        return [] if year == YEAR else [
+            f"Requirements are the {year} Bulletin's (the student's catalog year, {given}); courses, prereqs and GE "
+            f"tags are the {YEAR} Bulletin's, the one the remaining courses are taken under"]
     return [f"The student's catalog year is {given}, but GatorPath has rules only for {', '.join(YEARS)}, so this uses "
             f"{YEAR}. Requirements may differ (the 2024-25 Bulletin uses GE Areas A-E). Where the DPR disagrees, the DPR "
             "wins. In continuous attendance a student may elect the graduation requirements in effect when they began "

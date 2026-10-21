@@ -444,7 +444,12 @@ def test_the_students_catalog_year_picks_the_rules():
     year = lambda given: server.rules_year({"program": "bs-cs", "catalog_year": given})
     assert year("Fall 2025") == year("Spring 2026") == year("2025-fall") == year("2025-26") == "2025-26"
     assert year("Fall 2026") == "2026-27" and year("Spring 2025") == year(None) == server.YEAR  # no 2024-25 rules yet
+    assert year("2025-2026") == "2025-26" and year("2025-30") == server.YEAR
     assert server.YEAR == server.YEARS[-1]
+    # Commit review: "Fall 2026" is the newest year itself, not an unsupported one
+    warn = lambda given: server.year_warning({"catalog_year": given}, year(given))
+    assert warn("Fall 2026") == warn("2026-27") == []
+    assert warn("Spring 2025")[0].startswith("The student's catalog year is Spring 2025, but GatorPath has rules only for")
 
 
 def test_a_2025_26_student_needs_c_only_in_csc_510_and_648():
