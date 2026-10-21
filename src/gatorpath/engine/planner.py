@@ -155,6 +155,10 @@ def upper_only(g: dict) -> bool:
     filters = filters if isinstance(filters, list) else [filters]
 
     def up(f: dict) -> bool:
+        if f.get("level") in ("lower", "upper"):  # a GE filter's level (2024-25 D2: Area 4 + USH, lower division)
+            return f["level"] == "upper"
+        if "ge_area_all" in f:  # the course carries every area: one UD area makes it upper division
+            return any(str(a).endswith("UD") for a in f["ge_area_all"])
         if "ge_area" in f:
             areas = f["ge_area"] if isinstance(f["ge_area"], list) else [f["ge_area"]]
             return all(str(a).endswith("UD") for a in areas)
@@ -465,7 +469,9 @@ def pick_variant(profile: dict, roadmap: dict) -> str | None:
     if profile.get("adt") and "adt" in roadmap["variants"]:
         return "adt"
     qr = profile.get("qr_pathway")
-    return next((k for k, v in roadmap["variants"].items() if qr and v.get("qr_pathway") == str(qr)), None)
+    # A first-time roadmap without a qr_pathway (2024-25 has one, p.1947) fits every first-time student
+    return next((k for k, v in roadmap["variants"].items() if k != "adt"
+                 and (v.get("qr_pathway") is None or qr and v["qr_pathway"] == str(qr))), None)
 
 
 def first_term(profile: dict) -> str | None:

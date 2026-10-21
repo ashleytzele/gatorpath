@@ -72,9 +72,10 @@ All three misses are goal fit: electives that matched fewer of the goal's keywor
 
 ## Limitations
 
-- One program, two catalog years: BS Computer Science, 2025-26 and 2026-27 Bulletins. Requirements follow the
-  student's catalog year; courses and prereqs are the newest Bulletin's. A DPR on an older catalog (2024-25 and
-  before) is planned with 2026-27 rules plus a warning, and the DPR wins where they disagree.
+- One program, three catalog years: BS Computer Science, 2024-25 (the old GE Areas A-F), 2025-26 and 2026-27
+  Bulletins. Requirements follow the student's catalog year; courses and prereqs are the newest Bulletin's. A DPR on
+  an older catalog (2023-24 and before) is planned with 2026-27 rules plus a warning, and the DPR wins where they
+  disagree.
 - The rules are `verified: false`: eight rounds of independent AI review against the PDF brought the error rate
   from 19.6% to 10.6%, each finding fixed, but no second person has signed them off yet.
 - Offering history covers CSC, MATH and PHYS only (2023-spring to 2026-fall); other subjects show `offered: unknown`.

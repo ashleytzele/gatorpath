@@ -77,10 +77,16 @@ def test_major_units_add_up_to_74(year):
     assert required + electives == program["total_units"] == 74
 
 
+# GE minimum per year: 43 (2025-26 on); 48 in 2024-25 (p.2259): A 9 + B 9 + C 9 + D 6 + E 3 + F 3 + UD 9, where ge_c
+# holds C1+C2, ge_d holds D2, and the "B3: 0-1 units" lab (p.2260) is on top
+GE_MIN = {"2024-25": (48, {"ge_c1", "ge_c2", "ge_d2", "ge_b3"}), "2025-26": (43, set()), "2026-27": (43, set())}
+
+
 @pytest.mark.parametrize("year", YEARS)
-def test_ge_area_minimums_add_up_to_43(year):
+def test_ge_area_minimums_add_up(year):
     university = load_rules(year, "bs-cs")[1]
-    assert sum(g.get("choose_units", 0) for g in university["groups"] if g["id"].startswith("ge_")) == 43
+    want, inside = GE_MIN[year]
+    assert sum(g.get("choose_units", 0) for g in university["groups"] if g["id"].startswith("ge_") and g["id"] not in inside) == want
 
 
 ROADMAPS = {y: yaml.safe_load((RULES_DIR / f"roadmaps/{y}/bs-cs.yaml").read_text()) for y in YEARS}
@@ -307,3 +313,24 @@ def test_min_grade_can_name_courses():
     adv = groups_of(got)["advanced_cs"]
     assert adv["counted"] == ["CSC 415", "CSC 648"] and adv["remaining"] == ["CSC 510"]
     assert any(w.startswith("CSC 510: grade D doesn't count toward Advanced") and "needs C or better" in w for w in got["warnings"])
+
+
+def test_amendments_change_a_group_after_publication():
+    # §6.2: a change after the Bulletin was published, applied on top of the group and cited in the audit (DPR wording,
+    # 2024-25: "Area E: Requirement waived 3/12/25 to align with Fall 2025 CSU GE ... via Dean's Memo")
+    memo = "Dean's memo 3/12/25 (quoted on DPRs)"
+    university = UNIVERSITY | {"groups": [
+        g | {"amendments": [{"effective": "2025-03-12", "change": {"waived": True}, "source": memo}]} if g["id"] == "ge_3a"
+        else g | {"amendments": [{"effective": "2025-03-12", "change": {"choose_units": 3}, "source": memo}]} if g["id"] == "ge_4"
+        else g for g in UNIVERSITY["groups"]]}
+    one = [{"code": "ECON 101", "grade": "B", "term": "2026-fall"}]
+    got = groups_of(audit(BASE | {"completed": one}, PROGRAM, university, CATALOG))
+    assert (got["ge_3a"]["status"], got["ge_3a"]["waived_by"]) == ("waived", memo)
+    assert got["ge_4"]["status"] == "satisfied" and got["ge_4"]["amended_by"] == [memo]  # 3 units now, not 6
+
+
+def test_a_legacy_ge_code_can_stand_for_two_areas():
+    # 2024-25 "D2: Social Sciences: US History" (p.2259) is Area 4 with USH in the newest course tags
+    from gatorpath.engine.rules import translate_ge
+    university = UNIVERSITY | {"legacy_ge_areas": UNIVERSITY["legacy_ge_areas"] | {"map": {"D2": ["4", "USH"], "A2": "1A"}}}
+    assert translate_ge(["Area D2 - Social Sciences: US History", "A2"], university)[0] == ["4", "USH", "1A"]

@@ -155,8 +155,8 @@ def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
     for g in audit["groups"]:
         code_status |= {c: "in_progress" for c in g.get("in_progress", []) if c not in code_status}
         code_status |= {c: "done" for c in g.get("counted", [])}
-    by_area = {str(a): g["id"] for g in university["groups"] if isinstance(g.get("from"), dict)
-               for a in (g["from"]["ge_area"] if isinstance(g["from"].get("ge_area"), list) else [g["from"].get("ge_area")])}
+    by_area = {str(a): g["id"] for g in university["groups"] if isinstance(g.get("from"), dict) and "ge_area" in g["from"]
+               for a in (g["from"]["ge_area"] if isinstance(g["from"]["ge_area"], list) else [g["from"]["ge_area"]])}
     out, seen = [], set()
     for b in dpr["requirements"]:
         if b["status"] in ("info", "waived"):

@@ -1,6 +1,6 @@
 # GatorPath — Architecture & Design
 
-> Status: **Approved 2026-10-15** · Last updated: 2026-10-20 · Catalog years in scope: **2026-27, 2025-26**
+> Status: **Approved 2026-10-15** · Last updated: 2026-10-20 · Catalog years in scope: **2026-27, 2025-26, 2024-25**
 >
 > GatorPath is an **MCP server** that gives any AI assistant (Claude, Gemini CLI, ChatGPT, …)
 > accurate, checkable tools for planning an SF State degree. The AI talks to the student and
@@ -143,7 +143,10 @@ AGENTS.md golden rule 1 in full:
 - **A memo after publication:** only as an `amendment` (§6.2), citing the memo (or the DPR that quotes it) and its date.
 - **The student's DPR:** that student's record (transfer evaluations, substitutions, waivers) in their profile, never
   in `rules/` (§5 "Keeping it current").
-- **Never:** model memory, unofficial pages, or another year's Bulletin inside `rules/<kind>/<this year>/`.
+- **Never:** model memory, unofficial pages, or another year's Bulletin inside `rules/<kind>/<this year>/`. One
+  exception (D23): an older year's GE areas match courses by the newest Bulletin's codes, through its "[Formerly …]"
+  headings (2024-25 "A2" is `ge_area: 1A`), because course tags are the newest Bulletin's. The requirement itself
+  (units, grades, which areas) and its page stay the older year's.
 
 ### Keeping it current (decided 2026-10-16)
 
@@ -326,6 +329,14 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
 Added 2026-10-20 (2025-26 rules, the second catalog year):
 - `min_grade` may be a map `{course: grade}` instead of one grade: only the named courses need it. 2025-26 BS CS:
   "Grades of C or better are required for CSC 510 and CSC 648" (p.1905), not every Advanced course.
+Added 2026-10-20 (2024-25 rules, the old GE pattern):
+- `amendments` (below) are applied by the audit: `waived: true` reports `waived_by` with the memo, other changes
+  report `amended_by`.
+- A `legacy_ge_areas.map` value may be a list: 2024-25 "D2" (Social Sciences: US History, p.2259) reads as
+  `["4", USH]`, so a DPR's "D2 done" meets a `ge_area_all: ["4", USH]` group.
+- A roadmap variant without `qr_pathway` fits every first-time student (2024-25 has one roadmap, p.1947).
+- No `transfer` block when the Bulletin doesn't say which areas a certification meets (2024-25): `ge_certified` then
+  gets a warning, and the DPR's `ge_done` decides.
 
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo
@@ -559,7 +570,7 @@ deterministic (D6). The prompt gives the client its workflow:
 As built (2026-10-17, revised after Desktop trial 3): ask **once**, in one message, for everything missing; the
 fastest path is the student's DPR. Say once that an attached PDF carries their name and ID to the AI provider
 (black them out, or paste the requirement sections), then accept what they share; `import_dpr` will make this
-local. Defaults instead of questions (15 units, no summer). A catalog year GatorPath has rules for (2025-26, 2026-27) is
+local. Defaults instead of questions (15 units, no summer). A catalog year GatorPath has rules for (2024-25 to 2026-27) is
 audited with that year's rules (D23); another year is planned with the newest rules and a warning, not refused (the DPR
 wins on disagreements). Transfer rows the DPR lists under a
 requirement become that course with `transfer: true`; substitutions go in `dpr_met`; GE areas in the DPR's own

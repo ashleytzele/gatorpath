@@ -34,7 +34,8 @@ def translate_ge(areas: list, university: dict) -> tuple[list[str], list[str]]:
     """GE areas as a DPR writes them ("A2", "Area D - Social Sciences", "GE D/USH", "UD-D", "1A") -> this catalog's
     areas, plus warnings for what was translated, has no equivalent, or isn't a known area."""
     legacy = university.get("legacy_ge_areas", {})
-    table, none = {str(k).upper(): str(v) for k, v in legacy.get("map", {}).items()}, set(legacy.get("none", []))
+    table = {str(k).upper(): [str(x) for x in v] if isinstance(v, list) else [str(v)] for k, v in legacy.get("map", {}).items()}
+    none = set(legacy.get("none", []))
     known = {str(a).upper() for g in university["groups"] if "from" in g
              for f in (g["from"] if isinstance(g["from"], list) else [g["from"]]) if "ge_area" in f
              for a in (f["ge_area"] if isinstance(f["ge_area"], list) else [f["ge_area"]])}
@@ -45,8 +46,8 @@ def translate_ge(areas: list, university: dict) -> tuple[list[str], list[str]]:
         for key in [text] if text in table else text.split("/"):  # "D/USH" -> D, USH; but "C3 OR C2" stays whole
             key = key.strip()
             if key in table:
-                out.append(table[key])
-                mapped.append(f"{key} → {table[key]}")
+                out += table[key]
+                mapped.append(f"{key} → {'+'.join(table[key])}")
             elif key in none:
                 dropped.append(key)
             elif key in known:
@@ -85,6 +86,13 @@ def first_time(profile: dict) -> bool:
     if "first_time" in profile:
         return bool(profile["first_time"])
     return not (profile.get("transfer_units") or profile.get("adt") or any(r.get("transfer") for r in profile.get("completed", [])))
+
+
+def amended(g: dict) -> dict:
+    """The group with its `amendments` applied: changes after the Bulletin was published, each citing its memo (§6.2)."""
+    for a in g.get("amendments", []):
+        g = g | a["change"]
+    return g
 
 
 def min_grade_of(g: dict, code: str) -> str | None:
@@ -182,6 +190,10 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
                no_cr_nc: bool, done_groups: dict, warnings: list[str], certified: frozenset = frozenset()) -> dict:
     out = {"id": g["id"], "title": g.get("title", g["id"]), "kind": kind, "source": g["source"],
            "counted": [], "in_progress": []}
+    if g.get("amendments"):
+        out["amended_by"] = [a["source"] for a in g["amendments"]]
+    if g.get("waived"):  # by an amendment
+        return out | {"status": "waived", "waived_by": "; ".join(out["amended_by"])}
     if g.get("waived_if") and profile.get(g["waived_if"]):
         return out | {"status": "waived"} | ({"waived_by": g["waiver"]} if "waiver" in g else {})
     if kind == "university" and profile.get("prior_bachelors"):  # p.2313: no GE or other graduation requirements
@@ -373,7 +385,7 @@ def totals(profile: dict, taken: dict, groups: list[dict], university: dict, cat
     min_gpa = t["min_gpa"]
     check = lambda v, need: {"value": v, "needed": need, "ok": v is not None and v >= need}
     transfer_units = profile.get("transfer_units", 0)
-    if caps and transfer_units > caps["all_transfer"]:
+    if caps.get("all_transfer") and transfer_units > caps["all_transfer"]:  # 2024-25 states no total cap
         warnings.append(f"{transfer_units:g} transfer units: at most {caps['all_transfer']} can be transferred from all "
                         f"sources, so {caps['all_transfer']} count toward the 120 ({caps['source']})")
         transfer_units = caps["all_transfer"]
@@ -426,9 +438,12 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
     claimed: set[str] = set()
     no_cr_nc = program.get("global", {}).get("no_cr_nc", False)
     certified = frozenset(university.get("transfer", {}).get("certified_ld_ge", [])) if profile.get("ge_certified") else frozenset()
+    if profile.get("ge_certified") and not certified:
+        warnings.append(f"ge_certified: the {university['catalog_year']} Bulletin doesn't say which GE areas a transfer "
+                        "certification meets, so it isn't applied; list the areas your DPR shows met in ge_done")
     for kind, rules in (("major", program), ("university", university)):
         for g in rules["groups"]:
-            done[g["id"]] = eval_group(g, kind, taken, profile, catalog, claimed if kind == "major" else None,
+            done[g["id"]] = eval_group(amended(g), kind, taken, profile, catalog, claimed if kind == "major" else None,
                                        no_cr_nc and kind == "major", done, warnings, certified)
     groups = list(done.values())
     # A major course counts for GE too (p.2352): name the required ones still ahead that carry an open area, so the

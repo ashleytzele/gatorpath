@@ -291,7 +291,7 @@ def year_warning(profile: dict, year: str) -> list[str]:
             f"Requirements are the {year} Bulletin's (the student's catalog year, {given}); courses, prereqs and GE "
             f"tags are the {YEAR} Bulletin's, the one the remaining courses are taken under"]
     return [f"The student's catalog year is {given}, but GatorPath has rules only for {', '.join(YEARS)}, so this uses "
-            f"{YEAR}. Requirements may differ (the 2024-25 Bulletin uses GE Areas A-E). Where the DPR disagrees, the DPR "
+            f"{YEAR}. Requirements may differ (GE areas especially). Where the DPR disagrees, the DPR "
             "wins. In continuous attendance a student may elect the graduation requirements in effect when they began "
             "their study, when they entered SF State, or when they graduate (p.2390); ask an advisor before relying on that"]
 
@@ -301,8 +301,8 @@ def prepare(profile: dict, university: dict, year: str = YEAR) -> tuple[dict, li
     ge_done, ge_warnings = translate_ge(profile.get("ge_done", []), university)
     # not_on_dpr: group ids, or GE areas in the DPR's or this Bulletin's codes ("6", "F", "Area 6")
     groups = {g["id"]: g for g in university["groups"]}
-    by_area = {str(a): gid for gid, g in groups.items() if isinstance(g.get("from"), dict)
-               for a in ([g["from"]["ge_area"]] if not isinstance(g["from"].get("ge_area"), list) else g["from"]["ge_area"])}
+    by_area = {str(a): gid for gid, g in groups.items() if isinstance(g.get("from"), dict) and "ge_area" in g["from"]
+               for a in ([g["from"]["ge_area"]] if not isinstance(g["from"]["ge_area"], list) else g["from"]["ge_area"])}
     left_out = []
     for x in profile.get("not_on_dpr", []):
         if str(x) in groups or str(x) in {g["id"] for g in load_rules(year, profile["program"])[0]["groups"]}:

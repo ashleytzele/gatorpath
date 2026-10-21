@@ -405,3 +405,11 @@ def test_the_current_term_is_taken_by_in_progress_courses():
     past = check(FRESHMAN | {"current_term": "2026-fall", "completed": []}, ("2026-spring", ["CSC 101"]))
     assert "term_in_past" in [e["error"] for e in errors(past)]
     assert not any(e["error"].startswith("term_in") for e in errors(check(p, ("2027-spring", ["CSC 215"]))))
+
+
+def test_a_roadmap_without_qr_pathways_fits_every_first_time_student():
+    # 2024-25 BS CS has one First-Time Student Roadmap (p.1947), not one per QR pathway
+    from gatorpath.engine.planner import pick_variant
+    one = {"variants": {"first-time": {"title": "First-Time Student Roadmap"}, "adt": {"title": "ADT"}}}
+    assert pick_variant({}, one) == "first-time" and pick_variant({"adt": True}, one) == "adt"
+    assert pick_variant({}, ROADMAP) is None and pick_variant({"qr_pathway": "3/4"}, ROADMAP) == "qr-3-4"

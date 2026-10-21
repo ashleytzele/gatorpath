@@ -912,6 +912,34 @@
   ]
  },
  {
+  "code": "ENG 104",
+  "title": "Writing the First Year: Finding Your Voice Stretch I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "The first semester of the stretch version of the First-Year Writing Seminar. Practice academic success strategies and habits of mind, learn about campus resources, and learn and practice written academic inquiry, information literacy, the writing process, and critical reading in a variety of rhetorical genres. (ABC/NC grading, CR/NC allowed) Note: Completion of ENG 104 and ENG 105 with a grade of C- or better will culminate in satisfying the Written English Composition requirement (GE Area 1A/A2).",
+  "grading": "letter_or_cr_nc",
+  "ge_areas": [],
+  "source_page": 1106,
+  "prereq_text": "",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ENG 105",
+  "title": "Writing the First Year: Finding Your Voice Stretch II",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "The second semester of the stretch version of the First-Year Writing Seminar. Practice academic success strategies and habits of mind, learn about campus resources, and learn and practice written academic inquiry, information literacy, the writing process, and critical reading in a variety of rhetorical genres. (ABC/NC grading, CR/NC allowed)",
+  "grading": "letter_or_cr_nc",
+  "ge_areas": [
+   "1A"
+  ],
+  "source_page": 1106,
+  "prereq_text": "ENG 104* with a grade of C- or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
   "code": "ENG 114",
   "title": "Writing the First Year: Finding Your Voice",
   "units_min": 3.0,

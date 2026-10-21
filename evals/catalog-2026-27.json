@@ -633,6 +633,28 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ENG 104": {
+  "ge_areas": [],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1106,
+  "title": "Writing the First Year: Finding Your Voice Stretch I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENG 105": {
+  "ge_areas": [
+   "1A"
+  ],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1106,
+  "title": "Writing the First Year: Finding Your Voice Stretch II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ENG 114": {
   "ge_areas": [
    "1A"

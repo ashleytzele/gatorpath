@@ -1,0 +1,82 @@
+# BS Computer Science roadmaps, Bulletin 2024-25. Suggested plans only ("does not replace meeting with an advisor").
+# The Bulletin has two: one First-Time Student Roadmap (no QR pathways yet, p.1947) and the COMP ADT roadmap.
+# GE slots name the area by the newest Bulletin's code (A2 is 1A, UD-B is 5UD: ARCHITECTURE §5, D23), with the
+# Bulletin's own label in `note`. Items: a course code, or a slot {slot: GE | ai | senior_elective | sfss_or_elective |
+# elective, units, …}. `units` on a semester is the printed total; tests check that the items add up to it.
+program: bs-cs
+catalog_year: 2024-25
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: First-Time Student Roadmap
+    total_units: 120
+    source: "p.1947-1949"
+    notes:
+      - "This roadmap is a suggested plan of study and does not replace meeting with an advisor. Students may need to adjust the actual sequence of courses based on course availability; consult an advisor in your major program."
+      - "ENG 114 can only be taken if you complete Directed Self-Placement (DSP) and select ENG 114; if you choose ENG 104/ENG 105 through DSP you will satisfy A2 upon successful completion of ENG 105 in the second semester; multilingual students may be advised into alternative English courses (footnote 1)."
+      - "To determine the best B4 course option, complete the online advising activity at mathadvising.sfsu.edu; questions go to Gator Smart Start, https://gatorsmartstart.sfsu.edu/ (footnote 2)."
+      - "To avoid taking additional units, meet the SF State Studies (AERM, GP, ES, SJ) requirements within your GE or major (footnote 3)."
+      - "Major electives: the full list is reprinted with the roadmap, pp.1948-1949 (footnote 4)."
+      - "CSC 648 serves as the major capstone course (footnote 5)."
+      - "Given catalog rights, fall 2023 transfer students do not need to complete an Area F course (footnote ±)."
+    semesters:
+      - units: 16
+        source: "p.1947"
+        items: [CSC 101, ENG 114, MATH 226, {slot: GE, area: "1", units: 6, note: "GE Area A - Take Two (ENG 114 is A2)"}]
+      - units: 15
+        source: "p.1947"
+        items: [CSC 215, MATH 227, PHYS 220, PHYS 222, {slot: GE, area: E, units: 3, note: "GE Area E"}]
+      - units: 16
+        source: "p.1947"
+        items: [CSC 220, CSC 230, MATH 225, PHYS 230, PHYS 232, {slot: GE, area: "3", units: 3, note: "GE Area C"}]
+      - units: 15
+        source: "p.1947"
+        items: [CSC 256, CSC 340, MATH 324, {slot: GE, area: 5B, units: 3, note: "GE Area B: Life Science (B2)"},
+                {slot: GE, area: "3", units: 3, note: "GE Area C"}]
+      - units: 15
+        source: "p.1947-1948"
+        items: [CSC 300GW, CSC 317, CSC 510, {slot: GE, area: "3", units: 3, note: "GE Area C"},
+                {slot: GE, area: "4", units: 3, note: "GE Area D"}]
+      - units: 15
+        source: "p.1948"
+        items: [CSC 413, CSC 415, {slot: senior_elective, count: 1, units: 3}, {slot: GE, area: "4", units: 3, note: "GE Area D"},
+                {slot: GE, area: "6", units: 3, note: "GE Area F"}]
+      - units: 13
+        source: "p.1948"
+        items: [{slot: senior_elective, count: 2, units: 6}, {slot: GE, area: 3UD, units: 3, note: "GE Area UD-C"},
+                {slot: GE, area: 4UD, units: 3, note: "GE Area UD-D"}, {slot: sfss_or_elective, units: 1}]
+      - units: 15
+        source: "p.1948"
+        items: [CSC 648, {slot: senior_elective, count: 2, units: 6}, {slot: ai, area: USG/CSLG, units: 3},
+                {slot: GE, area: 5UD, units: 3, note: "GE Area UD-B"}]
+
+  adt:
+    title: COMP Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: "p.1950-1951"
+    # "35 units in the major … and all lower-division GE requirements have been satisfied."
+    met_in_transfer: [MATH 225, MATH 226, MATH 227, PHYS 220, PHYS 222, PHYS 230, PHYS 232,
+                      CSC 101, CSC 215, CSC 220, CSC 230, CSC 256]
+    notes:
+      - "For students who transfer in the current Bulletin year with an AS-T in Computer Science, with 35 units in the major (MATH 225, MATH 226, MATH 227, PHYS 220/222, PHYS 230/232, CSC 101, CSC 215, CSC 220, CSC 230, CSC 256) and all lower-division GE requirements satisfied. Additional units in the major may have been satisfied: check with a major advisor about the course sequence (p.1950)."
+      - "Students entering the major with the AS-T in Computer Science are not required to fulfill SF State Studies and Complementary Studies requirements (p.1950)."
+      - "Upon verification that the ADT has been awarded prior to matriculation at SF State, students are guaranteed B.A. or B.S. completion in 60 units if pursuing a 'similar' major after transfer (p.1945; see p.2251)."
+      - "Degree completion in 60 units cannot be guaranteed when a student simultaneously pursues an additional major, a minor, certificate, or credential (p.1945)."
+      - "University-wide requirements 9-15 units: American Institutions 0-6 (if not met in transfer) and upper-division GE 9; courses may satisfy US History or US/CA Government and UD-C or UD-D at the same time if approved for multiple areas. Major at SF State: 42 units (Mathematics 3, Core 12, Advanced 24 including electives). University electives: 3 or more units (p.1950)."
+      - "The roadmap also lists 'Senior Presentation: required oral presentation during senior year (0 units)' (p.1950); the degree requirements (p.1944) don't, so ask the department whether it applies."
+    semesters:
+      - units: 15
+        source: "p.1950"
+        items: [CSC 300GW, CSC 317, CSC 340, MATH 324,
+                {slot: ai, area: USH, units: 3, note: "or University Elective if US History met in transfer"}]
+      - units: 15
+        source: "p.1950-1951"
+        items: [CSC 413, CSC 415, CSC 510, {slot: GE, area: 3UD, units: 3, note: "GE Area UD-C"},
+                {slot: ai, area: USG/CSLG, units: 3, note: "or University Elective if US/CA Government met in transfer"}]
+      - units: 15
+        source: "p.1951"
+        items: [{slot: senior_elective, count: 3, units: 9}, {slot: GE, area: 5UD, units: 3, note: "GE Area UD-B"}, {slot: elective, units: 3}]
+      - units: 15
+        source: "p.1951"
+        items: [CSC 648, {slot: senior_elective, count: 2, units: 6}, {slot: GE, area: 4UD, units: 3, note: "GE Area UD-D"}, {slot: elective, units: 3}]

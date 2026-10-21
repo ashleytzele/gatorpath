@@ -110,9 +110,9 @@ def test_audit_progress_warns_about_assumed_year_and_uncredited_transfer():
 
 def test_audit_progress_unknown_program_and_other_catalog_years():
     assert server.audit_progress({"program": "bs-art"})["error"] == "unknown_program"
-    # a Spring 2025 student is planned with 2026-27 rules and told so, not turned away
-    got = server.audit_progress({"program": "bs-cs", "catalog_year": "Spring 2025"})
-    assert "error" not in got and got["warnings"][0].startswith("The student's catalog year is Spring 2025")
+    # a Spring 2024 student (no 2023-24 rules) is planned with the newest rules and told so, not turned away
+    got = server.audit_progress({"program": "bs-cs", "catalog_year": "Spring 2024"})
+    assert "error" not in got and got["warnings"][0].startswith("The student's catalog year is Spring 2024")
 
 
 def test_a_dpr_shaped_profile():
@@ -126,11 +126,14 @@ def test_a_dpr_shaped_profile():
     got = server.audit_progress(dpr)
     groups = {g["id"]: g for g in got["groups"]}
     assert groups["math_physics"]["met_per_dpr"] == ["MATH 225"] and "MATH 225" in groups["math_physics"]["counted"]
-    for gid in ("ge_1a", "ge_1b", "ge_1c", "ge_2", "ge_3a", "ge_3b", "ge_4", "ge_5a", "ge_5b", "ge_5c"):
+    # 2024-25 rules (the student's year): old areas, D + USH meets D2, the 3/12/25 memo waives E and the third C course
+    assert got["catalog_year"] == "2024-25"
+    for gid in ("ge_a1", "ge_a2", "ge_a3", "ge_b1", "ge_b2", "ge_b3", "ge_b4", "ge_c1", "ge_c2", "ge_d", "ge_d2"):
         assert groups[gid]["status"] == "satisfied", gid
+    assert groups["ge_e"]["status"] == groups["ge_c"]["status"] == "waived" and "3/12/25" in groups["ge_e"]["waived_by"]
     w = "\n".join(got["warnings"])
     assert "A1 → 1C" in w and "UD" not in w.split("read as this Bulletin's areas")[1].split("(")[0]
-    assert "GE E: no 2026-27 equivalent" in w and "MATH 225: counted for Mathematics and Physics" in w
+    assert "MATH 225: counted for Mathematics and Physics" in w
     plan = server.build_plan(dpr)
     assert "MATH 225" not in {c for s in plan["semesters"] for c in s["courses"] if isinstance(c, str)}
 
@@ -243,8 +246,8 @@ def test_plan_my_degree_prompt_names_only_real_tools():
 
 
 def test_not_on_dpr_leaves_a_requirement_out_and_sends_to_an_advisor():
-    # Spring 2025 transfer GE pattern: the DPR lists Areas A-E + UD, no Ethnic Studies
-    profile = TRANSFER_SENIOR | {"catalog_year": "Spring 2025", "qr_pathway": "1/2",
+    # An older transfer GE pattern on the newest rules (Spring 2024: no 2023-24 rules): the DPR has no Ethnic Studies
+    profile = TRANSFER_SENIOR | {"catalog_year": "Spring 2024", "qr_pathway": "1/2",
                                  "ge_done": [a for a in TRANSFER_SENIOR["ge_done"] if a != "6"]}
     plan_with = server.build_plan(profile | {"start_term": "2027-spring"})
     slots = lambda p: {c["slot"] for s in p["semesters"] for c in s["courses"] if isinstance(c, dict)}
@@ -359,11 +362,12 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
         assert pii not in json.dumps(got)
     p = got["profile"]
     assert (p["program"], p["catalog_year"], p["gpa"]) == ("bs-cs", "Fall 2024", 3.215)
-    assert {"code": "MATH 226", "grade": "C", "transfer": True} in p["completed"]  # MATH 100TR under "MATH 226"; min C
+    # MATH 100TR under "MATH 226", recorded at the requirement's minimum: C- in 2024-25 (C only for CSC 510, CSC 648)
+    assert {"code": "MATH 226", "grade": "C-", "transfer": True} in p["completed"]
     assert p["dpr_met"] == ["MATH 225"] and p["in_progress"] == ["CSC 300GW", "CSC 220"]
-    assert any("catalog year is Fall 2024" in w for w in got["warnings"])
+    assert got["catalog_year"] == "2024-25" and any("Requirements are the 2024-25 Bulletin's" in w for w in got["warnings"])
     audit = {g["id"]: g for g in server.audit_progress(p)["groups"]}
-    assert audit["ge_1c"]["status"] == "satisfied"  # "Area A1 - Oral Communication" done on the DPR -> GE 1C
+    assert audit["ge_a1"]["status"] == "satisfied"  # "Area A1 - Oral Communication" done on the DPR
     assert [w.split(":")[0] for w in got["cross_check"]] == ["Units toward the 120", "Not found on this DPR"]
     assert [a["role"] for a in got["see_advisor"]] == ["dpr"]
 
@@ -373,6 +377,7 @@ SCENARIOS = {
     "new freshman, QR 1/2": FRESH | {"qr_pathway": "1/2"},
     "new freshman, QR 3/4, F-1": FRESH | {"qr_pathway": "3/4", "f1": True},
     "Fall 2025 catalog, QR 3/4": FRESH | {"qr_pathway": "3/4", "catalog_year": "Fall 2025"},  # roadmap without PHYS 222
+    "Fall 2024 catalog (old GE)": FRESH | {"catalog_year": "Fall 2024"},  # one roadmap, no QR pathway; Area E waived
     "freshman with AP credit": FRESH | {"qr_pathway": "1/2", "first_time": True, "transfer_units": 8, "ge_done": ["USH", "2"]},
     "sophomore": yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"],
     "ADT transfer": FRESH | {"adt": True, "ge_certified": True, "first_time": False, "transfer_units": 60,
@@ -443,13 +448,14 @@ def test_the_students_catalog_year_picks_the_rules():
     # Catalog rights (p.2390): audited against the student's own year. Test user 1's DPR: Fall 2025 -> 2025-26 rules
     year = lambda given: server.rules_year({"program": "bs-cs", "catalog_year": given})
     assert year("Fall 2025") == year("Spring 2026") == year("2025-fall") == year("2025-26") == "2025-26"
-    assert year("Fall 2026") == "2026-27" and year("Spring 2025") == year(None) == server.YEAR  # no 2024-25 rules yet
+    assert year("Fall 2026") == "2026-27" and year("Spring 2025") == year("Fall 2024") == "2024-25"
+    assert year("Spring 2024") == year(None) == server.YEAR  # no 2023-24 rules
     assert year("2025-2026") == "2025-26" and year("2025-30") == server.YEAR
     assert server.YEAR == server.YEARS[-1]
     # Commit review: "Fall 2026" is the newest year itself, not an unsupported one
     warn = lambda given: server.year_warning({"catalog_year": given}, year(given))
     assert warn("Fall 2026") == warn("2026-27") == []
-    assert warn("Spring 2025")[0].startswith("The student's catalog year is Spring 2025, but GatorPath has rules only for")
+    assert warn("Spring 2024")[0].startswith("The student's catalog year is Spring 2024, but GatorPath has rules only for")
 
 
 def test_a_2025_26_student_needs_c_only_in_csc_510_and_648():
