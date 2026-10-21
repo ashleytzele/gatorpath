@@ -407,7 +407,7 @@ Robots detect and rebuild; a human approves rule changes; students re-import the
     `rules_year` ("Fall 2025" -> 2025-26, else the newest with a warning), course facts from the newest Bulletin and a
     completed course dropped since keeps its old row (D23; that closed a real DPR's 3-unit gap).
     `get_program_requirements` / `get_roadmap` take `catalog_year`. Next: 2024-25 (PDF in `data/raw/`; old GE A-E)
-  - 2025-26 rules verified by ashleytzele (2026-10-20)
+  - 2025-26 rules verified by ashleytzele (2026-10-20); its Winter Session line (p.1722) checked 2026-10-21
   - 2026-10-21, 2024-25 (Spring 2025 / Fall 2024 DPRs), `verified: false`. BS CS and policies by rule diff from
     2025-26 (same rules; the elective list adds CSC 649, 658; pages 39 and 46 earlier). GE rewritten from this
     Bulletin: 48 units in A1-A3, B1-B4, C1, C2 + "C1 or C2", D (D2 = US History), E, F, UD-B/C/D, matched by the
@@ -415,6 +415,9 @@ Robots detect and rebuild; a human approves rule changes; students re-import the
     Area E and the third Area C course ("Min Units Changed from 48 to 42", DPR wording). One first-time roadmap (no
     QR split). No `transfer` block (the Bulletin doesn't say what a certification meets), no 90-unit transfer cap,
     no GWAR grade minimum (not stated); a CSLG exam exists only this year. Confirm the memo on a second DPR
+  - Next up (2026-10-21): (1) a second Spring 2025 DPR shows the 3/12/25 Area E/C waiver -> verify the 2024-25 files;
+    (2) the 2026-27 rules still need their sign-off (verified: false); (3) re-run the evals on the three catalog years
+    and winter terms; (4) more classmates (Phase 7: 5-10, top 3 issues)
 - [ ] Source snapshots: `rules/programs/<year>/<program>.source.txt` holds the Bulletin text each
   group was written from
 - [ ] Bulletin diff: new Bulletin vs snapshots → unchanged groups copied to the new year (new page
