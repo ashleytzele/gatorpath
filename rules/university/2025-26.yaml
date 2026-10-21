@@ -4,8 +4,8 @@
 # GE areas match `course.ge_areas` (from each course's "Course Attributes:"), so no GE course lists here.
 # Grades: CR = "equivalent to grades A through C-" (p.2391), so CR meets a C- minimum but not a C.
 catalog_year: 2025-26
-verified: false
-verified_by: null
+verified: true
+verified_by: "ashleytzele, 2026-10-20"
 # Catalog rights (p.2378): "A student ... who remains in continuous attendance ... may, for purposes of meeting
 # graduation requirements, elect to meet the graduation requirements ... in effect (1) at the time they began their
 # study, (2) at the time they entered the CSU campus from which they graduate, or (3) at the time they graduate".

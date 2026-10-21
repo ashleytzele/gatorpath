@@ -5,8 +5,8 @@
 program: bs-cs
 title: Bachelor of Science in Computer Science
 catalog_year: 2025-26
-verified: false                    # a second person checks every rule against the PDF, then flips this
-verified_by: null
+verified: true                    # a second person checks every rule against the PDF, then flips this
+verified_by: "ashleytzele, 2026-10-20"
 total_units: 74                    # "Computer Science (B.S.) – 74 units"
 dpr_plan: Computer Science-BS     # how the DPR's "Plan:" line names this program (DPR sample, 2026-10-16)
 source: "p.1905"

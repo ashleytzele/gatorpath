@@ -6,8 +6,8 @@
 # `units` on a semester is the printed total; tests check that the items add up to it.
 program: bs-cs
 catalog_year: 2025-26
-verified: false
-verified_by: null
+verified: true
+verified_by: "ashleytzele, 2026-10-20"
 variants:
   qr-1-2:
     title: First-Time Student Roadmap – QR Pathway/Category 1/2
