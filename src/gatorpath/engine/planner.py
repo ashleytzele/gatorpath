@@ -51,6 +51,16 @@ def passed(grade: str | None) -> bool:
     return rank(grade) is not None
 
 
+def known_grades(completed: list[dict], in_progress: list[str]) -> dict[str, str]:
+    """Best grade per completed course. A course in progress again (a retake) has none: like any in-progress course,
+    it's assumed passed with the grade later prereqs need."""
+    grades: dict[str, str] = {}
+    for r in completed:
+        if r["code"] not in grades or (rank(r["grade"]) or -1) > (rank(grades[r["code"]]) or -1):
+            grades[r["code"]] = r["grade"]
+    return {c: g for c, g in grades.items() if c not in in_progress}
+
+
 def standing_ok(level: str, units: float, class_level: dict) -> bool:
     return {"lower": True, "upper": units >= class_level["upper"], "senior": units >= class_level["senior"],
             "graduate": False}.get(level, False)
@@ -218,10 +228,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     this_term = profile.get("current_term") if TERM.fullmatch(str(profile.get("current_term", ""))) else None  # by the server
 
     completed = [r for r in profile.get("completed", []) if r["code"] in catalog]
-    grades: dict[str, str] = {}
-    for r in completed:  # best attempt
-        if r["code"] not in grades or (rank(r["grade"]) or -1) > (rank(grades[r["code"]]) or -1):
-            grades[r["code"]] = r["grade"]
+    grades = known_grades(completed, profile.get("in_progress", []))
     done = {c for c, g in grades.items() if passed(g)} | {c for c in profile.get("in_progress", []) if c in catalog}
     now = audit(profile, program, university, catalog)["totals"]  # repeats, transfer duplicates handled there
     units = now["units"]["value"] + now["units_in_progress"]
@@ -609,7 +616,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         _matches(f, c, catalog[c]) for f in (g["from"] if isinstance(g["from"], list) else [g["from"]]))]
         for g in program["groups"] if "from" in g}
 
-    grades0 = {r["code"]: r["grade"] for r in profile.get("completed", [])}
+    grades0 = known_grades(profile.get("completed", []), profile.get("in_progress", []))
     units0 = status["totals"]["units"]["value"]
     gpa = profile.get("gpa", status["totals"]["gpa_sf_state"]["value"])
     slots0 = slots
@@ -1005,7 +1012,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
     Ranked: ready first, then courses that also cover the most other open requirements (ENVS 401 = 4UD + ESCA + GP),
     then the preferred subject while a `min_units_from` minimum is short (12 CSC units of senior electives).
     """
-    from gatorpath.engine.rules import matches, subject
+    from gatorpath.engine.rules import filters_for, matches, subject
 
     groups = {g["id"]: g for g in program["groups"] + university["groups"]}
     kind = {g["id"]: k for k, rules in (("major", program), ("university", university)) for g in rules["groups"]}
@@ -1023,7 +1030,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
                                         f"least {g['distinct_subjects']} different subjects ({g['source']})"]}
     if "all_of" in g or "from" not in g:
         return {"error": "not_a_choice", "warnings": [f"{group_id} isn't a choose-group; see get_program_requirements"]}
-    filters = g["from"] if isinstance(g["from"], list) else [g["from"]]
+    filters = filters_for(g, profile)
 
     in_prog = [c for c in profile.get("in_progress", []) if c in catalog]
     semesters = (plan or {}).get("semesters", [])
@@ -1044,7 +1051,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
     base_units = now["units"]["value"] + now["units_in_progress"]
     terms = sorted({first} | {s["term"] for s in semesters if term_key(s["term"]) >= term_key(first)}, key=term_key)
     gpa = profile.get("gpa", now["gpa_sf_state"]["value"])
-    grades = {r["code"]: r["grade"] for r in profile.get("completed", [])}
+    grades = known_grades(profile.get("completed", []), profile.get("in_progress", []))
 
     def ctx_at(term: str) -> dict:
         before = [s for s in semesters if term_key(s["term"]) < term_key(term)]
@@ -1076,7 +1083,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
         option = {"code": code, "title": course["title"], "units": course["units_min"], "source_page": course["source_page"],
                   "readiness": {OK: "ready", UNVERIFIED: "check", NO: "blocked"}[state],
                   "also_covers": [i for i in open_groups if not (kind[i] == kind[group_id] == "major")
-                                  and any(matches(f, code, course) for f in (groups[i]["from"] if isinstance(groups[i]["from"], list) else [groups[i]["from"]]))],
+                                  and any(matches(f, code, course) for f in filters_for(groups[i], profile))],
                   "offered": "unknown"}
         if state != OK:
             option["blocked_by" if state == NO else "cannot_check"] = why

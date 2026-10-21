@@ -159,6 +159,11 @@ def test_first_time_students_meet_us_history_only_with_lower_division_area_4():
     assert groups_of(transfer)["ai_ush"]["status"] == "satisfied"
     aa_s_210 = audit(BASE | {"completed": [{"code": "AA S 210", "grade": "B", "term": "2026-fall"}]}, PROGRAM, UNIVERSITY, CATALOG)
     assert groups_of(aa_s_210)["ai_ush"]["status"] == "satisfied"  # Area 4 + USH
+    # Test user 1 (2026-10-20): a DPR with Area 4 done and US History needed read as US History met
+    area_4 = audit(BASE | {"ge_done": ["4"]}, PROGRAM, UNIVERSITY, CATALOG)
+    assert groups_of(area_4)["ai_ush"]["status"] == "remaining"
+    exam = audit(BASE | {"ge_done": ["USH"]}, PROGRAM, UNIVERSITY, CATALOG)  # AP U.S. History (p.2350)
+    assert groups_of(exam)["ai_ush"]["status"] == "satisfied"
 
 
 def test_cal_getc_certification_meets_lower_division_ge():

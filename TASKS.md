@@ -367,6 +367,12 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   The PDF importers now say to install poppler when pdftotext is missing
 - [ ] Make the repo public (MIT); credit GatorWay/Plan-Ed as prior art
 - [ ] 5–10 SFSU classmates try it; collect feedback; fix the top 3 issues
+  - Test user 1 (2026-10-20: DPR import, plan, "can I take a GE class in winter"). Fixed: US History options for a
+    first-time student (ge_combinations, list_eligible_electives) follow `first_time_from` like the audit (an
+    upper-division USH course was offered, then failed check_plan); GE Area 4 in ge_done alone no longer meets US
+    History; a course retaken now drops its old grade for prereqs (build_plan blocked everything after it); a DPR page
+    break's print header and "One course is required." are no longer requirement titles. Open: Winter Session terms
+    (between fall and spring, at most 4 units, residence credit; not in the 24-unit extension cap)
 - [ ] Write the resume bullet with real numbers
 
 **Done when:** the public repo has a demo, an eval table, and real user feedback.

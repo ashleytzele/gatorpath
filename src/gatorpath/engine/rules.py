@@ -87,6 +87,12 @@ def first_time(profile: dict) -> bool:
     return not (profile.get("transfer_units") or profile.get("adt") or any(r.get("transfer") for r in profile.get("completed", [])))
 
 
+def filters_for(g: dict, profile: dict) -> list[dict]:
+    """A group's `from` filters for this student: `first_time_from` for a first-time student (US History, p.2313)."""
+    source = g["first_time_from"] if "first_time_from" in g and first_time(profile) else g["from"]
+    return source if isinstance(source, list) else [source]
+
+
 def matches(f: dict, code: str, course: dict) -> bool:
     """One `from` filter: {list} | {ge_area} (any of) | {ge_area_all} | {subject, level, paired}, each with `except`."""
     if code in f.get("except", ()):
@@ -217,12 +223,12 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
         return out | {"status": status, "counted": done, "in_progress": prog, "remaining": left} | (
             {"met_per_dpr": met} if met else {})
 
-    source = g["first_time_from"] if "first_time_from" in g and first_time(profile) else g["from"]
-    filters = source if isinstance(source, list) else [source]
-    ge_areas = {str(a) for f in (g["from"] if isinstance(g["from"], list) else [g["from"]]) + filters
-                for key in ("ge_area", "ge_area_all") if key in f
-                for a in (f[key] if isinstance(f[key], list) else [f[key]])}
-    if ge_areas & set(profile.get("ge_done", [])):
+    filters = filters_for(g, profile)
+    areas = lambda x: {str(a) for a in (x if isinstance(x, list) else [x])}
+    ge_done = set(profile.get("ge_done", []))
+    # An area in ge_done stands alone; ge_area_all needs one course carrying them all, so "4" isn't Area 4 with USH
+    if any(areas(f["ge_area"]) & ge_done if "ge_area" in f else "ge_area_all" in f and areas(f["ge_area_all"]) <= ge_done
+           for f in (g["from"] if isinstance(g["from"], list) else [g["from"]]) + filters):
         return out | {"status": "satisfied", "met_by": "ge_done"}
 
     need_units, need_n = g.get("choose_units"), g.get("choose_n")
@@ -424,8 +430,7 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
     ahead = [c for g in groups if g["kind"] == "major" for c in g.get("remaining", []) if c in catalog]
     for g, rule in ((done[r["id"]], r) for r in university["groups"] if "from" in r):
         if g["status"] in ("remaining", "in_progress"):
-            src = rule["first_time_from"] if "first_time_from" in rule and first_time(profile) else rule["from"]
-            hit = [c for c in ahead if any(matches(f, c, catalog[c]) for f in (src if isinstance(src, list) else [src]))]
+            hit = [c for c in ahead if any(matches(f, c, catalog[c]) for f in filters_for(rule, profile))]
             if hit:
                 g["major_courses"] = hit
     tot = totals(profile, taken, groups, university, catalog, warnings)

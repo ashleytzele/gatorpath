@@ -32,6 +32,34 @@ def test_transfer_rows_meet_the_course_they_sit_under_and_substitutions_become_d
                                                            "120 Minimum Units Required for Degree", "CSC 413"]
 
 
+def test_print_headers_and_instruction_lines_are_not_titles():
+    # Test user 1 (2026-10-20; layout copied, rows invented): a page break between a title and its tag made the
+    # browser's print header the title; "One course is required." stood in for "U.S. History"
+    text = """
+         Area 5B: Biological Science
+
+https://cmsweb.sfsu.edu/psp/CSFPRDS/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDENT_CENTER.GBL?gsmobile=0                   3/16
+
+01/20/27, 10:05 AM                                                                     My Academic Requirements
+
+          Units Required = 3 Units (2.68 Converted Quarter Units)
+
+          [R12829 / L0040]
+
+         Course            Description                               Units      When                Grade Status
+         BIOL 100          HUMAN BIOLOGY                      3.00              Fall 2025           B
+
+         U.S. History
+
+          One course is required.
+
+          [R10003 / L0010]
+
+                       Courses: 1 required, 0 taken, 1 needed
+"""
+    assert [r["title"] for r in parse(text)["requirements"]] == ["Area 5B: Biological Science", "U.S. History"]
+
+
 def test_cross_check_flags_only_real_disagreements():
     # Phase 6 done-when: the synthetic DPR's courses and GE areas agree with an audit of what it lists; what's left
     # is explained (unlisted transfer units; GE areas this partial DPR doesn't show)

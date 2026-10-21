@@ -364,6 +364,30 @@ def test_ge_combinations_list_every_minimal_way():
         assert set().union(*(set(part["covers"]) for part in w["parts"])) == set(got["open"])
 
 
+def test_us_history_options_follow_the_first_time_rule():
+    # Test user 1 (2026-10-20): ge_combinations offered AFRS 375 (USH, upper division) for US History to a first-time
+    # student, then check_plan rejected it. p.2313: first-time students meet it with a lower-division Area 4 USH course
+    from gatorpath.engine.planner import eligible_options
+    opts = lambda p, gid: {o["code"]: o for o in eligible_options(p, gid, PROGRAM, UNIVERSITY, CATALOG, PREREQS,
+                                                                  by_term="2027-spring", limit=99)["options"]}
+    transfer = FRESHMAN | {"transfer_units": 30}
+    assert "AA S 210" in opts(FRESHMAN, "ai_ush") and "HIST 470" not in opts(FRESHMAN, "ai_ush")
+    assert "HIST 470" in opts(transfer, "ai_ush")
+    assert "ai_ush" not in opts(FRESHMAN, "ai_usg")["HIST 470"]["also_covers"]
+    assert "ai_ush" in opts(transfer, "ai_usg")["HIST 470"]["also_covers"]
+
+
+def test_a_retake_in_progress_replaces_the_old_grade():
+    # 2026-10-20: a course being retaken kept its old failing grade, so the courses after it showed blocked
+    from gatorpath.engine.planner import build_plan, eligible_options
+    p = FRESHMAN | {"completed": FRESHMAN["completed"] + [{"code": "CSC 215", "grade": "F", "term": "2026-fall"}],
+                    "in_progress": ["CSC 215"]}
+    assert errors(check(p, ("2027-spring", ["CSC 220"]))) == []
+    assert not any("have F" in w for w in build_plan(p, PROGRAM, UNIVERSITY, ROADMAP, CATALOG, PREREQS)["warnings"])
+    opts = eligible_options(p, "senior_electives", PROGRAM, UNIVERSITY, CATALOG, PREREQS, by_term="2027-spring", limit=999)
+    assert not any("have F" in r for o in opts["options"] for r in o.get("blocked_by", []))
+
+
 def test_the_current_term_is_taken_by_in_progress_courses():
     # Eval plan-p01 (codex): start_term 2026-fall, the term CSC 101 is in progress, and CSC 215 was planned beside it
     from gatorpath.engine.planner import first_term

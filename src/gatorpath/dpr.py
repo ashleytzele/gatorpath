@@ -20,7 +20,9 @@ ROW = re.compile(rf"\s*(?P<code>{CODE})\s+(?P<desc>.*?)\s*(?P<units>\d+\.\d\d)"
                  r"(?:\s+(?P<notes>\d\d))?(?:\s+(?P<desig>GE \S.*?))?\s*")
 NEEDED = re.compile(r"(Units|Courses): (\d+(?:\.\d+)?) required, (\d+(?:\.\d+)?) taken, (\d+(?:\.\d+)?) needed")
 PAGES = re.compile(r"First\s+(\d+)-(\d+) of (\d+)\s+Last")
-NOT_TITLE = ("Units Required", "Total Units Required", "(", "Complete ", "The following", "Course ", "View All")
+NOT_TITLE = ("Units Required", "Total Units Required", "(", "Complete ", "One course", "The following", "Course ",
+             "View All")
+PRINT_CHROME = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}, \d{1,2}:\d{2} [AP]M\s.*|https?://\S+.*")  # browser header/footer
 TRANSFER = re.compile(r"\d+N?TR$")
 
 
@@ -36,6 +38,8 @@ def parse(text: str) -> dict:
     block: dict | None = None
     for line in text.splitlines():
         s = line.strip()
+        if PRINT_CHROME.fullmatch(s):  # a page break can fall between a requirement's title and its tag
+            continue
         if m := re.search(r"Plan:\s+(.+?)\s{2,}((?:Fall|Spring|Summer|Winter) \d{4})", line):
             out["plan"], out["catalog_term"] = m[1], m[2]
         for key, label in (("gpa", "Overall GPA:"), ("sf_state_gpa", "SF State GPA:")):
