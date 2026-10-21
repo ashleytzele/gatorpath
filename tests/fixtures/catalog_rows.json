@@ -526,6 +526,21 @@
   "crosslisted_with": []
  },
  {
+  "code": "CSC 657",
+  "title": "Bioinformatics Computing",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "A broad range of topics in computational biology as practiced in the life science industry and leading research organizations. Provides computational background required to participate in R&D. Extra fee required. (CSC 857/CSC 657 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1899,
+  "prereq_text": "Upper-division or graduate standing in a science program or permission of the instructor.",
+  "paired_with": [
+   "CSC 857"
+  ],
+  "crosslisted_with": []
+ },
+ {
   "code": "CSC 659",
   "title": "AI Explainability and Ethics",
   "units_min": 3.0,
@@ -683,6 +698,19 @@
   "ge_areas": [],
   "source_page": 1900,
   "prereq_text": "CSC 215 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 690",
+  "title": "Interactive Multimedia Application Development",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Basics of multimedia data formats and algorithms to build applications using non-standard interfaces such as game controllers and multi-touch surfaces. (Plus-minus letter grade only)",
+  "grading": "letter",
+  "ge_areas": [],
+  "source_page": 1900,
+  "prereq_text": "CSC 340* with a grade of C or better or permission of the instructor.",
   "paired_with": [],
   "crosslisted_with": []
  },

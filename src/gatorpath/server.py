@@ -19,9 +19,11 @@ from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import cover_combinations, eligible_options, see_advisor
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
-from gatorpath.engine.rules import RULES_DIR, audit, load_rules, number, translate_ge
+from gatorpath.engine.rules import RULES_DIR, audit, load_rules, min_grade_of, number, translate_ge
 
-YEAR = "2026-27"  # ponytail: one catalog year. Take it from the profile/tool input once a second year is ingested.
+# Requirements follow the student's catalog year (rules/<kind>/<year>/); course facts are the newest Bulletin's (D23).
+YEARS = sorted(p.stem for p in (RULES_DIR / "university").glob("*.yaml"))
+YEAR = YEARS[-1]
 REPO = Path(__file__).parents[2]
 DB = REPO / "data/catalog.db"
 PROFILE_PATH = "~/.gatorpath/profile.yaml"
@@ -33,7 +35,8 @@ WRITES_FILE = ToolAnnotations(readOnlyHint=False, destructiveHint=True, idempote
 mcp = MCPServer(
     "gatorpath",
     instructions=(
-        f"SF State degree-planning tools for the {YEAR} Bulletin. Answers come only from the Bulletin and reviewed rules: "
+        f"SF State degree-planning tools for the {', '.join(YEARS)} Bulletins: requirements follow the student's catalog "
+        f"year, courses and prereqs are the newest ({YEAR}). Answers come only from the Bulletin and reviewed rules: "
         "don't add courses, prereqs or requirements the tools didn't return. Cite the `source`/`source_page` each answer "
         "comes with (Bulletin pages; a few office policies cite that office's page), show every warning, and remind "
         "the student that the DPR and an advisor are the final word. A course meets a GE, SF State Studies or American "
@@ -218,52 +221,75 @@ def get_prereq_chain(code: str) -> dict:
 @mcp.tool(annotations=READ_ONLY)
 def list_programs() -> dict:
     """Programs GatorPath has reviewed requirement rules for."""
-    return {"catalog_year": YEAR, "warnings": [],
+    return {"catalog_year": YEAR, "catalog_years": YEARS, "warnings": [],
             "programs": [{"id": k, "title": p["title"], "verified": bool(p.get("verified"))} for k, p in programs().items()]}
 
 
 @mcp.tool(annotations=READ_ONLY)
-def get_program_requirements(program: str) -> dict:
+def get_program_requirements(program: str, catalog_year: str | None = None) -> dict:
     """A program's requirement groups (as written in its rules YAML, each with its Bulletin page) plus the university
     graduation requirements every bachelor's degree shares: GE areas, SF State Studies, American Institutions, GWAR,
-    unit/residence/GPA totals."""
+    unit/residence/GPA totals. catalog_year: the student's (e.g. 'Fall 2025' or '2025-26'); default the newest."""
     if program not in programs():
         return unknown_program(program)
-    prog, univ = load_rules(YEAR, program)
-    return {"catalog_year": YEAR, "program": prog, "university": univ,
+    year = rules_year({"program": program, "catalog_year": catalog_year or YEAR})
+    prog, univ = load_rules(year, program)
+    return {"catalog_year": year, "program": prog, "university": univ,
             "warnings": unverified(prog, program) + unverified(univ, "University (GE and graduation)")}
 
 
 @mcp.tool(annotations=READ_ONLY)
-def get_roadmap(program: str, variant: str | None = None) -> dict:
+def get_roadmap(program: str, variant: str | None = None, catalog_year: str | None = None) -> dict:
     """The Bulletin's suggested semester-by-semester roadmap. Items are course codes or slots like
     {slot: GE, area: "1A", units: 3}. Without a valid variant, returns the variants to choose from (for BS CS the
-    variant follows the student's QR pathway / math placement, or the ADT for transfer students)."""
-    path = RULES_DIR / "roadmaps" / YEAR / f"{program}.yaml"
-    if program not in programs() or not path.exists():
+    variant follows the student's QR pathway / math placement, or the ADT for transfer students). catalog_year: the
+    student's (e.g. 'Fall 2025'); default the newest."""
+    if program not in programs():
+        return unknown_program(program)
+    year = rules_year({"program": program, "catalog_year": catalog_year or YEAR})
+    path = RULES_DIR / "roadmaps" / year / f"{program}.yaml"
+    if not path.exists():
         return unknown_program(program)
     rm = yaml.safe_load(path.read_text())
     warnings = ["The roadmap is a suggestion and doesn't replace meeting with an advisor"] + unverified(rm, f"{program} roadmap")
     if variant not in rm["variants"]:
-        return {"catalog_year": YEAR, "program": program, "needs_input": "variant", "warnings": warnings,
+        return {"catalog_year": year, "program": program, "needs_input": "variant", "warnings": warnings,
                 "variants": {k: {"title": v["title"], "qr_pathway": v.get("qr_pathway")} for k, v in rm["variants"].items()}}
-    return {"catalog_year": YEAR, "program": program, "variant": variant, **rm["variants"][variant], "warnings": warnings}
+    return {"catalog_year": year, "program": program, "variant": variant, **rm["variants"][variant], "warnings": warnings}
 
 
-def year_warning(profile: dict) -> list[str]:
+def rules_year(profile: dict) -> str:
+    """The Bulletin year the student is held to: "Fall 2025", "2025-fall" or "2025-26" -> "2025-26" (a Bulletin runs
+    fall to summer), when GatorPath has that year's rules for the program; else the newest (year_warning says so)."""
+    given = str(profile.get("catalog_year", "")).strip().lower()
+    if re.fullmatch(r"\d{4}-\d{2}", given):
+        year = given
+    elif m := re.fullmatch(r"(fall|spring|summer|winter) (\d{4})|(\d{4})-(fall|spring|summer|winter)", given):
+        season, y = (m[1], int(m[2])) if m[1] else (m[4], int(m[3]))
+        start = y if season == "fall" else y - 1
+        year = f"{start}-{(start + 1) % 100:02d}"
+    else:
+        return YEAR
+    return year if (RULES_DIR / "programs" / year / f"{profile['program']}.yaml").exists() else YEAR
+
+
+def year_warning(profile: dict, year: str) -> list[str]:
     given = profile.get("catalog_year")
     if given is None:
         return [f"catalog_year not given, so this uses the {YEAR} Bulletin. Students are held to the year on their DPR "
                 "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
     if str(given).strip() == YEAR:
         return []
-    return [f"The student's catalog year is {given}, but GatorPath only has {YEAR} rules, so this uses them. "
-            "Requirements may differ (older catalogs use GE Areas A-E). Where the DPR disagrees, the DPR wins. In "
-            "continuous attendance a student may elect the graduation requirements in effect when they began their "
-            "study, when they entered SF State, or when they graduate (p.2390); ask an advisor before relying on that"]
+    if year != YEAR:
+        return [f"Requirements are the {year} Bulletin's (the student's catalog year, {given}); courses, prereqs and GE "
+                f"tags are the {YEAR} Bulletin's, the one the remaining courses are taken under"]
+    return [f"The student's catalog year is {given}, but GatorPath has rules only for {', '.join(YEARS)}, so this uses "
+            f"{YEAR}. Requirements may differ (the 2024-25 Bulletin uses GE Areas A-E). Where the DPR disagrees, the DPR "
+            "wins. In continuous attendance a student may elect the graduation requirements in effect when they began "
+            "their study, when they entered SF State, or when they graduate (p.2390); ask an advisor before relying on that"]
 
 
-def prepare(profile: dict, university: dict) -> tuple[dict, list[str]]:
+def prepare(profile: dict, university: dict, year: str = YEAR) -> tuple[dict, list[str]]:
     """Normalize what a client sends (codes, DPR GE area names) and say what was assumed or translated."""
     ge_done, ge_warnings = translate_ge(profile.get("ge_done", []), university)
     # not_on_dpr: group ids, or GE areas in the DPR's or this Bulletin's codes ("6", "F", "Area 6")
@@ -272,7 +298,7 @@ def prepare(profile: dict, university: dict) -> tuple[dict, list[str]]:
                for a in ([g["from"]["ge_area"]] if not isinstance(g["from"].get("ge_area"), list) else g["from"]["ge_area"])}
     left_out = []
     for x in profile.get("not_on_dpr", []):
-        if str(x) in groups or str(x) in {g["id"] for g in load_rules(YEAR, profile["program"])[0]["groups"]}:
+        if str(x) in groups or str(x) in {g["id"] for g in load_rules(year, profile["program"])[0]["groups"]}:
             left_out.append(str(x))
         else:
             areas, w = translate_ge([x], university)
@@ -283,11 +309,27 @@ def prepare(profile: dict, university: dict) -> tuple[dict, list[str]]:
     qr = next((k for k in ("1/2", "3/4") if digits and digits <= set(k[::2])), profile.get("qr_pathway"))
     clean = profile | ({"qr_pathway": qr} if qr else {}) | {
                        "current_term": term_start(today())[0],  # the term underway: never plan on top of it
-                       "catalog_year": YEAR, "ge_done": ge_done, "not_on_dpr": list(dict.fromkeys(left_out)),
+                       "catalog_year": year, "ge_done": ge_done, "not_on_dpr": list(dict.fromkeys(left_out)),
                        "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
                        "in_progress": [norm_code(c) for c in profile.get("in_progress", [])],
                        "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])]}
-    return clean, year_warning(profile) + ge_warnings
+    return clean, year_warning(profile, year) + ge_warnings
+
+
+def load_for(profile: dict) -> tuple[str, dict, dict, dict, list[str]]:
+    """The student's rules year, its program and university rules, the cleaned profile and what was assumed."""
+    year = rules_year(profile)
+    program, university = load_rules(year, profile["program"])
+    return year, program, university, *prepare(profile, university, year)
+
+
+def catalog_for(profile: dict) -> dict[str, dict]:
+    """The newest Bulletin's courses; a completed course dropped since keeps its row from the latest year that has it."""
+    cat = catalog(DB, YEAR)
+    gone = {r["code"] for r in profile.get("completed", [])} - cat.keys()
+    for year in YEARS[:-1]:  # oldest first, so a later year's row wins
+        cat = cat | {c: r for c, r in catalog(DB, year).items() if c in gone}
+    return cat
 
 
 def normalized_plan(plan: dict | None) -> dict | None:
@@ -306,8 +348,8 @@ def audit_progress(profile: Profile) -> dict:
     """Degree audit: per requirement group satisfied / in_progress / remaining / waived and which courses counted,
     plus university totals (120 units, upper-division, residence, CR cap, GPAs). Nothing is stored.
 
-    profile: program (e.g. 'bs-cs'); catalog_year (the DPR's "Requirement (Catalog) Term"; another year than
-    2026-27 is planned with 2026-27 rules and a warning); completed: [{code, grade, term?, units? (variable-unit
+    profile: program (e.g. 'bs-cs'); catalog_year (the DPR's "Requirement (Catalog) Term", e.g. 'Fall 2025': that
+    year's rules when GatorPath has them, else the newest with a warning); completed: [{code, grade, term?, units? (variable-unit
     courses), transfer? (articulated transfer course), credit? ('extension' | 'exam' | 'evaluation': counts for
     units, never residence)}], grades as SF State symbols (A..F, CR, NC, W, I);
     in_progress: [codes]; ge_done: GE areas met by transfer/AP/IB credit, as the DPR writes them (e.g. "1A", or an
@@ -322,9 +364,8 @@ def audit_progress(profile: Profile) -> dict:
     """
     if err := profile_error(profile):
         return err
-    program, university = load_rules(YEAR, profile["program"])
-    clean, notes = prepare(profile, university)
-    out = audit(clean, program, university, catalog(DB, YEAR))
+    year, program, university, clean, notes = load_for(profile)
+    out = audit(clean, program, university, catalog_for(clean))
     out["warnings"] = notes + out["warnings"] + unverified(university, "University (GE and graduation)")
     out["see_advisor"] = see_advisor([("dpr", "Your DPR is the official audit; compare it with this one")]
                                      + ([("major_advisor", f"GatorPath's {profile['program']} rules aren't verified yet")]
@@ -347,9 +388,8 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     """
     if err := profile_error(profile):
         return err
-    program, university = load_rules(YEAR, profile["program"])
-    clean, notes = prepare(profile, university)
-    out = engine_check_plan(clean, normalized_plan(plan), program, university, catalog(DB, YEAR), prereqs(DB, YEAR))
+    year, program, university, clean, notes = load_for(profile)
+    out = engine_check_plan(clean, normalized_plan(plan), program, university, catalog_for(clean), prereqs(DB, YEAR))
     out["warnings"] = notes + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
     return out
 
@@ -371,10 +411,9 @@ def build_plan(profile: Profile) -> dict:
     """
     if err := profile_error(profile):
         return err
-    program, university = load_rules(YEAR, profile["program"])
-    path = RULES_DIR / "roadmaps" / YEAR / f"{profile['program']}.yaml"
-    clean, notes = prepare(profile, university)
-    out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), catalog(DB, YEAR), prereqs(DB, YEAR))
+    year, program, university, clean, notes = load_for(profile)
+    path = RULES_DIR / "roadmaps" / year / f"{profile['program']}.yaml"
+    out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), catalog_for(clean), prereqs(DB, YEAR))
     out["warnings"] = notes + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
     return out
 
@@ -394,14 +433,13 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     """
     if err := profile_error(profile):
         return err
-    program, university = load_rules(YEAR, profile["program"])
-    clean, notes = prepare(profile, university)
-    out = eligible_options(clean, group_id, program, university, catalog(DB, YEAR), prereqs(DB, YEAR),
+    year, program, university, clean, notes = load_for(profile)
+    out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs(DB, YEAR),
                            normalized_plan(plan), by_term, max(1, min(limit, 100)))
     if "options" in out:
         desc = db.descriptions(DB, YEAR, [o["code"] for o in out["options"]])
         out["options"] = [o | {"description": desc.get(o["code"]), "offered": offered(o["code"])} for o in out["options"]]
-    out["catalog_year"] = YEAR
+    out["catalog_year"] = year
     out["warnings"] = notes + out.get("warnings", []) + [offering_note(DB, YEAR)]
     return out
 
@@ -416,9 +454,8 @@ def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | N
     Pass the build_plan output as plan so planned courses count."""
     if err := profile_error(profile):
         return err
-    program, university = load_rules(YEAR, profile["program"])
-    clean, notes = prepare(profile, university)
-    out = cover_combinations(clean, program, university, catalog(DB, YEAR), prereqs(DB, YEAR), normalized_plan(plan), by_term)
+    year, program, university, clean, notes = load_for(profile)
+    out = cover_combinations(clean, program, university, catalog_for(clean), prereqs(DB, YEAR), normalized_plan(plan), by_term)
     for way in out.get("ways", []):
         for part in way["parts"]:
             part["examples"] = [e | {"offered": offered(e["code"])} for e in part["examples"]]
@@ -567,25 +604,25 @@ def import_dpr(pdf_path: str) -> dict:
     if program is None:
         return {"catalog_year": YEAR, "error": "unknown_program", "programs": list(programs()),
                 "warnings": warnings + [f"The DPR's plan isn't one GatorPath has rules for; it covers {', '.join(programs())}"]}
-    rules = load_rules(YEAR, program)[0]
+    year = rules_year({"program": program, "catalog_year": parsed["catalog_term"]})
+    rules, university = load_rules(year, program)
     loose = "C-" if rules.get("global", {}).get("no_cr_nc") else "CR"
-    min_grade = {c: g.get("min_grade", loose) for g in rules["groups"] for c in g.get("all_of", [])}
+    min_grade = {c: min_grade_of(g, c) or loose for g in rules["groups"] for c in g.get("all_of", [])}
     units = {c: r["units_min"] for c, r in catalog(DB, YEAR).items()}
     got = dpr.to_profile(parsed, min_grade, units)
     profile = {"program": program, **{k: v for k, v in got.items() if k not in ("remaining", "warnings")}}
     profile["completed"] = [r | {"code": norm_code(r["code"])} for r in profile["completed"]]
     profile["in_progress"] = [norm_code(c) for c in profile["in_progress"]]
     profile["dpr_met"] = [norm_code(c) for c in profile["dpr_met"]]
-    university = load_rules(YEAR, program)[1]
     ours = audit_progress(profile)
     disagree = dpr.cross_check(parsed, ours, university)
-    return {"catalog_year": YEAR, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,
-            "warnings": warnings + got["warnings"] + disagree + year_warning(profile),
+    return {"catalog_year": year, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,
+            "warnings": warnings + got["warnings"] + disagree + year_warning(profile, year),
             "see_advisor": see_advisor([("dpr", "GatorPath's audit and your DPR disagree on what's listed in cross_check; "
                                          "the DPR is the official one")] if disagree else [], rules, university)}
 
 
-PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath ({year} Bulletin). Every course, prereq,
+PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath (Bulletins {years}). Every course, prereq,
 requirement and date comes from the tools: never add one they didn't return, and never present a plan check_plan
 hasn't passed.{goal}{deadline}
 
@@ -611,8 +648,8 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 2. Build the profile. From import_dpr, use its `profile` as is, and tell the student its warnings (grades it had
    to assume for transfer rows, Notes codes) and every cross_check line (where GatorPath disagrees with the DPR; the
    DPR wins). Otherwise build it from what they shared:
-   - catalog_year: the DPR's "Requirement (Catalog) Term", e.g. "Spring 2025". If it isn't {year}, keep going:
-     the tools plan with {year} rules and warn. Where the DPR and the tools disagree, the DPR wins: say so.
+   - catalog_year: the DPR's "Requirement (Catalog) Term", e.g. "Fall 2025". The tools use that year's rules when
+     they have them ({years}); otherwise they plan with {year} rules and warn: keep going. Where the DPR and the tools disagree, the DPR wins: say so.
    - completed: each course with a grade (code, grade, term). A course with a term and no grade is in_progress.
    - transfer: "MATH 100TR" listed under the "MATH 226" requirement means MATH 226 met by transfer:
      {{code: "MATH 226", grade, transfer: true}}. Use the other school's grade; with only the DPR's "T", use the
@@ -677,6 +714,6 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 @mcp.prompt(title="Plan my degree")
 def plan_my_degree(goal: str = "", graduate_by: str = "") -> str:
     """Step-by-step workflow: profile → audit → plan → electives by goal → check_plan → pace/what-ifs → advisor."""
-    return PLAN_MY_DEGREE.format(year=YEAR, goal=f"\n\nThe student's goal: {goal}." if goal else "",
+    return PLAN_MY_DEGREE.format(year=YEAR, years=", ".join(YEARS), goal=f"\n\nThe student's goal: {goal}." if goal else "",
                                  deadline=f" They'd like to graduate by {graduate_by} (pass it as graduate_by)."
                                  if graduate_by else "")

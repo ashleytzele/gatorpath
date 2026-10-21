@@ -377,6 +377,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "CSC 657": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1899,
+  "title": "Bioinformatics Computing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "CSC 659": {
   "ge_areas": [],
   "grading": "letter",
@@ -486,6 +496,16 @@
   "title": "Experiences in Computer Science Teaching",
   "units_max": 1.0,
   "units_min": 1.0
+ },
+ "CSC 690": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1900,
+  "title": "Interactive Multimedia Application Development",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "CSC 694": {
   "ge_areas": [],

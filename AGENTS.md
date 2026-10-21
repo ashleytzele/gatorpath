@@ -33,9 +33,9 @@ Full design: `docs/ARCHITECTURE.md`. Current work: `TASKS.md` (work phase by pha
 brew install uv poppler            # one-time
 uv sync                            # install deps
 uv run pytest                      # tests
-uv run python -m gatorpath.ingest.bulletin data/raw/bulletin-2026-27.pdf   # build catalog.db
+uv run python -m gatorpath.ingest.bulletin data/raw/bulletin-2026-27.pdf   # build catalog.db (one run per year; 2025-26 too)
 uv run python -m gatorpath.ingest.bulletin data/raw/bulletin-2026-27.pdf --legacy-ge   # old→new GE code evidence
-uv run python -m gatorpath.db evals/profiles/*.yaml rules/programs/2026-27/*.yaml rules/roadmaps/2026-27/*.yaml > evals/catalog-2026-27.json   # refresh eval catalog rows
+uv run python -m gatorpath.db evals/profiles/*.yaml rules/programs/*/*.yaml rules/roadmaps/*/*.yaml > evals/catalog-2026-27.json   # refresh eval catalog rows (newest Bulletin's rows, every year's rules)
 uv run python -m gatorpath.ingest.offerings --subjects CSC,MATH,PHYS        # offering history
 uv run gatorpath                   # start MCP server (stdio)
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md

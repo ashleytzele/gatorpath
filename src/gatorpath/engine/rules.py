@@ -87,6 +87,12 @@ def first_time(profile: dict) -> bool:
     return not (profile.get("transfer_units") or profile.get("adt") or any(r.get("transfer") for r in profile.get("completed", [])))
 
 
+def min_grade_of(g: dict, code: str) -> str | None:
+    """A group's minimum grade for one course: `min_grade: C` covers every course, `{CSC 510: C}` only those named."""
+    m = g.get("min_grade")
+    return m.get(code) if isinstance(m, dict) else m
+
+
 def filters_for(g: dict, profile: dict) -> list[dict]:
     """A group's `from` filters for this student: `first_time_from` for a first-time student (US History, p.2313)."""
     source = g["first_time_from"] if "first_time_from" in g and first_time(profile) else g["from"]
@@ -193,16 +199,16 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
 
     in_progress = [c for c in profile.get("in_progress", []) if c in catalog]
     free = lambda c: claimed is None or c not in claimed
-    bar = GRADE_POINTS[g["min_grade"]] if "min_grade" in g else PASSING
+    bar = lambda c: GRADE_POINTS[min_grade_of(g, c)] if min_grade_of(g, c) else PASSING
 
     def ok(c: str) -> bool:
         t = taken.get(c)
-        return bool(t) and free(c) and not (no_cr_nc and t["grade"] == "CR") and (rank(t["grade"]) or -1) >= bar
+        return bool(t) and free(c) and not (no_cr_nc and t["grade"] == "CR") and (rank(t["grade"]) or -1) >= bar(c)
 
     def note_grade(c: str) -> None:
         if c in taken and free(c) and not ok(c) and c not in in_progress:
             why = "CR/NC is not accepted in the major" if no_cr_nc and taken[c]["grade"] == "CR" else \
-                f"needs {g.get('min_grade', 'a passing grade')}" + (" or better" if "min_grade" in g else "")
+                f"needs {min_grade_of(g, c) or 'a passing grade'}" + (" or better" if min_grade_of(g, c) else "")
             warnings.append(f"{c}: grade {taken[c]['grade']} doesn't count toward {out['title']}; {why} ({g['source']})")
 
     if "all_of" in g:

@@ -396,6 +396,13 @@ Robots detect and rebuild; a human approves rule changes; students re-import the
 - [ ] Catalog year per student: the server takes the year from `profile.catalog_year` / the DPR's
   requirement term and loads `rules/<kind>/<year>/` (removes the `YEAR` ponytail in `server.py`).
   First real case: 2024-25 rules (needs the 2024-25 Bulletin PDF), see the Phase 6 `(?)`
+  - 2026-10-20, for test user 1 (Fall 2025): 2025-26 rules, roadmaps and catalog rows, `verified: false`. Written by
+    a rule diff from 2026-27: every quote re-found on its new page (pages 12-14 earlier), section-by-section text
+    diffs read. What differs: C or better only for CSC 510 and CSC 648 (`min_grade` map, §6.2); the printed elective
+    list; no course approved for 2UD; the QR 3/4 roadmap leaves out PHYS 222; F -> 6 rests on tags only. Server:
+    `rules_year` ("Fall 2025" -> 2025-26, else the newest with a warning), course facts from the newest Bulletin and a
+    completed course dropped since keeps its old row (D23; that closed a real DPR's 3-unit gap).
+    `get_program_requirements` / `get_roadmap` take `catalog_year`. Next: 2024-25 (PDF in `data/raw/`; old GE A-E)
 - [ ] Source snapshots: `rules/programs/<year>/<program>.source.txt` holds the Bulletin text each
   group was written from
 - [ ] Bulletin diff: new Bulletin vs snapshots → unchanged groups copied to the new year (new page

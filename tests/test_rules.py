@@ -58,27 +58,37 @@ def test_level_and_paired_filters():
     assert not matches(six, "CSC 510", CATALOG["CSC 510"])
 
 
-def test_every_rule_group_cites_a_page():
-    for g in PROGRAM["groups"] + UNIVERSITY["groups"]:
+YEARS = sorted(p.stem for p in (RULES_DIR / "university").glob("*.yaml"))  # every catalog year with rules
+
+
+@pytest.mark.parametrize("year", YEARS)
+def test_every_rule_group_cites_a_page(year):
+    program, university = load_rules(year, "bs-cs")
+    assert program["catalog_year"] == university["catalog_year"] == year
+    for g in program["groups"] + university["groups"]:
         assert re.fullmatch(r"p\.\d{4}.*", g["source"]), g["id"]
 
 
-def test_major_units_add_up_to_74():
-    required = sum(CATALOG[c]["units_min"] for g in PROGRAM["groups"] for c in g.get("all_of", []))
-    electives = next(g for g in PROGRAM["groups"] if g["id"] == "senior_electives")["choose_units"]
-    assert required + electives == PROGRAM["total_units"] == 74
+@pytest.mark.parametrize("year", YEARS)
+def test_major_units_add_up_to_74(year):
+    program = load_rules(year, "bs-cs")[0]
+    required = sum(CATALOG[c]["units_min"] for g in program["groups"] for c in g.get("all_of", []))
+    electives = next(g for g in program["groups"] if g["id"] == "senior_electives")["choose_units"]
+    assert required + electives == program["total_units"] == 74
 
 
-def test_ge_area_minimums_add_up_to_43():
-    assert sum(g.get("choose_units", 0) for g in UNIVERSITY["groups"] if g["id"].startswith("ge_")) == 43
+@pytest.mark.parametrize("year", YEARS)
+def test_ge_area_minimums_add_up_to_43(year):
+    university = load_rules(year, "bs-cs")[1]
+    assert sum(g.get("choose_units", 0) for g in university["groups"] if g["id"].startswith("ge_")) == 43
 
 
-ROADMAPS = yaml.safe_load((RULES_DIR / "roadmaps/2026-27/bs-cs.yaml").read_text())
+ROADMAPS = {y: yaml.safe_load((RULES_DIR / f"roadmaps/{y}/bs-cs.yaml").read_text()) for y in YEARS}
 
 
-@pytest.mark.parametrize("variant", ROADMAPS["variants"])
-def test_roadmap_semesters_add_up_to_printed_units(variant):
-    v = ROADMAPS["variants"][variant]
+@pytest.mark.parametrize("year,variant", [(y, v) for y, r in ROADMAPS.items() for v in r["variants"]])
+def test_roadmap_semesters_add_up_to_printed_units(year, variant):
+    v = ROADMAPS[year]["variants"][variant]
     for i, sem in enumerate(v["semesters"], 1):
         units = sum(CATALOG[x]["units_min"] if isinstance(x, str) else x["units"] for x in sem["items"])
         assert units == sem["units"], f"{variant} semester {i}"
@@ -285,3 +295,15 @@ def test_open_ge_areas_name_the_major_courses_still_ahead_that_carry_them():
     assert (groups["ge_5a"]["major_courses"], groups["ge_5c"]["major_courses"]) == (["PHYS 220"], ["PHYS 222"])
     assert groups["gwar"]["major_courses"] == ["CSC 300GW"]
     assert "major_courses" not in groups["ge_6"] and "major_courses" not in groups["ge_1a"]  # none; ge_1a is satisfied
+
+
+def test_min_grade_can_name_courses():
+    # 2025-26 BS CS (p.1905): "Grades of C or better are required for CSC 510 and CSC 648." CSC 415 with a D counts
+    program = PROGRAM | {"groups": [g | {"min_grade": {"CSC 510": "C", "CSC 648": "C"}} if g["id"] == "advanced_cs" else g
+                                    for g in PROGRAM["groups"]]}
+    rows = [{"code": c, "grade": "D", "term": "2026-fall"} for c in ("CSC 415", "CSC 510")] + \
+           [{"code": "CSC 648", "grade": "C", "term": "2026-fall"}]
+    got = audit(BASE | {"completed": rows}, program, UNIVERSITY, CATALOG)
+    adv = groups_of(got)["advanced_cs"]
+    assert adv["counted"] == ["CSC 415", "CSC 648"] and adv["remaining"] == ["CSC 510"]
+    assert any(w.startswith("CSC 510: grade D doesn't count toward Advanced") and "needs C or better" in w for w in got["warnings"])

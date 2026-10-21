@@ -1,6 +1,6 @@
 # GatorPath — Architecture & Design
 
-> Status: **Approved 2026-10-15** · Last updated: 2026-10-18 · Catalog year in scope: **2026-27**
+> Status: **Approved 2026-10-15** · Last updated: 2026-10-20 · Catalog years in scope: **2026-27, 2025-26**
 >
 > GatorPath is an **MCP server** that gives any AI assistant (Claude, Gemini CLI, ChatGPT, …)
 > accurate, checkable tools for planning an SF State degree. The AI talks to the student and
@@ -160,6 +160,10 @@ Automate everything that is **detection or rebuilding**. A human approves every 
 - **Catalog rights:** a student is audited against **their own** catalog year (the DPR's
   `Requirement (Catalog) Term`, or `profile.catalog_year`), not the newest Bulletin. So
   `rules/<kind>/<year>/` folders are added and never replaced.
+  Course facts (that a course exists, its units, prereqs and GE tags) are the newest ingested Bulletin's: the
+  remaining courses are taken under it, and a newly approved course counts for the student's requirement areas
+  (a Fall 2025 DPR lists "Area 2UD … or Area 5UD", though the 2025-26 Bulletin approved no 2UD course). Older years'
+  rows only fill in courses dropped since (D23).
 - **Rule diff, not rule rewrite:** each program keeps the Bulletin text its YAML was written from
   (`rules/programs/<year>/<program>.source.txt`, public text). The yearly job finds each group's
   heading in the new Bulletin and compares normalized text. Unchanged groups are copied to the new year
@@ -318,6 +322,10 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   `totals.community_college_upper_division: {allowed: false}` (p.2304): a transfer row numbered 300-699 still counts
   as upper division but gets a ⚠️, since a profile doesn't say which transfer rows were community college work.
   A CR course that counts in the major and is CR/NC-only in the catalog stays out of `max_cr_units` (p.2313).
+
+Added 2026-10-20 (2025-26 rules, the second catalog year):
+- `min_grade` may be a map `{course: grade}` instead of one grade: only the named courses need it. 2025-26 BS CS:
+  "Grades of C or better are required for CSC 510 and CSC 648" (p.1905), not every Advanced course.
 
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo
@@ -551,8 +559,9 @@ deterministic (D6). The prompt gives the client its workflow:
 As built (2026-10-17, revised after Desktop trial 3): ask **once**, in one message, for everything missing; the
 fastest path is the student's DPR. Say once that an attached PDF carries their name and ID to the AI provider
 (black them out, or paste the requirement sections), then accept what they share; `import_dpr` will make this
-local. Defaults instead of questions (15 units, no summer). A catalog year other than 2026-27 is planned with
-2026-27 rules and a warning, not refused (the DPR wins on disagreements). Transfer rows the DPR lists under a
+local. Defaults instead of questions (15 units, no summer). A catalog year GatorPath has rules for (2025-26, 2026-27) is
+audited with that year's rules (D23); another year is planned with the newest rules and a warning, not refused (the DPR
+wins on disagreements). Transfer rows the DPR lists under a
 requirement become that course with `transfer: true`; substitutions go in `dpr_met`; GE areas in the DPR's own
 codes. Then run through to a checked plan without confirmation stops. A test fails if the prompt names a tool that
 doesn't exist.
@@ -771,6 +780,7 @@ students; 0 hallucinated courses."*
 | D20 | `import_dpr` is the main import; `import_transcript` is the fallback (D7 kept, D14 as built) | The DPR has the catalog year, transfer evaluations and substitutions; the transcript's transfer blocks are totals only (§7.3). In trial 7 the two PDFs disagreed on a current course and the newer DPR was used | 2026-10-18 |
 | D21 | Office policies the Bulletin leaves to an office (F-1 final-term Reduced Course Load) and advising contacts may come from that office's page, cited as page + date checked; the Bulletin wins on any conflict (§5 "What may come from where") | Trial 7: an F-1 student's last term was padded to 12 units, but the international office allows a one-time final-semester RCL (`international.sfsu.edu/rcl`). The Bulletin states only the 12-unit minimum | 2026-10-18 |
 | D22 | Work phases in order, but trial feedback can pull work forward, and an item waiting on a person or a real document stays open while later phases go on (TASKS.md header) | Trial 1 needed `build_plan` (Phase 4) to answer "when do I finish?"; Phase 2's `verified: true` needs a second person; Phase 6's CR/W/repeat sample and the DPR Notes legend need real documents. Phases 5 and 6 were done with those open | 2026-10-18 |
+| D23 | Requirements from the student's catalog year (`rules/<kind>/<year>/`, picked from `profile.catalog_year` or the DPR's requirement term); course facts from the newest Bulletin, older rows only for dropped courses | A Fall 2025 DPR (test user 1's): the 2025-26 BS CS needs C or better only in CSC 510 and CSC 648, not all of Math/Physics, Core and Advanced as 2026-27 does. Courses still to take run under the newest Bulletin (new courses such as CSC 603; COMM 301 is 2UD from 2026-27) | 2026-10-20 |
 
 ---
 

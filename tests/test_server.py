@@ -372,6 +372,7 @@ FRESH = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall
 SCENARIOS = {
     "new freshman, QR 1/2": FRESH | {"qr_pathway": "1/2"},
     "new freshman, QR 3/4, F-1": FRESH | {"qr_pathway": "3/4", "f1": True},
+    "Fall 2025 catalog, QR 3/4": FRESH | {"qr_pathway": "3/4", "catalog_year": "Fall 2025"},  # roadmap without PHYS 222
     "freshman with AP credit": FRESH | {"qr_pathway": "1/2", "first_time": True, "transfer_units": 8, "ge_done": ["USH", "2"]},
     "sophomore": yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"],
     "ADT transfer": FRESH | {"adt": True, "ge_certified": True, "first_time": False, "transfer_units": 60,
@@ -436,6 +437,35 @@ def test_every_kind_of_student_gets_a_checked_plan_and_ge_ways(name):
         for slot in {c["slot"] for c in s["courses"] if isinstance(c, dict) and c["slot"] != "elective"}:
             got = server.list_eligible_electives(p, slot, {"semesters": plan["semesters"]}, by_term=s["term"])
             assert "error" not in got, (slot, got.get("error"))
+
+
+def test_the_students_catalog_year_picks_the_rules():
+    # Catalog rights (p.2390): audited against the student's own year. Test user 1's DPR: Fall 2025 -> 2025-26 rules
+    year = lambda given: server.rules_year({"program": "bs-cs", "catalog_year": given})
+    assert year("Fall 2025") == year("Spring 2026") == year("2025-fall") == year("2025-26") == "2025-26"
+    assert year("Fall 2026") == "2026-27" and year("Spring 2025") == year(None) == server.YEAR  # no 2024-25 rules yet
+    assert server.YEAR == server.YEARS[-1]
+
+
+def test_a_2025_26_student_needs_c_only_in_csc_510_and_648():
+    # 2025-26 p.1905: "Grades of C or better are required for CSC 510 and CSC 648"; 2026-27 asks C in all Math/Physics
+    rows = [{"code": "PHYS 220", "grade": "C", "term": "2025-fall"}, {"code": "PHYS 222", "grade": "D", "term": "2025-fall"}]
+    audit = lambda year: server.audit_progress({"program": "bs-cs", "catalog_year": year, "completed": rows})
+    groups = lambda out: {g["id"]: g for g in out["groups"]}
+    old, new = audit("Fall 2025"), audit("2026-27")
+    assert "PHYS 222" in groups(old)["math_physics"]["counted"] and "PHYS 222" in groups(new)["math_physics"]["remaining"]
+    assert old["catalog_year"] == "2025-26" and any(w.startswith("Requirements are the 2025-26 Bulletin's") for w in old["warnings"])
+
+
+def test_a_completed_course_dropped_since_keeps_its_older_row(tmp_path, monkeypatch):
+    # D23: course facts are the newest Bulletin's, but a course taken before it was dropped still counts
+    db = tmp_path / "catalog.db"
+    write_catalog(db, "2026-27", ROWS)
+    gone = next(r for r in ROWS if r["code"] == "ECON 101") | {"code": "ETHS 100", "title": "Introduction to Ethnic Studies"}
+    write_catalog(db, "2025-26", [gone])
+    monkeypatch.setattr(server, "DB", db)
+    assert server.catalog_for({"completed": [{"code": "ETHS 100", "grade": "A"}]})["ETHS 100"]["title"] == gone["title"]
+    assert "ETHS 100" not in server.catalog_for({"completed": []})
 
 
 def test_qr_pathway_is_read_however_the_student_writes_it():
