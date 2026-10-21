@@ -448,6 +448,7 @@ max_units_per_term: 15
 current_term: 2026-fall            # set by the server from today's date (month boundaries), never by the client:
                                    # the in-progress courses fill it, so plans start after it (eval run 2026-10-18)
 include_summer: false
+include_winter: false              # Winter Session (2027-winter = January 2027): up to 4 units (p.1716)
 ```
 
 ---
@@ -636,7 +637,9 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
    - standing (`upper`/`senior`) is computed from cumulative units
 4. **Two plans, one kept:** the roadmap-led plan (steps 2 + 3) and the plain greedy (step 3 alone) are built at
    the same cap. The roadmap-led one is kept when it passes check_plan and has no more terms. With
-   `include_summer`, only the greedy runs: the roadmaps have no summer terms.
+   `include_summer`, only the greedy runs: the roadmaps have no summer terms. Winter Session terms (`include_winter`)
+   don't use a roadmap semester and take only GE, American Institutions and free-elective slots, up to the 4-unit
+   Winter Session maximum (p.1716): Class Search history has no winter terms, so major courses stay in spring/fall.
 5. **The cap stays the student's (D18):** `max_units_per_term`, default 15, the normal load (p.2393), even though
    the first-time roadmaps have 16- and 17-unit terms (qr-1-2: 16, 16; qr-3-4: 16, 16, 17, 16). A roadmap item that
    doesn't fit carries over, so the plan passes check_plan as given. When the student set no cap and the roadmap's

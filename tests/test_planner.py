@@ -413,3 +413,33 @@ def test_a_roadmap_without_qr_pathways_fits_every_first_time_student():
     one = {"variants": {"first-time": {"title": "First-Time Student Roadmap"}, "adt": {"title": "ADT"}}}
     assert pick_variant({}, one) == "first-time" and pick_variant({"adt": True}, one) == "adt"
     assert pick_variant({}, ROADMAP) is None and pick_variant({"qr_pathway": "3/4"}, ROADMAP) == "qr-3-4"
+
+
+def test_winter_session_sits_between_fall_and_spring():
+    # "Scheduled during the intersession between the Fall and Spring term"; "The maximum number of units a student may
+    # earn in Winter Session is 4 units" (2026-27 p.1716). 2027-winter is January 2027 (DPRs print "Winter 2027").
+    from gatorpath.engine.planner import next_term, term_key
+    assert term_key("2026-fall") < term_key("2027-winter") < term_key("2027-spring")
+    assert next_term("2026-fall", False, winter=True) == "2027-winter" and next_term("2027-winter", False) == "2027-spring"
+    assert next_term("2026-fall", False) == "2027-spring" and next_term("2027-spring", True, winter=True) == "2027-summer"
+    p = FRESHMAN | {"f1": True}
+    one = check(p, ("2027-winter", ["PSY 200"]), ("2027-spring", ["CSC 215", "MATH 227", "PHYS 220", "PHYS 222", "ENG 114"]))
+    assert errors(one) == [] and not any(w.startswith("2027-winter: 3 units is below") for w in one["warnings"])
+    over = check(FRESHMAN, ("2027-winter", ["CSC 215", "PSY 200"]))
+    [e] = errors(over, "over_max_units")
+    assert "4-unit Winter Session maximum" in e["message"] and "p.1716" in e["message"]
+
+
+def test_build_plan_uses_winter_terms_only_when_asked_and_only_for_ge_and_electives():
+    from gatorpath.engine.planner import build_plan
+    plain = build_plan(FRESHMAN, PROGRAM, UNIVERSITY, ROADMAP, CATALOG, PREREQS)
+    assert not any(s["term"].endswith("winter") for s in plain["semesters"])
+    got = build_plan(FRESHMAN | {"include_winter": True}, PROGRAM, UNIVERSITY, ROADMAP, CATALOG, PREREQS)
+    winters = [s for s in got["semesters"] if s["term"].endswith("winter")]
+    assert winters and got["check"]["valid"]
+    # Test user 1 asked about Winter 2027 while in Fall 2026: winter is the first term after the one underway
+    from gatorpath.engine.planner import first_term
+    now = {"completed": [], "current_term": "2026-fall", "in_progress": ["CSC 101"], "include_winter": True}
+    assert first_term(FRESHMAN | now) == "2027-winter" and first_term(FRESHMAN | now | {"include_winter": False}) == "2027-spring"
+    for s in winters:  # Class Search has no Winter Session history: no required major course is put there
+        assert s["units"] <= 4 and all(isinstance(c, dict) for c in s["courses"])

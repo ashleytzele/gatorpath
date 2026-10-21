@@ -113,7 +113,10 @@ f1_final_term:
 # notice/probation can enroll in a maximum of 13 units per semester while their GPA is below 2.0 ... On rare occasions,
 # individual exceptions to this unit limit may be granted with approval from an advisor in the Undergraduate Advising
 # Center" (p.2339).
+# Winter Session: "Scheduled during the intersession between the Fall and Spring term ... Winter Session courses earn
+# residence credit ... The maximum number of units a student may earn in Winter Session is 4 units." (p.1765)
 max_units: {fall_spring: 19, summer: 14, summer_sessions: {five_week: 7, eight_week: 9, ten_week: 12},
+            winter_session: {units: 4, residence_credit: true, source: "p.1765"},
             includes_waitlisted: {fall_spring: 12, summer: 5},
             academic_notice: {units: 13, applies_from: "the student's second semester on academic probation",
                               while_gpa_below: 2.0, exception: "Undergraduate Advising Center advisor approval"},

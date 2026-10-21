@@ -371,8 +371,12 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     first-time student (ge_combinations, list_eligible_electives) follow `first_time_from` like the audit (an
     upper-division USH course was offered, then failed check_plan); GE Area 4 in ge_done alone no longer meets US
     History; a course retaken now drops its old grade for prereqs (build_plan blocked everything after it); a DPR page
-    break's print header and "One course is required." are no longer requirement titles. Open: Winter Session terms
-    (between fall and spring, at most 4 units, residence credit; not in the 24-unit extension cap)
+    break's print header and "One course is required." are no longer requirement titles.
+  - Winter Session terms (2026-10-21): `YYYY-winter` (January, between fall and spring; "The maximum number of units a
+    student may earn in Winter Session is 4 units", each year's Bulletin), checked by check_plan with no F-1 minimum or
+    normal-load rule; `include_winter` lets build_plan use them for GE, American Institutions and free-elective slots
+    only (no winter offering history). With it, 6 of 17 scenarios finish a term sooner; a student 19 units short of
+    a spring graduation gets one GE course into Winter. Summer stays opt-in (`include_summer`), as before
 - [ ] Write the resume bullet with real numbers
 
 **Done when:** the public repo has a demo, an eval table, and real user feedback.

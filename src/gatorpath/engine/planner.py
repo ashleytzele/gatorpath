@@ -15,8 +15,10 @@ import re
 from gatorpath.engine.prereq import leaves, prereq_warnings, reverse_index
 from gatorpath.engine.rules import GRADE_POINTS, audit, blocks_repeat, number, rank
 
-SEASONS = {"spring": 0, "summer": 1, "fall": 2}
-TERM = re.compile(r"(\d{4})-(spring|summer|fall)")
+# Winter Session runs "during the intersession between the Fall and Spring term" (2026-27 p.1716): 2027-winter is
+# January 2027, after 2026-fall and before 2027-spring.
+SEASONS = {"winter": 0, "spring": 1, "summer": 2, "fall": 3}
+TERM = re.compile(r"(\d{4})-(winter|spring|summer|fall)")
 ASSUMED = "A"  # stand-in grade for planned courses when simulating the audit; statuses only, never a GPA
 OK, NO, UNVERIFIED = "ok", "no", "unverified"
 UNVERIFIABLE = {"permission", "equivalent", "requirement", "high_school", "unknown"}
@@ -35,10 +37,12 @@ def season_ok(c: str, term: str, catalog: dict, seasons=tuple(SEASONS)) -> tuple
     if not o:
         return True, None
     season, span = term[5:], f"Class Search {o['since']} to {o['until']}"
+    if season not in o:  # Winter Session isn't in the offering history
+        return True, f"{c}: Class Search history doesn't cover {season} terms; check that term's schedule"
     if not o["last"]:
         return True, f"{c}: not offered in any term checked ({span}); ask the department when it runs"
-    ran = [f"{s} {o[s][0]} of {o[s][1]}" for s in SEASONS if o[s][0]]
-    if o[season][1] and not o[season][0] and any(o[s][0] for s in seasons if s != season):
+    ran = [f"{s} {o[s][0]} of {o[s][1]}" for s in SEASONS if s in o and o[s][0]]
+    if o[season][1] and not o[season][0] and any(o[s][0] for s in seasons if s != season and s in o):
         return False, (f"{c} in {term}: not offered in any of the last {o[season][1]} {season} terms (ran {', '.join(ran)}; "
                        f"{span}); check Class Search")
     y, s = term_key(o["until"])
@@ -248,7 +252,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     for sem in plan.get("semesters", []):
         term = str(sem.get("term", ""))
         if not TERM.fullmatch(term):
-            err("bad_term", f"{term!r} is not a term like 2027-fall")
+            err("bad_term", f"{term!r} is not a term like 2027-fall (or 2027-winter for Winter Session)")
             continue
         if seen_terms and term_key(term) <= term_key(seen_terms[-1]):
             err("term_order", f"{term} comes after {seen_terms[-1]} in the plan; list terms in order, once each", term=term)
@@ -326,11 +330,16 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         if ctx.get("gpa_used") and "gpa" not in profile:
             warnings.append(f"GPA-gated prereqs were checked with your SF State GPA ({gpa}); pass `gpa` if your overall GPA differs")
 
-        summer = term.endswith("summer")
+        summer, winter = term.endswith("summer"), term.endswith("winter")
+        regular = not (summer or winter)  # spring or fall: the F-1 minimum and the normal load apply
+        ws = most.get("winter_session", {})
         if term_units > cap:
             err("over_cap", f"{term}: {term_units:g} units is over max_units_per_term ({cap:g})", term=term)
+        if winter and term_units > ws.get("units", 0):
+            err("over_max_units", f"{term}: {term_units:g} units is over the {ws.get('units', 0):g}-unit Winter Session maximum "
+                f"({ws.get('source', 'no Winter Session in this Bulletin')})", term=term)
         ceiling = most["summer" if summer else "fall_spring"]
-        if term_units > ceiling:
+        if not winter and term_units > ceiling:
             why = (f"{term}: {term_units:g} units is over the {ceiling:g}-unit {'summer ' if summer else ''}maximum; more "
                    f"needs a cumulative SF State GPA of {most['above_needs_sf_state_gpa']:g} or better and an Exceed Maximum "
                    f"Units Petition signed by your major advisor, department chair and college dean ({most['source']})")
@@ -341,7 +350,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             else:
                 warnings.append(why)
                 advise.append(("major_advisor", why))
-        if not summer and term_units < f1_min:
+        if regular and term_units < f1_min:
             why = (f"{term}: {term_units:g} units; F-1 visa students must carry at least {f1_min:g} units every spring "
                    f"and fall ({load['source']})")
             if term == last_term and rcl:
@@ -356,12 +365,12 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                 advise.append(("international", why + "; ask whether a lighter final term is allowed"))
             else:
                 err("below_f1_minimum", why, term=term)
-        elif not summer and 0 < term_units < load["normal_min"]:
+        elif regular and 0 < term_units < load["normal_min"]:
             warnings.append(f"{term}: {term_units:g} units is below the normal {load['normal_min']:g}-{load['normal_max']:g} "
                             f"load, so it's part-time; F-1 visa students need at least {load['f1_min']['undergraduate']:g} "
                             f"in spring and fall, and it can matter for financial aid ({load['source']})")
         online = [c for c in codes if c in catalog and term[5:] in (catalog[c].get("offered") or {}).get("online_only", ())]
-        if f1_min and rcl and online and not summer and term != last_term:  # the last term has the Reduced Course Load
+        if f1_min and rcl and online and regular and term != last_term:  # the last term has the Reduced Course Load
             counted = term_units - max(0, sum(catalog[c]["units_min"] for c in online) - rcl["online_units_count"])
             if counted < f1_min <= term_units:
                 warnings.append(f"{term}: {', '.join(online)} ran only fully online the last time they ran in {term[5:]}; "
@@ -369,13 +378,15 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                                 f"counts as {counted:g} of the {f1_min:g} if they stay online. Look for in-person or "
                                 f"hybrid sections in Class Search, or swap one ({rcl['source']})")
         normal = load["summer_normal" if summer else "normal_max"]
-        if term_units > normal:
+        if not winter and term_units > normal:
             warnings.append(f"{term}: {term_units:g} units is above the normal load of {normal:g} ({load['source']}); "
                             "see an advisor before planning an overload")
             advise.append(("major_advisor", f"{term}: {term_units:g} units is above the normal load of {normal:g} "
                            f"({load['source']})"))
         if summer and not profile.get("include_summer", False):
             warnings.append(f"{term}: summer term planned but include_summer is false")
+        if winter and not profile.get("include_winter", False):
+            warnings.append(f"{term}: Winter Session term planned but include_winter is false")
         terms_out.append({"term": term, "units": term_units, "units_before": units})
         planned += [{"code": c, "grade": ASSUMED, "term": term} for c in codes if c in catalog]
         done = done | {c for c in codes if c in catalog}
@@ -455,14 +466,16 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             "terms": terms_out, "remaining": remaining}
 
 
-def next_term(term: str, summer: bool) -> str:
-    y, s = term_key(term)
-    order = ["spring", "summer", "fall"] if summer else ["spring", "fall"]
-    season = list(SEASONS)[s]
-    if season not in order:  # a summer start when summers are off
-        season = "spring"
-    i = order.index(season) + 1
-    return f"{y + i // len(order)}-{order[i % len(order)]}"
+def next_term(term: str, summer: bool, winter: bool = False) -> str:
+    """The next planned term: spring and fall always, summer and Winter Session only when they're planned."""
+    y, i = term_key(term)
+    seasons = list(SEASONS)
+    while True:
+        i += 1
+        if i == len(seasons):
+            y, i = y + 1, 0
+        if seasons[i] in ("spring", "fall") or (seasons[i] == "summer" and summer) or (seasons[i] == "winter" and winter):
+            return f"{y}-{seasons[i]}"
 
 
 def pick_variant(profile: dict, roadmap: dict) -> str | None:
@@ -476,7 +489,8 @@ def pick_variant(profile: dict, roadmap: dict) -> str | None:
 
 def first_term(profile: dict) -> str | None:
     now = profile.get("current_term")  # set by the server from today's date
-    after = next_term(now, False) if profile.get("in_progress") and TERM.fullmatch(str(now or "")) else None
+    after = (next_term(now, False, profile.get("include_winter", False))  # Winter Session can follow the fall underway
+             if profile.get("in_progress") and TERM.fullmatch(str(now or "")) else None)
     later = lambda t: after if after and t and TERM.fullmatch(str(t)) and term_key(t) < term_key(after) else t
     if profile.get("start_term"):  # the in-progress courses fill the current term: never plan on top of them
         return later(profile["start_term"])
@@ -486,15 +500,15 @@ def first_term(profile: dict) -> str | None:
     last = max(terms, key=term_key)
     if profile.get("in_progress"):  # this term's courses: the next spring/fall, not a summer the student may not plan
         last = next_term(last, False)  # ponytail: in progress in a summer term needs start_term
-    return later(next_term(last, profile.get("include_summer", False)))
+    return later(next_term(last, profile.get("include_summer", False), profile.get("include_winter", False)))
 
 
-def terms_through(start: str, end: str, summer: bool) -> int:
-    """How many terms from start to end, inclusive (summers only when they're planned)."""
+def terms_through(start: str, end: str, summer: bool, winter: bool = False) -> int:
+    """How many terms from start to end, inclusive (summers and winters only when they're planned)."""
     n, t = 0, start
     while term_key(t) <= term_key(end) and n < 40:
         n += 1
-        t = next_term(t, summer)
+        t = next_term(t, summer, winter)
     return n
 
 
@@ -506,8 +520,9 @@ def chunks(units: float, size: float = 3) -> list[float]:
 def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, catalog: dict, prereqs: dict) -> dict:
     """Deterministic baseline plan (ARCHITECTURE §8): roadmap semester first, then required courses by critical path,
     then slots. Passes check_plan."""
-    summer = profile.get("include_summer", False)
+    summer, winter = profile.get("include_summer", False), profile.get("include_winter", False)
     seasons = ("spring", "summer", "fall") if summer else ("spring", "fall")  # a course waits only for these
+    winter_max = university["max_units"].get("winter_session", {}).get("units", 0)
     load, levels = university["academic_load"], university["class_level"]
     cap = profile.get("max_units_per_term", load["normal_max"])
     start = first_term(profile)
@@ -670,10 +685,13 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         for _ in range(20):
             if not left and not slots:
                 break
-            if term.endswith("summer") and not summer:
-                term = next_term(term, summer)
+            if term.endswith("summer") and not summer or term.endswith("winter") and not winter:
+                term = next_term(term, summer, winter)
                 continue
-            limit = min(cap, load["summer_normal"]) if term.endswith("summer") else cap
+            # ponytail: a Winter Session term takes only GE, American Institutions and free-elective slots: Class Search
+            # history has no winter terms, so which major courses run then is unknown. Upgrade: scrape the winter schedule.
+            in_winter = term.endswith("winter")
+            limit = min(cap, load["summer_normal"]) if term.endswith("summer") else min(cap, winter_max) if in_winter else cap
             placed: list[str] = []
             term_slots: list[dict] = []
             used = 0.0
@@ -707,9 +725,12 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                             or (x["_kind"] == "elective" and x.get("upper_division") and units < levels["upper"]))
 
             # Roadmap semester first (skipping semesters with nothing left); what can't go now carries over.
-            while queue and not any((i in left) if isinstance(i, str) else take(i, slots) for i in queue[0]):
+            while not in_winter and queue and not any((i in left) if isinstance(i, str) else take(i, slots) for i in queue[0]):
                 queue.pop(0)
-            pins, carry = carry + (queue.pop(0) if queue else []), []
+            if in_winter:  # roadmap semesters are fall/spring: what carries over waits for the next one
+                pins = []
+            else:
+                pins, carry = carry + (queue.pop(0) if queue else []), []
             for item in pins:
                 if isinstance(item, str):
                     if item not in left or item in placed:
@@ -737,7 +758,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             for c in placed:
                 first_ok.setdefault(c, term)
 
-            changed = True
+            changed = not in_winter
             while changed:
                 changed = False
                 for c in [c for c in left if c not in placed]:
@@ -753,7 +774,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                         changed = True
                         break
             left = [c for c in left if c not in placed]
-            for kind in ("ge", "ud_ge", "major", "elective"):  # designation tags wait: a roadmap item or the last term
+            for kind in ("ge", "ud_ge", "elective") if in_winter else ("ge", "ud_ge", "major", "elective"):  # tags wait
                 for x in [x for x in slots if x["_kind"] == kind]:
                     if allowed(x) and used + x["units"] <= limit:
                         term_slots.append(x)
@@ -767,7 +788,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                         used += part["units"]
             # F-1 (pp.2390, 2393): a spring/fall term with more to come is filled toward the minimum with elective slots
             # that fit (free units split); check_plan flags what still falls short.
-            f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") and not term.endswith("summer") else 0
+            f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") and term[5:] in ("spring", "fall") else 0
             if used < f1_min and (left or slots):
                 for x in [x for x in slots if x["_kind"] in ("major", "elective")]:
                     if units >= levels["upper"] or not (x["_kind"] == "major" or x.get("upper_division")):
@@ -781,10 +802,14 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                                 x["units"] -= part["units"]
                                 term_slots.append(part)
                                 used += part["units"]
+            if in_winter and not placed and not any(x["units"] for x in term_slots):  # nothing for winter: skip it
+                slots += term_slots
+                term = next_term(term, summer, winter)
+                continue
             off_season = [c for c in left if not season_ok(c, term, catalog, seasons)[0]]
             if not placed and not any(x["units"] for x in term_slots) and off_season:
                 notes.append(f"{term}: nothing left runs in {term[5:]}; {', '.join(off_season)} wait for a term they run in")
-                term = next_term(term, summer)
+                term = next_term(term, summer, winter)
                 continue
             if not placed and not any(x["units"] for x in term_slots):
                 blocked = {c: evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[1] for c in left}
@@ -808,7 +833,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 grades.pop(c, None)
             slot_areas = slot_areas | {a for x in term_slots for a in slot_ge_areas(x, groups)}
             units += used
-            term = next_term(term, summer)
+            term = next_term(term, summer, winter)
         return semesters, first_ok, notes
 
     # Build both and keep the roadmap-led plan unless the plain greedy finishes sooner. Both use the same cap (the
@@ -878,14 +903,15 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
 
     plan_units = sum(s["units"] for s in semesters)
     critical = min(todo, key=rank_of) if todo else None
-    pace = {"terms": len(semesters), "units_per_term": cap, "include_summer": summer, "planned_units": plan_units,
+    pace = {"terms": len(semesters), "units_per_term": cap, "include_summer": summer, "include_winter": winter,
+            "planned_units": plan_units,
             **({"roadmap_load": road_pace} if road_pace else {}),
             "min_terms_by_prereqs": depth[critical] if critical else 0,
             "longest_chain": longest(critical) if critical else [],
             "min_terms_by_units": math.ceil(plan_units / cap) if cap else 0}
     target = profile.get("graduate_by")
     if target and TERM.fullmatch(str(target)) and semesters:
-        available = terms_through(start, target, summer)
+        available = terms_through(start, target, summer, winter)
         pace |= {"graduate_by": target, "terms_available": available,
                  "on_time": check["valid"] and term_key(semesters[-1]["term"]) <= term_key(target)}
         if not pace["on_time"]:
@@ -902,7 +928,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 held = [c if isinstance(c, str) else c["slot"] for c in last["courses"] if isinstance(c, str) or c["units"]]
                 why_not.append(f"the plan needs {len(semesters)} terms; the last ({last['term']}) holds {', '.join(held)}. "
                                "Senior electives wait for upper-division standing and an option that's ready (its "
-                               f"prereqs), and upper-division GE for {levels['upper']} units" + ("" if summer else "; try include_summer"))
+                               f"prereqs), and upper-division GE for {levels['upper']} units" + ("" if summer and winter else "; try include_summer or include_winter"))
             pace["why_not"] = why_not
     return {"catalog_year": program["catalog_year"], "variant": variant, **plan,
             "est_graduation_term": semesters[-1]["term"] if semesters and check["valid"] else None, "pace": pace,

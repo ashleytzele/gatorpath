@@ -81,7 +81,8 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
   network inside `engine/`.
 - Tool responses always include `catalog_year`, plus `warnings: []` where rules apply.
 - Course codes are normalized as `SUBJ NNN[SUFFIX]`, e.g. `CSC 300GW`, `MATH 226`.
-- Terms are written as `YYYY-fall` / `YYYY-spring` / `YYYY-summer`.
+- Terms are written as `YYYY-fall` / `YYYY-spring` / `YYYY-summer` / `YYYY-winter` (Winter Session, January:
+  `2027-winter` comes after `2026-fall`).
 - Tests: `pytest`, one test file per module. Prefer real Bulletin strings in parser tests.
 - Shortcuts with a known ceiling get a `# ponytail:` comment that names the upgrade path.
 
