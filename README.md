@@ -57,18 +57,21 @@ them may answer from web search, and nothing checks that plan.
 
 ## Evals
 
-39 questions (`evals/questions.yaml`) on synthetic students, run through Claude Code and Codex CLI with only the
-gatorpath server attached (run 2026-10-18, full report in [`evals/REPORT.md`](evals/REPORT.md)):
+44 questions (`evals/questions.yaml`) on synthetic students across the three catalog years, Winter Session included,
+run through Claude Code and Codex CLI with only the gatorpath server attached (run 2026-10-21, full report in
+[`evals/REPORT.md`](evals/REPORT.md)):
 
 | Metric | Claude Code | Codex CLI |
 |---|---|---|
-| Questions fully passed | 38/39 | 37/39 |
-| Plans passing check_plan | 13/13 | 13/13 |
-| Electives fit the goal | 11/12 | 10/12 |
+| Questions fully passed | 43/44 | 43/44 |
+| Plans passing check_plan | 15/15 | 14/15 |
+| Electives fit the goal | 13/14 | 13/14 |
 | Hallucinated course codes | 0 | 0 |
-| Used only the gatorpath tools | 39/39 | 39/39 |
+| Used only the gatorpath tools | 44/44 | 44/44 |
 
-All three misses are goal fit: electives that matched fewer of the goal's keywords.
+Claude's miss is goal fit (it passed over web electives that need a 3.0 GPA and named them as backups). Codex's
+stopped to ask a transfer student for their DPR; the prompt now plans from the units and certification given, and a
+rerun of that question passes on both.
 
 ## Limitations
 

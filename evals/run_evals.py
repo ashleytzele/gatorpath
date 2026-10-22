@@ -34,15 +34,22 @@ from gatorpath.engine.rules import first_time, matches  # noqa: E402
 YEAR = server.YEAR
 CATALOG = db.load_catalog(server.DB, YEAR)
 PROGRAM, UNIVERSITY = server.load_rules(YEAR, "bs-cs")
-REQUIRED = {c for g in PROGRAM["groups"] for c in g.get("all_of", [])}
-SENIOR = next(g for g in PROGRAM["groups"] if g["id"] == "senior_electives")
+
+
+def major(profile: dict | None) -> tuple[set[str], dict]:
+    """The required courses and senior-electives group of the student's rules year (the newest with no profile)."""
+    program = server.load_rules(server.rules_year(profile), "bs-cs")[0] if profile else PROGRAM
+    return {c for g in program["groups"] for c in g.get("all_of", [])}, next(g for g in program["groups"] if g["id"] == "senior_electives")
+
+
+REQUIRED, SENIOR = major(None)
 SUBJECTS = sorted({c.rsplit(" ", 1)[0] for c in CATALOG}, key=len, reverse=True)
 CODE = re.compile(r"\b(" + "|".join(map(re.escape, SUBJECTS)) + r") ?(\d{3}[A-Z]{0,3})\b(?!-?level|\+|s\b)")
 MORE = re.compile(r"(?:\s*\([^()]{0,40}\))?\s*(?:,\s*(?:and |or )?|and |or |/|&\s*)(\d{3}[A-Z]{0,3})\b(?!\s*units?\b|-?level|\+)")  # "CSC 230, 256 and 340"
 NOW = ("2026-fall", "Fall 2026")  # ponytail: the eval's "today"; move it when the profiles' terms are shifted again
-LOAD_KEYS = ("max_units_per_term", "include_summer")
+LOAD_KEYS = ("max_units_per_term", "include_summer", "include_winter")
 RECORD = ("program", "qr_pathway", "f1", "adt", "ge_certified", "prior_bachelors", "transfer_units")
-PREFS = ("include_summer", "max_units_per_term", "graduate_by")  # checked on build_plan, where they matter
+PREFS = ("include_summer", "include_winter", "max_units_per_term", "graduate_by")  # checked on build_plan, where they matter
 GRADE_WORDS = {"I": "I (incomplete)", "W": "W (withdrew)", "WU": "WU (unauthorized withdrawal)", "IC": "IC (incomplete charged)",
                "RD": "RD (report delayed)", "RP": "RP (report in progress)", "AU": "AU (audit)"}
 WORK = Path(tempfile.gettempdir()) / "gatorpath-evals"  # client cwd + Codex home, outside the repo
@@ -261,7 +268,7 @@ def fact(kind: str, arg, profile: dict | None) -> list[list[str]]:
         if courses:
             return courses
         short = [v for v in audit["totals"].values() if isinstance(v, dict) and not v.get("ok") and "needed" in v]
-        return ([[g["title"].split()[0]] for g in major]
+        return ([[g["title"].split()[0].rstrip("s")] for g in major]  # "Electives" also read as "senior elective"
                 + [[f"{v['needed']:g}", f"{v['needed'] - v['value']:g}"] for v in short])
     if kind == "unlocks_of":
         return [[c] for c in server.get_course(arg)["unlocks"] if c in REQUIRED]
@@ -275,12 +282,21 @@ def fact(kind: str, arg, profile: dict | None) -> list[list[str]]:
     raise ValueError(kind)
 
 
+def cleaned(x: dict) -> dict:
+    """The profile as the tools read it: codes normalized, GE areas translated, catalog_year as the rules year used."""
+    x = x | {"program": x.get("program", "bs-cs")}
+    year = server.rules_year(x)
+    return server.prepare(x, server.load_rules(year, "bs-cs")[1], year)[0]
+
+
 def profile_diff(expected: dict, got: dict, keys: tuple = RECORD) -> list[str]:
-    expected, got = (server.prepare(x | {"program": x.get("program", "bs-cs")}, UNIVERSITY)[0] for x in (expected, got))
+    expected, got = cleaned(expected), cleaned(got)
     norm = lambda rows: {(r["code"], "T" if r.get("transfer") else str(r.get("grade", "")).strip().upper()) for r in rows}
     diffs = []
     if keys != RECORD:
         return [f"{k}: {got.get(k)!r} vs {expected[k]!r}" for k in keys if k in expected and got.get(k) != expected[k]]
+    if got["catalog_year"] != expected["catalog_year"]:  # left out or wrong: another year's requirements
+        diffs.append(f"catalog_year: rules {got['catalog_year']} vs {expected['catalog_year']}")
     want, have = norm(expected.get("completed", [])), norm(got.get("completed", []))
     if want != have:
         diffs.append(f"completed: missing {sorted(want - have)}, extra {sorted(have - want)}")
@@ -378,13 +394,16 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
             why["plan_errors"] = [e["message"] for e in result["errors"]][:5]
         if last and (sems := last["plan"].get("semesters")):
             why["graduates"] = sems[-1].get("term")
-    if expect.get("summer_tried"):  # a pace run with summers, or a checked plan with a summer term
-        s["summer_tried"] = any(c["tool"] == "build_plan" and c["args"].get("profile", {}).get("include_summer") for c in calls) \
-            or bool(last) and any(str(x.get("term", "")).endswith("summer") for x in last["plan"].get("semesters", []))
+    for season in ("summer", "winter"):  # a pace run with that season (an earlier turn's counts), or a checked plan with such a term
+        if expect.get(f"{season}_tried"):
+            s[f"{season}_tried"] = any(c["tool"] == "build_plan" and c["args"].get("profile", {}).get(f"include_{season}")
+                                       for c in every) \
+                or bool(last) and any(str(x.get("term", "")).endswith(season) for x in last["plan"].get("semesters", []))
     if expect.get("goal_fit") and goal:
         plan = last["plan"] if last else {}
-        filters = SENIOR["from"] if isinstance(SENIOR["from"], list) else [SENIOR["from"]]
-        picks = [c for c in plan_codes(plan) if c in CATALOG and c not in REQUIRED
+        required, senior = major(profile)
+        filters = senior["from"] if isinstance(senior["from"], list) else [senior["from"]]
+        picks = [c for c in plan_codes(plan) if c in CATALOG and c not in required
                  and any(matches(f, c, CATALOG[c]) for f in filters)]
         desc = db.descriptions(server.DB, YEAR, picks)
         hits = [c for c in picks if any(k in f"{CATALOG[c]['title']} {desc.get(c) or ''}".lower() for k in goals[goal])]

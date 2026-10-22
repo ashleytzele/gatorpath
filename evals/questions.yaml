@@ -9,7 +9,8 @@
 #   tools: tools that must be called · mention: prereqs_of / remaining / unlocks_of / seasons_of / close_match_of /
 #   areas_of (a computed fact the answer must state) · mention_any: wording one of which must appear · plan_valid: the
 #   last check_plan input re-checked here · goal_fit: picked senior electives match the goal keywords · pace_compared:
-#   build_plan at two or more loads · summer_tried: build_plan with summers, or a checked plan with a summer term
+#   build_plan at two or more loads · summer_tried / winter_tried: build_plan with summers (Winter Session), or a
+#   checked plan with such a term
 # followup: a second turn in the same session, with its own expect.
 
 # Goal-fit rubric: words in a course's Bulletin title or description. A rubric, not an academic rule.
@@ -50,6 +51,11 @@ questions:
   - {id: left-p08, profile: p08, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
   - {id: left-p09, profile: p09, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
   - {id: left-p10, profile: p10, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  # Older catalog years: the student's own year's rules (2024-25: the old GE pattern and the 3/12/25 waivers)
+  - {id: left-2025, profile: "scenario: Fall 2025 sophomore", ask: "What's left for my degree?",
+     expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-2024, profile: "scenario: Fall 2024 junior (old GE)", ask: "What's left for my degree?",
+     expect: {tools: [audit_progress], mention: {remaining: true}}}
 
   # Plans: the plan_my_degree prompt, a goal, everything the prompt would ask for given up front
   - {id: plan-p01, profile: p01, prompt: true, goal: artificial intelligence, ask: "Plan the rest of my degree.",
@@ -84,6 +90,11 @@ questions:
   - {id: plan-fast, profile: "scenario: fast, with summers", prompt: true, goal: artificial intelligence,
      ask: "I want to finish as fast as I can. Plan my degree.", expect: {plan_valid: true, goal_fit: true}}
   - {id: plan-p10, profile: p10, prompt: true, ask: "Plan my last semester.", expect: {plan_valid: true}}
+  - {id: plan-2025, profile: "scenario: Fall 2025 sophomore", prompt: true, goal: data science,
+     ask: "Plan the rest of my degree.", expect: {plan_valid: true, goal_fit: true},
+     followup: {ask: "What if I take Winter Session classes too?", expect: {winter_tried: true}}}
+  - {id: plan-2024, profile: "scenario: Fall 2024 junior (old GE)", prompt: true, goal: cybersecurity,
+     ask: "Plan the rest of my degree.", expect: {plan_valid: true, goal_fit: true}}
 
   # Honesty: what the tools can't answer, or shouldn't be guessed
   - {id: transfer-guess, profile: {program: bs-cs, catalog_year: 2026-27, transfer_units: 46, first_time: false},
@@ -93,5 +104,8 @@ questions:
   - {id: opt, profile: "scenario: new freshman, QR 3/4, F-1",
      ask: "Can I work on OPT after I graduate, and for how long?", expect: {mention_any: [international, International]}}
   - {id: fake-course, ask: "Is CSC 999 a good senior elective for the SF State BS CS?", expect: {mention_any: ["not in", "isn't in", "doesn't exist",
-     "does not exist", "no CSC 999", "not a", "isn't a", "no such"]}}
+     "does not exist", "no CSC 999", "not a", "isn't a", "no such", "isn't listed", "not listed", "couldn't find",
+     "no course with"]}}
+  - {id: winter-ge, profile: "scenario: Fall 2025 sophomore", ask: "Can I take one of my GE classes in Winter Session?",
+     expect: {mention_any: ["4 units", "four units"]}}
   - {id: cr-major, ask: "Can I take MATH 226 CR/NC and still count it for the SF State CS major?", expect: {mention_any: ["1905"]}}

@@ -359,6 +359,20 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     comes through its `apps` feature (not `web_search`); usage limits return as an answer (Claude) or an error event
     (Codex), so `--retry` reruns them. Scorer bugs fixed with tests: shorthand code lists, the plan the answer presents
     (not the last check_plan), course levels ("700-level") read as codes
+  - Run 2026-10-21 (`data/evals/20261021-192336`), 44 questions: the three catalog years (a Fall 2025 sophomore, a Fall
+    2024 junior on the old GE pattern, both `scenario:` students in tests/test_server.py) and Winter Session (a plan's
+    what-if, "Can I take one of my GE classes in Winter Session?"). Claude 43/44, Codex 43/44; plans passing check_plan
+    15/15 and 14/15; 0 unknown course codes; the profile each client passed matched the student every time, catalog
+    year included (the scorer now checks it, and scores goal fit on the student's own year's elective list). All six
+    new questions pass on both. Left: Claude's web-development retake plan skips CSC 667 / 675, which need a 3.0 GPA
+    (the student has 2.545), and names them as backups (keyword rubric; kept as a fail); Codex stopped to ask a Cal-GETC
+    transfer student for a DPR though they gave units, certification and "no major courses" (the prompt's "gives their
+    courses" now covers transfer units and a GE certification; rerun `data/evals/20261021-195915` passes on both).
+    Scorer fixes: honesty wording ("isn't listed", "couldn't find"), "senior elective" for the Electives group, and a
+    summer what-if answered from the first turn's build_plan run
+  - Graduation terms differ on 2 of 15 plans. Fall 2025 sophomore: at 15 units build_plan ends with a 1-unit term;
+    Claude offered one 16-unit term instead (a term sooner, with an advisor's OK), Codex kept the extra term. p03:
+    Codex's own plan runs a term past build_plan's
 - [ ] README: problem, demo GIF/video (2 min), setup in 3 commands, eval table, limitations
   - 2026-10-19: problem, setup in 3 commands (from the zip), eval table and limitations written. Waits on the
     demo GIF/video, recorded by a person
@@ -415,9 +429,10 @@ Robots detect and rebuild; a human approves rule changes; students re-import the
     Area E and the third Area C course ("Min Units Changed from 48 to 42", DPR wording). One first-time roadmap (no
     QR split). No `transfer` block (the Bulletin doesn't say what a certification meets), no 90-unit transfer cap,
     no GWAR grade minimum (not stated); a CSLG exam exists only this year. Confirm the memo on a second DPR
-  - Next up (2026-10-21): (1) a second Spring 2025 DPR shows the 3/12/25 Area E/C waiver -> verify the 2024-25 files;
-    (2) the 2026-27 rules still need their sign-off (verified: false); (3) re-run the evals on the three catalog years
-    and winter terms; (4) more classmates (Phase 7: 5-10, top 3 issues)
+  - Next up (2026-10-22): (1) a second Spring 2025 DPR shows the 3/12/25 Area E/C waiver -> verify the 2024-25 files;
+    (2) the 2026-27 rules still need their sign-off (verified: false); (3) build_plan's 1-unit last term (eval run
+    2026-10-21, Phase 7): say when one term over 15 units finishes a term sooner; (4) more classmates (Phase 7: 5-10,
+    top 3 issues). Evals on the three catalog years and Winter Session: done 2026-10-21 (Phase 7)
 - [ ] Source snapshots: `rules/programs/<year>/<program>.source.txt` holds the Bulletin text each
   group was written from
 - [ ] Bulletin diff: new Bulletin vs snapshots → unchanged groups copied to the new year (new page
@@ -432,8 +447,8 @@ Robots detect and rebuild; a human approves rule changes; students re-import the
   PR. Never merges itself, never edits rule logic
 - [ ] Per-term GitHub Action: offerings scrape (phase 5), once per term, cached
 - [ ] Attach the rebuilt `catalog.db` to a GitHub release; README says how to download it
-- [ ] `amendments` rule type in `engine/rules.py` + tests; first use: the 3/12/25 Area C/E waivers
-  in the 2024-25 rules (needs the memo or its DPR wording as the source)
+- [x] `amendments` rule type in `engine/rules.py` + tests; first use: the 3/12/25 Area C/E waivers
+  in the 2024-25 rules (needs the memo or its DPR wording as the source). Done 2026-10-21 with the 2024-25 rules
 - [ ] DPR cross-check ⚠️ links a GitHub issue template: program, catalog year, requirement, what
   the DPR says. No grades, names or IDs
 

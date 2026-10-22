@@ -378,6 +378,19 @@ SCENARIOS = {
     "new freshman, QR 3/4, F-1": FRESH | {"qr_pathway": "3/4", "f1": True},
     "Fall 2025 catalog, QR 3/4": FRESH | {"qr_pathway": "3/4", "catalog_year": "Fall 2025"},  # roadmap without PHYS 222
     "Fall 2024 catalog (old GE)": FRESH | {"catalog_year": "Fall 2024"},  # one roadmap, no QR pathway; Area E waived
+    # Mid-degree students on the older catalogs (they began then), for the evals: courses as their roadmaps lay them out
+    "Fall 2025 sophomore": {"program": "bs-cs", "catalog_year": "Fall 2025", "qr_pathway": "1/2", "completed": [
+        {"code": c, "grade": "B", "term": t} for t, cs in {
+            "2025-fall": ["CSC 101", "MATH 226", "ENG 114", "COMM 150", "AA S 210"],
+            "2026-spring": ["CSC 215", "MATH 227", "PHYS 220", "PHYS 222", "PHIL 110"]}.items() for c in cs],
+        "in_progress": ["CSC 220", "CSC 230", "PHYS 230", "PHYS 232", "ARTH 201"]},
+    "Fall 2024 junior (old GE)": {"program": "bs-cs", "catalog_year": "Fall 2024", "completed": [
+        {"code": c, "grade": "B", "term": t} for t, cs in {
+            "2024-fall": ["CSC 101", "MATH 226", "ENG 114", "COMM 150", "PHIL 110"],
+            "2025-spring": ["CSC 215", "MATH 227", "PHYS 220", "PHYS 222", "AA S 210"],
+            "2025-fall": ["CSC 220", "CSC 230", "MATH 225", "PHYS 230", "PHYS 232", "ARTH 201"],
+            "2026-spring": ["CSC 256", "CSC 340", "MATH 324", "BIOL 100", "ECON 101"]}.items() for c in cs],
+        "in_progress": ["CSC 300GW", "CSC 317", "CSC 510"]},
     "freshman with AP credit": FRESH | {"qr_pathway": "1/2", "first_time": True, "transfer_units": 8, "ge_done": ["USH", "2"]},
     "sophomore": yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"],
     "ADT transfer": FRESH | {"adt": True, "ge_certified": True, "first_time": False, "transfer_units": 60,

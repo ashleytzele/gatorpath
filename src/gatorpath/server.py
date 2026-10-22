@@ -642,8 +642,9 @@ defaults (15 units per term, no summer or Winter Session) instead of asking. Wha
 no AP / IB or transfer credit, nothing in progress. Say so in one line and plan; don't ask them to confirm it.
 
 1. Start with `load_profile` (no path: the default file). If it returns a profile, start from it and ask only what's
-   missing or changed; if it warns the DPR is stale, ask for a fresh one. If their message already gives their courses
-   (or says they have none yet), use those and don't ask for a record. Otherwise ask for their record. Best is the
+   missing or changed; if it warns the DPR is stale, ask for a fresh one. If their message already gives their record
+   (courses, transfer units or a GE certification, or that they have none yet), use it and don't ask for one; the
+   answer says to compare with the DPR. Otherwise ask for their record. Best is the
    path to their DPR saved as a PDF on this computer (Student Center → Degree Progress Report → View All on long
    lists → print to PDF): `import_dpr` reads it locally and returns a ready profile, and no name or ID reaches you.
    The unofficial transcript PDF works the same way (`import_transcript`), but it doesn't say which requirements
