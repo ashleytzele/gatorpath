@@ -178,6 +178,22 @@ def test_build_plan_explains_itself_and_its_pace():
     assert on_time["on_time"] is True and "why_not" not in on_time
 
 
+def test_a_light_last_term_folds_into_one_heavier_term():
+    profile = eval_profile(ROOT / "evals/profiles/p04-repeats-below-c.yaml")
+    got = plan_for(profile)
+    sem, fold = got["semesters"], got["pace"]["fold_last_term"]
+    # 15-unit terms, one at 13, then a 3-unit senior elective: into the 13-unit term, one 16-unit term, a term sooner
+    into = next(s for s in sem if s["term"] == fold["term"])
+    assert (into["units"], sem[-1]["units"], fold["units"]) == (13, 3, 16)
+    assert fold["terms"] == len(sem) - 1 and fold["est_graduation_term"] == sem[-2]["term"]
+    assert "see an advisor" in fold["note"] and fold["note"].endswith("max_units_per_term: 16")
+    moved = {"semesters": [s | {"courses": s["courses"] + sem[-1]["courses"]} if s is into else s for s in sem[:-1]]}
+    assert check_plan(profile | {"max_units_per_term": 16}, moved, PROGRAM, UNIVERSITY, CATALOG, PREREQS)["valid"]
+    # a full last term (15 units) doesn't fit in any term under the 19-unit maximum
+    p03 = plan_for(eval_profile(ROOT / "evals/profiles/p03-sophomore-qr34.yaml"))
+    assert p03["semesters"][-1]["units"] == 15 and "fold_last_term" not in p03["pace"]
+
+
 def test_see_advisor_for_permission_and_overload():
     heavy = ["CSC 415", "MATH 227", "PHYS 220", "PHYS 222", "ENG 114", "COMM 150"]  # 3+4+3+1+3+3 = 17
     got = check(FRESHMAN | {"gpa": 2.5, "transfer_units": 60, "max_units_per_term": 18},

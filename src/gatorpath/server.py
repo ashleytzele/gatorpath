@@ -416,8 +416,9 @@ def build_plan(profile: Profile) -> dict:
     terms filled toward 12 units, pp.2390, 2393). Returns needs_input
     (qr_pathway, start_term) instead of guessing. Each semester has `why`: per course, what it's needed before, the
     chain it starts, and whether delaying it pushes back graduation. `pace` says what sets the length: the longest
-    prereq chain vs the units per term; with profile.graduate_by it says whether that term is reachable and, if
-    not, why_not. For "3, 4 or 5 years", call it at different max_units_per_term / include_summer / include_winter.
+    prereq chain vs the units per term; fold_last_term when a light last term fits into one earlier term (a term
+    sooner at one heavier load); with profile.graduate_by it says whether that term is reachable and, if not, why_not.
+    For "3, 4 or 5 years", call it at different max_units_per_term / include_summer / include_winter.
     """
     if err := profile_error(profile):
         return err
@@ -704,7 +705,8 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 6. A graduation target or "3, 4 or 5 years?": `build_plan` at 12, 15 and 18 units per term + include_summer (+ include_winter), then a
    table: load, est_graduation_term, on_time, why_not. Over 15 units is above the normal load (p.2393): advisor.
    build_plan lays a plan on the Bulletin roadmap; when pace.roadmap_load is there, the roadmap's own loads (some
-   16-17-unit terms) finish sooner: offer it as a row.
+   16-17-unit terms) finish sooner: offer it as a row. When pace.fold_last_term is there, moving the light last term
+   into one earlier term finishes a term sooner with only that term heavier: offer it as a row, from its note.
 7. Present, briefly:
    - done / left, with Bulletin pages, and every point where the DPR and the tools disagree
    - one table per term, in the order to enter it in Student Center → Degree Planner: course, units, what it counts

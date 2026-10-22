@@ -1,7 +1,8 @@
 """Plan review over every scenario in tests/test_server.py at 12 / 15 / 18 / 18+summer units, on data/catalog.db.
 
 Each cell: terms / lower bound (longest prereq chain or units / cap), flags (R = laid out on the roadmap, INVALID,
-STOP, OVER, EMPTY), graduation term. Run after planner changes: uv run python evals/plan_review.py
+STOP, OVER, EMPTY, F = pace.fold_last_term: the last term fits into one heavier term), graduation term.
+Run after planner changes: uv run python evals/plan_review.py
 """
 
 import sys
@@ -27,7 +28,8 @@ for name, profile in scenarios.SCENARIOS.items():
                                          ("STOP ", any("Stopped at" in w for w in out.get("warnings", []))),
                                          ("OVER ", any(s["units"] > cap for s in sem)),
                                          ("EMPTY ", any(not s["courses"] for s in sem)),
-                                         ("R", any(w.startswith("Laid out on the Bulletin") for w in out.get("warnings", []))))
+                                         ("R", any(w.startswith("Laid out on the Bulletin") for w in out.get("warnings", []))),
+                                         ("F", "fold_last_term" in pace))
                         if bad)
         cells.append(f"{len(sem):>2}/{bound:<2} {flags:8} {out.get('est_graduation_term') or '-':11}")
     print(f"{name:34}" + " ".join(cells))

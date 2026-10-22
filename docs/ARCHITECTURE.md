@@ -479,7 +479,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | Tool | Input | Output |
 |---|---|---|
 | `audit_progress` | `profile` | Per group: `satisfied`/`in_progress`/`remaining`, which courses counted where, units done vs needed; an open GE / SF State Studies / American Institutions group names the required major courses still ahead that carry it (`major_courses`: PHYS 220 for 5A, CSC 300GW for GWAR; p.2352); university totals (120 total, upper-division units, GWAR) |
-| `build_plan` | `profile` | Deterministic baseline plan laid out on the Bulletin roadmap (§8): `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`, `pace` (prereq-chain floor vs units floor, `roadmap_load` when the roadmap's own 16-17-unit terms finish sooner, `graduate_by` → `on_time` / `why_not`). When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
+| `build_plan` | `profile` | Deterministic baseline plan laid out on the Bulletin roadmap (§8): `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`, `pace` (prereq-chain floor vs units floor, `roadmap_load` when the roadmap's own 16-17-unit terms finish sooner, `fold_last_term` when a light last term fits into one earlier term, `graduate_by` → `on_time` / `why_not`). When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
 | `list_eligible_electives` | `profile`, `group_id`, `plan?`, `by_term?`, `limit=25` | Options that satisfy that group, each with description, `readiness` (`ready` / `check`: met except what can't be verified, see `cannot_check` / `blocked`: see `blocked_by`, plus `ready_by: term` when a plan opens it up), `also_covers`, and offering pattern. **The AI picks from this list using the student's goal.** |
 | `ge_combinations` | `profile`, `plan?`, `by_term?` | Up to 8 minimal ways (3 when more than 5 are open) to finish the open GE / SF State Studies / American Institutions requirements one course can fill, fewest courses first; the first is the fewest a bounded search found, not a proven minimum (one course for 4UD + ESCA + GP, two that split them, or one each); each part: what it covers, how many courses fit, examples (ready first, recently offered first). Requirements the major's own courses cover (GWAR via CSC 300GW) are left out |
 | `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include a term already started (`term_in_past`, or `term_in_progress`: the current term, which the in-progress courses fill), prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
@@ -560,7 +560,8 @@ deterministic (D6). The prompt gives the client its workflow:
    math before MATH 226; `build_plan` returns `needs_input: qr_pathway` only then).
 4. Call `audit_progress` (with a DPR: as the cross-check).
 5. Call `build_plan`. For "3, 4 or 5 years", call it at three loads (≈18 units + summer, 15, 12)
-   and compare `est_graduation_term`, plus the roadmap's own loads when `pace.roadmap_load` is there. Say why a
+   and compare `est_graduation_term`, plus the roadmap's own loads when `pace.roadmap_load` is there and one heavier
+   term when `pace.fold_last_term` is there. Say why a
    faster pace can't work when it can't (the prereq chain or the units per term).
 6. Fill elective slots using `list_eligible_electives` plus the student's goal.
 7. **Call `check_plan`. Fix any errors and re-check until `valid`.**
@@ -644,7 +645,9 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
    the first-time roadmaps have 16- and 17-unit terms (qr-1-2: 16, 16; qr-3-4: 16, 16, 17, 16). A roadmap item that
    doesn't fit carries over, so the plan passes check_plan as given. When the student set no cap and the roadmap's
    own loads finish sooner, `pace.roadmap_load` says so (terms, `est_graduation_term`, the `max_units_per_term` to
-   pass), and `plan_my_degree` offers it as a pace option.
+   pass), and `plan_my_degree` offers it as a pace option. When the last term is light (a 1-unit free elective at
+   15), `pace.fold_last_term` names the one earlier spring/fall term it fits into: the lightest that passes
+   check_plan with the extra units, up to the 19-unit maximum (p.2392), latest first. The plan itself keeps the cap.
 6. Stop when nothing remains. Report `est_graduation_term`.
 7. If no progress is possible in a term (a blocked prereq), stop and emit an error saying
    which condition blocks it. Never loop forever.

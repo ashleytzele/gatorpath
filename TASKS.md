@@ -373,7 +373,9 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     summer what-if answered from the first turn's build_plan run
   - Graduation terms differ on 2 of 15 plans. Fall 2025 sophomore: at 15 units build_plan ends with a 1-unit term;
     Claude offered one 16-unit term instead (a term sooner, with an advisor's OK), Codex kept the extra term. p03:
-    Codex's own plan runs a term past build_plan's
+    Codex's own plan runs a term past build_plan's. Since 2026-10-22 `pace.fold_last_term` says it: a light last term
+    goes into the lightest earlier spring/fall term that passes check_plan (up to 19 units), with the advisor note when
+    it's over 15. In plan_review (flag F) 15 scenario/load cells get it, e.g. the sophomore's 1 unit -> one 16-unit term
 - [ ] README: problem, demo GIF/video (2 min), setup in 3 commands, eval table, limitations
   - 2026-10-19: problem, setup in 3 commands (from the zip), eval table and limitations written. Waits on the
     demo GIF/video, recorded by a person
@@ -431,8 +433,8 @@ Robots detect and rebuild; a human approves rule changes; students re-import the
     QR split). No `transfer` block (the Bulletin doesn't say what a certification meets), no 90-unit transfer cap,
     no GWAR grade minimum (not stated); a CSLG exam exists only this year. Confirm the memo on a second DPR
   - Next up (2026-10-22): (1) a second Spring 2025 DPR shows the 3/12/25 Area E/C waiver -> verify the 2024-25 files;
-    (2) the 2026-27 rules still need their sign-off (verified: false); (3) build_plan's 1-unit last term (eval run
-    2026-10-21, Phase 7): say when one term over 15 units finishes a term sooner; (4) more classmates (Phase 7: 5-10,
+    (2) the 2026-27 rules still need their sign-off (verified: false); (3) done 2026-10-22: `pace.fold_last_term`
+    (Phase 7); (4) more classmates (Phase 7: 5-10,
     top 3 issues). Evals on the three catalog years and Winter Session: done 2026-10-21 (Phase 7)
 - [ ] Source snapshots: `rules/programs/<year>/<program>.source.txt` holds the Bulletin text each
   group was written from

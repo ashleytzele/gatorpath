@@ -11,6 +11,7 @@ Assumptions, reported as a warning on every check:
 
 import math
 import re
+from collections import Counter
 
 from gatorpath.engine.prereq import leaves, prereq_warnings, reverse_index
 from gatorpath.engine.rules import GRADE_POINTS, audit, blocks_repeat, number, rank
@@ -859,6 +860,26 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     warnings += notes
     plan = {"semesters": semesters}
     check = check_plan(profile, plan, program, university, catalog, prereqs)
+    held = Counter(c if isinstance(c, str) else c["slot"] for c in (semesters[-1]["courses"] if semesters else [])
+                   if isinstance(c, str) or c["units"])
+    held = ", ".join(f"{n} × {c}" if n > 1 else c for c, n in held.items())
+    # A light last term (a 1-unit free elective at 15 per term) can fold into one earlier spring/fall term: the
+    # lightest one that passes check_plan with the extra units, latest first.
+    fold, last = None, semesters[-1] if semesters else None
+    for s in sorted(reversed(semesters[:-1]) if check["valid"] else [], key=lambda s: s["units"]):  # stable: latest first
+        units = s["units"] + last["units"]
+        if s["term"][5:] not in ("spring", "fall") or units > university["max_units"]["fall_spring"]:
+            continue
+        moved = [x | {"courses": x["courses"] + last["courses"], "units": units} if x is s else x for x in semesters[:-1]]
+        if check_plan(profile | {"max_units_per_term": max(cap, units)}, {"semesters": moved},
+                      program, university, catalog, prereqs)["valid"]:
+            fold = {"term": s["term"], "units": units, "terms": len(moved), "est_graduation_term": moved[-1]["term"],
+                    "note": f"move {last['term']}'s {held} ({last['units']:g} unit{'s' if last['units'] != 1 else ''}) "
+                            f"into {s['term']}: one {units:g}-unit term, done in {moved[-1]['term']}, a term sooner"
+                            + (f"; above the normal load of {load['normal_max']:g} ({load['source']}), so see an advisor "
+                               "first" if units > load["normal_max"] else "")
+                            + f". check_plan the moved plan with max_units_per_term: {max(cap, units):g}"}
+            break
 
     # Why each course is where it is, and what sets the pace.
     from gatorpath.engine.rules import matches
@@ -905,7 +926,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     critical = min(todo, key=rank_of) if todo else None
     pace = {"terms": len(semesters), "units_per_term": cap, "include_summer": summer, "include_winter": winter,
             "planned_units": plan_units,
-            **({"roadmap_load": road_pace} if road_pace else {}),
+            **({"roadmap_load": road_pace} if road_pace else {}), **({"fold_last_term": fold} if fold else {}),
             "min_terms_by_prereqs": depth[critical] if critical else 0,
             "longest_chain": longest(critical) if critical else [],
             "min_terms_by_units": math.ceil(plan_units / cap) if cap else 0}
@@ -924,9 +945,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                                f"{available}: add summers or raise max_units_per_term (above {load['normal_max']:g} is "
                                f"an overload, {load['source']})")
             if not why_not:
-                last = semesters[-1]
-                held = [c if isinstance(c, str) else c["slot"] for c in last["courses"] if isinstance(c, str) or c["units"]]
-                why_not.append(f"the plan needs {len(semesters)} terms; the last ({last['term']}) holds {', '.join(held)}. "
+                why_not.append(f"the plan needs {len(semesters)} terms; the last ({semesters[-1]['term']}) holds {held}. "
                                "Senior electives wait for upper-division standing and an option that's ready (its "
                                f"prereqs), and upper-division GE for {levels['upper']} units" + ("" if summer and winter else "; try include_summer or include_winter"))
             pace["why_not"] = why_not
