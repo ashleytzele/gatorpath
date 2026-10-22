@@ -248,7 +248,8 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
 
     if "one_of" in g:
         # "Select One" of course bundles: met when every course of one option counts. What's left is one option: the
-        # most done or in progress, then the fewest units left, then the first printed (§6.2).
+        # most done or in progress, then one with no attempt that didn't count (a CR can't be retaken, p.2392), then
+        # the fewest units left, then the first printed (§6.2).
         opts = []
         for opt in g["one_of"]:
             done = [c for c in opt if ok(c)]
@@ -257,6 +258,7 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
         for c in {c for opt in g["one_of"] for c in opt}:
             note_grade(c)
         best = min(opts, key=lambda o: (bool(o["left"]), bool(o["in_progress"]), -len(o["done"] + o["in_progress"]),
+                                        any(c in taken for c in o["left"]),
                                         sum(catalog[c]["units_min"] for c in o["left"] if c in catalog)))
         if claimed is not None:
             claimed.update(best["done"] + best["in_progress"])

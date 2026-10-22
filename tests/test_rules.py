@@ -335,3 +335,18 @@ def test_a_legacy_ge_code_can_stand_for_two_areas():
     from gatorpath.engine.rules import translate_ge
     university = UNIVERSITY | {"legacy_ge_areas": UNIVERSITY["legacy_ge_areas"] | {"map": {"D2": ["4", "USH"], "A2": "1A"}}}
     assert translate_ge(["Area D2 - Social Sciences: US History", "A2"], university)[0] == ["4", "USH", "1A"]
+
+
+def test_a_select_one_plans_the_option_still_open():
+    # BS Applied Mathematics p.2129: "Select One: MATH 209, CSC 101 & CSC 215, or CSC 309", C or better, no CR/NC
+    program, university = load_rules("2026-27", "bs-applied-math")
+    group = lambda rows, prog=(): next(g for g in audit({"catalog_year": "2026-27", "completed": rows, "in_progress": list(prog)},
+                                                        program, university, CATALOG)["groups"] if g["id"] == "programming")
+    assert group([])["remaining"] == ["MATH 209"]  # the fewest units, first printed
+    started = group([{"code": "CSC 101", "grade": "A", "term": "2026-fall"}])
+    assert started["status"] == "remaining" and started["counted"] == ["CSC 101"] and started["remaining"] == ["CSC 215"]
+    assert group([{"code": "CSC 101", "grade": "A", "term": "2026-fall"}], ["CSC 215"])["status"] == "in_progress"
+    # MATH 209 with CR doesn't count and can't be retaken (p.2392): plan CSC 309, the other 3-unit option
+    cr = group([{"code": "MATH 209", "grade": "CR", "term": "2026-fall"}])
+    assert cr["remaining"] == ["CSC 309"] and {"courses": ["MATH 209"], "left": ["MATH 209"]} in cr["options"]
+    assert group([{"code": "CSC 309", "grade": "B", "term": "2026-fall"}])["status"] == "satisfied"
