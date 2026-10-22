@@ -362,6 +362,22 @@ Added 2026-10-22 (BS Applied Mathematics, the second program, pp.2129-2137):
   count, units}` is a slot of that major choose-group (CS's `senior_elective` takes any major slot). A printed range
   ("3-4") keeps the minimum in `units`, with the range in a comment, so the units still add up to the printed minimum.
 
+**AI-drafted rules (phase 8, D5; added 2026-10-22).** Offline, never at question time (D6):
+`python -m gatorpath.ingest.programs <bulletin.pdf>` lists every bachelor's program the department pages list
+("• Bachelor of … (p. 2129)"), with its requirement pages (the pages from there whose running head is its title) and
+roadmap pages (heads that start with it). `--source <id>` writes the requirement pages' text, one `=== p.NNNN ===`
+line per page, as `<id>.source.txt` next to the rules (public Bulletin text: the snapshot §5's yearly diff reads).
+`--draft <id>` sends that text, this section and the hand-written programs to a headless AI client (`claude -p`, no
+tools) and writes `rules/drafts/<year>/<id>.yaml`, which the server never reads. `check_program` (engine/rules.py)
+then checks any program file, drafted or hand-written: only this vocabulary, every course code in the catalog, every
+`source` page one of the program's pages, every `quote` word for word in the source text, and the groups' minimum
+units adding up to `total_units`. A person fixes what it reports, moves the file to `rules/programs/<year>/`, and a
+second person sets `verified`. Draft-only keys: `quote` on a group (the Bulletin words it was written from) and
+`drafted_by` (client, date); a requirement the vocabulary can't express is a group with `unparsed: true`, its
+`quote` and `source`, for the person to write (rule 3: flag, don't guess). A major's choice is `choose_units` (the
+printed units): `choose_n` plans a 0-unit designation slot, so check_program flags it in a program file. Advising
+contacts aren't drafted: they come from office pages (§5).
+
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo
 3/12/25 (quoted on DPRs)"}`. It's applied on top of the group and reported in the audit with its source.

@@ -13,6 +13,7 @@ Counting rules:
 
 import math
 import re
+import unicodedata
 from pathlib import Path
 
 import yaml
@@ -497,3 +498,68 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
         "totals": tot,
         "warnings": warnings,
     }
+
+
+# The §6.2 vocabulary a program file may use (check_program); `quote`, `unparsed` and `drafted_by` come from drafts.
+PROGRAM_KEYS = {"program", "title", "catalog_year", "verified", "verified_by", "drafted_by", "total_units", "dpr_plan",
+                "source", "global", "groups", "transfer_notes", "advising"}
+GROUP_KEYS = {"id", "title", "source", "quote", "unparsed", "all_of", "one_of", "choose_n", "choose_units", "from",
+              "first_time_from", "min_grade", "min_units_from", "course_units", "exceptions", "approval", "waived_if",
+              "waiver", "amendments"}
+FILTER_KEYS = {"list", "subject", "level", "except", "paired", "max_courses", "ge_area", "ge_area_all", "approved"}
+SHAPES = ("all_of", "one_of", "choose_n", "choose_units", "unparsed")
+PAGE = re.compile(r"\b(\d{4})\b")  # every page a source names: "p.2129", "p.1905-1906"
+
+
+def squashed(text: str) -> str:
+    """Text compared word for word, ignoring case, spacing and line breaks: a quote must survive pdftotext's wrapping."""
+    return re.sub(r"\s+", "", unicodedata.normalize("NFKC", text)).lower()
+
+
+def check_program(program: dict, catalog: dict, pages: set[int] | None = None, source: str | None = None) -> list[str]:
+    """What a person must fix before a program file is used (§6.2 "AI-drafted rules"): keys outside the vocabulary, course
+    codes not in the catalog, `source` pages outside the program's `pages`, a `quote` not in its `source` text, and
+    groups whose minimum units don't add up to `total_units`. [] when it's clean."""
+    out = [f"unknown key {k!r}" for k in program if k not in PROGRAM_KEYS]
+    out += [f"missing {k!r}" for k in ("program", "title", "catalog_year", "total_units", "groups") if k not in program]
+    ids, low = set(), 0.0
+    units = lambda cs: sum(catalog[c]["units_min"] for c in cs if c in catalog)
+    for g in program.get("groups", []):
+        gid = g.get("id", "?")
+        out += [f"{gid}: unknown key {k!r}" for k in g if k not in GROUP_KEYS]
+        if gid in ids:
+            out.append(f"{gid}: duplicate id")
+        ids.add(gid)
+        shape = [k for k in SHAPES if k in g]
+        if len(shape) != 1:
+            out.append(f"{gid}: needs exactly one of {', '.join(SHAPES)} (has {', '.join(shape) or 'none'})")
+        if g.get("unparsed"):
+            out.append(f"{gid}: unparsed, a person writes this requirement from its quote")
+        if ("choose_n" in g or "choose_units" in g) and "from" not in g:
+            out.append(f"{gid}: a choose group needs `from`")
+        if "choose_n" in g:  # in the university rules it's a designation (SF State Studies), met inside other courses
+            out.append(f"{gid}: choose_n in a major is planned as a 0-unit designation slot; use choose_units, the units "
+                       "the Bulletin prints for it")
+        filters = [f for key in ("from", "first_time_from") if key in g
+                   for f in (g[key] if isinstance(g[key], list) else [g[key]])]
+        out += [f"{gid}: unknown filter key {k!r}" for f in filters for k in f if k not in FILTER_KEYS]
+        codes = (g.get("all_of", []) + [c for opt in g.get("one_of", []) for c in opt]
+                 + [c for f in filters for c in f.get("list", []) + f.get("except", [])]
+                 + list(g["min_grade"] if isinstance(g.get("min_grade"), dict) else []))
+        out += [f"{gid}: {c} is not in the {program.get('catalog_year', '')} catalog" for c in dict.fromkeys(codes) if c not in catalog]
+        grades = g["min_grade"].values() if isinstance(g.get("min_grade"), dict) else [g["min_grade"]] if "min_grade" in g else []
+        out += [f"{gid}: min_grade {m!r} isn't a grade" for m in grades if m not in GRADE_POINTS]
+        cited = [int(p) for p in PAGE.findall(str(g.get("source", "")))]
+        if not cited:
+            out.append(f"{gid}: source must cite a page like \"p.2129\"")
+        elif pages and not set(cited) <= pages:
+            out.append(f"{gid}: source {g['source']} is outside the program's pages ({min(pages)}-{max(pages)})")
+        if "quote" in g and source is not None and squashed(g["quote"]) not in squashed(source):
+            out.append(f"{gid}: quote isn't word for word in the Bulletin text: {g['quote'][:80]!r}")
+        low += (units(g.get("all_of", [])) + g.get("choose_units", 0)
+                + min((units(opt) for opt in g.get("one_of", [])), default=0))
+    if any("choose_n" in g or g.get("unparsed") for g in program.get("groups", [])):
+        out.append("units: can't check total_units with choose_n or unparsed groups; a person adds them up")
+    elif "total_units" in program and low != program["total_units"]:
+        out.append(f"units: the groups' minimums add up to {low:g}, total_units says {program['total_units']:g}")
+    return out

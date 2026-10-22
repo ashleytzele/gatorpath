@@ -350,3 +350,37 @@ def test_a_select_one_plans_the_option_still_open():
     cr = group([{"code": "MATH 209", "grade": "CR", "term": "2026-fall"}])
     assert cr["remaining"] == ["CSC 309"] and {"courses": ["MATH 209"], "left": ["MATH 209"]} in cr["options"]
     assert group([{"code": "CSC 309", "grade": "B", "term": "2026-fall"}])["status"] == "satisfied"
+
+
+def test_program_files_pass_check_program():
+    # ARCHITECTURE §6.2 "AI-drafted rules": the hand-written programs are the bar a draft is held to
+    from gatorpath.engine.rules import check_program
+    from gatorpath.ingest.programs import source_pages
+    for path in sorted((RULES_DIR / "programs/2026-27").glob("*.yaml")):
+        source = path.with_suffix(".source.txt").read_text()
+        assert check_program(yaml.safe_load(path.read_text()), CATALOG, source_pages(source), source) == [], path.name
+
+
+def test_check_program_reports_what_a_person_must_fix():
+    from gatorpath.engine.rules import check_program
+    source = (RULES_DIR / "programs/2026-27/bs-applied-math.source.txt").read_text()
+    good = yaml.safe_load((RULES_DIR / "programs/2026-27/bs-applied-math.yaml").read_text())
+    theory = {"id": "theory", "choose_units": 3, "from": {"list": ["MATH 335", "MATH 370", "MATH 380"]}, "source": "p.2129",
+              "quote": "Select One: 3 MATH 335 Modern Algebra"}
+    assert check_program(good | {"groups": [g if g["id"] != "theory" else theory for g in good["groups"]]},
+                         CATALOG, {2129, 2130, 2131}, source) == []  # the quote survives pdftotext's line breaks
+    bad = good | {"groups": [
+        {"id": "required", "all_of": ["MATH 226", "MATH 999"], "min_grade": "C+-", "source": "p.2200", "level": 3},
+        {"id": "required", "choose_units": 6, "source": "p.2129", "quote": "Select six units of anything"},
+        {"id": "odd", "unparsed": True, "source": "p.2130", "quote": "A coherent collection of three courses"},
+    ]}
+    got = check_program(bad, CATALOG, {2129, 2130, 2131}, source)
+    assert got == ["required: unknown key 'level'", "required: MATH 999 is not in the 2026-27 catalog",
+                   "required: min_grade 'C+-' isn't a grade",
+                   "required: source p.2200 is outside the program's pages (2129-2131)",
+                   "required: duplicate id", "required: a choose group needs `from`",
+                   "required: quote isn't word for word in the Bulletin text: 'Select six units of anything'",
+                   "odd: unparsed, a person writes this requirement from its quote",
+                   "units: can't check total_units with choose_n or unparsed groups; a person adds them up"]
+    short = good | {"total_units": 56}
+    assert check_program(short, CATALOG)[-1] == "units: the groups' minimums add up to 55, total_units says 56"

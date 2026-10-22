@@ -37,6 +37,9 @@ uv run python -m gatorpath.ingest.bulletin data/raw/bulletin-2026-27.pdf   # bui
 uv run python -m gatorpath.ingest.bulletin data/raw/bulletin-2026-27.pdf --legacy-ge   # old→new GE code evidence
 uv run python -m gatorpath.db evals/profiles/*.yaml rules/programs/*/*.yaml rules/roadmaps/*/*.yaml > evals/catalog-2026-27.json   # refresh eval catalog rows (newest Bulletin's rows, every year's rules)
 uv run python -m gatorpath.ingest.offerings --subjects CSC,MATH,PHYS        # offering history
+uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf    # list bachelor's programs + their pages
+uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --source   # <id>.source.txt for programs with rules
+uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --draft <id>   # AI draft -> rules/drafts/ + checks
 uv run gatorpath                   # start MCP server (stdio)
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
@@ -65,12 +68,13 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 |---|---|
 | `src/gatorpath/server.py` | MCP tool/prompt definitions only. Keep it thin and call the engine |
 | `src/gatorpath/engine/` | `prereq.py`, `rules.py`, `planner.py`: all logic, pure functions |
-| `src/gatorpath/ingest/` | Offline builders: Bulletin PDF and class search → `data/catalog.db` |
+| `src/gatorpath/ingest/` | Offline builders: Bulletin PDF and class search → `data/catalog.db`; program pages → source text and AI drafts |
 | `src/gatorpath/dpr.py` | Local DPR PDF → profile + what's left (PII dropped); the main import |
 | `src/gatorpath/transcript.py` | Local transcript PDF → course list (PII dropped) |
 | `rules/programs/<year>/` | Hand-written requirement YAML (reviewed) |
 | `rules/university/<year>.yaml` | GE, SF State Studies, American Institutions, GWAR, unit totals |
 | `rules/roadmaps/<year>/` | Official roadmap variants as YAML |
+| `rules/drafts/<year>/` | AI-drafted program rules waiting for a person (the server never reads them) |
 | `evals/` | Synthetic profiles + eval runner |
 | `data/` | **git-ignored**: raw PDFs, `catalog.db`, scrape cache |
 
@@ -88,7 +92,9 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 
 ## Adding or changing a program's rules
 
-1. Copy the Bulletin text for each requirement group and note the page.
+1. Copy the Bulletin text for each requirement group and note the page (`--source <id>` writes it, page by page).
+   Or start from a draft: `--draft <id>` (ARCHITECTURE §6.2 "AI-drafted rules"), fix everything it reports, and
+   move it from `rules/drafts/<year>/` to `rules/programs/<year>/`. A draft is a starting point, never a source.
 2. Write it in `rules/programs/<year>/<program>.yaml` using only the vocabulary in
    ARCHITECTURE §6.2. If you need a new rule type, update ARCHITECTURE first.
 3. Add or extend synthetic profiles in `evals/profiles/` that exercise the new groups.

@@ -433,8 +433,15 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   declare or change their major", pp.2352, 2390: `change_of_major` in the university rules), GE stays the catalog
   year; the DPR's substitutions aren't carried over. A CS junior on track keeps 4 major courses toward Applied Math
   and needs 2 more terms. Eval questions left-p11, left-p12 and switch-math added (not run yet)
-- [ ] Offline AI-draft pipeline: Bulletin program page → draft YAML → human review →
-  `verified: true`
+- [x] Offline AI-draft pipeline: Bulletin program page → draft YAML → human review →
+  `verified: true`. Done 2026-10-22: `gatorpath.ingest.programs` lists the 110 bachelor's programs the 2026-27
+  department pages list, with requirement and roadmap pages from the running heads (wrapped heads, a shortened listed
+  title, a listed page that's another program's, "&"/"and" handled); `--source` writes `<id>.source.txt`; `--draft`
+  runs `claude -p` (no tools) with ARCHITECTURE §6.2, the other programs as examples and the page text, into
+  `rules/drafts/<year>/`; `check_program` (engine) checks vocabulary, codes, pages, word-for-word `quote`s and units.
+  Acceptance: BS Applied Mathematics drafted without itself as an example audits p11 and p12 exactly like the
+  hand-written file (counted, remaining, totals; only group titles differ). The first draft used choose_n, which
+  plans a 0-unit slot: check_program flags it and the prompt asks for choose_units. No roadmap drafting yet
 - [ ] Load all programs as `verified: false`
 
 ---
@@ -467,6 +474,8 @@ Robots detect and rebuild; a human approves rule changes; students re-import the
     top 3 issues). Evals on the three catalog years and Winter Session: done 2026-10-21 (Phase 7)
 - [ ] Source snapshots: `rules/programs/<year>/<program>.source.txt` holds the Bulletin text each
   group was written from
+  - 2026-10-22: written for 2026-27 (bs-cs, bs-applied-math) by `ingest.programs --source`; 2024-25 and 2025-26 not
+    yet (their PDFs' program lists may differ: check the index first)
 - [ ] Bulletin diff: new Bulletin vs snapshots → unchanged groups copied to the new year (new page
   numbers, `verified` kept); changed groups listed with old/new text, program set `verified: false`
 - [x] Find the Bulletin PDF's download URL so a job can fetch it (2026-10-20): every year is on
