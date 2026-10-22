@@ -191,9 +191,13 @@ def main() -> None:
     if args.source is None and not args.draft:
         print(json.dumps([{"id": i, **p, "has_rules": p["title"] in have} for i, p in programs.items()], indent=1))
         return
+    if unknown := [i for i in (args.source or []) + (args.draft or []) if i not in programs]:
+        ap.error(f"unknown program id {', '.join(unknown)}; run with only the PDF to list them")
     catalog = db.load_catalog(args.db, year)
     for pid in (args.source or [i for i, p in programs.items() if p["title"] in have]) if args.source is not None else []:
-        path = RULES_DIR / "programs" / year / f"{pid}.source.txt"
+        # next to the rules; a program without rules yet keeps it with its drafts
+        path = RULES_DIR / ("programs" if programs[pid]["title"] in have else "drafts") / year / f"{pid}.source.txt"
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(source_text(pages, programs[pid]["pages"]))
         print(f"{path} ({len(programs[pid]['pages'])} pages)")
     for pid in args.draft or []:
