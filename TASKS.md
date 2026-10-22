@@ -367,7 +367,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     new questions pass on both. Left: Claude's web-development retake plan skips CSC 667 / 675, which need a 3.0 GPA
     (the student has 2.545), and names them as backups (keyword rubric; kept as a fail); Codex stopped to ask a Cal-GETC
     transfer student for a DPR though they gave units, certification and "no major courses" (the prompt's "gives their
-    courses" now covers transfer units and a GE certification; rerun `data/evals/20261021-195915` passes on both).
+    courses" now covers what transfer credit meets, e.g. a GE certification and no major courses, but not a unit total
+    alone; rerun `data/evals/20261022-001516` passes on both).
     Scorer fixes: honesty wording ("isn't listed", "couldn't find"), "senior elective" for the Electives group, and a
     summer what-if answered from the first turn's build_plan run
   - Graduation terms differ on 2 of 15 plans. Fall 2025 sophomore: at 15 units build_plan ends with a 1-unit term;

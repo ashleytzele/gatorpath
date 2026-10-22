@@ -70,8 +70,8 @@ run through Claude Code and Codex CLI with only the gatorpath server attached (r
 | Used only the gatorpath tools | 44/44 | 44/44 |
 
 Claude's miss is goal fit (it passed over web electives that need a 3.0 GPA and named them as backups). Codex's
-stopped to ask a transfer student for their DPR; the prompt now plans from the units and certification given, and a
-rerun of that question passes on both.
+miss: it stopped to ask a transfer student for their DPR though they had said what their transfer credit meets; the
+prompt now plans from that, and a rerun of that question passes on both.
 
 ## Limitations
 
