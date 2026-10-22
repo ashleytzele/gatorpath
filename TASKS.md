@@ -399,7 +399,7 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   20261021-192336, `pytest`). Add "N SF State students tried it" once the classmates have:
   - Built GatorPath, a Python MCP server that gives AI assistants deterministic SF State degree-planning tools: parsed
     4,967 courses from the 2,932-page Bulletin PDF (prerequisites fully parsed for 74%, the 111 it can't parse flagged,
-    never guessed), encoded BS CS requirements for 3 catalog years with a Bulletin page cited on every rule, and wrote
+    never guessed), encoded BS CS requirements for 3 catalog years with a source page cited on every rule, and wrote
     the plan checker every generated plan must pass; on 44 eval questions Claude Code and Codex CLI each passed 43,
     with 0 hallucinated course codes
   - Short: Built an MCP server that grounds AI degree planning in SF State's 2,932-page Bulletin: 4,967 courses, page-
