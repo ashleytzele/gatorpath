@@ -475,3 +475,24 @@ def test_build_plan_uses_winter_terms_only_when_asked_and_only_for_ge_and_electi
     assert first_term(FRESHMAN | now) == "2027-winter" and first_term(FRESHMAN | now | {"include_winter": False}) == "2027-spring"
     for s in winters:  # Class Search has no Winter Session history: no required major course is put there
         assert s["units"] <= 4 and all(isinstance(c, dict) for c in s["courses"])
+
+
+def test_compare_programs_says_what_carries_over_to_a_new_major():
+    from gatorpath.engine.planner import compare_programs
+    profile = eval_profile(ROOT / "evals/profiles/p03-sophomore-qr34.yaml")  # BS CS, QR 3/4, MATH 226 in progress
+    current, target = rules_for(profile), rules_for({"program": "bs-applied-math"})
+    got = compare_programs(profile, (current[0], current[2]), (target[0], target[2]), UNIVERSITY, CATALOG, PREREQS)
+    # Applied Math (p.2129): CSC 101 & CSC 215 is one "Select One" option, MATH 226 is required; CSC 220 and MATH 225 aren't
+    assert got["courses"] == {"count_in_both": ["CSC 101", "CSC 215", "MATH 226"], "only_current": ["CSC 220", "MATH 225"],
+                              "only_target": []}
+    assert got["target"]["major_units"] == {"done": 7, "in_progress": 4, "needed": 55}
+    groups = {g["id"]: g for g in got["target"]["groups"]}
+    assert groups["programming"]["status"] == "satisfied" and groups["required"]["in_progress"] == ["MATH 226"]
+    assert got["current"]["plan_valid"] and got["target"]["plan_valid"]
+    assert got["extra_terms"] == got["target"]["terms"] - got["current"]["terms"]
+    assert any(w.startswith("CSC 220, MATH 225 still count toward the 120 units") for w in got["warnings"])
+    assert got["see_advisor"][0]["role"] == "substitutions" and any(a["role"] == "major_advisor" for a in got["see_advisor"])
+    # a DPR substitution for the current major isn't carried to the new one
+    sub = compare_programs(profile | {"dpr_met": ["MATH 324"]}, (current[0], current[2]), (target[0], target[2]),
+                           UNIVERSITY, CATALOG, PREREQS)
+    assert any(w.startswith("Substitutions on your DPR (MATH 324) are your current major's") for w in sub["warnings"])

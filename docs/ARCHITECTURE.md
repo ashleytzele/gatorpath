@@ -319,6 +319,9 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   (`totals.residence.no_residence_credit`, p.2391).
 - `course_units` (choose-group): the unit size the Bulletin names ("five 3-unit senior electives", p.1905). A
   counted course with fewer units gets a ⚠️ (the same list names 1-unit CSC 685/686), never a silent pass or fail.
+- `change_of_major` (university, added 2026-10-22): the Bulletin's rule that a student who changes major meets "the
+  major requirements in effect at the time they declare or change their major" (pp.2352, 2390), and how (a Change
+  of Major through the Student Center after consulting faculty advisors, p.2352). compare_programs quotes it.
 - University keys: `transfer.certified_ld_ge` (group ids met by Cal-GETC certification, `profile.ge_certified`,
   p.2304), `totals.max_units_from` (70 community college, 90 all transfer, 30 exam or evaluation, 4 "Projects in Teaching" 685,
   pp.2304, 2313), `max_units` per term (19 fall/spring, 14 summer; more needs a 3.0 SF State GPA and a petition,
@@ -504,6 +507,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | `list_eligible_electives` | `profile`, `group_id`, `plan?`, `by_term?`, `limit=25` | Options that satisfy that group, each with description, `readiness` (`ready` / `check`: met except what can't be verified, see `cannot_check` / `blocked`: see `blocked_by`, plus `ready_by: term` when a plan opens it up), `also_covers`, and offering pattern. **The AI picks from this list using the student's goal.** A group with `approval` (an advisor's consent, no list) returns that text, no options, and `see_advisor` |
 | `ge_combinations` | `profile`, `plan?`, `by_term?` | Up to 8 minimal ways (3 when more than 5 are open) to finish the open GE / SF State Studies / American Institutions requirements one course can fill, fewest courses first; the first is the fewest a bounded search found, not a proven minimum (one course for 4UD + ESCA + GP, two that split them, or one each); each part: what it covers, how many courses fit, examples (ready first, recently offered first). Requirements the major's own courses cover (GWAR via CSC 300GW) are left out |
 | `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include a term already started (`term_in_past`, or `term_in_progress`: the current term, which the in-progress courses fill), prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
+| `compare_programs` | `profile`, `target` (program id) | What-if for a change of major (added 2026-10-22): `current` and `target`, each with `major_units` (done / in progress / needed), build_plan's `terms` and `est_graduation_term`; the target's major groups (counted, in progress, what's left); `courses`: `count_in_both`, `only_current` (they still count toward the 120 and GE), `only_target`; `extra_terms` (target minus current, under the same load). The target major is the Bulletin in effect when the student changes (`change_of_major`, pp.2352, 2390); GE and graduation requirements stay the student's catalog year |
 | `import_dpr` | `pdf_path` (local file) | `{profile: {program, catalog_year, completed (SF State rows + transfer rows as the course they sit under, at its minimum grade), in_progress, ge_done (DPR titles of GE areas it shows done, + USH/USG/CSLG designations), dpr_met, gpa, transfer_units}, remaining: [{requirement, what, needed}], warnings}`. Personal info dropped; raw text never returned, logged or stored. Layout below |
 | `save_profile` / `load_profile` | `profile`, `path` / `path` | Writes or reads the student's profile as YAML at a path **the student chose**, only when they ask. Default `~/.gatorpath/profile.yaml`; refuses paths inside the repo, relative paths and non-`.yaml` names. Replaces only an earlier GatorPath profile (never another file), atomically, mode 600. `load_profile` returns only a GatorPath profile (a mapping with `program`) and warns when `dpr_imported` is before the current term (month boundaries: spring Jan, summer Jun, fall Aug) |
 | `import_transcript` | `pdf_path` (local file) | `{completed: [...], in_progress: [...], transfer_units, warnings}`, with **only** course code, grade, units and term. Name, student ID, birthdate and address are dropped. Raw text is never returned, logged or stored |
@@ -603,7 +607,8 @@ doesn't exist.
 What-ifs map to tools, not to new server logic:
 - "Graduate a year early" → step 5 with a heavier load, and say what has to give.
 - "Different direction" (AI, cybersecurity, …) → step 6 with the new goal. Required courses don't change.
-- "Switch major" → `compare_programs` (phase 8).
+- "Switch major" → `compare_programs`: what counts, what's left, how many more terms. The official version is
+  the Student Center What-If report; the student confirms with the target department's advisor.
 
 ### 7.5 Advisor handoff
 

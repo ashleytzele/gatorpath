@@ -7,7 +7,7 @@
 #   at scoring time, never written here (golden rule 1). Every answer is also checked for course codes that neither the
 #   catalog nor a tool output has, for the profile the client passed (it must match the question), and for save_profile.
 #   tools: tools that must be called · mention: prereqs_of / remaining / unlocks_of / seasons_of / close_match_of /
-#   areas_of (a computed fact the answer must state) · mention_any: wording one of which must appear · plan_valid: the
+#   areas_of / carries_over_to (a computed fact the answer must state) · mention_any: wording one of which must appear · plan_valid: the
 #   last check_plan input re-checked here · goal_fit: picked senior electives match the goal keywords · pace_compared:
 #   build_plan at two or more loads · summer_tried / winter_tried: build_plan with summers (Winter Session), or a
 #   checked plan with such a term
@@ -56,6 +56,11 @@ questions:
      expect: {tools: [audit_progress], mention: {remaining: true}}}
   - {id: left-2024, profile: "scenario: Fall 2024 junior (old GE)", ask: "What's left for my degree?",
      expect: {tools: [audit_progress], mention: {remaining: true}}}
+  # BS Applied Mathematics (the second program) and a change of major
+  - {id: left-p11, profile: p11, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: left-p12, profile: p12, ask: "What's left for my degree?", expect: {tools: [audit_progress], mention: {remaining: true}}}
+  - {id: switch-math, profile: p03, ask: "What if I switch my major to Applied Mathematics?",
+     expect: {tools: [compare_programs], mention: {carries_over_to: bs-applied-math}, mention_any: [What-If, advisor]}}
 
   # Plans: the plan_my_degree prompt, a goal, everything the prompt would ask for given up front
   - {id: plan-p01, profile: p01, prompt: true, goal: artificial intelligence, ask: "Plan the rest of my degree.",

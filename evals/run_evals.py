@@ -48,7 +48,7 @@ CODE = re.compile(r"\b(" + "|".join(map(re.escape, SUBJECTS)) + r") ?(\d{3}[A-Z]
 MORE = re.compile(r"(?:\s*\([^()]{0,40}\))?\s*(?:,\s*(?:and |or )?|and |or |/|&\s*)(\d{3}[A-Z]{0,3})\b(?!\s*units?\b|-?level|\+)")  # "CSC 230, 256 and 340"
 NOW = ("2026-fall", "Fall 2026")  # ponytail: the eval's "today"; move it when the profiles' terms are shifted again
 LOAD_KEYS = ("max_units_per_term", "include_summer", "include_winter")
-RECORD = ("program", "qr_pathway", "f1", "adt", "ge_certified", "prior_bachelors", "transfer_units")
+RECORD = ("program", "qr_pathway", "f1", "adt", "ge_certified", "prior_bachelors", "transfer_units", "approved")
 PREFS = ("include_summer", "include_winter", "max_units_per_term", "graduate_by")  # checked on build_plan, where they matter
 GRADE_WORDS = {"I": "I (incomplete)", "W": "W (withdrew)", "WU": "WU (unauthorized withdrawal)", "IC": "IC (incomplete charged)",
                "RD": "RD (report delayed)", "RP": "RP (report in progress)", "AU": "AU (audit)"}
@@ -90,7 +90,9 @@ def render(profile: dict | None, goal: str | None, plan: bool) -> str:
     """The student's own words for a profile: what a student would type, nothing a tool would compute."""
     if not profile:
         return ""
-    say = [f"I'm a BS Computer Science major at SF State on the {profile.get('catalog_year', YEAR)} catalog."]
+    rules = server.programs()[profile.get("program", "bs-cs")]
+    major = rules["title"].replace("Bachelor of Science in ", "BS ")
+    say = [f"I'm a {major} major at SF State on the {profile.get('catalog_year', YEAR)} catalog."]
     if profile.get("qr_pathway"):
         say.append(f"My math placement is QR {profile['qr_pathway']}.")
     if profile.get("prior_bachelors"):
@@ -124,6 +126,9 @@ def render(profile: dict | None, goal: str | None, plan: bool) -> str:
         say.append(f"I'm not taking classes this fall ({NOW[0][:4]}).")
     if profile.get("start_term"):
         say.append(f"I start at SF State in {term_words(profile['start_term'])}.")
+    titles = {g["id"]: g["title"] for g in rules["groups"]}
+    for gid, codes in (profile.get("approved") or {}).items():
+        say.append(f"My advisor approved {', '.join(codes)} for my {titles.get(gid, gid)}.")
     if profile.get("gpa"):
         say.append(f"My GPA is {profile['gpa']}.")
     if plan or profile.get("f1"):
@@ -279,6 +284,8 @@ def fact(kind: str, arg, profile: dict | None) -> list[list[str]]:
         return [[server.get_course(arg)["close_matches"][0]]]
     if kind == "areas_of":
         return [area_names(a) for a in CATALOG[arg]["ge_areas"]]
+    if kind == "carries_over_to":  # a change of major: the major courses that count in both programs
+        return [[c] for c in server.compare_programs(profile, arg)["courses"]["count_in_both"]]
     raise ValueError(kind)
 
 
@@ -286,7 +293,7 @@ def cleaned(x: dict) -> dict:
     """The profile as the tools read it: codes normalized, GE areas translated, catalog_year as the rules year used."""
     x = x | {"program": x.get("program", "bs-cs")}
     year = server.rules_year(x)
-    return server.prepare(x, server.load_rules(year, "bs-cs")[1], year)[0]
+    return server.prepare(x, server.load_rules(year, x["program"])[1], year)[0]
 
 
 def profile_diff(expected: dict, got: dict, keys: tuple = RECORD) -> list[str]:

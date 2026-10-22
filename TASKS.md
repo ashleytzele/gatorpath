@@ -427,7 +427,12 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     fall-only, the history says spring; MATH 400's prereq names "MATH 309" (not in the Bulletin), not CSC 309.
     Not done: the Scholars BS + MA roadmap (graduate rules), older catalog years, `dpr_plan` (waits on a real Applied
     Math DPR), and a second person's check against the PDF
-- [ ] `compare_programs(profile, target)`: what counts, what's left, extra semesters
+- [x] `compare_programs(profile, target)`: what counts, what's left, extra semesters. Done 2026-10-22: both majors'
+  audits and build_plan at the same load; `courses` count_in_both / only_current / only_target, `extra_terms`. The new
+  major is the Bulletin in effect at the change ("must fulfill the major requirements in effect at the time they
+  declare or change their major", pp.2352, 2390: `change_of_major` in the university rules), GE stays the catalog
+  year; the DPR's substitutions aren't carried over. A CS junior on track keeps 4 major courses toward Applied Math
+  and needs 2 more terms. Eval questions left-p11, left-p12 and switch-math added (not run yet)
 - [ ] Offline AI-draft pipeline: Bulletin program page → draft YAML → human review →
   `verified: true`
 - [ ] Load all programs as `verified: false`

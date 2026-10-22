@@ -131,6 +131,11 @@ upper_division_ge: {groups: [ge_ud_sci, ge_3ud, ge_4ud], prerequisites: [ge_1a, 
 # accrediting association will not have to complete any GE or additional graduation requirements. These students will
 # only be held to completing courses specifically required for the secondary major." (profile.prior_bachelors)
 prior_degree: {waives: university_groups_and_totals, source: "p.2313"}
+# Change of major (compare_programs): the new major is the Bulletin in effect at the change; GE stays the catalog year.
+change_of_major:
+  rule: "Students who change their major after being admitted or who declare a major after being admitted with an undeclared major must fulfill the major requirements in effect at the time they declare or change their major."
+  how: "Choosing a major involves declaring this choice at the time of admission or consulting with faculty advisors and then submitting a Change of Major through the student center."
+  source: "p.2352, p.2390"
 # Grade points (p.2405) and CR: "equivalent to grades A through C-" (p.2403). The engine's GRADE_POINTS must equal
 # these (tests/test_rules.py checks).
 grading:

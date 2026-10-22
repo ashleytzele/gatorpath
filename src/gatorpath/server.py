@@ -16,6 +16,7 @@ from mcp.types import ToolAnnotations
 
 from gatorpath import db, dpr, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
+from gatorpath.engine.planner import compare_programs as engine_compare_programs
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import cover_combinations, eligible_options, see_advisor
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
@@ -481,6 +482,42 @@ def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | N
     return out
 
 
+@mcp.tool(annotations=READ_ONLY)
+def compare_programs(profile: Profile, target: str) -> dict:
+    """What if the student changes major to `target` (a program id from list_programs)? Returns `current` and `target`:
+    major units done / in progress / needed, and build_plan's terms and est_graduation_term at the profile's load;
+    the target's major groups (what counts, what's left); `courses`: count_in_both, only_current (still count toward
+    the 120 and GE), only_target; and `extra_terms` (target minus current). The new major is the Bulletin in effect
+    when they change (quoted in warnings); GE and graduation requirements stay their catalog year's. Show the
+    see_advisor items: the official check is the Student Center What-If report and the target department."""
+    if err := profile_error(profile):
+        return err
+    if target not in programs():
+        return unknown_program(target)
+    if target == profile["program"]:
+        return {"catalog_year": YEAR, "error": "same_program",
+                "warnings": [f"{target} is already the student's program; use audit_progress and build_plan"]}
+    year, program, university, clean, notes = load_for(profile)
+    # "must fulfill the major requirements in effect at the time they declare or change their major": the current term's
+    # Bulletin when GatorPath has the target's rules for it, else the newest
+    change = held_to(clean["current_term"])
+    t_year = rules_year({"program": target, "catalog_year": clean["current_term"]})
+    t_program, t_university = load_rules(t_year, target)
+    road = lambda y, name: yaml.safe_load((RULES_DIR / "roadmaps" / y / f"{name}.yaml").read_text())
+    out = engine_compare_programs(clean, (program, road(year, profile["program"])), (t_program, road(t_year, target)),
+                                  university, catalog_for(clean), prereqs(DB, YEAR))
+    if "error" in out or "needs_input" in out:
+        return out | {"warnings": notes + out.get("warnings", [])}
+    rule = t_university.get("change_of_major")
+    out["warnings"] = (notes + ([f"Changing major: \"{rule['rule']}\" How: \"{rule['how']}\" ({rule['source']}). So "
+                                 f"{t_program['title']} uses the {t_year} Bulletin; GE and graduation requirements stay "
+                                 f"your catalog year's ({year})"] if rule else [])
+                       + ([f"GatorPath doesn't have the {change} Bulletin's {target} rules; this uses {t_year}"]
+                          if change and change != t_year else [])
+                       + out["warnings"] + unverified(t_program, target) + [offering_note(DB, YEAR)])
+    return out
+
+
 def profile_file(path: str | None) -> tuple[Path | None, str | None]:
     """The student's chosen profile file, or why it's refused (golden rule 5: never inside the repo)."""
     given = Path(path or PROFILE_PATH).expanduser()
@@ -721,6 +758,10 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    build_plan lays a plan on the Bulletin roadmap; when pace.roadmap_load is there, the roadmap's own loads (some
    16-17-unit terms) finish sooner: offer it as a row. When pace.fold_last_term is there, moving the light last term
    into one earlier term finishes a term sooner with only that term heavier: offer it as a row, from its note.
+   "What if I switch to <major>?": `compare_programs` with target = its id from list_programs. Show what counts in
+   both, what only the current major used (still toward the 120), what the new one still needs, and extra_terms;
+   quote its change-of-major warning (the new major is the Bulletin in effect when they change) and its see_advisor;
+   the official check is the Student Center What-If report.
 7. Present, briefly:
    - done / left, with Bulletin pages, and every point where the DPR and the tools disagree
    - one table per term, in the order to enter it in Student Center → Degree Planner: course, units, what it counts

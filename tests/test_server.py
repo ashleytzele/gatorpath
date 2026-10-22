@@ -297,6 +297,7 @@ def test_only_save_profile_writes_a_file(tmp_path, tmp_path_factory, monkeypatch
         "load_profile": server.load_profile, "import_transcript": lambda: server.import_transcript(str(pdf)),
         "import_dpr": lambda: server.import_dpr(str(pdf)),
         "ge_combinations": lambda: server.ge_combinations(profile, plan),
+        "compare_programs": lambda: server.compare_programs(profile, "bs-applied-math"),
     }
     assert set(calls) == {t.name for t in asyncio.run(server.mcp.list_tools())} - {"save_profile"}
     for call in calls.values():
@@ -539,3 +540,18 @@ def test_the_server_never_plans_on_top_of_the_current_term():
     p = {"catalog_year": "2026-27", "program": "bs-cs", "in_progress": ["CSC 101"], "start_term": "2026-fall"}
     errs = [e["error"] for e in server.check_plan(p, {"semesters": [{"term": "2026-fall", "courses": ["CSC 215"]}]})["errors"]]
     assert "term_in_progress" in errs
+
+
+def test_compare_programs_quotes_the_change_of_major_rule():
+    p = SCENARIOS["Fall 2025 sophomore"]  # BS CS on the 2025-26 Bulletin
+    got = server.compare_programs(p, "bs-applied-math")
+    assert got["catalog_year"] == got["target"]["catalog_year"] == "2026-27" and got["current"]["catalog_year"] == "2025-26"
+    rule = next(w for w in got["warnings"] if w.startswith("Changing major:"))
+    assert "must fulfill the major requirements in effect at the time they declare or change their major" in rule
+    assert "(p.2352, p.2390)" in rule and "stay your catalog year's (2025-26)" in rule
+    assert "MATH 226" in got["courses"]["count_in_both"] and "PHYS 220" in got["courses"]["only_current"]
+    assert server.compare_programs(p, "bs-cs")["error"] == "same_program"
+    assert server.compare_programs(p, "ba-math")["error"] == "unknown_program"
+    freshman = server.compare_programs(SCENARIOS["new freshman, QR 1/2"], "bs-applied-math")
+    assert freshman["courses"] == {"count_in_both": [], "only_current": [], "only_target": []}
+    assert freshman["extra_terms"] == freshman["target"]["terms"] - freshman["current"]["terms"]

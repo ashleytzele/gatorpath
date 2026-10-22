@@ -978,6 +978,48 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             "check": {"valid": check["valid"], "errors": check["errors"]}}
 
 
+def compare_programs(profile: dict, current: tuple[dict, dict], target: tuple[dict, dict], university: dict,
+                     catalog: dict, prereqs: dict) -> dict:
+    """What-if for a change of major (ARCHITECTURE §7.3): which of the student's courses count toward each major, what
+    the target still needs, and build_plan's length for each at the same load. `current` and `target` are (program
+    rules, roadmap); `university` is the student's own catalog year (GE doesn't change with the major)."""
+    sides, counts, warnings = {}, {}, []
+    for key, (program, roadmap) in (("current", current), ("target", target)):
+        p = profile | {"program": program["program"]}
+        if key == "target":  # the DPR's substitutions were approved for the current major, not this one
+            p = p | {"dpr_met": []}
+            if profile.get("dpr_met"):
+                warnings.append(f"Substitutions on your DPR ({', '.join(profile['dpr_met'])}) are your current major's; "
+                                f"they aren't counted toward {program['title']}: ask its department whether they carry over")
+        plan = build_plan(p, program, university, roadmap, catalog, prereqs)
+        if "needs_input" in plan or "error" in plan:
+            return plan | {"for": key}
+        status = audit(p, program, university, catalog)
+        major = [g for g in status["groups"] if g["kind"] == "major"]
+        done = {c for g in major for c in g["counted"]}
+        going = {c for g in major for c in g["in_progress"]}
+        units = lambda cs: sum(catalog[c]["units_min"] for c in cs if c in catalog)
+        counts[key] = done | going
+        sides[key] = {"program": program["program"], "title": program["title"], "catalog_year": program["catalog_year"],
+                      "major_units": {"done": units(done), "in_progress": units(going), "needed": program["total_units"]},
+                      "terms": len(plan["semesters"]), "est_graduation_term": plan["est_graduation_term"],
+                      "plan_valid": plan["check"]["valid"]}
+        if key == "target":
+            sides[key]["groups"] = [{k: v for k, v in g.items() if k not in ("kind", "eligible")} for g in major]
+            warnings += [w for w in status["warnings"] if "doesn't count toward" in w]
+            advise = see_advisor([("major_advisor", f"Changing your major to {program['title']}: confirm what counts and "
+                                   "the requirements in effect when you change")], program, university, plan["see_advisor"])
+    only_current = sorted(counts["current"] - counts["target"])
+    return {"catalog_year": sides["target"]["catalog_year"], **sides,
+            "courses": {"count_in_both": sorted(counts["current"] & counts["target"]), "only_current": only_current,
+                        "only_target": sorted(counts["target"] - counts["current"])},
+            "extra_terms": sides["target"]["terms"] - sides["current"]["terms"]
+                           if sides["target"]["est_graduation_term"] and sides["current"]["est_graduation_term"] else None,
+            "warnings": warnings + ([f"{', '.join(only_current)} still count toward the 120 units (and GE where they carry "
+                                     "an area), just not toward the new major"] if only_current else []),
+            "see_advisor": advise}
+
+
 def minimal_covers(need: frozenset, covers: list[frozenset], ways: int = 10, budget: int = 20000) -> list[list]:
     """Sets of covers whose union is `need`, none redundant, fewest first. A greedy cover sets the size; an exact-cover
     search (branch on the requirement with the fewest covers, only over covers that contain it) finds others up to that
