@@ -395,7 +395,16 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     normal-load rule; `include_winter` lets build_plan use them for GE, American Institutions and free-elective slots
     only (no winter offering history). With it, 6 of 17 scenarios finish a term sooner; a student 19 units short of
     a spring graduation gets one GE course into Winter. Summer stays opt-in (`include_summer`), as before
-- [ ] Write the resume bullet with real numbers
+- [x] Write the resume bullet with real numbers (2026-10-22; numbers from `data/catalog.db`, `evals/REPORT.md` run
+  20261021-192336, `pytest`). Add "N SF State students tried it" once the classmates have:
+  - Built GatorPath, a Python MCP server that gives AI assistants deterministic SF State degree-planning tools: parsed
+    4,967 courses from the 2,932-page Bulletin PDF (prerequisites fully parsed for 74%, the 111 it can't parse flagged,
+    never guessed), encoded BS CS requirements for 3 catalog years with a Bulletin page cited on every rule, and wrote
+    the plan checker every generated plan must pass; on 44 eval questions Claude Code and Codex CLI each passed 43,
+    with 0 hallucinated course codes
+  - Short: Built an MCP server that grounds AI degree planning in SF State's 2,932-page Bulletin: 4,967 courses, page-
+    cited requirements for 3 catalog years, a deterministic plan checker; 43/44 eval questions passed on both Claude
+    Code and Codex CLI, 0 hallucinated course codes
 
 **Done when:** the public repo has a demo, an eval table, and real user feedback.
 

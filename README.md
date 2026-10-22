@@ -79,8 +79,9 @@ prompt now plans from that, and a rerun of that question passes on both.
   Bulletins. Requirements follow the student's catalog year; courses and prereqs are the newest Bulletin's. A DPR on
   an older catalog (2023-24 and before) is planned with 2026-27 rules plus a warning, and the DPR wins where they
   disagree.
-- The rules are `verified: false`: eight rounds of independent AI review against the PDF brought the error rate
-  from 19.6% to 10.6%, each finding fixed, but no second person has signed them off yet.
+- Only the 2025-26 rules are signed off by a person (`verified: true`). The 2026-27 and 2024-25 rules are
+  `verified: false`: for 2026-27, eight rounds of independent AI review against the PDF brought the error rate from
+  19.6% to 10.6%, each finding fixed.
 - Offering history covers CSC, MATH and PHYS only (2023-spring to 2026-fall); other subjects show `offered: unknown`.
 - The transcript importer hasn't seen a real CR / W / I / repeat row yet, and the DPR's transfer-row Notes codes have
   no legend. Both get flagged rather than guessed.
