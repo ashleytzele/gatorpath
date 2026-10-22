@@ -1,0 +1,66 @@
+# BS Applied Mathematics senior (first-time student) exercising the program's own rules (p.2129):
+# - programming "Select One": CSC 101 done, CSC 215 in progress -> the CSC 101 & CSC 215 option, in progress
+# - MATH 325 with C-: "Grades of C or better are required in ... MATH 325", so it doesn't count (retake allowed)
+# - MATH 430 with CR: "CR/NC grades are not acceptable in courses to be counted for a mathematics major program"
+# - application electives: PHYS 320 and ECON 312 approved by the advisor (profile.approved) = 6 of 9 units
+# Units 16 + 16 + 18 + 15 = 65. GPA (MATH 430 CR left out): 197.8 / 62 = 3.190. Major GPA: required counted +
+# MATH 325 C- + CSC 101 + MATH 370 + MATH 491 + PHYS 320 + ECON 312 = 115.8 / 37 = 3.130.
+profile:
+  catalog_year: 2026-27
+  program: bs-applied-math
+  qr_pathway: "1/2"
+  completed:
+    - {code: MATH 226, grade: A, term: 2025-fall}
+    - {code: CSC 101, grade: A, term: 2025-fall}
+    - {code: ENG 114, grade: A, term: 2025-fall}
+    - {code: COMM 150, grade: B, term: 2025-fall}
+    - {code: AA S 210, grade: B, term: 2025-fall}
+    - {code: MATH 227, grade: B, term: 2026-spring}
+    - {code: PHIL 110, grade: B, term: 2026-spring}
+    - {code: ECON 101, grade: B, term: 2026-spring}
+    - {code: ARTH 201, grade: A, term: 2026-spring}
+    - {code: PHIL 101, grade: B, term: 2026-spring}
+    - {code: MATH 228, grade: B, term: 2026-fall}
+    - {code: MATH 301GW, grade: B, term: 2026-fall}
+    - {code: MATH 325, grade: C-, term: 2026-fall}
+    - {code: ASTR 115, grade: B, term: 2026-fall}
+    - {code: ASTR 116, grade: A, term: 2026-fall}
+    - {code: ECON 312, grade: B, term: 2026-fall}
+    - {code: MATH 440, grade: B, term: 2027-spring}
+    - {code: MATH 370, grade: B, term: 2027-spring}
+    - {code: MATH 430, grade: CR, term: 2027-spring}
+    - {code: MATH 491, grade: A, term: 2027-spring}
+    - {code: PHYS 320, grade: B, term: 2027-spring}
+  in_progress: [CSC 215, MATH 495, ENVS 401]
+  approved: {application_electives: [PHYS 320, ECON 312]}
+expected:
+  complete: false
+  groups:
+    "*": remaining
+    programming: in_progress    # CSC 101 done, CSC 215 in progress
+    theory: satisfied           # MATH 370
+    major_electives: in_progress  # MATH 491 done + MATH 495 in progress; MATH 430 CR doesn't count
+    ge_1a: satisfied
+    ge_1b: satisfied
+    ge_1c: satisfied
+    ge_2: satisfied
+    ge_3a: satisfied
+    ge_3b: satisfied
+    ge_4: satisfied
+    ge_4ud: in_progress         # ENVS 401
+    ge_4_disciplines: satisfied # two subjects already (AA S, ECON)
+    ge_5a: satisfied
+    ge_5c: satisfied
+    gwar: satisfied             # MATH 301GW
+    sfss_aerm: satisfied
+    sfss_esca: in_progress      # ENVS 401
+    sfss_gp: in_progress        # ENVS 401
+    ai_ush: satisfied
+  counted: {required: [MATH 226, MATH 227, MATH 228, MATH 301GW, MATH 440], programming: [CSC 101],
+            theory: [MATH 370], major_electives: [MATH 491], application_electives: [PHYS 320, ECON 312]}
+  in_progress: {programming: [CSC 215], major_electives: [MATH 495]}
+  totals: {units: 65, units_in_progress: 10, upper_division_units: 25, residence_major_units: 33, cr_units: 3,
+           gpa_sf_state: 3.19, gpa_major: 3.13}
+  warnings_include:
+    - "MATH 325: grade C- doesn't count toward Required Courses; needs C or better (p.2129)"
+    - "MATH 430: grade CR doesn't count toward Electives: six units from the list; CR/NC is not accepted in the major (p.2129)"

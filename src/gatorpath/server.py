@@ -70,6 +70,7 @@ class Profile(TypedDict):
     ge_done: NotRequired[list[str]]
     dpr_met: NotRequired[list[str]]
     not_on_dpr: NotRequired[list[str]]
+    approved: NotRequired[dict[str, list[str]]]
     first_time: NotRequired[bool]
     ge_certified: NotRequired[bool]
     prior_bachelors: NotRequired[bool]
@@ -284,6 +285,7 @@ def rules_year(profile: dict) -> str:
 
 def year_warning(profile: dict, year: str) -> list[str]:
     given = profile.get("catalog_year")
+    have = [y for y in YEARS if (RULES_DIR / "programs" / y / f"{profile['program']}.yaml").exists()]
     if given is None:
         return [f"catalog_year not given, so this uses the {YEAR} Bulletin. Students are held to the year on their DPR "
                 "('Requirement (Catalog) Term'); if it's earlier, requirements (GE areas especially) may differ"]
@@ -291,7 +293,7 @@ def year_warning(profile: dict, year: str) -> list[str]:
         return [] if year == YEAR else [
             f"Requirements are the {year} Bulletin's (the student's catalog year, {given}); courses, prereqs and GE "
             f"tags are the {YEAR} Bulletin's, the one the remaining courses are taken under"]
-    return [f"The student's catalog year is {given}, but GatorPath has rules only for {', '.join(YEARS)}, so this uses "
+    return [f"The student's catalog year is {given}, but GatorPath has {profile['program']} rules only for {', '.join(have)}, so this uses "
             f"{YEAR}. Requirements may differ (GE areas especially). Where the DPR disagrees, the DPR "
             "wins. In continuous attendance a student may elect the graduation requirements in effect when they began "
             "their study, when they entered SF State, or when they graduate (p.2390); ask an advisor before relying on that"]
@@ -320,7 +322,8 @@ def prepare(profile: dict, university: dict, year: str = YEAR) -> tuple[dict, li
                        "catalog_year": year, "ge_done": ge_done, "not_on_dpr": list(dict.fromkeys(left_out)),
                        "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
                        "in_progress": [norm_code(c) for c in profile.get("in_progress", [])],
-                       "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])]}
+                       "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])],
+                       "approved": {g: [norm_code(c) for c in cs] for g, cs in (profile.get("approved") or {}).items()}}
     return clean, year_warning(profile, year) + ge_warnings
 
 
@@ -368,7 +371,10 @@ def audit_progress(profile: Profile) -> dict:
     unless the student says: without it, transfer work decides); ge_certified (Cal-GETC certification of lower-division GE, p.2304); prior_bachelors (already holds
     a bachelor's or higher degree from a regionally accredited institution: GE and graduation requirements waived,
     p.2313); transfer_units: total transfer units; adt: true only for a verified AA-T/AS-T from a California Community
-    College in a similar approved major (waives SF State Studies, p.2313); gpa optional.
+    College in a similar approved major (waives SF State Studies, p.2313); approved: {group id: [codes]}, the courses
+    the student's advisor approved for a group with `approval` (BS Applied Mathematics application electives: no
+    Bulletin list), from the DPR or the student; gpa optional. A group with `options` is a "Select One": `remaining`
+    is one option, and the student may take another.
     """
     if err := profile_error(profile):
         return err
@@ -440,7 +446,8 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     (blocked_by, plus ready_by: the first plan term it opens up, when a plan is given). Pass the build_plan output as
     `plan` and the slot's term as by_term, so planned courses count. Options are ranked ready-first, then by
     also_covers: other open requirements the same course would satisfy (one course can do triple duty, e.g. 4UD +
-    Environmental Sustainability + Global Perspectives). Re-run check_plan after filling slots.
+    Environmental Sustainability + Global Perspectives). Re-run check_plan after filling slots. A group with
+    `approval` (courses an advisor consents to, no Bulletin list) returns that text, no options, and see_advisor.
     """
     if err := profile_error(profile):
         return err
@@ -618,7 +625,8 @@ def import_dpr(pdf_path: str) -> dict:
     year = rules_year({"program": program, "catalog_year": parsed["catalog_term"]})
     rules, university = load_rules(year, program)
     loose = "C-" if rules.get("global", {}).get("no_cr_nc") else "CR"
-    min_grade = {c: min_grade_of(g, c) or loose for g in rules["groups"] for c in g.get("all_of", [])}
+    min_grade = {c: min_grade_of(g, c) or loose for g in rules["groups"]
+                 for c in g.get("all_of", []) + [c for opt in g.get("one_of", []) for c in opt]}
     units = {c: r["units_min"] for c, r in catalog(DB, YEAR).items()}
     got = dpr.to_profile(parsed, min_grade, units)
     profile = {"program": program, **{k: v for k, v in got.items() if k not in ("remaining", "warnings")}}
@@ -678,6 +686,8 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      in a similar approved major; ge_certified: true for Cal-GETC certification of lower-division GE; first_time:
      false for transfer students; prior_bachelors: true if they already hold a bachelor's or higher degree from a
      regionally accredited institution; f1: true for an F-1 visa student.
+   - approved: for a group with `approval` (no Bulletin list, an advisor's consent), the courses the DPR lists under
+     it or the student says their advisor approved: {{group id: [codes]}}.
    - exam credit (AP / CLEP): put US History and US Government in ge_done as USH / USG only when the DPR shows them;
      no AP or CLEP exam meets California government (CSLG), p.2350.
 3. `audit_progress`, then `build_plan` (with graduate_by if given). If build_plan returns needs_input, ask for
@@ -692,7 +702,11 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    as a short table, fewest courses first, with 2-3 example courses per part (one course can cover several, or they
    can split them, e.g. 4UD + Environmental Sustainability this term and Global Perspectives the next). Put the
    first way (the fewest courses found) in the plan by default and say any other way works.
-   Senior electives: at least 12 of the 15 units in CSC; name a backup for each. A 0-unit tag slot is met by a
+   Major electives: meet any min_units_from (BS CS senior electives: at least 12 of the 15 units in CSC); name a
+   backup for each. A group with `approval` has no options to list: keep its slots, say the advisor approves those
+   courses before they're taken (see_advisor), and fill them only with courses the student says were approved. A
+   "Select One" group (audit `options`) is the student's pick: build_plan plans the first, so name the others.
+   A 0-unit tag slot is met by a
    chosen course whose also_covers includes it (then drop the tag); otherwise fill it from its own group and add the
    units. Free `elective` slots: suggest courses that fit the goal.
 5. `check_plan` the filled plan; fix every error and re-check until valid. Before calling a course optional, take

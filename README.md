@@ -75,13 +75,16 @@ prompt now plans from that, and a rerun of that question passes on both.
 
 ## Limitations
 
-- One program, three catalog years: BS Computer Science, 2024-25 (the old GE Areas A-F), 2025-26 and 2026-27
-  Bulletins. Requirements follow the student's catalog year; courses and prereqs are the newest Bulletin's. A DPR on
-  an older catalog (2023-24 and before) is planned with 2026-27 rules plus a warning, and the DPR wins where they
-  disagree.
-- Only the 2025-26 rules are signed off by a person (`verified: true`). The 2026-27 and 2024-25 rules are
-  `verified: false`: for 2026-27, eight rounds of independent AI review against the PDF brought the error rate from
-  19.6% to 10.6%, each finding fixed.
+- Two programs: BS Computer Science for three catalog years, 2024-25 (the old GE Areas A-F), 2025-26 and 2026-27,
+  and BS Applied Mathematics for 2026-27 only. Requirements follow the student's catalog year; courses and prereqs
+  are the newest Bulletin's. A DPR on a catalog year without rules is planned with 2026-27 rules plus a warning,
+  and the DPR wins where they disagree. `import_dpr` doesn't recognize an Applied Mathematics DPR yet (no sample
+  to read its program line from); type the courses or use the transcript instead.
+- BS Applied Mathematics: the three application electives are "chosen with the consent of the applied mathematics
+  advisor" (p.2129), so GatorPath can't list them; it counts only the ones you say were approved.
+- Only the 2025-26 BS CS rules are signed off by a person (`verified: true`). The others are
+  `verified: false`: for BS CS 2026-27, eight rounds of independent AI review against the PDF brought the error rate
+  from 19.6% to 10.6%, each finding fixed. BS Applied Mathematics hasn't had a review yet.
 - Offering history covers CSC, MATH and PHYS only (2023-spring to 2026-fall); other subjects show `offered: unknown`.
 - The transcript importer hasn't seen a real CR / W / I / repeat row yet, and the DPR's transfer-row Notes codes have
   no legend. Both get flagged rather than guessed.
@@ -91,7 +94,7 @@ prompt now plans from that, and a rerun of that question passes on both.
 
 ## Scope
 
-- v1: SF State, BS Computer Science (2026-27 Bulletin), then Mathematics
+- v1: SF State, BS Computer Science (2026-27 Bulletin), then BS Applied Mathematics (2026-27, rules unverified)
 - Later: transfer credit, week-level schedules, web UI
 
 *Not affiliated with San Francisco State University. Always confirm with your advisor and your

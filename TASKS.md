@@ -413,6 +413,20 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
 ## Phase 8 — Expand
 
 - [ ] BS Mathematics rules + roadmaps (verified)
+  - 2026-10-22: the Bulletin has no BS in Mathematics: a BA (Advanced Study, Liberal Arts, Teaching), a BS in
+    Applied Mathematics and a BS in Statistics (p.2089). Chosen: **BS Applied Mathematics**, 2026-27,
+    `rules/programs/2026-27/bs-applied-math.yaml` + roadmaps QR 1/2, QR 3/4, ADT (pp.2129-2137), `verified: false`.
+    New vocabulary (ARCHITECTURE §6.2): `one_of` ("Select One: MATH 209, CSC 101 & CSC 215, or CSC 309"),
+    `approval` + `from: {approved: true}` + `profile.approved` (three application electives "chosen with the consent
+    of the applied mathematics advisor": no list, so only approved courses count and build_plan sends the student to
+    that advisor), roadmap `{one_of}` and `{slot: major, group}` items. check_plan's "12 units must be CSC" note and
+    the "rules only for <years>" warning are now per program. Synthetic p11 (sophomore) and p12 (senior: C- in MATH
+    325, CR in an elective, the CSC option in progress, approved electives); 4 Applied Math scenarios in plan_review.
+    Found: QR 3/4 takes 10 terms, not the roadmap's 8 (MATH 376 ran fall-only and MATH 460 spring-only in Class
+    Search 2023-2026; the roadmap puts MATH 696 before its prereq MATH 460); the ADT footnote says MATH 460 is
+    fall-only, the history says spring; MATH 400's prereq names "MATH 309" (not in the Bulletin), not CSC 309.
+    Not done: the Scholars BS + MA roadmap (graduate rules), older catalog years, `dpr_plan` (waits on a real Applied
+    Math DPR), and a second person's check against the PDF
 - [ ] `compare_programs(profile, target)`: what counts, what's left, extra semesters
 - [ ] Offline AI-draft pipeline: Bulletin program page → draft YAML → human review →
   `verified: true`

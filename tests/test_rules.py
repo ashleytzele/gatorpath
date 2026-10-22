@@ -17,7 +17,7 @@ PROFILES = sorted((ROOT / "evals/profiles").glob("*.yaml"))
 def test_eval_profile_matches_hand_computed_audit(path):
     case = yaml.safe_load(path.read_text())
     want = case["expected"]
-    got = audit(case["profile"], PROGRAM, UNIVERSITY, CATALOG)
+    got = audit(case["profile"], *load_rules("2026-27", case["profile"]["program"]), CATALOG)
     groups = {g["id"]: g for g in got["groups"]}
     assert {i: g["status"] for i, g in groups.items()} == {i: want["groups"].get(i, want["groups"]["*"]) for i in groups}
     assert got["complete"] == want["complete"]
@@ -59,12 +59,13 @@ def test_level_and_paired_filters():
 
 
 YEARS = sorted(p.stem for p in (RULES_DIR / "university").glob("*.yaml"))  # every catalog year with rules
+PROGRAMS = [(y, p.stem) for y in YEARS for p in sorted((RULES_DIR / "programs" / y).glob("*.yaml"))]
 
 
-@pytest.mark.parametrize("year", YEARS)
-def test_every_rule_group_cites_a_page(year):
-    program, university = load_rules(year, "bs-cs")
-    assert program["catalog_year"] == university["catalog_year"] == year
+@pytest.mark.parametrize("year,name", PROGRAMS)
+def test_every_rule_group_cites_a_page(year, name):
+    program, university = load_rules(year, name)
+    assert program["catalog_year"] == university["catalog_year"] == year and program["program"] == name
     for g in program["groups"] + university["groups"]:
         assert re.fullmatch(r"p\.\d{4}.*", g["source"]), g["id"]
 
@@ -89,12 +90,12 @@ def test_ge_area_minimums_add_up(year):
     assert sum(g.get("choose_units", 0) for g in university["groups"] if g["id"].startswith("ge_") and g["id"] not in inside) == want
 
 
-ROADMAPS = {y: yaml.safe_load((RULES_DIR / f"roadmaps/{y}/bs-cs.yaml").read_text()) for y in YEARS}
+ROADMAPS = {(y, n): yaml.safe_load((RULES_DIR / f"roadmaps/{y}/{n}.yaml").read_text()) for y, n in PROGRAMS}
 
 
-@pytest.mark.parametrize("year,variant", [(y, v) for y, r in ROADMAPS.items() for v in r["variants"]])
-def test_roadmap_semesters_add_up_to_printed_units(year, variant):
-    v = ROADMAPS[year]["variants"][variant]
+@pytest.mark.parametrize("key,variant", [(k, v) for k, r in ROADMAPS.items() for v in r["variants"]])
+def test_roadmap_semesters_add_up_to_printed_units(key, variant):
+    v = ROADMAPS[key]["variants"][variant]
     for i, sem in enumerate(v["semesters"], 1):
         units = sum(CATALOG[x]["units_min"] if isinstance(x, str) else x["units"] for x in sem["items"])
         assert units == sem["units"], f"{variant} semester {i}"

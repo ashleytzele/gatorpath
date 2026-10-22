@@ -104,13 +104,18 @@ def min_grade_of(g: dict, code: str) -> str | None:
 def filters_for(g: dict, profile: dict) -> list[dict]:
     """A group's `from` filters for this student: `first_time_from` for a first-time student (US History, p.2313)."""
     source = g["first_time_from"] if "first_time_from" in g and first_time(profile) else g["from"]
-    return source if isinstance(source, list) else [source]
+    # {approved: true}: no Bulletin list, only the courses the student's advisor approved for this group (§6.2)
+    return [f | {"courses": profile.get("approved", {}).get(g["id"], [])} if "approved" in f else f
+            for f in (source if isinstance(source, list) else [source])]
 
 
 def matches(f: dict, code: str, course: dict) -> bool:
-    """One `from` filter: {list} | {ge_area} (any of) | {ge_area_all} | {subject, level, paired}, each with `except`."""
+    """One `from` filter: {list} | {ge_area} (any of) | {ge_area_all} | {subject, level, paired}, each with `except`;
+    {approved} matches the courses filters_for gave it."""
     if code in f.get("except", ()):
         return False
+    if "approved" in f:
+        return code in f.get("courses", ())
     if "list" in f:
         return code in f["list"]
     if "ge_area_all" in f or "ge_area" in f:
@@ -240,6 +245,25 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
         status = "remaining" if left else "in_progress" if prog else "satisfied"
         return out | {"status": status, "counted": done, "in_progress": prog, "remaining": left} | (
             {"met_per_dpr": met} if met else {})
+
+    if "one_of" in g:
+        # "Select One" of course bundles: met when every course of one option counts. What's left is one option: the
+        # most done or in progress, then the fewest units left, then the first printed (§6.2).
+        opts = []
+        for opt in g["one_of"]:
+            done = [c for c in opt if ok(c)]
+            prog = [c for c in opt if c not in done and c in in_progress and free(c)]
+            opts.append({"courses": opt, "done": done, "in_progress": prog, "left": [c for c in opt if c not in done + prog]})
+        for c in {c for opt in g["one_of"] for c in opt}:
+            note_grade(c)
+        best = min(opts, key=lambda o: (bool(o["left"]), bool(o["in_progress"]), -len(o["done"] + o["in_progress"]),
+                                        sum(catalog[c]["units_min"] for c in o["left"] if c in catalog)))
+        if claimed is not None:
+            claimed.update(best["done"] + best["in_progress"])
+        status = "remaining" if best["left"] else "in_progress" if best["in_progress"] else "satisfied"
+        return out | {"status": status, "counted": best["done"], "in_progress": best["in_progress"],
+                      "remaining": best["left"]} | (
+            {"options": [{"courses": o["courses"], "left": o["left"]} for o in opts]} if status != "satisfied" else {})
 
     filters = filters_for(g, profile)
     areas = lambda x: {str(a) for a in (x if isinstance(x, list) else [x])}

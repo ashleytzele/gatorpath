@@ -109,9 +109,16 @@ def test_complete_plan_for_adt_transfer_is_valid():
 ROADMAP = yaml.safe_load((ROOT / "rules/roadmaps/2026-27/bs-cs.yaml").read_text())
 
 
+def rules_for(profile):
+    """(program, university, roadmap) for the profile's own program (bs-cs unless it says otherwise)."""
+    name = profile.get("program", "bs-cs")
+    return (*load_rules("2026-27", name), yaml.safe_load((ROOT / f"rules/roadmaps/2026-27/{name}.yaml").read_text()))
+
+
 def plan_for(profile):
     from gatorpath.engine.planner import build_plan
-    return build_plan(profile, PROGRAM, UNIVERSITY, ROADMAP, CATALOG, PREREQS)
+    program, university, roadmap = rules_for(profile)
+    return build_plan(profile, program, university, roadmap, CATALOG, PREREQS)
 
 
 def eval_profile(path):
@@ -126,7 +133,7 @@ def eval_profile(path):
 def test_build_plan_passes_check_plan(path):
     profile = eval_profile(path)
     got = plan_for(profile)
-    recheck = check_plan(profile, {"semesters": got["semesters"]}, PROGRAM, UNIVERSITY, CATALOG, PREREQS)
+    recheck = check_plan(profile, {"semesters": got["semesters"]}, *rules_for(profile)[:2], CATALOG, PREREQS)
     assert recheck["valid"] == got["check"]["valid"]
     if path.stem == "p05-cr-grades":
         # MATH 226 and CSC 101 passed with CR: the major doesn't accept CR, and CR courses can't be repeated (p.2392)

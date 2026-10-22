@@ -39,6 +39,30 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ASTR 115": {
+  "ge_areas": [
+   "5A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2159,
+  "title": "Introduction to Astronomy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ASTR 116": {
+  "ge_areas": [
+   "5C"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2159,
+  "title": "Astronomy Laboratory",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
  "BIOL 100": {
   "ge_areas": [
    "5B"
@@ -134,6 +158,16 @@
   "repeatable": false,
   "source_page": 1896,
   "title": "Ethics, Communication, and Tools for Software Development - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CSC 309": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1896,
+  "title": "Computer Programming",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -619,6 +653,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ECON 312": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Introduction to Econometrics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ECON 474": {
   "ge_areas": [
    "AERM",
@@ -664,6 +708,20 @@
   "repeatable": false,
   "source_page": 1106,
   "title": "Writing the First Year: Finding Your Voice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENVS 401": {
+  "ge_areas": [
+   "ESCA",
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2009,
+  "title": "International Development and Resource Justice",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -755,6 +813,23 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "HIST 471": {
+  "ge_areas": [
+   "USG",
+   "CSLG",
+   "USH",
+   "SJ",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1222,
+  "title": "The U.S. Constitution Since 1896",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MATH 197": {
   "ge_areas": [],
   "grading": null,
@@ -774,6 +849,16 @@
   "repeatable": false,
   "source_page": 2091,
   "title": "Prelude to Calculus II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 209": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2091,
+  "title": "Mathematical Computing",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -809,6 +894,28 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "MATH 228": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Calculus III",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "MATH 301GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Exploration and Proof - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MATH 324": {
   "ge_areas": [],
   "grading": null,
@@ -816,6 +923,56 @@
   "repeatable": false,
   "source_page": 2092,
   "title": "Probability and Statistics with Computing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 325": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Linear Algebra",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "MATH 335": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Modern Algebra",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 370": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Real Analysis I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 376": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Ordinary Differential Equations I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 380": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Introduction to Complex Analysis",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -839,6 +996,46 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "MATH 430": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Mathematics of Optimization",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 440": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Probability and Statistics I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 442": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Probability Models",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 447": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2094,
+  "title": "Design and Analysis of Experiments",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MATH 448": {
   "ge_areas": [],
   "grading": null,
@@ -848,6 +1045,86 @@
   "title": "Introduction to Statistical Learning and Data Mining",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "MATH 449": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2094,
+  "title": "Categorical Data Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 460": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2094,
+  "title": "Mathematical Modeling",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 471": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2094,
+  "title": "Fourier Analysis and Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 477": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2094,
+  "title": "Partial Differential Equations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 491": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2095,
+  "title": "Game Theory",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 495": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2095,
+  "title": "Introduction to Wavelets and Frames with Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 696": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2095,
+  "title": "Applied Mathematics Project I",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MATH 697": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2095,
+  "title": "Applied Mathematics Project II",
+  "units_max": 2.0,
+  "units_min": 2.0
  },
  "PHIL 101": {
   "ge_areas": [
@@ -941,6 +1218,16 @@
   "title": "General Physics with Calculus II Laboratory",
   "units_max": 1.0,
   "units_min": 1.0
+ },
+ "PHYS 320": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2162,
+  "title": "Modern Physics I",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "PLSI 200": {
   "ge_areas": [

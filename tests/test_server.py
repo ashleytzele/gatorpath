@@ -78,6 +78,7 @@ def test_search_courses():
 
 def test_programs_and_roadmap():
     assert server.list_programs()["programs"] == [
+        {"id": "bs-applied-math", "title": "Bachelor of Science in Applied Mathematics", "verified": False},
         {"id": "bs-cs", "title": "Bachelor of Science in Computer Science", "verified": False}]
     req = server.get_program_requirements("bs-cs")
     assert [g["id"] for g in req["program"]["groups"]][:2] == ["math_physics", "core_cs"]
@@ -86,12 +87,13 @@ def test_programs_and_roadmap():
     assert set(server.get_roadmap("bs-cs")["variants"]) == {"qr-1-2", "qr-3-4", "adt"}
     rm = server.get_roadmap("bs-cs", "qr-1-2")
     assert rm["semesters"][0]["items"][0] == "CSC 101" and rm["source"] == "p.1908-1909"
+    assert set(server.get_roadmap("bs-applied-math")["variants"]) == {"qr-1-2", "qr-3-4", "adt"}
 
 
 @pytest.mark.parametrize("path", sorted((ROOT / "evals/profiles").glob("*.yaml")), ids=lambda p: p.stem)
 def test_audit_progress_matches_engine(path):
     profile = yaml.safe_load(path.read_text())["profile"]
-    want = audit(profile, *load_rules("2026-27", "bs-cs"), json.loads((ROOT / "evals/catalog-2026-27.json").read_text()))
+    want = audit(profile, *load_rules("2026-27", profile["program"]), json.loads((ROOT / "evals/catalog-2026-27.json").read_text()))
     # sloppy client input: lower case, no spaces ('aas210' -> 'AA S 210')
     sloppy = profile | {"completed": [r | {"code": r["code"].lower().replace(" ", "")} for r in profile.get("completed", [])],
                         "in_progress": [c.lower() for c in profile.get("in_progress", [])]}
@@ -237,7 +239,8 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     text = server.plan_my_degree(goal="AI / machine learning", graduate_by="2029-spring")
     assert "The student's goal: AI / machine learning." in text and "graduate by 2029-spring" in text
     tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
-    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last", "profile"}  # data
+    fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last", "profile",
+              "approval", "options"}  # data
     named = set(regex.findall(r"`([a-z_]+)`", text)) - fields
     assert named <= tools, named - tools
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named
@@ -373,6 +376,7 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
 
 
 FRESH = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall"}
+MATH_FRESH = FRESH | {"program": "bs-applied-math"}
 SCENARIOS = {
     "new freshman, QR 1/2": FRESH | {"qr_pathway": "1/2"},
     "new freshman, QR 3/4, F-1": FRESH | {"qr_pathway": "3/4", "f1": True},
@@ -419,7 +423,32 @@ SCENARIOS = {
                         "completed": [{"code": "CSC 101", "grade": "A", "term": "2026-fall"},
                                       {"code": "MATH 226", "grade": "F", "term": "2026-fall"}]},
     "freshman at 18 units": FRESH | {"qr_pathway": "1/2", "max_units_per_term": 18},
+    # BS Applied Mathematics (pp.2129-2137)
+    "Applied Math freshman, QR 1/2": MATH_FRESH | {"qr_pathway": "1/2"},
+    "Applied Math freshman, QR 3/4": MATH_FRESH | {"qr_pathway": "3/4"},
+    "Applied Math ADT transfer": MATH_FRESH | {"adt": True, "ge_certified": True, "first_time": False, "transfer_units": 60,
+                                               "completed": [{"code": c, "grade": "B", "transfer": True}
+                                                             for c in ("MATH 226", "MATH 227", "MATH 228")]},
+    "Applied Math, CSC 101 done": MATH_FRESH | {"qr_pathway": "1/2", "completed": [
+        {"code": "CSC 101", "grade": "A", "term": "2027-spring"}, {"code": "MATH 226", "grade": "B", "term": "2027-spring"}]},
 }
+
+
+def test_an_applied_math_plan_follows_its_roadmap_and_select_ones():
+    # QR 1/2 at 15 units: every course in its roadmap semester (p.2132-2133); the "Select One" is MATH 209
+    sems = yaml.safe_load((ROOT / "rules/roadmaps/2026-27/bs-applied-math.yaml").read_text())["variants"]["qr-1-2"]["semesters"]
+    road = {c: n for n, sem in enumerate(sems) for c in sem["items"] if isinstance(c, str)}
+    plan = server.build_plan(SCENARIOS["Applied Math freshman, QR 1/2"])
+    at = {c: n for n, s in enumerate(plan["semesters"]) for c in s["courses"] if isinstance(c, str)}
+    assert plan["check"]["valid"] and len(plan["semesters"]) == 8
+    assert {c: at[c] for c in road} == road and at["MATH 209"] == 1
+    slots = {c["slot"] for s in plan["semesters"] for c in s["courses"] if isinstance(c, dict)}
+    assert {"theory", "major_electives", "application_electives"} <= slots
+    assert plan["see_advisor"][0]["role"] == "substitutions" and "consent of the applied mathematics advisor" in plan["see_advisor"][0]["why"][0]
+    # CSC 101 already done: the CSC 101 & CSC 215 option, and the roadmap's "CSC 215 (if CSC 101 taken)"
+    switch = server.build_plan(SCENARIOS["Applied Math, CSC 101 done"])
+    codes = {c for s in switch["semesters"] for c in s["courses"] if isinstance(c, str)}
+    assert switch["check"]["valid"] and "CSC 215" in codes and not codes & {"MATH 209", "CSC 309"}
 
 
 def test_a_freshman_plan_is_the_roadmap_adjusted():
@@ -466,9 +495,14 @@ def test_the_students_catalog_year_picks_the_rules():
     assert year("2025-2026") == "2025-26" and year("2025-30") == server.YEAR
     assert server.YEAR == server.YEARS[-1]
     # Commit review: "Fall 2026" is the newest year itself, not an unsupported one
-    warn = lambda given: server.year_warning({"catalog_year": given}, year(given))
+    warn = lambda given: server.year_warning({"program": "bs-cs", "catalog_year": given}, year(given))
     assert warn("Fall 2026") == warn("2026-27") == []
-    assert warn("Spring 2024")[0].startswith("The student's catalog year is Spring 2024, but GatorPath has rules only for")
+    assert warn("Spring 2024")[0].startswith("The student's catalog year is Spring 2024, but GatorPath has bs-cs rules "
+                                             "only for 2024-25, 2025-26, 2026-27")
+    # a program with fewer years names its own: BS Applied Mathematics has only 2026-27 rules
+    math = {"program": "bs-applied-math", "catalog_year": "Fall 2025"}
+    assert server.rules_year(math) == "2026-27"
+    assert "has bs-applied-math rules only for 2026-27, so this uses 2026-27" in server.year_warning(math, "2026-27")[0]
 
 
 def test_a_2025_26_student_needs_c_only_in_csc_510_and_648():

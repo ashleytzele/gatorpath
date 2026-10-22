@@ -21,7 +21,8 @@ Help an SF State student answer, correctly:
 
 ### In scope (v1)
 
-- SF State only, **BS Computer Science** first (verified), then Math.
+- SF State only, **BS Computer Science** first (verified), then Math: **BS Applied Mathematics** (2026-27, added
+  2026-10-22; the Bulletin has no BS in Mathematics, only a BA with three concentrations, p.2089).
 - 4-year roadmap / pathway planning, career-direction elective picks.
 - Course history: the student's DPR (local PDF import, the main one), a typed list, or the local transcript PDF
   (D14, D20).
@@ -207,6 +208,10 @@ Automate everything that is **detection or rebuilding**. A human approves every 
   placement) pathway 1/2 vs 3/4**, plus a 2-year transfer roadmap and an ADT roadmap.
 - **Course renumbering:** the 2026-27 core uses **CSC 215** (older material says CSC 210).
   Never hard-code course codes from memory. Read them from the Bulletin.
+- **A prereq naming a course that isn't in the Bulletin** (found 2026-10-22): MATH 400 asks for "CSC 210 or CSC 215
+  or MATH 209 or MATH 309" (p.2093). There's no MATH 309 or CSC 210 in 2026-27, and the BS Applied Mathematics
+  option CSC 309 isn't named. It stays as printed: a student with CSC 309 sees MATH 400 blocked and asks the
+  department, rather than GatorPath guessing that MATH 309 means CSC 309.
 
 ---
 
@@ -337,6 +342,21 @@ Added 2026-10-20 (2024-25 rules, the old GE pattern):
 - A roadmap variant without `qr_pathway` fits every first-time student (2024-25 has one roadmap, p.1947).
 - No `transfer` block when the Bulletin doesn't say which areas a certification meets (2024-25): `ge_certified` then
   gets a warning, and the DPR's `ge_done` decides.
+
+Added 2026-10-22 (BS Applied Mathematics, the second program, pp.2129-2137):
+- `one_of` (group): options, each a list of courses taken together. "Select One: MATH 209, CSC 101 & CSC 215, or
+  CSC 309" = `one_of: [[MATH 209], [CSC 101, CSC 215], [CSC 309]]`. Met when every course of one option counts.
+  The audit's `remaining` is one option: the one with the most done or in progress, then the fewest units left, then
+  the first printed (so build_plan plans it); `options` lists each with what's left, for the student to switch.
+- `approval` (group text) + `from: {approved: true}`: courses no list names, chosen with someone's consent ("A coherent
+  collection of three courses emphasizing applications of mathematics, chosen with the consent of the applied
+  mathematics advisor", p.2129). Only the courses in `profile.approved[<group id>]` count: one student's approved
+  courses, from their DPR or advisor, never a rule. build_plan leaves slots (ready at upper-division standing: no
+  options to check), and list_eligible_electives returns the approval text instead of options.
+- Roadmap items: `{one_of: [<item>, …], units}` is the first option still needed (a course in the plan's to-do list,
+  or a slot), e.g. "CSC 215 (if CSC 101 taken) / SF State Studies or University Elective"; `{slot: major, group: <id>,
+  count, units}` is a slot of that major choose-group (CS's `senior_elective` takes any major slot). A printed range
+  ("3-4") keeps the minimum in `units`, with the range in a comment, so the units still add up to the printed minimum.
 
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo
@@ -480,7 +500,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 |---|---|---|
 | `audit_progress` | `profile` | Per group: `satisfied`/`in_progress`/`remaining`, which courses counted where, units done vs needed; an open GE / SF State Studies / American Institutions group names the required major courses still ahead that carry it (`major_courses`: PHYS 220 for 5A, CSC 300GW for GWAR; p.2352); university totals (120 total, upper-division units, GWAR) |
 | `build_plan` | `profile` | Deterministic baseline plan laid out on the Bulletin roadmap (§8): `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`, `pace` (prereq-chain floor vs units floor, `roadmap_load` when the roadmap's own 16-17-unit terms finish sooner, `fold_last_term` when a light last term fits into one earlier term, `graduate_by` → `on_time` / `why_not`). When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
-| `list_eligible_electives` | `profile`, `group_id`, `plan?`, `by_term?`, `limit=25` | Options that satisfy that group, each with description, `readiness` (`ready` / `check`: met except what can't be verified, see `cannot_check` / `blocked`: see `blocked_by`, plus `ready_by: term` when a plan opens it up), `also_covers`, and offering pattern. **The AI picks from this list using the student's goal.** |
+| `list_eligible_electives` | `profile`, `group_id`, `plan?`, `by_term?`, `limit=25` | Options that satisfy that group, each with description, `readiness` (`ready` / `check`: met except what can't be verified, see `cannot_check` / `blocked`: see `blocked_by`, plus `ready_by: term` when a plan opens it up), `also_covers`, and offering pattern. **The AI picks from this list using the student's goal.** A group with `approval` (an advisor's consent, no list) returns that text, no options, and `see_advisor` |
 | `ge_combinations` | `profile`, `plan?`, `by_term?` | Up to 8 minimal ways (3 when more than 5 are open) to finish the open GE / SF State Studies / American Institutions requirements one course can fill, fewest courses first; the first is the fewest a bounded search found, not a proven minimum (one course for 4UD + ESCA + GP, two that split them, or one each); each part: what it covers, how many courses fit, examples (ready first, recently offered first). Requirements the major's own courses cover (GWAR via CSC 300GW) are left out |
 | `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include a term already started (`term_in_past`, or `term_in_progress`: the current term, which the in-progress courses fill), prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
 | `import_dpr` | `pdf_path` (local file) | `{profile: {program, catalog_year, completed (SF State rows + transfer rows as the course they sit under, at its minimum grade), in_progress, ge_done (DPR titles of GE areas it shows done, + USH/USG/CSLG designations), dpr_met, gpa, transfer_units}, remaining: [{requirement, what, needed}], warnings}`. Personal info dropped; raw text never returned, logged or stored. Layout below |

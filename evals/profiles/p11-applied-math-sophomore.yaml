@@ -1,0 +1,42 @@
+# BS Applied Mathematics, QR 1/2: freshman year done on the MATH 209 path, third semester in progress.
+# The programming "Select One" is met by MATH 209 alone (p.2129); MATH 226 also meets GE 2.
+# GPA: (16+12+9+12+9 + 12+9.9+12+9+12) / 32 = 112.9 / 32 = 3.528; major (MATH 226 A, MATH 227 B, MATH 209 B+)
+# 37.9 / 11 = 3.445.
+profile:
+  catalog_year: 2026-27
+  program: bs-applied-math
+  qr_pathway: "1/2"
+  completed:
+    - {code: MATH 226, grade: A, term: 2026-fall}
+    - {code: COMM 150, grade: A, term: 2026-fall}
+    - {code: ARTH 201, grade: B, term: 2026-fall}
+    - {code: AA S 210, grade: A, term: 2026-fall}
+    - {code: ENG 114, grade: B, term: 2026-fall}
+    - {code: MATH 227, grade: B, term: 2027-spring}
+    - {code: MATH 209, grade: B+, term: 2027-spring}
+    - {code: PHIL 110, grade: A, term: 2027-spring}
+    - {code: ECON 101, grade: B, term: 2027-spring}
+    - {code: PHIL 101, grade: A, term: 2027-spring}
+  in_progress: [MATH 228, MATH 301GW, MATH 325, ASTR 115, ASTR 116]
+expected:
+  complete: false
+  groups:
+    "*": remaining
+    programming: satisfied      # MATH 209
+    ge_1a: satisfied
+    ge_1b: satisfied
+    ge_1c: satisfied
+    ge_2: satisfied             # MATH 226
+    ge_3a: satisfied
+    ge_3b: satisfied
+    ge_4: satisfied             # AA S 210 + ECON 101
+    ge_4_disciplines: satisfied # two subjects already (AA S, ECON)
+    ge_5a: in_progress          # ASTR 115
+    ge_5c: in_progress          # ASTR 116
+    gwar: in_progress           # MATH 301GW
+    sfss_aerm: satisfied
+    ai_ush: satisfied           # AA S 210: lower-division Area 4 with USH, for a first-time student
+  counted: {required: [MATH 226, MATH 227], programming: [MATH 209]}
+  in_progress: {required: [MATH 228, MATH 301GW, MATH 325]}
+  totals: {units: 32, units_in_progress: 15, upper_division_units: 0, residence_major_units: 11,
+           gpa_sf_state: 3.528, gpa_major: 3.445}

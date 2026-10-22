@@ -292,7 +292,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             if g is None:
                 err("unknown_slot", f"slot {s.get('slot')!r} is not a requirement group id", term=term)
                 continue
-            if "all_of" in g:
+            if "all_of" in g or "one_of" in g:
                 err("bad_slot", f"{g['id']} lists exact courses; plan them instead of a slot", term=term)
                 continue
             slots.append(s | {"term": term})
@@ -434,8 +434,10 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         remaining.append(g["id"])
         err("requirement_not_covered", f"{g['title']} isn't covered by the plan", group=g["id"], source=g["source"])
     if slots:
-        warnings.append(f"{len(slots)} slot(s) still to fill; pick each from list_eligible_electives for its group "
-                        "(senior electives: at least 12 units must be CSC)")
+        mins = [f"{g['title']}: at least {g['min_units_from']['units']} units must be {g['min_units_from']['subject']}"
+                for g in program["groups"] if "min_units_from" in g]
+        warnings.append(f"{len(slots)} slot(s) still to fill; pick each from list_eligible_electives for its group"
+                        + (f" ({'; '.join(mins)})" if mins else ""))
 
     t = result["totals"]
     extra = sum(s.get("units", 0) for s in slots)
@@ -646,7 +648,11 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     # The Bulletin roadmap as the foundation (its GE areas by semester, e.g. "GE Area 1A" in term 2): a roadmap label
     # maps to the university groups taking that GE area ("1" -> 1A/1B/1C, preferring areas the roadmap doesn't name
     # elsewhere; "5UD/2UD" -> the group taking either), or an American Institutions / SF State Studies designation.
-    road = roadmap["variants"][ref]["semesters"]
+    # A roadmap "Select One" ({one_of: [...]}) is its first option still needed: a course to do, or a slot (§6.2).
+    pick_one = lambda i: next((o for o in i["one_of"] if not isinstance(o, str) or o in todo), None) \
+        if isinstance(i, dict) and "one_of" in i else i
+    road = [sem | {"items": [x for x in map(pick_one, sem["items"]) if x is not None]}
+            for sem in roadmap["variants"][ref]["semesters"]]
     named = {str(i.get("area")) for sem in road for i in sem["items"] if isinstance(i, dict)}
     areas_of = lambda g: [str(a) for f in ([g["from"]] if isinstance(g.get("from"), dict) else g.get("from") or [])
                           for a in ([f.get("ge_area")] if not isinstance(f.get("ge_area"), list) else f["ge_area"]) if a]
@@ -666,8 +672,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             if str(item["area"]) == "4":  # footnote 2: one of the lower-division Area 4 courses meets USH
                 out += [x for x in pool if x["_kind"] == "tag" and x["slot"] in groups_for("USH")][:1]
             return out
-        if item["slot"] == "senior_elective":
-            return [x for x in pool if x["_kind"] == "major"][:item.get("count", 1)]
+        if item["slot"] in ("senior_elective", "major"):  # `major` names its choose-group; CS's senior_elective takes any
+            return [x for x in pool if x["_kind"] == "major" and x["slot"] == item.get("group", x["slot"])][:item.get("count", 1)]
         if item["slot"] == "ai":
             tags = [x for x in pool if x["_kind"] == "tag" and x["slot"] in groups_for(str(item["area"]))]
             return tags + free(item["units"]) if tags else []
@@ -707,7 +713,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 waiting = (hard[c] - done) | (needs[c] - hard[c] - done - same)
                 return (state == OK or (state == UNVERIFIED and not waiting)) and season_ok(c, term, catalog, seasons)[0]
 
-            def ready_options(gid: str) -> int:
+            def ready_options(gid: str) -> float:
+                if groups[gid].get("approval"):  # the advisor's pick: no options to check, so ready at the standing
+                    return math.inf
                 return sum(1 for c in choice_options.get(gid, ())
                            if evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[0] == OK
                            and season_ok(c, term, catalog, seasons)[0])
@@ -961,7 +969,12 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             "warnings": warnings + check["warnings"],
             "see_advisor": see_advisor([("substitutions", f"{c}: passed with {best[c]}, which this requirement doesn't "
                                          "accept, and it can't be repeated; ask about a substitution or petition")
-                                        for c in stuck], program, university, check["see_advisor"]),
+                                        for c in stuck]
+                                       + [("substitutions", f"{groups[g['id']]['title']}: \"{groups[g['id']]['approval']}\" "
+                                                            f"({g['source']}); get the courses approved before taking them")
+                                          for g in status["groups"] if groups[g["id"]].get("approval")
+                                          and g["status"] not in ("satisfied", "waived")],
+                                       program, university, check["see_advisor"]),
             "check": {"valid": check["valid"], "errors": check["errors"]}}
 
 
@@ -1088,6 +1101,13 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
                                         f"least {g['distinct_subjects']} different subjects ({g['source']})"]}
     if "all_of" in g or "from" not in g:
         return {"error": "not_a_choice", "warnings": [f"{group_id} isn't a choose-group; see get_program_requirements"]}
+    if g.get("approval"):  # no list to pick from (§6.2): the student's advisor approves the courses
+        why = f"{g.get('title', group_id)}: \"{g['approval']}\" ({g['source']})"
+        return {"catalog_year": program["catalog_year"], "group": group_id, "title": g.get("title", group_id),
+                "source": g["source"], "approval": g["approval"], "options": [], "total_options": 0,
+                "warnings": [why + ". GatorPath can't list or check these courses: ask the advisor, then pass the approved "
+                             f"ones as profile.approved['{group_id}'] so they count"],
+                "see_advisor": see_advisor([("substitutions", why)], program, university)}
     filters = filters_for(g, profile)
 
     in_prog = [c for c in profile.get("in_progress", []) if c in catalog]

@@ -67,6 +67,36 @@
   "crosslisted_with": []
  },
  {
+  "code": "ASTR 115",
+  "title": "Introduction to Astronomy",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to topics in astronomy including Stonehenge, the solar system, the sun, stars, and stellar evolution, pulsars, black holes, nebulae; galaxies, quasars, the big bang, the expanding universe, and the search for extraterrestrial life. Includes the opportunity for telescopic observation.",
+  "grading": null,
+  "ge_areas": [
+   "5A"
+  ],
+  "source_page": 2159,
+  "prereq_text": "Category I or II placement for QR/Math, or completion of GE Area 2/B4, or MATH 197.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "ASTR 116",
+  "title": "Astronomy Laboratory",
+  "units_min": 1.0,
+  "units_max": 1.0,
+  "description": "Fundamentals of astronomical observation including optics and spectroscopy. Planetarium exploration of the stars, sun, and moon. Opportunity for telescopic observation. Laboratory.",
+  "grading": null,
+  "ge_areas": [
+   "5C"
+  ],
+  "source_page": 2159,
+  "prereq_text": "ASTR 115 (may be taken concurrently).",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
   "code": "BIOL 100",
   "title": "Human Biology",
   "units_min": 3.0,
@@ -188,6 +218,19 @@
   ],
   "source_page": 1896,
   "prereq_text": "Restricted to upper-division Computer Science majors and minors; GE Area 1A/A2; CSC 210 or CSC 215.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "CSC 309",
+  "title": "Computer Programming",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Procedural programming for scientific applications. Good programming practices and basic numerical and nonnumerical algorithms for scientists and engineers.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 1896,
+  "prereq_text": "MATH 226 or permission of the instructor.",
   "paired_with": [],
   "crosslisted_with": []
  },
@@ -892,6 +935,19 @@
   "crosslisted_with": []
  },
  {
+  "code": "ECON 312",
+  "title": "Introduction to Econometrics",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Applied regression and correlation analysis of variance, time series analysis, and forecasting, index numbers, experimental design and sampling methods, and computer applications using major economic data sources; interpretation of results.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 128,
+  "prereq_text": "ECON 301, ECON 212/DS 212 or MATH 124 or equivalents, and either MATH 108 or MATH 110 or MATH 226 or DS 110; or Statistics majors with ECON 301 and MATH 440; or Business Analytics Certificate students; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
   "code": "ECON 474",
   "title": "History of Labor in the United States",
   "units_min": 3.0,
@@ -1139,6 +1195,26 @@
   "crosslisted_with": []
  },
  {
+  "code": "HIST 471",
+  "title": "The U.S. Constitution Since 1896",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "History of the U.S. Constitution from the late 19th century to the present with special attention to new constitutional amendments, shifts in the politics and powers of the Supreme Court, debates about racial segregation and immigration restriction, controversies about civil liberties and civil rights, and discussions about citizenship rules and voting rights. The struggles of Native Americans, racialized minorities, immigrants, women, gender and sexual minorities, and people with disabilities are emphasized.",
+  "grading": null,
+  "ge_areas": [
+   "USG",
+   "CSLG",
+   "USH",
+   "SJ",
+   "AERM",
+   "3UD"
+  ],
+  "source_page": 1222,
+  "prereq_text": "Restricted to upper-division standing; GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
   "code": "IBUS 330",
   "title": "International Business and Multicultural Relations",
   "units_min": 3.0,
@@ -1217,6 +1293,19 @@
   "crosslisted_with": []
  },
  {
+  "code": "MATH 209",
+  "title": "Mathematical Computing",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduces basic sequential programming constructs in scientific computing using the Python Language. Uses programming projects to review and reinforce material from Calculus and Linear Algebra. Introduces essential modeling and programming concepts. [Formerly MATH 309]",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2091,
+  "prereq_text": "MATH 226 with a grade of C or better or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
   "code": "MATH 225",
   "title": "Introduction to Linear Algebra",
   "units_min": 3.0,
@@ -1258,6 +1347,34 @@
   "crosslisted_with": []
  },
  {
+  "code": "MATH 228",
+  "title": "Calculus III",
+  "units_min": 4.0,
+  "units_max": 4.0,
+  "description": "Three-dimensional analytic geometry, partial differentiation, multiple integrals, and vector calculus. Lecture, 3 units; lab, 1 unit.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2092,
+  "prereq_text": "MATH 227* with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 301GW",
+  "title": "Exploration and Proof - GWAR",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Informal exploration and proofs in mathematics. Basic concepts of advanced mathematics courses. Exploratory thinking, elementary logic, sets, mathematical induction, the integers, relations, and functions. (ABC/NC grading only)",
+  "grading": "letter",
+  "ge_areas": [
+   "GW"
+  ],
+  "source_page": 2092,
+  "prereq_text": "GE Area 1A/A2; MATH 226* with a grade of C or higher.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
   "code": "MATH 324",
   "title": "Probability and Statistics with Computing",
   "units_min": 3.0,
@@ -1267,6 +1384,71 @@
   "ge_areas": [],
   "source_page": 2092,
   "prereq_text": "MATH 227* with a grade of C or better; computer experience that meets the approval of the instructor; basic concepts of probability and statistics.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 325",
+  "title": "Linear Algebra",
+  "units_min": 4.0,
+  "units_max": 4.0,
+  "description": "Examination of the solution of systems of linear equations, Gaussian elimination, matrix algebra, vector spaces, bases, linear transformations, inner products, orthogonal bases, orthogonalization, eigenvalues and eigenvectors, diagonalization and spectral factorization of symmetric matrices, and singular value decomposition.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2092,
+  "prereq_text": "MATH 226* with a grade of C or better; concurrent enrollment in MATH 301GW recommended.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 335",
+  "title": "Modern Algebra",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to groups, rings, integral domains, fields, and ordering.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2092,
+  "prereq_text": "MATH 301GW and either MATH 225 or MATH 325 all with a grade of C or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 370",
+  "title": "Real Analysis I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Critical development of analysis: Bolzano-Weierstrass and Heine-Borel theorems; limits, continuity, differentiability, integrability.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2092,
+  "prereq_text": "MATH 227 and MATH 301GW* with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 376",
+  "title": "Ordinary Differential Equations I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "First-order differential equations, second-order linear equations with constant coefficients, graphical and numerical methods, systems of differential equations and phase-plane analysis, existence and uniqueness theorems.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2093,
+  "prereq_text": "MATH 228; MATH 225 or MATH 325; MATH 209 or CSC 309 or equivalent, all with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 380",
+  "title": "Introduction to Complex Analysis",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Analytic functions of a complex variable. Cauchy's theorem, power series, Laurent series, singularities, residue theorem with applications to definite integrals.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2093,
+  "prereq_text": "MATH 228 and MATH 301GW* with grades of C or better.",
   "paired_with": [],
   "crosslisted_with": []
  },
@@ -1297,6 +1479,60 @@
   "crosslisted_with": []
  },
  {
+  "code": "MATH 430",
+  "title": "Mathematics of Optimization",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Modeling and solution of optimization problems as linear, semidefinite, nonlinear, or integer programming problems. Analysis and interpretations of solutions to these problems.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2093,
+  "prereq_text": "MATH 325 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 440",
+  "title": "Probability and Statistics I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Probability spaces, elementary combinatorics, random variables, independence, expected values, moment generating functions, selected probability distributions, limit theorems, and applications.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2093,
+  "prereq_text": "MATH 228* with a grade of C or better (may be taken concurrently); or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 442",
+  "title": "Probability Models",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Advanced topics in probability theory: discrete and continuous-time Markov chains, Poisson process, queuing systems, and applications.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2093,
+  "prereq_text": "MATH 228*, MATH 325*, and MATH 440* all with grades of C or better, or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 447",
+  "title": "Design and Analysis of Experiments",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Learn how to plan, design, and conduct experiments and analyze the resulting data. (MATH 747/MATH 447 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2094,
+  "prereq_text": "MATH 228*, MATH 325*, and MATH 440* all with grades of C or better; or permission of the instructor.",
+  "paired_with": [
+   "MATH 747"
+  ],
+  "crosslisted_with": []
+ },
+ {
   "code": "MATH 448",
   "title": "Introduction to Statistical Learning and Data Mining",
   "units_min": 3.0,
@@ -1306,6 +1542,114 @@
   "ge_areas": [],
   "source_page": 2094,
   "prereq_text": "MATH 228*, MATH 325*, and MATH 440* all with grades of C or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 449",
+  "title": "Categorical Data Analysis",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Exploration of descriptive and inferential methods for contingency tables, generalized linear models for discrete data, logistic regression for binary responses, multi-category logistic models for nominal and ordinal responses, log-linear models, and inference for matched-pairs and correlated clustered data.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2094,
+  "prereq_text": "MATH 228*, MATH 325*, and MATH 440* all with grades of C or better; or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 460",
+  "title": "Mathematical Modeling",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Deterministic and stochastic techniques used in mathematical modeling, illustrated and developed through problems originating in industry and applied research.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2094,
+  "prereq_text": "MATH 225 or MATH 325; MATH 245 or MATH 376; all with grades of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 471",
+  "title": "Fourier Analysis and Applications",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Sequences and series of functions, modes of convergence, Fourier series and integrals, and wavelet analysis. (MATH 771/MATH 471 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2094,
+  "prereq_text": "Upper-division standing; MATH 370 with a grade of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "MATH 771"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 477",
+  "title": "Partial Differential Equations",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Study of partial differential equations in rectangular and polar coordinates. Initial and boundary value problems for the heat equation and wave equation. Study of Fourier series, Bessel series, harmonic functions, and Fourier transforms. (MATH 777/MATH 477 is a paired course offering. Students who complete the course at one level may not repeat the course at the other level.)",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2094,
+  "prereq_text": "Upper-division standing; MATH 376 with a grade of C or better; GPA of 3.0 or higher; or permission of the instructor.",
+  "paired_with": [
+   "MATH 777"
+  ],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 491",
+  "title": "Game Theory",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Normal, extensive and network forms. Strategy, bets reply and Nash equilibrium. Equilibrium path, information and beliefs, sequential rationality and perfect equilibria. Applications to learning, signaling, screening and deterrence.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2095,
+  "prereq_text": "MATH 227 with a grade of C or better.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 495",
+  "title": "Introduction to Wavelets and Frames with Applications",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Fundamentals of wavelets, time frequency analysis, and frames, as well as applications in engineering and physics.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2095,
+  "prereq_text": "MATH 325 or MATH 370 with grades of C or better, or permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 696",
+  "title": "Applied Mathematics Project I",
+  "units_min": 1.0,
+  "units_max": 1.0,
+  "description": "Preparation under faculty guidance of feasibility study and outline of a project in applied mathematics.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2095,
+  "prereq_text": "MATH 460 with a grade of C or better. May be replaced by permission of the instructor.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "MATH 697",
+  "title": "Applied Mathematics Project II",
+  "units_min": 2.0,
+  "units_max": 2.0,
+  "description": "May not be taken concurrently with MATH 696. Completion of applied mathematics project. Presentation of oral and written report.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2095,
+  "prereq_text": "Successful completion of MATH 696 in a previous semester.",
   "paired_with": [],
   "crosslisted_with": []
  },
@@ -1423,6 +1767,19 @@
   "ge_areas": [],
   "source_page": 2161,
   "prereq_text": "Concurrent enrollment in PHYS 230.",
+  "paired_with": [],
+  "crosslisted_with": []
+ },
+ {
+  "code": "PHYS 320",
+  "title": "Modern Physics I",
+  "units_min": 3.0,
+  "units_max": 3.0,
+  "description": "Introduction to special relativity and quantum mechanics, including blackbody radiation, photoelectric effect, Compton effect, Bohr model of the hydrogen atom, wave-particle duality, wavefunctions, Heisenberg uncertainty principle, Schrödinger equation, one-dimensional potentials.",
+  "grading": null,
+  "ge_areas": [],
+  "source_page": 2162,
+  "prereq_text": "MATH 228, PHYS 230, and PHYS 240 with grades of C or better; MATH 245 or MATH 376 with a grade of C or better (may be taken concurrently).",
   "paired_with": [],
   "crosslisted_with": []
  },
