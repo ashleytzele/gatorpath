@@ -192,6 +192,15 @@ def test_a_light_last_term_folds_into_one_heavier_term():
     # a full last term (15 units) doesn't fit in any term under the 19-unit maximum
     p03 = plan_for(eval_profile(ROOT / "evals/profiles/p03-sophomore-qr34.yaml"))
     assert p03["semesters"][-1]["units"] == 15 and "fold_last_term" not in p03["pace"]
+    # check_plan can't see that senior electives wait for a ready option (D19): a transfer's last two don't fold into
+    # their first term, the only one with room
+    transfer = {"catalog_year": "2026-27", "program": "bs-cs", "start_term": "2027-fall", "qr_pathway": "1/2",
+                "ge_certified": True, "first_time": False, "transfer_units": 62,
+                "completed": [{"code": c, "grade": "B", "transfer": True}
+                              for c in ("CSC 101", "CSC 215", "MATH 226", "MATH 227", "PHYS 220", "PHYS 222")]}
+    got = plan_for(transfer)
+    assert [x["slot"] for x in got["semesters"][-1]["courses"] if isinstance(x, dict) and x["units"]] == ["senior_electives"] * 2
+    assert "fold_last_term" not in got["pace"]
 
 
 def test_see_advisor_for_permission_and_overload():

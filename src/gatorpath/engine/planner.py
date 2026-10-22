@@ -864,9 +864,16 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                    if isinstance(c, str) or c["units"])
     held = ", ".join(f"{n} × {c}" if n > 1 else c for c, n in held.items())
     # A light last term (a 1-unit free elective at 15 per term) can fold into one earlier spring/fall term: the
-    # lightest one that passes check_plan with the extra units, latest first.
-    fold, last = None, semesters[-1] if semesters else None
-    for s in sorted(reversed(semesters[:-1]) if check["valid"] else [], key=lambda s: s["units"]):  # stable: latest first
+    # lightest one that passes check_plan with the extra units, latest first. check_plan can't see when a slot's
+    # options are ready (senior electives, D19; upper-division standing), so a slot moves no earlier than the first
+    # term the plan already gives that slot.
+    fold, last, first = None, semesters[-1] if semesters else {"courses": []}, {}
+    kind = lambda x: (x["slot"], bool(x.get("upper_division")))
+    for i, s in enumerate(semesters):
+        for x in (x for x in s["courses"] if isinstance(x, dict)):
+            first.setdefault(kind(x), i)
+    earliest = max((first[kind(x)] for x in last["courses"] if isinstance(x, dict) and x["units"]), default=0)
+    for s in sorted(reversed(semesters[earliest:-1]) if check["valid"] else [], key=lambda s: s["units"]):  # stable: latest first
         units = s["units"] + last["units"]
         if s["term"][5:] not in ("spring", "fall") or units > university["max_units"]["fall_spring"]:
             continue

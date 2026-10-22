@@ -375,7 +375,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     Claude offered one 16-unit term instead (a term sooner, with an advisor's OK), Codex kept the extra term. p03:
     Codex's own plan runs a term past build_plan's. Since 2026-10-22 `pace.fold_last_term` says it: a light last term
     goes into the lightest earlier spring/fall term that passes check_plan (up to 19 units), with the advisor note when
-    it's over 15. In plan_review (flag F) 15 scenario/load cells get it, e.g. the sophomore's 1 unit -> one 16-unit term
+    it's over 15; a slot moves no earlier than the plan's first term with that slot (check_plan can't see senior-elective
+    readiness: without it a transfer's last two went into their first term). In plan_review (flag F) 14 cells get it, e.g. the sophomore's 1 unit -> one 16-unit term
 - [ ] README: problem, demo GIF/video (2 min), setup in 3 commands, eval table, limitations
   - 2026-10-19: problem, setup in 3 commands (from the zip), eval table and limitations written. Waits on the
     demo GIF/video, recorded by a person

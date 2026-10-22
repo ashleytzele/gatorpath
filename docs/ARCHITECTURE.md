@@ -647,7 +647,9 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
    own loads finish sooner, `pace.roadmap_load` says so (terms, `est_graduation_term`, the `max_units_per_term` to
    pass), and `plan_my_degree` offers it as a pace option. When the last term is light (a 1-unit free elective at
    15), `pace.fold_last_term` names the one earlier spring/fall term it fits into: the lightest that passes
-   check_plan with the extra units, up to the 19-unit maximum (p.2392), latest first. The plan itself keeps the cap.
+   check_plan with the extra units, up to the 19-unit maximum (p.2392), latest first. A slot moves no earlier than
+   the first term the plan gives that slot: check_plan can't see when senior-elective options are ready (D19). The
+   plan itself keeps the cap.
 6. Stop when nothing remains. Report `est_graduation_term`.
 7. If no progress is possible in a term (a blocked prereq), stop and emit an error saying
    which condition blocks it. Never loop forever.
