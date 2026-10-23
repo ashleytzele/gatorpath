@@ -202,10 +202,12 @@ The Bulletin's roadmap pages ({year}), page by page:
 
 
 def parse_draft(answer: str, key: str = "groups") -> dict:
-    """The YAML in a ```yaml block (or the whole answer), as a mapping that has `key`. A `title:` whose colon a model left
-    unquoted ("Bachelor of Music: Concentration in Composition Roadmap") is quoted first: a title is one line of text."""
+    """The YAML in a ```yaml block (or the whole answer), as a mapping that has `key`. A title, quote, note or text whose
+    colon a model left unquoted ("Bachelor of Music: Concentration in Composition Roadmap", "Select One: 3") is quoted
+    first: each is one line of plain text."""
     m = re.search(r"```(?:yaml)?\n(.*?)```", answer, re.S)
-    text = re.sub(r"^(\s*(?:- )?title: )(?![\"'])(.*:.*)$", lambda t: t[1] + json.dumps(t[2], ensure_ascii=False),
+    text = re.sub(r"^(\s*(?:- )?(?:title|quote|note|text): )(?![\"'|>\[{])(.*:.*)$",
+                  lambda t: t[1] + json.dumps(t[2], ensure_ascii=False),
                   m.group(1) if m else answer, flags=re.M)
     data = yaml.safe_load(text)
     if not isinstance(data, dict) or key not in data:

@@ -90,6 +90,7 @@ def test_a_draft_is_parsed_checked_and_never_verified(tmp_path):
     assert got["groups"][0]["all_of"] == ["MATH 226"]
     with pytest.raises(ValueError):
         P.parse_draft("I can't do that.")
+    assert P.parse_draft("groups:\n  - id: a\n    quote: Select One: 3\n")["groups"][0]["quote"] == "Select One: 3"
     # a title's unquoted colon doesn't lose the draft, at any depth
     assert P.parse_draft("```yaml\ntitle: Bachelor of Music: Composition\nvariants:\n  first-time:\n    title: B.M.: "
                          "Composition Roadmap\n```", "variants") == {
