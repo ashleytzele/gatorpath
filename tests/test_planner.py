@@ -176,10 +176,10 @@ def test_build_plan_explains_itself_and_its_pace():
     assert why["PHYS 222"].startswith("Corequisite of PHYS 220")
     assert "Needed before CSC 648" in why["CSC 413"]
     assert got["pace"]["min_terms_by_prereqs"] == 5 and got["pace"]["longest_chain"][-1] == "CSC 648"
-    # 3 years from a fall 2026 start = spring 2029: 5 terms left, but ~104 units at the roadmap's loads need 7
+    # 3 years from a fall 2026 start = spring 2029: 5 terms left, and ~104 units need 6 even at the 19-unit maximum
     late = plan_for(profile | {"graduate_by": "2029-spring"})["pace"]
-    assert late["on_time"] is False and late["terms_available"] == 5
-    assert any("104 units at the roadmap's loads needs 7 terms" in w for w in late["why_not"])
+    assert late["on_time"] is False and late["terms_available"] == 5 and late["load"] == "roadmap"
+    assert any(w.startswith("104 units need 6 terms even at 19 a term") for w in late["why_not"])
     # by spring 2028 even the prereq chain can't fit
     soon = plan_for(profile | {"graduate_by": "2028-spring"})["pace"]
     assert any(w.startswith("the prereq chain alone needs 5 terms") for w in soon["why_not"])
@@ -265,6 +265,25 @@ def test_roadmap_loads_follow_the_students_units_and_their_own_cap_wins():
     assert mine["pace"]["load"] == "max_units_per_term" and mine["pace"]["units_per_term"] == 18
     assert {s["max_units"] for s in mine["semesters"]} == {18, 8}
     assert all(s["max_units"] == 8 for s in mine["semesters"] if s["term"].endswith("summer"))
+
+
+def test_loads_fit_the_graduation_goal_from_the_roadmaps_range():
+    # D25: on time on the roadmap's loads: they stay
+    assert plan_for(FRESH | {"graduate_by": "2031-spring"})["pace"]["load"] == "roadmap"
+    # a 62-unit transfer ends in 2030-spring on the roadmap; by 2029-fall, every term at its heaviest semester (16)
+    transfer = FRESH | {"ge_certified": True, "first_time": False, "transfer_units": 62,
+                        "completed": [{"code": c, "grade": "B", "transfer": True} for c in ("CSC 101", "MATH 226")]}
+    assert plan_for(transfer)["est_graduation_term"] == "2030-spring"
+    got = plan_for(transfer | {"graduate_by": "2029-fall"})
+    assert got["check"]["valid"] and got["est_graduation_term"] == "2029-fall" and got["pace"]["on_time"]
+    assert got["pace"]["load"] == "graduate_by" and {s["max_units"] for s in got["semesters"]} == {16}
+    assert got["pace"]["fit"]["note"].endswith("the roadmap's heaviest semester (16)")
+    # a freshman a term early needs more than the roadmap ever prints: an overload, so an advisor
+    early = plan_for(FRESH | {"graduate_by": "2030-fall"})
+    assert early["est_graduation_term"] == "2030-fall" and early["pace"]["fit"]["units_per_term"] == 18
+    assert "an overload above 15" in early["pace"]["fit"]["note"] and any(a["role"] == "major_advisor" for a in early["see_advisor"])
+    # the student's own cap isn't fitted
+    assert plan_for(transfer | {"graduate_by": "2029-fall", "max_units_per_term": 15})["pace"]["load"] == "max_units_per_term"
 
 
 def test_check_plan_takes_each_terms_cap_and_the_roadmap_load():

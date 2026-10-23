@@ -431,8 +431,11 @@ def build_plan(profile: Profile) -> dict:
     (qr_pathway, start_term) instead of guessing. Each semester has `why`: per course, what it's needed before, the
     chain it starts, and whether delaying it pushes back graduation. `pace` says what sets the length: the longest
     prereq chain vs the units per term (load: roadmap / max_units_per_term); normal_load is the lighter option at the
-    normal 15 (terms, graduation term) when the roadmap goes above it; fold_last_term when a light last term fits into one earlier term (a term
-    sooner at one heavier load); with profile.graduate_by it says whether that term is reachable and, if not, why_not.
+    normal 15 (terms, graduation term) when the roadmap goes above it; fold_last_term when a light last term fits into
+    one earlier term (a term sooner at one heavier load). profile.graduate_by (D25) fits the loads to that goal: when the
+    roadmap's loads end later, every term goes to the roadmap's heaviest semester, then one unit more at a time up to
+    19, until the plan ends by then (load: graduate_by, pace.fit with the units and a note; above the roadmap's
+    heaviest is an overload: advisor). pace says whether the term is reachable and, if not, why_not.
     For "3, 4 or 5 years", call it at different max_units_per_term / include_summer / include_winter.
     """
     if err := profile_error(profile):
@@ -735,8 +738,9 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      it or the student says their advisor approved: {{group id: [codes]}}.
    - exam credit (AP / CLEP): put US History and US Government in ge_done as USH / USG only when the DPR shows them;
      no AP or CLEP exam meets California government (CSLG), p.2350.
-3. `audit_progress`, then `build_plan` (with graduate_by if given). If build_plan returns needs_input, ask for
-   just that.
+3. Ask when they want to graduate (a term, e.g. 2030-spring) unless they said, and pass it as graduate_by: the
+   plan's loads fit that goal, starting from the roadmap's own (the normal range). Then `audit_progress`, then
+   `build_plan`. If build_plan returns needs_input, ask for just that.
 4. Fill every slot: `list_eligible_electives` with group_id = the slot, plan = the current plan, by_term = the slot's
    term. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
    also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and

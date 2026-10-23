@@ -620,7 +620,8 @@ deterministic (D6). The prompt gives the client its workflow:
 3. Ask for the math placement / QR pathway if it's unknown and lower-division math isn't done (it only changes the
    math before MATH 226; `build_plan` returns `needs_input: qr_pathway` only then).
 4. Call `audit_progress` (with a DPR: as the cross-check).
-5. Call `build_plan`: the roadmap's own loads (D24). For "3, 4 or 5 years", add 18 units + summer and 12, and
+5. Ask when they want to graduate and pass `graduate_by` (D25), then call `build_plan`: the roadmap's own loads
+   (D24), raised to fit the goal when they'd end later. For "3, 4 or 5 years", add 18 units + summer and 12, and
    compare `est_graduation_term`, plus the normal 15 when `pace.normal_load` is there and one heavier term when
    `pace.fold_last_term` is there. Say why a
    faster pace can't work when it can't (the prereq chain or the units per term).
@@ -713,7 +714,12 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
    `max_units` and `roadmap` {units, source}; check_plan uses a term's `max_units` when the profile has no cap, and
    a load over 15 that its roadmap semester prints is "as on the Bulletin roadmap (p.X)", not an advisor handoff
    (above the roadmap's load is). When the roadmap goes above 15, `pace.normal_load` reports the lighter plan at the
-   normal 15 (terms, `est_graduation_term`) and `plan_my_degree` offers it. When the last term is light (a 1-unit free elective at
+   normal 15 (terms, `est_graduation_term`) and `plan_my_degree` offers it. **The graduation goal sets the load
+   (D25):** with `graduate_by` and no cap of the student's, a roadmap plan that ends after it is rebuilt with every
+   term at the roadmap's heaviest semester, then one unit more at a time up to the 19-unit maximum, until it ends by
+   then (`pace.load: graduate_by`, `pace.fit`); above the roadmap's heaviest is an overload with an advisor handoff.
+   If even 19 doesn't do it, the roadmap plan stays and `why_not` says why (judged at 19). `plan_my_degree` asks
+   for the goal first. When the last term is light (a 1-unit free elective at
    15), `pace.fold_last_term` names the one earlier spring/fall term it fits into: the lightest that passes
    check_plan with the extra units, up to the 19-unit maximum (p.2392), latest first. A slot moves no earlier than
    the first term the plan gives that slot: check_plan can't see when senior-elective options are ready (D19). The
@@ -870,6 +876,7 @@ students; 0 hallucinated courses."*
 | D22 | Work phases in order, but trial feedback can pull work forward, and an item waiting on a person or a real document stays open while later phases go on (TASKS.md header) | Trial 1 needed `build_plan` (Phase 4) to answer "when do I finish?"; Phase 2's `verified: true` needs a second person; Phase 6's CR/W/repeat sample and the DPR Notes legend need real documents. Phases 5 and 6 were done with those open | 2026-10-18 |
 | D23 | Requirements from the student's catalog year (`rules/<kind>/<year>/`, picked from `profile.catalog_year` or the DPR's requirement term); course facts from the newest Bulletin, older rows only for dropped courses | A Fall 2025 DPR (test user 1's): the 2025-26 BS CS needs C or better only in CSC 510 and CSC 648, not all of Math/Physics, Core and Advanced as 2026-27 does. Courses still to take run under the newest Bulletin (new courses such as CSC 603; COMM 301 is 2UD from 2026-27) | 2026-10-20 |
 | D24 | The roadmap is the default load: each spring/fall term's cap is the printed units of the roadmap semester the student's units have reached (the last semester's past its end, at most 19, at least 12 for F-1); `max_units_per_term` is the student's own cap and overrides it; `pace.normal_load` reports the normal-15 plan as the lighter option. Replaces D18 | The roadmap is the planner's foundation; the student sets a cap if they want less. A term at its roadmap semester's load is the Bulletin's own suggested plan, so it gets "as on the Bulletin roadmap (p.X)", not an overload handoff | 2026-10-22 |
+| D25 | The graduation goal sets the load: with `graduate_by`, a roadmap plan that ends later is rebuilt with every term at the roadmap's heaviest semester, then a unit more at a time up to 19, until it ends by then; `plan_my_degree` asks for the goal | The student's own words (2026-10-22): ask when they're graduating and fit the units to it; the roadmap is the foundation that shows the normal range. A past-the-end term has no roadmap semester of its own, so the goal, not a guessed load, decides it | 2026-10-22 |
 
 ---
 

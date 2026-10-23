@@ -452,6 +452,10 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   lighter plan at 15. Scenario matrix (plan_review, new roadmap column): same or fewer terms than at 15 for
   freshmen (QR 3/4: 8 vs 9); a term more for transfers past a first-time roadmap's end (its last semester's 13,
   Cal-GETC transfer 7 vs 6) and for the Applied Math ADT roadmap, which prints 13, 13, 9, 12, 7, 4, 2.
+- [x] The graduation goal sets the load (D25). Done 2026-10-22: with graduate_by, a roadmap plan that ends later is
+  rebuilt at the roadmap's heaviest semester, then a unit more at a time up to 19, until it ends by then (a 62-unit
+  transfer by 2029-fall: 16 a term; a BS CS freshman a term early: 18, an overload, advisor); plan_my_degree asks
+  for the goal. Without one, a term past the roadmap's end keeps its last semester's load.
 - [ ] Load all programs as `verified: false`
   Pilot 2026-10-22: one program per college, drafted with `--client "claude -p --model sonnet …"` to save usage
   (about 35 s each), kept in `rules/drafts/2026-27/`. BS Civil Engineering had 0 to fix. BM Composition, BS Business

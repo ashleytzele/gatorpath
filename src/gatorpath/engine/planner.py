@@ -1010,10 +1010,32 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         return semesters, first_ok, notes
 
     semesters, first_ok, notes = plan_at(fixed)
+    # D25: the graduation goal sets the load; the roadmap is the normal range. With graduate_by (and no cap of the
+    # student's), a roadmap plan that ends after it is rebuilt with every term at the roadmap's heaviest semester, then
+    # one unit more at a time up to the fall/spring maximum, until it ends by then. Past that, why_not says why.
+    target = profile.get("graduate_by")
+    late = lambda sems: not sems or term_key(sems[-1]["term"]) > term_key(str(target))
+    fit = None
+    tried = fixed is None and road_sems and TERM.fullmatch(str(target or "")) and late(semesters)
+    if tried:
+        heaviest = min(max(x["units"] for x in road_sems), university["max_units"]["fall_spring"])
+        for x in range(int(heaviest), int(university["max_units"]["fall_spring"]) + 1):
+            trial = plan_at(x)
+            if not late(trial[0]) and check_plan(profile, {"semesters": trial[0]}, program, university, catalog,
+                                                 prereqs)["valid"]:
+                semesters, first_ok, notes = trial
+                fit = {"graduate_by": target, "units_per_term": x,
+                       "note": f"to finish by {target}, terms go up to {x:g} units: "
+                               + (f"the roadmap's heaviest semester ({heaviest:g})" if x == heaviest else
+                                  f"above the roadmap's heaviest semester ({heaviest:g}), an overload above "
+                                  f"{load['normal_max']:g} ({load['source']}): see an advisor")}
+                break
+    most = university["max_units"]["fall_spring"]
+    cap_used = fit["units_per_term"] if fit else most if tried else fixed  # a failed fit is judged at the maximum
     # The lighter option (D24): the normal 15 where the roadmap's loads go above it (two 16-unit terms in the
     # first-time roadmaps).
     normal_pace = None
-    if fixed is None and any(s["max_units"] > load["normal_max"] for s in semesters):
+    if fixed is None and not fit and any(s["max_units"] > load["normal_max"] for s in semesters):
         light = plan_at(load["normal_max"])[0]
         if light and check_plan(profile, {"semesters": light}, program, university, catalog, prereqs)["valid"]:
             normal_pace = {"max_units_per_term": load["normal_max"], "terms": len(light),
@@ -1098,18 +1120,19 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
 
     plan_units = sum(s["units"] for s in semesters)
     critical = min(todo, key=rank_of) if todo else None
-    kind_of_load = "max_units_per_term" if fixed is not None else "roadmap" if road_sems else "normal"
+    kind_of_load = ("max_units_per_term" if fixed is not None else "graduate_by" if fit else "roadmap" if road_sems
+                    else "normal")
     by_units, got, t = 0, 0.0, start if start[5:] in ("spring", "fall") else next_term(start, False)
     while got < plan_units and by_units < 40:  # spring/fall terms at their caps
-        got, by_units, t = got + cap_for(t, fixed, units0 + got), by_units + 1, next_term(t, False)
+        got, by_units, t = got + cap_for(t, cap_used, units0 + got), by_units + 1, next_term(t, False)
     pace = {"terms": len(semesters), "load": kind_of_load,
-            **({"units_per_term": fixed if fixed is not None else load["normal_max"]} if kind_of_load != "roadmap" else {}),
+            **({"units_per_term": cap_used if cap_used is not None else load["normal_max"]}
+               if kind_of_load != "roadmap" else {}), **({"fit": fit} if fit else {}),
             "include_summer": summer, "include_winter": winter, "planned_units": plan_units,
             **({"normal_load": normal_pace} if normal_pace else {}), **({"fold_last_term": fold} if fold else {}),
             "min_terms_by_prereqs": depth[critical] if critical else 0,
             "longest_chain": longest(critical) if critical else [],
             "min_terms_by_units": by_units}
-    target = profile.get("graduate_by")
     if target and TERM.fullmatch(str(target)) and semesters:
         available = terms_through(start, target, summer, winter)
         pace |= {"graduate_by": target, "terms_available": available,
@@ -1120,10 +1143,15 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 why_not.append(f"the prereq chain alone needs {pace['min_terms_by_prereqs']} terms "
                                f"({' → '.join(pace['longest_chain'])}); only {available} until {target}")
             if pace["min_terms_by_units"] > available:
-                at = "the roadmap's loads" if kind_of_load == "roadmap" else f"{pace['units_per_term']:g} per term"
-                why_not.append(f"{plan_units:g} units at {at} needs {pace['min_terms_by_units']} terms; only "
-                               f"{available}: add summers or raise max_units_per_term (above {load['normal_max']:g} is "
-                               f"an overload, {load['source']})")
+                if tried and not fit:
+                    why_not.append(f"{plan_units:g} units need {pace['min_terms_by_units']} terms even at {most:g} a "
+                                   f"term, the fall/spring maximum ({university['max_units']['source']}); only "
+                                   f"{available}: add summers or Winter Session")
+                else:
+                    at = "the roadmap's loads" if kind_of_load == "roadmap" else f"{pace['units_per_term']:g} per term"
+                    why_not.append(f"{plan_units:g} units at {at} needs {pace['min_terms_by_units']} terms; only "
+                                   f"{available}: add summers or raise max_units_per_term (above {load['normal_max']:g} "
+                                   f"is an overload, {load['source']})")
             if not why_not:
                 why_not.append(f"the plan needs {len(semesters)} terms; the last ({semesters[-1]['term']}) holds {held}. "
                                "Senior electives wait for upper-division standing and an option that's ready (its "
