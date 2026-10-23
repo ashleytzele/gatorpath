@@ -244,9 +244,16 @@ def ask(client: str, text: str, key: str, keep: Path | None = None) -> dict:
                                        "drafted_by": f"{shlex.split(client)[0]}, {date.today().isoformat()}"}
 
 
+def hand_written(kind: str, year: str, program: str) -> list[str]:
+    """The examples a draft is shown: the hand-written files only (never another draft: they'd multiply the prompt as
+    programs load, and teach the drafter its own mistakes), and never the program being drafted."""
+    return [t for p in sorted((RULES_DIR / kind / year).glob("*.yaml"))
+            if p.stem != program and "drafted_by:" not in (t := p.read_text())]
+
+
 def draft(title: str, program: str, year: str, source: str, client: str = CLIENT, keep: Path | None = None) -> dict:
     """A program's rules. Fields a model mustn't set are overwritten."""
-    examples = [p.read_text() for p in sorted((RULES_DIR / "programs" / year).glob("*.yaml")) if p.stem != program]
+    examples = hand_written("programs", year, program)
     data = ask(client, prompt(title, program, year, source, examples), "groups", keep)
     return data | {"program": program, "title": title, "catalog_year": year}
 
@@ -254,7 +261,7 @@ def draft(title: str, program: str, year: str, source: str, client: str = CLIENT
 def draft_roadmap(title: str, program: str, year: str, source: str, rules: str, university: dict,
                   client: str = CLIENT, keep: Path | None = None) -> dict:
     """A program's roadmaps, written against its rules (`rules`: the YAML text, for the major groups' ids)."""
-    examples = [p.read_text() for p in sorted((RULES_DIR / "roadmaps" / year).glob("*.yaml")) if p.stem != program]
+    examples = hand_written("roadmaps", year, program)
     labels = sorted({a for g in university["groups"] for a in ge_areas(g)})
     data = ask(client, roadmap_prompt(title, program, year, source, rules, labels, examples), "variants", keep)
     return {"program": program, "catalog_year": year} | data | {"program": program, "catalog_year": year}

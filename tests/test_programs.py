@@ -122,3 +122,10 @@ def test_a_roadmap_draft_is_written_against_the_rules_and_never_verified(tmp_pat
     assert got["verified"] is False and got["program"] == "bm-composition" and yaml.safe_load(keep.read_text()) == got
     with pytest.raises(RuntimeError, match="exited 3"):  # a usage limit: this program fails, not the batch
         P.ask(f"{sys.executable} -c \"import sys; sys.exit(3)\"", "prompt", "variants")
+
+
+def test_drafts_are_never_examples():
+    # loaded drafts multiplied every prompt (28 programs of examples) and would teach the drafter its own mistakes
+    for kind in ("programs", "roadmaps"):
+        shown = P.hand_written(kind, "2026-27", "bs-public-health")
+        assert shown and all("drafted_by:" not in t for t in shown) and len(shown) == 2
