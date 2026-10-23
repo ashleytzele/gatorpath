@@ -526,8 +526,8 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
     groups whose minimum units don't add up to `total_units`. [] when it's clean."""
     out = [f"unknown key {k!r}" for k in program if k not in PROGRAM_KEYS]
     out += [f"missing {k!r}" for k in ("program", "title", "catalog_year", "total_units", "groups") if k not in program]
-    ids, low = set(), 0.0
-    units = lambda cs: sum(catalog[c]["units_min"] for c in cs if c in catalog)
+    ids, low, high = set(), 0.0, 0.0  # high: variable-unit courses at their most ("KIN 699 Independent Study", 1-3)
+    units = lambda cs, end="units_min": sum(catalog[c].get(end, catalog[c]["units_min"]) for c in cs if c in catalog)
     for g in program.get("groups", []):
         gid = g.get("id", "?")
         out += [f"{gid}: unknown key {k!r}" for k in g if k not in GROUP_KEYS]
@@ -565,9 +565,13 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
             out.append(f"{gid}: quote isn't word for word in the Bulletin text: {g['quote'][:80]!r}")
         low += (units(g.get("all_of", [])) + g.get("choose_units", 0)
                 + min((units(opt) for opt in g.get("one_of", [])), default=0))
+        high += (units(g.get("all_of", []), "units_max") + g.get("choose_units", 0)
+                 + min((units(opt, "units_max") for opt in g.get("one_of", [])), default=0))
     if any("choose_n" in g or g.get("unparsed") for g in program.get("groups", [])):
         out.append(f"units: can't check total_units with choose_n or unparsed groups (the others add up to {low:g} of "
                    f"{program.get('total_units', 0):g}); a person adds them up")
-    elif "total_units" in program and low != program["total_units"]:
-        out.append(f"units: the groups' minimums add up to {low:g}, total_units says {program['total_units']:g}")
+    elif "total_units" in program and not low <= program["total_units"] <= high:
+        out.append(f"units: the groups' minimums add up to {low:g}"
+                   + (f" ({high:g} with variable-unit courses at their most)" if high != low else "")
+                   + f", total_units says {program['total_units']:g}")
     return out

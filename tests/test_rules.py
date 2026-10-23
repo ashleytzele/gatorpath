@@ -401,6 +401,10 @@ def test_check_program_reports_what_a_person_must_fix():
                    "a person adds them up"]
     short = good | {"total_units": 56}
     assert check_program(short, CATALOG)[-1] == "units: the groups' minimums add up to 55, total_units says 56"
+    # a variable-unit course (KIN 699 Independent Study, 1-3 in "Select one: 3", p.710) can reach the printed total
+    variable = CATALOG | {"MATH 696": CATALOG["MATH 696"] | {"units_max": CATALOG["MATH 696"]["units_min"] + 1}}
+    assert check_program(short, variable) == [] and check_program(good | {"total_units": 57}, variable)[-1] == \
+        "units: the groups' minimums add up to 55 (56 with variable-unit courses at their most), total_units says 57"
     # MUS 130/TH A 131 (BM Composition, p.1549) is one course: both codes in an all_of would need it twice
     twins = CATALOG | {"MUS 130": {"units_min": 3, "crosslisted": ["TH A 131"]},
                        "TH A 131": {"units_min": 3, "crosslisted": ["MUS 130"]}}
