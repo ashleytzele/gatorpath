@@ -142,7 +142,7 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
     if "restricted_to" in e:
         # ponytail: word match on the restriction text. Upgrade to a parsed {majors, standing, level} leaf if it misfires.
         text = e["restricted_to"]
-        if re.search(r"(?<!under)graduate", text, re.I):
+        if re.search(r"(?<!under)graduate", text, re.I) and not re.search(r"upper|undergraduate|junior|senior", text, re.I):
             return NO, [f"restricted to {text}"]
         if major_name(ctx["program"]).lower() not in text.lower():
             return UNVERIFIED, [f"restricted to {text}"]
@@ -485,6 +485,95 @@ def next_term(term: str, summer: bool, winter: bool = False) -> str:
             return f"{y}-{seasons[i]}"
 
 
+def ge_areas(g: dict) -> list[str]:
+    """The GE area labels a university group takes ("1A", "USH"), from its `from` filters."""
+    return [str(a) for f in ([g["from"]] if isinstance(g.get("from"), dict) else g.get("from") or [])
+            for a in ([f.get("ge_area")] if not isinstance(f.get("ge_area"), list) else f["ge_area"]) if a]
+
+
+def area_groups(label: str, university: dict) -> list[str]:
+    """The university groups a roadmap area label stands for: "1" -> 1A/1B/1C, "5UD/2UD" -> both, "USH/USG/CSLG"."""
+    labels = label.split("/")
+    return [g["id"] for g in university["groups"] if any(a == l or (len(l) == 1 and a[0] == l and len(a) == 2)
+                                                         for a in ge_areas(g) for l in labels)]
+
+
+# Variants the planner reads (pick_variant): first-time by QR pathway (or one for every first-time student), and the ADT.
+VARIANTS = {"qr-1-2": "1/2", "qr-3-4": "3/4", "first-time": None, "adt": None}
+ROADMAP_KEYS = {"program", "catalog_year", "verified", "verified_by", "variants", "drafted_by"}
+SLOTS = {"GE", "ai", "major", "senior_elective", "sfss_or_elective", "elective"}
+
+
+def check_roadmap(roadmap: dict, program: dict, university: dict, catalog: dict, pages: set[int] | None = None,
+                  source: str | None = None) -> list[str]:
+    """What a person must fix before a roadmap file is used (§6.2 "AI-drafted rules"): variants the planner doesn't
+    read, items it can't place (unknown slot, GE label or major group, a code not in the catalog or not in the
+    `source` text), semesters that don't add up to their printed units, pages outside `pages`, roadmap pages no variant
+    covers, and a first-time roadmap missing a required course. [] when it's clean."""
+    from gatorpath.engine.rules import PAGE, squashed
+    out = [f"unknown key {k!r}" for k in roadmap if k not in ROADMAP_KEYS]
+    choose = {g["id"] for g in program["groups"] if "from" in g}
+    unparsed = {g["id"] for g in program["groups"] if g.get("unparsed")}
+    text = squashed(source or "")
+
+    def printed(code: str) -> bool:  # as itself or in a cross-listing: "MUS/TH A 221" has MUS 221 and TH A 221
+        subj, num = (squashed(x) for x in code.rsplit(" ", 1))
+        return bool(re.search(rf"{re.escape(subj)}(?:/[a-z]+)*{re.escape(num)}", text))
+
+    required = [c for g in program["groups"] for c in g.get("all_of", [])]
+    cited = lambda text: {n for m in PAGE.findall(str(text)) for n in range(int(m[0]), int(m[1] or m[0]) + 1)}
+    covered: set[int] = set()
+
+    def bad(where: str, x) -> list[str]:
+        if isinstance(x, str):
+            return [f"{where}: {x} is not in the {program['catalog_year']} catalog"] if x not in catalog else \
+                [f"{where}: {x} isn't in the roadmap text"] if source is not None and not printed(x) else []
+        if not isinstance(x, dict):
+            return [f"{where}: {x!r} isn't a course code or a slot"]
+        if "one_of" in x:
+            return [p for o in x["one_of"] for p in bad(where, o)]
+        if x.get("slot") not in SLOTS:
+            return [f"{where}: unknown slot {x.get('slot')!r} (one of {', '.join(sorted(SLOTS))})"]
+        if x["slot"] in ("GE", "ai") and not area_groups(str(x.get("area", "")), university):
+            return [f"{where}: area {x.get('area')!r} matches no GE or American Institutions group"]
+        if x["slot"] == "major" and x.get("group") in unparsed:
+            return [f"{where}: group {x['group']!r} is unparsed in the program rules: write it there first"]
+        if x["slot"] == "major" and x.get("group") not in choose:
+            return [f"{where}: group {x.get('group')!r} isn't a choose group of {program['program']}"]
+        return []
+
+    for key, v in roadmap.get("variants", {}).items():
+        if key not in VARIANTS:
+            out.append(f"{key}: the planner reads only the variants {', '.join(VARIANTS)}")
+        elif v.get("qr_pathway") != VARIANTS[key]:
+            out.append(f"{key}: qr_pathway should be {VARIANTS[key]!r}")
+        codes = set()
+        for i, sem in enumerate(v.get("semesters", []), 1):
+            where = f"{key} semester {i}"
+            for x in sem.get("items", []):
+                out += bad(where, x)
+                codes |= {o for o in (x.get("one_of", []) if isinstance(x, dict) else [x]) if isinstance(o, str)}
+            units = sum(catalog[x]["units_min"] if isinstance(x, str) else x.get("units", 0)
+                        for x in sem.get("items", []) if not isinstance(x, str) or x in catalog)
+            if units != sem.get("units"):
+                out.append(f"{where}: the items add up to {units:g}, units says {sem.get('units')}")
+            if not cited(sem.get("source")):
+                out.append(f"{where}: source must cite a page like \"p.2132\"")
+            covered |= cited(sem.get("source"))
+        if sum(s.get("units", 0) for s in v.get("semesters", [])) != v.get("total_units"):
+            out.append(f"{key}: the semesters add up to {sum(s.get('units', 0) for s in v.get('semesters', [])):g}, "
+                       f"total_units says {v.get('total_units')}")
+        if key != "adt" and (missing := [c for c in required if c not in codes]):
+            out.append(f"{key}: required but not on this roadmap: {', '.join(missing)}")
+        covered |= cited(v.get("source"))
+    if pages and (outside := sorted(covered - pages)):
+        out.append(f"source pages {', '.join(map(str, outside))} are outside the roadmap pages ({min(pages)}-{max(pages)})")
+    if pages and (left := sorted(pages - covered)):
+        out.append(f"roadmap pages {', '.join(map(str, left))} aren't in any variant: a roadmap the planner doesn't read "
+                   "(a 5-year or 2-year one)? A person checks nothing is lost")
+    return out
+
+
 def pick_variant(profile: dict, roadmap: dict) -> str | None:
     if profile.get("adt") and "adt" in roadmap["variants"]:
         return "adt"
@@ -629,7 +718,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                       for _ in range(g["courses_needed"] - len(g["counted"]))]
     t = after["totals"]
     slot_units = sum(s["units"] for s in slots)
-    ud_slot_units = sum(s["units"] for s in slots if s["_kind"] in ("major", "ud_ge"))
+    # as check_plan counts them: a major slot adds upper-division units only when its options all are (not "Select One
+    # lower-division course")
+    ud_slot_units = sum(s["units"] for s in slots if s["_kind"] == "ud_ge" or s["_kind"] == "major" and upper_only(groups[s["slot"]]))
     free = max(0, t["units"]["needed"] - t["units"]["value"] - slot_units)
     ud_short = max(0, t["upper_division_units"]["needed"] - t["upper_division_units"]["value"] - ud_slot_units)
     for u in chunks(free):
@@ -658,14 +749,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     road = [sem | {"items": [x for x in map(pick_one, sem["items"]) if x is not None]}
             for sem in roadmap["variants"][ref]["semesters"]]
     named = {str(i.get("area")) for sem in road for i in sem["items"] if isinstance(i, dict)}
-    areas_of = lambda g: [str(a) for f in ([g["from"]] if isinstance(g.get("from"), dict) else g.get("from") or [])
-                          for a in ([f.get("ge_area")] if not isinstance(f.get("ge_area"), list) else f["ge_area"]) if a]
 
     def groups_for(label: str) -> list[str]:
-        labels = label.split("/")
-        hit = [g["id"] for g in university["groups"] if any(a == l or (len(l) == 1 and a[0] == l and len(a) == 2)
-                                                             for a in areas_of(g) for l in labels)]
-        return sorted(hit, key=lambda i: any(a in named for a in areas_of(groups[i])))
+        return sorted(area_groups(label, university), key=lambda i: any(a in named for a in ge_areas(groups[i])))
 
     def take(item: dict, pool: list[dict]) -> list[dict]:
         """The open slots a roadmap item stands for (removed from `pool` by the caller once placed)."""

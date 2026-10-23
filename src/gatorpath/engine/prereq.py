@@ -6,6 +6,8 @@ How SFSU writes prereqs (checked against every CSC/MATH/PHYS string, 2026-27):
   clause, or a clause that is only a grade phrase, covers every earlier clause in the group too.
 - 'either A or B' binds tighter than 'and'; ', and' / ', or' split a comma list.
 - Clauses saying "recommended" are not requirements.
+- "<X> majors with …" clauses are alternatives, one per major (ENGR 696: "Civil Engineering majors with … ENGR 300 …;
+  Mechanical Engineering majors with … ENGR 302 …").
 Anything not understood becomes an {"unknown": text} leaf: kept, never dropped (status 'partial').
 """
 
@@ -22,6 +24,7 @@ UP, SENIOR, GRAD = {"standing": "upper"}, {"standing": "senior"}, {"standing": "
 ROMAN = {"i": 1, "ii": 2, "iii": 3, "iv": 4}
 ADVISORY = re.compile(r"\b(recommended|should)\b", I)
 MAY_ENROLL = re.compile(r"(.+?) may enroll with (?:the )?permission of the instructor\.?$", I)
+MAJORS_WITH = re.compile(r"(?:Restricted to )?([A-Za-z][A-Za-z&,\- ]*? majors) with (.+)$", I)
 ATC = "Advancement to Candidacy and Culminating Experience forms approved by Graduate Studies"
 
 
@@ -280,7 +283,8 @@ def parse_prereq(text: str) -> dict:
         replaced = sentence.lower().startswith("may be replaced by ")  # "… May be replaced by permission"
         if replaced:
             sentence = sentence[len("may be replaced by "):]
-        groups = [[]]
+        groups, majors = [[]], []  # majors: the "<X> majors with …" branches of the current group
+        flush = lambda: groups[-1].append(combine("any", [combine("all", b) for b in majors])) if majors else None
         for clause in sentence.rstrip(".").split(";"):
             clause = clause.strip()
             if ADVISORY.search(clause):
@@ -289,16 +293,25 @@ def parse_prereq(text: str) -> dict:
             if not clause:
                 continue
             if clause.lower().startswith("or "):
+                flush()
                 groups.append([])
+                majors = []
                 clause = clause[3:]
             elif clause.lower().startswith("and "):
                 clause = clause[4:]
+            # not "… majors with junior standing", and not "A or B and C or D" (ambiguous: kept whole, flagged)
+            if (m := MAJORS_WITH.match(clause)) and COURSE.search(m[2]) and not (
+                    " or " in m[2] and " and " in m[2] and "either" not in m[2]):
+                majors.append([{"restricted_to": m.group(1)}])
+                clause = m.group(2)
+            into = majors[-1] if majors else groups[-1]  # a clause after a branch is that major's
             expr, group_grade = parse_clause(clause)
             if group_grade:
-                for e in groups[-1]:
+                for e in into:
                     apply_grade(e, *group_grade)
             if expr:
-                groups[-1].append(expr)
+                into.append(expr)
+        flush()
         expr = combine("any", [combine("all", g) for g in groups])
         if replaced and sentences:
             sentences[-1] = combine("any", [sentences[-1], expr])

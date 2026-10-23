@@ -371,6 +371,16 @@ def test_finished_math_adds_no_pathway_courses():
     assert "MATH 227" in planned and not planned & {"MATH 197", "MATH 198"}
 
 
+def test_upper_division_and_graduate_isnt_graduate_only():
+    # MUS 434: "Restricted to upper-division and graduate Broadcast & Electronic Communication Arts and Music majors"
+    from gatorpath.engine.planner import NO, OK, evaluate
+    ctx = {"program": {"title": "Bachelor of Music in Music"}, "units": 60, "class_level": UNIVERSITY["class_level"]}
+    text = "upper-division and graduate Broadcast & Electronic Communication Arts and Music majors"
+    assert evaluate({"restricted_to": text}, ctx)[0] == OK
+    assert evaluate({"restricted_to": text}, ctx | {"units": 30})[0] == NO  # not upper-division yet
+    assert evaluate({"restricted_to": "graduate students"}, ctx)[0] == NO
+
+
 def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():
     # Trial 7: MATH 325 met MATH 225 on the DPR; electives needing MATH 225 showed as blocked
     from gatorpath.engine.planner import UNVERIFIED, evaluate
@@ -507,3 +517,34 @@ def test_compare_programs_says_what_carries_over_to_a_new_major():
     sub = compare_programs(profile | {"dpr_met": ["MATH 324"]}, (current[0], current[2]), (target[0], target[2]),
                            UNIVERSITY, CATALOG, PREREQS)
     assert any(w.startswith("Substitutions on your DPR (MATH 324) are your current major's") for w in sub["warnings"])
+
+
+@pytest.mark.parametrize("path", sorted((ROOT / "rules/roadmaps").glob("*/*.yaml")), ids=lambda p: f"{p.parent.name}/{p.stem}")
+def test_roadmap_files_pass_check_roadmap(path):
+    # ARCHITECTURE §6.2 "AI-drafted rules": the hand-written roadmaps are the bar a drafted one is held to
+    from gatorpath.engine.planner import check_roadmap
+    program, university = load_rules(path.parent.name, path.stem)
+    got = check_roadmap(yaml.safe_load(path.read_text()), program, university, CATALOG)
+    # the 2025-26 QR 3/4 roadmap never prints PHYS 222, which the major requires (p.1905): the check finds it
+    assert got == (["qr-3-4: required but not on this roadmap: PHYS 222"] if path.parent.name == "2025-26" else [])
+
+
+def test_check_roadmap_reports_what_a_person_must_fix():
+    from gatorpath.engine.planner import check_roadmap
+    program, university, roadmap = rules_for({"program": "bs-applied-math"})
+    v = roadmap["variants"]["qr-1-2"]
+    first = v["semesters"][0] | {"items": ["MATH 226", "MATH 999", {"slot": "GE", "area": "9Z", "units": 3},
+                                           {"slot": "major", "group": "required", "units": 3}, {"slot": "minor", "units": 3}]}
+    bad = roadmap | {"drafted": True, "variants": {
+        "qr-1-2": v | {"semesters": [first] + [s for s in v["semesters"][1:] if "MATH 696" not in s["items"]]},
+        "transfer": roadmap["variants"]["adt"]}}
+    got = check_roadmap(bad, program, university, CATALOG, set(range(2132, 2139)))
+    assert got[:6] == ["unknown key 'drafted'", "qr-1-2 semester 1: MATH 999 is not in the 2026-27 catalog",
+                       "qr-1-2 semester 1: area '9Z' matches no GE or American Institutions group",
+                       "qr-1-2 semester 1: group 'required' isn't a choose group of bs-applied-math",
+                       "qr-1-2 semester 1: unknown slot 'minor' (one of GE, ai, elective, major, senior_elective, "
+                       "sfss_or_elective)", "qr-1-2 semester 1: the items add up to 13, units says 16"]
+    assert "qr-1-2: the semesters add up to 105, total_units says 120" in got
+    assert "qr-1-2: required but not on this roadmap: MATH 696" in got
+    assert "transfer: the planner reads only the variants qr-1-2, qr-3-4, first-time, adt" in got
+    assert got[-1].startswith("roadmap pages 2134, 2135, 2138 aren't in any variant")

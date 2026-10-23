@@ -40,6 +40,7 @@ uv run python -m gatorpath.ingest.offerings --subjects CSC,MATH,PHYS        # of
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf    # list bachelor's programs + their pages
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --source   # <id>.source.txt for programs with rules
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --draft <id>   # AI draft -> rules/drafts/ + checks
+uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --roadmap <id>   # AI roadmap draft + checks + a test plan
 uv run gatorpath                   # start MCP server (stdio)
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
@@ -74,7 +75,7 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 | `rules/programs/<year>/` | Hand-written requirement YAML (reviewed) |
 | `rules/university/<year>.yaml` | GE, SF State Studies, American Institutions, GWAR, unit totals |
 | `rules/roadmaps/<year>/` | Official roadmap variants as YAML |
-| `rules/drafts/<year>/` | AI-drafted program rules waiting for a person (the server never reads them) |
+| `rules/drafts/<year>/` | AI-drafted program rules and roadmaps (`<id>.roadmap.yaml`) waiting for a person (the server never reads them) |
 | `evals/` | Synthetic profiles + eval runner |
 | `data/` | **git-ignored**: raw PDFs, `catalog.db`, scrape cache |
 

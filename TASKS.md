@@ -453,7 +453,22 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   (fixed). The checker can't see omissions: the Civil draft's electives left out "subject to the minimum number of
   units specified for each group" and the advisor-approved study plan, so a draft with 0 to fix still needs a person.
   Before loading: (1) done 2026-10-22: an `unparsed` group (4 of the 5 drafts) audits as status `unparsed` with its
-  quote and a warning, and check_plan warns instead of failing (it raised KeyError before); (2) build_plan needs a roadmap; (3) decide whether unreviewed drafts are served.
+  quote and a warning, and check_plan warns instead of failing (it raised KeyError before); (2) done 2026-10-22, the
+  roadmap is the planner's foundation, so every program gets one: `--roadmap <id>` drafts it (below); (3) decide
+  whether unreviewed drafts are served.
+  Roadmap pilot 2026-10-22 (same 5 programs, Sonnet): `check_roadmap` found Finance and Public Health clean. The
+  rest: Asian American Studies and Composition name a major group that their rules draft left unparsed; Civil QR
+  3/4's total_units was the "123 Total Units Required" header, not its own "Total Units 129-130" (the prompt now
+  says which); Civil's 5-year roadmap was left out, as asked. Plans for a new student on each draft (`try_plans`)
+  found four engine and parser bugs, fixed: a "Select One" written as `choose_units` is only a slot, so a course
+  needing it never fit (Public Health's PH 425 needs a statistics course; the prompt now says `one_of`);
+  "<X> majors with …" prereq clauses were ANDed (ENGR 696 needed every major's courses; now one alternative per
+  major, 20 of 4,967 prereqs changed, ambiguous "A or B and C or D" kept whole); "upper-division and graduate …
+  majors" read as graduate-only (MUS 434); build_plan counted every major slot as upper division and check_plan
+  didn't (Asian American Studies came up 3 units short). With the Select Ones as `one_of`, 9 of 10 test plans pass
+  check_plan at 8-10 terms. Civil QR 3/4 still stops: CHEM 180's second sentence ("Category III or IV … must have
+  completed MATH 197 …") is an alternative the parser ANDs, and the one_of option is chosen by units, not readiness.
+  Not redrafted with the new prompt yet (usage): the pilot's 5 come first in the load-all run.
 
 ---
 

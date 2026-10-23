@@ -375,9 +375,21 @@ units adding up to `total_units`. A person fixes what it reports, moves the file
 second person sets `verified`. Draft-only keys: `quote` on a group (the Bulletin words it was written from) and
 `drafted_by` (client, date); a requirement the vocabulary can't express is a group with `unparsed: true`, its
 `quote` and `source`, for the person to write (rule 3: flag, don't guess); until then `audit` gives it status
-`unparsed` (never complete) with its quote, and `check_plan` warns that it isn't checked. A major's choice is `choose_units` (the
-printed units): `choose_n` plans a 0-unit designation slot, so check_program flags it in a program file. Advising
-contacts aren't drafted: they come from office pages (§5).
+`unparsed` (never complete) with its quote, and `check_plan` warns that it isn't checked. A "Select One" between
+printed courses is `one_of`, so the plan schedules a real course a later prereq can see (a `choose_units` slot is
+only a placeholder: the pilot's Public Health core stalled on a statistics slot that PH 425 needs). Other choices are
+`choose_units` (the printed units): `choose_n` plans a 0-unit designation slot, so check_program flags it in a program
+file. Advising contacts aren't drafted: they come from office pages (§5).
+
+`--roadmap <id>` drafts `rules/drafts/<year>/<id>.roadmap.yaml` the same way, from the roadmap pages, against the
+program's rules (or its draft) for the major groups' ids. `check_roadmap` (engine/planner.py) checks it: only the
+variants the planner reads (`qr-1-2`, `qr-3-4`, `first-time`, `adt`), items it can place (a known slot, a GE label
+that maps to a group, a choose group of the program, a code in the catalog and printed on the roadmap pages, a
+cross-listing like "MUS/TH A 221" included), semesters adding up to their printed units and variants to
+`total_units`, every roadmap page in some variant (else it's a 5-year or 2-year roadmap left out), and every required
+course on a first-time roadmap (that's how 2025-26's missing PHYS 222 shows). Then it builds a plan for a new student
+on each variant and prints check_plan's errors: the end-to-end check. An answer that isn't YAML is kept in the
+draft's file for a person, never lost.
 
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo

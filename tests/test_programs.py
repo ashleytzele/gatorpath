@@ -91,3 +91,23 @@ def test_a_draft_is_parsed_checked_and_never_verified(tmp_path):
     with pytest.raises(ValueError):
         P.parse_draft("I can't do that.")
     assert yaml.safe_load(yaml.safe_dump(got)) == got
+
+
+def test_a_roadmap_draft_is_written_against_the_rules_and_never_verified(tmp_path):
+    answer = tmp_path / "answer.txt"
+    answer.write_text("```yaml\nprogram: x\nverified: true\nvariants:\n  first-time:\n    semesters: []\n```\n")
+    client = f"{sys.executable} -c \"import sys; sys.stdin.read(); print(open(sys.argv[1]).read())\" {answer}"
+    university = {"groups": [{"id": "ge_1a", "from": {"ge_area": "1A"}}, {"id": "ush", "from": {"ge_area": "USH"}}]}
+    text = P.roadmap_prompt(APPLIED, "bs-applied-math", "2026-27", "=== p.2132 ===\nFirst Semester\n", "program: bs-x\n",
+                            ["1A", "USH"], [])
+    assert "one of 1A, USH" in text and "```yaml\nprogram: bs-x\n```" in text and "qr-1-2, qr-3-4, first-time, adt" in text
+    got = P.draft_roadmap(APPLIED, "bs-applied-math", "2026-27", "=== p.2132 ===\n", "program: bs-x\n", university, client)
+    assert got["program"] == "bs-applied-math" and got["catalog_year"] == "2026-27" and got["verified"] is False
+    assert list(got)[:2] == ["program", "catalog_year"] and got["variants"] == {"first-time": {"semesters": []}}
+    with pytest.raises(ValueError):
+        P.parse_draft("```yaml\ngroups: []\n```", "variants")
+    answer.write_text("```yaml\nvariants:\n  adt: {title: Bachelor of Music: Composition}\n```")  # unquoted ": "
+    keep = tmp_path / "kept.yaml"
+    with pytest.raises(yaml.YAMLError):
+        P.draft_roadmap(APPLIED, "bs-applied-math", "2026-27", "", "", university, client, keep)
+    assert "Bachelor of Music: Composition" in keep.read_text()  # kept for a person, not lost

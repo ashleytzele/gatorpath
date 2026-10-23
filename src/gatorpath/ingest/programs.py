@@ -13,6 +13,7 @@ from pathlib import Path
 import yaml
 
 from gatorpath import db
+from gatorpath.engine.planner import VARIANTS, build_plan, check_roadmap, ge_areas
 from gatorpath.engine.rules import RULES_DIR, check_program
 from gatorpath.ingest.bulletin import extract_pages
 
@@ -135,15 +136,16 @@ Rules (they're checked by a program, then by a person):
   that group was written from, copied exactly (no paraphrase, no "...").
 - Only course codes printed in the text, written as printed ("MATH 301GW"). Never add a course, a grade minimum or a
   unit count the text doesn't state. total_units is the printed major total (its minimum).
-- A "Select One" / "select N units" / "N courses" choice in the major is `choose_units`: the units the Bulletin prints
-  for it (the Units column). Don't use choose_n in a program file: the planner reads it as a 0-unit designation.
-  A choice between bundles ("CSC 101 & CSC 215") is `one_of`. A cross-listed course ("PH/ETHS 221") is each of its
-  codes: PH 221, ETHS 221.
+- A "Select One" between printed courses or bundles is `one_of`, one option each: [[MATH 209], [CSC 101, CSC 215]].
+  The plan then schedules a real course, which a later course's prereq may need. "Select N units" / "N courses" from a
+  list, and electives, are `choose_units`: the units the Bulletin prints for it (the Units column). Don't use choose_n
+  in a program file: the planner reads it as a 0-unit designation. A cross-listed course ("PH/ETHS 221") is each of
+  its codes: PH 221, ETHS 221.
 - Major requirements only: GE, SF State Studies and the university's graduation requirements are in other files.
   Include transfer_notes only when the text gives transfer advice; leave out `advising` and `dpr_plan`.
 - A requirement the vocabulary can't express exactly: a group with `unparsed: true`, its `quote` and `source`, and
   nothing else. Never approximate one.
-- Answer with the YAML only, in one ```yaml block.
+- Answer with the YAML only, in one ```yaml block. Double-quote every string with a colon in it.
 
 {vocabulary()}
 
@@ -156,23 +158,98 @@ The Bulletin text ({year}), page by page:
 {source}"""
 
 
-def parse_draft(answer: str) -> dict:
-    """The YAML in a ```yaml block (or the whole answer), as a mapping."""
+def roadmap_prompt(title: str, program: str, year: str, source: str, rules: str, labels: list[str],
+                   examples: list[str]) -> str:
+    shown = "\n\n".join(f"```yaml\n{e}```" for e in examples)
+    return f"""Draft the roadmaps of "{title}" from the {year} SF State Bulletin as a GatorPath roadmap YAML file.
+
+Rules (they're checked by a program, then by a person):
+- Use only the roadmap vocabulary below (ARCHITECTURE §6.2, "Roadmap items"). Copy the shape of the hand-written examples.
+- program: {program}; catalog_year: {year}; verified: false; verified_by: null.
+- Variants, keyed {", ".join(VARIANTS)} only: a first-time roadmap per Quantitative Reasoning category (qr-1-2 with
+  qr_pathway: "1/2", qr-3-4 with "3/4"), or first-time (no qr_pathway) when the program has one first-time roadmap;
+  adt for the Associate Degree for Transfer roadmap. Leave out every other roadmap (5-year, 2-year transfer without
+  an ADT, Scholars). Each variant: title (the printed heading), total_units (its last "Total Units" line, the minimum), source
+  ("p.NNNN-NNNN", its pages), notes (the printed notes and footnotes, word for word), semesters.
+- Each semester: units (the printed "Units" line; the minimum of a range), source ("p.NNNN"), items. The items' units
+  must add up to it exactly: a course code counts its catalog units; a slot counts its `units`.
+- Items: a course code as printed ("PH 400GW"); a GE requirement is {{slot: GE, area: <label>, units}} with the
+  printed area (one of {", ".join(labels)}, or a label made of them like "1", "5UD/2UD"); American Institutions
+  (USH, USG, CSLG) is {{slot: ai, area, units}}; "SF State Studies or University Elective" is
+  {{slot: sfss_or_elective, units}}; "University Elective" or "Minor or Elective" is {{slot: elective, units}};
+  a major choice ("Major Elective", "Concentration Elective", a "Select One" between courses that's a choose group of
+  the program rules below) is {{slot: major, group: <that group's id>, units}}; a "Select One" of course codes or
+  slots the rules don't make a group is {{one_of: [...], units}}. "Take Two" etc. go in the item's units (and a note).
+- Numbers printed between a title and its units are footnote marks, not units.
+- Answer with the YAML only, in one ```yaml block. Double-quote every title, note and string with a colon in it.
+
+{vocabulary()}
+
+The program's rules (group ids for major slots):
+
+```yaml
+{rules}```
+
+Hand-written examples:
+
+{shown}
+
+The Bulletin's roadmap pages ({year}), page by page:
+
+{source}"""
+
+
+def parse_draft(answer: str, key: str = "groups") -> dict:
+    """The YAML in a ```yaml block (or the whole answer), as a mapping that has `key`."""
     m = re.search(r"```(?:yaml)?\n(.*?)```", answer, re.S)
     data = yaml.safe_load(m.group(1) if m else answer)
-    if not isinstance(data, dict) or "groups" not in data:
-        raise ValueError("the answer isn't a rules file with groups")
+    if not isinstance(data, dict) or key not in data:
+        raise ValueError(f"the answer isn't a rules file with {key}")
     return data
 
 
-def draft(title: str, program: str, year: str, source: str, client: str = CLIENT) -> dict:
-    """One headless AI-client run: the prompt on stdin, the YAML out. Fields a model mustn't set are overwritten."""
+def ask(client: str, text: str, key: str, keep: Path | None = None) -> dict:
+    """One headless AI-client run: the prompt on stdin, the YAML out, stamped never verified. The answer is written to
+    `keep` first, so one that isn't YAML is there for a person to fix instead of lost."""
+    answer = subprocess.run(shlex.split(client), input=text, capture_output=True, text=True, check=True).stdout
+    if keep:
+        keep.write_text(answer)
+    return parse_draft(answer, key) | {"verified": False, "verified_by": None,
+                                       "drafted_by": f"{shlex.split(client)[0]}, {date.today().isoformat()}"}
+
+
+def draft(title: str, program: str, year: str, source: str, client: str = CLIENT, keep: Path | None = None) -> dict:
+    """A program's rules. Fields a model mustn't set are overwritten."""
     examples = [p.read_text() for p in sorted((RULES_DIR / "programs" / year).glob("*.yaml")) if p.stem != program]
-    answer = subprocess.run(shlex.split(client), input=prompt(title, program, year, source, examples), capture_output=True,
-                            text=True, check=True).stdout
-    data = parse_draft(answer)
-    return data | {"program": program, "title": title, "catalog_year": year, "verified": False, "verified_by": None,
-                   "drafted_by": f"{shlex.split(client)[0]}, {date.today().isoformat()}"}
+    data = ask(client, prompt(title, program, year, source, examples), "groups", keep)
+    return data | {"program": program, "title": title, "catalog_year": year}
+
+
+def draft_roadmap(title: str, program: str, year: str, source: str, rules: str, university: dict,
+                  client: str = CLIENT, keep: Path | None = None) -> dict:
+    """A program's roadmaps, written against its rules (`rules`: the YAML text, for the major groups' ids)."""
+    examples = [p.read_text() for p in sorted((RULES_DIR / "roadmaps" / year).glob("*.yaml")) if p.stem != program]
+    labels = sorted({a for g in university["groups"] for a in ge_areas(g)})
+    data = ask(client, roadmap_prompt(title, program, year, source, rules, labels, examples), "variants", keep)
+    return {"program": program, "catalog_year": year} | data | {"program": program, "catalog_year": year}
+
+
+def try_plans(program: dict, roadmap: dict, university: dict, catalog: dict, prereqs: dict) -> list[str]:
+    """build_plan for a new student on each variant (an ADT transfer on `adt`), as check_plan sees it: the end-to-end
+    check that a drafted program and roadmap can be planned at all."""
+    out = []
+    for key, v in roadmap.get("variants", {}).items():
+        profile = {"program": program["program"], "catalog_year": program["catalog_year"], "start_term": "2027-fall",
+                   "completed": []} | ({"qr_pathway": v["qr_pathway"]} if v.get("qr_pathway") else {}) | (
+                      {"adt": True} if key == "adt" else {})
+        plan = build_plan(profile, program, university, roadmap, catalog, prereqs)
+        if "check" not in plan:
+            out.append(f"plan {key}: none ({plan.get('needs_input') or plan.get('error')})")
+            continue
+        stopped = [w for w in plan["warnings"] if w.startswith("Stopped")]
+        out.append(f"plan {key}: {'valid' if plan['check']['valid'] else 'INVALID'}, {len(plan['semesters'])} terms"
+                   + "".join(f"\n    {e['message']}" for e in plan["check"]["errors"]) + "".join(f"\n    {w}" for w in stopped))
+    return out
 
 
 def main() -> None:
@@ -182,6 +259,8 @@ def main() -> None:
     ap.add_argument("--year", help="catalog year, e.g. 2026-27 (default: read from the file name)")
     ap.add_argument("--source", nargs="*", metavar="ID", help="write <id>.source.txt (no ids: every program with rules)")
     ap.add_argument("--draft", nargs="+", metavar="ID", help="draft rules/drafts/<year>/<id>.yaml with --client")
+    ap.add_argument("--roadmap", nargs="+", metavar="ID", help="draft rules/drafts/<year>/<id>.roadmap.yaml with --client, "
+                                                               "against the program's rules (or its draft)")
     ap.add_argument("--client", default=CLIENT, help=f"headless AI client, prompt on stdin (default: {CLIENT})")
     ap.add_argument("--db", default="data/catalog.db")
     args = ap.parse_args()
@@ -189,10 +268,10 @@ def main() -> None:
     pages = extract_pages(args.pdf)
     have = {yaml.safe_load(p.read_text())["title"]: p.stem for p in (RULES_DIR / "programs" / year).glob("*.yaml")}
     programs = {program_id(p["title"], have): p for p in index(pages)}
-    if args.source is None and not args.draft:
+    if args.source is None and not args.draft and not args.roadmap:
         print(json.dumps([{"id": i, **p, "has_rules": p["title"] in have} for i, p in programs.items()], indent=1))
         return
-    if unknown := [i for i in (args.source or []) + (args.draft or []) if i not in programs]:
+    if unknown := [i for i in (args.source or []) + (args.draft or []) + (args.roadmap or []) if i not in programs]:
         ap.error(f"unknown program id {', '.join(unknown)}; run with only the PDF to list them")
     catalog = db.load_catalog(args.db, year)
     for pid in (args.source or [i for i, p in programs.items() if p["title"] in have]) if args.source is not None else []:
@@ -207,10 +286,34 @@ def main() -> None:
         out = RULES_DIR / "drafts" / year
         out.mkdir(parents=True, exist_ok=True)
         (out / f"{pid}.source.txt").write_text(source)
-        data = draft(p["title"], pid, year, source, args.client)
+        try:
+            data = draft(p["title"], pid, year, source, args.client, out / f"{pid}.yaml")
+        except (ValueError, yaml.YAMLError) as e:
+            print(f"{out / f'{pid}.yaml'}: the answer isn't a rules file, fix it by hand ({str(e).splitlines()[0]})")
+            continue
         (out / f"{pid}.yaml").write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
         problems = check_program(data, catalog, set(p["pages"]), source)
         print(f"{out / f'{pid}.yaml'}: {len(problems)} to fix" + "".join(f"\n  {x}" for x in problems))
+    university = yaml.safe_load((RULES_DIR / "university" / f"{year}.yaml").read_text())
+    for pid in args.roadmap or []:
+        p, out = programs[pid], RULES_DIR / "drafts" / year
+        rules = next((f for f in (RULES_DIR / "programs" / year / f"{pid}.yaml", out / f"{pid}.yaml") if f.exists()), None)
+        if rules is None:
+            ap.error(f"{pid} has no rules or draft yet: run --draft {pid} first")
+        source = source_text(pages, p["roadmap_pages"])
+        out.mkdir(parents=True, exist_ok=True)
+        (out / f"{pid}.roadmap.source.txt").write_text(source)
+        try:
+            data = draft_roadmap(p["title"], pid, year, source, rules.read_text(), university, args.client,
+                                 out / f"{pid}.roadmap.yaml")
+        except (ValueError, yaml.YAMLError) as e:
+            print(f"{out / f'{pid}.roadmap.yaml'}: the answer isn't a roadmap file, fix it by hand ({str(e).splitlines()[0]})")
+            continue
+        (out / f"{pid}.roadmap.yaml").write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
+        program = yaml.safe_load(rules.read_text())
+        problems = check_roadmap(data, program, university, catalog, set(p["roadmap_pages"]), source)
+        print(f"{out / f'{pid}.roadmap.yaml'}: {len(problems)} to fix" + "".join(f"\n  {x}" for x in problems)
+              + "".join(f"\n  {x}" for x in try_plans(program, data, university, catalog, db.load_prereqs(args.db, year))))
 
 
 if __name__ == "__main__":

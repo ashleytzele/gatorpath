@@ -290,3 +290,30 @@ def test_reverse_index_lists_what_a_course_unlocks():
     got = reverse_index(rows)
     assert got["CSC 215"] == ["CSC 220", "CSC 230"] and got["MATH 227"] == ["CSC 230"]
     assert "MATH 226" not in got  # its own retake branch isn't "unlocking" itself
+
+
+def test_per_major_clauses_are_alternatives():
+    # ENGR 696: one clause per major; "Computer and Electrical Engineering majors" is one restriction
+    got = parse_prereq("Civil Engineering majors with 15* upper-division ENGR units and ENGR 300* and ENGR 323*; "
+                       "Mechanical Engineering majors with 18* upper-division ENGR units and ENGR 302* (may be taken "
+                       "concurrently); Computer and Electrical Engineering majors with 18* upper-division ENGR units and "
+                       "ENGR 478*.")["expr"]
+    assert got == {"any": [
+        {"all": [{"restricted_to": "Civil Engineering majors"}, {"unknown": "15* upper-division ENGR units"},
+                 c("ENGR 300"), c("ENGR 323")]},
+        {"all": [{"restricted_to": "Mechanical Engineering majors"}, {"unknown": "18* upper-division ENGR units"},
+                 c("ENGR 302", conc=True)]},
+        {"all": [{"restricted_to": "Computer and Electrical Engineering majors"},
+                 {"unknown": "18* upper-division ENGR units"}, c("ENGR 478")]}]}
+    # DES 485: what every Design major needs, then each concentration's courses
+    des = parse_prereq("Restricted to Design majors and minors; DES 200*, DES 300*, and DES 322*; Visual Communication "
+                       "Design majors with DES 325* and DES 327*; Industrial Design majors with DES 305 and DES 310; or "
+                       "permission of the instructor.")["expr"]
+    assert des["any"][0]["all"][:4] == [{"restricted_to": "Design majors and minors"}, c("DES 200"), c("DES 300"), c("DES 322")]
+    assert [b["all"][0] for b in des["any"][0]["all"][4]["any"]] == [
+        {"restricted_to": "Visual Communication Design majors"}, {"restricted_to": "Industrial Design majors"}]
+    # PSY 430: "A or B and C or D" is ambiguous, so it stays one restriction (shown, never guessed)
+    psy = parse_prereq("Restricted to upper-division Psychology majors with PSY 200 or equivalent and PSY 330 or PSY 431; "
+                       "or Child and Adolescent Development majors with CAD 210 and CAD 410; or permission of the instructor.")
+    assert psy["expr"]["any"][0] == {"restricted_to": "upper-division Psychology majors with PSY 200 or equivalent and "
+                                                      "PSY 330 or PSY 431"}
