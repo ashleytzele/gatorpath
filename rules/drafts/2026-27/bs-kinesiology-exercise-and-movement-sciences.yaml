@@ -1,0 +1,183 @@
+program: bs-kinesiology-exercise-and-movement-sciences
+title: 'Bachelor of Science in Kinesiology: Concentration in Exercise and Movement Sciences'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 65
+source: p.710
+global:
+  no_cr_nc: true
+  source: p.710
+groups:
+- id: premajor_biology_intro
+  title: 'Pre-Major Prerequisites: Select One (BIOL 100 & BIOL 101, or BIOL 230)'
+  one_of:
+  - - BIOL 100
+    - BIOL 101
+  - - BIOL 230
+  quote: 'Select one: 4-5'
+  source: p.710
+- id: premajor_physiology
+  title: 'Pre-Major Prerequisites: Human Physiology and Laboratory'
+  all_of:
+  - BIOL 212
+  - BIOL 213
+  quote: BIOL 212 Principles of Human Physiology 3
+  source: p.710
+- id: premajor_anatomy
+  title: 'Pre-Major Prerequisites: Select One (BIOL 220 or BIOL 328)'
+  one_of:
+  - - BIOL 220
+  - - BIOL 328
+  quote: BIOL 328 Human Anatomy
+  source: p.710
+- id: premajor_chemistry
+  title: 'Pre-Major Prerequisites: Select One (CHEM 101 & CHEM 102, or CHEM 115)'
+  one_of:
+  - - CHEM 101
+    - CHEM 102
+  - - CHEM 115
+  quote: CHEM 115 General Chemistry I
+  source: p.710
+- id: premajor_intro_kin
+  title: 'Pre-Major Prerequisites: Introduction to Kinesiology'
+  all_of:
+  - KIN 250
+  min_grade:
+    KIN 250: C
+  quote: A grade of C or better is required for KIN 250, or equivalent, in the major.
+  source: p.710
+- id: premajor_statistics
+  title: 'Pre-Major Prerequisites: Select One (statistics)'
+  one_of:
+  - - ETHS 116
+  - - ETHS 117
+  - - ISED 160
+  - - MATH 124
+  - - PSY 171
+  quote: 'Select One: 3-4'
+  source: p.710
+- id: core
+  title: Core Requirements (16 units)
+  all_of:
+  - KIN 384GW
+  - KIN 457
+  - KIN 480
+  - KIN 482
+  - KIN 486
+  quote: Core Requirements (16 Units)
+  source: p.710
+- id: concentration_required
+  title: Required Concentration Courses
+  all_of:
+  - KIN 404
+  - KIN 483
+  - KIN 485
+  quote: Required Concentration Courses (14 Units)
+  source: p.710
+- id: concentration_physics
+  title: 'Required Concentration Courses: Select One (PHYS 101 & PHYS 102, or PHYS 111 & PHYS 112)'
+  one_of:
+  - - PHYS 101
+    - PHYS 102
+  - - PHYS 111
+    - PHYS 112
+  quote: PHYS 111
+  source: p.710
+- id: concentration_capstone
+  title: 'Required Concentration Courses: Select One (KIN 696, KIN 697 & KIN 698, or KIN 699)'
+  one_of:
+  - - KIN 696
+  - - KIN 697
+    - KIN 698
+  - - KIN 699
+  quote: KIN 699 Independent Study
+  source: p.710
+- id: electives
+  title: Electives (12 units)
+  choose_units: 12
+  approval: Students must meet with an advisor to select electives that align with their career path; other groups are possible
+  from:
+  - list:
+    - KIN 325
+    - KIN 437
+    - KIN 487
+    - KIN 538
+    - KIN 539
+    - KIN 636
+    - KIN 680
+    - KIN 322
+    - KIN 331
+    - KIN 434
+    - KIN 489
+    - KIN 502
+    - KIN 510
+    - KIN 604
+    - KIN 310
+    - KIN 312
+    - KIN 314
+    - KIN 490
+    - KIN 555
+    - KIN 683
+    - KIN 690
+  - approved: true
+  quote: Students must take 12 units of electives.
+  source: p.710
+- id: activity
+  title: Activity Requirement (1 unit)
+  choose_units: 1
+  approval: With prior approval of advisor
+  from:
+  - list:
+    - KIN 100
+    - KIN 103
+    - KIN 136
+    - KIN 139
+    - KIN 148
+    - KIN 151
+    - KIN 161
+    - KIN 164
+    - KIN 171
+    - KIN 172
+    - KIN 189
+    - KIN 191
+    - KIN 272
+  quote: Activity Requirement (1 Unit)
+  source: p.711
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.711
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.712
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.712
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.712
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.712
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.712
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.712
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.712
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.712
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.712
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.712
+drafted_by: claude, 2026-10-23

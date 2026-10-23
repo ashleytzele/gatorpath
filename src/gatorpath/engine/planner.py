@@ -146,7 +146,9 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
     if "restricted_to" in e:
         # ponytail: word match on the restriction text. Upgrade to a parsed {majors, standing, level} leaf if it misfires.
         text = e["restricted_to"]
-        if re.search(r"(?<!under)graduate", text, re.I) and not re.search(r"upper|undergraduate|junior|senior", text, re.I):
+        # graduate-only unless it also opens to undergraduates: "upper-division and graduate … majors" (MUS 434), "graduate
+        # standing or KIN ITEP credential students" (KIN 750, taken in the integrated teacher education program)
+        if re.search(r"(?<!under)graduate", text, re.I) and not re.search(r"upper|undergraduate|junior|senior|\bor\b", text, re.I):
             return NO, [f"restricted to {text}"]
         if major_name(ctx["program"]).lower() not in text.lower():
             return UNVERIFIED, [f"restricted to {text}"]

@@ -1,0 +1,214 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-hospitality-tourism-and-event-management.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-hospitality-tourism-and-event-management
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: Bachelor of Science in Hospitality, Tourism, and Event Management Roadmap
+    total_units: 120
+    source: p.190-191
+    notes:
+    - 120 Total Units Required
+    - 'Minimum Number of Units in the Major: 60'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - '1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '3: Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.'
+    - '4: Guided Electives (6 units). A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements (p. 187).'
+    semesters:
+    - units: 15
+      source: p.190
+      items:
+      - ECON 101
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: with USH
+    - units: 15
+      source: p.190
+      items:
+      - ECON 102
+      - slot: major
+        group: core_statistics
+        units: 3
+        note: 'Select One (Major Core): DS/ECON 212 or MATH 124 (GE 2); footnote 2'
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.190
+      items:
+      - ACCT 100
+      - HTM 110
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.190
+      items:
+      - ACCT 101
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: GE
+        area: '6'
+        units: 3
+        note: Ethnic Studies (p. 2328)
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government (p. 2351)
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.190
+      items:
+      - FIN 350
+      - HTM 300GW
+      - HTM 301
+      - slot: major
+        group: guided_electives
+        count: 2
+        units: 6
+        note: Guided HTM Electives (6 units) - Take Two; footnote 4
+    - units: 15
+      source: p.191
+      items:
+      - HTM 457
+      - HTM 561
+      - MGMT 405
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.191
+      items:
+      - HTM 424
+      - HTM 531
+      - HTM 560
+      - MKTG 431
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.191
+      items:
+      - HTM 515
+      - HTM 590
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+  adt:
+    title: Bachelor of Science in Hospitality, Tourism, and Event Management – BUS Associate Degree for Transfer (2011) Roadmap
+    total_units: 60
+    source: p.192-193
+    met_in_transfer:
+    - ACCT 100
+    - ACCT 101
+    - ECON 101
+    - ECON 102
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Business Administration. Up to 15 units in the major [ACCT 100, ACCT 101, possibly DS 212, ECON 101, and
+      ECON 102] and all lower-division GE requirements have been satisfied. Check with a major advisor about the most appropriate
+      course sequence. Degree completion guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for more
+      information (p. 2304).
+    - 'Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level; to include the
+      following:'
+    - 'University-wide requirements: 9-15 units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government requirements if not met pre-transfer. Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD (9 units):
+      Courses required for the major also satisfy UD GE. Students entering the major with the AS-T in Business Administration
+      are not required to fulfill the SF State Studies requirement.'
+    - 'Hospitality, Tourism, and Event Management major: 45-48 units [Up to 15 units completed in ADT. Statistics may or may
+      not be complete]. Major Core (39-42 units). Guided Electives (6 units).'
+    - 'University Electives: 3 or more units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State - some courses may meet more than one requirement,
+      e.g., in both UD GE and the major.'
+    - '1: Guided Electives (6 units). A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements (p. 187).'
+    semesters:
+    - units: 15
+      source: p.192
+      items:
+      - slot: major
+        group: core_statistics
+        units: 3
+        note: 'Select One (Major Core): DS/ECON 212 or MATH 124; University Elective if met before transfer'
+      - HTM 110
+      - HTM 300GW
+      - HTM 301
+      - MKTG 431
+    - units: 15
+      source: p.192
+      items:
+      - FIN 350
+      - HTM 457
+      - HTM 561
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government (p. 2351), or University Elective if met in transfer
+    - units: 15
+      source: p.192-193
+      items:
+      - HTM 424
+      - HTM 531
+      - HTM 560
+      - MGMT 405
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: Guided Elective (6 units); footnote 1
+    - units: 15
+      source: p.193
+      items:
+      - HTM 515
+      - HTM 590
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: Guided Electives (6 units); footnote 1
+      - slot: ai
+        area: USH
+        units: 3
+        note: US History (p. 2350), or University Elective if met in transfer
+      - slot: elective
+        units: 3
+drafted_by: claude, 2026-10-23

@@ -1,0 +1,104 @@
+program: ba-dance
+title: Bachelor of Arts in Dance
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.1677
+groups:
+- id: dance_studies
+  title: 'Dance Studies (9 units): Select Three'
+  choose_units: 9
+  from:
+  - list:
+    - DANC 350
+    - DANC 352
+    - TH A 352
+    - MUS 352
+    - DANC 408
+    - TH A 408
+    - DANC 430
+    - DANC 657
+    - ANTH 657
+  quote: Dance Studies (9 units)
+  source: p.1677
+- id: composition_core
+  title: 'Composition, Performance, and Production (12 units): Choreography I and II, Technical Theatre and Design'
+  all_of:
+  - DANC 232
+  - DANC 434
+  - TH A 347
+  quote: Composition, Performance, and Production (12 units)
+  source: p.1677
+- id: dance_theatre_workshop
+  title: 'Composition, Performance, and Production: Dance Theatre Workshop (DANC 490 / TH A 490)'
+  one_of:
+  - - DANC 490
+  - - TH A 490
+  quote: DANC/TH A 490 Dance Theatre Workshop 3
+  source: p.1677
+- id: technique
+  title: Technique (12 units)
+  choose_units: 12
+  from:
+  - list:
+    - DANC 263
+    - DANC 275
+    - DANC 276
+    - DANC 278
+    - DANC 363
+    - DANC 374
+    - DANC 376
+    - DANC 378
+    - DANC 400
+    - DANC 416
+    - DANC 465
+    - DANC 474
+    - DANC 476
+  quote: Technique (12 units)
+  source: p.1677
+- id: technique_levels
+  title: 'Technique: 6 units at the 200-400 level and 6 units at the 300-400 level'
+  unparsed: true
+  quote: 'Select 6 units at the 200-400 level and 6 units at the 300-400 level:'
+  source: p.1677
+- id: gwar
+  title: GWAR Course (3 units)
+  choose_units: 3
+  from:
+    ge_area: GW
+  quote: GWAR Course (3 units)
+  source: p.1677
+- id: complementary_studies
+  title: Complementary Studies (at least 12 units outside the primary prefix)
+  unparsed: true
+  quote: Bachelor of Arts students must complete at least 12 units of
+  source: p.1677
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1678
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1678
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1678
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1678
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.1678
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.1678
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.1678
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1678
+drafted_by: claude, 2026-10-23

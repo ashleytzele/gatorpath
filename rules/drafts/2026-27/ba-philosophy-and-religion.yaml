@@ -1,0 +1,13 @@
+program: ba-philosophy-and-religion
+title: Bachelor of Arts in Philosophy and Religion
+catalog_year: 2026-27
+verified: false
+verified_by: null
+source: p.1607
+groups:
+- id: program_suspended
+  title: Program suspended
+  unparsed: true
+  quote: This program is currently suspended.
+  source: p.1607
+drafted_by: claude, 2026-10-23

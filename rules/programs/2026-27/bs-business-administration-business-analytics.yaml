@@ -1,0 +1,180 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-business-administration-business-analytics.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-business-administration-business-analytics
+title: 'Bachelor of Science in Business Administration: Concentration in Business Analytics'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 69
+source: p.96
+groups:
+- id: core_cr_nc_limit
+  unparsed: true
+  quote: Except in cases of credit by examination, no more than 6 units of the core may be completed on a CR/NC basis.
+  source: p.96
+- id: core_gpa
+  unparsed: true
+  quote: Students must have a minimum grade point average of 2.0 in all Core Requirement Business courses.
+  source: p.96
+- id: concentration_letter_grade
+  unparsed: true
+  quote: All concentration courses must be taken on a letter-grade basis.
+  source: p.96
+- id: concentration_gpa
+  unparsed: true
+  quote: A student must have a minimum grade point average of 2.0 across all concentration courses.
+  source: p.96
+- id: prereq_calculus
+  title: 'Prerequisite Courses: Select One (DS 110, MATH 107 & MATH 108, or MATH 110)'
+  one_of:
+  - - DS 110
+  - - MATH 107
+    - MATH 108
+  - - MATH 110
+  quote: 'Select One: 3-6'
+  source: p.96
+- id: prereq_econ
+  title: Prerequisite Courses (ECON 101)
+  all_of:
+  - ECON 101
+  quote: ECON 101 Introduction to Microeconomic Analysis 3
+  source: p.96
+- id: prereq_isys_263
+  title: 'Prerequisite Courses: ISYS 263 (or a passing score on the ISYS 263 CLEP Exam)'
+  all_of:
+  - ISYS 263
+  quote: or a passing score on the ISYS 263 CLEP Exam
+  source: p.96
+- id: core_accounting
+  title: Core Courses (Accounting)
+  all_of:
+  - ACCT 100
+  - ACCT 101
+  quote: ACCT 100 Introduction to Financial Accounting 3
+  source: p.96
+- id: core_communication
+  title: 'Core Courses: Select One (DS 660GW or BUS 300GW)'
+  one_of:
+  - - DS 660GW
+  - - BUS 300GW
+  quote: BUS 300GW Business Communication for Professionals -
+  source: p.96
+- id: core_seminars
+  title: Core Courses (BUS 682 and BUS 690)
+  all_of:
+  - BUS 682
+  - BUS 690
+  quote: BUS 682 Seminar on Business and Society 3
+  source: p.96
+- id: core_statistics
+  title: 'Core Courses: Select One (DS/ECON 212 or MATH 124)'
+  one_of:
+  - - DS 212
+  - - ECON 212
+  - - MATH 124
+  quote: MATH 124 Elementary Statistics
+  source: p.96
+- id: core_business
+  title: Core Courses (Business courses)
+  all_of:
+  - DS 412
+  - ECON 102
+  - FIN 350
+  - IBUS 330
+  - ISYS 363
+  - MGMT 405
+  - MKTG 431
+  quote: Core Courses (39 units)
+  source: p.96
+- id: conc_data_analysis
+  title: 'Concentration Courses: Select one (DS 312 or ECON 312)'
+  one_of:
+  - - DS 312
+  - - ECON 312
+  quote: DS 312 Data Analysis for Business
+  source: p.96
+- id: conc_decision_inference
+  title: 'Concentration Courses: Select one (DS 601 or ECON 618)'
+  one_of:
+  - - DS 601
+  - - ECON 618
+  quote: 'ECON 618 Economic Inference: Methods and Applications'
+  source: p.96
+- id: conc_required
+  title: Concentration Courses
+  all_of:
+  - DS 612
+  - ISYS 412
+  - ISYS 464
+  - ISYS 650
+  quote: DS 612 Data Mining with Business Applications 3
+  source: p.96
+- id: approved_elective
+  title: Approved Elective (3 units)
+  choose_units: 3
+  approval: Other upper-division courses can be used as an elective upon consultation with an advisor.
+  from:
+  - list:
+    - DS 311
+    - DS 312
+    - DS 408
+    - DS 601
+    - DS 604
+    - DS 624
+    - DS 655
+    - ECON 301
+    - ECON 302
+    - ECON 312
+    - ECON 450
+    - ECON 505
+    - ECON 510
+    - LABR 510
+    - ECON 520
+    - ECON 550
+    - ECON 611
+    - ECON 616
+    - ECON 618
+    - ECON 640
+    - ECON 680
+    - ISYS 350
+    - ISYS 565
+    - ISYS 568
+    - ISYS 569
+    - ISYS 575
+    - ISYS 663
+    - MATH 225
+    - MKTG 632
+    - MKTG 660
+    - MKTG 661
+  - approved: true
+  quote: Please select one course from the list below.
+  source: p.96
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.98
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.98
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.98
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.98
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.98
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.98
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.98
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.98
+drafted_by: claude, 2026-10-23

@@ -1,0 +1,104 @@
+program: bs-nutrition-and-dietetics-dietetics-and-nutrition-science
+title: 'Bachelor of Science in Nutrition and Dietetics: Concentration in Dietetics and Nutrition Science'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 70
+source: p.677
+groups:
+- id: core
+  title: Core Requirements (37 units)
+  all_of:
+  - CHEM 115
+  - HTM 560
+  - MATH 124
+  - NUTR 253
+  - NUTR 353GW
+  - NUTR 357
+  - NUTR 453
+  - NUTR 457
+  - NUTR 551
+  - NUTR 557
+  - NUTR 651
+  - PSY 200
+  quote: Core Requirements (37 units)
+  source: p.677
+- id: professional
+  title: Professional Requirements (30 units)
+  all_of:
+  - BIOL 210
+  - BIOL 211
+  - BIOL 212
+  - BIOL 213
+  - BIOL 220
+  - CHEM 130
+  - CHEM 349
+  - NUTR 450
+  - NUTR 550
+  quote: Professional Requirements (30 units)
+  source: p.677
+- id: professional_mnt
+  title: 'Professional Requirements: Medical Nutrition Therapy'
+  all_of:
+  - NUTR 484
+  - NUTR 584
+  quote: NUTR 484 Medical Nutrition Therapy I 3
+  source: p.678
+- id: recommended_elective
+  title: 'Recommended Electives (3-4 units): Select One'
+  one_of:
+  - - A U 220
+  - - BIOL 326
+  - - FCS 426
+  - - FCS 543
+  - - GEOG 427
+  - - HH 380
+  - - HH 381
+  - - HH 382
+  - - HH 383
+  - - HTM 557
+  - - KIN 331
+  - - KIN 355
+  - - NUTR 356
+  - - PH 200
+  - - PH 210
+  - - PH 221
+  - - PH 241
+  - - PH 290
+  - - PH 410
+  - - PH 455
+  quote: Recommended Electives (3-4 units)
+  source: p.678
+transfer_notes:
+- text: Nutrition & Dietetics majors should consult the designated DPD director/advisor for planning and evaluation of courses
+    transferred from other institutions and prepare a Graduation Plan outlining course sequence.
+  source: p.677
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.678
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.678
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.678
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.679
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.679
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.679
+- text: STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after transfer to focus
+    on preparation courses for the major. This advice does not apply to students pursuing associate degree completion before
+    transfer.
+  source: p.679
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.679
+drafted_by: claude, 2026-10-23

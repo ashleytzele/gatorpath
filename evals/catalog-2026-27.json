@@ -359,6 +359,19 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AA S 520": {
+  "ge_areas": [
+   "AERM",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 434,
+  "title": "Asian American Musical Communities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AA S 540": {
   "ge_areas": [
    "3UD",
@@ -491,6 +504,18 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AA S 593": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 435,
+  "title": "Asian Americans in Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AA S 595": {
   "ge_areas": [
    "6",
@@ -587,6 +612,430 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ACCT 301": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Intermediate Financial Accounting I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 302": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Intermediate Financial Accounting II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 305": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Cost Accounting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 307": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Accounting Information Systems",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 317": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Accounting Internship",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "ACCT 320": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Legal Aspects of Business Transactions",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 501": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Advanced Accounting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 504": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Government and Non-Profit Accounting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 506": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Auditing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 507": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Information Systems Auditing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 508": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Federal Tax Accounting I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 509": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 49,
+  "title": "Federal Tax Accounting II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 513": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 50,
+  "title": "International Accounting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 514": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 50,
+  "title": "Fundamentals of Data Analytics in Accounting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 517": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 50,
+  "title": "Accounting Ethics and Professional Responsibilities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 518": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 50,
+  "title": "Accounting Fraud Examination",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 527": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 50,
+  "title": "Artificial Intelligence Powered Accounting: Natural Language Processing & Robotic Process Automation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 531": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 50,
+  "title": "Fundamentals of Financial Statement Analysis and Valuation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 551": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 50,
+  "title": "Principles of Internal Auditing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 260": {
+  "ge_areas": [
+   "5A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Textiles",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 261": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 2462,
+  "title": "Apparel Construction: Industry Methods",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 262": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Fashion Illustration and Design Communication",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 265": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Introduction to the Fashion Industry",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 360GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Fashion, Clothing, and Society - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 361": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Apparel Design I: Patternmaking Foundations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 362": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Apparel Design II: Advanced Patternmaking with 2D/3D CAD",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 365": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Textile Laboratory",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "ADM 366": {
+  "crosslisted": [
+   "ID 366"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Forecasting Apparel and Interior Design Trends",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 369": {
+  "ge_areas": [
+   "2UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2462,
+  "title": "Fashion Merchandising and Buying",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 466": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2463,
+  "title": "Computer Applications in the Clothing and Textile Industries",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 560": {
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2463,
+  "title": "Supply Chain Management in the Textile and Apparel World Marketplace",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 561": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2463,
+  "title": "Culture and Historical Costume",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 566": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2463,
+  "title": "Fashion and the Consumer",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 569": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2463,
+  "title": "Visual Merchandising and Promotion",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 661": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2463,
+  "title": "Advanced Apparel Design",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 665": {
+  "ge_areas": [
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2463,
+  "title": "Product Development for Apparel",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ADM 675": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 2463,
+  "title": "Variable Topics in Apparel Design",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 101": {
+  "ge_areas": [
+   "SJ",
+   "4",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 395,
+  "title": "Introduction to Africana Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 120": {
+  "ge_areas": [
+   "1C",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 396,
+  "title": "Communicating Realness: Minding the Gap",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 200": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 396,
+  "title": "Introduction to Black Psychology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 202": {
   "ge_areas": [
    "AERM",
@@ -598,6 +1047,45 @@
   "repeatable": false,
   "source_page": 396,
   "title": "Black Men's Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 210": {
+  "ge_areas": [
+   "3B",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 397,
+  "title": "Introduction to Africana Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 303": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 398,
+  "title": "African American History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 355": {
+  "ge_areas": [
+   "SJ",
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 399,
+  "title": "The Nation of Islam in America",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -613,6 +1101,52 @@
   "repeatable": false,
   "source_page": 399,
   "title": "Health, Medicine, and Nutrition in the Black Community",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 375": {
+  "ge_areas": [
+   "USG",
+   "CSLG",
+   "USH",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 399,
+  "title": "Law and the Black Community",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 376": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "USG",
+   "CSLG",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 399,
+  "title": "Government, the Constitution, and Black Citizens",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 400": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 399,
+  "title": "Black Arts and Humanities",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -640,6 +1174,71 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AFRS 515": {
+  "ge_areas": [
+   "AERM",
+   "ESCA",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 400,
+  "title": "Black Family Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 516": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 400,
+  "title": "Research Methods",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 525": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 400,
+  "title": "Black Child Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 645": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 400,
+  "title": "Literature of the Harlem Renaissance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 678": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 401,
+  "title": "Urban Issues of Black Children and Youth",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AIS 320": {
   "ge_areas": [
    "AERM",
@@ -653,6 +1252,147 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AIS 325": {
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 418,
+  "title": "American Indian Art",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 330": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 418,
+  "title": "American Indian Law",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 410": {
+  "ge_areas": [
+   "6",
+   "AERM",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 418,
+  "title": "Perspectives of Native California Indians",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 460": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4UD",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 419,
+  "title": "Power and Politics in American Indian History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 470": {
+  "ge_areas": [
+   "4UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 419,
+  "title": "American Indian Ethnicity: Problems in Identity",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 560": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 419,
+  "title": "Modern Creative and Performing Arts",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AMST 310": {
+  "crosslisted": [
+   "HUM 485"
+  ],
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1249,
+  "title": "The Arts and American Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 302": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 883,
+  "title": "Foundations of Human Variation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 501": {
+  "crosslisted": [
+   "HIST 358",
+   "LTNS 501"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 884,
+  "title": "Latin America: The National Period",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 569": {
+  "crosslisted": [
+   "SXS 567"
+  ],
+  "ge_areas": [
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 885,
+  "title": "Cross-Cultural Aspects of Sex and Gender",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ANTH 630": {
   "ge_areas": [],
   "grading": null,
@@ -660,6 +1400,102 @@
   "repeatable": false,
   "source_page": 886,
   "title": "Medical Anthropology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 657": {
+  "crosslisted": [
+   "DANC 657"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 886,
+  "title": "Ethnography of Dance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ART 210": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 901,
+  "title": "Introduction to Digital Media Arts",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ART 222": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 901,
+  "title": "Introduction to Textile Art",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ART 231": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 901,
+  "title": "Introduction to Drawing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ART 260": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 901,
+  "title": "Introduction to the Darkroom",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ART 322": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 901,
+  "title": "Foundations in Fiber and Textiles",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ART 422": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 902,
+  "title": "Weaving I: Beginning",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ART 424": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 902,
+  "title": "Surface Design Studio",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ART 527": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 904,
+  "title": "Repeat Pattern for Fine Art",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -672,6 +1508,31 @@
   "repeatable": false,
   "source_page": 906,
   "title": "Global Art History I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ARTH 202": {
+  "ge_areas": [
+   "3A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 906,
+  "title": "Global Art History II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ARTH 301": {
+  "crosslisted": [
+   "LTNS 301"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 907,
+  "title": "Latin American and Latino/a/x Art, 1492 to the Present",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -712,6 +1573,19 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "BECA 453": {
+  "crosslisted": [
+   "I R 453"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 948,
+  "title": "Women and Media in International Relations",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "BIOL 100": {
   "ge_areas": [
    "5B"
@@ -746,6 +1620,19 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "BIOL 300": {
+  "ge_areas": [
+   "5UD",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1770,
+  "title": "Nature Study",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "BIOL 305": {
   "crosslisted": [
    "I R 305"
@@ -762,6 +1649,34 @@
   "title": "Global Politics of Science, Technology, and Health",
   "units_max": 4.0,
   "units_min": 4.0
+ },
+ "BIOL 310": {
+  "ge_areas": [
+   "5UD",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1770,
+  "title": "Biology for Today's World",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 318": {
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "AERM",
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1771,
+  "title": "Our Endangered Planet",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "BIOL 326": {
   "ge_areas": [
@@ -789,6 +1704,18 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "BIOL 330": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1771,
+  "title": "Human Sexuality",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "BUS 300GW": {
   "ge_areas": [
    "GW"
@@ -808,6 +1735,38 @@
   "repeatable": false,
   "source_page": 70,
   "title": "Introduction to Entrepreneurship",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BUS 354": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 70,
+  "title": "Starting a Small Business",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BUS 440": {
+  "ge_areas": [
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 71,
+  "title": "Ethics at Work: Business Impacts",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BUS 450": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 71,
+  "title": "Greening of Business",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -831,6 +1790,793 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "C J 200": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 635,
+  "title": "Construction of Crime and Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 230": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 635,
+  "title": "Crime, Data, and Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 300": {
+  "ge_areas": [
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 635,
+  "title": "Criminal Justice: A Cross-Disciplinary Perspective",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 306": {
+  "crosslisted": [
+   "I R 306"
+  ],
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 635,
+  "title": "Crisis in Central America: U.S. Policy and the Root Causes of Chaos",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 320": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 635,
+  "title": "Literature in Criminal Justice - Crime Control, Due Process, and Class Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 323": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 635,
+  "title": "Ethics in Criminal Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 330": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 635,
+  "title": "Research Methods in Criminal Justice Studies Activity",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "C J 330GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Research Methods in Criminal Justice - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 335": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Legal Writing and Research",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 340": {
+  "crosslisted": [
+   "I R 341"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Comparative Criminal Justice",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 360": {
+  "crosslisted": [
+   "I R 360"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Intelligence and Intelligence Agencies",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 362": {
+  "crosslisted": [
+   "I R 362",
+   "PLSI 362"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "The Making of US Foreign Policy",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 400": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Police and Public Policy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 401": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Criminal Profiling",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 405": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Organized Crime",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 410": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Crime Scene Investigation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 420": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Introduction to Forensic Science",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 435": {
+  "crosslisted": [
+   "LTNS 430"
+  ],
+  "ge_areas": [
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 636,
+  "title": "Race, Crime, and Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 450": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Jails and Prisons",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 451": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "The Architecture of Incarceration",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 452": {
+  "crosslisted": [
+   "SOC 451"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Criminological Theory",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 460": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Community Corrections and Sentencing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 461": {
+  "crosslisted": [
+   "I R 361"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Terrorism and Covert Political Warfare",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 470": {
+  "crosslisted": [
+   "SOC 452"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Juvenile Justice",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 471": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Contemporary Issues in Juvenile Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 475": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Intervention Policies in Juvenile Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 480": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "California Corrections System",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 485": {
+  "crosslisted": [
+   "LTNS 485"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Latina/o Youth, Crime, and Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 490": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Immigration, Criminalization, and Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 501": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Criminal Law",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 502": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 637,
+  "title": "Criminal Procedure",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 510": {
+  "crosslisted": [
+   "SOC 510"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Analysis of the Felon in Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 511": {
+  "crosslisted": [
+   "SOC 511",
+   "USP 511"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Critical Analysis of Re-entry and Housing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 515": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Extremism as Crime",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 525": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Global Restorative Justice and Corrections",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 530": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Geographies of Social Control and Urban Diversity",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 535": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Alternatives to Criminalization",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 550": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "School Violence and Discipline",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 570": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Urban Violence",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 600": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Youth Gangs in Community Context",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 605": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Criminalization of Gender and Sexuality",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "C J 680": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Capstone in Criminal Justice Studies",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "C J 685": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 638,
+  "title": "Projects In Teaching Criminal Justice",
+  "units_max": 4.0,
+  "units_min": 1.0
+ },
+ "C J 690": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 638,
+  "title": "Criminal Justice Studies Internship",
+  "units_max": 4.0,
+  "units_min": 1.0
+ },
+ "C J 699": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 638,
+  "title": "Independent Study",
+  "units_max": 4.0,
+  "units_min": 1.0
+ },
+ "CAD 120": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "SJ",
+   "3B"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Child Development, Social Justice, and Academic Success",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 210": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Introduction to Applied Child and Adolescent Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 215": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Foundations in Early Childhood",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 223": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Infants, Toddlers, and Families",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 230": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Principles and Practices in Early Childhood Programs",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 260": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Children, Families, and Community: An Ecological Perspective",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 280": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Practicum in Early Childhood Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 300": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Professional Roles and Careers in Child and Adolescent Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 326": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Developing Language and Literacy Skills in Young Children",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 330": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 531,
+  "title": "Curriculum and Development in Early Childhood",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 400": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Community Youth Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 410GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Applied Developmental Science: Prenatal Through Early Childhood - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 411": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Applied Developmental Science: Middle Childhood through Emerging Adulthood",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 420": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Assessment and Observation with Children",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 423": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Administration of Programs for Young Children",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 426": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Family Stress, Coping, and Resilience",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 450": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Understanding and Working with Diverse Families",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 500": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Research Methods in Child and Adolescent Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 510": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Adult Supervision and Leadership in Early Childhood Programs",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 550": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Child Life: Theory and Application",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 560": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 532,
+  "title": "Loss and Grief: Children, Youth, Families and Community",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 600": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 533,
+  "title": "Child and Adolescent Development Internship Seminar",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "CAD 601": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 533,
+  "title": "Child and Adolescent Development Internship",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "CAD 625": {
+  "ge_areas": [],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 533,
+  "title": "Children, Youth, and Public Policy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 660": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 533,
+  "title": "Applied Advanced Developmental Science in Child and Adolescent Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 680": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 533,
+  "title": "International Field Study in Child and Adolescent Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CAD 685": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 533,
+  "title": "Projects in the Teaching of CAD",
+  "units_max": 4.0,
+  "units_min": 1.0
+ },
  "CHEM 115": {
   "ge_areas": [],
   "grading": null,
@@ -853,6 +2599,23 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "CINE 309": {
+  "crosslisted": [
+   "LTNS 409"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 973,
+  "title": "Latina/o/x Cinema",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "COMM 150": {
   "ge_areas": [
    "1C"
@@ -862,6 +2625,145 @@
   "repeatable": false,
   "source_page": 1029,
   "title": "Fundamentals of Oral Communication",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "COMM 503": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1032,
+  "title": "Gender and Communication",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "COMM 525": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1032,
+  "title": "Sexualities and Communication",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "COMM 531": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1032,
+  "title": "Conflict and Communication",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "COMM 541": {
+  "ge_areas": [
+   "AERM",
+   "3UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1033,
+  "title": "Critical Approaches to Culture and Communication",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "COMM 543": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1033,
+  "title": "Dialogues Across Differences",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "COMM 554": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1033,
+  "title": "Performance of Children's Literature",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "COMM 557": {
+  "crosslisted": [
+   "LS 403"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1034,
+  "title": "Performance and Pedagogy of the Oppressed for Educators",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "COMM 564": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1034,
+  "title": "Issues in Free Speech",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "COMM 573": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1034,
+  "title": "The Rhetoric of Criminality and Punishment",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "COUN 630": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 620,
+  "title": "Legal Center Training I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "COUN 631": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 620,
+  "title": "Legal Center Training II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "COUN 690": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 621,
+  "title": "Field of Counseling I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "COUN 691": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 621,
+  "title": "Multicultural Human Relations",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1407,6 +3309,148 @@
   "units_max": 3.0,
   "units_min": 1.0
  },
+ "CWL 440": {
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1251,
+  "title": "\"Typical American\": Narratives of Multiculturalism in the Americas from 1492 to the Present",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DANC 340": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1667,
+  "title": "Dance Pedagogy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DANC 350": {
+  "ge_areas": [
+   "GP",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1667,
+  "title": "Dance Aesthetics: Cultural/Historical Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DANC 408": {
+  "crosslisted": [
+   "TH A 408"
+  ],
+  "ge_areas": [
+   "GP",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1668,
+  "title": "Performance in Asia and the Asian Diaspora",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DANC 430": {
+  "ge_areas": [
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1668,
+  "title": "Survey of Ballet and Modern Dance History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DANC 657": {
+  "crosslisted": [
+   "ANTH 657"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1668,
+  "title": "Ethnography of Dance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DES 210": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1077,
+  "title": "Our Manufactured World: The Life Cycle of Everyday Objects",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DES 220": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1077,
+  "title": "Introduction to Drawing for Designers",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DES 221": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1077,
+  "title": "Introduction to 3D Digital Design",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DES 222": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1077,
+  "title": "Digital Design Foundations I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DES 256": {
+  "ge_areas": [
+   "3A"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1077,
+  "title": "Design and Society: Contemporary Design Issues and Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DES 300": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1077,
+  "title": "Design Process",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "DS 110": {
   "ge_areas": [
    "2"
@@ -1432,6 +3476,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "DS 311": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 92,
+  "title": "Technologies in Data Analytics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "DS 312": {
   "ge_areas": [],
   "grading": "letter",
@@ -1439,6 +3493,16 @@
   "repeatable": false,
   "source_page": 92,
   "title": "Data Analysis for Business",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 314": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 93,
+  "title": "Project Management Tools",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1502,6 +3566,26 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "DS 624": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 93,
+  "title": "Quality Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 655": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 94,
+  "title": "Supply Chain Analytics & Logistics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "DS 660GW": {
   "ge_areas": [
    "GW"
@@ -1511,6 +3595,253 @@
   "repeatable": false,
   "source_page": 94,
   "title": "Business Analytics: Communication and Professional Practice - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 250": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 313,
+  "title": "Teaching and Learning Beyond the Classroom",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 450": {
+  "ge_areas": [
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 314,
+  "title": "Art and Learning",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 603": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 314,
+  "title": "Understanding and Supporting Children's Socio-Emotional Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 604": {
+  "ge_areas": [
+   "AERM",
+   "4UD",
+   "SJ",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 314,
+  "title": "Collaborating with Children, Families, and Communities in Early Childhood Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 607": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 315,
+  "title": "Leadership and Administration in ECE",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 608": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 315,
+  "title": "Supervised Fieldwork Phase I, PK-3",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 610": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 315,
+  "title": "Authentic Assessment for Children and Families",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 611": {
+  "ge_areas": [
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 315,
+  "title": "Transforming Infant-Toddler Education and Care",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 614": {
+  "ge_areas": [
+   "ESCA",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 315,
+  "title": "Science, Math, and Technology Curricular in ECE",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 616": {
+  "ge_areas": [
+   "SJ",
+   "GP",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 315,
+  "title": "Multilingualism and Multiliteracies in the Early Years",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 628": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 315,
+  "title": "Teaching Practicum Seminar Phase I: PK-3",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 655": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 316,
+  "title": "Hands-on Undergraduate Science Education Experience",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 668": {
+  "ge_areas": [
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 316,
+  "title": "Multicultural Education and Social Justice for Young Children",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 681": {
+  "ge_areas": [
+   "3UD"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 316,
+  "title": "Teaching Language and Literature with Elementary and Middle School Students",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 719": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 317,
+  "title": "Play & Inquiry-Based Learning",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 733": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 317,
+  "title": "Integrated Teaching through the Arts",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 734": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 318,
+  "title": "Teaching Early Childhood Math, Pre-K-3",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 735": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 318,
+  "title": "Science and Environmental Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 738": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 318,
+  "title": "Language and Literacy in Multilingual PK-3 Settings",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 748": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 318,
+  "title": "Teaching Practicum Phase III",
+  "units_max": 7.0,
+  "units_min": 3.0
+ },
+ "E ED 758": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 318,
+  "title": "Teaching Practicum Seminar Phase III",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "E ED 768": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 319,
+  "title": "Culturally Sustaining Teaching & Learning",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1551,6 +3882,26 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ECON 301": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Intermediate Microeconomic Theory",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 302": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Intermediate Macroeconomic Theory",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ECON 312": {
   "ge_areas": [],
   "grading": null,
@@ -1558,6 +3909,26 @@
   "repeatable": false,
   "source_page": 128,
   "title": "Introduction to Econometrics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 400": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Economic and Social History of the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 450": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Health Economics",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1579,6 +3950,183 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ECON 500": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Money and Banking",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 505": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Public Economics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 510": {
+  "crosslisted": [
+   "LABR 510"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Labor Economics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 511": {
+  "crosslisted": [
+   "LABR 511"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Collective Bargaining",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 520": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "Industrial Organization",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 540": {
+  "ge_areas": [
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "Economics of Gender",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 541": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "Economics of LGBTQ Issues",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 550": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "Environmental Economics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 605": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "Seminar: History of Economic Thought",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 611": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "International Trade Theory and Policy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 612": {
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "International Finance and Macroeconomics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 616": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "Experimental Economics and Game Theory",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 618": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "Economic Inference: Methods and Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 620": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 129,
+  "title": "Economic Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 635": {
+  "crosslisted": [
+   "I R 635"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Economics of Globalization",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 640": {
+  "ge_areas": [
+   "SJ",
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Health Economics Analysis and Research",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ECON 651": {
   "crosslisted": [
    "ENVS 651",
@@ -1592,6 +4140,48 @@
   "title": "Student Managed Fund in Environmental, Social and Governance (ESG) Investments",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "ECON 675": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Natural Resource Economics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 680": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Applied Economics and Data Analysis with R",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 690GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Senior Seminar: Economic Inquiry and Analysis - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 699": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
  },
  "ENG 104": {
   "ge_areas": [],
@@ -1624,6 +4214,54 @@
   "repeatable": false,
   "source_page": 1106,
   "title": "Writing the First Year: Finding Your Voice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENG 420": {
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1109,
+  "title": "Introduction to the Study of Language",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENG 602": {
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1113,
+  "title": "Literature, Identity, Society: Theoretical Approaches to Identity and Cultural Critique",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENG 620": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1114,
+  "title": "Computational Analysis of Language Data for Artificial Intelligence (AI)",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENG 655": {
+  "ge_areas": [
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1115,
+  "title": "Literature and the Adolescent Reader",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2039,6 +4677,18 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ENVS 130": {
+  "ge_areas": [
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2008,
+  "title": "Environmental Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ENVS 401": {
   "crosslisted": [
    "LS 401"
@@ -2053,6 +4703,23 @@
   "repeatable": false,
   "source_page": 2009,
   "title": "International Development and Resource Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENVS 430": {
+  "crosslisted": [
+   "LS 430"
+  ],
+  "ge_areas": [
+   "5UD",
+   "ESCA",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2009,
+  "title": "Future of the Forests",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2084,6 +4751,19 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "ERTH 310": {
+  "ge_areas": [
+   "5UD",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2003,
+  "title": "The Violent Earth",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ERTH 335": {
   "ge_areas": [
    "ESCA",
@@ -2095,6 +4775,20 @@
   "repeatable": false,
   "source_page": 2003,
   "title": "Global Warming",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ERTH 365": {
+  "ge_areas": [
+   "5UD",
+   "ESCA",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2004,
+  "title": "Extreme Weather in a Warming World",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2170,6 +4864,49 @@
   "title": "Writing in Ethnic Studies - GWAR",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "FCS 543": {
+  "ge_areas": [
+   "ESCA",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 662,
+  "title": "Sustainability in the Textile, Housing, and Food Industries",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FCS 600": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 662,
+  "title": "Professional Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FCS 685": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 662,
+  "title": "Projects in Teaching of Family, Interiors, Nutrition, & Apparel",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FCS 699": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 662,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
  },
  "FIN 303": {
   "ge_areas": [],
@@ -2419,6 +5156,19 @@
   "units_max": 3.0,
   "units_min": 1.0
  },
+ "GEOG 301": {
+  "ge_areas": [
+   "5UD",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2011,
+  "title": "Bay Area Environments",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "GEOG 434": {
   "crosslisted": [
    "PH 434"
@@ -2429,6 +5179,75 @@
   "repeatable": false,
   "source_page": 2013,
   "title": "Geographies of Health and Health Care",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "GEOG 455": {
+  "ge_areas": [
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2013,
+  "title": "Justice and Belonging: Intersecting Geographies of Race and Ethnicity",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "GEOG 603": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2014,
+  "title": "Introduction to Geographic Information Systems",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "GEOG 604": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2014,
+  "title": "Environmental Data Science",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "GEOG 667": {
+  "crosslisted": [
+   "USP 515"
+  ],
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2016,
+  "title": "Environmental Justice: Race, Poverty, and the Environment",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "GPS 315": {
+  "crosslisted": [
+   "I R 315",
+   "PHIL 315"
+  ],
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1339,
+  "title": "Introduction to Global Peace Studies",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2523,6 +5342,36 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "HIST 278": {
+  "crosslisted": [
+   "LTNS 278"
+  ],
+  "ge_areas": [
+   "SJ",
+   "USH",
+   "AERM",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1211,
+  "title": "History of Latinas/Latinos in the U.S.",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 300GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1211,
+  "title": "Seminar in Historical Analysis - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "HIST 308": {
   "crosslisted": [
    "PLSI 451"
@@ -2539,6 +5388,63 @@
   "repeatable": false,
   "source_page": 1212,
   "title": "Engaging Democracy: Participating in Historical Debates",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 355": {
+  "crosslisted": [
+   "LTNS 533",
+   "WGS 355"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1216,
+  "title": "History of Women in Latin America",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 358": {
+  "crosslisted": [
+   "ANTH 501",
+   "LTNS 501"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1216,
+  "title": "Latin America: The National Period",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 450": {
+  "ge_areas": [
+   "CSLG",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1220,
+  "title": "History of California",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 465": {
+  "ge_areas": [
+   "SJ",
+   "GP",
+   "AERM",
+   "3UD",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1221,
+  "title": "American Ethnic and Racial Relations II: 1890-Present",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2576,6 +5482,383 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "HIST 472": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1222,
+  "title": "The Supreme Court and Social Change in U.S. History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 474": {
+  "crosslisted": [
+   "ECON 474",
+   "LABR 474"
+  ],
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1223,
+  "title": "History of Labor in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HIST 484": {
+  "ge_areas": [
+   "USH",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1224,
+  "title": "Disability and Culture in the U.S.",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 110": {
+  "ge_areas": [
+   "ESCA",
+   "SJ",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 183,
+  "title": "Introduction to Hospitality and Tourism Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 215": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 183,
+  "title": "Service Leadership: Theory and Practice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 300GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 183,
+  "title": "Hospitality Tourism Management Business Communication - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 301": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 184,
+  "title": "Food Science and Production",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 324": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 184,
+  "title": "Historical and Contemporary Aspects of Food, Beverage, and Culture in America",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 351": {
+  "ge_areas": [
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 184,
+  "title": "Asian Food, Culture, and Hospitality",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 357": {
+  "ge_areas": [
+   "ESCA"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 184,
+  "title": "Food Systems and the Environment",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 400": {
+  "ge_areas": [
+   "ESCA",
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 184,
+  "title": "Wine Appreciation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 421": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 184,
+  "title": "Food, Wine, and Culture in California",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 424": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 184,
+  "title": "Tourism Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 425": {
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 184,
+  "title": "The Business of International Tourism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 457": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Restaurant Operations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 515": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Hospitality and Tourism Management Internship",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 531": {
+  "ge_areas": [],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Hospitality Services Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 557": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Restaurant and Catering Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 560": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Hospitality Human Resource Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 561": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Hotel Operation Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 562": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Advanced Studies in Global Hotel Operations Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 576": {
+  "ge_areas": [
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Meeting Planning and Convention/Event Management I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 577": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Meeting Planning and Convention/Event Management II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 578": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Hospitality and Tourism Management Sales and Marketing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HTM 590": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 185,
+  "title": "Integrated Seminar in Hospitality, Tourism, and Event Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HUM 361": {
+  "crosslisted": [
+   "I R 363"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1255,
+  "title": "Cultural Expression in Islam",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HUM 375": {
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1256,
+  "title": "Biography of a City: United States Cities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HUM 376": {
+  "ge_areas": [
+   "ESCA",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1256,
+  "title": "San Francisco",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HUM 440": {
+  "crosslisted": [
+   "LS 440",
+   "PHIL 440"
+  ],
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1258,
+  "title": "Mind, Body, and Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HUM 485": {
+  "crosslisted": [
+   "AMST 310"
+  ],
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1259,
+  "title": "The Arts and American Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "I R 259": {
+  "ge_areas": [
+   "SJ",
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1311,
+  "title": "Children and Youth in International Relations",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "I R 305": {
   "crosslisted": [
    "BIOL 305"
@@ -2593,6 +5876,136 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "I R 306": {
+  "crosslisted": [
+   "C J 306"
+  ],
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1311,
+  "title": "Crisis in Central America: U.S. Policy and the Root Causes of Chaos",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 312": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1312,
+  "title": "Introduction to International Political Economy",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 315": {
+  "crosslisted": [
+   "GPS 315",
+   "PHIL 315"
+  ],
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1312,
+  "title": "Introduction to Global Peace Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "I R 334": {
+  "crosslisted": [
+   "IBUS 334"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1313,
+  "title": "International Organizations: New World Order",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 341": {
+  "crosslisted": [
+   "C J 340"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1313,
+  "title": "Comparative Criminal Justice",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 360": {
+  "crosslisted": [
+   "C J 360"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1314,
+  "title": "Intelligence and Intelligence Agencies",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 361": {
+  "crosslisted": [
+   "C J 461"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1314,
+  "title": "Terrorism and Covert Political Warfare",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 362": {
+  "crosslisted": [
+   "C J 362",
+   "PLSI 362"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1314,
+  "title": "The Making of US Foreign Policy",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 363": {
+  "crosslisted": [
+   "HUM 361"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1314,
+  "title": "Cultural Expression in Islam",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "I R 435": {
   "crosslisted": [
    "FIN 435",
@@ -2607,6 +6020,66 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "I R 436": {
+  "crosslisted": [
+   "PHIL 435"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1316,
+  "title": "Human Rights in Global Perspective",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "I R 453": {
+  "crosslisted": [
+   "BECA 453"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1317,
+  "title": "Women and Media in International Relations",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 459": {
+  "crosslisted": [
+   "PLSI 459"
+  ],
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1317,
+  "title": "Refugees in Global Perspective",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 635": {
+  "crosslisted": [
+   "ECON 635"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1319,
+  "title": "Economics of Globalization",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "IBUS 330": {
   "ge_areas": [
    "GP",
@@ -2617,6 +6090,178 @@
   "repeatable": false,
   "source_page": 235,
   "title": "International Business and Multicultural Relations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "IBUS 430": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 235,
+  "title": "Import-Export Management and Small Business Operations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "IBUS 659": {
+  "crosslisted": [
+   "MGMT 659"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 236,
+  "title": "Introduction to International Business Negotiation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 240": {
+  "ge_areas": [
+   "3A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2711,
+  "title": "Color and Design",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 242": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2711,
+  "title": "Interior Design Graphic Communication I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 244": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2711,
+  "title": "History of Architecture & Interior Design I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 245": {
+  "ge_areas": [
+   "3A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2711,
+  "title": "History of Architecture & Interior Design II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 340GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2711,
+  "title": "Human Centered Design Principles - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 343": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2711,
+  "title": "Advanced Human Centered Design Studio",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 345": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2711,
+  "title": "Interior Design Graphic Communication II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 366": {
+  "crosslisted": [
+   "ADM 366"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2712,
+  "title": "Forecasting Apparel and Interior Design Trends",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 440": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2712,
+  "title": "Residential Construction Methods",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 445": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2712,
+  "title": "Professional Practices for Interior Design",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 540": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2712,
+  "title": "Material Applications & Specification",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 640": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2712,
+  "title": "Residential Interior Design & Architecture Studio",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 641": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2712,
+  "title": "Commercial Interior Design & Architecture Studio",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ID 645": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2712,
+  "title": "Advanced Interior Design & Architecture Studio",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2645,6 +6290,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ISYS 350": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 197,
+  "title": "Building Business Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ISYS 363": {
   "ge_areas": [],
   "grading": null,
@@ -2652,6 +6307,26 @@
   "repeatable": false,
   "source_page": 198,
   "title": "Information Systems for Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 412": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Application Development for Data Analytics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 463": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Information Systems Analysis and Design",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2665,6 +6340,56 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ISYS 475": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Building Web Applications with Open Source Software",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 556": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Building Mobile Business Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 565": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Managing Enterprise Networks",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 567": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Information Systems Internship",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 568": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Multimedia Business Applications Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ISYS 569": {
   "ge_areas": [],
   "grading": "letter",
@@ -2675,6 +6400,36 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ISYS 573": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 199,
+  "title": "Generative Artificial Intelligence (Gen AI) and Large Language Models (LLMs) for Business",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 574": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 199,
+  "title": "Artificial Intelligence (AI)/Machine Learning (ML) for Business Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 575": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 199,
+  "title": "Information Security Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ISYS 650": {
   "ge_areas": [],
   "grading": "letter",
@@ -2682,6 +6437,280 @@
   "repeatable": false,
   "source_page": 199,
   "title": "Business Intelligence",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 663": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 199,
+  "title": "Information Technology Project Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "JOUR 235": {
+  "ge_areas": [
+   "3A"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1367,
+  "title": "Photojournalism I: Foundations of Photojournalism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "JOUR 536": {
+  "crosslisted": [
+   "LTNS 536"
+  ],
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1369,
+  "title": "Latina/o Journalism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "KIN 240": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 702,
+  "title": "Introduction to Teaching Physical Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "KIN 401": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 704,
+  "title": "Elementary School Physical Education: K-5",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "KIN 487": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 705,
+  "title": "Motor Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 250": {
+  "ge_areas": [
+   "4",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 251,
+  "title": "Introduction to the Study of Labor",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 251": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 251,
+  "title": "Know Your Work Rights",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 474": {
+  "crosslisted": [
+   "ECON 474",
+   "HIST 474"
+  ],
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 252,
+  "title": "History of Labor in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 510": {
+  "crosslisted": [
+   "ECON 510"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 252,
+  "title": "Labor Economics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 511": {
+  "crosslisted": [
+   "ECON 511"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 252,
+  "title": "Collective Bargaining",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 552": {
+  "crosslisted": [
+   "SOC 552"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 252,
+  "title": "Comparative Employment Relations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 553": {
+  "crosslisted": [
+   "SOC 553"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 252,
+  "title": "Labor Standards and Corporate Social Responsibility",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 555": {
+  "crosslisted": [
+   "SOC 555"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 252,
+  "title": "Labor Rights in the Global Economy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LS 310": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1397,
+  "title": "Science and Culture for Future Elementary School Teachers",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LS 402": {
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1398,
+  "title": "Introduction to Human Rights Education for Teachers and Local Communities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LS 403": {
+  "crosslisted": [
+   "COMM 557"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1398,
+  "title": "Performance and Pedagogy of the Oppressed for Educators",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LS 427": {
+  "ge_areas": [
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1399,
+  "title": "Social Movements & the Arts for Future Teachers",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LS 430": {
+  "crosslisted": [
+   "ENVS 430"
+  ],
+  "ge_areas": [
+   "5UD",
+   "ESCA",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1399,
+  "title": "Future of the Forests",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LS 440": {
+  "crosslisted": [
+   "HUM 440",
+   "PHIL 440"
+  ],
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1399,
+  "title": "Mind, Body, and Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 110": {
+  "ge_areas": [
+   "1B",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 467,
+  "title": "Critical Thinking and the Rhetoric of Latinas/os/x in the 21st Century",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2701,6 +6730,462 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "LTNS 211": {
+  "ge_areas": [
+   "4",
+   "AERM",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 467,
+  "title": "Latina/o/x Families",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 215": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 467,
+  "title": "Introduction to Latina/o/x Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 222": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 467,
+  "title": "Latina/o/x Art History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 225": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "3A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "Latina/o/x Visual Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 230": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "3B"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "Introduction to Latina/o Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 265": {
+  "ge_areas": [
+   "4",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "Topics in Latina/o/x History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 270": {
+  "ge_areas": [
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "Latina/o/x Murals, Memes, Music, and More: Latina/o/x Arts & Humanities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 276": {
+  "ge_areas": [
+   "USG",
+   "CSLG",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "Latina/o, U.S. Government, and Constitutional Ideals",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 278": {
+  "crosslisted": [
+   "HIST 278"
+  ],
+  "ge_areas": [
+   "SJ",
+   "USH",
+   "AERM",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "History of Latinas/Latinos in the U.S.",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 301": {
+  "crosslisted": [
+   "ARTH 301"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "Latin American and Latino/a/x Art, 1492 to the Present",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 305": {
+  "ge_areas": [
+   "GP",
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "Latina/o Studies Creative Writing Workshop",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 315": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 468,
+  "title": "Latina/os in California",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 340": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Latinx Youth Subcultures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 350": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Gender, Latina/x, and Women of Color Feminisms",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 380": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Afro/Latina/o Diasporas",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 385": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Afro-Latina Experiences",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 390": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Latina/Latino Studies Knowledge Production",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 400": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Latina Girlhood",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 409": {
+  "crosslisted": [
+   "CINE 309"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Latina/o/x Cinema",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 415": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Latina/o Economic Empowerment",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 425": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 470,
+  "title": "Popular and Traditional Music of the Latinx U.S.",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 430": {
+  "crosslisted": [
+   "C J 435"
+  ],
+  "ge_areas": [
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 470,
+  "title": "Race, Crime, and Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 435": {
+  "ge_areas": [
+   "6",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 470,
+  "title": "Oral History, Community Memory, and Collective Stories",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 445": {
+  "crosslisted": [
+   "WGS 445"
+  ],
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 470,
+  "title": "Gendered Borders: Latinas and Globalization",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 450": {
+  "ge_areas": [
+   "GP",
+   "3UD",
+   "AERM",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 470,
+  "title": "Critical Latinx Indigeneities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 455": {
+  "ge_areas": [
+   "3UD",
+   "SJ",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 470,
+  "title": "Resistance Literature of the Americas",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 460": {
+  "ge_areas": [
+   "4UD",
+   "SJ",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 471,
+  "title": "Central Americans of the U.S.: History and Heritage",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 465": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 471,
+  "title": "Mexican American and Chicana/x/o History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 467": {
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 471,
+  "title": "Caribbeans in the U.S.: History and Heritage",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 470": {
+  "ge_areas": [
+   "SJ",
+   "4UD",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 471,
+  "title": "Latina/o Immigration to the U.S.",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 475": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 471,
+  "title": "Mesoamerican Cosmologies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 485": {
+  "crosslisted": [
+   "C J 485"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 471,
+  "title": "Latina/o Youth, Crime, and Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 487": {
+  "crosslisted": [
+   "SOC 487"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "Latin American Migrations: A Social History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "LTNS 500": {
   "ge_areas": [
    "6"
@@ -2710,6 +7195,239 @@
   "repeatable": false,
   "source_page": 472,
   "title": "Latina/o Community Mental Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 501": {
+  "crosslisted": [
+   "ANTH 501",
+   "HIST 358"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "Latin America: The National Period",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 505": {
+  "crosslisted": [
+   "WGS 505"
+  ],
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "Latina/o/x Sexualities and Genders",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 530": {
+  "ge_areas": [
+   "AERM",
+   "3UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "Latina/os and the Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 531": {
+  "crosslisted": [
+   "SPAN 531"
+  ],
+  "ge_areas": [],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "Creative Writing in Spanish: Poetry, Fiction, and Drama",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 533": {
+  "crosslisted": [
+   "HIST 355",
+   "WGS 355"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "History of Women in Latin America",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 536": {
+  "crosslisted": [
+   "JOUR 536"
+  ],
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "Latina/o Journalism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 560": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "Contemporary Latina/o Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 565": {
+  "ge_areas": [
+   "SJ",
+   "3UD",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 473,
+  "title": "Central Americans Writing in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 580": {
+  "crosslisted": [
+   "RRS 580",
+   "SOC 580"
+  ],
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 473,
+  "title": "Educational Equity",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 640": {
+  "crosslisted": [
+   "SOC 640"
+  ],
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 473,
+  "title": "Sociology of Latina/x/o Experiences",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 660": {
+  "ge_areas": [
+   "AERM",
+   "4UD",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 473,
+  "title": "Latina/o Politics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 670": {
+  "crosslisted": [
+   "PLSI 408"
+  ],
+  "ge_areas": [
+   "AERM",
+   "4UD",
+   "SJ",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 473,
+  "title": "Mexican Politics and Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 679": {
+  "ge_areas": [
+   "GP",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 473,
+  "title": "Central American Literature: Roots to the Present",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 680": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 473,
+  "title": "Latina/o/x Community Organizing and Career Futures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 685": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 474,
+  "title": "Projects in the Teaching of Latina/o Studies",
+  "units_max": 4.0,
+  "units_min": 1.0
+ },
+ "LTNS 690": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 474,
+  "title": "Community Fieldwork in Latina/o Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 694": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 474,
+  "title": "Community Service Learning",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2756,6 +7474,16 @@
   "repeatable": false,
   "source_page": 2091,
   "title": "Elementary Statistics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 165": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2091,
+  "title": "Concepts of the Number System",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2885,6 +7613,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "MATH 338": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Introduction to SAS",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MATH 370": {
   "ge_areas": [],
   "grading": null,
@@ -2925,6 +7663,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "MATH 424": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Introduction to Linear Models",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MATH 425": {
   "ge_areas": [],
   "grading": null,
@@ -2952,6 +7700,16 @@
   "repeatable": false,
   "source_page": 2093,
   "title": "Probability and Statistics I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 441": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2093,
+  "title": "Probability and Statistics II",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -3075,6 +7833,139 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "MGMT 567": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 263,
+  "title": "Internship in Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 605": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 263,
+  "title": "Seminar in Developing Management Skills",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 610": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Human Resource Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 614": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Fundamentals of Recruiting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 616": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Compensation, Benefits, and Performance Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 640": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Managing Diversity in the Workplace",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 648": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Seminar in Leadership and Influence Skills",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 650": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Managing Creativity and Innovation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 653": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Seminar in Project Management Skills",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 655": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 264,
+  "title": "Seminar in Emerging Issues in Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 656": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Seminar in Managing Teams",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 659": {
+  "crosslisted": [
+   "IBUS 659"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Introduction to International Business Negotiation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MGMT 670": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 264,
+  "title": "Managing Organization Development and Change",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MKTG 431": {
   "ge_areas": [],
   "grading": null,
@@ -3082,6 +7973,246 @@
   "repeatable": false,
   "source_page": 279,
   "title": "Principles of Marketing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 432": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 279,
+  "title": "Public Relations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 433": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 279,
+  "title": "Personal Selling",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 434": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 279,
+  "title": "Advertising Theory and Practice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 436": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 279,
+  "title": "Retail Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 441": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 279,
+  "title": "Business-to-Business Marketing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 443": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 279,
+  "title": "Sales Promotion and Publicity",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 450": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Social Media Marketing with Artificial Intelligence (AI)",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 460": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Content Marketing with Artificial Intelligence (AI)",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 469": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Digital Marketing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 480": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Search, Display, and Video Advertising",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 567": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 280,
+  "title": "Internship in Marketing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 569": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Digital Marketing Strategy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 632": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Marketing Research",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 633": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Consumer Behavior",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 637": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Sales Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 644": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Services Marketing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 647": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Organizational Reputation Management and Communication",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 649": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 280,
+  "title": "Marketing Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 660": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 281,
+  "title": "Marketing Analytics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 661": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 281,
+  "title": "Introduction to Digital Marketing Analytics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 675": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 281,
+  "title": "Brand Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 680": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 281,
+  "title": "International Marketing Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 688": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 281,
+  "title": "New Product Management Seminar",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 689": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 281,
+  "title": "New Product Marketing and Launch",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -3583,6 +8714,16 @@
   "units_max": 1.0,
   "units_min": 1.0
  },
+ "MUS 601": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1539,
+  "title": "Music for Children",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MUS 640": {
   "ge_areas": [],
   "grading": null,
@@ -3988,6 +9129,65 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PHIL 315": {
+  "crosslisted": [
+   "GPS 315",
+   "I R 315"
+  ],
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1585,
+  "title": "Introduction to Global Peace Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 335": {
+  "ge_areas": [
+   "4UD",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1586,
+  "title": "Law and Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 378": {
+  "ge_areas": [
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1587,
+  "title": "Philosophy of Criminal Law",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 380": {
+  "ge_areas": [
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1587,
+  "title": "Philosophy of Law",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PHIL 383": {
   "ge_areas": [
    "SJ",
@@ -3998,6 +9198,55 @@
   "repeatable": false,
   "source_page": 1587,
   "title": "Ethics in Medicine",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 435": {
+  "crosslisted": [
+   "I R 436"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1588,
+  "title": "Human Rights in Global Perspective",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 440": {
+  "crosslisted": [
+   "HUM 440",
+   "LS 440"
+  ],
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1588,
+  "title": "Mind, Body, and Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 455": {
+  "crosslisted": [
+   "SXS 569"
+  ],
+  "ge_areas": [
+   "3UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1589,
+  "title": "Sex and the Law",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -4105,6 +9354,40 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PLSI 362": {
+  "crosslisted": [
+   "C J 362",
+   "I R 362"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "The Making of US Foreign Policy",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 408": {
+  "crosslisted": [
+   "LTNS 670"
+  ],
+  "ge_areas": [
+   "AERM",
+   "4UD",
+   "SJ",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1630,
+  "title": "Mexican Politics and Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PLSI 435": {
   "crosslisted": [
    "FIN 435",
@@ -4118,6 +9401,79 @@
   "title": "Politics of Global Finance and Crisis",
   "units_max": 4.0,
   "units_min": 4.0
+ },
+ "PLSI 459": {
+  "crosslisted": [
+   "I R 459"
+  ],
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1632,
+  "title": "Refugees in Global Perspective",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 478": {
+  "ge_areas": [
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1634,
+  "title": "Judicial Process",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 512": {
+  "crosslisted": [
+   "USP 512"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1634,
+  "title": "Urban Politics and Community Power",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 552": {
+  "ge_areas": [
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1635,
+  "title": "Individual Rights and the Constitution",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 580": {
+  "crosslisted": [
+   "USP 580"
+  ],
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1635,
+  "title": "Housing Policy and Planning",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "PSY 171": {
   "ge_areas": [
@@ -4143,6 +9499,262 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PSY 330": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2225,
+  "title": "Child Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 430": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2226,
+  "title": "Adolescent Psychology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 433": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2226,
+  "title": "Social, Emotional, and Personality Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 435": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2226,
+  "title": "Developmental Psychopathology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 441": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2226,
+  "title": "The Psychology of the Family",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 450": {
+  "crosslisted": [
+   "SOC 400",
+   "SXS 400"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2227,
+  "title": "Variations in Human Sexuality",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 456": {
+  "crosslisted": [
+   "SXS 456"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2227,
+  "title": "Psychology of Human Sexual Behavior",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 472": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2228,
+  "title": "Introduction to Legal Psychology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 475": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2228,
+  "title": "Psychology of Policing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PSY 547": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2229,
+  "title": "Social Conflict and Conflict Resolution",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RPT 280": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 803,
+  "title": "Developmental Play Processes",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RPT 300": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 803,
+  "title": "Leadership in Recreation, Parks, and Tourism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RPT 340": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 803,
+  "title": "Conference, Event Planning, and Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RPT 410": {
+  "ge_areas": [
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 804,
+  "title": "Therapeutic and Inclusive Recreation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RPT 440": {
+  "ge_areas": [
+   "SJ",
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 804,
+  "title": "Urban Recreation and Parks",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 100": {
+  "ge_areas": [
+   "4",
+   "AERM",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 495,
+  "title": "Introduction to Ethnic Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 240": {
+  "ge_areas": [
+   "USH",
+   "SJ",
+   "AERM",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 496,
+  "title": "All Power to the People: Comparative Freedom Movements of the \"Sixties\"",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 250": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "USG",
+   "CSLG"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 496,
+  "title": "Race, Ethnicity and Power in America",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 280": {
+  "ge_areas": [
+   "3B",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 497,
+  "title": "Disrupting Science Fiction: Race, Gender, and Alternative Futures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 290": {
+  "ge_areas": [
+   "AERM",
+   "3A",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 497,
+  "title": "Sounds of Resistance: Race, Rhythm, Rhyme, and Revolution",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 295": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 497,
+  "title": "Race, Public Art, and Creative Resistance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "RRS 303": {
   "ge_areas": [
    "SJ",
@@ -4153,6 +9765,181 @@
   "repeatable": false,
   "source_page": 497,
   "title": "Health and Wellness among Pacific Islanders",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 330": {
+  "crosslisted": [
+   "SOC 330"
+  ],
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 498,
+  "title": "Comparative Race and Ethnicity in the U.S.: Class, Gender, and Nation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 360": {
+  "ge_areas": [
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 498,
+  "title": "Our Stories: Literatures of Race and Resistance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 365": {
+  "ge_areas": [
+   "6",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 499,
+  "title": "Race and Comedy in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 380": {
+  "crosslisted": [
+   "SXS 380"
+  ],
+  "ge_areas": [
+   "SJ",
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 499,
+  "title": "Queer and Trans Ethnic Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 410": {
+  "crosslisted": [
+   "SOC 410"
+  ],
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 499,
+  "title": "Grassroots Organizing for Change in Communities of Color",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 420": {
+  "ge_areas": [
+   "GP",
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 500,
+  "title": "Arab American Identity: Memory and Resistance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 425": {
+  "ge_areas": [
+   "SJ",
+   "6",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 500,
+  "title": "Critical Exposures: Race, Racism, and Resistance in Photography",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 480": {
+  "ge_areas": [
+   "4UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 501,
+  "title": "Youth Culture, Race and Resistance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 490": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 501,
+  "title": "Race, Art, and Social Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 571": {
+  "ge_areas": [
+   "GP",
+   "3UD",
+   "AERM",
+   "ESCA",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 502,
+  "title": "Women, Race, and Class",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 580": {
+  "crosslisted": [
+   "LTNS 580",
+   "SOC 580"
+  ],
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 502,
+  "title": "Educational Equity",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 590": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 502,
+  "title": "Senior Capstone",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -4174,6 +9961,330 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "RRS 694": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 503,
+  "title": "Community Engaged Learning: Praxis in Race and Resistance Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 300": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "U.S. Social Welfare: Past, Present, and Future",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 301GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "U.S. Social Welfare II: Problems, Policies, and Programs -GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 302": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "Introduction to Social Service Organizations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 350": {
+  "ge_areas": [
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "Services to Children, Youth, and Their Families",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 352": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "Gender, Sexism, and Social Welfare",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 400": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "Social Work Practice I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 401": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "Social Work Practice II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 402": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "Interviewing Skills in Social Work",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 410": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 827,
+  "title": "Human Development and the Social Services",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 450": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 828,
+  "title": "Introduction to Research in Social Work",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 456": {
+  "crosslisted": [
+   "USP 456"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 828,
+  "title": "Urban Community Organizing and Citizen Action",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 470": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 828,
+  "title": "Social Differences and Social Work Practice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "S W 502": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 828,
+  "title": "Seminar on Internship Experience I",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "S W 503": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 828,
+  "title": "Internship Experience in the Social Services I",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "S W 504": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 828,
+  "title": "Seminar on Internship Experience II",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "S W 505": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 828,
+  "title": "Internship Experience in the Social Services II",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "SLHS 300": {
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 377,
+  "title": "Introduction to Speech, Language, and Hearing Sciences",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 651": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Anatomy and Physiology of the Speech Mechanism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 652": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Audiology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 654": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Audiometry",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 655": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Language Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 656GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Diagnosis of Communicative Disabilities - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 657": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Aural Rehabilitation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 658": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Developmental Speech-Language Disabilities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 659": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Speech and Voice Science",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 661": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 378,
+  "title": "Neurolinguistics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 663": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 379,
+  "title": "Introduction to Augmentative and Alternative Communication",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 664": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 379,
+  "title": "Clinical Phonetics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 668": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 379,
+  "title": "Social Communication and Linguistic Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SLHS 680": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 379,
+  "title": "Practicum in Communication Therapy",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
  "SOC 105": {
   "ge_areas": [
    "4"
@@ -4183,6 +10294,630 @@
   "repeatable": false,
   "source_page": 845,
   "title": "Sociological Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 272": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Social Inequality: Poverty, Wealth, and Privilege",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 300": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Writing Sociological Analysis",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "SOC 300GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Sociological Analysis - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 330": {
+  "crosslisted": [
+   "RRS 330"
+  ],
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Comparative Race and Ethnicity in the U.S.: Class, Gender, and Nation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 370": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Classical Theories of Society",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 371": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Contemporary Theories of Society",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 392": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Introduction to Research Methods",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 393": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Visualizing Social Data and the Power of Numbers",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 394": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 846,
+  "title": "Inside the Social World: Qualitative Research Tools",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 395": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Comparative Historical Methods and Postcolonial Critique",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 400": {
+  "crosslisted": [
+   "PSY 450",
+   "SXS 400"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Variations in Human Sexuality",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 410": {
+  "crosslisted": [
+   "RRS 410"
+  ],
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Grassroots Organizing for Change in Communities of Color",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 451": {
+  "crosslisted": [
+   "C J 452"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Criminological Theory",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 452": {
+  "crosslisted": [
+   "C J 470"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Juvenile Justice",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 455": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Punishment and Social Control",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 464": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Families and Society",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 469": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 848,
+  "title": "Gender and Society",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 483": {
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 848,
+  "title": "Global Sociology",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "SOC 487": {
+  "crosslisted": [
+   "LTNS 487"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 849,
+  "title": "Latin American Migrations: A Social History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 501": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 849,
+  "title": "Sociology Internship: Making Social Change",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "SOC 502": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 849,
+  "title": "Sociology Internship Seminar: Making Social Change",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "SOC 505": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 849,
+  "title": "Public Sociology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 510": {
+  "crosslisted": [
+   "C J 510"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 849,
+  "title": "Analysis of the Felon in Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 511": {
+  "crosslisted": [
+   "C J 511",
+   "USP 511"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 849,
+  "title": "Critical Analysis of Re-entry and Housing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 552": {
+  "crosslisted": [
+   "LABR 552"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 850,
+  "title": "Comparative Employment Relations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 553": {
+  "crosslisted": [
+   "LABR 553"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 850,
+  "title": "Labor Standards and Corporate Social Responsibility",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 555": {
+  "crosslisted": [
+   "LABR 555"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 850,
+  "title": "Labor Rights in the Global Economy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 580": {
+  "crosslisted": [
+   "LTNS 580",
+   "RRS 580"
+  ],
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 850,
+  "title": "Educational Equity",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SOC 640": {
+  "crosslisted": [
+   "LTNS 640"
+  ],
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 850,
+  "title": "Sociology of Latina/x/o Experiences",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPAN 531": {
+  "crosslisted": [
+   "LTNS 531"
+  ],
+  "ge_areas": [],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1505,
+  "title": "Creative Writing in Spanish: Poetry, Fiction, and Drama",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 330": {
+  "ge_areas": [
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 355,
+  "title": "Introduction to Disability",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 370": {
+  "ge_areas": [
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 355,
+  "title": "Early Development and Neurodiversity",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 620": {
+  "ge_areas": [
+   "SJ",
+   "ESCA",
+   "5UD"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 355,
+  "title": "The Science of Early Intervention",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 630": {
+  "ge_areas": [
+   "4UD",
+   "SJ",
+   "GP"
+  ],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 355,
+  "title": "Inclusive Education: Empowerment and Equity in Diverse Schools",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 662": {
+  "ge_areas": [
+   "SJ",
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 355,
+  "title": "Deaf Studies and Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 671": {
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 356,
+  "title": "Inclusive Social-Emotional Development & Equitable Practices for Children & Families in Early Educ",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 672": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 356,
+  "title": "Inclusive Learning Environments for Young Children",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 675": {
+  "ge_areas": [
+   "SJ",
+   "4UD"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 356,
+  "title": "Working with Families of Young Children with Disabilities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 688": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 356,
+  "title": "American Sign Language I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 689": {
+  "ge_areas": [
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 356,
+  "title": "American Sign Language II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 691": {
+  "ge_areas": [
+   "3UD"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 356,
+  "title": "Autism in the Contemporary World",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SXS 380": {
+  "crosslisted": [
+   "RRS 380"
+  ],
+  "ge_areas": [
+   "SJ",
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 817,
+  "title": "Queer and Trans Ethnic Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SXS 400": {
+  "crosslisted": [
+   "PSY 450",
+   "SOC 400"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 817,
+  "title": "Variations in Human Sexuality",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SXS 455": {
+  "ge_areas": [
+   "4UD",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 817,
+  "title": "Sex, Power, and Politics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SXS 456": {
+  "crosslisted": [
+   "PSY 456"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 817,
+  "title": "Psychology of Human Sexual Behavior",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SXS 551": {
+  "crosslisted": [
+   "WGS 551"
+  ],
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 818,
+  "title": "Queer Literatures and Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SXS 567": {
+  "crosslisted": [
+   "ANTH 569"
+  ],
+  "ge_areas": [
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 818,
+  "title": "Cross-Cultural Aspects of Sex and Gender",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SXS 569": {
+  "crosslisted": [
+   "PHIL 455"
+  ],
+  "ge_areas": [
+   "3UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 818,
+  "title": "Sex and the Law",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -4238,6 +10973,45 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "TH A 408": {
+  "crosslisted": [
+   "DANC 408"
+  ],
+  "ge_areas": [
+   "GP",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1672,
+  "title": "Performance in Asia and the Asian Diaspora",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "TH A 411": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1672,
+  "title": "Costume Design for Stage and Screen",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "TH A 451": {
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1673,
+  "title": "Storytelling and Folk Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "TH A 559": {
   "crosslisted": [
    "MUS 559"
@@ -4252,6 +11026,197 @@
   "repeatable": false,
   "source_page": 1674,
   "title": "Women in Jazz",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "USP 511": {
+  "crosslisted": [
+   "C J 511",
+   "SOC 511"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 864,
+  "title": "Critical Analysis of Re-entry and Housing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "USP 512": {
+  "crosslisted": [
+   "PLSI 512"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 864,
+  "title": "Urban Politics and Community Power",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "USP 515": {
+  "crosslisted": [
+   "GEOG 667"
+  ],
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 864,
+  "title": "Environmental Justice: Race, Poverty, and the Environment",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "USP 580": {
+  "crosslisted": [
+   "PLSI 580"
+  ],
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 865,
+  "title": "Housing Policy and Planning",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 303": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1697,
+  "title": "Feminist Artivism & Praxis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 355": {
+  "crosslisted": [
+   "HIST 355",
+   "LTNS 533"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1698,
+  "title": "History of Women in Latin America",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 445": {
+  "crosslisted": [
+   "LTNS 445"
+  ],
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1698,
+  "title": "Gendered Borders: Latinas and Globalization",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 505": {
+  "crosslisted": [
+   "LTNS 505"
+  ],
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1699,
+  "title": "Latina/o/x Sexualities and Genders",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 513": {
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1699,
+  "title": "Gender, War, and Militarism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 514": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1699,
+  "title": "Women and the Prison Industrial Complex",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 541": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1699,
+  "title": "Women Writers and Social Change",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 551": {
+  "crosslisted": [
+   "SXS 551"
+  ],
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1700,
+  "title": "Queer Literatures and Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 554": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1700,
+  "title": "Gender and Global Migration",
   "units_max": 3.0,
   "units_min": 3.0
  },

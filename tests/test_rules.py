@@ -364,6 +364,18 @@ def test_an_unparsed_group_is_reported_never_guessed():
     assert any("can't check" in w and odd["quote"] in w for w in got["warnings"])
 
 
+def test_a_select_one_claims_its_course_before_an_elective_list_does():
+    # BA Art History (p.911): its ARTH electives list names ART 671, which is also an option of a later Select One; listed
+    # first, the electives took it and left the Select One uncovered. Applied Math stands in: MATH 209 in both.
+    program, university = load_rules("2026-27", "bs-applied-math")
+    extra = {"id": "extra", "choose_units": 3, "from": {"list": ["MATH 209", "MATH 430"]}, "source": "p.2129"}
+    got = audit({"catalog_year": "2026-27", "completed": [{"code": "MATH 209", "grade": "A", "term": "2026-fall"}]},
+                program | {"groups": [extra] + program["groups"]}, university, CATALOG)
+    status = {g["id"]: g for g in got["groups"]}
+    assert status["programming"]["status"] == "satisfied" and status["extra"]["counted"] == []
+    assert [g["id"] for g in got["groups"]][:2] == ["extra", "required"]  # still in the rules' order
+
+
 def test_program_files_pass_check_program():
     # ARCHITECTURE §6.2 "AI-drafted rules": the hand-written programs are the bar a draft is held to
     from gatorpath.engine.rules import check_program

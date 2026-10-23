@@ -1,0 +1,179 @@
+program: ba-video-game-studies
+title: Bachelor of Arts in Video Game Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 24
+source: p.1296
+groups:
+- id: upper_division_units
+  title: Upper-division units
+  unparsed: true
+  quote: 15 Units must be completed at the upper-division level.
+  source: p.1296
+- id: core_intro
+  title: 'Core: Introduction to Videogames (VGS 100 / CWL 180)'
+  one_of:
+  - - VGS 100
+  - - CWL 180
+  quote: 'Introduction to Videogames: A Comparative'
+  source: p.1296
+- id: core_comparative_analysis
+  title: 'Core: Comparative Analysis of Video Games'
+  all_of:
+  - VGS 300
+  quote: VGS 300 Comparative Analysis of Video Games 3
+  source: p.1296
+- id: core_gwar
+  title: 'Core: Reading and Writing Across Creative Forms (GWAR)'
+  all_of:
+  - HUM 300GW
+  quote: HUM 300GW Reading and Writing Across Creative Forms -
+  source: p.1296
+- id: core_senior_seminar
+  title: 'Core: Senior Seminar'
+  all_of:
+  - VGS 600
+  quote: 'Senior Seminar: Research Projects in Video Game'
+  source: p.1296
+- id: field_1_design
+  title: 'Electives, Field I: Design and Development (at least one course)'
+  choose_units: 3
+  from:
+  - list:
+    - BECA 340
+    - BECA 352
+    - BECA 374
+    - BECA 434
+    - MUS 434
+    - BECA 454
+    - BECA 536
+    - CINE 414
+    - CINE 440
+    - CINE 658
+    - CINE 660
+    - CSC 631
+    - DES 252
+    - DES 367
+  quote: 'Field I: Design and Development'
+  source: p.1296
+- id: field_2_interpretation
+  title: 'Electives, Field II: Interpretation and Theory (at least one course)'
+  choose_units: 3
+  from:
+  - list:
+    - BECA 321
+    - BECA 340
+    - BECA 374
+    - CINE 336
+    - CINE 560
+    - VGS 270
+    - VGS 275
+    - ENG 275
+    - CWL 275
+    - VGS 380
+    - CWL 380
+    - WGS 582
+  quote: 'Field II: Interpretation and Theory'
+  source: p.1296
+- id: field_3_society
+  title: 'Electives, Field III: Games and Society (at least one course)'
+  choose_units: 3
+  from:
+  - list:
+    - BECA 321
+    - BECA 422
+    - CINE 336
+    - CINE 560
+    - COMM 595
+    - COMM 665
+    - HUM 320
+    - HUM 423
+    - CWL 423
+    - HUM 426
+    - CWL 426
+    - ENG 616
+    - VGS 380
+    - CWL 380
+    - WGS 304
+    - WGS 582
+  quote: 'Field III: Games and Society'
+  source: p.1296
+- id: electives_additional
+  title: 'Electives: remaining units to reach 12 (from any field''s list)'
+  choose_units: 3
+  from:
+  - list:
+    - BECA 340
+    - BECA 352
+    - BECA 374
+    - BECA 434
+    - MUS 434
+    - BECA 454
+    - BECA 536
+    - CINE 414
+    - CINE 440
+    - CINE 658
+    - CINE 660
+    - CSC 631
+    - DES 252
+    - DES 367
+    - BECA 321
+    - CINE 336
+    - CINE 560
+    - VGS 270
+    - VGS 275
+    - ENG 275
+    - CWL 275
+    - VGS 380
+    - CWL 380
+    - WGS 582
+    - BECA 422
+    - COMM 595
+    - COMM 665
+    - HUM 320
+    - HUM 423
+    - CWL 423
+    - HUM 426
+    - CWL 426
+    - ENG 616
+    - WGS 304
+  quote: Electives (12 units minimum)
+  source: p.1296
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.1297
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1297
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1297
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1297
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1297
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1297
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1297
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.1297
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.1297
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.1298
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1298
+drafted_by: claude, 2026-10-23

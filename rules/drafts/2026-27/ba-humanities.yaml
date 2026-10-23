@@ -1,0 +1,216 @@
+program: ba-humanities
+title: Bachelor of Arts in Humanities
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 30
+source: p.1285
+groups:
+- id: core_writing
+  title: 'Core Requirements: Select One (HUM 300GW or CWL 400GW)'
+  one_of:
+  - - HUM 300GW
+  - - CWL 400GW
+  quote: 'Select One: 3'
+  source: p.1285
+- id: core_select_two
+  title: 'Core Requirements: Select Two (HUM 303, HUM 305 or HUM 415)'
+  choose_units: 6
+  from:
+  - list:
+    - HUM 303
+    - HUM 305
+    - HUM 415
+  quote: 'Select Two: 6'
+  source: p.1285
+- id: core_senior_seminar
+  title: 'Core Requirements: Senior Seminar (HUM 690 / CWL 680)'
+  one_of:
+  - - HUM 690
+  - - CWL 680
+  quote: Senior Seminar 3
+  source: p.1285
+- id: elective_interdisciplinary
+  title: 'Electives: one course in Interdisciplinary Humanities'
+  choose_units: 3
+  from:
+  - list:
+    - HUM 130
+    - HUM 205
+    - ARTH 205
+    - HUM 271
+    - CHIN 271
+    - HUM 220
+    - HUM 225
+    - AMST 225
+    - HUM 315
+    - HIST 315
+    - HUM 317
+    - LS 317
+    - HUM 320
+    - HUM 340
+    - HUM 345
+    - HUM 348
+    - HIST 348
+    - HUM 361
+    - I R 363
+    - HUM 370
+    - HUM 371
+    - HUM 372
+    - I R 372
+    - PLSI 372
+    - HUM 373
+    - HUM 374
+    - HUM 375
+    - HUM 376
+    - HUM 379
+    - JS 379
+    - HUM 380
+    - HUM 390
+    - HUM 403
+    - HIST 330
+    - HUM 407
+    - HUM 424
+    - CWL 424
+    - HUM 432
+    - PHIL 432
+    - HUM 440
+    - LS 440
+    - HUM 441
+    - HIST 441
+    - JS 441
+    - HUM 450
+    - AMST 410
+    - ENG 450
+    - HUM 455
+    - HUM 485
+    - AMST 310
+    - HUM 496
+    - ARTH 496
+    - HUM 501
+    - JS 501
+    - PHIL 501
+    - HUM 510
+    - HUM 582
+    - CLAS 582
+    - HIST 370
+    - HUM 586
+    - HIST 374
+  quote: Students must choose one course in each of the subject areas below.
+  source: p.1285
+- id: elective_comparative_world_lit
+  title: 'Electives: one course in Comparative and World Literature'
+  choose_units: 3
+  from:
+  - list:
+    - CWL 220
+    - CWL 230
+    - CWL 250
+    - CWL 260
+    - CWL 420
+    - CWL 423
+    - HUM 423
+    - CWL 426
+    - HUM 426
+    - CWL 427
+    - HUM 427
+    - CWL 432
+    - HUM 532
+    - CWL 437
+    - ENG 533
+    - JS 437
+    - CWL 440
+    - CWL 445
+    - HUM 445
+    - CWL 450
+    - CWL 451
+    - ENG 451
+    - JS 451
+    - CWL 480
+    - JS 480
+    - CWL 540
+    - HUM 401
+    - CLAS 410
+    - HUM 402
+    - CLAS 415
+    - HUM 438
+    - PHIL 438
+  quote: Students must choose one course in each of the subject areas below.
+  source: p.1286
+- id: elective_new_media
+  title: 'Electives: one course in New Media Studies'
+  choose_units: 3
+  from:
+  - list:
+    - CLAS 450
+    - HUM 460
+    - VGS 450
+    - CWL 180
+    - CWL 275
+    - ENG 275
+    - CWL 380
+    - HUM 235
+    - CMX 235
+    - HUM 304
+    - CMX 304
+    - LS 304
+    - HUM 541
+    - CMX 541
+    - HUM 604
+    - CMX 604
+    - LS 604
+    - WGS 580
+    - WGS 582
+  quote: Students must choose one course in each of the subject areas below.
+  source: p.1286
+- id: elective_remaining
+  title: 'Electives: three more courses, any HUM or CWL course not taken in the core'
+  choose_units: 9
+  from:
+  - subject: HUM
+  - subject: CWL
+  quote: Remaining three elective courses can be drawn from any HUM or CWL-
+  source: p.1285
+- id: elective_lower_division_cap
+  title: 'Electives: lower-division limit'
+  unparsed: true
+  quote: Up to 6 units of lower-division coursework may be counted as
+  source: p.1285
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1287
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.1287
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1287
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1287
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1287
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1287
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1287
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.1287
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.1288
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.1288
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1288
+drafted_by: claude, 2026-10-23

@@ -1,0 +1,161 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-business-administration-information-systems.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-business-administration-information-systems
+title: 'Bachelor of Science in Business Administration: Concentration in Information Systems'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 69
+source: p.202
+groups:
+- id: cr_nc_limit
+  unparsed: true
+  quote: Except in cases of credit by examination, no more than 6 units of the core may be completed on a CR/NC basis.
+  source: p.202
+- id: core_gpa
+  unparsed: true
+  quote: Students must have a minimum grade point average of 2.0 in all Core Requirement Business courses.
+  source: p.202
+- id: concentration_letter_grade
+  unparsed: true
+  quote: All concentration courses must be taken on a letter-grade basis.
+  source: p.202
+- id: concentration_gpa
+  unparsed: true
+  quote: Students must have a minimum grade point average of 2.0 in all concentration courses.
+  source: p.202
+- id: concentration_outside_courses
+  unparsed: true
+  quote: A maximum of two courses (6 units) in the information systems concentration may be courses not listed in the bulletin
+    for the concentration including courses from other disciplines at SF State and courses from other AACSB accredited schools
+    of business or institutions of equal caliber. All such courses must be approved in advance by an Information Systems advisor.
+  source: p.202
+- id: prereq_calculus
+  title: 'Prerequisite Courses: Select One (DS 110, MATH 107 & MATH 108, or MATH 110)'
+  one_of:
+  - - DS 110
+  - - MATH 107
+    - MATH 108
+  - - MATH 110
+  quote: 'Select One: 3-6'
+  source: p.202
+- id: prereq_econ
+  title: Prerequisite Courses (ECON 101)
+  all_of:
+  - ECON 101
+  quote: ECON 101 Introduction to Microeconomic Analysis 3
+  source: p.202
+- id: prereq_isys_263
+  title: 'Prerequisite Courses: ISYS 263 (or a passing score on the ISYS 263 CLEP Exam)'
+  all_of:
+  - ISYS 263
+  quote: ISYS 263 Introduction to Information Systems 3
+  source: p.202
+- id: core_accounting
+  title: Core Courses (Accounting)
+  all_of:
+  - ACCT 100
+  - ACCT 101
+  quote: ACCT 100 Introduction to Financial Accounting 3
+  source: p.202
+- id: core_communication
+  title: 'Core Courses: Select One (BUS 300GW or DS 660GW)'
+  one_of:
+  - - BUS 300GW
+  - - DS 660GW
+  quote: BUS 300GW Business Communication for Professionals -
+  source: p.202
+- id: core_seminars
+  title: Core Courses (BUS 682 and BUS 690)
+  all_of:
+  - BUS 682
+  - BUS 690
+  quote: BUS 682 Seminar on Business and Society
+  source: p.202
+- id: core_seminars_letter_grade
+  unparsed: true
+  quote: Course must be taken for a letter grade.
+  source: p.202
+- id: core_statistics
+  title: 'Core Courses: Select One (DS/ECON 212 or MATH 124)'
+  one_of:
+  - - DS 212
+  - - ECON 212
+  - - MATH 124
+  quote: MATH 124 Elementary Statistics
+  source: p.202
+- id: core_business
+  title: Core Courses (Business courses)
+  all_of:
+  - DS 412
+  - ECON 102
+  - FIN 350
+  - IBUS 330
+  - ISYS 363
+  - MGMT 405
+  - MKTG 431
+  quote: Core Courses (39 units)
+  source: p.202
+- id: concentration_first
+  title: Concentration Courses (ISYS 350, ISYS 463, ISYS 464)
+  all_of:
+  - ISYS 350
+  - ISYS 463
+  - ISYS 464
+  quote: ISYS 350 Building Business Applications 3
+  source: p.202
+- id: concentration_second
+  title: Concentration Courses (ISYS 565, ISYS 663)
+  all_of:
+  - ISYS 565
+  - ISYS 663
+  quote: ISYS 565 Managing Enterprise Networks 3
+  source: p.203
+- id: electives
+  title: 'Electives: Select Two (6 units)'
+  choose_units: 6
+  from:
+  - list:
+    - ISYS 412
+    - ISYS 475
+    - ISYS 556
+    - ISYS 567
+    - ISYS 568
+    - ISYS 569
+    - ISYS 573
+    - ISYS 574
+    - ISYS 575
+    - ISYS 650
+  quote: Electives (6 units)
+  source: p.203
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.203
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.203
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.204
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.204
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.204
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.204
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.204
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.204
+drafted_by: claude, 2026-10-23

@@ -1,0 +1,221 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-early-childhood-studies-pk-3-integrated-teacher-education-program.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-early-childhood-studies-pk-3-integrated-teacher-education-program
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: 'Bachelor of Arts in Early Childhood Studies: Concentration in PK-3 Integrated Teacher Education Program Roadmap'
+    total_units: 120
+    source: p.594-596
+    notes:
+    - 120 Total Units Required
+    - 'Minimum Number of Units in the Major: 72'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 2 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 3 Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.
+    - 4 Science Course. A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p.
+      591). This requirement also fulfills GE Area 5UD.
+    - 5 Arts Course. A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p.
+      591). This requirement also fulfills GE Area 3UD.
+    semesters:
+    - units: 15
+      source: p.594
+      items:
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+        note: footnote 2
+      - slot: GE
+        area: '3'
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.594
+      items:
+      - CAD 210
+      - slot: major
+        group: core_early_childhood
+        units: 3
+        note: 'Select One (Major Core): CAD 215 or CAD 230'
+      - CAD 260
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+    - units: 15
+      source: p.594
+      items:
+      - slot: GE
+        area: '4'
+        units: 3
+        note: with USH
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government (p. 2351)
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.594
+      items:
+      - CAD 280
+      - CAD 300
+      - MATH 165
+      - SPED 370
+      - slot: GE
+        area: '6'
+        units: 3
+        note: Ethnic Studies (p. 2328)
+    - units: 15
+      source: p.594-595
+      items:
+      - CAD 326
+      - CAD 410GW
+      - SPED 671
+      - slot: major
+        group: science
+        units: 3
+        note: Science Course; footnote 4
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.595
+      items:
+      - CAD 330
+      - CAD 660
+      - slot: major
+        group: arts
+        units: 3
+        note: Arts Course; footnote 5
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 6
+      source: p.595
+      items:
+      - E ED 719
+      - E ED 768
+    - units: 12
+      source: p.595
+      items:
+      - E ED 608
+      - E ED 628
+      - E ED 734
+      - E ED 738
+    - units: 12
+      source: p.595
+      items:
+      - E ED 733
+      - E ED 735
+      - E ED 748
+      - E ED 758
+  adt:
+    title: 'Bachelor of Arts in Early Childhood Studies: Concentration in PK-3 Integrated Teacher Education Program – ECE
+      Associate Degree for Transfer (ADT) Roadmap'
+    total_units: 60
+    source: p.597-598
+    met_in_transfer:
+    - CAD 210
+    - CAD 215
+    - CAD 260
+    - CAD 280
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current bulletin year with
+      an AA-T in Early Childhood Education. Twelve units in the major (CAD 210, CAD 215, CAD 260, and CAD 280) and all lower-division
+      GE requirements have been satisfied. Check with a major advisor about the most appropriate course sequence. Degree completion
+      guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 0-6 units. American Institutions (0-6 units): US History, US Government, California State
+      and Local Government requirements if not taken before transfer. Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD (0 units):
+      All UD GE Areas are fulfilled through the major requirements. Students entering this major with an approved ADT are
+      not required to fulfill SF State Studies requirements.'
+    - 'Early Childhood Studies Major (Child Development Pre-K to 3rd Grade Integrated Teacher Education Program): 60 units.
+      CAD 210, CAD 215, CAD 260, and CAD 280 met in transfer. Core (21 units): Includes GWAR and Capstone. Science (3 units):
+      Also fulfills GE Area 5UD. Art (3 units): Also fulfills GE Area 3UD. Credential (33 units). A minimum grade of C or
+      better is required for all courses in the major.'
+    - 'University Electives: 0 or More units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
+      e.g., both in UD GE and the major.'
+    - 1 Arts Course. A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p.
+      591). This requirement also fulfills GE Area 3UD.
+    - 2 Science Course. A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p.
+      591). This requirement also fulfills GE Area 5UD.
+    - '3 American Institutions. Select one if USH and/or USG/CSLG not met in transfer: AFRS 375 Law and the Black Community
+      (3 units) (USH, USG/CSLG, AERM, SJ); AFRS 376 Government, the Constitution, and Black Citizens (3 units) (USH, USG/CSLG,
+      AERM, SJ); HIST 470 The U.S. Constitution to 1896 (3 units) (GE 3UD, USH, USG/CSLG, AERM, SJ); HIST 471 The U.S. Constitution
+      Since 1896 (3 units) (GE 3UD, USH, USG/CSLG, AERM)'
+    semesters:
+    - units: 15
+      source: p.597
+      items:
+      - CAD 300
+      - CAD 326
+      - CAD 410GW
+      - MATH 165
+      - SPED 671
+    - units: 12
+      source: p.597
+      items:
+      - CAD 330
+      - SPED 370
+      - slot: major
+        group: arts
+        units: 3
+        note: Arts Course; footnote 1
+      - slot: major
+        group: science
+        units: 3
+        note: Science Course; footnote 2
+      - slot: ai
+        area: USH/USG/CSLG
+        units: 0
+        note: '0-3 units; footnote 3: select one if USH and/or USG/CSLG not met in transfer'
+    - units: 6
+      source: p.598
+      items:
+      - E ED 719
+      - E ED 768
+    - units: 15
+      source: p.598
+      items:
+      - CAD 660
+      - E ED 608
+      - E ED 628
+      - E ED 734
+      - E ED 738
+    - units: 12
+      source: p.598
+      items:
+      - E ED 733
+      - E ED 735
+      - E ED 748
+      - E ED 758
+drafted_by: claude, 2026-10-23

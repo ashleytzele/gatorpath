@@ -1,0 +1,113 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-sociology.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-sociology
+title: Bachelor of Arts in Sociology
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 42
+source: p.851
+groups:
+- id: cr_nc_one_course
+  unparsed: true
+  quote: Students are allowed to take one course toward the major as credit/
+  source: p.851
+- id: upper_division_units
+  unparsed: true
+  quote: A total of 30 Sociology units must be upper-division. University
+  source: p.851
+- id: soc_272
+  title: 'Required Courses: Social Inequality'
+  all_of:
+  - SOC 272
+  quote: 'SOC 272 Social Inequality: Poverty, Wealth, and Privilege 4'
+  source: p.851
+- id: soc_300
+  title: 'Required Courses: Writing Sociological Analysis'
+  all_of:
+  - SOC 300
+  quote: SOC 300 Writing Sociological Analysis 1
+  source: p.851
+- id: soc_300gw
+  title: 'Required Courses: Sociological Analysis (GWAR)'
+  all_of:
+  - SOC 300GW
+  quote: SOC 300GW Sociological Analysis - GWAR 3
+  source: p.851
+- id: theory
+  title: 'Required Courses: Select One (SOC 370 or SOC 371)'
+  one_of:
+  - - SOC 370
+  - - SOC 371
+  quote: SOC 371 Contemporary Theories of Society
+  source: p.851
+- id: soc_392
+  title: 'Required Courses: Introduction to Research Methods'
+  all_of:
+  - SOC 392
+  quote: SOC 392 Introduction to Research Methods 4
+  source: p.851
+- id: soc_483
+  title: 'Required Courses: Global Sociology'
+  all_of:
+  - SOC 483
+  quote: SOC 483 Global Sociology 4
+  source: p.851
+- id: capstone
+  title: 'Capstone (3-4 units): Select One'
+  one_of:
+  - - SOC 393
+  - - SOC 394
+  - - SOC 395
+  - - SOC 501
+    - SOC 502
+  - - SOC 505
+  quote: Capstone (3-4 units)
+  source: p.851
+- id: electives
+  unparsed: true
+  quote: Upper-division SOC courses or courses cross-listed with SOC not used
+  source: p.851
+- id: electives_lower_division_cap
+  unparsed: true
+  quote: courses or courses cross-listed with SOC not used to meet requirements above. Up to 9 units of lower-division sociology
+  source: p.851
+transfer_notes:
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.852
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.852
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.852
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.852
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.852
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.852
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.852
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.853
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.853
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.853
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.853
+drafted_by: claude, 2026-10-23

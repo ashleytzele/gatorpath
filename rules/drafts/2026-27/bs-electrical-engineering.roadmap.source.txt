@@ -1,0 +1,439 @@
+=== p.1969 ===
+Bachelor of Science in Electrical Engineering Roadmap – Quantitative
+Reasoning Category 1/2
+123 Total Units Required
+Minimum Number of Units in Major: 93
+This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual
+sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner) and an advisor for
+further guidance.
+To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major.
+Course Title Units
+First Semester
+Select One (Major Core): 3-4
+CHEM 115 General Chemistry I
+CHEM 180 Chemistry for Energy and the Environment
+(ESCA)
+ENGR 100 Introduction to Engineering (Major Core) 3
+ENGR 212 Introduction to Unix and Linux for Engineers
+(Major Core)
+2
+MATH 226 Calculus I (Major Core, GE 2)
+1
+4
+GE Area 1A: English Composition
+2
+3
+Units 15-16
+Second Semester
+MATH 227 Calculus II (Major Core) 4
+PHYS 220
+& PHYS 222
+General Physics with Calculus I
+and General Physics with Calculus I
+Laboratory (Major Core, GE 5A, GE 5C)
+4
+ENGR 213 Introduction to C Programming for
+Engineers (Major Core)
+3
+3
+ENGR 214 C Programming Laboratory (Major Core) 1
+GE Area 1C: Oral Communication 3
+Units 15
+Third Semester
+ENGR 221 Data Structures and Algorithms in Python
+(Major Core)
+4
+MATH 228 Calculus III (Major Core) 4
+PHYS 230
+& PHYS 232
+General Physics with Calculus II
+and General Physics with Calculus II
+Laboratory (Major Core)
+4
+GE Area 5B: Biological Science 3
+Units 15
+Fourth Semester
+ENGR 205 Electric Circuits (Major Core)
+3
+3
+ENGR 206 Circuits and Instrumentation Laboratory
+(Major Core)
+1
+ENGR 282 Probability and Statistics for Engineers
+(Major Core)
+3
+3
+MATH 245 Elementary Differential Equations and Linear
+Algebra (Major Core)
+3
+GE Area 3: Arts and Humanities - Take Two 6
+Units 16
+Fifth Semester
+ENGR 305 Linear Systems Analysis (Major Core) 3
+ENGR 306 Electromechanical Systems (Major Core) 3
+=== p.1970 ===
+Reasoning Category 1/2
+ENGR 353 Microelectronics (Major Core) 3
+ENGR 356 Digital Design (Major Core) 3
+ENGR 357 Digital Design Laboratory (Major Core) 1
+GE Area 6: Ethnic Studies (p. 2328) 3
+Units 16
+Sixth Semester
+ENGR 301 Microelectronics Laboratory (Major Core) 1
+ENGR 442 Operational Amplifier Systems Design
+(Major Core)
+3
+ENGR 446 Control Systems Laboratory (Major Core) 1
+ENGR 447 Control Systems (Major Core) 3
+ENGR 478 Design with Microprocessors (Major Core)
+4
+4
+GE Area 4: Social and Behavioral Sciences
+5
+3
+Units 15
+Seventh Semester
+ENGR 350 Introduction to Engineering
+Electromagnetics (Major Core)
+3
+ENGR 449 Communication Systems (Major Core) 3
+ENGR 451 Digital Signal Processing (Major Core) 4
+ENGR 696 Engineering Design Project I (Major Core) 1
+GE Area 4: Social and Behavioral Sciences
+5
+3
+Major Upper-Division Electives - Take One
+6
+3
+Units 17
+Eighth Semester
+ENGR 697GW Engineering Design Project II - GWAR (Major
+Core)
+2
+Major Upper-Division Electives - Take Two
+6
+6
+GE Area 3UD: Upper-Division Arts or Humanities
+7
+3
+GE Area 4UD: Upper-Division Social and Behavioral Sciences
+7
+3
+Units 14
+Total Units 123-124
+1
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For
+directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+2
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option.
+For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+3
+GE Area 1B: Critical Thinking is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.
+4
+GE Area 5UD (Upper-Division Science) is satisfied upon completion of ENGR 478.
+5
+First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+6
+Major Upper-Division Electives (9 units)
+A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 1965).
+7
+To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG) within Upper-Division GE.
+=== p.1971 ===
+Bachelor of Science in Electrical Engineering 5 Year Roadmap – Quantitative
+Reasoning Category 1/2
+123 Total Units Required
+Minimum Number of Units in Major: 93
+This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual
+sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner) and an advisor for
+further guidance.
+To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major.
+Course Title Units
+First Semester
+Select One (Major Core): 3-4
+CHEM 115 General Chemistry I
+CHEM 180 Chemistry for Energy and the Environment
+(ESCA)
+ENGR 100 Introduction to Engineering (Major Core) 3
+ENGR 212 Introduction to Unix and Linux for Engineers
+(Major Core)
+2
+MATH 226 Calculus I (Major Core, GE 2)
+1
+4
+GE Area 1A: English Composition
+2
+3
+Units 15-16
+Second Semester
+MATH 227 Calculus II (Major Core) 4
+PHYS 220
+& PHYS 222
+General Physics with Calculus I
+and General Physics with Calculus I
+Laboratory (Major Core, GE 5A, GE 5C)
+4
+ENGR 213 Introduction to C Programming for
+Engineers (Major Core)
+3
+3
+ENGR 214 C Programming Laboratory (Major Core) 1
+GE Area 1C: Oral Communication 3
+Units 15
+Third Semester
+ENGR 221 Data Structures and Algorithms in Python
+(Major Core)
+4
+MATH 228 Calculus III (Major Core) 4
+PHYS 230
+& PHYS 232
+General Physics with Calculus II
+and General Physics with Calculus II
+Laboratory (Major Core)
+4
+GE Area 5B: Biological Science 3
+Units 15
+Fourth Semester
+ENGR 205 Electric Circuits (Major Core)
+3
+3
+ENGR 206 Circuits and Instrumentation Laboratory
+(Major Core)
+1
+ENGR 282 Probability and Statistics for Engineers
+(Major Core)
+3
+3
+MATH 245 Elementary Differential Equations and Linear
+Algebra (Major Core)
+3
+GE Area 3: Arts and Humanities 3
+Units 13
+Fifth Semester
+ENGR 301 Microelectronics Laboratory (Major Core) 1
+ENGR 305 Linear Systems Analysis (Major Core) 3
+=== p.1972 ===
+Reasoning Category 1/2
+ENGR 353 Microelectronics (Major Core) 3
+ENGR 478 Design with Microprocessors
+4
+4
+GE Area 3: Arts and Humanities 3
+Units 14
+Sixth Semester
+ENGR 442 Operational Amplifier Systems Design
+(Major Core)
+3
+ENGR 446 Control Systems Laboratory (Major Core) 1
+ENGR 447 Control Systems (Major Core) 3
+ENGR 449 Communication Systems (Major Core) 3
+GE Area 4: Social and Behavioral Sciences
+5
+3
+Units 13
+Seventh Semester
+ENGR 306 Electromechanical Systems (Major Core) 3
+ENGR 350 Introduction to Engineering
+Electromagnetics (Major Core)
+3
+ENGR 356 Digital Design (Major Core) 3
+ENGR 357 Digital Design Laboratory (Major Core) 1
+GE Area 4: Social and Behavioral Sciences
+5
+3
+Units 13
+Eighth Semester
+ENGR 451 Digital Signal Processing (Major Core) 4
+ENGR 696 Engineering Design Project I (Major Core) 1
+Major Upper-Division Electives
+6
+3
+GE Area 6: Ethnic Studies (p. 2328) 3
+GE Area 4UD: Upper-Division Social and Behavioral Sciences
+7
+3
+Units 14
+Ninth Semester
+ENGR 697GW Engineering Design Project II - GWAR (Major
+Core)
+2
+Major Upper-Division Electives - Take Two
+6
+6
+GE Area 3UD: Upper-Division Arts or Humanities
+7
+3
+Units 11
+Total Units 123-124
+1
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For
+directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+2
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option.
+For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+3
+GE Area 1B: Critical Thinking is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.
+4
+GE Area 5UD (Upper-Division Science) is satisfied upon completion of ENGR 478.
+5
+First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+6
+Major Upper-Division Electives (9 units)
+A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 1965).
+7
+To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG) within Upper-Division GE.
+=== p.1973 ===
+Bachelor of Science in Electrical Engineering Roadmap – Quantitative
+Reasoning Category 3/4
+129 Total Units Required
+Minimum Number of Units in Major: 93
+This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual
+sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner) and an advisor for
+further guidance.
+To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major.
+Course Title Units
+First Semester
+ENGR 100 Introduction to Engineering (Major Core) 3
+ENGR 212 Introduction to Unix and Linux for Engineers
+(Major Core)
+2
+MATH 197 Prelude to Calculus I (Prerequisite for
+MATH 226)
+1
+3
+GE Area 1A: English Composition
+2
+3
+GE Area 3: Arts and Humanities 3
+Units 14
+Second Semester
+Select One (Major Core): 3-4
+CHEM 115 General Chemistry I
+CHEM 180 Chemistry for Energy and the Environment
+(ESCA)
+MATH 198 Prelude to Calculus II (Prerequisite for
+MATH 226, GE 2)
+1
+3
+GE Area 1C: Oral Communication 3
+GE Area 3: Arts and Humanities 3
+Units 12-13
+Third Semester
+MATH 226 Calculus I (Major Core, GE 2)
+1
+4
+GE Area 4: Social and Behavioral Sciences - Take Two
+3
+6
+GE Area 5B: Biological Science 3
+Units 13
+Fourth Semester
+MATH 227 Calculus II (Major Core) 4
+PHYS 220
+& PHYS 222
+General Physics with Calculus I
+and General Physics with Calculus I
+Laboratory (Major Core, GE 5A, GE 5C)
+4
+ENGR 213 Introduction to C Programming for
+Engineers (Major Core)
+4
+3
+ENGR 214 C Programming Laboratory (Major Core) 1
+Units 12
+Fifth Semester
+ENGR 221 Data Structures and Algorithms in Python
+(Major Core)
+4
+ENGR 282 Probability and Statistics for Engineers
+(Major Core)
+4
+3
+MATH 228 Calculus III (Major Core) 4
+PHYS 230
+& PHYS 232
+General Physics with Calculus II
+and General Physics with Calculus II
+Laboratory (Major Core)
+4
+Units 15
+=== p.1974 ===
+Reasoning Category 3/4
+Sixth Semester
+ENGR 205 Electric Circuits (Major Core)
+4
+3
+ENGR 206 Circuits and Instrumentation Laboratory
+(Major Core)
+1
+MATH 245 Elementary Differential Equations and Linear
+Algebra (Major Core)
+3
+GE Area 6: Ethnic Studies (p. 2328) 3
+GE Area 3UD: Upper-Division Arts or Humanities
+5
+3
+Units 13
+Seventh Semester
+ENGR 305 Linear Systems Analysis (Major Core) 3
+ENGR 306 Electromechanical Systems (Major Core) 3
+ENGR 353 Microelectronics (Major Core) 3
+ENGR 356 Digital Design (Major Core) 3
+ENGR 357 Digital Design Laboratory (Major Core) 1
+Units 13
+Eighth Semester
+ENGR 301 Microelectronics Laboratory (Major Core) 1
+ENGR 442 Operational Amplifier Systems Design
+(Major Core)
+3
+ENGR 446 Control Systems Laboratory (Major Core) 1
+ENGR 447 Control Systems (Major Core) 3
+ENGR 478 Design with Microprocessors (Major Core)
+6
+4
+Units 12
+Ninth Semester
+ENGR 350 Introduction to Engineering
+Electromagnetics (Major Core)
+3
+ENGR 449 Communication Systems (Major Core) 3
+ENGR 451 Digital Signal Processing (Major Core) 4
+ENGR 696 Engineering Design Project I (Major Core) 1
+Major Electives - Take One
+7
+3
+Units 14
+Tenth Semester
+ENGR 697GW Engineering Design Project II - GWAR (Major
+Core)
+2
+Major Upper-Division Electives - Take Two
+7
+6
+GE Area 4UD: Upper-Division Social and Behavioral Sciences
+5
+3
+Units 11
+Total Units 129-130
+1
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For
+directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+2
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option.
+For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+3
+First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+4
+GE Area 1B: Critical Thinking is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.
+5
+To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG) within Upper-Division GE.
+6
+GE Area 5UD (Upper-Division Science) is satisfied upon completion of ENGR 478.
+7
+Major Upper-Division Electives (9 units)
+A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 1965).

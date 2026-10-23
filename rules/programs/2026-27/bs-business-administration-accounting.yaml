@@ -1,0 +1,182 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-business-administration-accounting.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-business-administration-accounting
+title: 'Bachelor of Science in Business Administration: Concentration in Accounting'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 69
+source: p.53
+groups:
+- id: prereq_calculus
+  title: 'Prerequisite Courses: Select One (DS 110, MATH 107 & MATH 108, or MATH 110)'
+  one_of:
+  - - DS 110
+  - - MATH 107
+    - MATH 108
+  - - MATH 110
+  quote: 'Select One: 3-6'
+  source: p.53
+- id: prereq_econ
+  title: Prerequisite Courses (ECON 101)
+  all_of:
+  - ECON 101
+  quote: ECON 101 Introduction to Microeconomic Analysis 3
+  source: p.53
+- id: prereq_isys_263
+  title: 'Prerequisite Courses: ISYS 263 (or a passing score on the ISYS 263 CLEP Exam)'
+  all_of:
+  - ISYS 263
+  quote: ISYS 263 Introduction to Information Systems 3
+  source: p.53
+- id: core_accounting_intro
+  title: 'Core Requirements: ACCT 100 and ACCT 101'
+  all_of:
+  - ACCT 100
+  - ACCT 101
+  min_grade:
+    ACCT 100: C
+    ACCT 101: C
+  quote: ACCT 100 and ACCT 101 must be completed with a grade of C or better for accounting students.
+  source: p.53
+- id: core_accounting_systems
+  title: 'Core Requirements: Accounting Information Systems'
+  all_of:
+  - ACCT 307
+  quote: ACCT 307 Accounting Information Systems 3
+  source: p.53
+- id: core_communication
+  title: 'Core Requirements: Select One (BUS 300GW or DS 660GW)'
+  one_of:
+  - - BUS 300GW
+  - - DS 660GW
+  quote: 'Select One: 3'
+  source: p.53
+- id: core_seminars
+  title: Core Requirements (BUS 682 and BUS 690)
+  all_of:
+  - BUS 682
+  - BUS 690
+  quote: BUS 682 Seminar on Business and Society
+  source: p.53
+- id: core_statistics
+  title: 'Core Requirements: Select One (DS/ECON 212 or MATH 124)'
+  one_of:
+  - - DS 212
+  - - ECON 212
+  - - MATH 124
+  quote: DS/ECON 212 Business Statistics
+  source: p.53
+- id: core_operations
+  title: 'Core Requirements: Operations Management'
+  all_of:
+  - DS 412
+  quote: DS 412 Operations Management 3
+  source: p.53
+- id: core_business
+  title: Core Requirements (Business courses)
+  all_of:
+  - ECON 102
+  - FIN 350
+  - IBUS 330
+  - MGMT 405
+  - MKTG 431
+  quote: ECON 102 Introduction to Macroeconomic Analysis 3
+  source: p.54
+- id: core_cr_nc_limit
+  unparsed: true
+  quote: Except in cases of credit by examination, no more than 6 units of the core may be completed on a CR/NC basis.
+  source: p.53
+- id: core_gpa
+  unparsed: true
+  quote: Students must have a minimum grade point average of 2.0 in all Core Requirement Business courses.
+  source: p.53
+- id: core_letter_grade
+  unparsed: true
+  quote: Course must be taken for a letter grade.
+  source: p.54
+- id: conc_intermediate_1
+  title: 'Concentration Requirements: Intermediate Financial Accounting I'
+  all_of:
+  - ACCT 301
+  min_grade: C
+  quote: ACCT 301 must be completed with a grade of C or better.
+  source: p.53
+- id: conc_required
+  title: Concentration Requirements (ACCT 302 and ACCT 305)
+  all_of:
+  - ACCT 302
+  - ACCT 305
+  quote: ACCT 302 Intermediate Financial Accounting II 3
+  source: p.54
+- id: conc_select_two
+  title: 'Concentration Requirements: Select Two'
+  choose_units: 6
+  from:
+  - list:
+    - ACCT 501
+    - ACCT 504
+    - ACCT 506
+    - ACCT 508
+    - ACCT 514
+  quote: 'Select Two: 6'
+  source: p.54
+- id: conc_letter_grade
+  unparsed: true
+  quote: All concentration courses must be taken on a letter-grade basis.
+  source: p.53
+- id: conc_gpa
+  unparsed: true
+  quote: Students must have a minimum grade point average of 2.0 in all concentration courses.
+  source: p.53
+- id: electives
+  title: 'Electives: Select Two'
+  choose_units: 6
+  from:
+  - list:
+    - ACCT 320
+    - ACCT 501
+    - ACCT 504
+    - ACCT 506
+    - ACCT 507
+    - ACCT 508
+    - ACCT 509
+    - ACCT 513
+    - ACCT 514
+    - ACCT 517
+    - ACCT 518
+    - ACCT 527
+    - ACCT 531
+    - ACCT 551
+  quote: 'Select two courses not already used to satisfy the concentration requirements above:'
+  source: p.54
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.55
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.55
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.55
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.55
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.55
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.55
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.55
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.55
+drafted_by: claude, 2026-10-23

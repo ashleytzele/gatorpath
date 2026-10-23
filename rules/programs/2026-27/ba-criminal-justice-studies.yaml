@@ -1,0 +1,217 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-criminal-justice-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-criminal-justice-studies
+title: Bachelor of Arts in Criminal Justice Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.639
+groups:
+- id: core
+  title: Core Courses (18 units)
+  all_of:
+  - C J 200
+  - C J 230
+  - C J 300
+  - C J 330
+  - C J 330GW
+  - C J 680
+  quote: Core Courses (18 units)
+  source: p.639
+- id: power_inequality
+  title: 'Power and Inequality (3 units): Select one'
+  one_of:
+  - - C J 435
+  - - LTNS 430
+  - - C J 485
+  - - LTNS 485
+  - - C J 530
+  - - C J 605
+  quote: Power and Inequality (3 units)
+  source: p.639
+- id: law_administration
+  title: 'Criminal Justice Law and Administration (3 units): Select one'
+  one_of:
+  - - C J 400
+  - - C J 450
+  - - C J 480
+  - - C J 501
+  - - C J 502
+  quote: Criminal Justice Law and Administration (3 units)
+  source: p.639
+- id: additional_electives
+  title: Select four additional Criminal Justice Studies Electives (12-16 units)
+  choose_units: 12
+  from:
+  - list:
+    - AA S 595
+    - AFRS 375
+    - AFRS 376
+    - AIS 330
+    - AIS 460
+    - COMM 503
+    - COMM 525
+    - COMM 531
+    - COMM 541
+    - COMM 543
+    - COMM 564
+    - COMM 573
+    - COUN 630
+    - COUN 631
+    - C J 306
+    - I R 306
+    - C J 320
+    - C J 323
+    - C J 335
+    - C J 340
+    - I R 341
+    - C J 360
+    - I R 360
+    - C J 362
+    - I R 362
+    - PLSI 362
+    - C J 400
+    - C J 401
+    - C J 405
+    - C J 410
+    - C J 420
+    - C J 435
+    - LTNS 430
+    - C J 450
+    - C J 451
+    - C J 452
+    - SOC 451
+    - C J 460
+    - C J 461
+    - I R 361
+    - C J 470
+    - SOC 452
+    - C J 471
+    - C J 475
+    - C J 480
+    - C J 485
+    - LTNS 485
+    - C J 490
+    - C J 501
+    - C J 502
+    - C J 510
+    - SOC 510
+    - C J 511
+    - SOC 511
+    - USP 511
+    - C J 515
+    - C J 525
+    - C J 530
+    - C J 535
+    - C J 550
+    - C J 570
+    - C J 600
+    - C J 605
+    - C J 690
+    - HIST 465
+    - HIST 470
+    - HIST 471
+    - HIST 472
+    - I R 259
+    - I R 334
+    - I R 436
+    - PHIL 435
+    - I R 453
+    - BECA 453
+    - I R 459
+    - PLSI 459
+    - LTNS 415
+    - LTNS 470
+    - PHIL 335
+    - PHIL 378
+    - PHIL 380
+    - PLSI 478
+    - PLSI 512
+    - USP 512
+    - PLSI 552
+    - PSY 472
+    - PSY 475
+    - PSY 547
+    - RRS 330
+    - SOC 330
+    - RRS 571
+    - SOC 455
+    - SXS 455
+    - SXS 569
+    - PHIL 455
+    - WGS 513
+    - WGS 514
+    - WGS 554
+  - subject: C J
+    level: 300
+    except:
+    - C J 685
+    - C J 699
+  - subject: C J
+    level: 400
+    except:
+    - C J 685
+    - C J 699
+  - subject: C J
+    level: 500
+    except:
+    - C J 685
+    - C J 699
+  - subject: C J
+    level: 600
+    except:
+    - C J 685
+    - C J 699
+  quote: Select four additional Criminal Justice Studies Electives (12-16
+  source: p.639
+- id: complementary_studies
+  title: Complementary Studies (12 units outside the major prefix)
+  unparsed: true
+  quote: Bachelor of Arts students must complete at least 12 units of
+  source: p.640
+- id: cc_transfer_electives
+  title: Up to 6 community college transfer units toward general electives
+  unparsed: true
+  quote: Up to a total of 6 transfer units in the following Criminal Justice courses
+  source: p.640
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.641
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.641
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.641
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.641
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.641
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.642
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.642
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.642
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.642
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.642
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.642
+drafted_by: claude, 2026-10-23

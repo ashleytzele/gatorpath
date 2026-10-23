@@ -473,10 +473,12 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
         warnings.append(f"ge_certified: the {university['catalog_year']} Bulletin doesn't say which GE areas a transfer "
                         "certification meets, so it isn't applied; list the areas your DPR shows met in ge_done")
     for kind, rules in (("major", program), ("university", university)):
-        for g in rules["groups"]:
+        # A requirement naming its courses (all_of, one_of) claims them before a choice does: an elective list that also
+        # names a Select One's course doesn't take it from the Select One (BA Art History's ART 671, p.911)
+        for g in sorted(rules["groups"], key=lambda g: kind == "major" and "from" in g):
             done[g["id"]] = eval_group(amended(g), kind, taken, profile, catalog, claimed if kind == "major" else None,
                                        no_cr_nc and kind == "major", done, warnings, certified)
-    groups = list(done.values())
+    groups = [done[g["id"]] for g in program["groups"] + university["groups"]]  # in the rules' order
     # A major course counts for GE too (p.2352): name the required ones still ahead that carry an open area, so the
     # client doesn't guess which open area a course meets.
     ahead = [c for g in groups if g["kind"] == "major" for c in g.get("remaining", []) if c in catalog]

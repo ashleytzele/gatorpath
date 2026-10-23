@@ -1,0 +1,357 @@
+=== p.1951 ===
+Bachelor of Science in Computer
+Engineering
+Program Webpage: https://engineering.sfsu.edu/computer-engineering
+Computer engineering is a multidisciplinary field with roots in electrical
+engineering and computer science that has grown to become a separate
+discipline in itself. Graduates of the computer engineering program are
+expected to have, within a few years of graduation:
+• Established themselves as practicing professionals or engaged in
+graduate study in computer engineering or a related field.
+• Demonstrated an ability to be productive and responsible
+professionals
+The first two years of the program are designed to build a strong
+background in mathematics and science to provide a basis for
+understanding the underlying analysis and modeling tools and physical
+principles that are common to all engineering. The last two years cover
+a rich set of hardware and software subjects to give students a broad
+background in computer engineering. This broad foundation enables
+students to adapt and extend their knowledge and skills more easily
+in the future. The curriculum also stresses problem-solving skills and
+teamwork. Through electives, students can choose to develop further
+breadth or in-depth knowledge in one of three areas: embedded systems,
+network systems, or multimedia systems.
+The number of units required for graduation (p. 2311) and the GE
+requirements (p. 2314) are described in the Undergraduate Education
+section of this Bulletin. For information for all engineering students, see
+Undergraduate Programs in Engineering above.
+A number of required and elective lecture courses in the computer
+engineering program have corresponding laboratory courses that
+students are either required or strongly encouraged to take concurrently.
+These course pairs are:
+Code Title Units
+ENGR 205
+& ENGR 206
+Electric Circuits
+and Circuits and Instrumentation Laboratory
+4
+ENGR 353
+& ENGR 301
+Microelectronics
+and Microelectronics Laboratory
+4
+ENGR 356
+& ENGR 357
+Digital Design
+and Digital Design Laboratory
+4
+Students who drop or withdraw from any of these lecture courses must
+also drop or withdraw from the corresponding laboratory course, or they
+will be administratively dropped or withdrawn.
+Courses are scheduled during the day as well as in the late afternoon and
+evening. Other information and assistance in selecting courses can be
+obtained from a major advisor in the School of Engineering, or by calling
+(415) 338-1174, by email to engrasst@sfsu.edu, or by writing to:
+School of Engineering
+San Francisco State University
+Science and Engineering Innovation Center
+1600 Holloway Avenue
+San Francisco, CA 94132
+Applicants
+Freshman applicants have completed four years of high school
+mathematics, one year of high school chemistry, and one year of high
+school physics. Students are also encouraged to include courses in
+computer programming.
+Community college transfers should complete the sequence of
+mathematics, chemistry, physics, and engineering courses listed in
+freshman and sophomore years under the “sample sequence of courses,”
+if available at the community college.
+Program Learning Outcomes
+1. An ability to identify, formulate, and solve complex engineering
+problems by applying principles of engineering, science, and
+mathematics.
+2. An ability to apply engineering design to produce solutions that
+meet specified needs with consideration of public health, safety,
+and welfare, as well as global, cultural, social, environmental, and
+economic factors.
+3. An ability to communicate effectively with a range of audiences.
+4. An ability to recognize ethical and professional responsibilities in
+engineering situations and make informed judgments, which must
+consider the impact of engineering solutions in global, economic,
+environmental, and societal contexts.
+5. An ability to function effectively on a team whose members together
+provide leadership, create a collaborative environment, establish
+goals, plan tasks, and meet objectives.
+6. An ability to develop and conduct appropriate experimentation,
+analyze and interpret data, and use engineering judgment to draw
+conclusions.
+7. An ability to acquire and apply new knowledge as needed, using
+appropriate learning strategies.
+Computer Engineering (B.S.) – 93 units
+minimum
+• All courses for the major must be completed with a letter grade.
+• Grades of C or better are required in MATH 226, MATH 227,
+and PHYS 220.
+• Grades of C- or better are required in MATH 245,
+PHYS 230, ENGR 205, ENGR 206, ENGR 212, ENGR 213, ENGR 221,
+ENGR 282, ENGR 305, ENGR 356, and ENGR 478.
+General Education Requirements Met in the Major
+The requirements below are deemed “met in the major” upon completion
+of the courses listed (even though the courses and their prerequisites are
+not approved for GE). This is true whether or not the student completes
+the major.
+• Area 1B (Critical Thinking) is satisfied upon completion of
+ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.
+• Area 5UD (Upper-Division Science) is satisfied upon completion of
+ENGR 478.
+Math and Science Lower-Division Courses (22-23 units)
+Code Title Units
+Select One: 3-4
+CHEM 115 General Chemistry I
+=== p.1952 ===
+CHEM 180 Chemistry for Energy and the Environment
+MATH 226 Calculus I 4
+MATH 227 Calculus II 4
+MATH 245 Elementary Differential Equations and Linear
+Algebra
+3
+PHYS 220
+& PHYS 222
+General Physics with Calculus I
+and General Physics with Calculus I Laboratory
+4
+PHYS 230
+& PHYS 232
+General Physics with Calculus II
+and General Physics with Calculus II Laboratory
+4
+Lower-Division Computer Engineering Courses (23
+units)
+Code Title Units
+CSC 230 Discrete Mathematical Structures for Computer
+Science
+3
+ENGR 100 Introduction to Engineering 3
+ENGR 205 Electric Circuits 3
+ENGR 206 Circuits and Instrumentation Laboratory 1
+ENGR 212 Introduction to Unix and Linux for Engineers 2
+ENGR 213 Introduction to C Programming for Engineers 3
+ENGR 214 C Programming Laboratory 1
+ENGR 221 Data Structures and Algorithms in Python 4
+ENGR 282 Probability and Statistics for Engineers 3
+Upper-Division Computer Engineering Courses (42
+units)
+Code Title Units
+ENGR 305 Linear Systems Analysis 3
+ENGR 340 Programming Methodology for Engineers 4
+Select One: 4
+ENGR 353
+& ENGR 301
+Microelectronics
+and Microelectronics Laboratory
+ENGR 354 Electronics for Computer Engineers
+ENGR 356 Digital Design 3
+ENGR 357 Digital Design Laboratory 1
+ENGR 378 Digital Systems Design 3
+ENGR 413 Artificial Intelligence (AI) in Engineering 3
+ENGR 451 Digital Signal Processing 4
+ENGR 456 Computer Systems 3
+ENGR 476 Computer Communications Networks 3
+ENGR 478 Design with Microprocessors 4
+ENGR 498 Advanced Design with Microcontrollers 4
+ENGR 696 Engineering Design Project I 1
+ENGR 697GW Engineering Design Project II - GWAR 2
+Upper-Division Electives (6 units minimum)
+Choice of upper-division electives must demonstrate a clearly identifiable
+educational objective and have an advisor’s approval. A study plan of
+intended upper-division electives must be approved by the student’s
+advisor and the program coordinator prior to registering for ENGR 696.
+A minimum of 6 units from the following list of courses is required.
+Students with a GPA of 3.0 or better and the required prerequisites may
+take graduate courses (numbered 800 and above) with the approval of
+their advisor or the program coordinator.
+Code Title Units
+CSC 415 Operating System Principles 3
+CSC 510 Analysis of Algorithms I 3
+CSC 645 Computer Networks 3
+CSC 648 Software Engineering 3
+CSC 652 Introduction to Security and Data Privacy 3
+CSC 667 Internet Application Design and Development 3
+CSC 668 Advanced Object Oriented Software Design and
+Development
+3
+ENGR 415 Mechatronics 4
+ENGR 442 Operational Amplifier Systems Design 3
+ENGR 446 Control Systems Laboratory 1
+ENGR 447 Control Systems 3
+ENGR 449 Communication Systems 3
+ENGR 453 Digital Integrated Circuit Design 4
+ENGR 492 Hardware for Machine Learning 3
+ENGR 844 Embedded Systems 3
+ENGR 845 Neural-Machine Interfaces: Design and
+Applications
+3
+ENGR 848 Digital VLSI Design 3
+ENGR 849 Advanced Analog IC Design 3
+ENGR 850 Digital Design Verification 3
+ENGR 851 Advanced Microprocessor Architectures 3
+ENGR 852 Advanced Digital Design 3
+ENGR 853 Advanced Topics in Computer Communication and
+Networks
+3
+ENGR 856 Nanoscale Circuits and Systems 3
+ENGR 857 Advanced Topics in Electrical and Computer
+Engineering
+3
+ENGR 858 Hardware Security and Trust 3
+ENGR 859 On-Device Machine Learning 3
+ENGR 868 Advanced Control Systems 3
+ENGR 869 Robotics 3
+ENGR 870 Robot Control 3
+ENGR 890 Static Timing Analysis for Nanometer Designs 3
+General Education Requirements
+Requirement Course Level Units Area Designation
+English
+Composition
+LD 3 1A
+Critical Thinking LD 3 1B
+Oral
+Communication
+LD 3 1C
+Mathematical
+Concepts and
+Quantitative
+Reasoning
+LD 3 2
+Arts LD 3 3A
+Humanities LD 3 3B
+Social and
+Behavioral
+Sciences*
+LD 6 4
+Physical Science LD 3 5A
+=== p.1953 ===
+Biological
+Science
+LD 3 5B
+Laboratory LD 1 5C
+Ethnic Studies LD or UD 3 6
+Science or Math/
+Quantitative
+Reasoning
+UD 3 5UD or 2UD
+Arts or
+Humanities
+UD 3 3UD
+Social and
+Behavioral
+Sciences
+UD 3 4UD
+*Students will fulfill USH through their Area 4 courses
+SF State Studies
+Courses certified as meeting the SF State Studies
+requirements may be upper or lower division in General
+Education (GE), a major or minor, or an elective.
+American Ethnic
+and Racial
+Minorities
+LD or UD 3 AERM
+Environmental
+Sustainability
+and Climate
+Action
+LD or UD 3 ESCA
+Global
+Perspectives
+LD or UD 3 GP
+Social Justice LD or UD 3 SJ
+American Institutions
+US and California
+Government
+(p. 2350)
+LD or UD 3 USG/CSLG
+Note: LD = Lower-Division; UD = Upper-Division.
+First-Time Student Roadmap (4 Year)
+The roadmaps presented in this Bulletin are intended as suggested
+plans of study and do not replace meeting with an advisor. For a
+more personalized roadmap, please use the Degree Planner (https://
+registrar.sfsu.edu/degreeplanner) tool found in your Student Center.
+Students should use their Pathway/Category (https://
+gatorsmartstart.sfsu.edu/pathways) to determine which roadmap
+to follow. For directions on how to view your Pathway/Category,
+visit how to find your pathway (https://gatorsmartstart.sfsu.edu/
+howtofindyourpathways). Questions? Contact Gator Smart Start. (https://
+gatorsmartstart.sfsu.edu/)
+First-Time Student Roadmap – QR Pathway 1/2 (p. 1955)
+5 Year First-Time Student Roadmap – QR Pathway 1/2 (p. 1957)
+First-Time Student Roadmap – QR Pathway 3/4 (p. 1959)
+SF State Scholars Roadmap
+The San Francisco State Scholars program provides undergraduate
+students with an accelerated pathway to a graduate degree. Students in
+this program pursue a bachelor’s and master’s degree simultaneously.
+This program allows students to earn graduate credit while in their
+junior and/or senior year, reducing the number of semesters required for
+completion of a master’s degree.
+Computer Engineering BS + Electrical and Computer Engineering MS SF
+State Scholars Roadmap (p. 1962)
+General Advising Information for Transfer
+Students
+1. Before transfer, complete as many lower-division requirements or
+electives for this major as possible.
+2. The following courses are not required for admission but are required
+for graduation. Students are strongly encouraged to complete these
+units before transfer; doing so will provide more flexibility in course
+selection after transfer.
+• a course in U.S. History
+• a course in U.S. & California Government
+For information about satisfying the requirements described in (1) and
+(2) above at a California Community College (CCC), please visit http://
+www.assist.org (http://assist.org). Check any geographically accessible
+CCCs; sometimes, options include more than one college. Use ASSIST to
+determine:
+• Which courses at a CCC satisfy any lower-division major
+requirements for this major;
+• Which courses at a CCC satisfy CSU GE, US History, and US & CA
+Government requirements.
+Remedial courses are not transferable and do not apply to the minimum
+60 semester units/90 quarter units required for admission.
+Additional units for courses that are repeated do not apply to the
+minimum 60 units required for upper-division transfer (for example, if
+a course was not passed on the first attempt or was taken to earn a
+better grade).
+Before leaving the last California Community College of attendance,
+obtain a summary of completion of lower-division General Education
+units (IGETC or CSU GE Breadth). This is often referred to as a GE
+certification worksheet. SF State does not require delivery of this
+certification to Admissions, but students should retain this document for
+verifying degree progress after transfer.
+Credit for Advanced Placement, International Baccalaureate, or
+College-Level Examination Program courses: AP/IB/CLEP credit is
+not automatically transferred from the previous institution. Units are
+transferred only when an official score report is delivered to SF State.
+Credit is based on the academic year during which exams were taken.
+Refer to the University Bulletin in effect during the year of AP/IB/CLEP
+examination(s) for details regarding the award of credit for AP/IB/CLEP.
+Students pursuing majors in science, technology, engineering, and
+mathematics (STEM) disciplines often defer 6-9 units of lower-division
+General Education in Areas C and D until after transfer to focus on
+preparation courses for the major. This advice does not apply to students
+pursuing associate degree completion before transfer.
+Transferring From Institutions Other Than CCCs
+or CSUs
+Review SF State's lower-division General Education requirements.
+Note that, as described below, the four basic skills courses required for
+=== p.1954 ===
+admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State
+GE pattern. Courses that fulfill the remaining areas of SF State’s lower-
+division GE pattern are available at most two-year and four-year colleges
+and universities.
+Of the four required basic skills courses, a course in critical thinking
+(1B/A3) may not be widely offered outside the CCC and CSU systems.
+Students should attempt to identify and take an appropriate course
+no later than the term of application to the CSU. To review more
+information about the 1B/A3 requirement, please visit bulletin.sfsu.edu/
+undergraduate-education/general-education/lower-division/#AAEL.
+Waiting until after transfer to take a single course at SF State that meets
+both US and CA/local government requirements may be an appropriate
+option, particularly if transferring from outside of California.

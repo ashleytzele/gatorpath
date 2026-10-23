@@ -1,0 +1,171 @@
+program: ba-urban-studies-and-planning
+title: Bachelor of Arts in Urban Studies and Planning
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.867
+global:
+  no_cr_nc: true
+  source: p.867
+groups:
+- id: core_city
+  title: 'Core: Select One (USP 370 / SOC 380, or USP 400 / HIST 489)'
+  one_of:
+  - - USP 370
+  - - SOC 380
+  - - USP 400
+  - - HIST 489
+  min_grade: C
+  quote: Cities in a Global Society
+  source: p.867
+- id: core_seminar
+  title: 'Core: Seminar in Urban Studies and Planning (GWAR)'
+  all_of:
+  - USP 401GW
+  min_grade: C
+  quote: USP 401GW Seminar in Urban Studies and Planning - GWAR 3
+  source: p.867
+- id: core_policy_planning
+  title: 'Core: Select One (USP/PLSI 480 or USP/GEOG 658)'
+  one_of:
+  - - USP 480
+  - - PLSI 480
+  - - USP 658
+  - - GEOG 658
+  min_grade: C
+  quote: 'Select One: 3-4'
+  source: p.867
+- id: core_research_methods
+  title: 'Core: Research Methods (USP 492 / PLSI 492)'
+  one_of:
+  - - USP 492
+  - - PLSI 492
+  min_grade: C
+  quote: USP/PLSI 492 Research Methods 3
+  source: p.867
+- id: core_data_analysis
+  title: 'Core: Data Analysis (USP 493 / PLSI 493)'
+  one_of:
+  - - USP 493
+  - - PLSI 493
+  min_grade: C
+  quote: USP/PLSI 493 Data Analysis 3
+  source: p.867
+- id: core_internship
+  title: 'Core: Public Service Internship'
+  all_of:
+  - USP 603
+  min_grade: C
+  quote: USP 603 Public Service Internship 3
+  source: p.867
+- id: core_senior
+  title: 'Core: Select One (USP 680 or USP 681)'
+  one_of:
+  - - USP 680
+  - - USP 681
+  min_grade: C
+  quote: USP 680 Senior Seminar
+  source: p.867
+- id: electives
+  title: Electives (18 units minimum)
+  choose_units: 18
+  from:
+  - list:
+    - AFRS 345
+    - AFRS 678
+    - C J 530
+    - GEOG 301
+    - GEOG 435
+    - GEOG 666
+    - GRN 500
+    - HUM 340
+    - HUM 370
+    - HUM 371
+    - HUM 373
+    - HUM 374
+    - HUM 375
+    - HUM 376
+    - USP 200
+    - SOC 200
+    - USP 370
+    - SOC 380
+    - USP 400
+    - HIST 489
+    - USP 402
+    - USP 432
+    - GEOG 432
+    - USP 433
+    - GEOG 433
+    - USP 456
+    - S W 456
+    - USP 475
+    - USP 480
+    - PLSI 480
+    - USP 485
+    - PLSI 475
+    - USP 511
+    - C J 511
+    - SOC 511
+    - USP 512
+    - PLSI 512
+    - USP 513
+    - PLSI 513
+    - GEOG 668
+    - USP 514
+    - USP 515
+    - GEOG 667
+    - USP 530
+    - USP 555
+    - ANTH 555
+    - USP 557
+    - ANTH 557
+    - USP 560
+    - PLSI 560
+    - USP 570
+    - LABR 570
+    - PLSI 570
+    - USP 580
+    - PLSI 580
+    - USP 651
+    - GEOG 651
+    - USP 652
+    - GEOG 652
+    - USP 658
+    - GEOG 658
+    - USP 685
+    - USP 686
+    - USP 699
+    - USP 680
+    - USP 681
+  min_grade: C
+  quote: Electives (18 units minimum)
+  source: p.867
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.869
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.869
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.869
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.869
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.869
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.869
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.869
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.869
+drafted_by: claude, 2026-10-23

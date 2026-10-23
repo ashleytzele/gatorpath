@@ -1,0 +1,454 @@
+program: bs-earth-sciences
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: Bachelor of Science in Earth Sciences Roadmap – Quantitative Reasoning Category 1/2
+    qr_pathway: 1/2
+    total_units: 120
+    source: p.2038-2039
+    notes:
+    - '120 Total Units Required. Minimum Number of Units in the Major: 63.'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - Introduction to Earth Sciences (12 units). A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 2034). (footnote 2)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 3)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 4)
+    - Earth Science Electives (15 units minimum). A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 2034). (footnote 5)
+    - Techniques in Earth Science (6-8 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 2034). (footnote 6)
+    semesters:
+    - units: 14
+      source: p.2038
+      items:
+      - slot: major
+        group: foundation_chemistry
+        units: 3
+        note: 'Select One (Major Science and Math Foundation): CHEM 115 or CHEM 180; 3-4 units'
+      - MATH 226
+      - slot: major
+        group: intro_earth_sciences
+        units: 4
+        note: footnote 2
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 3
+    - units: 17
+      source: p.2038
+      items:
+      - slot: major
+        group: foundation_physics
+        units: 4
+        note: Select One Set of Courses (Major Science and Math Foundation, GE 5A, GE 5C)
+      - slot: major
+        group: intro_earth_sciences
+        units: 4
+        note: footnote 2
+      - slot: GE
+        area: '1'
+        units: 6
+        note: Take Two
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.2038
+      items:
+      - slot: major
+        group: methods_select_one
+        units: 3
+        note: Select One (Introductory Methods)
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: 5B
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 16
+      source: p.2038
+      items:
+      - slot: major
+        group: intro_earth_sciences
+        units: 4
+        note: footnote 2
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.2038-2039
+      items:
+      - slot: major
+        group: systems_select_one
+        units: 3
+        note: Select One (Earth Systems); 3-4 units
+      - ENV 500GW
+      - slot: major
+        group: focus_electives
+        units: 3
+        note: Earth Science Elective, 3-4 units; footnote 5
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+    - units: 15
+      source: p.2039
+      items:
+      - ERTH 500
+      - slot: major
+        group: focus_electives
+        units: 3
+        note: Earth Science Elective, 3-4 units; footnote 5
+      - slot: major
+        group: techniques_electives
+        units: 3
+        note: Techniques in Earth Science, 3-4 units; footnote 6
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 16
+      source: p.2039
+      items:
+      - ERTH 442
+      - slot: major
+        group: focus_electives
+        units: 3
+        note: Earth Science Elective, 3-4 units; footnote 5
+      - slot: major
+        group: techniques_electives
+        units: 3
+        note: Techniques in Earth Science, 3-4 units; footnote 6
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 12
+      source: p.2039
+      items:
+      - slot: major
+        group: capstone_presentation
+        units: 1
+        note: 'Select One (Capstone): ERTH 690 or ENV 690; 1-3 units'
+      - slot: major
+        group: capstone_project
+        units: 2
+        note: 'Select One (Capstone): ERTH 695, ERTH 697 & ERTH 698, or GEOG 688; 2-4 units'
+      - slot: major
+        group: focus_electives
+        count: 2
+        units: 6
+        note: Earth Science Elective - Take Two, 6-8 units; footnote 5
+      - slot: sfss_or_elective
+        units: 3
+  qr-3-4:
+    title: Bachelor of Science in Earth Sciences Roadmap – Quantitative Reasoning Category 3/4
+    qr_pathway: 3/4
+    total_units: 120
+    source: p.2040-2041
+    notes:
+    - '120 Total Units Required. Minimum Number of Units in the Major: 63.'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - MATH 197 Prelude to Calculus I (Prerequisite for MATH 226); MATH 198 Prelude to Calculus II (Prerequisite for MATH 226,
+      GE 2). Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - Introduction to Earth Sciences (12 units). A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 2034). (footnote 2)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 3)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 4)
+    - Earth Science Electives (15 units minimum). A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 2034). (footnote 5)
+    - Techniques in Earth Science (6-8 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 2034). (footnote 6)
+    semesters:
+    - units: 16
+      source: p.2040
+      items:
+      - MATH 197
+      - slot: major
+        group: intro_earth_sciences
+        units: 4
+        note: footnote 2
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 3
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 16
+      source: p.2040
+      items:
+      - slot: major
+        group: foundation_chemistry
+        units: 3
+        note: 'Select One (Major Science and Math Foundation): CHEM 115 or CHEM 180; 3-4 units'
+      - MATH 198
+      - slot: major
+        group: intro_earth_sciences
+        units: 4
+        note: footnote 2
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 16
+      source: p.2040
+      items:
+      - slot: major
+        group: methods_select_one
+        units: 3
+        note: Select One (Introductory Methods)
+      - MATH 226
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: 5B
+        units: 3
+    - units: 14
+      source: p.2040
+      items:
+      - slot: major
+        group: intro_earth_sciences
+        units: 4
+        note: footnote 2
+      - slot: major
+        group: foundation_physics
+        units: 4
+        note: Select One Set of Courses (Major Science and Math Foundation, GE 5A, GE 5C)
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 15
+      source: p.2040-2041
+      items:
+      - slot: major
+        group: systems_select_one
+        units: 3
+        note: Select One (Earth Systems); 3-4 units
+      - ENV 500GW
+      - slot: major
+        group: focus_electives
+        units: 3
+        note: Earth Science Elective, 3-4 units; footnote 5
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+    - units: 15
+      source: p.2041
+      items:
+      - ERTH 500
+      - slot: major
+        group: focus_electives
+        units: 3
+        note: Earth Science Elective, 3-4 units; footnote 5
+      - slot: major
+        group: techniques_electives
+        units: 3
+        note: Techniques in Earth Science, 3-4 units; footnote 6
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 16
+      source: p.2041
+      items:
+      - ERTH 442
+      - slot: major
+        group: focus_electives
+        units: 3
+        note: Earth Science Elective, 3-4 units; footnote 5
+      - slot: major
+        group: techniques_electives
+        units: 3
+        note: Techniques in Earth Science, 3-4 units; footnote 6
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 12
+      source: p.2041
+      items:
+      - slot: major
+        group: capstone_presentation
+        units: 1
+        note: 'Select One (Capstone): ERTH 690 or ENV 690; 1-3 units'
+      - slot: major
+        group: capstone_project
+        units: 2
+        note: 'Select One (Capstone): ERTH 695, ERTH 697 & ERTH 698, or GEOG 688; 2-4 units'
+      - slot: major
+        group: focus_electives
+        count: 2
+        units: 6
+        note: Earth Science Elective - Take Two, 6-8 units; footnote 5
+      - slot: sfss_or_elective
+        units: 3
+  adt:
+    title: 'Bachelor of Science in Earth Sciences: Geology Emphasis – GEOL Associate Degree for Transfer (ADT) Roadmap'
+    total_units: 60
+    source: p.2042-2043
+    met_in_transfer:
+    - CHEM 115
+    - MATH 226
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Geology. Twenty-three units in the major (CHEM 115, MATH 226, the Introduction to Earth Sciences requirement,
+      and 3 units of Focus Electives) and all lower-division GE requirements have been satisfied. Additional units in the
+      major may have been satisfied. Check with a major advisor about the most appropriate course sequence. Degree completion
+      guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 9-15 units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government requirements if not taken before transfer. Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD
+      (9 units): Courses required for the major may double-count if approved for UD GE. Students transferring with the AS-T
+      in Geology are not required to fulfill SF State Studies.'
+    - 'Earth Sciences Major: 41-47 units. CHEM 115, MATH 226, the Introduction to Earth Sciences requirement, and 3 units
+      of Focus Electives met in transfer. Basic Science & Math Foundation (4 units in PHYS): If some or all PHYS completed
+      before transfer, consult with a major advisor about appropriate course choices. Introductory Methods (5-6 units). Earth
+      Systems (10-11 units). Techniques in Earth Science Electives (6-8 units). Earth Science Focus Electives (12 units):
+      Three units met in transfer. Culminating Experience (4-6 units): Take ERTH 690 (1 unit) or ENV 690 (3 units) along with
+      one of the following three options: Senior Thesis (ERTH 697/ERTH 698 (2 units each); Senior Project (ERTH 695, 2 units
+      required); or Geographic Internship (GEOG 688, 2 units required)'
+    - 'University Electives: 0 or more units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, Culminating Experience option selected, and course choices at SF State - some
+      courses may meet more than one requirement, e.g., both in UD GE and in the major.'
+    - Earth Science Focus Electives (12 units minimum). A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 2034). (footnote 1)
+    - Techniques in Earth Science (6-8 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 2034). (footnote 2)
+    semesters:
+    - units: 14
+      source: p.2042
+      items:
+      - slot: major
+        group: systems_select_one
+        units: 3
+        note: Select One (Earth Systems); 3-4 units
+      - ERTH 442
+      - slot: major
+        group: foundation_physics
+        units: 4
+        note: Select One Set of Courses (Science and Math Foundation; GE 5A, GE 5C)
+      - slot: major
+        group: focus_electives
+        units: 3
+        note: Earth Science Focus Elective; footnote 1
+    - units: 14
+      source: p.2042-2043
+      items:
+      - slot: major
+        group: methods_select_one
+        units: 2
+        note: Select One (Introductory Methods); 2-3 units
+      - ERTH 500
+      - ENV 500GW
+      - slot: major
+        group: techniques_electives
+        units: 3
+        note: Techniques in Earth Science, 3-4 units; footnote 2
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 16
+      source: p.2043
+      items:
+      - slot: major
+        group: capstone_presentation
+        units: 1
+        note: 'Select One (Capstone): ERTH 690 or ENV 690; 1-3 units'
+      - slot: major
+        group: focus_electives
+        count: 2
+        units: 6
+        note: Earth Science Focus Elective - Take Two, 6-8 units; footnote 1
+      - slot: major
+        group: techniques_electives
+        units: 3
+        note: Techniques in Earth Science, 3-4 units; footnote 2
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: elective
+        units: 3
+        note: University Elective (if needed to reach 60 units), 0-3 units
+    - units: 16
+      source: p.2043
+      items:
+      - slot: major
+        group: capstone_project
+        units: 2
+        note: 'Select One (Capstone): ERTH 695, ERTH 697 & ERTH 698, or GEOG 688; 2-4 units'
+      - slot: major
+        group: focus_electives
+        units: 3
+        note: Earth Science Focus Elective, 3-4 units; footnote 1
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: ai
+        area: USH
+        units: 3
+        note: US History, or University Elective if US History met before transfer
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government, or University Elective if US/CA Government met before transfer
+      - slot: elective
+        units: 2
+        note: University Elective (if needed to reach 60 units), 0-2 units
+drafted_by: claude, 2026-10-23

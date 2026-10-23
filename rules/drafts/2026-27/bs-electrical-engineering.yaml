@@ -1,0 +1,159 @@
+program: bs-electrical-engineering
+title: Bachelor of Science in Electrical Engineering
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 93
+source: p.1965
+global:
+  no_cr_nc: true
+  source: p.1965
+groups:
+- id: math_science_chemistry
+  title: 'Lower-Division Math and Science: Select One (CHEM 115 or CHEM 180)'
+  one_of:
+  - - CHEM 115
+  - - CHEM 180
+  quote: 'Select One: 3-4'
+  source: p.1966
+- id: math_science
+  title: Lower-Division Math and Science Courses (fixed courses)
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 245
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  min_grade:
+    MATH 226: C
+    MATH 227: C
+    MATH 228: C-
+    MATH 245: C-
+    PHYS 220: C
+    PHYS 230: C-
+  quote: Lower-Division Math and Science Courses (26-27 units)
+  source: p.1966
+- id: lower_ee
+  title: Lower-Division Electrical Engineering Courses (20 units)
+  all_of:
+  - ENGR 100
+  - ENGR 205
+  - ENGR 206
+  - ENGR 212
+  - ENGR 213
+  - ENGR 214
+  - ENGR 221
+  - ENGR 282
+  min_grade:
+    ENGR 205: C-
+    ENGR 206: C-
+    ENGR 212: C-
+    ENGR 213: C-
+    ENGR 221: C-
+  quote: Lower-Division Electrical Engineering Courses (20 units)
+  source: p.1966
+- id: upper_ee
+  title: Upper-Division Electrical Engineering Courses (38 units)
+  all_of:
+  - ENGR 301
+  - ENGR 305
+  - ENGR 306
+  - ENGR 350
+  - ENGR 353
+  - ENGR 356
+  - ENGR 357
+  - ENGR 442
+  - ENGR 446
+  - ENGR 447
+  - ENGR 449
+  - ENGR 451
+  - ENGR 478
+  - ENGR 696
+  - ENGR 697GW
+  min_grade:
+    ENGR 301: C-
+    ENGR 305: C-
+    ENGR 356: C-
+  quote: Upper-Division Electrical Engineering Courses (38 units)
+  source: p.1966
+- id: upper_division_electives
+  title: Upper-Division Engineering Electives (9 units)
+  choose_units: 9
+  from:
+  - list:
+    - ENGR 378
+    - ENGR 410
+    - ENGR 411
+    - ENGR 413
+    - ENGR 415
+    - ENGR 445
+    - ENGR 448
+    - ENGR 453
+    - ENGR 454
+    - ENGR 455
+    - ENGR 456
+    - ENGR 458
+    - ENGR 476
+    - ENGR 492
+    - ENGR 498
+    - ENGR 610
+    - ENGR 844
+    - ENGR 845
+    - ENGR 848
+    - ENGR 849
+    - ENGR 850
+    - ENGR 851
+    - ENGR 852
+    - ENGR 853
+    - ENGR 856
+    - ENGR 857
+    - ENGR 858
+    - ENGR 859
+    - ENGR 868
+    - ENGR 869
+    - ENGR 870
+    - ENGR 890
+  quote: Upper-Division Engineering Electives (9 units)
+  source: p.1966
+- id: electives_study_plan
+  title: 'Upper-Division Engineering Electives: approved study plan'
+  unparsed: true
+  quote: A study plan of intended upper-division electives must be approved by the student’s advisor and the program coordinator
+    prior to the seventh semester of the engineering program.
+  source: p.1966
+transfer_notes:
+- text: 'Transfers: Complete the mathematics, chemistry, physics, and engineering sequence in SF State BSEE''s First-Time
+    Student Roadmap for freshman and sophomore years at a community college for a seamless transition.'
+  source: p.1965
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1967
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1967
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1967
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1967
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.1967
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.1967
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.1968
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1968
+drafted_by: claude, 2026-10-23

@@ -1,0 +1,145 @@
+program: bs-visual-communication-design
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: Bachelor of Science in Visual Communication Design Roadmap
+    total_units: 120
+    source: p.1094-1095
+    notes:
+    - 120 Total Units Required
+    - 'Minimum Number of Units in the Major: 58'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - '1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '3: Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.'
+    - '4: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - '5: Upper-Division General Education, Arts and/or Humanities (UD-C) is satisfied upon completion of DES 356.'
+    - '6: Major Electives (15 units). A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements (p. 1091).'
+    semesters:
+    - units: 15
+      source: p.1094
+      items:
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+        note: footnote 2
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1094
+      items:
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1094
+      items:
+      - DES 200
+      - slot: GE
+        area: '4'
+        units: 6
+        note: 'Take Two; footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1094
+      items:
+      - DES 222
+      - DES 228
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: GE
+        area: '6'
+        units: 3
+        note: Ethnic Studies (p. 2328)
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government (p. 2351)
+    - units: 16
+      source: p.1094
+      items:
+      - DES 322
+      - DES 356
+      - DES 370
+      - slot: major
+        group: major_electives
+        units: 3
+        note: Major Electives (15 units total); footnote 6
+      - slot: GE
+        area: 4UD
+        units: 3
+        note: Upper-Division Social and Behavioral Sciences
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+        note: Upper-Division Sciences or Upper-Division Mathematical Concepts
+    - units: 15
+      source: p.1094-1095
+      items:
+      - DES 300
+      - DES 324GW
+      - DES 325
+      - DES 327
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1095
+      items:
+      - DES 425
+      - DES 427
+      - slot: major
+        group: major_electives
+        count: 3
+        units: 9
+        note: Major Electives (15 units total) - Take Three; footnote 6
+    - units: 14
+      source: p.1095
+      items:
+      - DES 505
+      - DES 570
+      - slot: major
+        group: major_advanced
+        units: 3
+        note: 'Select One (Major Requirement): DES 525 or DES 527'
+      - slot: major
+        group: major_electives
+        units: 3
+        note: Major Electives (15 units total); footnote 6
+      - slot: sfss_or_elective
+        units: 2
+drafted_by: claude, 2026-10-23

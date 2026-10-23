@@ -1,0 +1,556 @@
+=== p.1784 ===
+Bachelor of Arts in General Biology
+The curriculum in general biology provides students with exposure to a
+broad spectrum of biological sciences including genetics, cell biology,
+physiology, ecology, and organismal and evolutionary biology. Since basic
+principles of physical science are central to many biological concepts,
+coursework in physics and chemistry is included in the lower-division
+requirements. The B.A. program is suited for students preparing for
+professional schools, including teacher credentialing programs, or
+careers that require students to be versed in diverse areas of biology.
+Students preparing to become teachers should note that additional
+science preparation beyond the major is required (geosciences breadth:
+meteorology, astronomy, geology, and oceanography). It is important
+to consult early and often with a credential advisor in the Biology
+department to plan the major and keep abreast of any state-mandated
+changes in requirements.
+The department does not permit multiple concentrations within the
+Biology degree program. All of the curricula require preliminary work in
+physics and chemistry because many important biological concepts
+are based squarely upon principles in the physical sciences. Also, each
+curriculum includes upper-division coursework in the biological sciences
+so that students will receive reasonable breadth and depth in their degree
+program. Because of the sequential arrangement of courses, students are
+urged to consult the descriptions for the prerequisites of all their courses.
+Although course electives are listed for most of the majors, new electives
+are always being added to various programs. Therefore, we highly
+recommend that students seek advisement prior to enrolling in elective
+courses in their major.
+General Information and Requirements
+• Candidates entering the bachelor’s programs in Biology should
+have completed three years of high school mathematics and one
+year of high school chemistry to allow completion of the curriculum
+in a timely fashion (see Undergraduate Admission Requirements
+(p. 2302)).
+• To remain enrolled in a biology course, students must be prepared
+to provide copies of transcripts demonstrating completion of
+prerequisite courses with a grade of C- or better.
+• Early in the first semester, and at regular intervals thereafter, students
+must consult with a biology advisor to plan a program of study. For
+the most current advising information, go to biology.sfsu.edu (http://
+biology.sfsu.edu).
+Program Learning Outcomes
+Core Competencies
+1. Understanding the Process of Science: Students will demonstrate
+how a theory is supported or can be rejected based on data from
+experiments.
+2. Quantitative Reasoning: Students will be able to create graphs
+and perform simple statistical tests to determine whether or not
+differences between groups are significant.
+3. Relationship Between Science and Society: Students will be able to
+explain a biological process or phenomenon as it relates to a societal
+issue.
+Core Concepts
+1. Evolution: Students will be able to understand the fundamental
+concepts of evolution, role of selective pressures, and how genes
+change.
+2. Relationship Between Structures and Function: Students will be able
+to describe how variation in the structure of an organ in a plant or
+animal contributes to variation in its function.
+3. Information Flow and Storage: Students will be able to explain the
+transmission of heritable traits.
+4. Core Concept - Pathways and transformation of matter and energy:
+Students can explain how a carbon molecule flows through a
+biological process or system.
+5. Core Concept - Systems (i.e. living systems are interconnected and
+interacting): Students can predict the consequences of how a change
+in one aspect of a biological or complex system will affect other.
+General Biology (B.A.) — 58 units
+• Students must take at least one GWAR course and earn a C- or better
+in a GWAR course to satisfy the GWAR requirement. GWAR courses
+are listed in upper-division categories and electives in the program.
+Contact a departmental advisor for further information.
+• All major coursework must be completed with letter grades (CR/NC is
+not acceptable).
+• A minimum grade point average of 2.0 in all coursework is required.
+• At least 12 units in biology must be completed at SF State.
+General Education Requirements Met in the Major
+The requirements below are deemed “met in the major” upon completion
+of the courses listed (even though the courses and their prerequisites are
+not approved for GE). This is true whether or not the student completes
+the major.
+• Area 5B (Biological Science) is satisfied upon completion
+of BIOL 240.
+• Area 5UD (Upper-Division Science) is satisfied upon completion
+of BIOL 355.
+Lower-Division Requirements (22 units)
+Code Title Units
+BIOL 230 Introductory Biology I 5
+BIOL 231 Advising for Success as a Biology Major 1
+BIOL 240 Introductory Biology II 5
+CHEM 115 General Chemistry I 4
+Select One: 3
+CHEM 130 General Organic Chemistry
+CHEM 233 Organic Chemistry I
+PHYS 111 General Physics I 3
+PHYS 112 General Physics I Laboratory 1
+Quantitative Reasoning (4-6 units)
+Select One:
+Code Title Units
+MATH 197
+& MATH 198
+Prelude to Calculus I
+and Prelude to Calculus II
+6
+=== p.1785 ===
+MATH 199 Pre-Calculus 4
+MATH 226 Calculus I 4
+Upper-Division Requirements (16-23 units)
+Upper-Division Core (6 units):
+Code Title Units
+BIOL 337 Evolution 3
+BIOL 355 Genetics 3
+One Physiology or Cell Biology Course (3-4 units):
+Code Title Units
+BIOL 328 Human Anatomy 4
+BIOL 350 Cell Biology 3
+BIOL 357 Molecular Genetics 3
+BIOL 382 Developmental Biology 3
+BIOL 401 General Microbiology 3
+BIOL 435 Immunology 3
+BIOL 442 Microbial Physiology 3
+BIOL 446 Microbial Genomics 4
+BIOL 453 General Parasitology 3
+BIOL 525 Plant Physiology 3
+BIOL 612 Systems Physiology 3
+BIOL 630 Animal Physiology 3
+CHEM 349 General Biochemistry 3
+One Physiology or Cell Biology Laboratory Course (1-4 units):
+Take a GWAR course if not already taken to meet requirements in another
+area.
+Code Title Units
+BIOL 351GW
+& BIOL 351
+Experiments in Cell and Molecular Biology - GWAR
+and Experiments in Cell and Molecular Biology
+Discussion
+4
+BIOL 402GW General Microbiology Laboratory - GWAR 3
+BIOL 436 Immunology Laboratory 2
+BIOL 443 Microbial Physiology Laboratory 2
+BIOL 454 Parasitology Laboratory 1
+BIOL 526 Plant Molecular Physiology Laboratory 2
+BIOL 613GW Human Physiology Laboratory - GWAR 3
+BIOL 631GW
+& BIOL 631
+Animal Physiology Laboratory - GWAR
+and Animal Physiology Laboratory Discussion
+4
+BIOL 638 Bioinformatics and Sequence Analysis 4
+Two Ecology, Evolution, or Organismal Biology Courses (6-9 units)
+Take a GWAR course if not already taken to meet requirements in another
+area.
+Code Title Units
+BIOL 380 Evolutionary Developmental Biology 3
+BIOL 425 Emerging Diseases 3
+BIOL 460 General Entomology 4
+BIOL 470 Natural History of Vertebrates 4
+BIOL 475GW Herpetology - GWAR 3
+BIOL 478GW
+& BIOL 478
+Ornithology - GWAR
+and Ornithology Discussion
+4
+BIOL 482 Ecology 3
+BIOL 490 Ecology of Infectious Diseases 4
+BIOL 500 Evolution and Diversity of Plants 4
+BIOL 502 Biology of the Algae 3
+BIOL 505 Plant Structure and Function 3
+BIOL 514 Plant Biodiversity and California Field Botany 5
+BIOL 529 Plants, People, and the Planet 4
+BIOL 532 Restoration Ecology 3
+BIOL 534 Wetland Ecology 4
+BIOL 555 Marine Invertebrate Zoology 4
+BIOL 570GW
+& BIOL 570
+Biology of Fishes - GWAR
+and Biology of Fishes Discussion
+4
+BIOL 580 Limnology 3
+BIOL 582 Biological Oceanography & Limnology 4
+BIOL 585 Marine Ecology 3
+BIOL 586GW
+& BIOL 586
+Marine Ecology Laboratory - GWAR
+and Marine Ecology Laboratory Discussion
+4
+BIOL 600 Animal Behavior 3
+Upper-Division Electives (7-16 units)
+Students should take as many units as needed to reach a total of 58
+units in the program. Elective courses can be additional courses listed
+above not used to satisfy requirements in those categories. Take a GWAR
+course if not already taken. Only one of the following courses can be
+used as an elective: BIOL 317, BIOL 327, BIOL 330, or BIOL 349. Up to 3
+units of BIOL 699 can also be used towards the total units. Other biology
+courses that have BIOL 230 and/or BIOL 240 as prerequisites can also
+be used as electives. Advisor approval is needed IN ADVANCE for any
+substitutions to elective courses.
+Code Title Units
+AA S 587 Asian Americans and Environmental Justice
+1
+3
+AA S 591 Asian American Community Health Issues
+1
+3
+AFRS 370 Health, Medicine, and Nutrition in the Black
+Community
+1
+3
+AIS 450 American Indian Science
+1
+3
+AIS 520 Before the Wilderness: American Indian Ecology
+1
+3
+ANTH 630 Medical Anthropology
+1
+3
+BIOL 315 Field Methods in Ecology and Evolution 1
+Select a Maximum of One: 3
+BIOL 317 Ecology of California
+BIOL 327 HIV, AIDS, and the Science to End the Epidemic
+BIOL 330 Human Sexuality
+BIOL 349 Bioethics
+BIOL 318 Our Endangered Planet 3
+BIOL 328 Human Anatomy 4
+BIOL/RRS 331 Research with Communities 3
+BIOL 332 Health Disparities in Cancer 3
+BIOL 350 Cell Biology 3
+BIOL 351GW
+& BIOL 351
+Experiments in Cell and Molecular Biology - GWAR
+and Experiments in Cell and Molecular Biology
+Discussion
+4
+BIOL 357 Molecular Genetics 3
+BIOL 358 Forensic Genetics: Math Matters 4
+BIOL 360 Cancer Biology 3
+BIOL 380 Evolutionary Developmental Biology 3
+=== p.1786 ===
+BIOL 382 Developmental Biology 3
+BIOL 401 General Microbiology 3
+BIOL 402GW General Microbiology Laboratory - GWAR 3
+BIOL 425 Emerging Diseases 3
+BIOL 435 Immunology 3
+BIOL 436 Immunology Laboratory 2
+BIOL 442 Microbial Physiology 3
+BIOL 443 Microbial Physiology Laboratory 2
+BIOL 453 General Parasitology 3
+BIOL 454 Parasitology Laboratory 1
+BIOL 458 Biostatistics 4
+BIOL 460 General Entomology 4
+BIOL 470 Natural History of Vertebrates 4
+BIOL 475GW Herpetology - GWAR 3
+BIOL 478GW
+& BIOL 478
+Ornithology - GWAR
+and Ornithology Discussion
+4
+BIOL 482 Ecology 3
+BIOL 490 Ecology of Infectious Diseases 4
+BIOL 500 Evolution and Diversity of Plants 4
+BIOL 502 Biology of the Algae 3
+BIOL 505 Plant Structure and Function 3
+BIOL 514 Plant Biodiversity and California Field Botany 5
+BIOL 525 Plant Physiology 3
+BIOL 526 Plant Molecular Physiology Laboratory 2
+BIOL 529 Plants, People, and the Planet 4
+BIOL 530 Conservation Biology 3
+BIOL 532 Restoration Ecology 3
+BIOL 534 Wetland Ecology 4
+BIOL 555 Marine Invertebrate Zoology 4
+BIOL 570GW
+& BIOL 570
+Biology of Fishes - GWAR
+and Biology of Fishes Discussion
+4
+BIOL/ERTH 577 Climate and Ecological Interactions 4
+BIOL 580 Limnology 3
+BIOL 582 Biological Oceanography & Limnology 4
+BIOL 585 Marine Ecology 3
+BIOL 586GW
+& BIOL 586
+Marine Ecology Laboratory - GWAR
+and Marine Ecology Laboratory Discussion
+4
+BIOL 600 Animal Behavior 3
+BIOL 612 Systems Physiology 3
+BIOL 613GW Human Physiology Laboratory - GWAR 3
+BIOL 617 Environmental Physiology 3
+BIOL 630 Animal Physiology 3
+BIOL 631GW
+& BIOL 631
+Animal Physiology Laboratory - GWAR
+and Animal Physiology Laboratory Discussion
+4
+BIOL 638 Bioinformatics and Sequence Analysis 4
+BIOL 644 LEADerS Service Learning Course: Learners
+Engaged in Advocating for Diversity in Science
+4
+BIOL/CHEM 667 Optical Engineering for the Biological Sciences 3
+BIOL 670 Ecology and Evolution of Marine Systems I 6
+BIOL 671 Ecology and Evolution of Marine Systems II 6
+BIOL 694 Cooperative Internship in Biology 2-4
+BIOL 699 Independent Study in Biology 1-3
+CHEM 343 Biochemistry I Laboratory 3
+CHEM 349 General Biochemistry 3
+CSC 306 An Interdisciplinary Approach to Computer
+Programming
+3
+CSC 408 Machine Learning and Data Science for
+Personalized Medicine
+3
+CSC 411 Intermediate Machine Learning for
+Interdisciplinary Data Scientists
+1
+3
+CSC 509 Data Science and Machine Learning for Medical
+Image Analysis
+1
+3
+I R/ENVS 331 Global Environmental Crisis
+1
+4
+LTNS 500 Latina/o Community Mental Health
+1
+3
+RRS 303 Health and Wellness among Pacific Islanders
+1
+3
+RRS 304 Decolonize Your Diet: Food Justice and Gendered
+Labor in Communities of Color
+1
+3
+ENVS 460 Energy, Justice, and Sustainability
+1
+3
+ENVS 480 Climate Change Adaptation and Justice
+1
+3
+ERTH 330 California Water
+1
+3
+ERTH 335 Global Warming
+1
+3
+FIN/ECON/ENVS
+651
+Student Managed Fund in Environmental, Social
+and Governance (ESG) Investments
+1
+3
+GEOG/USP 433 Urban Transportation
+1
+4
+GEOG 435 Geography of Global Transportation
+1
+4
+PH 414 Women's Health
+1
+3
+PHIL 383 Ethics in Medicine
+1
+3
+USP 514 Sustainable Development in Cities
+1
+4
+WGS 593 Gender, Health, and the Environment
+1
+3
+1
+Classes can only account for 6 units of upper-division elective courses.
+Note: A minimum of 30 upper-division units must be completed for the
+degree (including upper-division units required for the major, General
+Education, electives, etc.). A student can complete this major yet
+not attain the necessary number of upper-division units required for
+graduation. In this case, additional upper-division courses will be needed
+to reach the required total.
+Complementary Studies
+Students in the B.A. Biology program will satisfy the Complementary
+Studies requirement with the completion of courses in chemistry, physics,
+mathematics or computer science that are required for the major.
+General Education Requirements
+Requirement Course Level Units Area Designation
+English
+Composition
+LD 3 1A
+Critical Thinking LD 3 1B
+Oral
+Communication
+LD 3 1C
+Mathematical
+Concepts and
+Quantitative
+Reasoning
+LD 3 2
+Arts LD 3 3A
+Humanities LD 3 3B
+=== p.1787 ===
+Social and
+Behavioral
+Sciences*
+LD 6 4
+Physical Science LD 3 5A
+Biological
+Science
+LD 3 5B
+Laboratory LD 1 5C
+Ethnic Studies LD or UD 3 6
+Science or Math/
+Quantitative
+Reasoning
+UD 3 5UD or 2UD
+Arts or
+Humanities
+UD 3 3UD
+Social and
+Behavioral
+Sciences
+UD 3 4UD
+*Students will fulfill USH through their Area 4 courses
+SF State Studies
+Courses certified as meeting the SF State Studies
+requirements may be upper or lower division in General
+Education (GE), a major or minor, or an elective.
+American Ethnic
+and Racial
+Minorities
+LD or UD 3 AERM
+Environmental
+Sustainability
+and Climate
+Action
+LD or UD 3 ESCA
+Global
+Perspectives
+LD or UD 3 GP
+Social Justice LD or UD 3 SJ
+American Institutions
+US and California
+Government
+(p. 2350)
+LD or UD 3 USG/CSLG
+Note: LD = Lower-Division; UD = Upper-Division.
+First-Time Student Roadmap (4 Year)
+The roadmaps presented in this Bulletin are intended as suggested
+plans of study and do not replace meeting with an advisor. For a
+more personalized roadmap, please use the Degree Planner (https://
+registrar.sfsu.edu/degreeplanner) tool found in your Student Center.
+Students should use their Pathway/Category (https://
+gatorsmartstart.sfsu.edu/pathways) to determine which roadmap
+to follow. For directions on how to view your Pathway/Category,
+visit how to find your pathway (https://gatorsmartstart.sfsu.edu/
+howtofindyourpathways). Questions? Contact Gator Smart Start. (https://
+gatorsmartstart.sfsu.edu/)
+First-Time Student Roadmap - QR Pathway 1/2 (p. 1789)
+First-Time Student Roadmap - QR Pathway 3/4 (p. 1791)
+Transfer Student Roadmap (2 Year)
+For students with an AS-T in Biology.
+BIOL ADT Roadmap (p. 1793)
+This degree program is an approved pathway
+(“similar” major) for students earning the ADT in
+Biology
+California legislation SB 1440 (2009) mandated the creation of the
+Associate Degree for Transfer (ADT) to be awarded by the California
+Community Colleges. Two types of ADTs are awarded: Associate in Arts
+for Transfer (AA-T) and Associate in Science for Transfer (AS-T).
+Note: no specific degree is required for admission as an upper-division
+student. However, the ADT includes specific guarantees related to
+admission and graduation and is designed to clarify the transfer process
+and strengthen lower-division preparation for the major.
+An ADT totals 60 units and in most cases includes completion of all
+lower-division General Education requirements and at least 18 units in a
+specific major. (The Biology, Chemistry, and Environmental Science AS-
+T degrees defer 3 units in lower-division GE area 3 and 3 units in lower-
+division GE area 4 until after transfer.) Students pursuing an ADT are
+guaranteed admission to the CSU if minimum eligibility requirements are
+met, though not necessarily to the CSU campus of primary choice.
+Upon verification that the ADT has been awarded prior to matriculation
+at SF State, students are guaranteed B.A. or B.S. completion in 60 units
+if pursuing a “similar” major after transfer. Determinations about “similar”
+majors at SF State are made by faculty in the discipline.
+Degree completion in 60 units cannot be guaranteed when a student
+simultaneously pursues an additional major, a minor, certificate, or
+credential.
+A sample advising roadmap for students who have earned an ADT and
+continue in a "similar" major at SF State is available on the Roadmaps tab
+on the degree requirements page for the major. The roadmap displays:
+• How many lower-division units required for the major have been
+completed upon entry based on the award of a specific ADT;
+• Which lower-division requirements are considered complete upon
+entry based on the award of a specific ADT;
+• How to complete the remaining 60 units for the degree in four
+semesters.
+Students who have earned an ADT should seek advising in the major
+department during the first semester of attendance.
+General Advising Information for Transfer
+Students
+1. Before transfer, complete as many lower-division requirements or
+electives for this major as possible.
+2. The following courses are not required for admission but are required
+for graduation. Students are strongly encouraged to complete these
+units before transfer; doing so will provide more flexibility in course
+selection after transfer.
+• a course in U.S. History
+• a course in U.S. & California Government
+For information about satisfying the requirements described in (1) and
+(2) above at a California Community College (CCC), please visit http://
+www.assist.org (http://assist.org). Check any geographically accessible
+CCCs; sometimes, options include more than one college. Use ASSIST to
+determine:
+=== p.1788 ===
+• Which courses at a CCC satisfy any lower-division major
+requirements for this major;
+• Which courses at a CCC satisfy CSU GE, US History, and US & CA
+Government requirements.
+Remedial courses are not transferable and do not apply to the minimum
+60 semester units/90 quarter units required for admission.
+Additional units for courses that are repeated do not apply to the
+minimum 60 units required for upper-division transfer (for example, if
+a course was not passed on the first attempt or was taken to earn a
+better grade).
+Before leaving the last California Community College of attendance,
+obtain a summary of completion of lower-division General Education
+units (IGETC or CSU GE Breadth). This is often referred to as a GE
+certification worksheet. SF State does not require delivery of this
+certification to Admissions, but students should retain this document for
+verifying degree progress after transfer.
+Credit for Advanced Placement, International Baccalaureate, or
+College-Level Examination Program courses: AP/IB/CLEP credit is
+not automatically transferred from the previous institution. Units are
+transferred only when an official score report is delivered to SF State.
+Credit is based on the academic year during which exams were taken.
+Refer to the University Bulletin in effect during the year of AP/IB/CLEP
+examination(s) for details regarding the award of credit for AP/IB/CLEP.
+Students pursuing majors in science, technology, engineering, and
+mathematics (STEM) disciplines often defer 6-9 units of lower-division
+General Education in Areas C and D until after transfer to focus on
+preparation courses for the major. This advice does not apply to students
+pursuing associate degree completion before transfer.
+Transferring From Institutions Other Than CCCs
+or CSUs
+Review SF State's lower-division General Education requirements.
+Note that, as described below, the four basic skills courses required for
+admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State
+GE pattern. Courses that fulfill the remaining areas of SF State’s lower-
+division GE pattern are available at most two-year and four-year colleges
+and universities.
+Of the four required basic skills courses, a course in critical thinking
+(1B/A3) may not be widely offered outside the CCC and CSU systems.
+Students should attempt to identify and take an appropriate course
+no later than the term of application to the CSU. To review more
+information about the 1B/A3 requirement, please visit bulletin.sfsu.edu/
+undergraduate-education/general-education/lower-division/#AAEL.
+Waiting until after transfer to take a single course at SF State that meets
+both US and CA/local government requirements may be an appropriate
+option, particularly if transferring from outside of California.

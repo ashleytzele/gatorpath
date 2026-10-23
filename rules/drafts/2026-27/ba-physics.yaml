@@ -1,0 +1,140 @@
+program: ba-physics
+title: Bachelor of Arts in Physics
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 54
+source: p.2165
+groups:
+- id: cr_for_phys_200
+  title: PHYS 200 must be passed with a grade of CR
+  unparsed: true
+  quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
+    except for PHYS 200 which must be passed with a grade of CR.
+  source: p.2165
+- id: upper_core_letter_grade
+  title: Upper-Division Core courses must be taken for letter grades
+  unparsed: true
+  quote: All Major Upper-Division Core courses must be taken for letter grades;
+  source: p.2165
+- id: elective_cr_nc_cap
+  title: At most 3 units of Upper-Division Electives on CR/NC
+  unparsed: true
+  quote: Up to a maximum of 3 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
+    is allowed.
+  source: p.2165
+- id: lower_math
+  title: 'Lower-Division Prerequisites: Mathematics'
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 245
+  min_grade: C
+  quote: Lower-Division Prerequisites (31 units)
+  source: p.2165
+- id: phys_200
+  title: 'Lower-Division Prerequisites: Planning for Success as a Physics & Astronomy Major'
+  all_of:
+  - PHYS 200
+  quote: PHYS 200 Planning for Success as a Physics & Astronomy
+  source: p.2165
+- id: lower_physics
+  title: 'Lower-Division Prerequisites: General Physics with Calculus I, II and III'
+  all_of:
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  - PHYS 240
+  - PHYS 242
+  min_grade: C
+  quote: General Physics with Calculus I
+  source: p.2165
+- id: programming
+  title: 'Lower-Division Prerequisites: Select One (MATH 209 or CSC 309)'
+  one_of:
+  - - MATH 209
+  - - CSC 309
+  min_grade: C
+  quote: 'Select One: 3'
+  source: p.2165
+- id: upper_core
+  title: Upper-Division Requirements (17 units)
+  all_of:
+  - PHYS 320
+  - PHYS 321
+  - PHYS 330
+  - PHYS 360
+  - PHYS 370
+  - PHYS 385
+  min_grade: C-
+  quote: Upper-Division Requirements (17 units)
+  source: p.2165
+- id: upper_electives
+  title: Electives (3 units)
+  choose_units: 3
+  from:
+  - subject: PHYS
+    level: 300
+  - subject: PHYS
+    level: 400
+  - subject: PHYS
+    level: 500
+  - subject: PHYS
+    level: 600
+  - subject: ASTR
+    level: 300
+  - subject: ASTR
+    level: 400
+  - subject: ASTR
+    level: 500
+  - subject: ASTR
+    level: 600
+  quote: Choose 3 upper-division units in PHYS or ASTR.
+  source: p.2165
+- id: culminating
+  title: Culminating Experience (3 units)
+  all_of:
+  - PHYS 491GW
+  quote: PHYS 491GW Advanced Laboratory Techniques I - GWAR 3
+  source: p.2166
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.2166
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.2166
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.2167
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2167
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.2167
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.2167
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.2167
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.2167
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.2167
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.2167
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.2167
+drafted_by: claude, 2026-10-23

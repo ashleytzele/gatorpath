@@ -1,0 +1,336 @@
+=== p.2034 ===
+Bachelor of Science in Earth
+Sciences
+The Bachelor of Science in Earth Sciences is designed for students
+intending to prepare for direct entry into a career as a professional
+in industry or government, or for graduate school in any of the earth
+sciences, such as geology, oceanography, and meteorology. Courses in
+the BS degree’s Earth Sciences core, supported by courses in the basic
+science and math foundation, give students a strong understanding of
+the structure and behavior of Earth’s systems (geosphere, hydrosphere,
+atmosphere, and biosphere) and the physical process through which they
+interact. The Earth Sciences core courses teach not only interdisciplinary
+science concepts but also skills in quantitative problem solving,
+fieldwork, and writing and oral communication, which are directly
+applicable to both graduate school and a career.
+Program Learning Outcomes
+1. Apply the scientific method to solve problems in the Earth sciences.
+Graduates will be able to:
+a. collect, analyze, and interpret observations, and use field and
+laboratory equipment and data analysis software.
+b. explain and quantitatively evaluate uncertainty in observational
+records and assess the implications of that uncertainty.
+c. retrieve, use, and critically interpret relevant and appropriate
+scientific literature.
+d. create and interpret graphical representations of data.
+e. create, manipulate, and interpret mathematical representations of
+Earth systems.
+2. Demonstrate an understanding of Earth system processes and
+scales. Graduates will be able to:
+a. demonstrate a qualitative understanding of the processes driving
+the major Earth systems, including within the lithosphere, the
+hydrosphere, the atmosphere, and Earth’s energy budget, as
+well as the fluxes of mass and energy within and between Earth
+systems, such as plate tectonics and climate system.
+b. demonstrate a quantitative understanding of the processes
+driving the Earth systems in at least one area of Earth Sciences.
+c. demonstrate an understanding of the widely varying temporal and
+spatial scales of surface, subsurface, and deep-Earth processes
+that control changes in the Earth systems.
+3. Apply Earth system knowledge to societal issues. Graduates will be
+able to:
+a. use scientific principles and the understanding of physical
+processes to interpret the societal implications arising from
+anthropogenic and environmental change, such as natural
+hazards, resource management, and climate change.
+b. give an informed critique of the scientific data and literature
+underlying current policy discussions that relate to their
+emphasis area.
+4. Communicate Earth Science knowledge. Graduates will be able to:
+a. collaborate effectively to investigate Earth systems
+b. effectively communicate scientific information in oral, visual, and
+written formats.
+c. accurately and effectively record and document data, evidence,
+and findings.
+Earth Science (B.S.) – 63 units minimum
+Students are advised that the CR grade is acceptable in any two courses
+to be counted for the major. No more than one course counted toward
+major requirements may be completed with a grade less than a C-.
+Introduction to Earth Sciences (12 units)
+Select Three:
+Code Title Units
+ERTH 112 Our Dynamic Earth Lecture and Lab 4
+ERTH 162 Introduction to Weather and Climate 4
+ERTH 172 Oceans & Climate Lecture and Lab 4
+ERTH 240 Environmental Water Resources 4
+Basic Science and Math Foundation (11-12 units)
+Code Title Units
+Select One: 3-4
+CHEM 115 General Chemistry I
+CHEM 180 Chemistry for Energy and the Environment
+MATH 226 Calculus I 4
+Select One: 4
+PHYS 111
+& PHYS 112
+General Physics I
+and General Physics I Laboratory
+PHYS 220
+& PHYS 222
+General Physics with Calculus I
+and General Physics with Calculus I Laboratory
+Introductory Methods (5-6 units)
+Code Title Units
+ENV 500GW Physical and Human Dimensions of Climate
+Change - GWAR
+3
+Select One: 2-3
+ERTH 205 Techniques in Earth Sciences
+ENV 205 Our Environment Through Data
+Earth Systems (10-11 units)
+Code Title Units
+Select One: 3-4
+ERTH 400 Atmosphere and Oceans in the Earth System
+GEOG 313 Earth's Climate System
+ERTH 442/
+GEOG 342
+Surface Water Hydrology 4
+ERTH 500 Earth and Life Through Time 3
+Capstone Experience (4-6 units)
+Code Title Units
+Select One: 1-3
+ERTH 690 Earth Sciences Capstone Presentation
+ENV 690 Capstone Seminar
+Select One: 2-4
+ERTH 695 Senior Project (2 units required)
+ERTH 697
+& ERTH 698
+Undergraduate Research
+and Senior Thesis
+GEOG 688 Geographic Internship (2 units required)
+=== p.2035 ===
+Techniques in Earth Science Electives (6-8 units)
+Select Two:
+Code Title Units
+GEOG 602 Field Methods in Environmental Science &
+Physical Geography
+4
+GEOG 603 Introduction to Geographic Information Systems 3
+GEOG 604 Environmental Data Science 3
+GEOG 610 Remote Sensing of the Environment I 4
+GEOG 621 Geographic Information Systems for
+Environmental Analysis
+4
+MATH 227 Calculus II 4
+PHYS 240
+& PHYS 242
+General Physics with Calculus III
+and General Physics with Calculus III Laboratory
+4
+Earth Science Focus Electives (15 units minimum)
+Students will work with advisors to select a minimum of 15 units from
+the list below to provide a topical focus that best meets their interests or
+career goals within the Earth Sciences.
+Code Title Units
+ERTH 325 Geology of the National Parks 3
+Select One: 3
+ERTH 330 California Water
+ERTH 335 Global Warming
+ERTH 365 Extreme Weather in a Warming World
+ERTH 410 Earthquakes and Volcanoes 3
+ERTH 420 Mineralogy and Petrology I 4
+Select One: 4
+ERTH 425 Geomorphology
+GEOG 312 Geography of Landforms
+ERTH 446 Quaternary Geology and Soils 3
+ERTH 470 Physical Oceanography 4
+ERTH 515 Sedimentary Materials and Environments 4
+ERTH 535 Planetary Climate Change 4
+ERTH/BIOL 577 Climate and Ecological Interactions 4
+ERTH/GEOG 642 Watershed Assessment and Restoration 4
+GEOG 314 Bioclimatology 4
+GEOG 317 Soils 4
+GEOG 644 Water Quality 3
+General Education Requirements
+Requirement Course Level Units Area Designation
+English
+Composition
+LD 3 1A
+Critical Thinking LD 3 1B
+Oral
+Communication
+LD 3 1C
+Mathematical
+Concepts and
+Quantitative
+Reasoning
+LD 3 2
+Arts LD 3 3A
+Humanities LD 3 3B
+Social and
+Behavioral
+Sciences*
+LD 6 4
+Physical Science LD 3 5A
+Biological
+Science
+LD 3 5B
+Laboratory LD 1 5C
+Ethnic Studies LD or UD 3 6
+Science or Math/
+Quantitative
+Reasoning
+UD 3 5UD or 2UD
+Arts or
+Humanities
+UD 3 3UD
+Social and
+Behavioral
+Sciences
+UD 3 4UD
+*Students will fulfill USH through their Area 4 courses
+SF State Studies
+Courses certified as meeting the SF State Studies
+requirements may be upper or lower division in General
+Education (GE), a major or minor, or an elective.
+American Ethnic
+and Racial
+Minorities
+LD or UD 3 AERM
+Environmental
+Sustainability
+and Climate
+Action
+LD or UD 3 ESCA
+Global
+Perspectives
+LD or UD 3 GP
+Social Justice LD or UD 3 SJ
+American Institutions
+US and California
+Government
+(p. 2350)
+LD or UD 3 USG/CSLG
+Note: LD = Lower-Division; UD = Upper-Division.
+First-Time Student Roadmap (4 Year)
+The roadmaps presented in this Bulletin are intended as suggested
+plans of study and do not replace meeting with an advisor. For a
+more personalized roadmap, please use the Degree Planner (https://
+registrar.sfsu.edu/degreeplanner) tool found in your Student Center.
+Students should use their Pathway/Category (https://
+gatorsmartstart.sfsu.edu/pathways) to determine which roadmap
+to follow. For directions on how to view your Pathway/Category,
+visit how to find your pathway (https://gatorsmartstart.sfsu.edu/
+howtofindyourpathways). Questions? Contact Gator Smart Start. (https://
+gatorsmartstart.sfsu.edu/)
+First-Time Student Roadmap – QR Pathway 1/2 (p. 2038)
+First-Time Student Roadmap – QR Pathway 3/4 (p. 2040)
+Transfer Student Roadmap (2 Year)
+For students with an AS-T in Geology.
+GEOL ADT Roadmap (p. 2042)
+=== p.2036 ===
+SF State Scholars
+The San Francisco State Scholars program provides undergraduate
+students with an accelerated pathway to a graduate degree. Students in
+this program pursue a bachelor’s and master’s degree simultaneously.
+This program allows students to earn graduate credit while in their
+junior and/or senior year, reducing the number of semesters required for
+completion of a master’s degree.
+Earth Sciences BS + Earth and Environmental Sciences MS SF State
+Scholars Roadmap (p. 2044)
+This degree program is an approved pathway
+(“similar” major) for students earning the ADT in
+Geology
+California legislation SB 1440 (2009) mandated the creation of the
+Associate Degree for Transfer (ADT) to be awarded by the California
+Community Colleges. Two types of ADTs are awarded: Associate in Arts
+for Transfer (AA-T) and Associate in Science for Transfer (AS-T).
+Note: no specific degree is required for admission as an upper-division
+student. However, the ADT includes specific guarantees related to
+admission and graduation and is designed to clarify the transfer process
+and strengthen lower-division preparation for the major.
+An ADT totals 60 units and in most cases includes completion of all
+lower-division General Education requirements and at least 18 units in a
+specific major. (The Biology, Chemistry, and Environmental Science AS-
+T degrees defer 3 units in lower-division GE area 3 and 3 units in lower-
+division GE area 4 until after transfer.) Students pursuing an ADT are
+guaranteed admission to the CSU if minimum eligibility requirements are
+met, though not necessarily to the CSU campus of primary choice.
+Upon verification that the ADT has been awarded prior to matriculation
+at SF State, students are guaranteed B.A. or B.S. completion in 60 units
+if pursuing a “similar” major after transfer. Determinations about “similar”
+majors at SF State are made by faculty in the discipline.
+Degree completion in 60 units cannot be guaranteed when a student
+simultaneously pursues an additional major, a minor, certificate, or
+credential.
+A sample advising roadmap for students who have earned an ADT and
+continue in a "similar" major at SF State is available on the Roadmaps tab
+on the degree requirements page for the major. The roadmap displays:
+• How many lower-division units required for the major have been
+completed upon entry based on the award of a specific ADT;
+• Which lower-division requirements are considered complete upon
+entry based on the award of a specific ADT;
+• How to complete the remaining 60 units for the degree in four
+semesters.
+Students who have earned an ADT should seek advising in the major
+department during the first semester of attendance.
+General Advising Information for Transfer
+Students
+1. Before transfer, complete as many lower-division requirements or
+electives for this major as possible.
+2. The following courses are not required for admission but are required
+for graduation. Students are strongly encouraged to complete these
+units before transfer; doing so will provide more flexibility in course
+selection after transfer.
+• a course in U.S. History
+• a course in U.S. & California Government
+For information about satisfying the requirements described in (1) and
+(2) above at a California Community College (CCC), please visit http://
+www.assist.org (http://assist.org). Check any geographically accessible
+CCCs; sometimes, options include more than one college. Use ASSIST to
+determine:
+• Which courses at a CCC satisfy any lower-division major
+requirements for this major;
+• Which courses at a CCC satisfy CSU GE, US History, and US & CA
+Government requirements.
+Remedial courses are not transferable and do not apply to the minimum
+60 semester units/90 quarter units required for admission.
+Additional units for courses that are repeated do not apply to the
+minimum 60 units required for upper-division transfer (for example, if
+a course was not passed on the first attempt or was taken to earn a
+better grade).
+Before leaving the last California Community College of attendance,
+obtain a summary of completion of lower-division General Education
+units (IGETC or CSU GE Breadth). This is often referred to as a GE
+certification worksheet. SF State does not require delivery of this
+certification to Admissions, but students should retain this document for
+verifying degree progress after transfer.
+Credit for Advanced Placement, International Baccalaureate, or
+College-Level Examination Program courses: AP/IB/CLEP credit is
+not automatically transferred from the previous institution. Units are
+transferred only when an official score report is delivered to SF State.
+Credit is based on the academic year during which exams were taken.
+Refer to the University Bulletin in effect during the year of AP/IB/CLEP
+examination(s) for details regarding the award of credit for AP/IB/CLEP.
+Students pursuing majors in science, technology, engineering, and
+mathematics (STEM) disciplines often defer 6-9 units of lower-division
+General Education in Areas C and D until after transfer to focus on
+preparation courses for the major. This advice does not apply to students
+pursuing associate degree completion before transfer.
+Transferring From Institutions Other Than CCCs
+or CSUs
+Review SF State's lower-division General Education requirements.
+Note that, as described below, the four basic skills courses required for
+admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State
+GE pattern. Courses that fulfill the remaining areas of SF State’s lower-
+division GE pattern are available at most two-year and four-year colleges
+and universities.
+Of the four required basic skills courses, a course in critical thinking
+(1B/A3) may not be widely offered outside the CCC and CSU systems.
+Students should attempt to identify and take an appropriate course
+no later than the term of application to the CSU. To review more
+information about the 1B/A3 requirement, please visit bulletin.sfsu.edu/
+undergraduate-education/general-education/lower-division/#AAEL.
+=== p.2037 ===
+Waiting until after transfer to take a single course at SF State that meets
+both US and CA/local government requirements may be an appropriate
+option, particularly if transferring from outside of California.

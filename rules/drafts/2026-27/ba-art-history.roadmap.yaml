@@ -1,0 +1,260 @@
+program: ba-art-history
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: Bachelor of Arts in Art History Roadmap
+    total_units: 120
+    source: p.914-915
+    notes:
+    - '120 Total Units Required. Minimum Number of Units in the Major: 36'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - '1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '2: Lower-Division Studio Art Requirement (3 units). A full list of courses that can be used to fulfill this requirement
+      can be found in the Degree Requirements (p. 910).'
+    - '3: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '4: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - '5: Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.'
+    - '6: Upper-Division Art History Lectures (9 units). A full list of courses that can be used to fulfill this requirement
+      can be found in the Degree Requirements (p. 910).'
+    - '7: Art History Elective (6 units). A full list of courses that can be used to fulfill this requirement can be found
+      in the Degree Requirements (p. 910).'
+    - '8: Internship/Visual Studies Elective (3 units). A full list of courses that can be used to fulfill this requirement
+      can be found in the Degree Requirements (p. 910).'
+    semesters:
+    - units: 15
+      source: p.914
+      items:
+      - slot: major
+        group: ld_art_history
+        units: 3
+        note: 'Select one of the following (Lower-Division Core): ARTH 201, ARTH 202 or ARTH/HUM 205'
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: 3B
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.914
+      items:
+      - slot: major
+        group: ld_studio_art
+        units: 3
+        note: Lower-Division Studio Art; footnote 2
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+        note: footnote 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.914
+      items:
+      - slot: major
+        group: ld_art_history
+        units: 3
+        note: 'Select one of the following not already completed (Lower-Division Core): ARTH 201, ARTH 202 or ARTH/HUM 205'
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 5
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.914
+      items:
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 5
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.914
+      items:
+      - ARTH 400GW
+      - slot: major
+        group: ud_lectures
+        count: 2
+        units: 6
+        note: Upper-Division Art History Lecture - Take Two; footnote 6
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.914
+      items:
+      - ARTH 516
+      - slot: major
+        group: ud_lectures
+        units: 3
+        note: Upper-Division Art History Lecture - Take One; footnote 6
+      - slot: GE
+        area: '6'
+        units: 3
+        note: Ethnic Studies (p. 2328)
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government (p. 2351)
+    - units: 15
+      source: p.915
+      items:
+      - ARTH 602
+      - slot: major
+        group: arth_electives
+        units: 3
+        note: Art History Elective - Take One; footnote 7
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.915
+      items:
+      - slot: major
+        group: arth_electives
+        units: 3
+        note: Art History Elective - Take One; footnote 7
+      - slot: major
+        group: internship_visual_studies
+        units: 3
+        note: Internship/Visual Studies Elective; footnote 7 as printed (footnote 8)
+      - slot: GE
+        area: 3UD
+        units: 3
+        note: 'printed as GE Area UD-C: Upper-Division Arts and/or Humanities'
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+  adt:
+    title: Bachelor of Arts in Art History – ARTH Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: p.916-917
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AA-T in Art History. Nine units in the major (one lower-division studio course, two lower-division art history courses)
+      and all lower-division GE requirements have been satisfied. Check with a major advisor about the most appropriate course
+      sequence. Degree completion guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for more information
+      (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 9-15 Units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government requirements if not taken before transfer. Upper-Division GE, Areas 2UD/5UD, 3UD, 4UD (9
+      units): Courses required for the major may double-count if approved for UD GE. Students entering the major with the
+      AA-T in Art History are not required to fulfill SF State Studies requirements.'
+    - 'Art (Art History) Major: 30 Units. Lower-division requirements satisfied in transfer – 6 units of art history and 3
+      units of studio arts. Graduation Writing Assessment Requirement (3 units): ARTH 400GW. Upper-Division Art History (9
+      units): 300-400 level art history lectures. Advanced Topics in Art History (3 units). Elective (6 units): Two additional
+      300–600 level art history courses selected by the student. Internship (3 units). Capstone (3 units).'
+    - 'University Electives: 18 or More Units. Units depend on course choices made at the community college, how transferred
+      units are applied to the requirements above, and course choices at SF State – some courses may meet more than one requirement,
+      e.g., both in UD GE and the major.'
+    - '1: Upper-Division Art History Lectures (9 units). A full list of courses that can be used to fulfill this requirement
+      can be found in the Degree Requirements (p. 910).'
+    - '2: Art History Elective (6 units). A full list of courses that can be used to fulfill this requirement can be found
+      in the Degree Requirements (p. 910).'
+    - '3: Internship/Visual Studies Elective (3 units). A full list of courses that can be used to fulfill this requirement
+      can be found in the Degree Requirements (p. 910).'
+    semesters:
+    - units: 15
+      source: p.916
+      items:
+      - slot: major
+        group: ud_lectures
+        units: 3
+        note: Upper-Division Art History Lecture (9 units); footnote 1
+      - slot: ai
+        area: USH
+        units: 3
+        note: US History (p. 2350), or University Elective if US History met before transfer
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.916
+      items:
+      - ARTH 400GW
+      - slot: major
+        group: ud_lectures
+        units: 3
+        note: Upper-Division Art History Lecture (9 units); footnote 1
+      - slot: major
+        group: arth_electives
+        units: 3
+        note: Art History Elective (6 units); footnote 2
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government (p. 2351), or University Elective if US/CA Government met before transfer
+      - slot: elective
+        units: 3
+    - units: 15
+      source: p.916
+      items:
+      - slot: major
+        group: ud_lectures
+        units: 3
+        note: Upper-Division Art History Lecture (9 units); footnote 1
+      - slot: major
+        group: arth_electives
+        units: 3
+        note: Art History Elective (6 units); footnote 2
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.917
+      items:
+      - ARTH 516
+      - ARTH 602
+      - slot: major
+        group: internship_visual_studies
+        units: 3
+        note: Internship/Visual Studies Elective; footnote 3
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: elective
+        units: 3
+drafted_by: claude, 2026-10-23

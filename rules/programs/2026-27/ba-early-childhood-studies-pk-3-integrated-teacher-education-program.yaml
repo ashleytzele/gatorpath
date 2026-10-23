@@ -1,0 +1,131 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-early-childhood-studies-pk-3-integrated-teacher-education-program.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-early-childhood-studies-pk-3-integrated-teacher-education-program
+title: 'Bachelor of Arts in Early Childhood Studies: Concentration in PK-3 Integrated Teacher Education Program'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 72
+source: p.591
+groups:
+- id: gpa_before_credential
+  title: Minimum cumulative GPA before starting credential coursework
+  unparsed: true
+  quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
+  source: p.591
+- id: cr_grading_exception
+  title: CR grading only for E ED courses with a CR/NC-only grading option
+  unparsed: true
+  quote: CR grading is only acceptable for specific E ED courses that only have CR/NC grading option.
+  source: p.591
+- id: core_required
+  title: Core (33 units)
+  all_of:
+  - CAD 210
+  - CAD 260
+  - CAD 280
+  - CAD 300
+  - CAD 326
+  - CAD 330
+  - CAD 410GW
+  - CAD 660
+  - MATH 165
+  - SPED 370
+  min_grade: C
+  quote: Core (33 units)
+  source: p.591
+- id: core_early_childhood
+  title: 'Core: Select One (CAD 215 or CAD 230)'
+  one_of:
+  - - CAD 215
+  - - CAD 230
+  min_grade: C
+  quote: CAD 215 Foundations in Early Childhood
+  source: p.591
+- id: science
+  title: Science (3 units)
+  one_of:
+  - - BIOL 300
+  - - BIOL 310
+  - - BIOL 318
+  - - ERTH 310
+  - - ERTH 335
+  - - ERTH 365
+  - - GEOG 301
+  - - LS 430
+  - - ENVS 430
+  min_grade: C
+  quote: Science (3 units)
+  source: p.591
+- id: arts
+  title: Arts (3 units)
+  one_of:
+  - - AFRS 400
+  - - AIS 325
+  - - AIS 560
+  - - DANC 350
+  - - DANC 430
+  - - DANC 657
+  - - ANTH 657
+  - - E ED 450
+  - - HUM 361
+  - - I R 363
+  - - HUM 485
+  - - AMST 310
+  - - LTNS 425
+  - - MUS 505
+  - - TH A 408
+  - - DANC 408
+  - - TH A 451
+  - - WGS 303
+  min_grade: C
+  quote: Arts (3 units)
+  source: p.591
+- id: credential
+  title: PK-3 Early Childhood Education Specialist Instruction Credential (33 units)
+  all_of:
+  - E ED 608
+  - E ED 628
+  - E ED 719
+  - E ED 733
+  - E ED 734
+  - E ED 735
+  - E ED 738
+  - E ED 748
+  - E ED 758
+  - E ED 768
+  - SPED 671
+  min_grade: B-
+  quote: Credential (33 units)
+  source: p.592
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.592
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.592
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.592
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.592
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.592
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.593
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.593
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.593
+drafted_by: claude, 2026-10-23

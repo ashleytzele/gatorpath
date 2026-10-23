@@ -1,0 +1,210 @@
+program: bs-biology-marine-science
+title: 'Bachelor of Science in Biology: Concentration in Marine Science'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 58
+source: p.1815
+global:
+  no_cr_nc: true
+  source: p.1815
+groups:
+- id: ld_intro_biology
+  title: Lower-Division Requirements (Introductory Biology and advising)
+  all_of:
+  - BIOL 230
+  - BIOL 231
+  - BIOL 240
+  min_grade:
+    BIOL 230: C-
+    BIOL 240: C-
+  quote: BIOL 230 Introductory Biology I 5
+  source: p.1815
+- id: ld_chemistry
+  title: Lower-Division Requirements (General Chemistry)
+  all_of:
+  - CHEM 115
+  - CHEM 215
+  min_grade:
+    CHEM 115: C
+    CHEM 215: C
+  quote: CHEM 115 General Chemistry I 4
+  source: p.1815
+- id: ld_organic_chemistry
+  title: 'Lower-Division Requirements: Select One (CHEM 130 or CHEM 233)'
+  one_of:
+  - - CHEM 130
+  - - CHEM 233
+  quote: 'Select One: 3'
+  source: p.1815
+- id: ld_calculus
+  title: Lower-Division Requirements (Calculus I)
+  all_of:
+  - MATH 226
+  min_grade:
+    MATH 226: C-
+  quote: MATH 226 Calculus I 4
+  source: p.1815
+- id: ld_physics
+  title: 'Lower-Division Requirements: Select One (PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222)'
+  one_of:
+  - - PHYS 111
+    - PHYS 112
+  - - PHYS 220
+    - PHYS 222
+  quote: 'Select One: 4'
+  source: p.1815
+- id: ud_core
+  title: Upper-Division Requirements (17-18 units)
+  all_of:
+  - BIOL 337
+  - BIOL 355
+  - BIOL 458
+  quote: Upper-Division Requirements (17-18 units)
+  source: p.1815
+- id: ud_marine_course
+  title: 'Upper-Division Requirements: Select One (BIOL 555, BIOL 582 or BIOL 585)'
+  one_of:
+  - - BIOL 555
+  - - BIOL 582
+  - - BIOL 585
+  quote: 'Select One: 3-4'
+  source: p.1816
+- id: ud_marine_lab
+  title: 'Upper-Division Requirements: Select One (BIOL 570GW & BIOL 570, or BIOL 586GW & BIOL 586)'
+  one_of:
+  - - BIOL 570GW
+    - BIOL 570
+  - - BIOL 586GW
+    - BIOL 586
+  quote: 'Select One: 4'
+  source: p.1816
+- id: lab_elective
+  title: 'Upper-Division Electives: Laboratory Elective, Select One'
+  one_of:
+  - - BIOL 328
+  - - BIOL 351GW
+    - BIOL 351
+  - - BIOL 402GW
+  - - BIOL 436
+  - - BIOL 443
+  - - BIOL 454
+  - - BIOL 475GW
+  - - BIOL 478GW
+  - - BIOL 502
+  - - BIOL 505
+  - - BIOL 514
+  - - BIOL 529
+  - - BIOL 570GW
+    - BIOL 570
+  - - BIOL 580
+  - - BIOL 582
+  - - BIOL 586GW
+    - BIOL 586
+  - - BIOL 613GW
+  - - BIOL 631GW
+    - BIOL 631
+  - - BIOL 638
+  - - BIOL 644
+  - - BIOL 654
+  - - BIOL 667
+  - - BIOL 670
+  - - BIOL 671
+  - - BIOL 694
+  - - BIOL 699
+  - - CHEM 343
+  quote: Laboratory Elective
+  source: p.1816
+- id: lecture_electives
+  title: 'Upper-Division Electives: Lecture Electives (a minimum of 10 units)'
+  choose_units: 10
+  from:
+  - list:
+    - BIOL 315
+    - BIOL 331
+    - BIOL 332
+    - BIOL 350
+    - BIOL 357
+    - BIOL 358
+    - BIOL 360
+    - BIOL 380
+    - BIOL 382
+    - BIOL 401
+    - BIOL 411
+    - BIOL 425
+    - BIOL 435
+    - BIOL 442
+    - BIOL 446
+    - BIOL 453
+    - BIOL 460
+    - BIOL 470
+    - BIOL 482
+    - BIOL 490
+    - BIOL 500
+    - BIOL 514
+    - BIOL 525
+    - BIOL 526
+    - BIOL 530
+    - BIOL 532
+    - BIOL 534
+    - BIOL 555
+    - BIOL 577
+    - BIOL 585
+    - BIOL 600
+    - BIOL 612
+    - BIOL 617
+    - BIOL 618
+    - BIOL 621
+    - BIOL 622
+    - BIOL 640
+    - BIOL 642
+    - CSC 306
+  quote: Select enough to reach a minimum of 10 units of electives.
+  source: p.1816
+- id: sf_state_biology_units
+  unparsed: true
+  quote: At least 12 units in biology must be completed at SF State.
+  source: p.1815
+- id: minimum_gpa
+  unparsed: true
+  quote: A minimum grade point average of 2.0 in all coursework is required.
+  source: p.1815
+transfer_notes:
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.1817
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1817
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1817
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1817
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1817
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1817
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1818
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.1818
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.1818
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.1818
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1818
+drafted_by: claude, 2026-10-23

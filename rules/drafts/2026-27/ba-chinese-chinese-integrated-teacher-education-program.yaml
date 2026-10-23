@@ -1,0 +1,123 @@
+program: ba-chinese-chinese-integrated-teacher-education-program
+title: 'Bachelor of Arts in Chinese: Concentration in Chinese Integrated Teacher Education Program'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 60
+source: p.1438
+groups:
+- id: gpa_before_credential
+  unparsed: true
+  quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
+  source: p.1438
+- id: credential_cr_nc
+  unparsed: true
+  quote: CR grading is only acceptable for credential courses that only have CR/NC grading option.
+  source: p.1438
+- id: language_core_required
+  title: Language Core
+  all_of:
+  - CHIN 311
+  - CHIN 312
+  - CHIN 401
+  quote: CHIN 311 Conversation and Reading 3
+  source: p.1438
+- id: language_core_classical
+  title: 'Language Core: Select One (CHIN 501 or CHIN 502)'
+  one_of:
+  - - CHIN 501
+  - - CHIN 502
+  quote: CHIN 502 Readings in Literary Chinese
+  source: p.1438
+- id: language_core_linguistics
+  title: Language Core (MLL 325)
+  all_of:
+  - MLL 325
+  quote: MLL 325 Linguistics for Foreign Languages 3
+  source: p.1438
+- id: civilization_culture
+  title: 'Civilization and Culture (3 units): Select One'
+  one_of:
+  - - CHIN 228
+  - - CHIN 270
+  - - CHIN 271
+  - - HUM 271
+  quote: CHIN 228 Chinese Language and Society 3
+  source: p.1438
+- id: media_literacy
+  title: 'Media Literacy (3 units): Select One'
+  one_of:
+  - - CHIN 410
+  - - JOUR 410
+  - - CHIN 411
+  - - I R 413
+  - - JOUR 411
+  quote: CHIN/JOUR 410 Building Chinese Media Literacy 3
+  source: p.1438
+- id: content_course
+  title: 'Content Course (3 units): Select One'
+  one_of:
+  - - CHIN 521
+  - - CHIN 537
+  - - CHIN 580
+  quote: CHIN 521 Chinese Modern Fiction 3
+  source: p.1438
+- id: literature_in_translation
+  title: 'Literature in Translation (3 units): Select One'
+  one_of:
+  - - CHIN 600
+  - - CHIN 601GW
+  - - CHIN 602
+  - - CHIN 611GW
+  - - CHIN 612GW
+  - - HUM 530
+  quote: CHIN 602 The Narrative Tradition 3
+  source: p.1438
+- id: gwar
+  unparsed: true
+  quote: Select a 600 level CHIN GWAR course if not already taken for the Literature in Translation requirement above.
+  source: p.1439
+- id: single_subject_credential
+  title: Single Subject Teaching Credential (33 units)
+  all_of:
+  - S ED 640
+  - S ED 660
+  - S ED 701
+  - S ED 720
+  - S ED 751
+  - S ED 752
+  - S ED 790
+  - MLL 750
+  - MLL 751
+  min_grade: B-
+  quote: Single Subject Teaching Credential (33 units)
+  source: p.1439
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1439
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1439
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1439
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1440
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.1440
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.1440
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.1440
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly if transferring from outside of California.'
+  source: p.1440
+drafted_by: claude, 2026-10-23

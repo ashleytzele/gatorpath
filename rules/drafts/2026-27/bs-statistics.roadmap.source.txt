@@ -1,0 +1,291 @@
+=== p.2144 ===
+Category 1/2
+Bachelor of Science in Statistics Roadmap – Quantitative Reasoning
+Category 1/2
+120 Total Units Required
+Minimum Number of Units in the Major: 55
+This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual
+sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner) and an advisor for
+further guidance.
+To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major.
+Course Title Units
+First Semester
+MATH 226 Calculus I (Major Core, GE 2)
+1
+4
+GE Area 1: English Communication 3
+GE Area 3: Arts and Humanities 3
+GE Area 4: Social and Behavioral Sciences
+2
+3
+GE Area 5: Physical and Biological Sciences
+3
+3-4
+Units 16-17
+Second Semester
+MATH 227 Calculus II (Major Core) 4
+Select One (Major Core): 3
+MATH 209 Mathematical Computing
+CSC 101 Introduction to Computing
+CSC 309 Computer Programming
+GE Area 1A: English Composition
+4
+3
+GE Area 1: English Communication 3
+GE Area 3: Arts and Humanities 3
+Units 16
+Third Semester
+MATH 228 Calculus III (Major Core) 4
+MATH 301GW Exploration and Proof - GWAR (Major Core) 3
+MATH 325 Linear Algebra (Major Core) 4
+MATH 440 Probability and Statistics I (Major Core) 3
+Units 14
+Fourth Semester
+MATH 441 Probability and Statistics II (Major Core) 3
+Select One: 4
+CSC 215 Intermediate Computer Programming (if
+CSC 101 taken)
+SF State Studies or University Elective (if MATH 209 or CSC 309 taken)
+GE Area 4: Social and Behavioral Sciences
+2
+3
+GE Area 5: Physical and Biological Sciences
+3
+3-4
+GE Area 6: Ethnic Studies (p. 2328) 3
+Units 16-17
+Fifth Semester
+MATH 424 Introduction to Linear Models (Major Core) 3
+MATH 442 Probability Models (Major Core) 3
+MATH 447 Design and Analysis of Experiments (Major
+Core)
+3
+SF State Studies or University Elective - Take Two 6
+Units 15
+=== p.2145 ===
+Sixth Semester
+MATH 338 Introduction to SAS (Major Core) 3
+MATH 448 Introduction to Statistical Learning and Data
+Mining (Major Core)
+3
+MATH 449 Categorical Data Analysis (Major Core) 3
+Guided Electives (9 Units Total)
+5
+3
+GE Area 3UD: Upper-Division Arts or Humanities 3
+Units 15
+Seventh Semester
+Guided Electives (9 Units Total)
+5
+3
+GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3
+GE Area 4UD: Upper-Division Social and Behavioral Sciences 3
+US and California Government (p. 2351) 3
+SF State Studies or University Elective 4
+Units 16
+Eighth Semester
+Guided Electives (9 Units Total)
+5
+3
+SF State Studies or University Elective - Take Three 9
+Units 12
+Total Units 120-122
+1
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For
+directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+2
+First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+3
+Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.
+4
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option.
+For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+5
+Guided Electives (9 units)
+A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 2141).
+=== p.2146 ===
+Category 3/4
+Bachelor of Science in Statistics Roadmap – Quantitative Reasoning
+Category 3/4
+120 Total Units Required
+Minimum Number of Units in the Major: 55
+This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual
+sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner) and an advisor for
+further guidance.
+To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major.
+Course Title Units
+First Semester
+MATH 197 Prelude to Calculus I (Prerequisite for
+MATH 226)
+1
+3
+GE Area 1: English Communication 3
+GE Area 3: Arts and Humanities 3
+GE Area 4: Social and Behavioral Sciences
+2
+3
+GE Area 5: Physical and Biological Sciences
+3
+3-4
+Units 15-16
+Second Semester
+MATH 198 Prelude to Calculus II (Prerequisite for
+MATH 226, GE 2)
+1
+3
+GE Area 1A: English Composition
+4
+3
+GE Area 1: English Communication 3
+GE Area 3: Arts and Humanities 3
+SF State Studies or University Elective 3
+Units 15
+Third Semester
+MATH 226 Calculus I (Major Core, GE 2)
+1
+4
+GE Area 4: Social and Behavioral Sciences
+2
+3
+GE Area 5: Physical and Biological Sciences
+3
+3-4
+US and California Government (p. 2351) 3
+SF State Studies or University Elective 3
+Units 16-17
+Fourth Semester
+MATH 227 Calculus II (Major Core) 4
+Select One (Major Core): 3
+MATH 209 Mathematical Computing
+CSC 101 Introduction to Computing
+CSC 309 Computer Programming
+MATH 301GW Exploration and Proof - GWAR (Major Core) 3
+MATH 325 Linear Algebra (Major Core) 4
+Units 14
+Fifth Semester
+MATH 228 Calculus III (Major Core) 4
+MATH 440 Probability and Statistics I (Major Core) 3
+Select One: 4
+CSC 215 Intermediate Computer Programming (if
+CSC 101 taken)
+SF State Studies or University Elective (if MATH 209 or CSC 309 taken)
+GE Area 3UD: Upper-Division Arts or Humanities 3
+Units 14
+=== p.2147 ===
+Sixth Semester
+MATH 338 Introduction to SAS (Major Core) 3
+MATH 441 Probability and Statistics II (Major Core) 3
+MATH 448 Introduction to Statistical Learning and Data
+Mining (Major Core)
+3
+MATH 449 Categorical Data Analysis (Major Core) 3
+Guided Electives (9 Units Total)
+5
+3
+Units 15
+Seventh Semester
+MATH 424 Introduction to Linear Models (Major Core) 3
+MATH 442 Probability Models (Major Core) 3
+MATH 447 Design and Analysis of Experiments (Major
+Core)
+3
+Guided Electives (9 Units Total)
+5
+3
+GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3
+Units 15
+Eighth Semester
+Guided Electives (9 Units Total)
+5
+3
+GE Area 4UD: Upper-Division Social and Behavioral Sciences 3
+SF State Studies or University Elective - Take Three 10
+Units 16
+Total Units 120-122
+1
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For
+directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+2
+First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+3
+Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.
+4
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option.
+For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+5
+Guided Electives (9 units)
+A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 2141).
+=== p.2148 ===
+Roadmap
+Bachelor of Science in Statistics – MATH Associate Degree for Transfer
+(ADT) Roadmap
+This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with an AS-T in Mathematics. At least
+12 units in the major (MATH 226, MATH 227, and MATH 228) and all lower-division GE requirements have been satisfied. Additional units in the major
+may have been satisfied. Check with a major advisor about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the
+Associate Degree for Transfer (ADT) section for more information (p. 2304).
+To Do at SF State:
+Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level; to include the following:
+University-Wide Requirements: 9-15 Units
+• American Institutions (0-6 units): US History, US Government, California State and Local Government requirements if not taken before transfer.
+• Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD (9 units): Courses required for the major may double-count if approved for UD GE.
+• Students entering the major with the AS-T in Mathematics are not required to fulfill SF State Studies requirements.
+Statistics Major: 40-43 units
+MATH 226, MATH 227, and MATH 228 met in transfer.
+• Core (31-34 units)
+• Guided Electives (9 units) in one of the following areas: Science, Economics, Business: Decision Sciences, or Business: Information Systems.
+Consult with a department advisor.
+University Electives: 4 or More Units
+Depends on the number of units transferred, course choices made at the community college, and how transferred units are applied to the requirements
+above.
+Course Title Units
+First Semester
+Select One (Major Core): 3
+MATH 209 Mathematical Computing
+CSC 101 Introduction to Computing
+CSC 309 Computer Programming
+MATH 301GW Exploration and Proof - GWAR (Major Core) 3
+MATH 325 Linear Algebra (Major Core) 4
+MATH 440 Probability and Statistics I (Major Core) 3
+GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3
+Units 16
+Second Semester
+MATH 338 Introduction to SAS (Major Core) 3
+MATH 441 Probability and Statistics II (Major Core) 3
+Select One: 4
+CSC 215 Intermediate Computer Programming (if
+CSC 101 taken)
+University Elective (if MATH 209 or CSC 309 taken)
+University Elective 4
+Units 14
+Third Semester
+MATH 424 Introduction to Linear Models (Major Core) 3
+MATH 442 Probability Models (Major Core) 3
+MATH 447 Design and Analysis of Experiments (Major
+Core)
+3
+Guided Electives (9 units) - Take Two
+1
+6
+Units 15
+=== p.2149 ===
+Fourth Semester
+MATH 448 Introduction to Statistical Learning and Data
+Mining (Major Core)
+3
+MATH 449 Categorical Data Analysis (Major Core) 3
+Guided Electives (9 units) - Take One
+1
+3
+Select One (GE 3UD, USH, USG/CSLG): 3
+HIST 470 The U.S. Constitution to 1896
+HIST 471 The U.S. Constitution Since 1896
+GE Area 4UD: Upper-Division Social and Behavioral Sciences 3
+Units 15
+Total Units 60
+1
+Guided Electives (9 units)
+A full list of courses that can fulfill this requirement can be found in the Degree Requirements (p. 2141).

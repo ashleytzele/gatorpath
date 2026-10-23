@@ -1,0 +1,103 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-labor-and-employment-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-labor-and-employment-studies
+title: Bachelor of Arts in Labor and Employment Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.254
+groups:
+- id: labr_250
+  title: 'Required Courses: LABR 250 Introduction to the Study of Labor'
+  all_of:
+  - LABR 250
+  quote: LABR 250 Introduction to the Study of Labor 3
+  source: p.254
+- id: labr_251
+  title: 'Required Courses: LABR 251 Know Your Work Rights'
+  all_of:
+  - LABR 251
+  quote: LABR 251 Know Your Work Rights 3
+  source: p.254
+- id: labor_history
+  title: 'Required Courses: History of Labor in the United States (HIST/ECON/LABR 474)'
+  one_of:
+  - - HIST 474
+  - - ECON 474
+  - - LABR 474
+  quote: History of Labor in the United States 3
+  source: p.254
+- id: comparative_employment
+  title: 'Required Courses: Comparative Employment Relations (LABR/SOC 552)'
+  one_of:
+  - - LABR 552
+  - - SOC 552
+  quote: LABR/SOC 552 Comparative Employment Relations 3
+  source: p.254
+- id: labor_standards
+  title: 'Required Courses: Labor Standards and Corporate Social Responsibility (LABR/SOC 553)'
+  one_of:
+  - - LABR 553
+  - - SOC 553
+  quote: LABR/SOC 553 Labor Standards and Corporate Social
+  source: p.254
+- id: labor_rights
+  title: 'Required Courses: Labor Rights in the Global Economy (LABR/SOC 555)'
+  one_of:
+  - - LABR 555
+  - - SOC 555
+  quote: LABR/SOC 555 Labor Rights in the Global Economy 3
+  source: p.254
+- id: gwar
+  title: Graduation Writing Assessment Requirement (3 units)
+  all_of:
+  - HIST 300GW
+  quote: HIST 300GW Seminar in Historical Analysis - GWAR 3
+  source: p.254
+- id: related_electives
+  title: Related Electives (15 units)
+  unparsed: true
+  quote: Upper-division LABR courses or cross-listed with LABR not used to
+  source: p.254
+- id: final_experience
+  title: Final Experience (3-4 units)
+  unparsed: true
+  quote: Internship or Final Research Project
+  source: p.254
+- id: complementary_studies
+  title: Complementary Studies (12 units)
+  unparsed: true
+  quote: Bachelor of Arts students must complete at least 12 units of
+  source: p.254
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.255
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.255
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.255
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.255
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.255
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.255
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.255
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.255
+drafted_by: claude, 2026-10-23

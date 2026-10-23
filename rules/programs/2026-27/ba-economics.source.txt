@@ -1,0 +1,334 @@
+=== p.133 ===
+Bachelor of Arts in Economics
+Are you curious about how the world works and passionate about solving
+real-world problems? A Bachelor of Arts in Economics gives you the tools
+to understand markets, policy, and human behavior through a mix of
+theory and data. Whether you're interested in careers in business, finance,
+government, public policy, international development, or law, economics
+offers a flexible and powerful foundation. You’ll gain valuable analytical
+and critical thinking skills that employers love—and you'll be prepared
+to make smart decisions in any field. Join a major that helps you think
+bigger and make a difference.
+Program Learning Outcomes
+1. Economic Analysis. Graduates will be able to apply microeconomic
+and macroeconomic principles to analyze individual, business, and
+policy decisions.
+2. Quantitative Reasoning and Data Analysis. Graduates will be able to
+use quantitative tools, including statistical and econometric methods,
+to analyze economic data and interpret empirical results.
+3. Critical Thinking and Communication. Graduates will be able to
+critically evaluate economic arguments and communicate economic
+reasoning effectively.
+Economics (B.A.) — 42 Units Minimum
+• Majors must take the core courses for a letter grade and earn a
+minimum grade of C- in each. (CR/NC grading is not allowed for core
+courses.)
+• ECON 690GW is the capstone course and must be taken in the senior
+year.
+Core Courses (24-27 Units)
+Code Title Units
+ECON 101 Introduction to Microeconomic Analysis 3
+ECON 102 Introduction to Macroeconomic Analysis (formerly
+ECON 100)
+3
+ECON 301 Intermediate Microeconomic Theory 3
+ECON 302 Intermediate Macroeconomic Theory 3
+Select One: 3
+DS/ECON 212 Business Statistics
+MATH 124 Elementary Statistics
+ECON 312 Introduction to Econometrics 3
+ECON 690GW Senior Seminar: Economic Inquiry and Analysis -
+GWAR
+3
+Select One:
+1
+3-6
+DS 110 Calculus with Business Applications
+MATH 107
+& MATH 108
+Mathematics for Business Calculus I
+and Mathematics for Business Calculus II
+MATH 110 Business Calculus
+MATH 226 Calculus I
+1
+1
+We strongly recommend taking MATH 226 for students interested in
+pursuing a graduate degree in economics or related fields.
+Upper-Division Electives (18 Units)
+Economics majors are required to take six upper-division elective courses
+in economics. There are over 20 elective courses, including some cross-
+listed courses with other programs, offered each year. These elective
+courses can be taken in any order as long as the prerequisites are met.
+Code Title Units
+ECON 400 Economic and Social History of the United States 3
+ECON 450 Health Economics 3
+ECON/HIST/
+LABR 474
+History of Labor in the United States 3
+ECON 500 Money and Banking 3
+ECON 505 Public Economics 3
+ECON/LABR 510 Labor Economics 3
+ECON/LABR 511 Collective Bargaining 3
+ECON 520 Industrial Organization 3
+ECON 540 Economics of Gender 3
+ECON 541 Economics of LGBTQ Issues 3
+ECON 550 Environmental Economics 3
+ECON 605 Seminar: History of Economic Thought 3
+ECON 611 International Trade Theory and Policy 3
+ECON 612 International Finance and Macroeconomics 3
+ECON 616 Experimental Economics and Game Theory 3
+ECON 618 Economic Inference: Methods and Applications 3
+ECON 620 Economic Development 3
+ECON/I R 635 Economics of Globalization 3
+ECON 640 Health Economics Analysis and Research 3
+ECON/ENVS/FIN
+651
+Student Managed Fund in Environmental, Social
+and Governance (ESG) Investments
+3
+ECON 675 Natural Resource Economics 3
+ECON 680 Applied Economics and Data Analysis with R 3
+ECON 699 Independent Study 3
+Upon prior advisement, students may apply a maximum of two courses
+taken outside the Economics department to the elective requirement.
+Non-Economics courses approved by the department are included in the
+list of elective options below. Students should keep in mind that non-
+Economics courses may require additional prerequisites that are not met
+in the Economics degree or consent of the instructor.
+Code Title Units
+ACCT 301 Intermediate Financial Accounting I 3
+DS 311 Technologies in Data Analytics 3
+DS 312 Data Analysis for Business 3
+DS 408 Simulation Modeling for Business 3
+DS 412 Operations Management 3
+DS 612 Data Mining with Business Applications 3
+DS 624 Quality Management 3
+ENG 620 Computational Analysis of Language Data for
+Artificial Intelligence (AI)
+3
+FIN 350 Business Finance 3
+FIN 420 Introduction to FinTech 3
+FIN 520 FinTech II: DeFi, Business Blockchain, and
+Machine Learning
+3
+FIN 536 International Finance 3
+GEOG 603 Introduction to Geographic Information Systems 3
+GEOG 604 Environmental Data Science 3
+I R 312 Introduction to International Political Economy 4
+=== p.134 ===
+ISYS 363 Information Systems for Management 3
+MATH 227 Calculus II 4
+MATH 228 Calculus III 4
+MATH 245 Elementary Differential Equations and Linear
+Algebra
+3
+MATH 324 Probability and Statistics with Computing 3
+MATH 325 Linear Algebra 4
+MATH 338 Introduction to SAS 3
+MATH 376 Ordinary Differential Equations I 3
+MATH 400 Numerical Analysis 3
+MATH 424 Introduction to Linear Models 3
+MATH 440 Probability and Statistics I 3
+MATH 441 Probability and Statistics II 3
+MATH 448 Introduction to Statistical Learning and Data
+Mining
+3
+Complementary Studies
+Bachelor of Arts students must complete at least 12 units of
+Complementary Studies outside of the primary prefix for the major. (Note:
+Students may not use an alternate prefix that is cross-listed with the
+primary prefix for the major.)
+Students who complete two majors or a major and a minor automatically
+complete the Complementary Studies requirement. Alternatively, students
+in the Economics major can meet with a major advisor to determine
+which courses will satisfy the Complementary Studies requirement.
+Consult with your major advisor for assistance.
+Students who have earned AA-T or AS-T degrees and are pursuing a
+similar B.A. degree at SF State are required to fulfill the Complementary
+Studies requirement as defined by the major department. Students
+should consult with a major advisor about how transfer units and/or
+SF State units can best be applied to this requirement in order to ensure
+degree completion within 60 units.
+General Education Requirements
+Requirement Course Level Units Area Designation
+English
+Composition
+LD 3 1A
+Critical Thinking LD 3 1B
+Oral
+Communication
+LD 3 1C
+Mathematical
+Concepts and
+Quantitative
+Reasoning
+LD 3 2
+Arts LD 3 3A
+Humanities LD 3 3B
+Social and
+Behavioral
+Sciences*
+LD 6 4
+Physical Science LD 3 5A
+Biological
+Science
+LD 3 5B
+Laboratory LD 1 5C
+Ethnic Studies LD or UD 3 6
+Science or Math/
+Quantitative
+Reasoning
+UD 3 5UD or 2UD
+Arts or
+Humanities
+UD 3 3UD
+Social and
+Behavioral
+Sciences
+UD 3 4UD
+*Students will fulfill USH through their Area 4 courses
+SF State Studies
+Courses certified as meeting the SF State Studies
+requirements may be upper or lower division in General
+Education (GE), a major or minor, or an elective.
+American Ethnic
+and Racial
+Minorities
+LD or UD 3 AERM
+Environmental
+Sustainability
+and Climate
+Action
+LD or UD 3 ESCA
+Global
+Perspectives
+LD or UD 3 GP
+Social Justice LD or UD 3 SJ
+American Institutions
+US and California
+Government
+(p. 2350)
+LD or UD 3 USG/CSLG
+Note: LD = Lower-Division; UD = Upper-Division.
+First-Time Student Roadmap (4 Year)
+The roadmaps presented in this Bulletin are intended as suggested
+plans of study and do not replace meeting with an advisor. For a
+more personalized roadmap, please use the Degree Planner (https://
+registrar.sfsu.edu/degreeplanner) tool found in your Student Center.
+Students should use their Pathway/Category (https://
+gatorsmartstart.sfsu.edu/pathways) to determine which roadmap
+to follow. For directions on how to view your Pathway/Category,
+visit how to find your pathway (https://gatorsmartstart.sfsu.edu/
+howtofindyourpathways). Questions? Contact Gator Smart Start. (https://
+gatorsmartstart.sfsu.edu/)
+First-Time Student Roadmap – QR Pathway 1/2 (p. 136)
+First-Time Student Roadmap – QR Pathway 3/4 (p. 138)
+Transfer Student Roadmap (2 Year)
+For Students with an AA-T in Economics.
+ECON ADT Roadmap (p. 140)
+SF State Scholars Roadmap
+The San Francisco State Scholars program provides undergraduate
+students with an accelerated pathway to a graduate degree. Students in
+this program pursue a bachelor’s and master’s degree simultaneously.
+This program allows students to earn graduate credit while in their
+junior and/or senior year, reducing the number of semesters required for
+completion of a master’s degree.
+=== p.135 ===
+Economics BA + Quantitative Economics MS SF State Scholars Roadmap
+(p. 142)
+This degree program is an approved pathway
+(“similar” major) for students earning the ADT in
+Economics
+California legislation SB 1440 (2009) mandated the creation of the
+Associate Degree for Transfer (ADT) to be awarded by the California
+Community Colleges. Two types of ADTs are awarded: Associate in Arts
+for Transfer (AA-T) and Associate in Science for Transfer (AS-T).
+Note: no specific degree is required for admission as an upper-division
+student. However, the ADT includes specific guarantees related to
+admission and graduation and is designed to clarify the transfer process
+and strengthen lower-division preparation for the major.
+An ADT totals 60 units and in most cases includes completion of all
+lower-division General Education requirements and at least 18 units in a
+specific major. (The Biology, Chemistry, and Environmental Science AS-
+T degrees defer 3 units in lower-division GE area 3 and 3 units in lower-
+division GE area 4 until after transfer.) Students pursuing an ADT are
+guaranteed admission to the CSU if minimum eligibility requirements are
+met, though not necessarily to the CSU campus of primary choice.
+Upon verification that the ADT has been awarded prior to matriculation
+at SF State, students are guaranteed B.A. or B.S. completion in 60 units
+if pursuing a “similar” major after transfer. Determinations about “similar”
+majors at SF State are made by faculty in the discipline.
+Degree completion in 60 units cannot be guaranteed when a student
+simultaneously pursues an additional major, a minor, certificate, or
+credential.
+A sample advising roadmap for students who have earned an ADT and
+continue in a "similar" major at SF State is available on the Roadmaps tab
+on the degree requirements page for the major. The roadmap displays:
+• How many lower-division units required for the major have been
+completed upon entry based on the award of a specific ADT;
+• Which lower-division requirements are considered complete upon
+entry based on the award of a specific ADT;
+• How to complete the remaining 60 units for the degree in four
+semesters.
+Students who have earned an ADT should seek advising in the major
+department during the first semester of attendance.
+General Advising Information for Transfer
+Students
+1. Before transfer, complete as many lower-division requirements or
+electives for this major as possible.
+2. The following courses are not required for admission but are required
+for graduation. Students are strongly encouraged to complete these
+units before transfer; doing so will provide more flexibility in course
+selection after transfer.
+• a course in U.S. History
+• a course in U.S. & California Government
+For information about satisfying the requirements described in (1) and
+(2) above at a California Community College (CCC), please visit http://
+www.assist.org (http://assist.org). Check any geographically accessible
+CCCs; sometimes, options include more than one college. Use ASSIST to
+determine:
+• Which courses at a CCC satisfy any lower-division major
+requirements for this major;
+• Which courses at a CCC satisfy CSU GE, US History, and US & CA
+Government requirements.
+Remedial courses are not transferable and do not apply to the minimum
+60 semester units/90 quarter units required for admission.
+Additional units for courses that are repeated do not apply to the
+minimum 60 units required for upper-division transfer (for example, if
+a course was not passed on the first attempt or was taken to earn a
+better grade).
+Before leaving the last California Community College of attendance,
+obtain a summary of completion of lower-division General Education
+units (IGETC or CSU GE Breadth). This is often referred to as a GE
+certification worksheet. SF State does not require delivery of this
+certification to Admissions, but students should retain this document for
+verifying degree progress after transfer.
+Credit for Advanced Placement, International Baccalaureate, or
+College-Level Examination Program courses: AP/IB/CLEP credit is
+not automatically transferred from the previous institution. Units are
+transferred only when an official score report is delivered to SF State.
+Credit is based on the academic year during which exams were taken.
+Refer to the University Bulletin in effect during the year of AP/IB/CLEP
+examination(s) for details regarding the award of credit for AP/IB/CLEP.
+Students pursuing majors in science, technology, engineering, and
+mathematics (STEM) disciplines often defer 6-9 units of lower-division
+General Education in Areas C and D until after transfer to focus on
+preparation courses for the major. This advice does not apply to students
+pursuing associate degree completion before transfer.
+Transferring From Institutions Other Than CCCs
+or CSUs
+Review SF State's lower-division General Education requirements.
+Note that, as described below, the four basic skills courses required for
+admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State
+GE pattern. Courses that fulfill the remaining areas of SF State’s lower-
+division GE pattern are available at most two-year and four-year colleges
+and universities.
+Of the four required basic skills courses, a course in critical thinking
+(1B/A3) may not be widely offered outside the CCC and CSU systems.
+Students should attempt to identify and take an appropriate course
+no later than the term of application to the CSU. To review more
+information about the 1B/A3 requirement, please visit bulletin.sfsu.edu/
+undergraduate-education/general-education/lower-division/#AAEL.
+Waiting until after transfer to take a single course at SF State that meets
+both US and CA/local government requirements may be an appropriate
+option, particularly if transferring from outside of California.

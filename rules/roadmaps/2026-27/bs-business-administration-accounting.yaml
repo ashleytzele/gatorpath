@@ -1,0 +1,239 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-business-administration-accounting.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-business-administration-accounting
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-3-4:
+    title: 'Bachelor of Science in Business Administration: Concentration in Accounting Roadmap – Quantitative Reasoning Category
+      3/4'
+    qr_pathway: 3/4
+    total_units: 120
+    source: p.58-59
+    notes:
+    - 120 Total Units Required
+    - 'Minimum Number of Units in the Major: 69'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - '1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '3: Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.'
+    - '4: Students enrolled in the BSBA with a concentration in Accounting may use ACCT 317 as a University Elective to satisfy
+      the minimum units required for the BSBA degree.'
+    - '5: Concentration Option (6 units). A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements (p. 53).'
+    - '6: Major Electives (6 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 53).'
+    semesters:
+    - units: 15
+      source: p.58
+      items:
+      - ECON 101
+      - MATH 107
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 2
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 15
+      source: p.58
+      items:
+      - ACCT 100
+      - ECON 102
+      - MATH 108
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+    - units: 15
+      source: p.58
+      items:
+      - slot: major
+        group: core_statistics
+        units: 3
+        note: 'Select One (Major Core): DS/ECON 212 or MATH 124 (GE 2)'
+      - ISYS 263
+      - slot: GE
+        area: '4'
+        units: 3
+        note: Social and Behavioral Sciences with USH
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.58
+      items:
+      - ACCT 101
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '6'
+        units: 3
+        note: Ethnic Studies (p. 2328)
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government (p. 2351)
+      - slot: sfss_or_elective
+        units: 3
+        note: footnote 4
+    - units: 15
+      source: p.58-59
+      items:
+      - ACCT 301
+      - BUS 300GW
+      - FIN 350
+      - IBUS 330
+      - slot: sfss_or_elective
+        units: 3
+        note: footnote 4
+    - units: 15
+      source: p.59
+      items:
+      - ACCT 302
+      - ACCT 307
+      - MGMT 405
+      - MKTG 431
+      - slot: GE
+        area: 3UD
+        units: 3
+        note: Upper-Division Arts or Humanities
+    - units: 15
+      source: p.59
+      items:
+      - ACCT 305
+      - DS 412
+      - slot: major
+        group: conc_select_two
+        units: 3
+        note: Concentration Option (6 Units Total) - Take One; footnote 5
+      - slot: major
+        group: electives
+        units: 3
+        note: Major Elective (6 Units Total) - Take One; footnote 6
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+        note: Upper-Division Sciences or Upper-Division Mathematical Concepts
+    - units: 15
+      source: p.59
+      items:
+      - BUS 682
+      - BUS 690
+      - slot: major
+        group: conc_select_two
+        units: 3
+        note: Concentration Option (6 Units Total) – Take One; footnote 5
+      - slot: major
+        group: electives
+        units: 3
+        note: Major Elective (6 Units Total) – Take One; footnote 6
+      - slot: sfss_or_elective
+        units: 3
+        note: footnote 4
+  adt:
+    title: 'Bachelor of Science in Business Administration: Concentration in Accounting – BUS Associate Degree for Transfer
+      (ADT) with 15 Lower-Division Units Roadmap'
+    total_units: 60
+    source: p.60-61
+    met_in_transfer:
+    - ACCT 100
+    - ACCT 101
+    - DS 212
+    - ECON 101
+    - ECON 102
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Business Administration (VERSION 2.0, established Spring 2021). 15 units in the major [ACCT 100, ACCT 101,
+      DS 212/ECON 212, ECON 101, ECON 102] and all lower-division GE requirements have been satisfied. Additional units in
+      the major may have been satisfied. Check with a major advisor about the most appropriate course sequence. Degree completion
+      guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 9-15 units. American Institutions (0–6 units): US History, US Government, California
+      State and Local Government requirements if not met pre-transfer. Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD (9 units):
+      Courses required for the major may double-count if approved for UD GE. Students entering the major with the AS-T in
+      Business Administration with a concentration in Accounting are not required to fulfill SF State Studies requirements.'
+    - 'BS in Business Administration: Concentration in Accounting major: 48-54 units. ACCT 100/ACCT 101, DS 212, ECON 101/ECON
+      102 met in transfer. Prerequisites (0-6 units): DS 110 or MATH 110 and ISYS 263 if not met in transfer. Upper-division
+      core courses for Business majors (27 units). Concentration (21 units) – ACCT 301, ACCT 302, ACCT 305; two Concentration
+      Requirements; and Two Concentration Electives'
+    - 'University Electives: 0 or more units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State - some courses may meet more than one requirement,
+      e.g. in both UD GE and in the major.'
+    - '1: Concentration Requirements (6 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 53).'
+    - '2: Concentration Electives (6 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 53).'
+    semesters:
+    - units: 15
+      source: p.60
+      items:
+      - ACCT 301
+      - ISYS 263
+      - MGMT 405
+      - MKTG 431
+      - one_of:
+        - DS 110
+        - MATH 110
+        units: 3
+        note: Select One (Major Prerequisite, GE 2)
+    - units: 15
+      source: p.60
+      items:
+      - ACCT 302
+      - ACCT 307
+      - BUS 300GW
+      - FIN 350
+      - one_of:
+        - HIST 470
+        - HIST 471
+        units: 3
+        note: Select One (GE 3UD, USH, USG/CSLG)
+    - units: 15
+      source: p.61
+      items:
+      - ACCT 305
+      - DS 412
+      - IBUS 330
+      - slot: major
+        group: conc_select_two
+        count: 2
+        units: 6
+        note: Concentration Requirements (6 units) - Take Two; footnote 1
+    - units: 15
+      source: p.61
+      items:
+      - BUS 682
+      - BUS 690
+      - slot: major
+        group: electives
+        count: 2
+        units: 6
+        note: Concentration Electives (6 units) - Take Two; footnote 2
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+        note: Upper-Division Sciences or Upper-Division Mathematical Concepts
+drafted_by: claude, 2026-10-23

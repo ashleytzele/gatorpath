@@ -1,0 +1,114 @@
+program: ba-modern-jewish-studies
+title: Bachelor of Arts in Modern Jewish Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 30
+source: p.1357
+groups:
+- id: core_cr_nc
+  title: Core and Culminating Experience courses must be taken for a letter grade
+  unparsed: true
+  quote: CR/NC grading is not accepted for Core and Culminating Experience courses.
+  source: p.1357
+- id: major_core
+  title: Major Core (12 units)
+  choose_units: 12
+  min_grade: C-
+  from:
+  - list:
+    - JS 280
+    - HIST 280
+    - JS 301
+    - JS 408
+    - CINE 314
+    - JS 430
+    - I R 430
+    - PLSI 430
+    - JS 437
+    - CWL 437
+    - ENG 533
+    - JS 449
+    - HIST 449
+    - JS 480
+    - CWL 480
+    - JS 501
+    - HUM 501
+    - PHIL 501
+    - JS 540
+    - HEBR 101
+    - HEBR 102
+    - HEBR 201
+  quote: 'Select four courses from the following:'
+  source: p.1357
+- id: electives
+  title: Electives (12 units)
+  unparsed: true
+  quote: Select four JS upper-division courses. These can include courses from the major core list.
+  source: p.1357
+- id: gwar
+  title: GWAR Course (3 units)
+  choose_units: 3
+  min_grade: C
+  approval: Select any GWAR course from any discipline or department with the approval of a major advisor.
+  from:
+    ge_area: GW
+  quote: Select any GWAR course from any discipline or department with the approval of a major advisor.
+  source: p.1357
+- id: culminating_experience
+  title: 'Culminating Experience (3 units): Select One (JS 600 or JS 699)'
+  one_of:
+  - - JS 600
+  - - JS 699
+  min_grade: C-
+  quote: JS 600 Internship 3
+  source: p.1357
+- id: complementary_studies
+  title: Complementary Studies (12 units)
+  unparsed: true
+  quote: Twelve units of Complementary Studies are required of all candidates for the B.A. in Modern Jewish Studies.
+  source: p.1357
+transfer_notes:
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.1358
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1358
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1358
+- text: Students who have earned an AA-T or AS-T degree and are pursuing a similar B.A. degree at SF State must fulfill the
+    Complementary Studies requirement as defined by the major department. Students should consult with a major advisor about
+    how transfer units and/or SF State units can best be applied to this requirement to ensure degree completion within 60
+    units.
+  source: p.1357
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1358
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1358
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1358
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1359
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.1359
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.1359
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.1359
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1359
+drafted_by: claude, 2026-10-23

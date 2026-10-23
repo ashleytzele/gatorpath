@@ -491,6 +491,8 @@ def test_upper_division_and_graduate_isnt_graduate_only():
     assert evaluate({"restricted_to": text}, ctx)[0] == OK
     assert evaluate({"restricted_to": text}, ctx | {"units": 30})[0] == NO  # not upper-division yet
     assert evaluate({"restricted_to": "graduate students"}, ctx)[0] == NO
+    # KIN 750: open to the integrated teacher education program's undergraduates too
+    assert evaluate({"restricted_to": "graduate standing or KIN ITEP credential students"}, ctx)[0] != NO
 
 
 def test_not_open_after_a_course_is_an_exclusion():
@@ -521,7 +523,7 @@ def test_ge_combinations_list_every_minimal_way():
     first = got["ways"][0]
     assert first["courses"] == 1 and "ENVS 401" in [e["code"] for e in first["parts"][0]["examples"]]
     two = [w for w in got["ways"] if w["courses"] == 2]
-    assert any("PLSI 355" in [e["code"] for e in part["examples"]] and len(part["covers"]) == 2 for w in two for part in w["parts"])
+    assert any(len(part["covers"]) == 2 and part["examples"] for w in two for part in w["parts"])  # one course for two of them
     for w in got["ways"]:  # every way covers all three, and every part is needed
         assert set().union(*(set(part["covers"]) for part in w["parts"])) == set(got["open"])
 

@@ -1,0 +1,98 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-interior-design-and-architecture.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-interior-design-and-architecture
+title: Bachelor of Science in Interior Design and Architecture
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 54
+source: p.689
+global:
+  no_cr_nc: true
+  source: p.689
+groups:
+- id: core
+  title: Core Requirements (45 units)
+  all_of:
+  - ADM 260
+  - FCS 600
+  - ID 240
+  - ID 242
+  - ID 244
+  - ID 245
+  - ID 340GW
+  - ID 343
+  - ID 345
+  - ID 440
+  - ID 445
+  - ID 540
+  - ID 640
+  - ID 641
+  - ID 645
+  min_grade: C-
+  quote: Core Requirements (45 units)
+  source: p.689
+- id: electives
+  title: 'Electives (9 units): select three with the approval of an advisor'
+  choose_units: 9
+  from:
+  - list:
+    - A U 220
+    - ADM 569
+    - ARTH 201
+    - ARTH 202
+    - ART 210
+    - ART 222
+    - ART 231
+    - ART 260
+    - DES 210
+    - DES 220
+    - DES 221
+    - DES 222
+    - DES 256
+    - DES 300
+    - ENVS 130
+    - FCS 543
+    - FCS 685
+    - FCS 699
+    - GEOG 455
+    - HTM 110
+    - HUM 375
+    - HUM 376
+    - ID 366
+    - ADM 366
+    - MKTG 431
+    - USP 580
+    - PLSI 580
+  min_grade: C-
+  quote: 'Select three of the following with the approval of an advisor:'
+  source: p.689
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.690
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.690
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.690
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.690
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.690
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.690
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.690
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.690
+drafted_by: claude, 2026-10-23

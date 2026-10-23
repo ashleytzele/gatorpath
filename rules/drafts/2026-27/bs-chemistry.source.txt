@@ -1,0 +1,283 @@
+=== p.1881 ===
+Bachelor of Science in Chemistry
+Program Learning Outcomes
+1. Demonstrate an understanding of key concepts and an ability to
+solve problems in the five chemistry sub-disciplines: analytical
+chemistry, biochemistry, inorganic chemistry, organic chemistry and
+physical chemistry.
+2. Perform basic chemistry laboratory procedures, including the use
+of modern instrumentation, for the synthesis, separation, isolation,
+analysis and characterization of molecules.
+3. Effectively communicate the results of scientific experiments in oral
+reports, technical graphics and written reports.
+4. Demonstrate the retention and synthesis of prior learning in
+advanced classes.
+5. Search the chemical literature for published work relevant to a project
+of interest, read and understand technical literature related to the
+discipline.
+6. Draw on classroom knowledge to contribute to solutions of problems
+encountered in a laboratory.
+7. Articulate an understanding of the relationship between chemistry
+and related disciplines such as biological science, materials science
+and environmental science.
+8. Contribute to solving problems encountered in chemistry as part of a
+team.
+9. Understand the key experiments that led to the development of
+chemical theories and models.
+High school preparation for the chemistry and biochemistry degree
+programs should include two years of algebra, one year of geometry, one-
+half year of trigonometry, one year of chemistry, and one year of physics.
+Calculus is highly recommended.
+Chemistry (B.S.) — 71 units minimum
+• All courses used in the major program must be completed with letter
+grades (CR/NC not allowed) and a minimum GPA of 2.0 (SFSU Major
+GPA).
+• Grades of C or better are required in chemistry prerequisite courses.
+Lower-Division Requirements (37 units)
+Code Title Units
+CHEM 115 General Chemistry I 4
+CHEM 215 General Chemistry II 4
+CHEM 233
+& CHEM 234
+Organic Chemistry I
+and Organic Chemistry I Laboratory
+5
+CHEM 235 Organic Chemistry II 3
+CHEM 236 Organic Chemistry II Laboratory 2
+CHEM 251 Mathematics and Physics for Chemistry 3
+MATH 226 Calculus I 4
+MATH 227 Calculus II 4
+Select One: 8
+PHYS 111
+& PHYS 112
+& PHYS 121
+& PHYS 122
+General Physics I
+and General Physics I Laboratory
+and General Physics II
+and General Physics II Laboratory
+PHYS 220
+& PHYS 222
+& PHYS 230
+& PHYS 232
+General Physics with Calculus I
+and General Physics with Calculus I Laboratory
+and General Physics with Calculus II
+and General Physics with Calculus II Laboratory
+Upper-Division Requirements (25 units)
+Code Title Units
+CHEM 321 Quantitative Chemical Analysis 3
+CHEM 322 Quantitative Chemical Analysis Laboratory 2
+CHEM 325 Inorganic Chemistry 3
+CHEM 340 Biochemistry I 3
+CHEM 351 Physical Chemistry I: Thermodynamics and
+Kinetics
+3
+CHEM 353 Physical Chemistry II: Quantum Chemistry and
+Spectroscopy
+3
+CHEM 390GW Contemporary Chemistry and Biochemistry
+Research - GWAR
+3
+CHEM 426 Advanced Inorganic Chemistry Laboratory
+1
+2
+CHEM 451 Experimental Physical Chemistry with Laboratory
+1
+3
+Upper-Division Electives (9 units minimum)
+A minimum of 9 units of electives must be selected from the following
+list of courses. Courses from community colleges cannot be substituted
+for the courses on the list below. Graduate-level courses in chemistry
+or appropriate courses in biology, physics, geosciences, and computer
+science may be substituted upon prior approval of an advisor. Students
+should keep in mind that non-Chemistry courses may require additional
+prerequisites that are not met in the Chemistry degree or permission of
+the instructor.
+Code Title Units
+CHEM 341 Biochemistry II 3
+CHEM 343 Biochemistry I Laboratory
+1
+3
+CHEM 370 Computer Applications in Chemistry and
+Biochemistry
+3
+CHEM 420 Environmental Analysis 3
+CHEM 422 Instrumental Analysis 4
+CHEM 433 Advanced Organic Chemistry 3
+CHEM 443 Biophysical Chemistry Laboratory 4
+CHEM 645GW Research Trends in Chemistry and Biochemistry -
+GWAR
+3
+CHEM 667 Optical Engineering for the Biological Sciences 3
+CHEM 680 Chemical Oceanography 3
+CHEM 685 Instructional Methods in Teaching Chemistry and
+Biochemistry
+3
+CHEM 686 Experiences in Teaching Chemistry and
+Biochemistry
+2
+1
+CHEM 699 Independent Study
+3
+2-3
+Select One: 3
+CSC 306 An Interdisciplinary Approach to Computer
+Programming
+CSC 408 Machine Learning and Data Science for
+Personalized Medicine
+CSC 509 Data Science and Machine Learning for Medical
+Image Analysis
+=== p.1882 ===
+1
+Students may substitute CHEM 343 for CHEM 426 or CHEM 451 upon
+prior approval of advisor. If CHEM 343 is used as a substitute, it cannot
+also be used as an elective.
+2
+May be repeated and up to 2 units used towards Elective requirement.
+3
+By petition only. Units must be taken in the same semester to be used
+as an upper division elective.
+General Education Requirements
+Requirement Course Level Units Area Designation
+English
+Composition
+LD 3 1A
+Critical Thinking LD 3 1B
+Oral
+Communication
+LD 3 1C
+Mathematical
+Concepts and
+Quantitative
+Reasoning
+LD 3 2
+Arts LD 3 3A
+Humanities LD 3 3B
+Social and
+Behavioral
+Sciences*
+LD 6 4
+Physical Science LD 3 5A
+Biological
+Science
+LD 3 5B
+Laboratory LD 1 5C
+Ethnic Studies LD or UD 3 6
+Science or Math/
+Quantitative
+Reasoning
+UD 3 5UD or 2UD
+Arts or
+Humanities
+UD 3 3UD
+Social and
+Behavioral
+Sciences
+UD 3 4UD
+*Students will fulfill USH through their Area 4 courses
+SF State Studies
+Courses certified as meeting the SF State Studies
+requirements may be upper or lower division in General
+Education (GE), a major or minor, or an elective.
+American Ethnic
+and Racial
+Minorities
+LD or UD 3 AERM
+Environmental
+Sustainability
+and Climate
+Action
+LD or UD 3 ESCA
+Global
+Perspectives
+LD or UD 3 GP
+Social Justice LD or UD 3 SJ
+American Institutions
+US and California
+Government
+(p. 2350)
+LD or UD 3 USG/CSLG
+Note: LD = Lower-Division; UD = Upper-Division.
+First-Time Student Roadmap (4 Year)
+The roadmaps presented in this Bulletin are intended as suggested
+plans of study and do not replace meeting with an advisor. For a
+more personalized roadmap, please use the Degree Planner (https://
+registrar.sfsu.edu/degreeplanner) tool found in your Student Center.
+Students should use their Pathway/Category (https://
+gatorsmartstart.sfsu.edu/pathways) to determine which roadmap
+to follow. For directions on how to view your Pathway/Category,
+visit how to find your pathway (https://gatorsmartstart.sfsu.edu/
+howtofindyourpathways). Questions? Contact Gator Smart Start. (https://
+gatorsmartstart.sfsu.edu/)
+First-Time Student Roadmap – QR Pathway 1/2 (p. 1884)
+First-Time Student Roadmap – QR Pathway 3/4 (p. 1886)
+SF State Scholars Roadmap
+The San Francisco State Scholars program provides undergraduate
+students with an accelerated pathway to a graduate degree. Students in
+this program pursue a bachelor’s and master’s degree simultaneously.
+This program allows students to earn graduate credit while in their
+junior and/or senior year, reducing the number of semesters required for
+completion of a master’s degree.
+Chemistry BS + MS SF State Scholars Roadmap (p. 1888)
+General Advising Information for Transfer
+Students
+1. Before transfer, complete as many lower-division requirements or
+electives for this major as possible.
+2. The following courses are not required for admission but are required
+for graduation. Students are strongly encouraged to complete these
+units before transfer; doing so will provide more flexibility in course
+selection after transfer.
+• a course in U.S. History
+• a course in U.S. & California Government
+For information about satisfying the requirements described in (1) and
+(2) above at a California Community College (CCC), please visit http://
+www.assist.org (http://assist.org). Check any geographically accessible
+CCCs; sometimes, options include more than one college. Use ASSIST to
+determine:
+• Which courses at a CCC satisfy any lower-division major
+requirements for this major;
+• Which courses at a CCC satisfy CSU GE, US History, and US & CA
+Government requirements.
+Remedial courses are not transferable and do not apply to the minimum
+60 semester units/90 quarter units required for admission.
+Additional units for courses that are repeated do not apply to the
+minimum 60 units required for upper-division transfer (for example, if
+a course was not passed on the first attempt or was taken to earn a
+better grade).
+Before leaving the last California Community College of attendance,
+obtain a summary of completion of lower-division General Education
+units (IGETC or CSU GE Breadth). This is often referred to as a GE
+=== p.1883 ===
+certification worksheet. SF State does not require delivery of this
+certification to Admissions, but students should retain this document for
+verifying degree progress after transfer.
+Credit for Advanced Placement, International Baccalaureate, or
+College-Level Examination Program courses: AP/IB/CLEP credit is
+not automatically transferred from the previous institution. Units are
+transferred only when an official score report is delivered to SF State.
+Credit is based on the academic year during which exams were taken.
+Refer to the University Bulletin in effect during the year of AP/IB/CLEP
+examination(s) for details regarding the award of credit for AP/IB/CLEP.
+Students pursuing majors in science, technology, engineering, and
+mathematics (STEM) disciplines often defer 6-9 units of lower-division
+General Education in Areas C and D until after transfer to focus on
+preparation courses for the major. This advice does not apply to students
+pursuing associate degree completion before transfer.
+Transferring From Institutions Other Than CCCs
+or CSUs
+Review SF State's lower-division General Education requirements.
+Note that, as described below, the four basic skills courses required for
+admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State
+GE pattern. Courses that fulfill the remaining areas of SF State’s lower-
+division GE pattern are available at most two-year and four-year colleges
+and universities.
+Of the four required basic skills courses, a course in critical thinking
+(1B/A3) may not be widely offered outside the CCC and CSU systems.
+Students should attempt to identify and take an appropriate course
+no later than the term of application to the CSU. To review more
+information about the 1B/A3 requirement, please visit bulletin.sfsu.edu/
+undergraduate-education/general-education/lower-division/#AAEL.
+Waiting until after transfer to take a single course at SF State that meets
+both US and CA/local government requirements may be an appropriate
+option, particularly if transferring from outside of California.

@@ -1,0 +1,309 @@
+=== p.2211 ===
+Fifth Semester
+PHYS 320 Modern Physics I (Major Upper-Division
+Core)
+3
+PHYS 321 Modern Physics Laboratory (Major Upper-
+Division Core)
+2
+PHYS 330 Analytical Mechanics I (Major Upper-
+Division Core)
+3
+PHYS 385 Introduction to Theoretical Physics I (Major
+Upper-Division Core)
+3
+Select One: 3
+MATH 376 Ordinary Differential Equations I (if
+MATH 225 taken)
+SF State Studies or University Elective (if MATH 245 taken)
+Units 14
+Sixth Semester
+PHYS 360 Electricity and Magnetism I (Major Upper-
+Division Core)
+3
+PHYS 370 Thermodynamics and Statistical Mechanics
+(Major Upper-Division Core)
+3
+Major Elective (9-12 Units Total) - Take Two
+4
+6
+GE Area 6: Ethnic Studies (p. 2328) 3
+Units 15
+Seventh Semester
+Select One (Major Upper-Division Core): 3
+E ED 655 Hands-on Undergraduate Science Education
+Experience
+MATH 375 Field Study for Secondary Teachers
+PHYS 491GW Advanced Laboratory Techniques I - GWAR
+(Major Upper-Division Core)
+3
+Major Elective (9-12 Units Total)
+4
+3
+GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3
+GE Area 3UD: Upper-Division Arts or Humanities 3
+Units 15
+Eighth Semester
+Select One: 3
+Major Elective (9-12 Units Total) - Take One (if MATH 245 taken)
+4
+SF State Studies or University Elective (if MATH 225 and MATH 376 taken)
+GE Area 4UD: Upper-Division Social and Behavioral Sciences 3
+US and California Government (p. 2351) 3
+SF State Studies or University Elective – Take Two 6
+Units 15
+Total Units 120
+1
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For
+directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+2
+First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+3
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option.
+For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+4
+Major Electives (9-12 units)
+For students who choose MATH 245, 12 units of electives are required, whereas for students who choose MATH 225 & MATH 376, 9 units of
+electives are required. Selected in consultation with a faculty advisor to prepare to teach a second subject in addition to physics or general
+science at a 9th-grade level. Electives may be lower-division or upper-division courses.
+=== p.2212 ===
+Roadmap – Quantitative Reasoning Category 3/4
+Bachelor of Science in Physics: Concentration in Physics for Teaching
+Roadmap – Quantitative Reasoning Category 3/4
+Discontinued - Not Accepting New Majors
+120 Total Units Required
+Minimum Number of Units in the Major: 66
+This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual
+sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner) and an advisor for
+further guidance.
+To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major.
+Course Title Units
+First Semester
+MATH 197 Prelude to Calculus I (Prerequisite for
+MATH 226)
+1
+3
+PHYS 200 Planning for Success as a Physics &
+Astronomy Major (Major Prerequisite)
+1
+GE Area 1: English Communication 3
+GE Area 3: Arts and Humanities 3
+GE Area 4: Social and Behavioral Sciences
+2
+3
+Units 13
+Second Semester
+MATH 198 Prelude to Calculus II (Prerequisite for
+MATH 226, GE 2)
+1
+3
+GE Area 1A: English Composition
+3
+3
+GE Area 1: English Communication 3
+GE Area 3: Arts and Humanities 3
+Units 12
+Third Semester
+MATH 226 Calculus I (Major Prerequisite, GE 2)
+1
+4
+GE Area 4: Social and Behavioral Sciences
+2
+3
+GE Area 5B: Biological Science 3
+US and California Government (p. 2351) 3
+Units 13
+Fourth Semester
+MATH 227 Calculus II (Major Prerequisite) 4
+PHYS 220
+& PHYS 222
+General Physics with Calculus I
+and General Physics with Calculus I
+Laboratory (Major Prerequisite, GE 5A, GE
+5C)
+4
+GE Area 6: Ethnic Studies (p. 2328) 3
+SF State Studies or University Elective 3
+Units 14
+Fifth Semester
+Select One (Major Upper-Division Core): 3
+CSC 309 Computer Programming
+MATH 209 Mathematical Computing
+MATH 228 Calculus III (Major Prerequisite) 4
+PHYS 230
+& PHYS 232
+General Physics with Calculus II
+and General Physics with Calculus II
+Laboratory (Major Prerequisite)
+4
+=== p.2213 ===
+GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3
+Units 14
+Sixth Semester
+Select One (Major Prerequisite): 3
+MATH 225 Introduction to Linear Algebra
+MATH 245 Elementary Differential Equations and Linear
+Algebra
+PHYS 240
+& PHYS 242
+General Physics with Calculus III
+and General Physics with Calculus III
+Laboratory (Major Prerequisite))
+4
+GE Area 3UD: Upper-Division Arts or Humanities 3
+GE Area 4UD: Upper-Division Social and Behavioral Sciences 3
+Units 13
+Seventh Semester
+PHYS 320 Modern Physics I (Major Upper-Division
+Core)
+3
+PHYS 321 Modern Physics Laboratory (Major Upper-
+Division Core)
+2
+PHYS 330 Analytical Mechanics I (Major Upper-
+Division Core)
+3
+PHYS 385 Introduction to Theoretical Physics I (Major
+Upper-Division Core)
+3
+Select One: 3
+MATH 376 Ordinary Differential Equations I (if
+MATH 225 taken)
+SF State Studies or University Elective (if MATH 245 taken)
+Units 14
+Eighth Semester
+PHYS 360 Electricity and Magnetism I (Major Upper-
+Division Core)
+3
+PHYS 370 Thermodynamics and Statistical Mechanics
+(Major Upper-Division Core)
+3
+Major Elective (9-12 Units Total) - Take Three
+4
+9
+Units 15
+Ninth Semester
+Select One (Major Upper-Division Core): 3
+E ED 655 Hands-on Undergraduate Science Education
+Experience
+MATH 375 Field Study for Secondary Teachers
+PHYS 491GW Advanced Laboratory Techniques I - GWAR 3
+Select One: 3
+Major Elective (9-12 Units Total) (if MATH 245 taken)
+4
+SF State Studies or University Elective (if MATH 225/MATH 376 taken)
+SF State Studies or University Elective 3
+Units 12
+Total Units 120
+1
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 2 course option. For
+directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+2
+First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+3
+Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate GE 1A course option.
+For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+4
+Major Electives (9-12 units)
+=== p.2214 ===
+Roadmap – Quantitative Reasoning Category 3/4
+For students who choose MATH 245, 12 units of electives are required, whereas for students who choose MATH 225 & MATH 376, 9 units of
+electives are required. Selected in consultation with a faculty advisor to prepare to teach a second subject in addition to physics or general
+science at a 9th-grade level. Electives may be lower-division or upper-division courses.
+=== p.2215 ===
+Bachelor of Science in Physics: Concentration in Physics for Teaching –
+PHYS Associate Degree for Transfer (ADT) Roadmap
+Discontinued - Not Accepting New Majors
+This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with an AS-T in Physics. Twenty-four
+units in the major (MATH 226, MATH 227, MATH 228, PHYS 220, PHYS 222, PHYS 230, PHYS 232, PHYS 240, and PHYS 242) and all lower-division
+GE requirements have been satisfied. Additional units in the major may have been satisfied. Check with a major advisor about the most appropriate
+course sequence. Degree completion guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for more information (p. 2304).
+To Do at SF State:
+Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level; to include the following:
+University-Wide Requirements: 9-15 Units
+• American Institutions (0-6 units): US History, US Government, California State and Local Government requirements if not taken before transfer
+• Upper-division GE areas 2UD/5UD, 3UD, and 4UD (9 units): Courses required for the major may double-count if approved for UD GE.
+• Students entering the major with the AS-T in Physics are not required to fulfill SF State Studies requirements.
+Physics BS (Teaching) Major: 34-37 Units
+MATH 226, MATH 227, MATH 228, PHYS 220, PHYS 222, PHYS 230, PHYS 232, PHYS 240, and PHYS 242 met in transfer.
+• Prerequisites (4 units if MATH 245 equivalent not completed before transfer).
+• Upper-division Requirements (23 units).
+• Electives (12 units): May be lower- or upper-division. Selected in consultation with a department advisor, courses should prepare students to teach
+a second subject in addition to physics or general science at the 9th-grade level.
+University Electives: 3 or More Units
+Depends on course choices made at the community college, how transferred units are applied to the requirements above, and course choices at SF
+State. Some courses may meet more than one requirement, e.g., both in UD GE and the major.
+Course Title Units
+First Semester
+Select One (Major Upper-Division Core): 3
+CSC 309 Computer Programming
+MATH 209 Mathematical Computing
+MATH 245 Elementary Differential Equations and Linear
+Algebra (Major Prerequisite)
+1
+3
+PHYS 200 Planning for Success as a Physics &
+Astronomy Major (Major Prerequisite)
+1
+PHYS 320
+& PHYS 321
+Modern Physics I
+and Modern Physics Laboratory (Major
+Upper-Division Core)
+5
+PHYS 385 Introduction to Theoretical Physics I (Major
+Upper-Division Core)
+3
+Units 15
+Second Semester
+PHYS 360 Electricity and Magnetism I (Major Upper-
+Division Core)
+3
+PHYS 370 Thermodynamics and Statistical Mechanics
+(Major Upper-Division Core)
+3
+Major Elective (12 Units Total) - Take Two
+2
+6
+GE Area 5UD or 2UD: Upper-Division Sciences or Upper-Division Mathematical Concepts 3
+Units 15
+Third Semester
+Select One (Major Upper-Division Core): 3
+=== p.2216 ===
+PHYS Associate Degree for Transfer (ADT) Roadmap
+E ED 655 Hands-on Undergraduate Science Education
+Experience
+MATH 375 Field Study for Secondary Teachers
+PHYS 330 Analytical Mechanics I (Major Upper-
+Division Core)
+3
+PHYS 491GW Advanced Laboratory Techniques I - GWAR 3
+Major Elective (12 Units Total)
+2
+3
+GE Area 3UD: Upper-Division Arts or Humanities 3
+Units 15
+Fourth Semester
+Major Elective (12 Units Total)
+2
+3
+GE Area 4UD: Upper-Division Social and Behavioral Sciences 3
+US and California Government (p. 2351) 3
+or University Elective if met in transfer
+US History (p. 2350) 3
+or University Elective if met in transfer
+University Elective 3
+Units 15
+Total Units 60
+1
+Students may also fulfill this requirement with both MATH 225 and MATH 376. This option may increase time to graduation. Speak with an
+advisor.
+2
+Major Electives
+For students who choose MATH 245, 12 units of electives are required, whereas for students who choose MATH 225 & MATH 376, 9 units of
+electives are required. Selected in consultation with a faculty advisor to prepare to teach a second subject in addition to physics or general
+science at a 9th-grade level. Electives may be lower-division or upper-division courses.

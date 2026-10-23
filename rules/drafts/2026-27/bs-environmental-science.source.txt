@@ -1,0 +1,292 @@
+=== p.2047 ===
+Bachelor of Science in Environmental
+Science
+The Bachelor of Science in Environmental Science is designed for
+students intending to prepare for graduate school or direct entry into
+a career as an environmental scientist or environmental manager in
+industry or government. Entry to the major presupposes prior coursework
+comprising the high school equivalents of two years of algebra, one year
+of plane geometry, one-half year of trigonometry, one year of biology, and
+one year of physics and/or chemistry.
+The Environmental Science curriculum comprises a core providing a
+foundation of science and methods courses—introductory earth systems
+and environmental science, biology, chemistry, physics, and mathematics
+—as well as distributed electives in environmental science, environmental
+management, and analytical methods, and a capstone proseminar.
+ENV 205 provides introductory research design, statistical and geospatial
+methods. Geospatial methods are then further developed in GEOG 603,
+which is a prerequisite for all advanced GIS classes. The GWAR course
+(ENV 500GW) focuses on the physical and human dimensions of climate
+change, providing a rich source of topics for composition at the upper-
+division level.
+Electives are distributed into three areas:
+1. Environmental Systems, including investigations of the atmosphere,
+hydrosphere, lithosphere, pedosphere (soils), environmental
+chemistry, and the biosphere;
+2. Environmental Management of managed lands and waters, natural
+resources, threatened species and livable environment; and
+3. Analytical Methods, including geographic information science,
+statistical analysis, and field-based environmental analysis methods.
+Through choices in each area, students can tailor their program
+in a variety of ways, to focus on water, soils and agriculture, biotic
+systems, restoration science, coastal systems, bioclimatology,
+pollution management, protected land management, water resources
+management, or others. The capstone course, ENV 690, prepares
+students for careers and graduate study.
+Program Learning Outcomes
+1. Students will investigate environmental systems from an
+interdisciplinary perspective including interactions between systems
+and interactions with human activities.
+2. Students will critically evaluate environmental plans, and strategies
+as well as resource management practices with respect to
+environmental sustainability and social justice.
+3. Students will utilize GIScience techniques to investigate
+environmental questions.
+4. Students will conduct field based sampling and/or observational
+studies, analyze results and critically evaluate the method.
+5. Students will design, conduct and report on independent research
+projects using appropriate and well-developed methods.
+Environmental Science (B.S.) – 70 units
+minimum
+Students are advised that the CR grade is acceptable in any two courses
+to be counted for the major. No more than one course counted toward
+major requirements may be completed with a grade less than a C-.
+Foundation Requirements (27-31 units)
+Code Title Units
+Select One: 3
+BIOL 150 The World of Plants
+BIOL 170 Animal Diversity
+BIOL 313 Principles of Ecology
+Select One: 3-4
+CHEM 115 General Chemistry I
+CHEM 180 Chemistry for Energy and the Environment
+Select One: 3-4
+ERTH 112 Our Dynamic Earth Lecture and Lab
+ERTH 230 Environmental Geology
+GEOG 101 Our Physical Environment
+Select One: 3
+ENVS 130 Environmental Studies
+GEOG 102 The Human Environment
+ENV 205 Our Environment Through Data 3
+GEOG 160 Introduction to Environmental Science 4
+Select One: 4-6
+MATH 197
+& MATH 198
+Prelude to Calculus I
+and Prelude to Calculus II
+MATH 199 Pre-Calculus
+Select One: 4
+PHYS 111
+& PHYS 112
+General Physics I
+and General Physics I Laboratory
+PHYS 220
+& PHYS 222
+General Physics with Calculus I
+and General Physics with Calculus I Laboratory
+Core Requirements (12-13 units)
+Code Title Units
+ENVS 450 Environmental Law and Policy 3
+ENV 500GW Physical and Human Dimensions of Climate
+Change - GWAR
+3
+GEOG 603 Introduction to Geographic Information Systems 3
+Select One: 3-4
+BIOL 458 Biostatistics
+GEOG 604 Environmental Data Science
+MATH 226 Calculus I
+Capstone (3 units)
+Code Title Units
+ENV 690 Capstone Seminar 3
+Topical Areas (28-32 units)
+Choose course(s) from each area to meet the total units indicated on the
+right. Meet with an advisor to select courses that best align with your
+career goals. Courses used to meet core requirements can't be double
+counted for the topical areas.
+Environmental Systems (11-12 units)
+Code Title Units
+CHEM 380 Chemistry Behind Environmental Pollution 3
+ERTH 400 Atmosphere and Oceans in the Earth System 3
+or GEOG 313 Earth's Climate System
+=== p.2048 ===
+ERTH 410 Earthquakes and Volcanoes 3
+ERTH 425 Geomorphology 4
+or GEOG 312 Geography of Landforms
+ERTH 500 Earth and Life Through Time 3
+ERTH 515 Sedimentary Materials and Environments 4
+ERTH 535 Planetary Climate Change 4
+GEOG 314 Bioclimatology 4
+GEOG 316 Biogeography 4
+GEOG 317 Soils 4
+GEOG 342/
+ERTH 442
+Surface Water Hydrology 4
+GEOG 644 Water Quality 3
+Environmental Management (10-12 units)
+Code Title Units
+ENVS 470 Climate Politics and Policy 3
+ENVS 480 Climate Change Adaptation and Justice 3
+GEOG 427 Agriculture and Food Supply 4
+GEOG/ERTH 642 Watershed Assessment and Restoration 4
+GEOG 647 Geography of Water Resources 4
+GEOG 648 Management of National Parks and Protected
+Areas
+4
+GEOG/USP 652 Environmental Impact Analysis 4
+GEOG/ENVS 657 Natural Resource Management: Biotic Resources 4
+GEOG/USP 658 Land-Use Planning 4
+GEOG 666 Geography of Garbage: Recycling and Waste
+Reduction
+3
+Analytical Methods (7-8 units)
+Code Title Units
+BIOL 458 Biostatistics 4
+GEOG 602 Field Methods in Environmental Science &
+Physical Geography
+4
+GEOG 604 Environmental Data Science 3
+GEOG 610 Remote Sensing of the Environment I 4
+GEOG 611 Remote Sensing of the Environment II 4
+GEOG 620 Geographical Information Systems 4
+GEOG 621 Geographic Information Systems for
+Environmental Analysis
+4
+GEOG 625 Programming for Geographic Information Science 3
+General Education Requirements
+Requirement Course Level Units Area Designation
+English
+Composition
+LD 3 1A
+Critical Thinking LD 3 1B
+Oral
+Communication
+LD 3 1C
+Mathematical
+Concepts and
+Quantitative
+Reasoning
+LD 3 2
+Arts LD 3 3A
+Humanities LD 3 3B
+Social and
+Behavioral
+Sciences*
+LD 6 4
+Physical Science LD 3 5A
+Biological
+Science
+LD 3 5B
+Laboratory LD 1 5C
+Ethnic Studies LD or UD 3 6
+Science or Math/
+Quantitative
+Reasoning
+UD 3 5UD or 2UD
+Arts or
+Humanities
+UD 3 3UD
+Social and
+Behavioral
+Sciences
+UD 3 4UD
+*Students will fulfill USH through their Area 4 courses
+SF State Studies
+Courses certified as meeting the SF State Studies
+requirements may be upper or lower division in General
+Education (GE), a major or minor, or an elective.
+American Ethnic
+and Racial
+Minorities
+LD or UD 3 AERM
+Environmental
+Sustainability
+and Climate
+Action
+LD or UD 3 ESCA
+Global
+Perspectives
+LD or UD 3 GP
+Social Justice LD or UD 3 SJ
+American Institutions
+US and California
+Government
+(p. 2350)
+LD or UD 3 USG/CSLG
+Note: LD = Lower-Division; UD = Upper-Division.
+First-Time Student Roadmap (4 Year)
+The roadmaps presented in this Bulletin are intended as suggested
+plans of study and do not replace meeting with an advisor. For a
+more personalized roadmap, please use the Degree Planner (https://
+registrar.sfsu.edu/degreeplanner) tool found in your Student Center.
+Students should use their Pathway/Category (https://
+gatorsmartstart.sfsu.edu/pathways) to determine which roadmap
+to follow. For directions on how to view your Pathway/Category,
+visit how to find your pathway (https://gatorsmartstart.sfsu.edu/
+howtofindyourpathways). Questions? Contact Gator Smart Start. (https://
+gatorsmartstart.sfsu.edu/)
+First-Time Student Roadmap – QR Pathway 1/2 (p. 2050)
+First-Time Student Roadmap – QR Pathway 3/4 (p. 2053)
+Transfer Student Roadmap (2 Year)
+For students with an AS-T in Environmental Science.
+ENVS ADT Roadmap (p. 2056)
+=== p.2049 ===
+General Advising Information for Transfer
+Students
+1. Before transfer, complete as many lower-division requirements or
+electives for this major as possible.
+2. The following courses are not required for admission but are required
+for graduation. Students are strongly encouraged to complete these
+units before transfer; doing so will provide more flexibility in course
+selection after transfer.
+• a course in U.S. History
+• a course in U.S. & California Government
+For information about satisfying the requirements described in (1) and
+(2) above at a California Community College (CCC), please visit http://
+www.assist.org (http://assist.org). Check any geographically accessible
+CCCs; sometimes, options include more than one college. Use ASSIST to
+determine:
+• Which courses at a CCC satisfy any lower-division major
+requirements for this major;
+• Which courses at a CCC satisfy CSU GE, US History, and US & CA
+Government requirements.
+Remedial courses are not transferable and do not apply to the minimum
+60 semester units/90 quarter units required for admission.
+Additional units for courses that are repeated do not apply to the
+minimum 60 units required for upper-division transfer (for example, if
+a course was not passed on the first attempt or was taken to earn a
+better grade).
+Before leaving the last California Community College of attendance,
+obtain a summary of completion of lower-division General Education
+units (IGETC or CSU GE Breadth). This is often referred to as a GE
+certification worksheet. SF State does not require delivery of this
+certification to Admissions, but students should retain this document for
+verifying degree progress after transfer.
+Credit for Advanced Placement, International Baccalaureate, or
+College-Level Examination Program courses: AP/IB/CLEP credit is
+not automatically transferred from the previous institution. Units are
+transferred only when an official score report is delivered to SF State.
+Credit is based on the academic year during which exams were taken.
+Refer to the University Bulletin in effect during the year of AP/IB/CLEP
+examination(s) for details regarding the award of credit for AP/IB/CLEP.
+Students pursuing majors in science, technology, engineering, and
+mathematics (STEM) disciplines often defer 6-9 units of lower-division
+General Education in Areas C and D until after transfer to focus on
+preparation courses for the major. This advice does not apply to students
+pursuing associate degree completion before transfer.
+Transferring From Institutions Other Than CCCs
+or CSUs
+Review SF State's lower-division General Education requirements.
+Note that, as described below, the four basic skills courses required for
+admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State
+GE pattern. Courses that fulfill the remaining areas of SF State’s lower-
+division GE pattern are available at most two-year and four-year colleges
+and universities.
+Of the four required basic skills courses, a course in critical thinking
+(1B/A3) may not be widely offered outside the CCC and CSU systems.
+Students should attempt to identify and take an appropriate course
+no later than the term of application to the CSU. To review more
+information about the 1B/A3 requirement, please visit bulletin.sfsu.edu/
+undergraduate-education/general-education/lower-division/#AAEL.
+Waiting until after transfer to take a single course at SF State that meets
+both US and CA/local government requirements may be an appropriate
+option, particularly if transferring from outside of California.

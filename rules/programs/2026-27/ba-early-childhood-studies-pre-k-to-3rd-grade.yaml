@@ -1,0 +1,157 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-early-childhood-studies-pre-k-to-3rd-grade.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-early-childhood-studies-pre-k-to-3rd-grade
+title: 'Bachelor of Arts in Early Childhood Studies: Concentration in Pre-K to 3rd Grade'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.599
+groups:
+- id: core_required
+  title: 'Core (24 units): required courses'
+  all_of:
+  - CAD 210
+  - CAD 260
+  - CAD 280
+  - CAD 300
+  - CAD 330
+  - CAD 410GW
+  - CAD 660
+  min_grade: C
+  quote: Core (24 units)
+  source: p.599
+- id: core_early_childhood
+  title: 'Core: Select One (CAD 215 or CAD 230)'
+  one_of:
+  - - CAD 215
+  - - CAD 230
+  min_grade: C
+  quote: CAD 215 Foundations in Early Childhood
+  source: p.599
+- id: language_literacy
+  title: Language and Literacy (3 units)
+  all_of:
+  - CAD 326
+  min_grade: C
+  quote: Language and Literacy (3 units)
+  source: p.599
+- id: mathematics
+  title: Mathematics (3 units)
+  all_of:
+  - MATH 165
+  min_grade: C
+  quote: MATH 165 Concepts of the Number System 3
+  source: p.599
+- id: assessment
+  title: 'Assessment (3 units): Select One'
+  one_of:
+  - - CAD 420
+  - - E ED 610
+  min_grade: C
+  quote: CAD 420 Assessment and Observation with Children 3
+  source: p.599
+- id: inclusive_education
+  title: 'Inclusive Education (3 units): Select One'
+  one_of:
+  - - SPED 671
+  - - SPED 672
+  - - SPED 675
+  min_grade: C
+  quote: Inclusive Education (3 units)
+  source: p.599
+- id: science
+  title: 'Science (3 units): Select One'
+  one_of:
+  - - BIOL 300
+  - - BIOL 310
+  - - BIOL 318
+  - - ERTH 310
+  - - ERTH 335
+  - - ERTH 365
+  - - E ED 655
+  - - GEOG 301
+  - - LS 310
+  - - LS 430
+  - - ENVS 430
+  min_grade: C
+  quote: BIOL 300 Nature Study 3
+  source: p.599
+- id: physical_education
+  title: 'Physical Education (3 units): Select One'
+  one_of:
+  - - KIN 240
+  - - KIN 401
+  - - KIN 487
+  - - SPED 370
+  min_grade: C
+  quote: KIN 240 Introduction to Teaching Physical Education 3
+  source: p.599
+- id: arts
+  title: 'Arts (3 units): Select One'
+  one_of:
+  - - AFRS 400
+  - - AIS 325
+  - - AIS 560
+  - - AMST 310
+  - - HUM 485
+  - - AA S 520
+  - - DANC 350
+  - - DANC 430
+  - - DANC 657
+  - - ANTH 657
+  - - E ED 450
+  - - HUM 361
+  - - I R 363
+  - - LTNS 425
+  - - LS 403
+  - - COMM 557
+  - - LS 427
+  - - MUS 505
+  - - MUS 601
+  - - TH A 408
+  - - DANC 408
+  - - TH A 451
+  - - WGS 303
+  min_grade: C
+  quote: AFRS 400 Black Arts and Humanities 3
+  source: p.600
+transfer_notes:
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.600
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.601
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.601
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.601
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.601
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.601
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.601
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.601
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.601
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.601
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.601
+drafted_by: claude, 2026-10-23
