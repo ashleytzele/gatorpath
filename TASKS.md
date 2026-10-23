@@ -466,8 +466,12 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   major, 20 of 4,967 prereqs changed, ambiguous "A or B and C or D" kept whole); "upper-division and graduate …
   majors" read as graduate-only (MUS 434); build_plan counted every major slot as upper division and check_plan
   didn't (Asian American Studies came up 3 units short). With the Select Ones as `one_of`, 9 of 10 test plans pass
-  check_plan at 8-10 terms. Civil QR 3/4 still stops: CHEM 180's second sentence ("Category III or IV … must have
-  completed MATH 197 …") is an alternative the parser ANDs, and the one_of option is chosen by units, not readiness.
+  check_plan at 8-10 terms. Civil QR 3/4 stopped on CHEM 180, fixed 2026-10-22: its second sentence ("Category III or
+  IV for QR/Math placement must have completed MATH 197 …") was ANDed; another placement's sentence is now its own way
+  in, and the QR placement pattern reads every wording the Bulletin uses ("CAT I or II", "… QR/Math placement",
+  "Placement Category III or IV"): 7-8 prereqs per year change, CHEM 100/101/115/180 and ESE/ESM 101-102. 10 of 10
+  pilot plans pass. Open: "Not open to students who have completed ERTH 112" (ERTH 110-172) parses as requiring ERTH
+  112, and a one_of option is still chosen by units, not readiness.
   Not redrafted with the new prompt yet (usage): the pilot's 5 come first in the load-all run.
 
 ---

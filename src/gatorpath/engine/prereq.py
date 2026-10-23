@@ -22,6 +22,12 @@ GRADE = re.compile(
 )
 UP, SENIOR, GRAD = {"standing": "upper"}, {"standing": "senior"}, {"standing": "graduate"}
 ROMAN = {"i": 1, "ii": 2, "iii": 3, "iv": 4}
+# QR/Math placement as the Bulletin words it: "Category I or II placement for QR/Math", "Category III or IV for QR/Math
+# placement", "CAT I or II placement for QR/MATH*", "Category I or II QR/Math placement", "Placement Category III or IV"
+QR = (r"(?:\bcat(?:egory)?|(?:quantitative reasoning )?placement category) (iv|i{1,3})\*?(?: (?:or|and) (iv|i{1,3})\*?)?"
+      r"(?:(?: placement)?(?: for)? qr/math\*?(?: placement)?)?")
+# a sentence for one placement: "Category III or IV for QR/Math placement must have completed MATH 197 …"
+PLACED = re.compile(rf"((?>{QR})) (?:must )?(?!or\b)(.+)$", re.I)  # atomic: "placement for QR/Math" isn't the rest
 ADVISORY = re.compile(r"\b(recommended|should)\b", I)
 MAY_ENROLL = re.compile(r"(.+?) may enroll with (?:the )?permission of the instructor\.?$", I)
 MAJORS_WITH = re.compile(r"(?:Restricted to )?([A-Za-z][A-Za-z&,\- ]*? majors) with (.+)$", I)
@@ -45,12 +51,11 @@ def permissions(m: re.Match) -> dict:
 LEAF, AND, OR, COMMA, EITHER, BOTH, GRADE_T, CONC_MARK, CONC_PREFIX, WORD = range(10)
 RULES = [
     (re.compile(r"\(may be taken concurrently\)", I), lambda m: (CONC_MARK, None)),
-    (re.compile(r"concurrent(?:ly)? enroll(?:ment)? in", I), lambda m: (CONC_PREFIX, None)),
+    (re.compile(r"concurrent(?:ly)? enroll(?:ment)? in|be enrolled in an?\b", I), lambda m: (CONC_PREFIX, None)),
     (GRADE, lambda m: (GRADE_T, (m.group(2) + ("+" if m.group(3) == "+" else "-" if m.group(3) else ""), bool(m.group(1)),
                                  "max_grade" if (m.group(4) or "").lower() == "lower" else "min_grade"))),
     # Placement "Category 1/2" is the roadmap QR pathway 1/2 (Bulletin p.1906 -> p.1908).
-    (re.compile(r"category (iv|i{1,3})\*?(?: (?:or|and) (iv|i{1,3})\*?)? placement for qr/math", I),
-     lambda m: (LEAF, {"qr_category": [ROMAN[g.lower()] for g in m.groups() if g]})),
+    (re.compile(QR, I), lambda m: (LEAF, {"qr_category": [ROMAN[g.lower()] for g in m.groups() if g]})),
     (re.compile(r"first-year math advising module", I), lambda m: (LEAF, {"requirement": "First-Year Math Advising Module"})),
     # Named non-course requirements: understood, but unverifiable (⚠️ like permission).
     (re.compile(r"(?:approval of )?(?:advancement to candidacy|atc\b|proposal for culminating experience)(?:(?!permission)[^;])*?"
@@ -74,7 +79,7 @@ RULES = [
     (re.compile(r"(?:the candidate's )?committee chair", I), lambda m: (LEAF, {"permission": "committee_chair"})),
     (re.compile(r"restricted to (.+?),?(?= or (?:permission|approval)\b|$)", I),
      lambda m: (LEAF, {"restricted_to": m.group(1).strip()})),
-    (re.compile(r"(\d[a-c]?)/[a-d]\d\*?", I), lambda m: (LEAF, {"ge_area": m.group(1).upper()})),
+    (re.compile(r"(\d[a-c]?)/[a-d]\d\*?(?: course\b| requirement\b)?", I), lambda m: (LEAF, {"ge_area": m.group(1).upper()})),
     (COURSE, lambda m: (LEAF, {"course": m.group(1)})),
     (re.compile(r"equivalent\b", I), lambda m: (LEAF, {"equivalent": True})),
     (re.compile(r"and/or\b|or\b|/", I), lambda m: (OR, None)),
@@ -82,7 +87,8 @@ RULES = [
     (re.compile(r","), lambda m: (COMMA, None)),
     (re.compile(r"either\b", I), lambda m: (EITHER, None)),
     (re.compile(r"both\b", I), lambda m: (BOTH, None)),
-    (re.compile(r"ge areas?\b|one of the following:|required\b|all\b|successful completion of|in a previous semester", I),
+    (re.compile(r"ge areas?\b|one of the following:|required\b|all\b|successful completion of|in a previous semester|"
+                r"have satisfied the\b", I),
      lambda m: None),
     (re.compile(r"[^\s,;/&()]+|\S"), lambda m: (WORD, None)),
 ]
@@ -275,6 +281,12 @@ def parse_prereq(text: str) -> dict:
     for sentence in re.split(r"(?<=\.)\s+(?=[A-Z])", text):
         if sentence.lower().startswith("for students who"):  # audience note, not a requirement
             dropped = True
+            continue
+        if (m := PLACED.match(sentence)) and any("qr_category" in leaf for e in sentences for leaf in leaves(e)):
+            # placements are exclusive, so another placement's sentence is its own way in (CHEM 180), not one more need
+            alt = combine("all", [{"qr_category": [ROMAN[g.lower()] for g in m.groups()[1:3] if g]},
+                                  parse_prereq(re.sub(r"^have completed ", "", m.group(4)))["expr"]])
+            sentences[-1:] = [combine("any", [*sentences[-1:], alt])]
             continue
         if m := MAY_ENROLL.match(sentence):  # "Senior … majors may enroll with the permission of the instructor."
             alt = {"all": [{"restricted_to": m.group(1)}, {"permission": "instructor"}]}

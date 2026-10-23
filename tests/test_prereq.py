@@ -180,6 +180,14 @@ GOLDEN = [
     ("MATH 197", "First-Year Math Advising Module; Category III* and IV* placement for QR/Math.", all_(FYMAM, {"qr_category": [3, 4]})),
     ("PHYS 101", "Category I or II placement for QR/Math, or GE Area 2/B4, or MATH 197.",
      any_({"qr_category": [1, 2]}, ge("2"), c("MATH 197"))),
+    # another placement's sentence is its own way in, not one more requirement (placements are exclusive)
+    ("CHEM 180", "Category I or II placement for QR/Math. Category III or IV for QR/Math placement must have completed "
+                 "MATH 197 with a grade of C or better or be enrolled in a GE Area 2/B4 course, or have satisfied the GE "
+                 "Area 2/B4 requirement. High school chemistry is recommended.",
+     any_({"qr_category": [1, 2]}, all_({"qr_category": [3, 4]}, any_(c("MATH 197", "C"), ge("2"))))),
+    ("CHEM 101", "Category I or II QR/Math placement; or Category III or IV QR/Math placement and MATH 197 with a grade of "
+                 "C or better; or GE Area 2/B4 (may be taken concurrently).",
+     any_({"qr_category": [1, 2]}, all_({"qr_category": [3, 4]}, c("MATH 197", "C")), ge("2"))),
     ("MATH 112", "First-Year Math Advising Module.", FYMAM),
     # Audience notes and "should" advice are not requirements.
     ("MATH 110", "First-Year Math Advising Module. For students who wish to take business calculus in one semester.", FYMAM),
