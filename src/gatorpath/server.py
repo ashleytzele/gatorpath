@@ -160,13 +160,14 @@ def unknown_course(code: str) -> dict:
             "warnings": [f"{code} is not in the {YEAR} Bulletin; courses get renumbered, so check the close matches"]}
 
 
+@cache  # parsed once per server process: rules/ doesn't change while it runs
 def programs() -> dict[str, dict]:
     return {p.stem: yaml.safe_load(p.read_text()) for p in sorted((RULES_DIR / "programs" / YEAR).glob("*.yaml"))}
 
 
 def unknown_program(program: str) -> dict:
     return {"catalog_year": YEAR, "error": "unknown_program", "program": program, "programs": list(programs()),
-            "warnings": [f"{program!r} has no reviewed rules for {YEAR}; GatorPath only answers for the listed programs"]}
+            "warnings": [f"{program!r} has no rules for {YEAR}; GatorPath only answers for the listed programs"]}
 
 
 def unverified(rules: dict, name: str) -> list[str]:
@@ -223,9 +224,12 @@ def get_prereq_chain(code: str) -> dict:
 
 @mcp.tool(annotations=READ_ONLY)
 def list_programs() -> dict:
-    """Programs GatorPath has reviewed requirement rules for."""
+    """Programs GatorPath has requirement rules for. verified: a person checked them against the Bulletin; drafted:
+    AI-drafted from the Bulletin's text and checked by program (codes, pages, word-for-word quotes, units, a test plan),
+    not yet by a person: say so when planning with one."""
     return {"catalog_year": YEAR, "catalog_years": YEARS, "warnings": [],
-            "programs": [{"id": k, "title": p["title"], "verified": bool(p.get("verified"))} for k, p in programs().items()]}
+            "programs": [{"id": k, "title": p["title"], "verified": bool(p.get("verified")), "drafted": bool(p.get("drafted_by"))}
+                         for k, p in programs().items()]}
 
 
 @mcp.tool(annotations=READ_ONLY)

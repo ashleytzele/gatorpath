@@ -80,6 +80,11 @@ prompt now plans from that, and a rerun of that question passes on both.
   are the newest Bulletin's. A DPR on a catalog year without rules is planned with 2026-27 rules plus a warning,
   and the DPR wins where they disagree. `import_dpr` doesn't recognize an Applied Mathematics DPR yet (no sample
   to read its program line from); type the courses or use the transcript instead.
+- The other bachelor's programs (2026-27 only; `list_programs` marks them `drafted: true`) are AI-drafted from the
+  Bulletin's text, then checked by program: every course code, page and word-for-word quote, the unit totals, and a
+  test plan that passes check_plan. A person hasn't checked them against the PDF yet. Rules the format can't express
+  (a CR/NC unit cap, a course taken four times, a GPA floor) show as `unparsed` with the Bulletin's words: GatorPath
+  doesn't check them, and a degree with one is never marked complete.
 - BS Applied Mathematics: the three application electives are "chosen with the consent of the applied mathematics
   advisor" (p.2129), so GatorPath can't list them; it counts only the ones you say were approved.
 - Only the 2025-26 BS CS rules are signed off by a person (`verified: true`). The others are
@@ -94,7 +99,8 @@ prompt now plans from that, and a rerun of that question passes on both.
 
 ## Scope
 
-- v1: SF State, BS Computer Science (2026-27 Bulletin), then BS Applied Mathematics (2026-27, rules unverified)
+- v1: SF State, BS Computer Science (2026-27 Bulletin), then BS Applied Mathematics (2026-27, rules unverified), then
+  the other bachelor's programs (2026-27, AI-drafted, unverified)
 - Later: transfer credit, week-level schedules, web UI
 
 *Not affiliated with San Francisco State University. Always confirm with your advisor and your

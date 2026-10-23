@@ -77,9 +77,10 @@ def test_search_courses():
 
 
 def test_programs_and_roadmap():
-    assert server.list_programs()["programs"] == [
-        {"id": "bs-applied-math", "title": "Bachelor of Science in Applied Mathematics", "verified": False},
-        {"id": "bs-cs", "title": "Bachelor of Science in Computer Science", "verified": False}]
+    listed = {p["id"]: p for p in server.list_programs()["programs"]}
+    assert listed["bs-cs"] == {"id": "bs-cs", "title": "Bachelor of Science in Computer Science", "verified": False,
+                               "drafted": False}
+    assert listed["bs-applied-math"]["drafted"] is False and listed["bs-public-health"]["drafted"] is True
     req = server.get_program_requirements("bs-cs")
     assert [g["id"] for g in req["program"]["groups"]][:2] == ["math_physics", "core_cs"]
     assert any("not verified" in w for w in req["warnings"])

@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-public-health.source.txt) by claude, 2026-10-22; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: bs-public-health
 title: Bachelor of Science in Public Health
 catalog_year: 2026-27

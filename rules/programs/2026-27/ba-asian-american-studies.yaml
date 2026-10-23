@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-asian-american-studies.source.txt) by claude, 2026-10-22; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: ba-asian-american-studies
 title: Bachelor of Arts in Asian American Studies
 catalog_year: 2026-27
@@ -32,9 +35,34 @@ groups:
   quote: 'Select one course in Category A and one course in Category B:'
   source: p.437
 - id: ethnic_courses
-  unparsed: true
-  quote: Select three courses representing at least two different ethnic groups.
+  title: Ethnic Courses (9 Units)
+  choose_units: 9
+  from:
+  - list:
+    - AA S 301
+    - AA S 380
+    - AA S 320
+    - AA S 322
+    - AA S 323
+    - AA S 350
+    - AA S 352
+    - AA S 353
+    - AA S 330
+    - AA S 332
+    - AA S 333
+    - AA S 338
+    - AA S 360
+    - AA S 370
+    - AA S 372
+    - AA S 373
+  - approved: true
   source: p.437
+  quote: Ethnic Courses (9 Units) Select three courses
+- id: ethnic_groups
+  title: 'Ethnic Courses: at least two different ethnic groups'
+  unparsed: true
+  source: p.437
+  quote: Select three courses representing at least two different ethnic groups.
 - id: panethnic_courses
   title: Panethnic Courses (9 units)
   choose_units: 9
@@ -54,6 +82,7 @@ groups:
     - AA S 588
     - AA S 591
     - AA S 595
+  - approved: true
   quote: Select 3 courses from the following.
   source: p.437
 - id: required_major

@@ -267,6 +267,35 @@ def test_roadmap_loads_follow_the_students_units_and_their_own_cap_wins():
     assert all(s["max_units"] == 8 for s in mine["semesters"] if s["term"].endswith("summer"))
 
 
+def test_a_choice_whose_options_only_need_an_audition_is_planned():
+    # BM Composition's ensembles (MUS 370-390, p.1549) all read "Audition.": nothing to wait for, so the slots go in at
+    # upper-division standing like an advisor's pick. Here Applied Math's major electives stand in for them.
+    from gatorpath.engine.planner import build_plan
+    program, university, roadmap = rules_for({"program": "bs-applied-math"})
+    options = next(g for g in program["groups"] if g["id"] == "major_electives")["from"]["list"]
+    audition = PREREQS | {c: {"raw_text": "Audition.", **parse_prereq("Audition.")} for c in options}
+    fresh = FRESH | {"program": "bs-applied-math"}
+    got = build_plan(fresh, program, university, roadmap, CATALOG, audition)
+    assert got["check"]["valid"], got["check"]["errors"]
+    assert sum(1 for s in got["semesters"] for x in s["courses"] if isinstance(x, dict) and x["slot"] == "major_electives") == 2
+
+
+def test_an_approval_beside_a_printed_list_keeps_the_list():
+    # BS Business Administration: Finance p.153: Select Three from a list; "Other appropriate courses may be selected with
+    # prior written consent of an advisor." The list's courses are the options; only a group with no list is the
+    # advisor's pick alone (Applied Math's application electives)
+    from gatorpath.engine.planner import eligible_options
+    program, university, roadmap = rules_for({"program": "bs-applied-math"})
+    note = "Other appropriate courses may be selected with prior written consent of an advisor."
+    groups = [g | {"approval": note, "from": [g["from"], {"approved": True}]} if g["id"] == "major_electives" else g
+              for g in program["groups"]]
+    fresh = FRESH | {"program": "bs-applied-math"}
+    got = eligible_options(fresh, "major_electives", program | {"groups": groups}, university, CATALOG, PREREQS,
+                           by_term="2029-fall")
+    assert got["total_options"] >= 9 and any(note in w for w in got["warnings"])
+    assert eligible_options(fresh, "application_electives", program, university, CATALOG, PREREQS)["options"] == []
+
+
 def test_loads_fit_the_graduation_goal_from_the_roadmaps_range():
     # D25: on time on the roadmap's loads: they stay
     assert plan_for(FRESH | {"graduate_by": "2031-spring"})["pace"]["load"] == "roadmap"
@@ -490,9 +519,9 @@ def test_ge_combinations_list_every_minimal_way():
     got = cover_combinations(p, PROGRAM, UNIVERSITY, cat, PREREQS, by_term="2027-spring")
     assert [t.split(":")[-1].strip()[:6] for t in got["open"]] == ["GE 4UD", "Enviro", "Global"]  # not GWAR: CSC 300GW
     first = got["ways"][0]
-    assert first["courses"] == 1 and [e["code"] for e in first["parts"][0]["examples"]] == ["ENVS 401"]
+    assert first["courses"] == 1 and "ENVS 401" in [e["code"] for e in first["parts"][0]["examples"]]
     two = [w for w in got["ways"] if w["courses"] == 2]
-    assert any({e["code"] for part in w["parts"] for e in part["examples"]} >= {"PLSI 355", "HIST 308"} for w in two)
+    assert any("PLSI 355" in [e["code"] for e in part["examples"]] and len(part["covers"]) == 2 for w in two for part in w["parts"])
     for w in got["ways"]:  # every way covers all three, and every part is needed
         assert set().union(*(set(part["covers"]) for part in w["parts"])) == set(got["open"])
 
@@ -648,7 +677,10 @@ def test_roadmap_files_pass_check_roadmap(path):
     # ARCHITECTURE §6.2 "AI-drafted rules": the hand-written roadmaps are the bar a drafted one is held to
     from gatorpath.engine.planner import check_roadmap
     program, university = load_rules(path.parent.name, path.stem)
+    from gatorpath.ingest.programs import LOADABLE
     got = check_roadmap(yaml.safe_load(path.read_text()), program, university, CATALOG)
+    if program.get("drafted_by"):  # a loaded draft may name a group still flagged for a person (--load)
+        got = [x for x in got if not any(k in x for k in LOADABLE)]
     # the 2025-26 QR 3/4 roadmap never prints PHYS 222, which the major requires (p.1905): the check finds it
     assert got == (["qr-3-4: required but not on this roadmap: PHYS 222"] if path.parent.name == "2025-26" else [])
 

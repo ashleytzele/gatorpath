@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (bm-composition.source.txt) by claude, 2026-10-22; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: bm-composition
 title: 'Bachelor of Music: Concentration in Composition'
 catalog_year: 2026-27
@@ -115,10 +118,27 @@ groups:
   quote: MUS 360 Advanced Applied Music Lessons (1 unit course
   source: p.1549
 - id: conc_ensembles
-  title: 6 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390
-  unparsed: true
+  title: 'Concentration Requirements: ensembles (6 units)'
   quote: 6 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390 6
   source: p.1549
+  choose_units: 6
+  from:
+    list:
+    - MUS 370
+    - MUS 371
+    - MUS 372
+    - MUS 373
+    - MUS 374
+    - MUS 375
+    - MUS 376
+    - MUS 378
+    - MUS 379
+    - MUS 380
+    - MUS 386
+    - MUS 387
+    - MUS 388
+    - MUS 389
+    - MUS 390
 - id: conc_counterpoint
   title: Tonal Counterpoint
   all_of:

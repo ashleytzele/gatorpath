@@ -583,6 +583,14 @@ def check_roadmap(roadmap: dict, program: dict, university: dict, catalog: dict,
     return out
 
 
+def approval_only(g: dict) -> bool:
+    """A group only an advisor's approval fills (§6.2): `approval` text and no list or filter of courses. With a printed
+    list too ("Other appropriate courses may be selected with prior written consent of an advisor"), the list's courses
+    are the options and the approval covers the rest."""
+    fs = g.get("from", [])
+    return bool(g.get("approval")) and all("approved" in f for f in (fs if isinstance(fs, list) else [fs]))
+
+
 def pick_variant(profile: dict, roadmap: dict) -> str | None:
     if profile.get("adt") and "adt" in roadmap["variants"]:
         return "adt"
@@ -863,8 +871,11 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 return (state == OK or (state == UNVERIFIED and not waiting)) and season_ok(c, term, catalog, seasons)[0]
 
             def ready_options(gid: str) -> float:
-                if groups[gid].get("approval"):  # the advisor's pick: no options to check, so ready at the standing
+                if approval_only(groups[gid]):  # the advisor's pick: no options to check, so ready at the standing
                     return math.inf
+                if not any("course" in leaf for c in choice_options.get(gid, ())
+                           for leaf in leaves(prereqs.get(c, {}).get("expr"))):
+                    return math.inf  # no option waits on a course (ensembles: "Audition."): ready at the standing
                 return sum(1 for c in choice_options.get(gid, ())
                            if evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set()})[0] == OK
                            and season_ok(c, term, catalog, seasons)[0])
@@ -1165,7 +1176,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                                         for c in stuck]
                                        + [("substitutions", f"{groups[g['id']]['title']}: \"{groups[g['id']]['approval']}\" "
                                                             f"({g['source']}); get the courses approved before taking them")
-                                          for g in status["groups"] if groups[g["id"]].get("approval")
+                                          for g in status["groups"] if approval_only(groups[g["id"]])
                                           and g["status"] not in ("satisfied", "waived")],
                                        program, university, check["see_advisor"]),
             "check": {"valid": check["valid"], "errors": check["errors"]}}
@@ -1336,7 +1347,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
                                         f"least {g['distinct_subjects']} different subjects ({g['source']})"]}
     if "all_of" in g or "from" not in g:
         return {"error": "not_a_choice", "warnings": [f"{group_id} isn't a choose-group; see get_program_requirements"]}
-    if g.get("approval"):  # no list to pick from (§6.2): the student's advisor approves the courses
+    if approval_only(g):  # no list to pick from (§6.2): the student's advisor approves the courses
         why = f"{g.get('title', group_id)}: \"{g['approval']}\" ({g['source']})"
         return {"catalog_year": program["catalog_year"], "group": group_id, "title": g.get("title", group_id),
                 "source": g["source"], "approval": g["approval"], "options": [], "total_options": 0,
@@ -1415,5 +1426,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
             "source": g["source"], "by_term": first, "status": target["status"], **need,
             "options": options[:max(1, limit)], "total_options": len(options),
             "warnings": [f"also_covers lists other open requirements a course would count for (GE, SF State Studies and "
-                         f"American Institutions may overlap with each other and the major, p.2352)"]}
+                         f"American Institutions may overlap with each other and the major, p.2352)"]
+                        + ([f"{g.get('title', group_id)}: also \"{g['approval']}\" ({g['source']}): pass courses an advisor "
+                            f"approves as profile.approved['{group_id}'] so they count"] if g.get("approval") else [])}
 

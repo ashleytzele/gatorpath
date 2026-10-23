@@ -193,6 +193,9 @@ GOLDEN = [
      all_({"not_after": "ERTH 110"}, {"not_after": "ERTH 111"})),
     ("ERTH 171", "ERTH 170 (may be taken concurrently); not open to students who have completed ERTH 172.",
      all_(c("ERTH 170", conc=True), {"not_after": "ERTH 172"})),
+    # a named, unverifiable requirement (every MUS ensemble), not unparsed text
+    ("MUS 370", "Audition.", {"requirement": "Audition"}),
+    ("TH A 533", "TH A 433 and audition.", all_(c("TH A 433"), {"requirement": "Audition"})),
     ("MATH 112", "First-Year Math Advising Module.", FYMAM),
     # Audience notes and "should" advice are not requirements.
     ("MATH 110", "First-Year Math Advising Module. For students who wish to take business calculus in one semester.", FYMAM),

@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-business-administration-finance.source.txt) by claude, 2026-10-22; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: bs-business-administration-finance
 catalog_year: 2026-27
 verified: false
@@ -21,9 +24,11 @@ groups:
   quote: ECON 101 Introduction to Microeconomic Analysis 3
   source: p.152
 - id: prereq_isys_263
-  unparsed: true
   quote: or a passing score on the ISYS 263 CLEP Exam
   source: p.152
+  all_of:
+  - ISYS 263
+  title: 'Prerequisite Courses: ISYS 263 (or a passing score on the ISYS 263 CLEP Exam)'
 - id: core_accounting
   title: Core Requirements (Accounting)
   all_of:

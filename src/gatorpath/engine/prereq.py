@@ -60,6 +60,7 @@ RULES = [
     (re.compile(rf"(?i:not open to students who have completed )((?:{COURSE.pattern}(?:,? (?:or|and) |, )?)+)"),
      lambda m: (LEAF, combine("all", [{"not_after": c} for c in COURSE.findall(m.group(1))]))),
     (re.compile(r"first-year math advising module", I), lambda m: (LEAF, {"requirement": "First-Year Math Advising Module"})),
+    (re.compile(r"(?:by |an )?audition\b", I), lambda m: (LEAF, {"requirement": "Audition"})),  # MUS ensembles: "Audition."
     # Named non-course requirements: understood, but unverifiable (⚠️ like permission).
     (re.compile(r"(?:approval of )?(?:advancement to candidacy|atc\b|proposal for culminating experience)(?:(?!permission)[^;])*?"
                 r"\bforms\b(?: (?:must be )?approved)?(?: by (?:the )?(?:division of graduate studies|graduate division|"

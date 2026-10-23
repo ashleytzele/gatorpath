@@ -1,4 +1,14 @@
 {
+ "A U 220": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2449,
+  "title": "SF State and Braven Career Accelerator",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AA S 210": {
   "ge_areas": [
    "AERM",
@@ -13,6 +23,570 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AA S 211": {
+  "ge_areas": [
+   "SJ",
+   "4",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 430,
+  "title": "Contemporary Asian Americans",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 212": {
+  "ge_areas": [
+   "AERM",
+   "3A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 431,
+  "title": "Asian Americans and Mass Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 213": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "USG",
+   "CSLG"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 431,
+  "title": "Asian Americans and American Ideals and Institutions",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 216": {
+  "ge_areas": [
+   "3B",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 431,
+  "title": "Introduction to Asian American Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 218": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "3B"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 431,
+  "title": "Asian American Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 301": {
+  "ge_areas": [
+   "4UD",
+   "GP",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 431,
+  "title": "Asian Americans of Mixed Heritages",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 320": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 431,
+  "title": "Chinese in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 322": {
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 431,
+  "title": "Chinese American Language and Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 323": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 432,
+  "title": "Chinese American Identities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 330": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 432,
+  "title": "Nikkei in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 332": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 432,
+  "title": "Japanese American Art and Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 333": {
+  "ge_areas": [
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 432,
+  "title": "Japanese American Identities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 338": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 432,
+  "title": "Okinawan American Heritage and Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 350": {
+  "ge_areas": [
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 432,
+  "title": "Filipina/os in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 352": {
+  "ge_areas": [
+   "3UD",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 432,
+  "title": "Filipina/o American Literature, Art, and Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 353": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 432,
+  "title": "Filipina/o American Identities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 360": {
+  "ge_areas": [
+   "6",
+   "SJ",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 433,
+  "title": "Koreans in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 370": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 433,
+  "title": "Vietnamese in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 372": {
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 433,
+  "title": "Vietnamese American Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 373": {
+  "ge_areas": [
+   "4UD",
+   "GP",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 433,
+  "title": "Vietnamese American Identities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 380": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 433,
+  "title": "Cambodians in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 510": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "ESCA",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 433,
+  "title": "Asian Americans in California",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 512": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 433,
+  "title": "Asian American Children's/Adolescent Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 516": {
+  "ge_areas": [
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 433,
+  "title": "Asian American Photographic Explorations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 540": {
+  "ge_areas": [
+   "3UD",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 434,
+  "title": "South Asians in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 541": {
+  "crosslisted": [
+   "RRS 657"
+  ],
+  "ge_areas": [
+   "4UD",
+   "AERM",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 434,
+  "title": "South Asian Diaspora",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 570": {
+  "ge_areas": [
+   "SJ",
+   "4UD",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 434,
+  "title": "Southeast Asians in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 582": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 434,
+  "title": "Asian American Women's Literature and the Arts",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 584": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 434,
+  "title": "Asian American Sexualities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 585": {
+  "ge_areas": [
+   "AERM",
+   "3UD",
+   "SJ",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 434,
+  "title": "Asian American Religiosities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 587": {
+  "ge_areas": [
+   "AERM",
+   "ESCA",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 435,
+  "title": "Asian Americans and Environmental Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 588": {
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 435,
+  "title": "Asian American Media Workshop",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 591": {
+  "ge_areas": [
+   "AERM",
+   "5UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 435,
+  "title": "Asian American Community Health Issues",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 595": {
+  "ge_areas": [
+   "6",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 435,
+  "title": "Asian American Communities and Public Policy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 681": {
+  "ge_areas": [
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 435,
+  "title": "Asian American Community Changes and Development",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 685": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 435,
+  "title": "Projects in the Teaching of Asian American Studies",
+  "units_max": 4.0,
+  "units_min": 1.0
+ },
+ "AA S 688": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 435,
+  "title": "Asian American Community Service Internship",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 696": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 436,
+  "title": "Critical Approaches to Asian American Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 697": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 436,
+  "title": "Proseminar in Asian American Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AA S 699": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 436,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
+ "ACCT 100": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 48,
+  "title": "Introduction to Financial Accounting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ACCT 101": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 48,
+  "title": "Introduction to Managerial Accounting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 202": {
   "ge_areas": [
    "AERM",
@@ -24,6 +598,68 @@
   "repeatable": false,
   "source_page": 396,
   "title": "Black Men's Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 370": {
+  "ge_areas": [
+   "4UD",
+   "SJ",
+   "ESCA",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 399,
+  "title": "Health, Medicine, and Nutrition in the Black Community",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 466": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 399,
+  "title": "Black Lives Matter: Race and Social Movements",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 514": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 400,
+  "title": "African Musical Diaspora",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 320": {
+  "ge_areas": [
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 418,
+  "title": "American Indian Music",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 630": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 886,
+  "title": "Medical Anthropology",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -63,6 +699,19 @@
   "units_max": 1.0,
   "units_min": 1.0
  },
+ "BECA 434": {
+  "crosslisted": [
+   "MUS 434"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 947,
+  "title": "Introduction to Sound for Games",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "BIOL 100": {
   "ge_areas": [
    "5B"
@@ -86,6 +735,123 @@
   "title": "Human Biology Laboratory",
   "units_max": 1.0,
   "units_min": 1.0
+ },
+ "BIOL 210": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1769,
+  "title": "General Microbiology and Public Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 305": {
+  "crosslisted": [
+   "I R 305"
+  ],
+  "ge_areas": [
+   "4UD",
+   "ESCA",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1770,
+  "title": "Global Politics of Science, Technology, and Health",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "BIOL 326": {
+  "ge_areas": [
+   "5UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1771,
+  "title": "Disease!",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 327": {
+  "ge_areas": [
+   "5UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1771,
+  "title": "HIV, AIDS, and the Science to End the Epidemic",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BUS 300GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 70,
+  "title": "Business Communication for Professionals - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BUS 350": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 70,
+  "title": "Introduction to Entrepreneurship",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BUS 682": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 71,
+  "title": "Seminar on Business and Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BUS 690": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 71,
+  "title": "Seminar in Business Policy and Strategic Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CHEM 115": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1854,
+  "title": "General Chemistry I",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "CHEM 180": {
+  "ge_areas": [
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1854,
+  "title": "Chemistry for Energy and the Environment",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "COMM 150": {
   "ge_areas": [
@@ -641,6 +1407,113 @@
   "units_max": 3.0,
   "units_min": 1.0
  },
+ "DS 110": {
+  "ge_areas": [
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 92,
+  "title": "Calculus with Business Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 212": {
+  "crosslisted": [
+   "ECON 212"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 92,
+  "title": "Business Statistics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 312": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 92,
+  "title": "Data Analysis for Business",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 408": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 93,
+  "title": "Simulation Modeling for Business",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 411": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 93,
+  "title": "Decision Modeling for Business",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 412": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 93,
+  "title": "Operations Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 601": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 93,
+  "title": "Applied Management Science and Intelligent Decision Making",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 604": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 93,
+  "title": "Business Forecasting",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 612": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 93,
+  "title": "Data Mining with Business Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DS 660GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 94,
+  "title": "Business Analytics: Communication and Professional Practice - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ECON 101": {
   "ge_areas": [
    "4"
@@ -650,6 +1523,31 @@
   "repeatable": false,
   "source_page": 128,
   "title": "Introduction to Microeconomic Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 102": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Introduction to Macroeconomic Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 212": {
+  "crosslisted": [
+   "DS 212"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 128,
+  "title": "Business Statistics",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -678,6 +1576,20 @@
   "repeatable": false,
   "source_page": 128,
   "title": "History of Labor in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 651": {
+  "crosslisted": [
+   "ENVS 651",
+   "FIN 651"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Student Managed Fund in Environmental, Social and Governance (ESG) Investments",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -715,6 +1627,418 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ENGR 100": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1927,
+  "title": "Introduction to Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 101": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1928,
+  "title": "Engineering Graphics",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "ENGR 102": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1928,
+  "title": "Statics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 200": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1928,
+  "title": "Materials of Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 201": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1928,
+  "title": "Dynamics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 205": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1928,
+  "title": "Electric Circuits",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 213": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1928,
+  "title": "Introduction to C Programming for Engineers",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 235": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1929,
+  "title": "Surveying",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 282": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1929,
+  "title": "Probability and Statistics for Engineers",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 300": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1929,
+  "title": "Engineering Experimentation",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "ENGR 302": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1929,
+  "title": "Experimental Analysis",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "ENGR 304": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1930,
+  "title": "Mechanics of Fluids",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 309": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1930,
+  "title": "Mechanics of Solids",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 323": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1930,
+  "title": "Structural Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 425": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1931,
+  "title": "Reinforced Concrete Structures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 426": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1931,
+  "title": "Steel Structures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 427": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1931,
+  "title": "Wood Structures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 429": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1931,
+  "title": "Construction Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 430": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1931,
+  "title": "Soil Mechanics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 431": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1931,
+  "title": "Foundation Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 434": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1931,
+  "title": "Principles of Environmental Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 435": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1932,
+  "title": "Environmental Engineering Design",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 436": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1932,
+  "title": "Transportation Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 438": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1932,
+  "title": "Transportation Planning",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 439": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1932,
+  "title": "Construction Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 441": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1932,
+  "title": "Fundamentals of Composite Materials",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 461": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1933,
+  "title": "Structural Dynamics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 610": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1934,
+  "title": "Engineering Cost Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 696": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1934,
+  "title": "Engineering Design Project I",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "ENGR 697GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1934,
+  "title": "Engineering Design Project II - GWAR",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "ENGR 827": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1934,
+  "title": "Structural Design for Fire Safety",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 828": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1934,
+  "title": "Seismic Isolation and Energy Dissipation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 829": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Advanced Topics in Structural Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 831": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Advanced Concrete Structures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 832": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Advanced Topics in Seismic Design",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 833": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Principles of Earthquake Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 835": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Advanced Steel Structures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 836": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Structural Design for Earthquakes",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 837": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Geotechnical Earthquake Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 838": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Smart Structures Technology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENGR 839": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1935,
+  "title": "Advanced Topics in Civil Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ENVS 401": {
   "crosslisted": [
    "LS 401"
@@ -729,6 +2053,20 @@
   "repeatable": false,
   "source_page": 2009,
   "title": "International Development and Resource Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENVS 651": {
+  "crosslisted": [
+   "ECON 651",
+   "FIN 651"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2010,
+  "title": "Student Managed Fund in Environmental, Social and Governance (ESG) Investments",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -757,6 +2095,404 @@
   "repeatable": false,
   "source_page": 2003,
   "title": "Global Warming",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ETHS 116": {
+  "ge_areas": [
+   "SJ",
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 455,
+  "title": "Algebra and Statistics for Social Justice",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "ETHS 117": {
+  "ge_areas": [
+   "SJ",
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 455,
+  "title": "Statistics for Social Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ETHS 221": {
+  "crosslisted": [
+   "PH 221"
+  ],
+  "ge_areas": [
+   "4",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 455,
+  "title": "Health and Social Justice - Burning Issues, Taking Action",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ETHS 241": {
+  "crosslisted": [
+   "PH 241"
+  ],
+  "ge_areas": [
+   "AERM",
+   "USH",
+   "4",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 455,
+  "title": "Health and Social Movements in the United States in the 20th Century",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ETHS 300GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 456,
+  "title": "Writing in Ethnic Studies - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 303": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 149,
+  "title": "Accounting for Financial Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 350": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 149,
+  "title": "Business Finance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 351": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 149,
+  "title": "Financial Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 353": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 149,
+  "title": "Financial Institutions",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 355": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 149,
+  "title": "Investments",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 357": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Financial Statement and Data Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 365": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Real Estate Principles",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 370": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Fundamentals of Real Estate",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 420": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Introduction to FinTech",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 435": {
+  "crosslisted": [
+   "I R 435",
+   "PLSI 435"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Politics of Global Finance and Crisis",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "FIN 460": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Mathematics and Programming for Financial Analytics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 465": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Financial Engineering",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 470": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Fundamentals of Entrepreneurial Finance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 510": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Real Estate Practice and Financial Technology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 511": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Real Estate Finance and Technology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 520": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "FinTech II: DeFi, Business Blockchain, and Machine Learning",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 530": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "Financial Analytics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 536": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 150,
+  "title": "International Finance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 651": {
+  "crosslisted": [
+   "ECON 651",
+   "ENVS 651"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 151,
+  "title": "Student Managed Fund in Environmental, Social and Governance (ESG) Investments",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 653": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 151,
+  "title": "Seminar in Bank Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 655": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 151,
+  "title": "Alternative Investment",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 658": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 151,
+  "title": "Financial Risk Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 659": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 151,
+  "title": "Special Topics in Finance",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "FIN 699": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 151,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
+ "GEOG 434": {
+  "crosslisted": [
+   "PH 434"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2013,
+  "title": "Geographies of Health and Health Care",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HH 205": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 800,
+  "title": "Relaxation and Stress Reduction",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HH 380": {
+  "ge_areas": [
+   "GP",
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 800,
+  "title": "Holistic Health: Western Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HH 381": {
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 800,
+  "title": "Holistic Health: Eastern Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HH 382": {
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 801,
+  "title": "Holistic Health: Human Nature and Global Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HH 540": {
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 802,
+  "title": "Meditation for Health and Wellness",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -840,6 +2576,189 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "I R 305": {
+  "crosslisted": [
+   "BIOL 305"
+  ],
+  "ge_areas": [
+   "4UD",
+   "ESCA",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1311,
+  "title": "Global Politics of Science, Technology, and Health",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 435": {
+  "crosslisted": [
+   "FIN 435",
+   "PLSI 435"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1316,
+  "title": "Politics of Global Finance and Crisis",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "IBUS 330": {
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 235,
+  "title": "International Business and Multicultural Relations",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISED 160": {
+  "ge_areas": [
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 333,
+  "title": "Data Analysis in Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 263": {
+  "ge_areas": [
+   "GP",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 197,
+  "title": "Introduction to Information Systems",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 363": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Information Systems for Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 464": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 198,
+  "title": "Managing Enterprise Data",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 569": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 199,
+  "title": "Information Systems for Business Process Management",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ISYS 650": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 199,
+  "title": "Business Intelligence",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 210": {
+  "ge_areas": [
+   "SJ",
+   "GP",
+   "ESCA",
+   "5B",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 467,
+  "title": "Latina/o/x Health Care Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 500": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 472,
+  "title": "Latina/o Community Mental Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 107": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2090,
+  "title": "Mathematics for Business Calculus I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 108": {
+  "ge_areas": [
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2090,
+  "title": "Mathematics for Business Calculus II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 110": {
+  "ge_areas": [
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2090,
+  "title": "Business Calculus",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MATH 124": {
+  "ge_areas": [
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2091,
+  "title": "Elementary Statistics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MATH 197": {
   "ge_areas": [],
   "grading": null,
@@ -913,6 +2832,16 @@
   "title": "Calculus III",
   "units_max": 4.0,
   "units_min": 4.0
+ },
+ "MATH 245": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2092,
+  "title": "Elementary Differential Equations and Linear Algebra",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "MATH 301GW": {
   "ge_areas": [
@@ -1136,6 +3065,880 @@
   "units_max": 2.0,
   "units_min": 2.0
  },
+ "MGMT 405": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 263,
+  "title": "Introduction to Management and Organizational Behavior",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MKTG 431": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 279,
+  "title": "Principles of Marketing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 130": {
+  "crosslisted": [
+   "TH A 131"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1532,
+  "title": "The Foundations of Music Theory",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 200": {
+  "crosslisted": [
+   "TH A 234"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1532,
+  "title": "Fundamentals of Modern Musicianship",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 201": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1532,
+  "title": "Class Piano I",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 202": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1532,
+  "title": "Class Piano II",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 206": {
+  "crosslisted": [
+   "TH A 206"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1532,
+  "title": "Beginning Jazz/Pop Piano",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 221": {
+  "crosslisted": [
+   "TH A 221"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1532,
+  "title": "Ear Training I",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 222": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1532,
+  "title": "Ear Training II",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 232": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1532,
+  "title": "Diatonic Harmony",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 237": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1533,
+  "title": "Introduction to Music Technology",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 260": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1533,
+  "title": "Applied Music Lessons",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 281": {
+  "ge_areas": [
+   "3A",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1533,
+  "title": "The American Musical Experience",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 360": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Advanced Applied Music Lessons",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 361": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Capstone Composition or Performance Project",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 370": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Open Studio Ensemble",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 371": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Orchestra",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 372": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Wind Ensemble",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 373": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Chamber Singers",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 374": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "University Pep Band",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 375": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Treble Singers \"The Higher Ups\"",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 376": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Opera Workshop",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 378": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "Chamber Music",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 379": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1534,
+  "title": "University Chorus",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 380": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1535,
+  "title": "Instrumental Ensembles",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 386": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1535,
+  "title": "World Music Ensembles",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 387": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1535,
+  "title": "Collegium Musicum: Schola Civilis",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 388": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1535,
+  "title": "Jazz Combos",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 389": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1535,
+  "title": "Mexican Regional Music Ensemble",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 390": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1535,
+  "title": "Afro/Latin Jazz Ensemble",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 403": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1535,
+  "title": "Chromatic Harmony",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 405": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1535,
+  "title": "Tonal Counterpoint",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 420": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1536,
+  "title": "20th Century Techniques",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 434": {
+  "crosslisted": [
+   "BECA 434"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1536,
+  "title": "Introduction to Sound for Games",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 440": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1536,
+  "title": "Jazz Harmony",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 443": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1536,
+  "title": "Composition Studio Seminar",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 455": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1537,
+  "title": "Scoring for Film I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 505": {
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1537,
+  "title": "Music of the World's Peoples",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 506": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1537,
+  "title": "Survey of Jazz",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 513": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1537,
+  "title": "Asian Musical Diaspora",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 515": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1538,
+  "title": "Latin American Musical Diaspora",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 542GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1538,
+  "title": "Music in Culture and Context - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 550": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1538,
+  "title": "Western European Music History from the Middle Ages to 1750",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 551": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1538,
+  "title": "European and American Classical Music History of the 18th and 19th Century",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 552": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1538,
+  "title": "Classical Music History of Europe and the Americas in the 20th Century",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 558": {
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1538,
+  "title": "Music of John Coltrane",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 559": {
+  "crosslisted": [
+   "TH A 559"
+  ],
+  "ge_areas": [
+   "USH",
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1538,
+  "title": "Women in Jazz",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 598": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1539,
+  "title": "Senior Thesis",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "MUS 640": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1539,
+  "title": "Ensemble Conducting",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "NUTR 253": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 663,
+  "title": "Introduction to Nutrition and Dietetics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 100": {
+  "ge_areas": [
+   "ESCA"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Public Health Biology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 200": {
+  "ge_areas": [
+   "SJ",
+   "GP",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Global Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 205": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Introduction to Public Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 210": {
+  "ge_areas": [
+   "SJ",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Personal and Social Determinants of Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 221": {
+  "crosslisted": [
+   "ETHS 221"
+  ],
+  "ge_areas": [
+   "4",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Health and Social Justice - Burning Issues, Taking Action",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 241": {
+  "crosslisted": [
+   "ETHS 241"
+  ],
+  "ge_areas": [
+   "AERM",
+   "USH",
+   "4",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Health and Social Movements in the United States in the 20th Century",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 290": {
+  "ge_areas": [
+   "GP",
+   "3A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Promoting Positive Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 305": {
+  "ge_areas": [
+   "SJ",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Critical History of Public Health in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 315": {
+  "ge_areas": [
+   "SJ",
+   "4UD",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 783,
+  "title": "Drugs and Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 320": {
+  "ge_areas": [
+   "5UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Contemporary Sexuality",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 370": {
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Public Mental Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 400GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Determinants of Health - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 410": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Public Health Systems",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 414": {
+  "ge_areas": [
+   "4UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Women's Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 420": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Epidemiology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 425": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Public Health Research",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 431": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Program Planning, Implementation, and Evaluation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 434": {
+  "crosslisted": [
+   "GEOG 434"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 784,
+  "title": "Geographies of Health and Health Care",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 450": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Public Health Policy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 455": {
+  "ge_areas": [
+   "SJ",
+   "GP",
+   "ESCA",
+   "AERM",
+   "3UD"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Community Organizing and Community Building for Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 480": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Fieldwork and Reflective Seminar",
+  "units_max": 9.0,
+  "units_min": 9.0
+ },
+ "PH 520": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Structural Oppression and Social Foundations of Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 600": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Public Health Media, Technology, and Communications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 650": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Emerging Public Health Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 655": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Environmental Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 685": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Projects in the Teaching of Public Health",
+  "units_max": 4.0,
+  "units_min": 1.0
+ },
+ "PH 688": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 785,
+  "title": "Racial Capitalism, Neoliberalism, and Public Health",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PH 699": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 785,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
  "PHIL 101": {
   "ge_areas": [
    "3B"
@@ -1185,6 +3988,19 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PHIL 383": {
+  "ge_areas": [
+   "SJ",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1587,
+  "title": "Ethics in Medicine",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PHYS 220": {
   "ge_areas": [
    "5A"
@@ -1229,6 +4045,26 @@
   "units_max": 1.0,
   "units_min": 1.0
  },
+ "PHYS 240": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2161,
+  "title": "General Physics with Calculus III",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHYS 242": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2161,
+  "title": "General Physics with Calculus III Laboratory",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
  "PHYS 320": {
   "ge_areas": [],
   "grading": null,
@@ -1269,6 +4105,32 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PLSI 435": {
+  "crosslisted": [
+   "FIN 435",
+   "I R 435"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1631,
+  "title": "Politics of Global Finance and Crisis",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PSY 171": {
+  "ge_areas": [
+   "2"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2225,
+  "title": "Quantitative Reasoning in Psychology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PSY 200": {
   "ge_areas": [
    "4"
@@ -1281,6 +4143,37 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "RRS 303": {
+  "ge_areas": [
+   "SJ",
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 497,
+  "title": "Health and Wellness among Pacific Islanders",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 657": {
+  "crosslisted": [
+   "AA S 541"
+  ],
+  "ge_areas": [
+   "4UD",
+   "AERM",
+   "GP",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 503,
+  "title": "South Asian Diaspora",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "SOC 105": {
   "ge_areas": [
    "4"
@@ -1290,6 +4183,89 @@
   "repeatable": false,
   "source_page": 845,
   "title": "Sociological Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "TH A 131": {
+  "crosslisted": [
+   "MUS 130"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1669,
+  "title": "The Foundations of Music Theory",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "TH A 206": {
+  "crosslisted": [
+   "MUS 206"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1669,
+  "title": "Beginning Jazz/Pop Piano",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "TH A 221": {
+  "crosslisted": [
+   "MUS 221"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1669,
+  "title": "Ear Training I",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "TH A 234": {
+  "crosslisted": [
+   "MUS 200"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1670,
+  "title": "Fundamentals of Modern Musicianship",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "TH A 559": {
+  "crosslisted": [
+   "MUS 559"
+  ],
+  "ge_areas": [
+   "USH",
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1674,
+  "title": "Women in Jazz",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 593": {
+  "ge_areas": [
+   "GP",
+   "ESCA",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1701,
+  "title": "Gender, Health, and the Environment",
   "units_max": 3.0,
   "units_min": 3.0
  }

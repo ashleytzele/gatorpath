@@ -359,7 +359,9 @@ Added 2026-10-22 (BS Applied Mathematics, the second program, pp.2129-2137):
   collection of three courses emphasizing applications of mathematics, chosen with the consent of the applied
   mathematics advisor", p.2129). Only the courses in `profile.approved[<group id>]` count: one student's approved
   courses, from their DPR or advisor, never a rule. build_plan leaves slots (ready at upper-division standing: no
-  options to check), and list_eligible_electives returns the approval text instead of options.
+  options to check), and list_eligible_electives returns the approval text instead of options. Beside a printed list
+  (`from: [{list: [...]}, {approved: true}]`, "Other appropriate courses may be selected with prior written consent of
+  an advisor"), the list's courses are the options and the approval text is a warning.
 - Roadmap items: `{one_of: [<item>, …], units}` is the first option still needed (a course in the plan's to-do list,
   or a slot), e.g. "CSC 215 (if CSC 101 taken) / SF State Studies or University Elective"; `{slot: major, group: <id>,
   count, units}` is a slot of that major choose-group (CS's `senior_elective` takes any major slot), or, naming a
@@ -395,6 +397,11 @@ cross-listing like "MUS/TH A 221" included), semesters adding up to their printe
 course on a first-time roadmap (that's how 2025-26's missing PHYS 222 shows). Then it builds a plan for a new student
 on each variant and prints check_plan's errors: the end-to-end check. An answer that isn't YAML is kept in the
 draft's file for a person, never lost; a `title:` with an unquoted colon (the usual cause) is quoted before parsing.
+`--load [ids]` moves a draft and its roadmap into `rules/programs/<year>/` and `rules/roadmaps/<year>/` (with their
+source text and a header saying how they were made) when nothing is left but requirements flagged for a person
+(`unparsed` groups, the roadmap slots naming them, a roadmap the planner doesn't read) and a new student's plan passes
+check_plan on every variant; otherwise it stays in `rules/drafts/` and the command says why. Loaded drafts keep
+`verified: false` and `drafted_by`; `list_programs` marks them `drafted: true`.
 
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo

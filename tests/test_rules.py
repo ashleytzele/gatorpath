@@ -67,7 +67,7 @@ def test_every_rule_group_cites_a_page(year, name):
     program, university = load_rules(year, name)
     assert program["catalog_year"] == university["catalog_year"] == year and program["program"] == name
     for g in program["groups"] + university["groups"]:
-        assert re.fullmatch(r"p\.\d{4}.*", g["source"]), g["id"]
+        assert re.fullmatch(r"p\.\d{1,4}.*", g["source"]), g["id"]
 
 
 @pytest.mark.parametrize("year", YEARS)
@@ -367,10 +367,14 @@ def test_an_unparsed_group_is_reported_never_guessed():
 def test_program_files_pass_check_program():
     # ARCHITECTURE §6.2 "AI-drafted rules": the hand-written programs are the bar a draft is held to
     from gatorpath.engine.rules import check_program
-    from gatorpath.ingest.programs import source_pages
+    from gatorpath.ingest.programs import LOADABLE, source_pages
     for path in sorted((RULES_DIR / "programs/2026-27").glob("*.yaml")):
         source = path.with_suffix(".source.txt").read_text()
-        assert check_program(yaml.safe_load(path.read_text()), CATALOG, source_pages(source), source) == [], path.name
+        program = yaml.safe_load(path.read_text())
+        got = check_program(program, CATALOG, source_pages(source), source)
+        if program.get("drafted_by"):  # a loaded draft may still carry requirements flagged for a person (--load)
+            got = [x for x in got if not any(k in x for k in LOADABLE)]
+        assert got == [], path.name
 
 
 def test_check_program_reports_what_a_person_must_fix():

@@ -257,6 +257,42 @@ def try_plans(program: dict, roadmap: dict, university: dict, catalog: dict, pre
     return out
 
 
+# check_program / check_roadmap lines a loaded draft may still carry: requirements left for a person, flagged
+LOADABLE = ("unparsed, a person writes", "units: can't check total_units", "is unparsed in the program rules",
+            "aren't in any variant")
+HEADER = ("# AI-drafted from the {year} Bulletin text ({source}) by {drafted_by}; checked by check_program, check_roadmap\n"
+          "# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against\n"
+          "# the PDF (AGENTS.md, \"Adding or changing a program's rules\").\n")
+
+
+def load(pid: str, year: str, catalog: dict, prereqs: dict, university: dict, pages: dict) -> list[str]:
+    """Move a draft and its roadmap into rules/ when nothing but flagged requirements is left and a new student's plan
+    passes check_plan on every variant. [] when it moved; else what keeps it in rules/drafts/."""
+    d = RULES_DIR / "drafts" / year
+    try:
+        program = yaml.safe_load((d / f"{pid}.yaml").read_text())
+        roadmap = yaml.safe_load((d / f"{pid}.roadmap.yaml").read_text())
+    except (FileNotFoundError, yaml.YAMLError) as e:
+        return [f"no readable draft and roadmap ({type(e).__name__})"]
+    source, road_source = (d / f"{pid}.source.txt").read_text(), (d / f"{pid}.roadmap.source.txt").read_text()
+    problems = check_program(program, catalog, set(pages[pid]["pages"]), source) + check_roadmap(
+        roadmap, program, university, catalog, set(pages[pid]["roadmap_pages"]), road_source)
+    problems = [x for x in problems if not any(k in x for k in LOADABLE)]
+    problems += [x.split("\n")[0] for x in try_plans(program, roadmap, university, catalog, prereqs)
+                 if ": valid," not in x.split("\n")[0]]
+    if problems:
+        return problems
+    head = HEADER.format(year=year, source=f"{pid}.source.txt", drafted_by=program.get("drafted_by", "an AI client"))
+    for kind, data, src, text in (("programs", program, f"{pid}.source.txt", source),
+                                  ("roadmaps", roadmap, f"{pid}.roadmap.source.txt", road_source)):
+        out = RULES_DIR / kind / year
+        (out / f"{pid}.yaml").write_text(head + yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
+        (out / (f"{pid}.source.txt")).write_text(text)
+    for f in (f"{pid}.yaml", f"{pid}.roadmap.yaml", f"{pid}.source.txt", f"{pid}.roadmap.source.txt"):
+        (d / f).unlink()
+    return []
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="List the Bulletin's bachelor's programs, write their source text, draft "
                                              "rules YAML with an AI client, and check program files.")
@@ -266,6 +302,8 @@ def main() -> None:
     ap.add_argument("--draft", nargs="+", metavar="ID", help="draft rules/drafts/<year>/<id>.yaml with --client")
     ap.add_argument("--roadmap", nargs="+", metavar="ID", help="draft rules/drafts/<year>/<id>.roadmap.yaml with --client, "
                                                                "against the program's rules (or its draft)")
+    ap.add_argument("--load", nargs="*", metavar="ID", help="move drafts that pass the checks and a test plan into "
+                                                             "rules/ (no ids: every draft)")
     ap.add_argument("--client", default=CLIENT, help=f"headless AI client, prompt on stdin (default: {CLIENT})")
     ap.add_argument("--db", default="data/catalog.db")
     args = ap.parse_args()
@@ -273,10 +311,11 @@ def main() -> None:
     pages = extract_pages(args.pdf)
     have = {yaml.safe_load(p.read_text())["title"]: p.stem for p in (RULES_DIR / "programs" / year).glob("*.yaml")}
     programs = {program_id(p["title"], have): p for p in index(pages)}
-    if args.source is None and not args.draft and not args.roadmap:
+    if args.source is None and not args.draft and not args.roadmap and args.load is None:
         print(json.dumps([{"id": i, **p, "has_rules": p["title"] in have} for i, p in programs.items()], indent=1))
         return
-    if unknown := [i for i in (args.source or []) + (args.draft or []) + (args.roadmap or []) if i not in programs]:
+    if unknown := [i for i in (args.source or []) + (args.draft or []) + (args.roadmap or []) + (args.load or [])
+                   if i not in programs]:
         ap.error(f"unknown program id {', '.join(unknown)}; run with only the PDF to list them")
     catalog = db.load_catalog(args.db, year)
     for pid in (args.source or [i for i, p in programs.items() if p["title"] in have]) if args.source is not None else []:
@@ -323,6 +362,14 @@ def main() -> None:
         problems = check_roadmap(data, program, university, catalog, set(p["roadmap_pages"]), source)
         print(f"{out / f'{pid}.roadmap.yaml'}: {len(problems)} to fix" + "".join(f"\n  {x}" for x in problems)
               + "".join(f"\n  {x}" for x in try_plans(program, data, university, catalog, db.load_prereqs(args.db, year))))
+
+    if args.load is not None:
+        prereqs = db.load_prereqs(args.db, year)
+        ids = args.load or sorted(p.stem for p in (RULES_DIR / "drafts" / year).glob("*.yaml") if "." not in p.stem)
+        for pid in ids:
+            why = load(pid, year, catalog, prereqs, university, programs)
+            print(f"{pid}: " + ("loaded into rules/ (verified: false)" if not why else "stays a draft"
+                                + "".join(f"\n  {x}" for x in why)))
 
 
 if __name__ == "__main__":
