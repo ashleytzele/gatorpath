@@ -352,6 +352,18 @@ def test_a_select_one_plans_the_option_still_open():
     assert group([{"code": "CSC 309", "grade": "B", "term": "2026-fall"}])["status"] == "satisfied"
 
 
+def test_an_unparsed_group_is_reported_never_guessed():
+    # A drafted rule the vocabulary can't express (BA Asian American Studies p.437): unchecked, quoted, never complete
+    program, university = load_rules("2026-27", "bs-applied-math")
+    odd = {"id": "cr_nc_limit", "unparsed": True, "source": "p.437",
+           "quote": "No more than 9 units can be taken with CR/NC grading."}
+    got = audit({"catalog_year": "2026-27", "completed": []}, program | {"groups": program["groups"] + [odd]},
+                university, CATALOG)
+    group = next(g for g in got["groups"] if g["id"] == "cr_nc_limit")
+    assert group["status"] == "unparsed" and group["quote"] == odd["quote"] and not got["complete"]
+    assert any("can't check" in w and odd["quote"] in w for w in got["warnings"])
+
+
 def test_program_files_pass_check_program():
     # ARCHITECTURE §6.2 "AI-drafted rules": the hand-written programs are the bar a draft is held to
     from gatorpath.engine.rules import check_program

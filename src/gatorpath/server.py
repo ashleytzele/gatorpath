@@ -357,8 +357,9 @@ def profile_error(profile: dict) -> dict | None:
 
 @mcp.tool(annotations=READ_ONLY)
 def audit_progress(profile: Profile) -> dict:
-    """Degree audit: per requirement group satisfied / in_progress / remaining / waived and which courses counted,
-    plus university totals (120 units, upper-division, residence, CR cap, GPAs). Nothing is stored.
+    """Degree audit: per requirement group satisfied / in_progress / remaining / waived (or unparsed: a rule GatorPath
+    can't check, with the Bulletin's `quote`) and which courses counted, plus university totals (120 units,
+    upper-division, residence, CR cap, GPAs). Nothing is stored.
 
     profile: program (e.g. 'bs-cs'); catalog_year (the DPR's "Requirement (Catalog) Term", e.g. 'Fall 2025': that
     year's rules when GatorPath has them, else the newest with a warning); completed: [{code, grade, term?, units? (variable-unit

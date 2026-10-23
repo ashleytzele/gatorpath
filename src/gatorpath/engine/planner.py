@@ -424,6 +424,10 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             if g["id"] in slot_count:
                 warnings.append(f"slot for {g['title']}: already satisfied without it")
             continue
+        if g["status"] == "unparsed":  # can't be checked, so it neither passes nor fails the plan
+            warnings.append(f"{g['title']}: not checked, GatorPath can't read this requirement; the Bulletin says "
+                            f"\"{g['quote']}\" ({g['source']})")
+            continue
         if "units_needed" in g and g["units_done"] + slot_units.get(g["id"], 0) >= g["units_needed"]:
             continue
         if "courses_needed" in g and len(g["counted"]) + slot_count.get(g["id"], 0) >= g["courses_needed"]:

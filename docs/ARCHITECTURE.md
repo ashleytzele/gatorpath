@@ -374,7 +374,8 @@ then checks any program file, drafted or hand-written: only this vocabulary, eve
 units adding up to `total_units`. A person fixes what it reports, moves the file to `rules/programs/<year>/`, and a
 second person sets `verified`. Draft-only keys: `quote` on a group (the Bulletin words it was written from) and
 `drafted_by` (client, date); a requirement the vocabulary can't express is a group with `unparsed: true`, its
-`quote` and `source`, for the person to write (rule 3: flag, don't guess). A major's choice is `choose_units` (the
+`quote` and `source`, for the person to write (rule 3: flag, don't guess); until then `audit` gives it status
+`unparsed` (never complete) with its quote, and `check_plan` warns that it isn't checked. A major's choice is `choose_units` (the
 printed units): `choose_n` plans a 0-unit designation slot, so check_program flags it in a program file. Advising
 contacts aren't drafted: they come from office pages (§5).
 
@@ -735,6 +736,7 @@ pass it (tested).
 | Unknown course code | `error: unknown_course` with close matches (same subject, nearest numbers: CSC 210 → CSC 215, CSC 220) |
 | Unverified program | Works, but every response has `verified: false` + warning |
 | Prereq `unparsed`/`partial` | Course allowed; ⚠️ with raw Bulletin text so the student/AI can read it |
+| Requirement group `unparsed` | Status `unparsed`, degree never `complete`; ⚠️ with its Bulletin quote; the plan isn't failed for it |
 | Missing GPA when a prereq needs it | ⚠️ "requires GPA ≥ 3.0 — not provided" |
 | Missing QR pathway | `build_plan` returns `needs_input: qr_pathway` instead of guessing |
 | Offering data missing for a course | `offered: unknown` + ⚠️ |

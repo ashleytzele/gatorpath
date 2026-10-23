@@ -477,6 +477,17 @@ def test_build_plan_uses_winter_terms_only_when_asked_and_only_for_ge_and_electi
         assert s["units"] <= 4 and all(isinstance(c, dict) for c in s["courses"])
 
 
+def test_a_plan_with_an_unparsed_group_is_checked_except_for_it():
+    from gatorpath.engine.planner import build_plan
+    profile = eval_profile(ROOT / "evals/profiles/p11-applied-math-sophomore.yaml")
+    program, university, roadmap = rules_for(profile)
+    odd = {"id": "cr_nc_limit", "unparsed": True, "source": "p.437",
+           "quote": "No more than 9 units can be taken with CR/NC grading."}
+    got = build_plan(profile, program | {"groups": program["groups"] + [odd]}, university, roadmap, CATALOG, PREREQS)
+    assert got["check"]["valid"], got["check"]["errors"]
+    assert any(w.startswith("cr_nc_limit: not checked") for w in got["warnings"])
+
+
 def test_compare_programs_says_what_carries_over_to_a_new_major():
     from gatorpath.engine.planner import compare_programs
     profile = eval_profile(ROOT / "evals/profiles/p03-sophomore-qr34.yaml")  # BS CS, QR 3/4, MATH 226 in progress

@@ -452,8 +452,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   cross-listings as "PH/ETHS 221" (the prompt now says to list each code), and check_program rejected pages under 1000
   (fixed). The checker can't see omissions: the Civil draft's electives left out "subject to the minimum number of
   units specified for each group" and the advisor-approved study plan, so a draft with 0 to fix still needs a person.
-  Before loading: (1) audit raises KeyError on an `unparsed` group (4 of the 5 drafts): it must report the group as
-  unchecked; (2) build_plan needs a roadmap; (3) decide whether unreviewed drafts are served.
+  Before loading: (1) done 2026-10-22: an `unparsed` group (4 of the 5 drafts) audits as status `unparsed` with its
+  quote and a warning, and check_plan warns instead of failing (it raised KeyError before); (2) build_plan needs a roadmap; (3) decide whether unreviewed drafts are served.
 
 ---
 

@@ -210,6 +210,10 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
         warnings.append(f"{out['title']}: left out because the student's DPR doesn't list it (their catalog year); "
                         f"confirm with an advisor that it isn't required ({g['source']})")
         return out | {"status": "waived", "waived_by": "not on the student's DPR"}
+    if g.get("unparsed"):  # a drafted rule the vocabulary can't express (§6.2): flagged, never approximated
+        warnings.append(f"{out['title']}: GatorPath can't check this requirement; the Bulletin says \"{g.get('quote', '')}\" "
+                        f"({g['source']}). Check it on your DPR or with an advisor")
+        return out | {"status": "unparsed", "quote": g.get("quote", "")}
     if "distinct_subjects" in g:
         return out | distinct_subjects(g, done_groups, warnings)
     if g["id"] in certified:  # Cal-GETC certification of lower-division GE (p.2304)
@@ -443,7 +447,7 @@ def totals(profile: dict, taken: dict, groups: list[dict], university: dict, cat
 
 
 def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict:
-    """Per-group status (satisfied / in_progress / remaining / waived), university totals, warnings."""
+    """Per-group status (satisfied / in_progress / remaining / waived / unparsed), university totals, warnings."""
     warnings: list[str] = []
     norm = lambda x: str(x).strip().upper()  # 'b ' -> 'B'; ge_done [2] -> '2'
     profile = profile | {"completed": [r | {"grade": norm(r["grade"])} for r in profile.get("completed", [])],
