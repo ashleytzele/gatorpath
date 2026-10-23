@@ -116,5 +116,9 @@ def test_a_roadmap_draft_is_written_against_the_rules_and_never_verified(tmp_pat
     with pytest.raises(yaml.YAMLError):
         P.draft_roadmap(APPLIED, "bs-applied-math", "2026-27", "", "", university, client, keep)
     assert "Bachelor of Music: Composition" in keep.read_text()  # kept for a person, not lost
+    # a kept raw answer is read with parse_draft's repairs, stamped and rewritten as YAML
+    keep.write_text("```yaml\nvariants:\n  adt: {title: \"x\"}\nverified: true\n```")
+    got = P.read_draft(keep, "variants", {"program": "bm-composition", "catalog_year": "2026-27"})
+    assert got["verified"] is False and got["program"] == "bm-composition" and yaml.safe_load(keep.read_text()) == got
     with pytest.raises(RuntimeError, match="exited 3"):  # a usage limit: this program fails, not the batch
         P.ask(f"{sys.executable} -c \"import sys; sys.exit(3)\"", "prompt", "variants")

@@ -215,6 +215,22 @@ def parse_draft(answer: str, key: str = "groups") -> dict:
     return data
 
 
+def read_draft(path: Path, key: str, stamp: dict) -> dict:
+    """A draft file as a mapping. One kept as the client's raw answer (it wasn't YAML) is parsed with parse_draft's
+    repairs, stamped like a draft, and rewritten as YAML; ValueError / YAMLError when it still can't be read."""
+    text = path.read_text()
+    try:
+        data = yaml.safe_load(text)
+        if isinstance(data, dict) and key in data:
+            return data
+    except yaml.YAMLError:
+        pass
+    data = parse_draft(text, key) | stamp | {"verified": False, "verified_by": None,
+                                            "drafted_by": f"{CLIENT.split()[0]}, {date.fromtimestamp(path.stat().st_mtime)}"}
+    path.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
+    return data
+
+
 def ask(client: str, text: str, key: str, keep: Path | None = None) -> dict:
     """One headless AI-client run: the prompt on stdin, the YAML out, stamped never verified. The answer is written to
     `keep` first, so one that isn't YAML is there for a person to fix instead of lost."""
@@ -275,10 +291,11 @@ def load(pid: str, year: str, catalog: dict, prereqs: dict, university: dict, pa
     passes check_plan on every variant. [] when it moved; else what keeps it in rules/drafts/."""
     d, rules = RULES_DIR / "drafts" / year, RULES_DIR / "programs" / year
     home = d if (d / f"{pid}.yaml").exists() else rules  # a redrafted roadmap for a loaded program uses its rules
+    stamp = {"program": pid, "catalog_year": year}
     try:
-        program = yaml.safe_load((home / f"{pid}.yaml").read_text())
-        roadmap = yaml.safe_load((d / f"{pid}.roadmap.yaml").read_text())
-    except (FileNotFoundError, yaml.YAMLError) as e:
+        program = read_draft(home / f"{pid}.yaml", "groups", stamp | {"title": pages[pid]["title"]})
+        roadmap = read_draft(d / f"{pid}.roadmap.yaml", "variants", stamp)
+    except (FileNotFoundError, ValueError, yaml.YAMLError) as e:
         return [f"no readable draft and roadmap ({type(e).__name__})"]
     if not program.get("drafted_by"):
         return ["hand-written rules: --load only moves AI drafts"]
@@ -357,9 +374,9 @@ def main() -> None:
         if not p["roadmap_pages"]:
             print(f"{pid}: no roadmap pages in the Bulletin; nothing to draft")
             continue
-        try:  # before spending a call: a draft kept as the raw answer may not be YAML yet
-            program = yaml.safe_load(rules.read_text())
-        except yaml.YAMLError:
+        try:  # before spending a call: a draft kept as the raw answer is repaired, or reported
+            program = read_draft(rules, "groups", {"program": pid, "title": p["title"], "catalog_year": year})
+        except (ValueError, yaml.YAMLError):
             print(f"{rules}: isn't YAML yet, fix it before drafting its roadmap")
             continue
         source = source_text(pages, p["roadmap_pages"])
