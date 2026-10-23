@@ -472,7 +472,9 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   "Placement Category III or IV"): 7-8 prereqs per year change, CHEM 100/101/115/180 and ESE/ESM 101-102. 10 of 10
   pilot plans pass. "Not open to students who have completed ERTH 112" parsed as requiring ERTH 112; fixed
   2026-10-22, a `not_after` exclusion leaf (ERTH 110-172; 2024-25 also ARTH 404, CLAR 550, ERTH 162, MSCI 313).
-  Open: a one_of option is still chosen by units, not readiness.
+  A one_of option was chosen by units only; fixed 2026-10-22: build_plan keeps the audit's option only while every
+  planned course stays reachable with it, else the first by units that does (Applied Math: with MATH 209 out of reach,
+  CSC 101 & CSC 215, not CSC 309, since MATH 400 needs CSC 215 or MATH 209).
   Not redrafted with the new prompt yet (usage): the pilot's 5 come first in the load-all run.
 
 ---

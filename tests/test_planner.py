@@ -506,6 +506,23 @@ def test_a_plan_with_an_unparsed_group_is_checked_except_for_it():
     assert any(w.startswith("cr_nc_limit: not checked") for w in got["warnings"])
 
 
+def test_a_select_one_plans_an_option_whose_prereqs_can_be_met():
+    # Applied Math "Select One: MATH 209, CSC 101 & CSC 215, or CSC 309" (p.2129) plans MATH 209, the fewest units, first
+    # printed. Here MATH 209 is given a prereq no undergraduate meets, the way CHEM 180 once read for QR 3/4 placement.
+    from gatorpath.engine.planner import build_plan
+    program, university, roadmap = rules_for({"program": "bs-applied-math"})
+    fresh = {"program": "bs-applied-math", "catalog_year": "2026-27", "start_term": "2027-fall", "qr_pathway": "1/2",
+             "completed": []}
+    planned = lambda p: {c for s in p["semesters"] for c in s["courses"] if isinstance(c, str)}
+    assert "MATH 209" in planned(build_plan(fresh, program, university, roadmap, CATALOG, PREREQS))
+    blocked = PREREQS | {"MATH 209": {"raw_text": "Graduate standing.", **parse_prereq("Graduate standing.")}}
+    got = build_plan(fresh, program, university, roadmap, CATALOG, blocked)
+    assert got["check"]["valid"], got["check"]["errors"]
+    # CSC 309 is ready too, but MATH 400 (required) needs CSC 215 or MATH 209, so the plan takes CSC 101 & CSC 215
+    assert {"CSC 101", "CSC 215"} <= planned(got) and not planned(got) & {"MATH 209", "CSC 309"}
+    assert any("planned CSC 101, CSC 215, not MATH 209, which leaves a prereq in this plan unmet" in w for w in got["warnings"])
+
+
 def test_compare_programs_says_what_carries_over_to_a_new_major():
     from gatorpath.engine.planner import compare_programs
     profile = eval_profile(ROOT / "evals/profiles/p03-sophomore-qr34.yaml")  # BS CS, QR 3/4, MATH 226 in progress

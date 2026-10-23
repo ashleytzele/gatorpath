@@ -662,6 +662,26 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     required = [c for c in required if c not in stuck]
     met = have | set(profile.get("dpr_met", ()))
 
+    # A "Select One" (one_of) plans the audit's option (fewest units) unless, with it, some planned course can never be
+    # ready: a prereq nothing in the plan or roadmap meets (only those get scheduled; MATH 400 needs CSC 215 or MATH 209,
+    # not CSC 309), or one the student can't meet (another placement, graduate standing). Then the first option, by
+    # units left, that leaves every course reachable.
+    later = {"same_term": set(), "grades": {}, "profile": profile, "gpa": profile.get("gpa"),
+             "ge_done": ge_done_areas(profile, university), "slot_areas": {a for g in university["groups"] for a in ge_areas(g)},
+             "catalog": catalog, "program": program, "class_level": levels, "units": university["totals"]["min_units"]}
+
+    def reachable(left: list[str], instead: list[str]) -> bool:
+        plan = set(required) - set(instead) | set(left)
+        return all(evaluate(prereqs.get(c, {}).get("expr"), later | {"done": met | plan | set(order)})[0] != NO for c in plan)
+
+    for g in status["groups"]:
+        if "options" in g and g["remaining"] and not reachable(g["remaining"], g["remaining"]):
+            by_units = sorted(g["options"], key=lambda o: sum(catalog[c]["units_min"] for c in o["left"] if c in catalog))
+            if pick := next((o["left"] for o in by_units if o["left"] and reachable(o["left"], g["remaining"])), None):
+                required = [c for c in required if c not in g["remaining"]] + [c for c in pick if c in catalog]
+                warnings.append(f"{g['title']}: planned {', '.join(pick)}, not {', '.join(g['remaining'])}, which leaves a "
+                                f"prereq in this plan unmet ({g['source']})")
+
     def still_needed(e: dict | None) -> list[str]:
         """Courses a prereq tree still needs: a chain stops at what's done or met, and "one of" stops at a done one."""
         if not e:
