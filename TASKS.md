@@ -22,7 +22,8 @@ first, then audit.
   D17-D22, §8 rewritten roadmap-first, §5 "What may come from where" (+ AGENTS.md golden rules 1-2), the duplicate
   D15 renumbered D16, §16.8 (keep `import_transcript`?)
   - Planning is roadmap-led (§8 still describes critical-path greedy). The default cap stays 15 even though the
-    first-time roadmaps have 16-17-unit terms (`pace.roadmap_load` reports them)
+    first-time roadmaps have 16-17-unit terms (`pace.roadmap_load` reports them). Replaced by D24 (2026-10-22): the
+    roadmap's loads are the default
   - Senior electives wait for real readiness (an option ready that term), not the roadmap's course order
   - The DPR is the main import (`import_dpr`); the transcript could become optional
   - Some rules come from websites, not the Bulletin: the F-1 Reduced Course Load page (`f1_final_term`) and the
@@ -442,6 +443,15 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   Acceptance: BS Applied Mathematics drafted without itself as an example audits p11 and p12 exactly like the
   hand-written file (counted, remaining, totals; only group titles differ). The first draft used choose_n, which
   plans a 0-unit slot: check_program flags it and the prompt asks for choose_units. No roadmap drafting yet
+- [x] The roadmap is the default unit load (D24, replaces D18). Done 2026-10-22: without max_units_per_term, a
+  spring/fall term's cap is the printed load of the roadmap semester the student's units have reached (nearest
+  semester end: a new BS CS QR 1/2 freshman gets 16, 15, 16, 15, 15, 15, 15, 13; a 62-unit transfer starts on
+  semester 5's load; the ADT roadmap counts SF State units), the last semester's load past the end, at most 19, at
+  least 12 for F-1. Each semester carries max_units and roadmap {units, source}; check_plan takes them, and a load
+  over 15 its roadmap semester prints is "as on the Bulletin roadmap (p.X)", no advisor. pace.normal_load is the
+  lighter plan at 15. Scenario matrix (plan_review, new roadmap column): same or fewer terms than at 15 for
+  freshmen (QR 3/4: 8 vs 9); a term more for transfers past a first-time roadmap's end (its last semester's 13,
+  Cal-GETC transfer 7 vs 6) and for the Applied Math ADT roadmap, which prints 13, 13, 9, 12, 7, 4, 2.
 - [ ] Load all programs as `verified: false`
   Pilot 2026-10-22: one program per college, drafted with `--client "claude -p --model sonnet …"` to save usage
   (about 35 s each), kept in `rules/drafts/2026-27/`. BS Civil Engineering had 0 to fix. BM Composition, BS Business

@@ -393,12 +393,15 @@ def audit_progress(profile: Profile) -> dict:
 def check_plan(profile: Profile, plan: Plan) -> dict:
     """Validate a term-by-term plan. **Call this before presenting any plan, fix every error, and re-check until
     valid.** Errors (with Bulletin text/pages): prereq not met by that term, course already passed or planned twice,
-    unknown course, units over max_units_per_term, requirement or 120/upper-division units not covered. Warnings:
-    unverifiable prereqs (GPA not given, permission), loads above the normal 15 (p.2393), unfilled slots.
+    unknown course, units over the term's cap (profile.max_units_per_term, else the term's max_units, else 15),
+    requirement or 120/upper-division units not covered. Warnings: unverifiable prereqs (GPA not given, permission),
+    loads above the normal 15 (p.2393; "as on the Bulletin roadmap" with no advisor when the term's roadmap semester
+    prints that load), unfilled slots.
     profile.f1: true for an F-1 visa student: a spring/fall term under 12 units is an error (the plan's last term: a
     warning and the international office), and so is a skipped spring/fall term (pp.2390, 2393).
 
-    plan: {semesters: [{term: '2027-fall', courses: ['CSC 413', {slot: 'senior_electives', units: 3}]}]}. A slot is an
+    plan: {semesters: [{term: '2027-fall', courses: ['CSC 413', {slot: 'senior_electives', units: 3}]}]}. Pass
+    build_plan's semesters back as returned: their max_units and roadmap {units, source} keep the roadmap's loads. A slot is an
     unfilled pick for a requirement group (group ids from get_program_requirements), or {slot: 'elective', units: 3,
     upper_division?: true} for free units. Terms are YYYY-spring/summer/fall, or YYYY-winter for Winter Session (January,
     between fall and spring, at most 4 units), after the profile's completed terms.
@@ -419,12 +422,16 @@ def build_plan(profile: Profile) -> dict:
     electives) to reach the 120 and upper-division totals. Already run through check_plan: see `check`.
 
     Fill each slot with list_eligible_electives + the student's goal, then call check_plan again before presenting.
-    Uses max_units_per_term (default 15, the normal load, p.2393), include_summer, include_winter (Winter Session terms
+    Unit loads follow the roadmap (D24): each spring/fall term's cap is the printed units of the roadmap semester the
+    student's units have reached (16, 15, 16, … for a BS CS QR 1/2 freshman; the last semester's past its end; never
+    under 12 for f1), shown as each semester's max_units and roadmap. max_units_per_term is the student's own cap and
+    overrides it. Also include_summer, include_winter (Winter Session terms
     between fall and spring: up to 4 units of GE, American Institutions or free electives) and f1 (F-1 visa: spring/fall
     terms filled toward 12 units, pp.2390, 2393). Returns needs_input
     (qr_pathway, start_term) instead of guessing. Each semester has `why`: per course, what it's needed before, the
     chain it starts, and whether delaying it pushes back graduation. `pace` says what sets the length: the longest
-    prereq chain vs the units per term; fold_last_term when a light last term fits into one earlier term (a term
+    prereq chain vs the units per term (load: roadmap / max_units_per_term); normal_load is the lighter option at the
+    normal 15 (terms, graduation term) when the roadmap goes above it; fold_last_term when a light last term fits into one earlier term (a term
     sooner at one heavier load); with profile.graduate_by it says whether that term is reachable and, if not, why_not.
     For "3, 4 or 5 years", call it at different max_units_per_term / include_summer / include_winter.
     """
@@ -754,10 +761,11 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    course passed with CR that can't be repeated; a limit the student set, like F-1 with a 12-unit cap), stop
    re-checking: present no plan as final, say what causes it and what would lift it (a petition, a higher
    max_units_per_term, a summer or Winter Session), and show its see_advisor.
-6. A graduation target or "3, 4 or 5 years?": `build_plan` at 12, 15 and 18 units per term + include_summer (+ include_winter), then a
-   table: load, est_graduation_term, on_time, why_not. Over 15 units is above the normal load (p.2393): advisor.
-   build_plan lays a plan on the Bulletin roadmap; when pace.roadmap_load is there, the roadmap's own loads (some
-   16-17-unit terms) finish sooner: offer it as a row. When pace.fold_last_term is there, moving the light last term
+6. A graduation target or "3, 4 or 5 years?": `build_plan` as is (the roadmap's own loads, the default), then at 12 and
+   18 units per term + include_summer (+ include_winter), then a table: load, est_graduation_term, on_time, why_not.
+   A term over 15 that matches its roadmap semester is "as on the Bulletin roadmap": no advisor; above the roadmap's
+   load (or 15 off it) is an overload (p.2393): advisor. When pace.normal_load is there, the normal 15 is the lighter
+   row: offer it from its note. When pace.fold_last_term is there, moving the light last term
    into one earlier term finishes a term sooner with only that term heavier: offer it as a row, from its note.
    "What if I switch to <major>?": `compare_programs` with target = its id from list_programs. Show what counts in
    both, what only the current major used (still toward the 120), what the new one still needs, and extra_terms;

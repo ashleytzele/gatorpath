@@ -233,7 +233,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     advise: list[tuple[str, str]] = []
     err = lambda kind, msg, **kw: errors.append({"error": kind, "message": msg, **kw})
     load, levels = university["academic_load"], university["class_level"]
-    cap = profile.get("max_units_per_term", load["normal_max"])
+    fixed = profile.get("max_units_per_term")  # the student's cap; else each term's max_units (build_plan), else 15
     reps, most = university["repeats"], university["max_units"]
     f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") else 0
     rcl = university.get("f1_final_term")
@@ -338,8 +338,10 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         summer, winter = term.endswith("summer"), term.endswith("winter")
         regular = not (summer or winter)  # spring or fall: the F-1 minimum and the normal load apply
         ws = most.get("winter_session", {})
+        cap = fixed if fixed is not None else sem.get("max_units", load["normal_max"])
         if term_units > cap:
-            err("over_cap", f"{term}: {term_units:g} units is over max_units_per_term ({cap:g})", term=term)
+            err("over_cap", f"{term}: {term_units:g} units is over {'max_units_per_term' if fixed is not None else 'max_units'} "
+                f"({cap:g})", term=term)
         if winter and term_units > ws.get("units", 0):
             err("over_max_units", f"{term}: {term_units:g} units is over the {ws.get('units', 0):g}-unit Winter Session maximum "
                 f"({ws.get('source', 'no Winter Session in this Bulletin')})", term=term)
@@ -382,8 +384,11 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                                 f"only {rcl['online_units_count']:g} units of online classes count for F-1, so this term "
                                 f"counts as {counted:g} of the {f1_min:g} if they stay online. Look for in-person or "
                                 f"hybrid sections in Class Search, or swap one ({rcl['source']})")
-        normal = load["summer_normal" if summer else "normal_max"]
-        if not winter and term_units > normal:
+        normal, road = load["summer_normal" if summer else "normal_max"], sem.get("roadmap")
+        if regular and road and normal < term_units <= road["units"]:  # D24: the roadmap's own load, not an overload
+            warnings.append(f"{term}: {term_units:g} units, above the normal {normal:g}, as on the Bulletin roadmap "
+                            f"({road['source']})")
+        elif not winter and term_units > normal:
             warnings.append(f"{term}: {term_units:g} units is above the normal load of {normal:g} ({load['source']}); "
                             "see an advisor before planning an overload")
             advise.append(("major_advisor", f"{term}: {term_units:g} units is above the normal load of {normal:g} "
@@ -624,7 +629,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     seasons = ("spring", "summer", "fall") if summer else ("spring", "fall")  # a course waits only for these
     winter_max = university["max_units"].get("winter_session", {}).get("units", 0)
     load, levels = university["academic_load"], university["class_level"]
-    cap = profile.get("max_units_per_term", load["normal_max"])
+    fixed = profile.get("max_units_per_term")  # the student's cap overrides the roadmap's loads (D24)
     start = first_term(profile)
     if start is None:
         return {"catalog_year": program["catalog_year"], "needs_input": "start_term",
@@ -646,6 +651,31 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
 
     # Roadmap courses for this pathway that lead to a required course (QR 3/4: MATH 197, MATH 198 before MATH 226).
     ref = variant or next(iter(roadmap["variants"]))  # no pathway needed: any variant still orders the rest
+    # D24: the roadmap's loads are the default. A spring/fall term takes the printed units of the roadmap semester the
+    # student's units have reached (the nearest cumulative boundary, so a 62-unit transfer starts at semester 5; on the
+    # ADT roadmap, which starts at transfer, SF State units), the last semester's past the end, at most the
+    # fall/spring maximum. The student's max_units_per_term overrides.
+    road_sems = roadmap["variants"][ref]["semesters"]
+    ends = [sum(x["units"] for x in road_sems[:k]) for k in range(len(road_sems) + 1)]  # 0, 16, 32, …
+    away = status["totals"]["units"]["value"] - status["totals"]["residence_units"]["value"] if ref == "adt" else 0
+
+    def road_load(units: float) -> dict | None:
+        if not road_sems:
+            return None
+        k = min(range(len(ends)), key=lambda k: (abs(ends[k] - (units - away)), -k))
+        sem = road_sems[min(k, len(road_sems) - 1)]
+        return {"units": min(sem["units"], university["max_units"]["fall_spring"]), "source": sem["source"]}
+
+    def cap_for(term: str, cap: float | None, units: float) -> float:
+        """A term's unit cap with `units` earned before it: `cap` when one is set (the student's, or the normal 15 for
+        the lighter plan), else the roadmap's load. Summer and Winter Session keep their own limits."""
+        if term.endswith("summer") or term.endswith("winter"):
+            return min(math.inf if cap is None else cap, load["summer_normal"] if term.endswith("summer") else winter_max)
+        if cap is not None:
+            return cap
+        # F-1 students carry at least 12 every spring and fall (p.2390): a lighter roadmap semester doesn't lower that
+        return max((road_load(units) or {"units": load["normal_max"]})["units"],
+                   load["f1_min"]["undergraduate"] if profile.get("f1") else 0)
     items = [i for sem in roadmap["variants"][ref]["semesters"] for i in sem["items"]]
     order = {c: n for n, c in enumerate(i for i in items if isinstance(i, str))}
     have = {r["code"] for r in profile.get("completed", []) if passed(r["grade"])} | set(in_prog)
@@ -798,9 +828,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             return [x for x in pool if x["_kind"] == "tag" and x["slot"].startswith("sfss_")] + free(item["units"])
         return free(item.get("units", 3))
 
-    def schedule(queue: list[list], cap: float) -> tuple[list, dict, list]:
+    def schedule(queue: list[list], cap: float | None) -> tuple[list, dict, list]:
         """Term by term from `start`: a term first takes its roadmap semester's items (still needed and ready; the
-        rest carry to the next term), then the greedy fills what's left under `cap`, critical path first."""
+        rest carry to the next term), then the greedy fills what's left under its cap (cap_for), critical path first."""
         slots = [dict(x) for x in slots0]
         done, grades, units = set(have), dict(grades0), units0
         left = sorted(todo, key=rank_of)
@@ -815,7 +845,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             # ponytail: a Winter Session term takes only GE, American Institutions and free-elective slots: Class Search
             # history has no winter terms, so which major courses run then is unknown. Upgrade: scrape the winter schedule.
             in_winter = term.endswith("winter")
-            limit = min(cap, load["summer_normal"]) if term.endswith("summer") else min(cap, winter_max) if in_winter else cap
+            limit = cap_for(term, cap, units)
+            on_road = road_load(units) if term[5:] in ("spring", "fall") else None
+            limits = {"max_units": limit} | ({"roadmap": on_road} if on_road else {})
             placed: list[str] = []
             term_slots: list[dict] = []
             used = 0.0
@@ -942,7 +974,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 notes.append(f"Stopped at {term}: nothing more can be scheduled. Blocked: "
                              + "; ".join(f"{c} needs {', '.join(w) or 'more units per term'}" for c, w in blocked.items())
                              + ("; slots waiting: " + ", ".join(sorted({x['slot'] for x in slots})) if slots else ""))
-                semesters += [{"term": term, "courses": [{k: v for k, v in x.items() if k != "_kind"} for x in term_slots], "units": 0}] if term_slots else []
+                semesters += [{"term": term, "courses": [{k: v for k, v in x.items() if k != "_kind"} for x in term_slots],
+                               "units": 0} | limits] if term_slots else []
                 break
             if not left and slots and all(x["units"] == 0 for x in slots):
                 term_slots += slots  # designation tags never make a term of their own
@@ -953,7 +986,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 free[key] = free[key] | {"units": free[key]["units"] + x["units"]} if key in free else dict(x)
             term_slots = [x for x in term_slots if x["slot"] != "elective"] + list(free.values())
             semesters.append({"term": term, "units": used,
-                              "courses": placed + [{k: v for k, v in x.items() if k != "_kind"} for x in term_slots]})
+                              "courses": placed + [{k: v for k, v in x.items() if k != "_kind"} for x in term_slots]} | limits)
             done |= set(placed)
             for c in placed:  # a planned retake replaces the old grade
                 grades.pop(c, None)
@@ -962,26 +995,32 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             term = next_term(term, summer, winter)
         return semesters, first_ok, notes
 
-    # Build both and keep the roadmap-led plan unless the plain greedy finishes sooner. Both use the same cap (the
-    # roadmap's 16-unit terms carry an item over under the normal 15), so the plan always passes check_plan as given.
-    semesters, first_ok, notes = schedule([], cap)
-    if not summer:
-        led = schedule([list(sem["items"]) for sem in road], cap)
-        led_check = check_plan(profile, {"semesters": led[0]}, program, university, catalog, prereqs)
-        if led_check["valid"] and len(led[0]) <= len(semesters):
-            semesters, first_ok, notes = led
-            notes.append(f"Laid out on the Bulletin's {roadmap['variants'][ref]['title']} ({roadmap['variants'][ref]['source']}): "
-                         "each term starts from that roadmap semester's courses and GE areas, adjusted for what's done")
-    # The roadmap's own loads (two 16-unit terms in the first-time roadmaps) can finish sooner than the normal 15.
-    road_cap = max(sem["units"] for sem in road)
-    road_pace = None
-    if not summer and "max_units_per_term" not in profile and road_cap > cap:
-        fast = schedule([list(sem["items"]) for sem in road], road_cap)[0]
-        if fast and len(fast) < len(semesters) and check_plan(profile | {"max_units_per_term": road_cap}, {"semesters": fast},
-                                                              program, university, catalog, prereqs)["valid"]:
-            road_pace = {"max_units_per_term": road_cap, "terms": len(fast), "est_graduation_term": fast[-1]["term"],
-                         "note": f"the Bulletin roadmap's own loads (up to {road_cap:g} units, above the normal "
-                                 f"{load['normal_max']:g}); pass max_units_per_term: {road_cap:g} to plan that way"}
+    # Build both and keep the roadmap-led plan unless the plain greedy finishes sooner. Both use the same caps, and each
+    # term carries its own (max_units), so the plan passes check_plan as given.
+    def plan_at(cap: float | None) -> tuple[list, dict, list]:
+        semesters, first_ok, notes = schedule([], cap)
+        if not summer:
+            led = schedule([list(sem["items"]) for sem in road], cap)
+            if check_plan(profile, {"semesters": led[0]}, program, university, catalog, prereqs)["valid"] \
+                    and len(led[0]) <= len(semesters):
+                v = roadmap["variants"][ref]
+                return led[0], led[1], led[2] + [f"Laid out on the Bulletin's {v['title']} ({v['source']}): each term "
+                                                 "starts from that roadmap semester's courses and GE areas, adjusted for "
+                                                 "what's done"]
+        return semesters, first_ok, notes
+
+    semesters, first_ok, notes = plan_at(fixed)
+    # The lighter option (D24): the normal 15 where the roadmap's loads go above it (two 16-unit terms in the
+    # first-time roadmaps).
+    normal_pace = None
+    if fixed is None and any(s["max_units"] > load["normal_max"] for s in semesters):
+        light = plan_at(load["normal_max"])[0]
+        if light and check_plan(profile, {"semesters": light}, program, university, catalog, prereqs)["valid"]:
+            normal_pace = {"max_units_per_term": load["normal_max"], "terms": len(light),
+                           "est_graduation_term": light[-1]["term"],
+                           "note": f"the normal load of {load['normal_max']:g} ({load['source']}) instead of the roadmap's "
+                                   f"(up to {max(s['max_units'] for s in semesters):g}): {len(light)} terms, done in "
+                                   f"{light[-1]['term']}; pass max_units_per_term: {load['normal_max']:g} to plan that way"}
     warnings += notes
     plan = {"semesters": semesters}
     check = check_plan(profile, plan, program, university, catalog, prereqs)
@@ -1002,15 +1041,18 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         units = s["units"] + last["units"]
         if s["term"][5:] not in ("spring", "fall") or units > university["max_units"]["fall_spring"]:
             continue
-        moved = [x | {"courses": x["courses"] + last["courses"], "units": units} if x is s else x for x in semesters[:-1]]
-        if check_plan(profile | {"max_units_per_term": max(cap, units)}, {"semesters": moved},
-                      program, university, catalog, prereqs)["valid"]:
+        moved = [x | {"courses": x["courses"] + last["courses"], "units": units, "max_units": max(x["max_units"], units)}
+                 if x is s else x for x in semesters[:-1]]
+        if check_plan(profile | ({"max_units_per_term": max(fixed, units)} if fixed is not None else {}),
+                      {"semesters": moved}, program, university, catalog, prereqs)["valid"]:
+            overload = units > load["normal_max"] and units > s.get("roadmap", {}).get("units", 0)
             fold = {"term": s["term"], "units": units, "terms": len(moved), "est_graduation_term": moved[-1]["term"],
                     "note": f"move {last['term']}'s {held} ({last['units']:g} unit{'s' if last['units'] != 1 else ''}) "
                             f"into {s['term']}: one {units:g}-unit term, done in {moved[-1]['term']}, a term sooner"
                             + (f"; above the normal load of {load['normal_max']:g} ({load['source']}), so see an advisor "
-                               "first" if units > load["normal_max"] else "")
-                            + f". check_plan the moved plan with max_units_per_term: {max(cap, units):g}"}
+                               "first" if overload else "")
+                            + (f". check_plan the moved plan with max_units_per_term: {max(fixed, units):g}"
+                               if fixed is not None else f". In the moved plan {s['term']} has max_units: {units:g}")}
             break
 
     # Why each course is where it is, and what sets the pace.
@@ -1050,18 +1092,23 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             if len(path) >= 2 and all(term_of.get(path[k + 1]) == term_of[path[k]] + 1 for k in range(len(path) - 1)):
                 parts.append(f"no slack: delaying it pushes back {path[-1]}")
             if first_ok.get(c, s["term"]) != s["term"]:
-                parts.append(f"could have started in {first_ok[c]}; waited for room under {cap:g} units per term")
+                parts.append(f"could have started in {first_ok[c]}; waited for room under {s['max_units']:g} units that term")
             notes[c] = parts[0][0].upper() + "; ".join(parts)[1:]
         s["why"] = notes
 
     plan_units = sum(s["units"] for s in semesters)
     critical = min(todo, key=rank_of) if todo else None
-    pace = {"terms": len(semesters), "units_per_term": cap, "include_summer": summer, "include_winter": winter,
-            "planned_units": plan_units,
-            **({"roadmap_load": road_pace} if road_pace else {}), **({"fold_last_term": fold} if fold else {}),
+    kind_of_load = "max_units_per_term" if fixed is not None else "roadmap" if road_sems else "normal"
+    by_units, got, t = 0, 0.0, start if start[5:] in ("spring", "fall") else next_term(start, False)
+    while got < plan_units and by_units < 40:  # spring/fall terms at their caps
+        got, by_units, t = got + cap_for(t, fixed, units0 + got), by_units + 1, next_term(t, False)
+    pace = {"terms": len(semesters), "load": kind_of_load,
+            **({"units_per_term": fixed if fixed is not None else load["normal_max"]} if kind_of_load != "roadmap" else {}),
+            "include_summer": summer, "include_winter": winter, "planned_units": plan_units,
+            **({"normal_load": normal_pace} if normal_pace else {}), **({"fold_last_term": fold} if fold else {}),
             "min_terms_by_prereqs": depth[critical] if critical else 0,
             "longest_chain": longest(critical) if critical else [],
-            "min_terms_by_units": math.ceil(plan_units / cap) if cap else 0}
+            "min_terms_by_units": by_units}
     target = profile.get("graduate_by")
     if target and TERM.fullmatch(str(target)) and semesters:
         available = terms_through(start, target, summer, winter)
@@ -1073,7 +1120,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 why_not.append(f"the prereq chain alone needs {pace['min_terms_by_prereqs']} terms "
                                f"({' → '.join(pace['longest_chain'])}); only {available} until {target}")
             if pace["min_terms_by_units"] > available:
-                why_not.append(f"{plan_units:g} units at {cap:g} per term needs {pace['min_terms_by_units']} terms; only "
+                at = "the roadmap's loads" if kind_of_load == "roadmap" else f"{pace['units_per_term']:g} per term"
+                why_not.append(f"{plan_units:g} units at {at} needs {pace['min_terms_by_units']} terms; only "
                                f"{available}: add summers or raise max_units_per_term (above {load['normal_max']:g} is "
                                f"an overload, {load['source']})")
             if not why_not:

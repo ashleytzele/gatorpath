@@ -144,7 +144,9 @@ def test_build_plan_passes_check_plan(path):
         assert first["role"] == "substitutions" and first["contact"].startswith("cs-dept@sfsu.edu") and len(first["why"]) == 2
         return
     assert got["check"]["valid"], got["check"]["errors"]
-    assert all(s["units"] <= 15 for s in got["semesters"])
+    # D24: each spring/fall term within its roadmap semester's printed load
+    assert all("roadmap" in s and s["units"] <= s["max_units"] == s["roadmap"]["units"]
+               for s in got["semesters"] if s["term"][5:] in ("spring", "fall"))
 
 
 def test_build_plan_qr_3_4_takes_the_math_path_first():
@@ -174,10 +176,10 @@ def test_build_plan_explains_itself_and_its_pace():
     assert why["PHYS 222"].startswith("Corequisite of PHYS 220")
     assert "Needed before CSC 648" in why["CSC 413"]
     assert got["pace"]["min_terms_by_prereqs"] == 5 and got["pace"]["longest_chain"][-1] == "CSC 648"
-    # 3 years from a fall 2026 start = spring 2029: 5 terms left, but ~104 units at 15/term need 7
+    # 3 years from a fall 2026 start = spring 2029: 5 terms left, but ~104 units at the roadmap's loads need 7
     late = plan_for(profile | {"graduate_by": "2029-spring"})["pace"]
     assert late["on_time"] is False and late["terms_available"] == 5
-    assert any("units at 15 per term needs 7 terms" in w for w in late["why_not"])
+    assert any("104 units at the roadmap's loads needs 7 terms" in w for w in late["why_not"])
     # by spring 2028 even the prereq chain can't fit
     soon = plan_for(profile | {"graduate_by": "2028-spring"})["pace"]
     assert any(w.startswith("the prereq chain alone needs 5 terms") for w in soon["why_not"])
@@ -189,24 +191,26 @@ def test_a_light_last_term_folds_into_one_heavier_term():
     profile = eval_profile(ROOT / "evals/profiles/p04-repeats-below-c.yaml")
     got = plan_for(profile)
     sem, fold = got["semesters"], got["pace"]["fold_last_term"]
-    # 15-unit terms, one at 13, then a 3-unit senior elective: into the 13-unit term, one 16-unit term, a term sooner
+    # at the roadmap's loads, a 2-unit elective is left past the roadmap's last semester (13 units): into that 13-unit
+    # term, one 15-unit term, a term sooner, inside the normal load
     into = next(s for s in sem if s["term"] == fold["term"])
-    assert (into["units"], sem[-1]["units"], fold["units"]) == (13, 3, 16)
+    assert (into["units"], sem[-1]["units"], fold["units"]) == (13, 2, 15)
     assert fold["terms"] == len(sem) - 1 and fold["est_graduation_term"] == sem[-2]["term"]
-    assert "see an advisor" in fold["note"] and fold["note"].endswith("max_units_per_term: 16")
-    moved = {"semesters": [s | {"courses": s["courses"] + sem[-1]["courses"]} if s is into else s for s in sem[:-1]]}
-    assert check_plan(profile | {"max_units_per_term": 16}, moved, PROGRAM, UNIVERSITY, CATALOG, PREREQS)["valid"]
-    # a full last term (15 units) doesn't fit in any term under the 19-unit maximum
+    assert "see an advisor" not in fold["note"] and fold["note"].endswith(f"In the moved plan {into['term']} has max_units: 15")
+    moved = {"semesters": [s | {"courses": s["courses"] + sem[-1]["courses"], "max_units": 15} if s is into else s
+                           for s in sem[:-1]]}
+    assert check_plan(profile, moved, PROGRAM, UNIVERSITY, CATALOG, PREREQS)["valid"]
+    # a 12-unit last term doesn't fit in any term under the 19-unit maximum
     p03 = plan_for(eval_profile(ROOT / "evals/profiles/p03-sophomore-qr34.yaml"))
-    assert p03["semesters"][-1]["units"] == 15 and "fold_last_term" not in p03["pace"]
-    # check_plan can't see that senior electives wait for a ready option (D19): a transfer's last two don't fold into
+    assert p03["semesters"][-1]["units"] == 12 and "fold_last_term" not in p03["pace"]
+    # check_plan can't see that senior electives wait for a ready option (D19): a transfer's last three don't fold into
     # their first term, the only one with room
     transfer = {"catalog_year": "2026-27", "program": "bs-cs", "start_term": "2027-fall", "qr_pathway": "1/2",
                 "ge_certified": True, "first_time": False, "transfer_units": 62,
                 "completed": [{"code": c, "grade": "B", "transfer": True}
                               for c in ("CSC 101", "CSC 215", "MATH 226", "MATH 227", "PHYS 220", "PHYS 222")]}
     got = plan_for(transfer)
-    assert [x["slot"] for x in got["semesters"][-1]["courses"] if isinstance(x, dict) and x["units"]] == ["senior_electives"] * 2
+    assert [x["slot"] for x in got["semesters"][-1]["courses"] if isinstance(x, dict) and x["units"]] == ["senior_electives"] * 3
     assert "fold_last_term" not in got["pace"]
 
 
@@ -219,6 +223,66 @@ def test_see_advisor_for_permission_and_overload():
     assert any(w.startswith("CSC 653 in 2027-fall: GPA 3.0 or higher (have 2.5)") for w in advisor["why"])
     assert any("17 units is above the normal load of 15" in w for w in advisor["why"])
     assert any(a["role"] == "dpr" for a in got["see_advisor"])
+
+
+FRESH = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall", "qr_pathway": "1/2", "completed": []}
+
+
+def test_a_new_freshman_follows_the_roadmap_loads():
+    # D24: BS CS QR 1/2 prints 16, 15, 16, 15, 15, 15, 15, 13 units (pp.1908-1909); each term's cap is its semester's
+    road = rules_for(FRESH)[2]["variants"]["qr-1-2"]["semesters"]
+    got = plan_for(FRESH)
+    assert got["check"]["valid"] and got["pace"]["load"] == "roadmap" and "units_per_term" not in got["pace"]
+    assert [s["max_units"] for s in got["semesters"]] == [x["units"] for x in road]
+    assert all(s["units"] <= s["max_units"] for s in got["semesters"]) and got["semesters"][0]["units"] == 16
+    # above 15 as on the roadmap: a note, not an advisor
+    assert "2027-fall: 16 units, above the normal 15, as on the Bulletin roadmap (p.1908)" in got["warnings"]
+    assert not any("2027-fall" in w for a in got["see_advisor"] for w in a["why"])
+    # the normal 15 is the lighter option
+    light = got["pace"]["normal_load"]
+    assert light["max_units_per_term"] == 15 and light["terms"] >= len(got["semesters"])
+
+
+def test_roadmap_loads_follow_the_students_units_and_their_own_cap_wins():
+    from gatorpath.engine.planner import build_plan
+    # a 62-unit transfer: the nearest semester end is 63 (after semester 4), so the plan starts on semester 5's load
+    transfer = FRESH | {"ge_certified": True, "first_time": False, "transfer_units": 62,
+                        "completed": [{"code": c, "grade": "B", "transfer": True} for c in ("CSC 101", "MATH 226")]}
+    assert plan_for(transfer)["semesters"][0]["roadmap"] == {"units": 15, "source": "p.1909"}
+    # past the roadmap's last semester, its load (13)
+    p04 = plan_for(eval_profile(ROOT / "evals/profiles/p04-repeats-below-c.yaml"))
+    assert [s["max_units"] for s in p04["semesters"][-2:]] == [13, 13]
+    # F-1: a lighter roadmap semester (Applied Math's ADT roadmap ends 7, 4, 2 units, p.2137) doesn't go under 12
+    program, university, roadmap = rules_for({"program": "bs-applied-math"})
+    adt = transfer | {"program": "bs-applied-math", "adt": True, "transfer_units": 60, "completed": [
+        {"code": c, "grade": "B", "transfer": True} for c in ("MATH 226", "MATH 227", "MATH 228")]}
+    light = build_plan(adt, program, university, roadmap, CATALOG, PREREQS)
+    f1 = build_plan(adt | {"f1": True}, program, university, roadmap, CATALOG, PREREQS)
+    assert min(s["max_units"] for s in light["semesters"]) < 12 <= min(s["max_units"] for s in f1["semesters"])
+    assert f1["check"]["valid"], f1["check"]["errors"]
+    # the student's max_units_per_term overrides the roadmap; summer keeps its own limit (8, p.2393)
+    mine = plan_for(FRESH | {"max_units_per_term": 18, "include_summer": True})
+    assert mine["pace"]["load"] == "max_units_per_term" and mine["pace"]["units_per_term"] == 18
+    assert {s["max_units"] for s in mine["semesters"]} == {18, 8}
+    assert all(s["max_units"] == 8 for s in mine["semesters"] if s["term"].endswith("summer"))
+
+
+def test_check_plan_takes_each_terms_cap_and_the_roadmap_load():
+    heavy = ["CSC 415", "MATH 227", "PHYS 220", "PHYS 222", "ENG 114", "COMM 150"]  # 3+4+3+1+3+3 = 17
+    term = lambda **kw: check_plan(FRESHMAN | {"transfer_units": 60}, {"semesters": [
+        {"term": "2027-spring", "courses": heavy} | kw]}, PROGRAM, UNIVERSITY, CATALOG, PREREQS)
+    assert errors(term(), "over_cap")  # no cap given: the normal 15
+    # QR 3/4's 17-unit semester (p.1910): a plan built at that load passes as built, with a note and no advisor
+    as_road = term(max_units=17, roadmap={"units": 17, "source": "p.1910"})
+    assert errors(as_road, "over_cap") == [] and "2027-spring: 17 units, above the normal 15, as on the Bulletin roadmap (p.1910)" \
+        in as_road["warnings"]
+    assert not any("17 units" in w for a in as_road["see_advisor"] for w in a["why"])
+    # above the roadmap's load it's an overload again
+    above = term(max_units=17, roadmap={"units": 16, "source": "p.1908"})
+    assert any("17 units is above the normal load of 15" in w for a in above["see_advisor"] for w in a["why"])
+    # the student's cap wins over a term's
+    assert errors(check_plan(FRESHMAN | {"transfer_units": 60, "max_units_per_term": 16}, {"semesters": [
+        {"term": "2027-spring", "courses": heavy, "max_units": 17}]}, PROGRAM, UNIVERSITY, CATALOG, PREREQS), "over_cap")
 
 
 def test_semester_unit_maximum_and_part_time_note():
@@ -534,7 +598,7 @@ def test_a_roadmap_major_slot_naming_a_select_one_places_its_course():
     v = roadmap["variants"]["qr-1-2"]
     sems = [s | {"items": [i for i in s["items"] if not (isinstance(i, dict) and "MATH 209" in i.get("one_of", []))]}
             for s in v["semesters"]]
-    sems[0] = sems[0] | {"items": sems[0]["items"] + [{"slot": "major", "group": "programming", "units": 3}]}
+    sems[0] = sems[0] | {"items": [{"slot": "major", "group": "programming", "units": 3}] + sems[0]["items"]}
     got = build_plan(profile, program, university, roadmap | {"variants": {"qr-1-2": v | {"semesters": sems}}}, CATALOG, PREREQS)
     assert got["check"]["valid"] and next(s["term"] for s in got["semesters"] if "MATH 209" in s["courses"]) == "2027-fall"
 

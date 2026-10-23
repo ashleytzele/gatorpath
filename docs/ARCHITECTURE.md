@@ -503,7 +503,8 @@ prior_bachelors: false             # bachelor's or higher from a regionally accr
                                    # graduation requirements waived, major courses still required (p.2313)
 # completed rows may add `units` (variable-unit courses) and `transfer: true` (articulated
 # transfer course: counts for requirements, not residence or GPA; its units are in transfer_units)
-max_units_per_term: 15
+max_units_per_term: 18             # optional, the student's own cap; without it each term follows its roadmap
+                                   # semester's printed load (D24)
 current_term: 2026-fall            # set by the server from today's date (month boundaries), never by the client:
                                    # the in-progress courses fill it, so plans start after it (eval run 2026-10-18)
 include_summer: false
@@ -538,7 +539,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | Tool | Input | Output |
 |---|---|---|
 | `audit_progress` | `profile` | Per group: `satisfied`/`in_progress`/`remaining`, which courses counted where, units done vs needed; an open GE / SF State Studies / American Institutions group names the required major courses still ahead that carry it (`major_courses`: PHYS 220 for 5A, CSC 300GW for GWAR; p.2352); university totals (120 total, upper-division units, GWAR) |
-| `build_plan` | `profile` | Deterministic baseline plan laid out on the Bulletin roadmap (§8): `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`, `pace` (prereq-chain floor vs units floor, `roadmap_load` when the roadmap's own 16-17-unit terms finish sooner, `fold_last_term` when a light last term fits into one earlier term, `graduate_by` → `on_time` / `why_not`). When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
+| `build_plan` | `profile` | Deterministic baseline plan laid out on the Bulletin roadmap (§8): `semesters: [{term, courses, units}]`, each course with `why` ("term 3: CSC 665, CSC 620 and CSC 648 need it"; "delay it and CSC 665 slips to term 5"), unfilled `slots` (e.g. 5× senior_elective), `warnings`, `see_advisor`, `est_graduation_term`, each semester with its `max_units` (its cap: the roadmap semester's printed load the student's units have reached, D24; the student's `max_units_per_term` overrides) and `roadmap` {units, source}, `pace` (`load`: roadmap / max_units_per_term, prereq-chain floor vs units floor, `normal_load`: the lighter plan at the normal 15 when the roadmap goes above it, `fold_last_term` when a light last term fits into one earlier term, `graduate_by` → `on_time` / `why_not`). When the profile came from `import_dpr`, what's left comes from the DPR, not our audit (§7.3 DPR-first) |
 | `list_eligible_electives` | `profile`, `group_id`, `plan?`, `by_term?`, `limit=25` | Options that satisfy that group, each with description, `readiness` (`ready` / `check`: met except what can't be verified, see `cannot_check` / `blocked`: see `blocked_by`, plus `ready_by: term` when a plan opens it up), `also_covers`, and offering pattern. **The AI picks from this list using the student's goal.** A group with `approval` (an advisor's consent, no list) returns that text, no options, and `see_advisor` |
 | `ge_combinations` | `profile`, `plan?`, `by_term?` | Up to 8 minimal ways (3 when more than 5 are open) to finish the open GE / SF State Studies / American Institutions requirements one course can fill, fewest courses first; the first is the fewest a bounded search found, not a proven minimum (one course for 4UD + ESCA + GP, two that split them, or one each); each part: what it covers, how many courses fit, examples (ready first, recently offered first). Requirements the major's own courses cover (GWAR via CSC 300GW) are left out |
 | `check_plan` | `profile`, `plan` | `{valid: bool, errors: [...], warnings: [...]}`, each citing the rule and page. Errors include a term already started (`term_in_past`, or `term_in_progress`: the current term, which the in-progress courses fill), prereq not met by that term, grade rule, requirement not covered, excluded course, double-counting, and units over the cap. Warnings include not usually offered that term, permission needed, unparsed prereq, and GPA-gated |
@@ -619,9 +620,9 @@ deterministic (D6). The prompt gives the client its workflow:
 3. Ask for the math placement / QR pathway if it's unknown and lower-division math isn't done (it only changes the
    math before MATH 226; `build_plan` returns `needs_input: qr_pathway` only then).
 4. Call `audit_progress` (with a DPR: as the cross-check).
-5. Call `build_plan`. For "3, 4 or 5 years", call it at three loads (≈18 units + summer, 15, 12)
-   and compare `est_graduation_term`, plus the roadmap's own loads when `pace.roadmap_load` is there and one heavier
-   term when `pace.fold_last_term` is there. Say why a
+5. Call `build_plan`: the roadmap's own loads (D24). For "3, 4 or 5 years", add 18 units + summer and 12, and
+   compare `est_graduation_term`, plus the normal 15 when `pace.normal_load` is there and one heavier term when
+   `pace.fold_last_term` is there. Say why a
    faster pace can't work when it can't (the prereq chain or the units per term).
 6. Fill elective slots using `list_eligible_electives` plus the student's goal.
 7. **Call `check_plan`. Fix any errors and re-check until `valid`.**
@@ -691,26 +692,32 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
    - offered this season according to `offered_terms`: a course that ran in other seasons but in none of the
      checked terms of this one waits (check_plan warns if a plan puts it there); unknown, or never seen in any
      checked term, is allowed with a ⚠️ (rare isn't never)
-   - fill up to `max_units_per_term`, then slots; free-elective units split to fill a term
+   - fill up to the term's cap (step 5), then slots; free-elective units split to fill a term
    - **senior electives wait for real readiness (D19):** a senior-elective slot goes in once the student has
      upper-division standing and an option of that group is ready that term (prereqs met, offered that season),
      one ready option per slot in the term. Not at the roadmap's position for it
    - F-1 (`f1: true`): a spring/fall term with more terms to come is filled toward 12 units with elective slots
    - standing (`upper`/`senior`) is computed from cumulative units
 4. **Two plans, one kept:** the roadmap-led plan (steps 2 + 3) and the plain greedy (step 3 alone) are built at
-   the same cap. The roadmap-led one is kept when it passes check_plan and has no more terms. With
+   the same caps. The roadmap-led one is kept when it passes check_plan and has no more terms. With
    `include_summer`, only the greedy runs: the roadmaps have no summer terms. Winter Session terms (`include_winter`)
    don't use a roadmap semester and take only GE, American Institutions and free-elective slots, up to the 4-unit
    Winter Session maximum (p.1716): Class Search history has no winter terms, so major courses stay in spring/fall.
-5. **The cap stays the student's (D18):** `max_units_per_term`, default 15, the normal load (p.2393), even though
-   the first-time roadmaps have 16- and 17-unit terms (qr-1-2: 16, 16; qr-3-4: 16, 16, 17, 16). A roadmap item that
-   doesn't fit carries over, so the plan passes check_plan as given. When the student set no cap and the roadmap's
-   own loads finish sooner, `pace.roadmap_load` says so (terms, `est_graduation_term`, the `max_units_per_term` to
-   pass), and `plan_my_degree` offers it as a pace option. When the last term is light (a 1-unit free elective at
+5. **The roadmap sets each term's load (D24, replaces D18):** without `max_units_per_term`, a spring/fall term's
+   cap is the printed units (the minimum of a printed range) of the roadmap semester the student's units have
+   reached: the nearest end of a semester in the roadmap's cumulative units (BS CS qr-1-2: 16, 15, 16, 15, 15, 15,
+   15, 13), so a new freshman follows it term by term, a 62-unit transfer starts on semester 5's load, and the ADT
+   roadmap (which starts at transfer) counts SF State units. Past the last semester, that semester's load. Never
+   above the 19-unit fall/spring maximum, and never under 12 for an F-1 student (p.2390). Summer and Winter Session
+   keep their own limits. The student's `max_units_per_term` overrides all of it. Each semester carries its
+   `max_units` and `roadmap` {units, source}; check_plan uses a term's `max_units` when the profile has no cap, and
+   a load over 15 that its roadmap semester prints is "as on the Bulletin roadmap (p.X)", not an advisor handoff
+   (above the roadmap's load is). When the roadmap goes above 15, `pace.normal_load` reports the lighter plan at the
+   normal 15 (terms, `est_graduation_term`) and `plan_my_degree` offers it. When the last term is light (a 1-unit free elective at
    15), `pace.fold_last_term` names the one earlier spring/fall term it fits into: the lightest that passes
    check_plan with the extra units, up to the 19-unit maximum (p.2392), latest first. A slot moves no earlier than
    the first term the plan gives that slot: check_plan can't see when senior-elective options are ready (D19). The
-   plan itself keeps the cap.
+   plan itself keeps its caps.
 6. Stop when nothing remains. Report `est_graduation_term`.
 7. If no progress is possible in a term (a blocked prereq), stop and emit an error saying
    which condition blocks it. Never loop forever.
@@ -856,12 +863,13 @@ students; 0 hallucinated courses."*
 | D15 | Advisor handoffs name offices (department contact, UAC), never individual advisors | Names change and every major would need its own; the department and the UAC route students to the right advisor | 2026-10-17 |
 | D16 | The AI client is the agent; what-ifs and advisor handoff go through the prompt + tool fields (numbered D15 until 2026-10-18, a duplicate) | Keeps the server deterministic (D6); advisor links are sourced data, not model memory | 2026-10-16 |
 | D17 | Planning is roadmap-led: each term starts from its Bulletin roadmap semester, and the critical-path greedy fills the rest; the plain greedy is kept only if it finishes sooner (§8) | Trial 8: the student asked for the Bulletin roadmap as the foundation (GE Area 1A in term 2, …). It's the official suggested order (§3: complement, don't replace), and a new QR 1/2 freshman went from 9 terms to 8 at 15 units | 2026-10-18 |
-| D18 | The default cap stays 15 though the first-time roadmaps have 16-17-unit terms; `pace.roadmap_load` reports the roadmap's own loads as an option | 15 is the normal load (p.2393): above it is an overload with an advisor handoff (§7.5), which a default plan shouldn't need. The plan must pass check_plan as given | 2026-10-18 |
+| D18 | *Replaced by D24 (2026-10-22).* The default cap stays 15 though the first-time roadmaps have 16-17-unit terms; `pace.roadmap_load` reports the roadmap's own loads as an option | 15 is the normal load (p.2393): above it is an overload with an advisor handoff (§7.5), which a default plan shouldn't need. The plan must pass check_plan as given | 2026-10-18 |
 | D19 | Senior electives go in once an option is ready that term, not at the roadmap's position | Trial 5 left Spring 2027 at 9 units while the slots waited for the roadmap's order; the scenario review found them waiting for the roadmap instead of their prereqs | 2026-10-18 |
 | D20 | `import_dpr` is the main import; `import_transcript` is the fallback (D7 kept, D14 as built) | The DPR has the catalog year, transfer evaluations and substitutions; the transcript's transfer blocks are totals only (§7.3). In trial 7 the two PDFs disagreed on a current course and the newer DPR was used | 2026-10-18 |
 | D21 | Office policies the Bulletin leaves to an office (F-1 final-term Reduced Course Load) and advising contacts may come from that office's page, cited as page + date checked; the Bulletin wins on any conflict (§5 "What may come from where") | Trial 7: an F-1 student's last term was padded to 12 units, but the international office allows a one-time final-semester RCL (`international.sfsu.edu/rcl`). The Bulletin states only the 12-unit minimum | 2026-10-18 |
 | D22 | Work phases in order, but trial feedback can pull work forward, and an item waiting on a person or a real document stays open while later phases go on (TASKS.md header) | Trial 1 needed `build_plan` (Phase 4) to answer "when do I finish?"; Phase 2's `verified: true` needs a second person; Phase 6's CR/W/repeat sample and the DPR Notes legend need real documents. Phases 5 and 6 were done with those open | 2026-10-18 |
 | D23 | Requirements from the student's catalog year (`rules/<kind>/<year>/`, picked from `profile.catalog_year` or the DPR's requirement term); course facts from the newest Bulletin, older rows only for dropped courses | A Fall 2025 DPR (test user 1's): the 2025-26 BS CS needs C or better only in CSC 510 and CSC 648, not all of Math/Physics, Core and Advanced as 2026-27 does. Courses still to take run under the newest Bulletin (new courses such as CSC 603; COMM 301 is 2UD from 2026-27) | 2026-10-20 |
+| D24 | The roadmap is the default load: each spring/fall term's cap is the printed units of the roadmap semester the student's units have reached (the last semester's past its end, at most 19, at least 12 for F-1); `max_units_per_term` is the student's own cap and overrides it; `pace.normal_load` reports the normal-15 plan as the lighter option. Replaces D18 | The roadmap is the planner's foundation; the student sets a cap if they want less. A term at its roadmap semester's load is the Bulletin's own suggested plan, so it gets "as on the Bulletin roadmap (p.X)", not an overload handoff | 2026-10-22 |
 
 ---
 

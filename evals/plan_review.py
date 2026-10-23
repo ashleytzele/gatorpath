@@ -1,6 +1,7 @@
-"""Plan review over every scenario in tests/test_server.py at 12 / 15 / 18 / 18+summer units, on data/catalog.db.
+"""Plan review over every scenario in tests/test_server.py at the roadmap's loads (the default, D24) and 12 / 15 / 18 /
+18+summer units, on data/catalog.db.
 
-Each cell: terms / lower bound (longest prereq chain or units / cap), flags (R = laid out on the roadmap, INVALID,
+Each cell: terms / lower bound (longest prereq chain or units at the caps), flags (R = laid out on the roadmap, INVALID,
 STOP, OVER, EMPTY, F = pace.fold_last_term: the last term fits into one heavier term), graduation term.
 Run after planner changes: uv run python evals/plan_review.py
 """
@@ -15,18 +16,19 @@ import test_server as scenarios  # noqa: E402  (the scenario profiles live with 
 from gatorpath import server  # noqa: E402
 
 server.DB = ROOT / "data/catalog.db"
-LOADS = [(12, False), (15, False), (18, False), (18, True)]
+LOADS = [(None, False), (12, False), (15, False), (18, False), (18, True)]  # None: no max_units_per_term
 
-print(f"{'scenario':34}" + "".join(f"{str(u) + ('+summer' if su else ''):24}" for u, su in LOADS))
+print(f"{'scenario':34}" + "".join(f"{str(u or 'roadmap') + ('+summer' if su else ''):24}" for u, su in LOADS))
 for name, profile in scenarios.SCENARIOS.items():
     cells = []
     for cap, summer in LOADS:
-        out = server.build_plan(profile | {"max_units_per_term": cap, "include_summer": summer})
+        out = server.build_plan({k: v for k, v in profile.items() if k != "max_units_per_term"} | (
+            {"max_units_per_term": cap} if cap else {}) | {"include_summer": summer})
         sem, pace = out.get("semesters", []), out.get("pace", {})
         bound = max(pace.get("min_terms_by_prereqs", 0), pace.get("min_terms_by_units", 0))
         flags = "".join(f for f, bad in (("INVALID ", not out.get("check", {}).get("valid")),
                                          ("STOP ", any("Stopped at" in w for w in out.get("warnings", []))),
-                                         ("OVER ", any(s["units"] > cap for s in sem)),
+                                         ("OVER ", any(s["units"] > s.get("max_units", cap) for s in sem)),
                                          ("EMPTY ", any(not s["courses"] for s in sem)),
                                          ("R", any(w.startswith("Laid out on the Bulletin") for w in out.get("warnings", []))),
                                          ("F", "fold_last_term" in pace))
