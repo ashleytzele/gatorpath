@@ -139,6 +139,10 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
             return UNVERIFIED, [f"GPA {e['gpa']} or higher (GPA not provided)"]
         ctx["gpa_used"] = True
         return (OK, []) if g >= e["gpa"] else (NO, [f"GPA {e['gpa']} or higher (have {g})"])
+    if "not_after" in e:  # "Not open to students who have completed ERTH 112"
+        c = e["not_after"]
+        return (NO, [f"no {c} before this term (not open to students who have completed it)"]) if c in ctx["done"] \
+            else (OK, [])
     if "restricted_to" in e:
         # ponytail: word match on the restriction text. Upgrade to a parsed {majors, standing, level} leaf if it misfires.
         text = e["restricted_to"]

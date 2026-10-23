@@ -188,6 +188,11 @@ GOLDEN = [
     ("CHEM 101", "Category I or II QR/Math placement; or Category III or IV QR/Math placement and MATH 197 with a grade of "
                  "C or better; or GE Area 2/B4 (may be taken concurrently).",
      any_({"qr_category": [1, 2]}, all_({"qr_category": [3, 4]}, c("MATH 197", "C")), ge("2"))),
+    # an exclusion, never a requirement: it used to read as "needs ERTH 112"
+    ("ERTH 112", "Not open to students who have completed ERTH 110 or ERTH 111.",
+     all_({"not_after": "ERTH 110"}, {"not_after": "ERTH 111"})),
+    ("ERTH 171", "ERTH 170 (may be taken concurrently); not open to students who have completed ERTH 172.",
+     all_(c("ERTH 170", conc=True), {"not_after": "ERTH 172"})),
     ("MATH 112", "First-Year Math Advising Module.", FYMAM),
     # Audience notes and "should" advice are not requirements.
     ("MATH 110", "First-Year Math Advising Module. For students who wish to take business calculus in one semester.", FYMAM),

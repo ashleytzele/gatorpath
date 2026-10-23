@@ -456,7 +456,8 @@ Category 1/2"; checked against `profile.qr_pathway`), `standing` (`lower|upper|s
 "Graduate Mathematics students"), `permission` (instructor|department|advisor|committee_chair),
 `equivalent` ("or equivalent"), `requirement` (a named non-course requirement from a fixed list:
 First-Year Math Advising Module, Advancement to Candidacy forms, approved study proposal,
-"a college-level X course"), `unknown` (raw fragment).
+"a college-level X course"), `not_after` (an exclusion: "Not open to students who have completed ERTH 112" fails
+once that course is done or planned earlier; never a prereq of the course), `unknown` (raw fragment).
 `permission`/`restricted_to`/`equivalent`/`requirement`/`high_school`/`unknown` are **unverifiable**.
 They produce a ⚠️, never a silent pass.
 

@@ -381,6 +381,14 @@ def test_upper_division_and_graduate_isnt_graduate_only():
     assert evaluate({"restricted_to": "graduate students"}, ctx)[0] == NO
 
 
+def test_not_open_after_a_course_is_an_exclusion():
+    # ERTH 110: "Not open to students who have completed ERTH 112."
+    from gatorpath.engine.planner import NO, OK, evaluate
+    assert evaluate({"not_after": "ERTH 112"}, {"done": set()})[0] == OK
+    state, why = evaluate({"not_after": "ERTH 112"}, {"done": {"ERTH 112"}})
+    assert state == NO and why == ["no ERTH 112 before this term (not open to students who have completed it)"]
+
+
 def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():
     # Trial 7: MATH 325 met MATH 225 on the DPR; electives needing MATH 225 showed as blocked
     from gatorpath.engine.planner import UNVERIFIED, evaluate
