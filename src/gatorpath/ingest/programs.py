@@ -216,7 +216,10 @@ def parse_draft(answer: str, key: str = "groups") -> dict:
 def ask(client: str, text: str, key: str, keep: Path | None = None) -> dict:
     """One headless AI-client run: the prompt on stdin, the YAML out, stamped never verified. The answer is written to
     `keep` first, so one that isn't YAML is there for a person to fix instead of lost."""
-    answer = subprocess.run(shlex.split(client), input=text, capture_output=True, text=True, check=True).stdout
+    run = subprocess.run(shlex.split(client), input=text, capture_output=True, text=True)
+    if run.returncode:  # a usage limit, a network error: reported for this program, the batch goes on
+        raise RuntimeError(f"the client exited {run.returncode}: {(run.stderr or run.stdout).strip()[:200]}")
+    answer = run.stdout
     if keep:
         keep.write_text(answer)
     return parse_draft(answer, key) | {"verified": False, "verified_by": None,
@@ -334,6 +337,9 @@ def main() -> None:
         (out / f"{pid}.source.txt").write_text(source)
         try:
             data = draft(p["title"], pid, year, source, args.client, out / f"{pid}.yaml")
+        except RuntimeError as e:
+            print(f"{pid}: no draft, {e}")
+            continue
         except (ValueError, yaml.YAMLError) as e:
             print(f"{out / f'{pid}.yaml'}: the answer isn't a rules file, fix it by hand ({str(e).splitlines()[0]})")
             continue
@@ -360,6 +366,9 @@ def main() -> None:
         try:
             data = draft_roadmap(p["title"], pid, year, source, rules.read_text(), university, args.client,
                                  out / f"{pid}.roadmap.yaml")
+        except RuntimeError as e:
+            print(f"{pid}: no roadmap draft, {e}")
+            continue
         except (ValueError, yaml.YAMLError) as e:
             print(f"{out / f'{pid}.roadmap.yaml'}: the answer isn't a roadmap file, fix it by hand ({str(e).splitlines()[0]})")
             continue

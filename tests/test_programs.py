@@ -115,3 +115,5 @@ def test_a_roadmap_draft_is_written_against_the_rules_and_never_verified(tmp_pat
     with pytest.raises(yaml.YAMLError):
         P.draft_roadmap(APPLIED, "bs-applied-math", "2026-27", "", "", university, client, keep)
     assert "Bachelor of Music: Composition" in keep.read_text()  # kept for a person, not lost
+    with pytest.raises(RuntimeError, match="exited 3"):  # a usage limit: this program fails, not the batch
+        P.ask(f"{sys.executable} -c \"import sys; sys.exit(3)\"", "prompt", "variants")
