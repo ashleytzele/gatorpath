@@ -443,6 +443,17 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   hand-written file (counted, remaining, totals; only group titles differ). The first draft used choose_n, which
   plans a 0-unit slot: check_program flags it and the prompt asks for choose_units. No roadmap drafting yet
 - [ ] Load all programs as `verified: false`
+  Pilot 2026-10-22: one program per college, drafted with `--client "claude -p --model sonnet …"` to save usage
+  (about 35 s each), kept in `rules/drafts/2026-27/`. BS Civil Engineering had 0 to fix. BM Composition, BS Business
+  Administration: Finance, BA Asian American Studies and BS Public Health had 2-6 unparsed groups each. Those are all
+  things the vocabulary can't say: CR/NC unit caps, "a maximum of 3 units from", a 1-unit course taken 4 times, courses
+  taken concurrently or in sequence, a concentration GPA. In every draft the parsed groups plus the unparsed groups'
+  printed units equal total_units (27+9 of 36, 47+18 of 65, 66+3 of 69, 58 of 58, 93). Errors: Public Health wrote
+  cross-listings as "PH/ETHS 221" (the prompt now says to list each code), and check_program rejected pages under 1000
+  (fixed). The checker can't see omissions: the Civil draft's electives left out "subject to the minimum number of
+  units specified for each group" and the advisor-approved study plan, so a draft with 0 to fix still needs a person.
+  Before loading: (1) audit raises KeyError on an `unparsed` group (4 of the 5 drafts): it must report the group as
+  unchecked; (2) build_plan needs a roadmap; (3) decide whether unreviewed drafts are served.
 
 ---
 

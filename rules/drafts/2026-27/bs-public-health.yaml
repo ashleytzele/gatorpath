@@ -1,0 +1,160 @@
+program: bs-public-health
+title: Bachelor of Science in Public Health
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 58
+source: p.788
+global:
+  no_cr_nc: true
+  source: p.788
+groups:
+- id: foundation_biology_lecture
+  title: 'Foundation: Human Biology'
+  all_of:
+  - BIOL 100
+  quote: BIOL 100 Human Biology 3
+  source: p.788
+- id: foundation_biology_lab
+  title: 'Foundation: Human Biology Laboratory'
+  all_of:
+  - BIOL 101
+  quote: BIOL 101 Human Biology Laboratory 1
+  source: p.788
+- id: foundation_statistics
+  title: 'Foundation: Select One (statistics)'
+  choose_units: 3
+  from:
+    list:
+    - ETHS 116
+    - ETHS 117
+    - ISED 160
+    - MATH 124
+    - PSY 171
+  quote: 'Select One: 3 ETHS 116 Algebra and Statistics for Social Justice ETHS 117 Statistics for Social Justice ISED 160
+    Data Analysis in Education MATH 124 Elementary Statistics PSY 171 Quantitative Reasoning in Psychology'
+  source: p.788
+- id: foundation_microbiology
+  title: 'Foundation: Select One (BIOL 210 or PH 100)'
+  choose_units: 3
+  from:
+    list:
+    - BIOL 210
+    - PH 100
+  quote: 'Select One: 3 BIOL 210 General Microbiology and Public Health PH 100 Public Health Biology'
+  source: p.788
+- id: foundation_intro
+  title: 'Foundation: Introduction to Public Health'
+  all_of:
+  - PH 205
+  quote: PH 205 Introduction to Public Health 3
+  source: p.788
+- id: core
+  title: Core (36 units)
+  all_of:
+  - PH 400GW
+  - PH 410
+  - PH 420
+  - PH 425
+  - PH 431
+  - PH 450
+  - PH 455
+  - PH 480
+  - PH 520
+  - PH 600
+  quote: PH 400GW Determinants of Health - GWAR 3 PH 410 Public Health Systems 3 PH 420 Epidemiology 3 PH 425 Public Health
+    Research 3 PH 431 Program Planning, Implementation, and Evaluation 3 PH 450 Public Health Policy 3 PH 455 Community Organizing
+    and Community Building for Health 3 PH 480 Fieldwork and Reflective Seminar 9 PH 520 Structural Oppression and Social
+    Foundations of Health 3 PH 600 Public Health Media, Technology, and Communications 3
+  source: p.788
+- id: core_concurrent
+  unparsed: true
+  quote: PH 400GW and PH 425 must be taken concurrently.
+  source: p.788
+- id: core_sequence
+  unparsed: true
+  quote: PH 400GW, PH 431, and PH 480 must be taken sequentially.
+  source: p.788
+- id: electives
+  title: Electives (9 units)
+  choose_units: 9
+  from:
+  - list:
+    - AA S 587
+    - AA S 591
+    - AFRS 370
+    - AFRS 466
+    - ANTH 630
+    - A U 220
+    - BIOL 326
+    - BIOL 327
+    - HH 205
+    - HH 380
+    - HH 381
+    - HH 382
+    - HH 540
+    - I R/BIOL 305
+    - LTNS 210
+    - LTNS 500
+    - NUTR 253
+    - PH 200
+    - PH 210
+    - PH/ETHS 221
+    - PH/ETHS 241
+    - PH 290
+    - PH 305
+    - PH 315
+    - PH 320
+    - PH 370
+    - PH 414
+    - PH/GEOG 434
+    - PH 650
+    - PH 655
+    - PH 685
+    - PH 688
+    - PH 699
+    - PHIL 383
+    - RRS 303
+    - WGS 593
+  quote: 'Select 9 units from the following courses:'
+  source: p.788-789
+transfer_notes:
+- text: Students entering from the community college system, or other four-year universities, should have their transcripts
+    evaluated by a Department of Public Health advisor to receive credit for equivalent foundation courses taken elsewhere.
+  source: p.788
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.789
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.789
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.789
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.789
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.789
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.789
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.789
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.789
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.789-790
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.790
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.790
+drafted_by: claude, 2026-10-22

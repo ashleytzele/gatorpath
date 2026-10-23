@@ -19,7 +19,7 @@ from gatorpath.ingest.bulletin import extract_pages
 LISTED = re.compile(r"• (Bachelor of (?:Arts|Science|Music|Fine Arts)\b[^•()]*?) \(p\. (\d{1,4})\)")
 HEAD = re.compile(r"\s*San Francisco State University Bulletin \d{4}-\d{4}\s*")
 DEGREES = {"Bachelor of Arts": "ba", "Bachelor of Science": "bs", "Bachelor of Music": "bm", "Bachelor of Fine Arts": "bfa"}
-MARK = re.compile(r"^=== p\.(\d{4}) ===$", re.M)
+MARK = re.compile(r"^=== p\.(\d{1,4}) ===$", re.M)
 ARCHITECTURE = Path(__file__).parents[3] / "docs/ARCHITECTURE.md"
 CLIENT = "claude -p --tools '' --strict-mcp-config --setting-sources project"  # no tools: it only writes YAML
 
@@ -137,7 +137,8 @@ Rules (they're checked by a program, then by a person):
   unit count the text doesn't state. total_units is the printed major total (its minimum).
 - A "Select One" / "select N units" / "N courses" choice in the major is `choose_units`: the units the Bulletin prints
   for it (the Units column). Don't use choose_n in a program file: the planner reads it as a 0-unit designation.
-  A choice between bundles ("CSC 101 & CSC 215") is `one_of`.
+  A choice between bundles ("CSC 101 & CSC 215") is `one_of`. A cross-listed course ("PH/ETHS 221") is each of its
+  codes: PH 221, ETHS 221.
 - Major requirements only: GE, SF State Studies and the university's graduation requirements are in other files.
   Include transfer_notes only when the text gives transfer advice; leave out `advising` and `dpr_plan`.
 - A requirement the vocabulary can't express exactly: a group with `unparsed: true`, its `quote` and `source`, and

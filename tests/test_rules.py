@@ -381,6 +381,9 @@ def test_check_program_reports_what_a_person_must_fix():
                    "required: duplicate id", "required: a choose group needs `from`",
                    "required: quote isn't word for word in the Bulletin text: 'Select six units of anything'",
                    "odd: unparsed, a person writes this requirement from its quote",
-                   "units: can't check total_units with choose_n or unparsed groups; a person adds them up"]
+                   "units: can't check total_units with choose_n or unparsed groups (the others add up to 10 of 55); "
+                   "a person adds them up"]
     short = good | {"total_units": 56}
     assert check_program(short, CATALOG)[-1] == "units: the groups' minimums add up to 55, total_units says 56"
+    early = good | {"groups": [g | {"source": "p.152"} for g in good["groups"]]}  # a page under 1000
+    assert check_program(early, CATALOG, {152}) == []

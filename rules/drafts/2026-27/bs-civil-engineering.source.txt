@@ -1,0 +1,301 @@
+=== p.1939 ===
+Bachelor of Science in Civil
+Engineering
+Undergraduate Programs in Engineering
+Freshman applicants should have completed four years of high school
+mathematics, one year of high school chemistry, and one year of high
+school physics. Students are also encouraged to include courses in
+mechanical drawing and computer programming.
+Community college transfers should complete the sequence of
+mathematics, chemistry, physics, and engineering courses listed in
+freshman and sophomore years under the “sample sequence of courses”
+at the community college.
+Civil Engineering
+The curriculum provides a broad-based common core of engineering
+science and the essential civil engineering subjects. The students
+conclude with 15 units of upper-division electives where the primary
+emphasis is design, practical applications, and computer solutions in
+selected areas of civil engineering. Graduates of the civil engineering
+program are expected to have, within a few years of graduation:
+• Established themselves as practicing professionals or engaged in
+graduate study in civil engineering or a related field.
+• Become licensed civil engineers or made appropriate progress toward
+professional registration.
+Students must complete 15 upper-division ENGR units and ENGR 300
+and ENGR 323 before registering for ENGR 696.
+Courses are scheduled during the day as well as late afternoon and
+evening. Other information and assistance in selecting courses can be
+obtained from a major advisor in the School of Engineering, by calling
+(415) 338-1174, by emailing engrasst@sfsu.edu, or by writing to:
+School of Engineering
+San Francisco State University
+Science and Engineering Innovation Center
+1600 Holloway Avenue
+San Francisco, CA 94132
+Program Learning Outcomes
+Upon completion of the Bachelor of Science in Civil Engineering, a
+student will be able to demonstrate:
+1. An ability to identify, formulate, and solve complex engineering
+problems by applying principles of engineering, science, and
+mathematics.
+2. An ability to apply engineering design to produce solutions that
+meet specified needs with consideration of public health, safety,
+and welfare, as well as global, cultural, social, environmental, and
+economic factors.
+3. An ability to communicate effectively with a range of audiences.
+4. An ability to recognize ethical and professional responsibilities in
+engineering situations and make informed judgments, which must
+consider the impact of engineering solutions in global, economic,
+environmental, and societal contexts.
+5. An ability to function effectively on a team whose members together
+provide leadership, create a collaborative and inclusive environment,
+establish goals, plan tasks, and meet objectives.
+6. An ability to develop and conduct appropriate experimentation,
+analyze and interpret data, and use engineering judgment to draw
+conclusions.
+7. An ability to acquire and apply new knowledge as needed, using
+appropriate learning strategies.
+Civil Engineering (B.S.) – 93 units minimum
+• All courses for the major must be completed with a letter grade.
+• Grades of C or better are required in MATH 226, MATH 227, and
+PHYS 220.
+• Grades of C- or better are required in PHYS 230, PHYS 240, CHEM 115,
+CHEM 180, ENGR 100, ENGR 102, ENGR 200, ENGR 201, ENGR 235,
+ENGR 282, ENGR 300, and ENGR 309.
+General Education Requirements Met in the Major
+The requirements below are deemed “met in the major” upon completion
+of the courses listed (even though the courses and their prerequisites are
+not approved for GE). This is true whether or not the student completes
+the major.
+• Area 1B (Critical Thinking) is satisfied upon completion
+of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.
+• Area 5UD (Upper-Division Science) is satisfied upon completion of
+ENGR 300, ENGR 302, and ENGR 304.
+Math and Science Lower-Division Courses (30-31 units)
+Code Title Units
+Select One: 3-4
+CHEM 115 General Chemistry I
+CHEM 180 Chemistry for Energy and the Environment
+MATH 226 Calculus I 4
+MATH 227 Calculus II 4
+MATH 228 Calculus III 4
+MATH 245 Elementary Differential Equations and Linear
+Algebra
+3
+PHYS 220
+& PHYS 222
+General Physics with Calculus I
+and General Physics with Calculus I Laboratory
+4
+PHYS 230
+& PHYS 232
+General Physics with Calculus II
+and General Physics with Calculus II Laboratory
+4
+PHYS 240
+& PHYS 242
+General Physics with Calculus III
+and General Physics with Calculus III Laboratory
+4
+Lower-Division Civil Engineering Courses (19 units)
+Code Title Units
+ENGR 100 Introduction to Engineering 3
+ENGR 101 Engineering Graphics 1
+ENGR 102 Statics 3
+ENGR 200 Materials of Engineering 3
+ENGR 201 Dynamics 3
+ENGR 235 Surveying 3
+ENGR 282 Probability and Statistics for Engineers 3
+Upper-Division Civil Engineering Courses (29 units)
+Code Title Units
+ENGR 300 Engineering Experimentation 1
+ENGR 302 Experimental Analysis 1
+=== p.1940 ===
+ENGR 304 Mechanics of Fluids 3
+ENGR 309 Mechanics of Solids 3
+ENGR 323 Structural Analysis 3
+ENGR 425 Reinforced Concrete Structures 3
+ENGR 429 Construction Management 3
+ENGR 430 Soil Mechanics 3
+ENGR 434 Principles of Environmental Engineering 3
+ENGR 436 Transportation Engineering 3
+ENGR 696 Engineering Design Project I 1
+ENGR 697GW Engineering Design Project II - GWAR 2
+Upper-Division Engineering Electives (15 units)
+Choice of upper-division electives must present a clearly identifiable
+educational objective and ensure that the program requirements in
+engineering science and design are met by all students. Distribution
+of credit units among engineering science and design is given in the
+Advising Guide. A study plan of intended upper-division electives must be
+approved by the student’s advisor and the program coordinator prior to
+the seventh semester of the engineering program.
+A total of 15 units from the following list of courses is required, subject
+to the minimum number of units specified for each group. Students with
+a GPA of at least 3.0 and the required prerequisites may take graduate
+courses (numbered 800 and above) with the approval of their advisor or
+the program coordinator.
+Code Title Units
+ENGR 426 Steel Structures 3
+ENGR 427 Wood Structures 3
+ENGR 431 Foundation Engineering 3
+ENGR 435 Environmental Engineering Design 3
+ENGR 438 Transportation Planning 3
+ENGR 439 Construction Engineering 3
+ENGR 441 Fundamentals of Composite Materials 3
+ENGR 461 Structural Dynamics 3
+ENGR 610 Engineering Cost Analysis 3
+ENGR 827 Structural Design for Fire Safety 3
+ENGR 828 Seismic Isolation and Energy Dissipation 3
+ENGR 829 Advanced Topics in Structural Engineering 3
+ENGR 831 Advanced Concrete Structures 3
+ENGR 832 Advanced Topics in Seismic Design 3
+ENGR 833 Principles of Earthquake Engineering 3
+ENGR 835 Advanced Steel Structures 3
+ENGR 836 Structural Design for Earthquakes 3
+ENGR 837 Geotechnical Earthquake Engineering 3
+ENGR 838 Smart Structures Technology 3
+ENGR 839 Advanced Topics in Civil Engineering 3
+General Education Requirements
+Requirement Course Level Units Area Designation
+English
+Composition
+LD 3 1A
+Critical Thinking LD 3 1B
+Oral
+Communication
+LD 3 1C
+Mathematical
+Concepts and
+Quantitative
+Reasoning
+LD 3 2
+Arts LD 3 3A
+Humanities LD 3 3B
+Social and
+Behavioral
+Sciences*
+LD 6 4
+Physical Science LD 3 5A
+Biological
+Science
+LD 3 5B
+Laboratory LD 1 5C
+Ethnic Studies LD or UD 3 6
+Science or Math/
+Quantitative
+Reasoning
+UD 3 5UD or 2UD
+Arts or
+Humanities
+UD 3 3UD
+Social and
+Behavioral
+Sciences
+UD 3 4UD
+*Students will fulfill USH through their Area 4 courses
+SF State Studies
+Courses certified as meeting the SF State Studies
+requirements may be upper or lower division in General
+Education (GE), a major or minor, or an elective.
+American Ethnic
+and Racial
+Minorities
+LD or UD 3 AERM
+Environmental
+Sustainability
+and Climate
+Action
+LD or UD 3 ESCA
+Global
+Perspectives
+LD or UD 3 GP
+Social Justice LD or UD 3 SJ
+American Institutions
+US and California
+Government
+(p. 2350)
+LD or UD 3 USG/CSLG
+Note: LD = Lower-Division; UD = Upper-Division.
+First-Time Student Roadmap (4 Year)
+The roadmaps presented in this Bulletin are intended as suggested
+plans of study and do not replace meeting with an advisor. For a
+more personalized roadmap, please use the Degree Planner (https://
+registrar.sfsu.edu/degreeplanner) tool found in your Student Center.
+Students should use their Pathway/Category (https://
+gatorsmartstart.sfsu.edu/pathways) to determine which roadmap
+to follow. For directions on how to view your Pathway/Category,
+visit how to find your pathway (https://gatorsmartstart.sfsu.edu/
+howtofindyourpathways). Questions? Contact Gator Smart Start. (https://
+gatorsmartstart.sfsu.edu/)
+First-Time Student Roadmap – QR Pathway 1/2 (p. 1942)
+=== p.1941 ===
+5 Year First-Time Student Roadmap – QR Pathway 1/2 (p. 1944)
+First-Time Student Roadmap – QR Pathway 3/4 (p. 1946)
+SF State Scholars Roadmap
+The San Francisco State Scholars program provides undergraduate
+students with an accelerated pathway to a graduate degree. Students in
+this program pursue a bachelor’s and master’s degree simultaneously.
+This program allows students to earn graduate credit while in their
+junior and/or senior year, reducing the number of semesters required for
+completion of a master’s degree.
+Civil Engineering BS + MS SF State Scholars Roadmap (p. 1948)
+General Advising Information for Transfer
+Students
+1. Before transfer, complete as many lower-division requirements or
+electives for this major as possible.
+2. The following courses are not required for admission but are required
+for graduation. Students are strongly encouraged to complete these
+units before transfer; doing so will provide more flexibility in course
+selection after transfer.
+• a course in U.S. History
+• a course in U.S. & California Government
+For information about satisfying the requirements described in (1) and
+(2) above at a California Community College (CCC), please visit http://
+www.assist.org (http://assist.org). Check any geographically accessible
+CCCs; sometimes, options include more than one college. Use ASSIST to
+determine:
+• Which courses at a CCC satisfy any lower-division major
+requirements for this major;
+• Which courses at a CCC satisfy CSU GE, US History, and US & CA
+Government requirements.
+Remedial courses are not transferable and do not apply to the minimum
+60 semester units/90 quarter units required for admission.
+Additional units for courses that are repeated do not apply to the
+minimum 60 units required for upper-division transfer (for example, if
+a course was not passed on the first attempt or was taken to earn a
+better grade).
+Before leaving the last California Community College of attendance,
+obtain a summary of completion of lower-division General Education
+units (IGETC or CSU GE Breadth). This is often referred to as a GE
+certification worksheet. SF State does not require delivery of this
+certification to Admissions, but students should retain this document for
+verifying degree progress after transfer.
+Credit for Advanced Placement, International Baccalaureate, or
+College-Level Examination Program courses: AP/IB/CLEP credit is
+not automatically transferred from the previous institution. Units are
+transferred only when an official score report is delivered to SF State.
+Credit is based on the academic year during which exams were taken.
+Refer to the University Bulletin in effect during the year of AP/IB/CLEP
+examination(s) for details regarding the award of credit for AP/IB/CLEP.
+Students pursuing majors in science, technology, engineering, and
+mathematics (STEM) disciplines often defer 6-9 units of lower-division
+General Education in Areas C and D until after transfer to focus on
+preparation courses for the major. This advice does not apply to students
+pursuing associate degree completion before transfer.
+Transferring From Institutions Other Than CCCs
+or CSUs
+Review SF State's lower-division General Education requirements.
+Note that, as described below, the four basic skills courses required for
+admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State
+GE pattern. Courses that fulfill the remaining areas of SF State’s lower-
+division GE pattern are available at most two-year and four-year colleges
+and universities.
+Of the four required basic skills courses, a course in critical thinking
+(1B/A3) may not be widely offered outside the CCC and CSU systems.
+Students should attempt to identify and take an appropriate course
+no later than the term of application to the CSU. To review more
+information about the 1B/A3 requirement, please visit bulletin.sfsu.edu/
+undergraduate-education/general-education/lower-division/#AAEL.
+Waiting until after transfer to take a single course at SF State that meets
+both US and CA/local government requirements may be an appropriate
+option, particularly if transferring from outside of California.

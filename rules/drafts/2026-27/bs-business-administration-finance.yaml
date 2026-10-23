@@ -1,0 +1,184 @@
+program: bs-business-administration-finance
+title: 'Bachelor of Science in Business Administration: Concentration in Finance'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 69
+source: p.152
+groups:
+- id: prereq_calculus
+  title: 'Prerequisite Courses: Select One (DS 110, MATH 107 & MATH 108, or MATH 110)'
+  one_of:
+  - - DS 110
+  - - MATH 107
+    - MATH 108
+  - - MATH 110
+  quote: 'Select One: 3-6 DS 110 Calculus with Business Applications MATH 107 & MATH 108 Mathematics for Business Calculus
+    I and Mathematics for Business Calculus II MATH 110 Business Calculus'
+  source: p.152
+- id: prereq_econ
+  title: Prerequisite Courses
+  all_of:
+  - ECON 101
+  quote: ECON 101 Introduction to Microeconomic Analysis 3
+  source: p.152
+- id: prereq_isys
+  unparsed: true
+  quote: ISYS 263 Introduction to Information Systems 3 or a passing score on the ISYS 263 CLEP Exam
+  source: p.152
+- id: prereq_grade
+  unparsed: true
+  quote: Students must earn a grade of C- or better in core Business courses required as prerequisites for other core Business
+    courses.
+  source: p.152
+- id: core_accounting
+  title: Core Requirements
+  all_of:
+  - ACCT 100
+  - ACCT 101
+  quote: ACCT 100 Introduction to Financial Accounting 3 ACCT 101 Introduction to Managerial Accounting 3
+  source: p.152
+- id: core_communication
+  title: 'Core Requirements: Select One (BUS 300GW or DS 660GW)'
+  choose_units: 3
+  from:
+    list:
+    - BUS 300GW
+    - DS 660GW
+  quote: 'Select One: 3 BUS 300GW Business Communication for Professionals - GWAR DS 660GW Business Analytics: Communication
+    and Professional Practice - GWAR'
+  source: p.152
+- id: core_seminars
+  title: Core Requirements
+  all_of:
+  - BUS 682
+  - BUS 690
+  quote: BUS 682 Seminar on Business and Society 1 3 BUS 690 Seminar in Business Policy and Strategic Management 1 3
+  source: p.152
+- id: core_statistics
+  title: 'Core Requirements: Select One (DS 212, ECON 212 or MATH 124)'
+  choose_units: 3
+  from:
+    list:
+    - DS 212
+    - ECON 212
+    - MATH 124
+  quote: 'Select One: 3 DS/ECON 212 Business Statistics MATH 124 Elementary Statistics'
+  source: p.152
+- id: core_business
+  title: Core Requirements
+  all_of:
+  - DS 412
+  - ECON 102
+  - FIN 350
+  - IBUS 330
+  - ISYS 363
+  - MGMT 405
+  - MKTG 431
+  quote: DS 412 Operations Management 3 ECON 102 Introduction to Macroeconomic Analysis 3 FIN 350 Business Finance 3 IBUS
+    330 International Business and Multicultural Relations 3 ISYS 363 Information Systems for Management 3 MGMT 405 Introduction
+    to Management and Organizational Behavior 3 MKTG 431 Principles of Marketing 3
+  source: p.152
+- id: core_cr_nc
+  unparsed: true
+  quote: Except in cases of credit by examination, no more than 6 units of the core may be completed on a CR/NC basis.
+  source: p.152
+- id: core_letter_grade
+  unparsed: true
+  quote: Course must be taken for a letter grade.
+  source: p.152
+- id: concentration_select
+  title: 'Concentration Requirements: Select One (FIN 351 or FIN 357)'
+  choose_units: 3
+  from:
+    list:
+    - FIN 351
+    - FIN 357
+  quote: 'Select One: 3 FIN 351 Financial Management FIN 357 Financial Statement and Data Analysis'
+  source: p.152
+- id: concentration_required
+  title: Concentration Requirements
+  all_of:
+  - FIN 353
+  - FIN 355
+  - FIN 536
+  quote: FIN 353 Financial Institutions 3 FIN 355 Investments 3 FIN 536 International Finance 3
+  source: p.153
+- id: concentration_grade
+  unparsed: true
+  quote: All concentration courses must be taken on a letter-grade basis. Students must have a minimum grade point average
+    of 2.0 in all concentration courses.
+  source: p.152
+- id: electives
+  title: 'Electives: Select Three'
+  choose_units: 9
+  from:
+  - list:
+    - FIN 303
+    - FIN 351
+    - FIN 357
+    - FIN 365
+    - FIN 370
+    - FIN 420
+    - FIN 435
+    - I R 435
+    - PLSI 435
+    - FIN 460
+    - FIN 465
+    - FIN 470
+    - FIN 510
+    - FIN 511
+    - FIN 520
+    - FIN 530
+    - FIN 651
+    - ECON 651
+    - ENVS 651
+    - FIN 653
+    - FIN 655
+    - FIN 658
+    - FIN 659
+    - FIN 699
+    - BUS 350
+    - DS 312
+    - DS 408
+    - DS 411
+    - DS 601
+    - DS 604
+    - DS 612
+    - ISYS 464
+    - ISYS 569
+    - ISYS 650
+  quote: 'Electives (9-10 units) Select Three:'
+  source: p.153
+- id: electives_advisor_consent
+  unparsed: true
+  quote: Other appropriate courses may be selected with prior written consent of an advisor.
+  source: p.153
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.154
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.154
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.154
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.154
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.154
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.154
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.154
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.154
+drafted_by: claude, 2026-10-22

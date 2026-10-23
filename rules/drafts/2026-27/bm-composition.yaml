@@ -1,0 +1,154 @@
+program: bm-composition
+title: 'Bachelor of Music: Concentration in Composition'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 65
+source: p.1549
+groups:
+- id: foundational
+  title: 'Lower Division Core: Foundational (3 units)'
+  all_of:
+  - MUS 130
+  quote: MUS 130/ TH A 131 The Foundations of Music Theory 3
+  source: p.1549
+- id: theory_musicianship
+  title: 'Lower Division Core: Theory/Musicianship (10 units)'
+  all_of:
+  - MUS 200
+  - MUS 221
+  - MUS 222
+  - MUS 232
+  quote: MUS 200/ TH A 234 Fundamentals of Modern Musicianship 3 MUS/TH A 221 Ear Training I 2 MUS 222 Ear Training II 2 MUS
+    232 Diatonic Harmony 3
+  source: p.1549
+- id: piano_required
+  title: 'Lower Division Core: Piano (2 units), required course'
+  all_of:
+  - MUS 201
+  quote: MUS 201 Class Piano I 1
+  source: p.1549
+- id: piano_select
+  title: 'Lower Division Core: Piano (2 units), Select One'
+  choose_units: 1
+  from:
+    list:
+    - MUS 202
+    - MUS 206
+  quote: 'Select One: 1 MUS 202 Class Piano II MUS/TH A 206 Beginning Jazz/Pop Piano'
+  source: p.1549
+- id: technology
+  title: 'Lower Division Core: Technology (2 units)'
+  all_of:
+  - MUS 237
+  quote: MUS 237 Introduction to Music Technology 2
+  source: p.1549
+- id: history
+  title: 'Lower Division Core: History (3 units)'
+  all_of:
+  - MUS 281
+  quote: MUS 281 The American Musical Experience 3
+  source: p.1549
+- id: upper_core_required
+  title: 'Upper-Division Core: Core (4 units), required course'
+  all_of:
+  - MUS 542GW
+  quote: MUS 542GW Music in Culture and Context - GWAR 3
+  source: p.1549
+- id: upper_core_select
+  title: 'Upper-Division Core: Core (4 units), Select One'
+  choose_units: 1
+  from:
+    list:
+    - MUS 361
+    - MUS 598
+  quote: 'Select One: 1 MUS 361 Capstone Composition or Performance Project MUS 598 Senior Thesis'
+  source: p.1549
+- id: upper_theory
+  title: 'Upper-Division Core: Theory (3 units), Select One'
+  choose_units: 3
+  from:
+    list:
+    - MUS 403
+    - MUS 440
+  quote: 'Select One: Code Title Units MUS 403 Chromatic Harmony 3 MUS 440 Jazz Harmony 3'
+  source: p.1549
+- id: music_history
+  title: 'Upper-Division Core: Music History (6 units), Select Two'
+  choose_units: 6
+  from:
+  - list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+  quote: 'Music History (6 units) Select Two:'
+  source: p.1549
+- id: applied_lessons
+  unparsed: true
+  quote: MUS 260 Applied Music Lessons (1 unit course taken 4 times) 4
+  source: p.1549
+- id: advanced_applied_lessons
+  unparsed: true
+  quote: MUS 360 Advanced Applied Music Lessons (1 unit course taken 4 times) 4
+  source: p.1549
+- id: mus_370_390
+  unparsed: true
+  quote: 6 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390 6
+  source: p.1549
+- id: concentration_counterpoint_sound
+  title: 'Concentration Requirements: MUS 405, MUS 420, MUS 434 (9 units)'
+  all_of:
+  - MUS 405
+  - MUS 420
+  - MUS 434
+  quote: MUS 405 Tonal Counterpoint 3 MUS 420 20th Century Techniques 3 MUS/BECA 434 Introduction to Sound for Games 3
+  source: p.1549
+- id: composition_studio
+  unparsed: true
+  quote: MUS 443 Composition Studio Seminar (1 unit course taken 4 times) 4
+  source: p.1549
+- id: concentration_scoring_conducting
+  title: 'Concentration Requirements: MUS 455, MUS 640 (5 units)'
+  all_of:
+  - MUS 455
+  - MUS 640
+  quote: MUS 455 Scoring for Film I 3 MUS 640 Ensemble Conducting 2
+  source: p.1549
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1550
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer. a
+    course in U.S. History; a course in U.S. & California Government
+  source: p.1550
+- text: Use ASSIST (assist.org) to determine which courses at a CCC satisfy any lower-division major requirements for this
+    major, and which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+  source: p.1550
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.1550
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.1550
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.1550
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State. Credit is based on the academic year during which exams were taken.
+  source: p.1550
+- text: Of the four required basic skills courses, a course in critical thinking (1B/A3) may not be widely offered outside
+    the CCC and CSU systems. Students should attempt to identify and take an appropriate course no later than the term of
+    application to the CSU. Waiting until after transfer to take a single course at SF State that meets both US and CA/local
+    government requirements may be an appropriate option, particularly if transferring from outside of California.
+  source: p.1550
+drafted_by: claude, 2026-10-22

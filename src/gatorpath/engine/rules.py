@@ -508,7 +508,7 @@ GROUP_KEYS = {"id", "title", "source", "quote", "unparsed", "all_of", "one_of", 
               "waiver", "amendments"}
 FILTER_KEYS = {"list", "subject", "level", "except", "paired", "max_courses", "ge_area", "ge_area_all", "approved"}
 SHAPES = ("all_of", "one_of", "choose_n", "choose_units", "unparsed")
-PAGE = re.compile(r"\b(\d{4})\b")  # every page a source names: "p.2129", "p.1905-1906"
+PAGE = re.compile(r"p\.\s*(\d{1,4})(?:\s*[-–]\s*(\d{1,4}))?")  # the pages a source names: "p.152", "pp.1905-1906"
 
 
 def squashed(text: str) -> str:
@@ -549,7 +549,7 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
         out += [f"{gid}: {c} is not in the {program.get('catalog_year', '')} catalog" for c in dict.fromkeys(codes) if c not in catalog]
         grades = g["min_grade"].values() if isinstance(g.get("min_grade"), dict) else [g["min_grade"]] if "min_grade" in g else []
         out += [f"{gid}: min_grade {m!r} isn't a grade" for m in grades if m not in GRADE_POINTS]
-        cited = [int(p) for p in PAGE.findall(str(g.get("source", "")))]
+        cited = [int(p) for m in PAGE.findall(str(g.get("source", ""))) for p in m if p]
         if not cited:
             out.append(f"{gid}: source must cite a page like \"p.2129\"")
         elif pages and not set(cited) <= pages:
@@ -559,7 +559,8 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
         low += (units(g.get("all_of", [])) + g.get("choose_units", 0)
                 + min((units(opt) for opt in g.get("one_of", [])), default=0))
     if any("choose_n" in g or g.get("unparsed") for g in program.get("groups", [])):
-        out.append("units: can't check total_units with choose_n or unparsed groups; a person adds them up")
+        out.append(f"units: can't check total_units with choose_n or unparsed groups (the others add up to {low:g} of "
+                   f"{program.get('total_units', 0):g}); a person adds them up")
     elif "total_units" in program and low != program["total_units"]:
         out.append(f"units: the groups' minimums add up to {low:g}, total_units says {program['total_units']:g}")
     return out
