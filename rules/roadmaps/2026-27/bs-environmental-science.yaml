@@ -1,0 +1,458 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-environmental-science.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-environmental-science
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: Bachelor of Science in Environmental Science Roadmap – Quantitative Reasoning Category 1/2
+    qr_pathway: 1/2
+    total_units: 120
+    source: p.2050-2052
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 2 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 3 If students want to take PHYS 220/PHYS 222, they must take MATH 226 in the third semester. If students want to take
+      PHYS 111/PHYS 112, they should take a SF Studies or University Elective course in the third semester. If students take
+      MATH 226 and PHYS 220/PHYS 222, they should take a SF Studies or University Elective course in the sixth semester. If
+      students take PHYS 111/PHYS 112, they should take either BIOL 458 or GEOG 604 in the sixth semester.
+    - '4 Environmental Systems Electives (11-12 units): A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 1640). (p. 2047)'
+    - '5 Environmental Management Electives (10-12 units): A full list of courses that can fulfill this requirement can be
+      found in the Degree Requirements (p. 1640). (p. 2047)'
+    - '6 Analytical Methods Electives (7-8 units): A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 1640). (p. 2047)'
+    semesters:
+    - units: 14
+      source: p.2050
+      items:
+      - GEOG 160
+      - MATH 199
+      - slot: GE
+        area: '1'
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.2050
+      items:
+      - slot: major
+        group: foundation_chemistry
+        units: 3
+        note: Select One (Major Lower-Division Core), 3-4 units
+      - slot: major
+        group: foundation_earth
+        units: 3
+        note: Select One (Major Lower-Division Core), 3-4 units
+      - slot: major
+        group: foundation_environment
+        units: 3
+        note: Select One (Major Lower-Division Core)
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 2
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.2050
+      items:
+      - slot: major
+        group: foundation_biology
+        units: 3
+        note: Select One (Major Lower-Division Core)
+      - ENV 205
+      - one_of:
+        - MATH 226
+        - slot: sfss_or_elective
+          units: 3
+        units: 3
+        note: 'Select One, 3-4 units; footnote 3: MATH 226 if taking PHYS 220/PHYS 222'
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: with USH
+    - units: 16
+      source: p.2050-2051
+      items:
+      - slot: major
+        group: foundation_physics
+        units: 4
+        note: 'Select One Set of Courses (Major Lower-Division Core): PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222; footnote
+          3'
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.2051
+      items:
+      - ENVS 450
+      - ENV 500GW
+      - GEOG 603
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: GE
+        area: 2UD/5UD
+        units: 3
+    - units: 15
+      source: p.2051
+      items:
+      - one_of:
+        - BIOL 458
+        - GEOG 604
+        - slot: sfss_or_elective
+          units: 3
+        units: 3
+        note: Select One, 3-4 units; footnote 3
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 4
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 5
+      - slot: major
+        group: topical_analytical_methods
+        units: 3
+        note: Take One, 3-4 units; footnote 6
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 15
+      source: p.2051
+      items:
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 4
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 5
+      - slot: major
+        group: topical_analytical_methods
+        units: 3
+        note: Take One, 3-4 units; footnote 6
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government
+    - units: 15
+      source: p.2051
+      items:
+      - ENV 690
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 4
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 5
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+  qr-3-4:
+    title: Bachelor of Science in Environmental Science Roadmap – Quantitative Reasoning Category 3/4
+    qr_pathway: 3/4
+    total_units: 120
+    source: p.2053-2055
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 2 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 3 If students want to take PHYS 220/PHYS 222, they must take MATH 226 in the third semester. If students want to take
+      PHYS 111/PHYS 112, they should take a SF Studies or University Elective course in the third semester. If students take
+      MATH 226 and PHYS 220/PHYS 222, they should take a SF Studies or University Elective course in the sixth semester. If
+      students take PHYS 111/PHYS 112, they should take either BIOL 458 or GEOG 604 in the sixth semester.
+    - '4 Environmental Systems Electives (11-12 units): A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 1640). (p. 2047)'
+    - '5 Environmental Management Electives (10-12 units): A full list of courses that can fulfill this requirement can be
+      found in the Degree Requirements (p. 1640). (p. 2047)'
+    - '6 Analytical Methods Electives (7-8 units): A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 1640). (p. 2047)'
+    semesters:
+    - units: 16
+      source: p.2053
+      items:
+      - GEOG 160
+      - MATH 197
+      - slot: GE
+        area: '1'
+        units: 6
+        note: Take Two
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.2053
+      items:
+      - slot: major
+        group: foundation_chemistry
+        units: 3
+        note: Select One (Major Lower-Division Core), 3-4 units
+      - slot: major
+        group: foundation_earth
+        units: 3
+        note: Select One (Major Lower-Division Core), 3-4 units
+      - slot: major
+        group: foundation_environment
+        units: 3
+        note: Select One (Major Lower-Division Core)
+      - MATH 198
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 2
+    - units: 15
+      source: p.2053
+      items:
+      - slot: major
+        group: foundation_biology
+        units: 3
+        note: Select One (Major Lower-Division Core)
+      - ENV 205
+      - one_of:
+        - MATH 226
+        - slot: sfss_or_elective
+          units: 3
+        units: 3
+        note: 'Select One, 3-4 units; footnote 3: MATH 226 if taking PHYS 220/PHYS 222'
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: with USH
+    - units: 14
+      source: p.2053-2054
+      items:
+      - slot: major
+        group: foundation_physics
+        units: 4
+        note: 'Select One Set of Courses (Major Lower-Division Core): PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222; footnote
+          3'
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 7
+        note: Take Two
+    - units: 15
+      source: p.2054
+      items:
+      - ENVS 450
+      - ENV 500GW
+      - GEOG 603
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: GE
+        area: 2UD/5UD
+        units: 3
+    - units: 15
+      source: p.2054
+      items:
+      - one_of:
+        - BIOL 458
+        - GEOG 604
+        - slot: sfss_or_elective
+          units: 3
+        units: 3
+        note: Select One, 3-4 units; footnote 3
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 4
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 5
+      - slot: major
+        group: topical_analytical_methods
+        units: 3
+        note: Take One, 3-4 units; footnote 6
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 15
+      source: p.2054
+      items:
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 4
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 5
+      - slot: major
+        group: topical_analytical_methods
+        units: 3
+        note: Take One, 3-4 units; footnote 6
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government
+    - units: 15
+      source: p.2054
+      items:
+      - ENV 690
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 4
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 5
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+  adt:
+    title: Bachelor of Science in Environmental Science – ENVS Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: p.2056-2057
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Environmental Science. Twenty-six units in the major [BIOL and PHYS requirements; CHEM 115 or CHEM 180; GEOG
+      101; GEOG 160; MATH 197/MATH 198 or MATH 199; MATH 226] and 33 units of lower-division GE have been satisfied. Check
+      with a major advisor about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the Associate
+      Degree for Transfer (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 15-21 units. American Institutions (0-6 units): US History, US Government, CA Government.
+      Lower-Division GE (6 units) – Area 3 (3 units in any subarea) and Area 4 (3 units). Upper-Division GE (9 units): Courses
+      required for the major and American Institutions may double-count if approved for UD GE. Students entering the major
+      with the AS-T in ENVS are not required to fulfill SF State Studies requirements.'
+    - 'Environmental Science Major: 49-54 units. BIOL and PHYS Requirements; CHEM 115 or CHEM 180, GEOG 101, GEOG 160, MATH
+      197/MATH 198 or MATH 199, MATH 226 (26 units) met before transfer. Foundation Requirements (6 units) if not taken before
+      transfer: ENVS 130 or GEOG 102; ENV 205. Core Requirements (12-13 units). Capstone (3 units): ENV 690. Topical Areas
+      (28-32 units).'
+    - 'University Electives: 6 or more units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State - some courses may meet more than one requirement,
+      e.g., in both UD GE and the major.'
+    - '1 Environmental Systems (11-12 units): A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1640). (p. 2047)'
+    - '2 Environmental Management (10-12 units): A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 1640). (p. 2047)'
+    - '3 Analytical Methods (7-8 units): A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements (p. 1640). (p. 2047)'
+    semesters:
+    - units: 15
+      source: p.2056
+      items:
+      - one_of:
+        - ENV 205
+        - slot: elective
+          units: 3
+        units: 3
+        note: University Elective if taken before transfer
+      - one_of:
+        - ENVS 130
+        - GEOG 102
+        - slot: elective
+          units: 3
+        units: 3
+        note: Select One; University Elective if taken before transfer
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 1
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 2
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 15
+      source: p.2056
+      items:
+      - ENV 500GW
+      - GEOG 603
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 1
+      - slot: GE
+        area: '4'
+        units: 3
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+    - units: 15
+      source: p.2057
+      items:
+      - slot: major
+        group: topical_environmental_systems
+        units: 3
+        note: Take One, 3-4 units; footnote 1
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 2
+      - slot: major
+        group: topical_analytical_methods
+        units: 3
+        note: Take One, 3-4 units; footnote 3
+      - slot: GE
+        area: 3UD
+        units: 3
+        note: 'Select One (GE 3UD, AERM, USH, USG/CSLG): HIST 470 or HIST 471'
+      - slot: ai
+        area: USH/USG/CSLG
+        units: 0
+        note: the same HIST 470 or HIST 471 course
+      - slot: elective
+        units: 3
+    - units: 15
+      source: p.2057
+      items:
+      - ENV 690
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: Take One, 3-4 units; footnote 2
+      - slot: major
+        group: topical_analytical_methods
+        units: 3
+        note: Take One, 3-4 units; footnote 3
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: elective
+        units: 3
+drafted_by: claude, 2026-10-23

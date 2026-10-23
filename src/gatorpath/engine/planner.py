@@ -743,6 +743,30 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     todo = required + ([c for c in order if c in closure and c not in have and c not in required and c in catalog]
                        if variant else [])
 
+    # A prereq nothing in the plan or roadmap meets is a course to add: PHYS 330 needs MATH 376, WGS 300GW one of WGS
+    # 200/210/220/280. One per "one of" (the fewest units, then first printed), all of an "all", and their own prereqs.
+    def missing(e: dict | None, planned: set) -> list[str]:
+        if not e:
+            return []
+        if "all" in e:
+            return [c for x in e["all"] for c in missing(x, planned)]
+        if "any" in e:
+            if any(not missing(x, planned) for x in e["any"]):  # a branch already met (or not a course: checked later)
+                return []
+            options = sorted((x for x in e["any"] if x.get("course") in catalog),
+                             key=lambda x: (catalog[x["course"]]["units_min"], e["any"].index(x)))
+            return missing(options[0], planned) if options else []
+        c = e.get("course")
+        return [c] if c and c not in planned and c in catalog and "max_grade" not in e else []
+
+    planned_set, queue = met | set(todo), list(todo)
+    while queue:
+        for d in missing(prereqs.get(queue.pop(), {}).get("expr"), planned_set):
+            if d not in planned_set:
+                planned_set.add(d)
+                todo.append(d)
+                queue.append(d)
+
     # Priority: longest chain of plan courses that depend on it (critical path), then roadmap order.
     needs = {c: {l["course"] for l in leaves(prereqs.get(c, {}).get("expr")) if "course" in l and l["course"] in todo and l["course"] != c}
              for c in todo}

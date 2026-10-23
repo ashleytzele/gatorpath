@@ -1,0 +1,117 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-english-professional-writing-and-rhetoric.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-english-professional-writing-and-rhetoric
+title: 'Bachelor of Arts in English: Concentration in Professional Writing and Rhetoric'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.1173
+groups:
+- id: core_lower_division
+  title: Core Requirements, Lower-Division (6 units)
+  all_of:
+  - ENG 218
+  - ENG 250
+  min_grade: C-
+  quote: Lower-Division 6
+  source: p.1173
+- id: core_upper_division
+  title: Core Requirements, Upper-Division (18 units)
+  all_of:
+  - ENG 480GW
+  - ENG 420
+  - ENG 402
+  - ENG 640
+  - ENG 583
+  - ENG 461
+  min_grade:
+    ENG 480GW: C
+    ENG 420: C-
+    ENG 402: C-
+    ENG 640: C-
+    ENG 583: C-
+    ENG 461: C-
+  quote: Upper-Division 18
+  source: p.1173
+- id: concentration_required
+  title: Concentration Requirements, Required Courses (9 units)
+  all_of:
+  - ENG 540
+  - ENG 545
+  - ENG 618
+  min_grade: C-
+  quote: Required Courses (9 units)
+  source: p.1173
+- id: concentration_electives
+  title: 'Concentration Requirements, Electives (9 units): Select 3'
+  choose_units: 9
+  approval: Other courses with the approval of an advisor.
+  from:
+  - list:
+    - ENG 200
+    - ENG 471
+    - ENG 490
+    - ENG 585
+  - approved: true
+  min_grade: C-
+  quote: 'Select 3:'
+  source: p.1173
+- id: capstone
+  title: Capstone Experience (3 units)
+  all_of:
+  - ENG 660
+  min_grade: C-
+  quote: ENG 660 Career Pathways & Applied Projects 3
+  source: p.1174
+- id: capstone_term
+  title: Capstone Experience, term it must be taken
+  unparsed: true
+  quote: This course must be completed during the spring semester of the student’s final (senior) year.
+  source: p.1173
+- id: major_gpa
+  title: Major GPA and minimum grade
+  unparsed: true
+  quote: Students must have a GPA of 2.0 or higher in the major, and no grade in the major lower than C- (except for ENG 480GW,
+    which requires a grade of C or higher).
+  source: p.1174
+- id: complementary_studies
+  title: Complementary Studies Requirement for English Majors (12 units)
+  unparsed: true
+  quote: Twelve units of Complementary Studies are required of all candidates in any of the four concentrations (Literature,
+    Linguistics, English Education, and Professional Writing and Rhetoric) in the Bachelor of Arts degree in English.
+  source: p.1174
+transfer_notes:
+- text: Students who have earned AA-T or AS-T degrees and are pursuing a similar B.A. degree at SF State are required to fulfill
+    the Complementary Studies requirement as defined by the major department. Students should consult with a major advisor
+    about how transfer units and/or SF State units can best be applied to this requirement in order to ensure degree completion
+    within 60 units.
+  source: p.1174
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1175
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1175
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1175
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1175
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.1175
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.1175
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.1175
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1175
+drafted_by: claude, 2026-10-23

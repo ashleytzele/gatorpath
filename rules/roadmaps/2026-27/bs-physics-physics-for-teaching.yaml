@@ -1,0 +1,262 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-physics-physics-for-teaching.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-physics-physics-for-teaching
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-3-4:
+    title: 'Roadmap – Quantitative Reasoning Category 3/4: Bachelor of Science in Physics: Concentration in Physics for Teaching'
+    qr_pathway: 3/4
+    total_units: 120
+    source: p.2212-2214
+    notes:
+    - Discontinued - Not Accepting New Majors
+    - '120 Total Units Required. Minimum Number of Units in the Major: 66'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 2 First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+    - 3 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 4 Major Electives (9-12 units). For students who choose MATH 245, 12 units of electives are required, whereas for students
+      who choose MATH 225 & MATH 376, 9 units of electives are required. Selected in consultation with a faculty advisor to
+      prepare to teach a second subject in addition to physics or general science at a 9th-grade level. Electives may be lower-division
+      or upper-division courses.
+    semesters:
+    - units: 13
+      source: p.2212
+      items:
+      - MATH 197
+      - PHYS 200
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 2: one lower-division Area 4 course must meet USH'
+    - units: 12
+      source: p.2212
+      items:
+      - MATH 198
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 13
+      source: p.2212
+      items:
+      - MATH 226
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 2: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: 5B
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+    - units: 14
+      source: p.2212
+      items:
+      - MATH 227
+      - PHYS 220
+      - PHYS 222
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 14
+      source: p.2212-2213
+      items:
+      - slot: major
+        group: ud_programming
+        units: 3
+        note: 'Select One (Major Upper-Division Core): CSC 309 or MATH 209'
+      - MATH 228
+      - PHYS 230
+      - PHYS 232
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+    - units: 13
+      source: p.2213
+      items:
+      - one_of:
+        - MATH 225
+        - MATH 245
+        units: 3
+        note: Select One (Major Prerequisite)
+      - PHYS 240
+      - PHYS 242
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+    - units: 14
+      source: p.2213
+      items:
+      - PHYS 320
+      - PHYS 321
+      - PHYS 330
+      - PHYS 385
+      - one_of:
+        - MATH 376
+        - slot: sfss_or_elective
+          units: 3
+        units: 3
+        note: 'Select One: MATH 376 (if MATH 225 taken); SF State Studies or University Elective (if MATH 245 taken)'
+    - units: 15
+      source: p.2213
+      items:
+      - PHYS 360
+      - PHYS 370
+      - slot: major
+        group: math_science_electives
+        count: 3
+        units: 9
+        note: Major Elective (9-12 Units Total) - Take Three; footnote 4
+    - units: 12
+      source: p.2213
+      items:
+      - slot: major
+        group: ud_teaching_experience
+        units: 3
+        note: 'Select One (Major Upper-Division Core): E ED 655 or MATH 375'
+      - PHYS 491GW
+      - one_of:
+        - slot: major
+          group: math_science_electives
+          units: 3
+        - slot: sfss_or_elective
+          units: 3
+        units: 3
+        note: 'Select One: Major Elective (9-12 Units Total) (if MATH 245 taken); SF State Studies or University Elective
+          (if MATH 225/MATH 376 taken)'
+      - slot: sfss_or_elective
+        units: 3
+  adt:
+    title: 'Bachelor of Science in Physics: Concentration in Physics for Teaching – PHYS Associate Degree for Transfer (ADT)
+      Roadmap'
+    total_units: 60
+    source: p.2215-2216
+    met_in_transfer:
+    - MATH 226
+    - MATH 227
+    - MATH 228
+    - PHYS 220
+    - PHYS 222
+    - PHYS 230
+    - PHYS 232
+    - PHYS 240
+    - PHYS 242
+    notes:
+    - Discontinued - Not Accepting New Majors
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Physics. Twenty-four units in the major (MATH 226, MATH 227, MATH 228, PHYS 220, PHYS 222, PHYS 230, PHYS
+      232, PHYS 240, and PHYS 242) and all lower-division GE requirements have been satisfied. Additional units in the major
+      may have been satisfied. Check with a major advisor about the most appropriate course sequence. Degree completion guaranteed
+      in 60 units; see the Associate Degree for Transfer (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 9-15 Units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government requirements if not taken before transfer. Upper-division GE areas 2UD/5UD, 3UD, and 4UD
+      (9 units): Courses required for the major may double-count if approved for UD GE. Students entering the major with the
+      AS-T in Physics are not required to fulfill SF State Studies requirements.'
+    - 'Physics BS (Teaching) Major: 34-37 Units. MATH 226, MATH 227, MATH 228, PHYS 220, PHYS 222, PHYS 230, PHYS 232, PHYS
+      240, and PHYS 242 met in transfer. Prerequisites (4 units if MATH 245 equivalent not completed before transfer). Upper-division
+      Requirements (23 units). Electives (12 units): May be lower- or upper-division. Selected in consultation with a department
+      advisor, courses should prepare students to teach a second subject in addition to physics or general science at the
+      9th-grade level.'
+    - 'University Electives: 3 or More Units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
+      e.g., both in UD GE and the major.'
+    - 1 Students may also fulfill this requirement with both MATH 225 and MATH 376. This option may increase time to graduation.
+      Speak with an advisor.
+    - 2 Major Electives. For students who choose MATH 245, 12 units of electives are required, whereas for students who choose
+      MATH 225 & MATH 376, 9 units of electives are required. Selected in consultation with a faculty advisor to prepare to
+      teach a second subject in addition to physics or general science at a 9th-grade level. Electives may be lower-division
+      or upper-division courses.
+    semesters:
+    - units: 15
+      source: p.2215
+      items:
+      - slot: major
+        group: ud_programming
+        units: 3
+        note: 'Select One (Major Upper-Division Core): CSC 309 or MATH 209'
+      - MATH 245
+      - PHYS 200
+      - PHYS 320
+      - PHYS 321
+      - PHYS 385
+    - units: 15
+      source: p.2215
+      items:
+      - PHYS 360
+      - PHYS 370
+      - slot: major
+        group: math_science_electives
+        count: 2
+        units: 6
+        note: Major Elective (12 Units Total) - Take Two; footnote 2
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+    - units: 15
+      source: p.2215-2216
+      items:
+      - slot: major
+        group: ud_teaching_experience
+        units: 3
+        note: 'Select One (Major Upper-Division Core): E ED 655 or MATH 375'
+      - PHYS 330
+      - PHYS 491GW
+      - slot: major
+        group: math_science_electives
+        units: 3
+        note: Major Elective (12 Units Total); footnote 2
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 15
+      source: p.2216
+      items:
+      - slot: major
+        group: math_science_electives
+        units: 3
+        note: Major Elective (12 Units Total); footnote 2
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: or University Elective if met in transfer
+      - slot: ai
+        area: USH
+        units: 3
+        note: or University Elective if met in transfer
+      - slot: elective
+        units: 3
+drafted_by: claude, 2026-10-23

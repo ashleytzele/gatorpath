@@ -1,0 +1,100 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-broadcast-and-electronic-communication-arts.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-broadcast-and-electronic-communication-arts
+title: Bachelor of Arts in Broadcast and Electronic Communication Arts
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.954
+groups:
+- id: supervised_work_cap
+  title: 'Supervised and independent work: 3 units combined (BECA 576, 685, 695, 699)'
+  unparsed: true
+  quote: Students may count a total of 3 units combined from the courses BECA 576, BECA 685 , BECA 695 , and BECA 699 toward
+    satisfying major requirements.
+  source: p.954
+- id: supervised_work_cap_6
+  title: 'Supervised and independent work: 6 units combined (the Bulletin prints both 3 and 6)'
+  unparsed: true
+  quote: Students may count a total of 6 units combined from the courses BECA 576, BECA 685, BECA 695, and BECA 699 toward
+    satisfying major requirements.
+  source: p.954
+- id: core
+  title: Core (12 Units)
+  all_of:
+  - BECA 200
+  - BECA 300GW
+  - BECA 324
+  - BECA 340
+  min_grade: C
+  quote: Core (12 Units)
+  source: p.954
+- id: foundation_media_production
+  title: 'Foundation Areas: Media Production (select one)'
+  one_of:
+  - - BECA 231
+  - - BECA 241
+  - - BECA 246
+  quote: One course in each area is required.
+  source: p.954
+- id: foundation_media_writing
+  title: 'Foundation Areas: Media Writing (select one)'
+  one_of:
+  - - BECA 370
+  - - BECA 371
+  - - BECA 372
+  - - BECA 374
+  - - BECA 375
+  quote: One course in each area is required.
+  source: p.954
+- id: foundation_media_culture_society
+  title: 'Foundation Areas: Media, Culture, and Society (select one)'
+  one_of:
+  - - BECA 301
+  - - BECA 321
+  - - BECA 422
+  quote: One course in each area is required.
+  source: p.954
+- id: focus_area_electives
+  title: Electives in a Focus Area (15 units)
+  choose_units: 15
+  approval: Upper-division BECA courses selected in consultation with a BECA faculty advisor. Electives must be upper-division,
+    may include Foundation Area courses in the Media Writing and Media, Culture, and Society areas not used to fulfill those
+    requirements, and may include up to 3 units from other departments/programs.
+  from:
+    approved: true
+  quote: Electives in a Focus Area (15 units)
+  source: p.954
+transfer_notes:
+- text: Students transferring to the BECA program from a California community college or other institution should strive to
+    complete the SF State Lower Division Transfer Pattern.
+  source: p.954
+- text: Transfer students are encouraged to complete the equivalent of BECA 200 and one lower-division production course (BECA
+    230, 240, or 246) before matriculation at SF State.
+  source: p.954
+- text: Up to 12 units of courses from California community colleges may be directly applied to fulfilling BECA major requirements.
+  source: p.954
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.955
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.955
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.956
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.956
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.956
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.956
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.956
+drafted_by: claude, 2026-10-23

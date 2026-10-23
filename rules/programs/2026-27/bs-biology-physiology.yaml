@@ -1,0 +1,203 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-biology-physiology.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-biology-physiology
+title: 'Bachelor of Science in Biology: Concentration in Physiology'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 58
+source: p.1835
+global:
+  no_cr_nc: true
+  source: p.1835
+groups:
+- id: lower_fixed
+  title: Lower-Division Requirements (BIOL, CHEM, MATH)
+  all_of:
+  - BIOL 230
+  - BIOL 231
+  - BIOL 240
+  - CHEM 115
+  - CHEM 215
+  - MATH 226
+  min_grade:
+    BIOL 230: C-
+    BIOL 240: C-
+    MATH 226: C-
+    CHEM 115: C
+    CHEM 215: C
+  quote: Lower-Division Requirements (30 units)
+  source: p.1835
+- id: organic_chemistry
+  title: 'Lower-Division Requirements: Select One (CHEM 130 or CHEM 233)'
+  one_of:
+  - - CHEM 130
+  - - CHEM 233
+  min_grade:
+    CHEM 130: C
+    CHEM 233: C
+  quote: CHEM 130 General Organic Chemistry
+  source: p.1835
+- id: physics
+  title: 'Lower-Division Requirements: Select One (PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222)'
+  one_of:
+  - - PHYS 111
+    - PHYS 112
+  - - PHYS 220
+    - PHYS 222
+  quote: General Physics I
+  source: p.1835
+- id: upper_fixed
+  title: Upper-Division Requirements
+  all_of:
+  - BIOL 355
+  - BIOL 337
+  - BIOL 458
+  - BIOL 612
+  quote: Upper-Division Requirements (22-23 units)
+  source: p.1835
+- id: biochemistry
+  title: 'Upper-Division Requirements: Select One (CHEM 349 or CHEM 340)'
+  one_of:
+  - - CHEM 349
+  - - CHEM 340
+  quote: CHEM 349 General Biochemistry
+  source: p.1835
+- id: physiology_course
+  title: 'Upper-Division Requirements: Select One (physiology)'
+  one_of:
+  - - BIOL 525
+  - - BIOL 617
+  - - BIOL 618
+  - - BIOL 621
+  - - BIOL 622
+  - - BIOL 640
+  - - BIOL 642
+  quote: BIOL 617 Environmental Physiology
+  source: p.1836
+- id: physiology_lab
+  title: 'Upper-Division Requirements: Select One (BIOL 613GW, or BIOL 631GW & BIOL 631)'
+  one_of:
+  - - BIOL 613GW
+  - - BIOL 631GW
+    - BIOL 631
+  quote: BIOL 613GW Human Physiology Laboratory - GWAR
+  source: p.1836
+- id: lab_elective
+  title: 'Upper-Division Electives: Laboratory Elective, Select One'
+  one_of:
+  - - BIOL 328
+  - - BIOL 351GW
+    - BIOL 351
+  - - BIOL 402GW
+  - - BIOL 436
+  - - BIOL 443
+  - - BIOL 454
+  - - BIOL 475GW
+  - - BIOL 478GW
+  - - BIOL 502
+  - - BIOL 505
+  - - BIOL 529
+  - - BIOL 570GW
+    - BIOL 570
+  - - BIOL 580
+  - - BIOL 582
+  - - BIOL 586GW
+    - BIOL 586
+  - - BIOL 613GW
+  - - BIOL 631GW
+    - BIOL 631
+  - - BIOL 638
+  - - BIOL 644
+  - - BIOL 654
+  - - BIOL 667
+  - - BIOL 670
+  - - BIOL 671
+  - - BIOL 694
+  - - BIOL 699
+  - - CHEM 343
+  quote: Laboratory Elective
+  source: p.1836
+- id: lecture_electives
+  title: 'Upper-Division Electives: Lecture Electives (minimum 5 units)'
+  choose_units: 5
+  from:
+  - list:
+    - BIOL 315
+    - BIOL 331
+    - BIOL 332
+    - BIOL 350
+    - BIOL 357
+    - BIOL 358
+    - BIOL 360
+    - BIOL 380
+    - BIOL 382
+    - BIOL 401
+    - BIOL 411
+    - BIOL 425
+    - BIOL 435
+    - BIOL 442
+    - BIOL 446
+    - BIOL 453
+    - BIOL 460
+    - BIOL 470
+    - BIOL 482
+    - BIOL 490
+    - BIOL 500
+    - BIOL 514
+    - BIOL 525
+    - BIOL 526
+    - BIOL 532
+    - BIOL 534
+    - BIOL 555
+    - BIOL 577
+    - BIOL 585
+    - BIOL 600
+    - BIOL 617
+    - BIOL 618
+    - BIOL 621
+    - BIOL 622
+    - BIOL 640
+    - BIOL 642
+    - CSC 306
+  quote: Select enough to reach a minimum of 5 units of electives.
+  source: p.1836
+- id: sf_state_biology_units
+  unparsed: true
+  quote: At least 12 units in biology must be completed at SF State.
+  source: p.1835
+transfer_notes:
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.1837
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1837
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1837
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1837
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1837
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1837
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1838
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.1838
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.1838
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.1838
+drafted_by: claude, 2026-10-23

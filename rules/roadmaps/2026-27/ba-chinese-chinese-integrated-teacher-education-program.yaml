@@ -1,0 +1,161 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-chinese-chinese-integrated-teacher-education-program.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-chinese-chinese-integrated-teacher-education-program
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: 'Bachelor of Arts in Chinese: Concentration in Chinese Integrated Teacher Education Program Roadmap'
+    total_units: 120
+    source: p.1441-1442
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - '1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '2: Civilization and Culture (3 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1438).'
+    - '3: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '4: Content Course (3 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 1438).'
+    - '5: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - '6: Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.'
+    - '7: Literature in Translation (3 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1438).'
+    - '8: Graduation Writing Requirement (GWAR) (0-3 units). Only to be taken if not chosen from the 600-level courses in
+      Literature in Translation (CHIN 601GW, CHIN 611GW, or CHIN 612GW).'
+    semesters:
+    - units: 15
+      source: p.1441
+      items:
+      - CHIN 311
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1441
+      items:
+      - CHIN 312
+      - slot: major
+        group: civilization_culture
+        units: 3
+        note: Civilization and Culture; footnote 2
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+        note: footnote 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1441
+      items:
+      - CHIN 401
+      - slot: major
+        group: content_course
+        units: 3
+        note: Content Course; footnote 4
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 5: first-time freshmen must take one lower-division Area 4 course that meets USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 6
+    - units: 15
+      source: p.1441
+      items:
+      - slot: major
+        group: media_literacy
+        units: 3
+        note: 'Media Literacy - Select One: CHIN/JOUR 410 or CHIN 411/I R 413/JOUR 411'
+      - slot: major
+        group: language_core_classical
+        units: 3
+        note: 'Select One (Major Core): CHIN 501 or CHIN 502'
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 5: first-time freshmen must take one lower-division Area 4 course that meets USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 6
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1441
+      items:
+      - MLL 325
+      - slot: major
+        group: literature_in_translation
+        units: 3
+        note: Literature in Translation; footnote 7
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1442
+      items:
+      - S ED 701
+      - S ED 790
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government
+    - units: 15
+      source: p.1442
+      items:
+      - MLL 750
+      - S ED 640
+      - S ED 720
+      - S ED 751
+      - one_of:
+        - slot: GE
+          area: GW
+          units: 3
+        - slot: sfss_or_elective
+          units: 3
+        units: 3
+        note: 'Select One: GWAR Course (footnote 8) or SF State Studies or University Elective (if GWAR already fulfilled)'
+    - units: 15
+      source: p.1442
+      items:
+      - MLL 751
+      - S ED 660
+      - S ED 752
+drafted_by: claude, 2026-10-23

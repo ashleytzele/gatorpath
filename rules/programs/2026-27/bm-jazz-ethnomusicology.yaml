@@ -1,0 +1,224 @@
+# AI-drafted from the 2026-27 Bulletin text (bm-jazz-ethnomusicology.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bm-jazz-ethnomusicology
+title: 'Bachelor of Music: Concentration in Jazz/Ethnomusicology'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 65
+source: p.1559
+groups:
+- id: ld_foundations
+  title: 'Foundational (3 units): MUS 130 / TH A 131'
+  one_of:
+  - - MUS 130
+  - - TH A 131
+  quote: The Foundations of Music Theory 3
+  source: p.1559
+- id: ld_modern_musicianship
+  title: 'Theory/Musicianship: MUS 200 / TH A 234'
+  one_of:
+  - - MUS 200
+  - - TH A 234
+  quote: Fundamentals of Modern Musicianship 3
+  source: p.1559
+- id: ld_ear_training_1
+  title: 'Theory/Musicianship: Ear Training I (MUS 221 / TH A 221)'
+  one_of:
+  - - MUS 221
+  - - TH A 221
+  quote: Ear Training I 2
+  source: p.1559
+- id: ld_ear_training_2
+  title: 'Theory/Musicianship: Ear Training II'
+  all_of:
+  - MUS 222
+  quote: MUS 222 Ear Training II 2
+  source: p.1559
+- id: ld_diatonic_harmony
+  title: 'Theory/Musicianship: Diatonic Harmony'
+  all_of:
+  - MUS 232
+  quote: MUS 232 Diatonic Harmony 3
+  source: p.1559
+- id: ld_class_piano_1
+  title: 'Piano: Class Piano I'
+  all_of:
+  - MUS 201
+  quote: MUS 201 Class Piano I 1
+  source: p.1559
+- id: ld_piano_select_one
+  title: 'Piano: Select One (MUS 202, or MUS 206 / TH A 206)'
+  one_of:
+  - - MUS 202
+  - - MUS 206
+  - - TH A 206
+  quote: MUS/TH A 206 Beginning Jazz/Pop Piano
+  source: p.1559
+- id: ld_technology
+  title: Technology (2 units)
+  all_of:
+  - MUS 237
+  quote: MUS 237 Introduction to Music Technology 2
+  source: p.1559
+- id: ld_history
+  title: History (3 units)
+  all_of:
+  - MUS 281
+  quote: MUS 281 The American Musical Experience 3
+  source: p.1559
+- id: ud_core_context
+  title: 'Core: Music in Culture and Context (GWAR)'
+  all_of:
+  - MUS 542GW
+  quote: MUS 542GW Music in Culture and Context - GWAR 3
+  source: p.1559
+- id: ud_core_capstone
+  title: 'Core: Select One (MUS 361 or MUS 598)'
+  one_of:
+  - - MUS 361
+  - - MUS 598
+  quote: MUS 598 Senior Thesis
+  source: p.1559
+- id: ud_theory
+  title: 'Theory (3 units): Select One (MUS 403 or MUS 440)'
+  one_of:
+  - - MUS 403
+  - - MUS 440
+  quote: MUS 403 Chromatic Harmony 3
+  source: p.1559
+- id: ud_music_history
+  title: 'Music History (6 units): Select Two'
+  choose_units: 6
+  from:
+  - list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+  quote: Music History (6 units)
+  source: p.1559
+- id: conc_applied_lessons
+  title: 'Concentration: applied lessons (4 units in any combination)'
+  choose_units: 4
+  from:
+  - list:
+    - MUS 260
+    - MUS 360
+  quote: 'Take 4 units in any combination: 4'
+  source: p.1559
+- id: conc_improvisation_techniques
+  title: 'Concentration: Improvisation Techniques'
+  all_of:
+  - MUS 270
+  quote: MUS 270 Improvisation Techniques 2
+  source: p.1559
+- id: conc_seminar
+  title: 'Concentration: Select One (MUS 365 or MUS 394)'
+  one_of:
+  - - MUS 365
+  - - MUS 394
+  quote: 'Select One: 2'
+  source: p.1559
+- id: conc_ensembles
+  title: 'Concentration: ensembles (8 units)'
+  choose_units: 8
+  from:
+  - list:
+    - MUS 370
+    - MUS 371
+    - MUS 372
+    - MUS 373
+    - MUS 374
+    - MUS 375
+    - MUS 376
+    - MUS 378
+    - MUS 379
+    - MUS 380
+    - MUS 386
+    - MUS 387
+    - MUS 388
+    - MUS 389
+    - MUS 390
+  quote: 8 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390 8
+  source: p.1560
+- id: conc_jazz_improvisation
+  title: 'Concentration: Jazz Improvisation'
+  all_of:
+  - MUS 431
+  quote: MUS 431 Jazz Improvisation 2
+  source: p.1560
+- id: conc_creative_concepts
+  title: 'Concentration: Creative Concepts in Music'
+  all_of:
+  - MUS 445
+  quote: MUS 445 Creative Concepts in Music 2
+  source: p.1560
+- id: conc_ethnomusicology
+  title: 'Concentration: Introduction to Ethnomusicology'
+  all_of:
+  - MUS 524
+  quote: MUS 524 Introduction to Ethnomusicology 3
+  source: p.1560
+- id: conc_additional_history
+  title: 'Concentration: 3 additional Music History units not already used for the Core'
+  choose_units: 3
+  from:
+  - list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+  quote: 3 additional units selected from the Music History options not already used to satisfy the Core 3
+  source: p.1560
+- id: conc_electives
+  title: 'Concentration: Electives on advisement (6 units)'
+  choose_units: 6
+  approval: Electives on advisement
+  from:
+  - approved: true
+  quote: 6 units of Electives on advisement 6
+  source: p.1560
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1560
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1560
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1560
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1560
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.1560
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.1560
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.1560
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1560
+drafted_by: claude, 2026-10-23

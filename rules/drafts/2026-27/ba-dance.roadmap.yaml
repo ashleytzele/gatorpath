@@ -1,0 +1,178 @@
+program: ba-dance
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: Bachelor of Arts in Dance Roadmap
+    total_units: 120
+    source: p.1679-1680
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 'Technique Course (12 units): A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 1677) (footnote 1).'
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 2).
+    - 'Complementary Studies: Students must complete at least 12 units of Complementary Studies outside of the primary prefix
+      for the major. (Note: Students may not use an alternate prefix that is cross-listed with the primary prefix for the
+      major.) Students who complete two majors or a major and a minor automatically complete the Complementary Studies requirement.
+      Additional ways to complete Complementary Studies for students in the Dance major can, with the approval of a Dance
+      Program advisor, satisfy Complementary Studies in the major with 12 units in a single foreign language of their choosing,
+      12 units from courses taken in a study abroad program, 12 units of courses taken as partial completion of a second major,
+      minor or certificate, or 12 units of courses in related disciplines. Related disciplines typically include theater,
+      music, cinema, broadcast and electronic communications, creative writing, journalism, kinesiology, physical education,
+      health education, holistic health, biology, elementary education, English, history, anthropology, business, and journalism.
+      The Dance program allows up to 12 units of dance-related disciplines to count toward the Dance major (footnote 3).'
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 4).
+    - Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied (footnote
+      5).
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH) (footnote 6).
+    - 'Dance Studies (9 units): A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 1677) (footnote 7).'
+    - 'GWAR Course (3 units): Select a GWAR course from any discipline or department (footnote 8).'
+    semesters:
+    - units: 15
+      source: p.1679
+      items:
+      - slot: major
+        group: technique
+        units: 2
+        note: Technique Course (footnote 1)
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 2
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 4
+        note: Complementary Studies or SF State Studies or University Elective (footnote 3)
+    - units: 14
+      source: p.1679
+      items:
+      - slot: major
+        group: technique
+        units: 2
+        note: Technique Course (footnote 1)
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+        note: footnote 4
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 5
+    - units: 15
+      source: p.1679
+      items:
+      - DANC 232
+      - slot: major
+        group: technique
+        units: 2
+        note: Technique Course (footnote 1)
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 6: first-time freshmen take one lower-division Area 4 course that meets USH'
+      - slot: sfss_or_elective
+        units: 7
+        note: Take Two; Complementary Studies or SF State Studies or University Elective (footnote 3)
+    - units: 16
+      source: p.1679
+      items:
+      - DANC 434
+      - TH A 347
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 6: first-time freshmen must take one lower-division Area 4 course that meets USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 5
+      - slot: sfss_or_elective
+        units: 4
+        note: Complementary Studies or SF State Studies or University Elective (footnote 3)
+    - units: 15
+      source: p.1679
+      items:
+      - slot: major
+        group: technique
+        units: 2
+        note: Technique Course (footnote 1)
+      - slot: major
+        group: dance_studies
+        units: 3
+        note: Dance Studies (footnote 7)
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 4
+        note: Complementary Studies or SF State Studies or University Elective (footnote 3)
+    - units: 15
+      source: p.1679
+      items:
+      - slot: major
+        group: technique
+        units: 2
+        note: Technique Course (footnote 1)
+      - slot: GE
+        area: GW
+        units: 3
+        note: GWAR Course (footnote 8)
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 7
+        note: Take Two; Complementary Studies or SF State Studies or University Elective (footnote 3)
+    - units: 15
+      source: p.1680
+      items:
+      - DANC 490
+      - slot: major
+        group: technique
+        units: 2
+        note: Technique Course (footnote 1)
+      - slot: major
+        group: dance_studies
+        units: 3
+        note: Dance Studies (footnote 7)
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 4
+        note: Complementary Studies or SF State Studies or University Elective (footnote 3)
+    - units: 15
+      source: p.1680
+      items:
+      - slot: major
+        group: dance_studies
+        units: 3
+        note: Dance Studies (footnote 7)
+      - slot: sfss_or_elective
+        units: 12
+        note: Take Four; Complementary Studies or SF State Studies or University Elective (footnote 3)
+drafted_by: claude, 2026-10-23

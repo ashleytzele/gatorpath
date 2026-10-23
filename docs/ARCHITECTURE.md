@@ -432,7 +432,9 @@ groups:
 ```
 
 **Double-counting (what the engine allows):**
-- Within one program's groups, a course counts **once**.
+- Within one program's groups, a course counts **once**. Groups that name their courses (`all_of`, `one_of`) claim
+  first, then the choices: an elective list that also names a Select One's course doesn't take it from the Select
+  One (BA Art History's ART 671).
 - A course can count toward GE, SF State Studies and American Institutions **at the same time**.
   The Bulletin designs it that way: one course is tagged e.g. `(Area 1B, GP, SJ)`.
 - Units always count once toward the 120.
@@ -706,6 +708,9 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
      one ready option per slot in the term. Not at the roadmap's position for it
    - F-1 (`f1: true`): a spring/fall term with more terms to come is filled toward 12 units with elective slots
    - standing (`upper`/`senior`) is computed from cumulative units
+   - a prereq nothing in the plan, the requirements or the roadmap meets is added as a course (one per "one of",
+     the fewest units then first printed; all of an "all"; and its own prereqs): PHYS 330 needs MATH 376, which BS
+     Physics doesn't list. Its `why` says what needs it
 4. **Two plans, one kept:** the roadmap-led plan (steps 2 + 3) and the plain greedy (step 3 alone) are built at
    the same caps. The roadmap-led one is kept when it passes check_plan and has no more terms. With
    `include_summer`, only the greedy runs: the roadmaps have no summer terms. Winter Session terms (`include_winter`)

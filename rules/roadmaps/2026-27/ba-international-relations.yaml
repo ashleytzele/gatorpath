@@ -1,0 +1,245 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-international-relations.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-international-relations
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: Bachelor of Arts in International Relations Roadmap
+    total_units: 120
+    source: p.1325-1326
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 2: Recommended GE Courses: GE Area 1A I R 205 (GE 1A); GE Area 1C I R 207 (GE 1C); GE Area 2 I R 112/HIST
+      112/LCA 112/MATH 112/PHIL 112/PLSI 112 Quantitative Reasoning for Civic Engagement (3 units) (GE 2, SJ); GE Area 3B
+      I R 260/PRSN 260 History and Cultures of Iran (3 units) (GE 3B, GP)'
+    - 'Footnote 3: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 4: Complementary Studies. 12 units of Complementary Studies are required of all candidates for the Bachelor
+      of Arts degree in International Relations. These units must come from courses bearing a prefix other than I R, and not
+      cross-listed with I R. International Relations majors are offered several pathways toward completing this requirement,
+      each of which is designed to facilitate graduation in a timely manner. International Relations majors may, with the
+      approval of an International Relations advisor, elect to apply 12 units in a single foreign language of their choosing,
+      courses taken in an approved study abroad program (e.g., CSU Study Abroad), courses taken as part of a second major,
+      a minor or a certificate, and courses in a related discipline. Related disciplines typically include: political science,
+      sociology, anthropology, environmental studies, geography, global health, or journalism. Up to six units of a single
+      language or six upper-division units of Complementary Studies may, with the approval of a departmental advisor, also
+      be counted as International Relations electives in fulfillment of major requirements.'
+    - 'Footnote 5: Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.'
+    - 'Footnote 6: Major Electives (18 Units). Students are required to complete 18 elective units related to international
+      relations. At least 12 units of coursework must be upper-division I R courses (300-level or above) or be cross-listed
+      with I R. Six additional units may be taken outside of the department upon the approval of a major advisor. Lower-division
+      language courses taken in the Department of Modern Languages and Literatures and 200-level I R courses can be used for
+      these 6 units; otherwise, upper-division courses are required.'
+    semesters:
+    - units: 15
+      source: p.1325
+      items:
+      - I R 104
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+        note: Complementary Studies or SF State Studies or University Elective (footnote 4)
+    - units: 15
+      source: p.1325
+      items:
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: with USH
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 5
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two; Complementary Studies or SF State Studies or University Elective (footnote 4)
+    - units: 15
+      source: p.1325
+      items:
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 5
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three; Complementary Studies or SF State Studies or University Elective
+    - units: 16
+      source: p.1325
+      items:
+      - I R 208
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three; Complementary Studies or SF State Studies or University Elective (footnote 4)
+    - units: 16
+      source: p.1325
+      items:
+      - I R 310
+      - slot: major
+        group: electives
+        units: 3
+        note: Take One (footnote 6)
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+        note: Complementary Studies or SF State Studies or University Elective (footnote 4)
+    - units: 14
+      source: p.1325-1326
+      items:
+      - I R 309
+      - I R 309GW
+      - I R 312
+      - slot: major
+        group: electives
+        units: 3
+        note: Take One (footnote 6)
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+    - units: 15
+      source: p.1326
+      items:
+      - I R 550
+      - slot: major
+        group: electives
+        count: 2
+        units: 6
+        note: Take Two (footnote 6)
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 14
+      source: p.1326
+      items:
+      - slot: major
+        group: electives
+        count: 2
+        units: 6
+        note: Take Two (footnote 6)
+      - slot: sfss_or_elective
+        units: 8
+        note: Take Three; Complementary Studies or SF State Studies or University Elective (footnote 4)
+  adt:
+    title: Bachelor of Arts in International Relations – Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: p.1327-1328
+    met_in_transfer:
+    - I R 104
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an approved ADT. Three units in the major (I R 104) and all lower-division GE requirements have been satisfied. Check
+      with a major advisor about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the Associate
+      Degree for Transfer (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 9-15 Units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government requirements if not met pre-transfer. Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD (9 units):
+      Courses required for the major may double-count if approved for UD GE. Students entering the major with an approved
+      ADT are not required to fulfill SF State Studies requirements. Complementary Studies: Consult with a department advisor
+      on how transfer units and/or SF State units can be applied to ensure degree completion within 60 units.'
+    - 'International Relations Major: 40 Units. I R 104 met in transfer. Core Requirements (16 units). Emphasis/Electives
+      (18 units): In consultation with a department advisor, students select one of the following emphases: Area Studies;
+      International Institutions; Global Problems. 12 of the required 18 units must be courses with the I R prefix. Culminating
+      Experience Requirement (6 units): I R 550.'
+    - 'University Electives: 8 or More Units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
+      e.g., in both UD GE and the major.'
+    - 'Footnote 1: Major Electives (18 Units). Students are required to complete 18 elective units related to international
+      relations. At least 12 units of coursework must be upper-division I R courses (300-level or above) or be cross-listed
+      with I R. Six additional units may be taken outside of the department upon the approval of a major advisor. Lower-division
+      language courses taken in the Department of Modern Languages and Literatures and 200-level IR courses can be used for
+      these 6 units; otherwise, upper-division courses are required.'
+    - 'Associate Degrees for Transfer (ADTs) that are approved for the BA in International Relations are: AA-T in Administrative
+      Justice; AA-T in Anthropology; AS-T in Business; AA-T in Chicano/a Studies or Latino/a Studies; AA-T in Child and Adolescent
+      Development; AA-T in Communication; AA-T in English; AA-T in Film, TV; AA-T in Geography; AA-T in Global Studies; AA-T
+      in History; AA-T in Hospitality; AA-T in Journalism; AA-T in Law, Public Policy, Society; AA-T in Philosophy; AA-T in
+      Political Science; AA-T in Psychology; AA-T in Public Health; AA-T in Social Justice; AA-T in Social Work; AA-T in Sociology;
+      AA-T in Spanish'
+    semesters:
+    - units: 15
+      source: p.1327
+      items:
+      - I R 208
+      - I R 310
+      - slot: major
+        group: electives
+        units: 4
+        note: footnote 1
+      - slot: elective
+        units: 3
+    - units: 14
+      source: p.1327
+      items:
+      - I R 309
+      - I R 309GW
+      - I R 312
+      - slot: major
+        group: electives
+        units: 3
+        note: footnote 1
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: or University Elective if US/CA Government met in transfer
+    - units: 16
+      source: p.1327-1328
+      items:
+      - I R 550
+      - slot: major
+        group: electives
+        units: 4
+        note: footnote 1
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: ai
+        area: USH
+        units: 3
+        note: or University Elective if US History met before transfer
+    - units: 15
+      source: p.1328
+      items:
+      - slot: major
+        group: electives
+        count: 2
+        units: 7
+        note: Take Two; footnote 1
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: elective
+        units: 5
+        note: Take Two
+drafted_by: claude, 2026-10-23

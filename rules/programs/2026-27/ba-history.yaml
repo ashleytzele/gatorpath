@@ -1,0 +1,426 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-history.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-history
+title: Bachelor of Arts in History
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.1228
+groups:
+- id: cr_nc_limit
+  unparsed: true
+  quote: History majors cannot choose CR/NC grading in more than two history courses for their major, nor elect CR/NC grading
+    in HIST 300GW or HIST 696.
+  source: p.1228
+- id: ld_select_three
+  title: 'Lower-Division Requirements: Select three (9 units)'
+  choose_units: 9
+  from:
+  - list:
+    - HIST 114
+    - HIST 115
+    - HIST 120
+    - HIST 121
+  quote: 'Select three:'
+  source: p.1228
+- id: ld_select_one_more
+  title: 'Lower-Division Requirements: Select one course not already taken (3 units)'
+  choose_units: 3
+  from:
+  - list:
+    - HIST 101
+    - HIST 103
+    - HIST 110
+    - HIST 112
+    - I R 112
+    - LCA 112
+    - MATH 112
+    - PHIL 112
+    - PLSI 112
+    - HIST 114
+    - HIST 115
+    - HIST 120
+    - HIST 121
+  quote: 'Select one course not already taken to satisfy the requirement above:'
+  source: p.1228
+- id: ud_core
+  title: Upper-Division Core (6 units)
+  all_of:
+  - HIST 300GW
+  - HIST 696
+  quote: Upper-Division Core (6 units)
+  source: p.1228
+- id: breadth_a_early
+  title: 'Breadth A: One Upper-Division Course in Early Periods of History - Before 1750'
+  choose_units: 3
+  from:
+  - list:
+    - HIST 307
+    - FR 570
+    - HIST 310
+    - HIST 320
+    - HIST 321
+    - HIST 322
+    - HIST 323
+    - HIST 326
+    - MGS 510
+    - CLAS 510
+    - HIST 327
+    - HIST 328
+    - HIST 329
+    - HIST 330
+    - HUM 403
+    - HIST 331
+    - HUM 404
+    - HIST 332
+    - JS 332
+    - HIST 333
+    - HIST 334
+    - HIST 340
+    - HIST 357
+    - HIST 360
+    - HIST 361
+    - HIST 366
+    - ANTH 609
+    - HIST 370
+    - CLAS 582
+    - HUM 582
+    - HIST 380
+    - HIST 420
+  quote: A. One Upper-Division Course in Early Periods of History - Before 1750
+  source: p.1228
+- id: breadth_a_overlap
+  unparsed: true
+  quote: The course used to satisfy the Early Period of History - Before 1750 requirement (A) may also satisfy one of the
+    geographic requirements (B, C, and D).
+  source: p.1228
+- id: breadth_b_us
+  title: 'Breadth B: One Upper-Division Course That Focuses Primarily on U.S. History'
+  choose_units: 3
+  from:
+  - list:
+    - HIST 303
+    - HIST 404
+    - HIST 416
+    - JS 548
+    - HIST 418
+    - HIST 420
+    - HIST 421
+    - JS 421
+    - HIST 422
+    - HIST 424
+    - HIST 426
+    - HIST 427
+    - HIST 428
+    - HIST 429
+    - HIST 441
+    - JS 441
+    - HUM 441
+    - HIST 449
+    - JS 449
+    - HIST 450
+    - HIST 451
+    - HIST 460
+    - HIST 461
+    - HIST 464
+    - HIST 465
+    - HIST 466
+    - RRS 600
+    - HIST 467
+    - HIST 468
+    - HIST 469
+    - HIST 470
+    - HIST 471
+    - HIST 472
+    - HIST 473
+    - RRS 473
+    - LABR 473
+    - HIST 474
+    - ECON 474
+    - LABR 474
+    - HIST 475
+    - HIST 478
+    - HIST 479
+    - HIST 480
+    - HUM 480
+    - HIST 481
+    - HUM 481
+    - HIST 482
+    - RELS 482
+    - HIST 484
+    - HIST 485
+    - HIST 489
+    - USP 400
+    - HIST 490
+  quote: B. One Upper-Division Course That Focuses Primarily on U.S. History
+  source: p.1228
+- id: breadth_c_outside_us_incl_europe
+  title: 'Breadth C: One Upper-Division Course That Focuses Primarily on a Region Outside of the U.S. and includes Europe'
+  choose_units: 3
+  from:
+  - list:
+    - HIST 310
+    - HIST 311
+    - HIST 313
+    - HIST 315
+    - HUM 315
+    - HIST 317
+    - JS 317
+    - HIST 320
+    - HIST 321
+    - HIST 322
+    - HIST 323
+    - HIST 326
+    - MGS 510
+    - CLAS 510
+    - HIST 327
+    - HIST 328
+    - HIST 329
+    - HIST 330
+    - HUM 303
+    - HIST 331
+    - HUM 404
+    - HIST 332
+    - JS 332
+    - HIST 333
+    - HIST 334
+    - HIST 335
+    - JS 633
+    - HIST 339
+    - HIST 340
+    - HIST 342
+    - HIST 343
+    - HIST 344
+    - HIST 345
+    - HIST 346
+    - I R 346
+    - HIST 347
+    - HIST 348
+    - HUM 348
+    - HIST 349
+    - HIST 350
+    - MGS 350
+    - HIST 353
+    - HIST 355
+    - WGS 355
+    - LTNS 533
+    - HIST 357
+    - HIST 358
+    - ANTH 501
+    - LTNS 501
+    - HIST 360
+    - HIST 361
+    - HIST 362
+    - HIST 363
+    - HIST 364
+    - HIST 366
+    - ANTH 609
+    - HIST 368
+    - HIST 369
+    - HIST 370
+    - HUM 582
+    - CLAS 582
+    - HIST 372
+    - HIST 373
+    - HIST 374
+    - HUM 586
+    - HIST 376
+    - HIST 380
+    - HIST 381
+    - HIST 382
+    - HIST 385
+    - HIST 395
+    - HIST 398
+  quote: C. One Upper-Division Course that Focuses Primarily on a Region Outside
+  source: p.1229
+- id: breadth_d_outside_us_and_europe
+  title: 'Breadth D: One Upper-Division Course That Focuses Primarily on a Region Outside of the U.S. and Europe'
+  choose_units: 3
+  from:
+  - list:
+    - HIST 310
+    - HIST 311
+    - HIST 353
+    - HIST 355
+    - WGS 355
+    - LTNS 533
+    - HIST 357
+    - HIST 358
+    - ANTH 501
+    - LTNS 501
+    - HIST 360
+    - HIST 361
+    - HIST 362
+    - HIST 363
+    - HIST 364
+    - HIST 366
+    - ANTH 609
+    - HIST 368
+    - HIST 369
+    - HIST 370
+    - HUM 582
+    - CLAS 582
+    - HIST 372
+    - HIST 373
+    - HIST 374
+    - HUM 586
+    - HIST 376
+    - HIST 380
+    - HIST 381
+    - HIST 382
+    - HIST 395
+  quote: D. One Upper-Division Course That Focuses Primarily on a Region Outside
+  source: p.1230
+- id: electives
+  title: Electives (9-12 units)
+  choose_units: 9
+  from:
+  - list:
+    - HIST 303
+    - HIST 304
+    - HIST 305
+    - HIST 307
+    - FR 570
+    - HIST 308
+    - PLSI 451
+    - HIST 310
+    - HIST 311
+    - HIST 313
+    - HIST 315
+    - HIST 317
+    - HIST 318
+    - HIST 320
+    - HIST 321
+    - HIST 322
+    - HIST 323
+    - HIST 326
+    - HIST 327
+    - HIST 328
+    - HIST 329
+    - HIST 330
+    - HIST 331
+    - HIST 332
+    - HIST 333
+    - HIST 334
+    - HIST 335
+    - HIST 339
+    - HIST 340
+    - HIST 342
+    - HIST 343
+    - HIST 344
+    - HIST 345
+    - HIST 346
+    - HIST 347
+    - HIST 348
+    - HIST 349
+    - HIST 350
+    - HIST 353
+    - HIST 355
+    - HIST 357
+    - HIST 358
+    - HIST 360
+    - HIST 361
+    - HIST 362
+    - HIST 363
+    - HIST 364
+    - HIST 366
+    - HIST 368
+    - HIST 369
+    - HIST 370
+    - HIST 372
+    - HIST 373
+    - HIST 374
+    - HIST 376
+    - HIST 380
+    - HIST 381
+    - HIST 382
+    - HIST 385
+    - HIST 395
+    - HIST 398
+    - HIST 404
+    - HIST 405
+    - HIST 416
+    - HIST 418
+    - HIST 420
+    - HIST 421
+    - HIST 422
+    - HIST 424
+    - HIST 426
+    - HIST 427
+    - HIST 428
+    - HIST 429
+    - HIST 430
+    - HIST 441
+    - HIST 449
+    - HIST 450
+    - HIST 451
+    - HIST 460
+    - HIST 461
+    - HIST 464
+    - HIST 465
+    - HIST 466
+    - HIST 467
+    - HIST 468
+    - HIST 469
+    - HIST 470
+    - HIST 471
+    - HIST 472
+    - HIST 473
+    - HIST 474
+    - HIST 475
+    - HIST 478
+    - HIST 479
+    - HIST 480
+    - HIST 481
+    - HIST 482
+    - HIST 483
+    - HIST 484
+    - HIST 485
+    - HIST 489
+    - HIST 490
+    - HIST 514
+    - HIST 680
+    - HIST 690
+    - HIST 698
+    - HIST 699
+  - approved: true
+  approval: Three upper-division units (normally one course) outside the major (with a non-HIST prefix) may be counted upon
+    advisement.
+  quote: Three upper-division units (normally one course) outside the major (with a non-HIST prefix) may be counted upon advisement.
+  source: p.1230
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.1232
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1232
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1232
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1232
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1232
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1232
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1232
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.1232
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.1233
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1233
+drafted_by: claude, 2026-10-23

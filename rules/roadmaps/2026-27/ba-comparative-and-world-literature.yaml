@@ -1,0 +1,264 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-comparative-and-world-literature.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-comparative-and-world-literature
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: Bachelor of Arts in Comparative and World Literature Roadmap
+    total_units: 120
+    source: p.1281-1282
+    notes:
+    - Discontinued - Not Accepting New Students
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 2)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 3)
+    - Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied. (footnote
+      4)
+    - 'Program Electives (15 Units): In consultation with departmental advisors, students select literature courses that reflect
+      their chosen advising pathway. These courses may be CWL courses not used to fulfill the core, HUM courses, or courses
+      from departments other than CWL. No more than two lower-division courses may be used for electives. (footnote 5)'
+    semesters:
+    - units: 15
+      source: p.1281
+      items:
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1281
+      items:
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 4
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1281
+      items:
+      - slot: major
+        group: core_cwl_courses
+        units: 3
+        note: Lower-Division CWL Course (Major Core)
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 4
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1281
+      items:
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.1281
+      items:
+      - CWL 400GW
+      - slot: major
+        group: core_cwl_courses
+        units: 3
+        note: Any CWL Course (Major Core)
+      - slot: major
+        group: program_electives
+        count: 2
+        units: 6
+        note: Take Two; footnote 5
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1281
+      items:
+      - slot: major
+        group: core_cwl_courses
+        units: 3
+        note: Any CWL Course (Major Core)
+      - slot: major
+        group: program_electives
+        count: 2
+        units: 6
+        note: Take Two; footnote 5
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 15
+      source: p.1281-1282
+      items:
+      - slot: major
+        group: core_cwl_courses
+        units: 3
+        note: Any CWL Course (Major Core)
+      - slot: major
+        group: program_electives
+        units: 3
+        note: footnote 5
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1282
+      items:
+      - HUM 690
+      - slot: major
+        group: core_cwl_courses
+        units: 3
+        note: Any CWL Course (Major Core)
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+  adt:
+    title: Bachelor of Arts in Comparative and World Literature – ENGL or SPAN Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: p.1283-1284
+    notes:
+    - Discontinued - Not Accepting New Students
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      the AA-T in English OR the AA-T in Spanish. Up to 12 lower-division units in the major and all lower-division GE requirements
+      have been satisfied. Degree completion guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for
+      more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 9-15 Units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government requirements if not taken before transfer. Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD
+      (9 units): Courses required for the major may double-count if approved for UD GE. Students entering the major with the
+      AA-T in English or Spanish are not required to fulfill SF State Studies requirements.'
+    - 'Comparative and World Literature Major: 27-36 Units. See department advisor regarding how to apply ADT units to the
+      degree. Up to 12 literature and up to 3 Spanish language units may be applied. Major Core Courses/GWAR (18-21 units):
+      Up to 3 units from the ADT (literature) may be applied if approved. Program Electives (6-15 units): Select in consultation
+      with a department advisor. Up to 9 units from the ADT may be applied if approved.'
+    - 'Note: Students may follow one of two advising pathways: Comparative Literature or World Literature. Consult with a
+      department advisor.'
+    - 'University Electives: 9 or More Units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
+      e.g., in both UD GE and the major.'
+    - 'Program Electives (15 Units): In consultation with departmental advisors, students select literature courses that reflect
+      their chosen advising pathway. These courses may be CWL courses not used to fulfill the core, HUM courses, or courses
+      from departments other than CWL. No more than two lower-division courses may be used for electives. (footnote 1)'
+    semesters:
+    - units: 15
+      source: p.1283
+      items:
+      - CWL 400GW
+      - slot: major
+        group: program_electives
+        units: 3
+        note: footnote 1
+      - slot: ai
+        area: USH
+        units: 3
+        note: or University Elective if US History met before transfer
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: elective
+        units: 3
+    - units: 15
+      source: p.1283
+      items:
+      - slot: major
+        group: core_cwl_courses
+        count: 2
+        units: 6
+        note: Any CWL Course (Major Core) – Take Two
+      - slot: major
+        group: program_electives
+        units: 3
+        note: footnote 1
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: or University Elective if US/CA Government met before transfer
+      - slot: elective
+        units: 3
+    - units: 15
+      source: p.1283
+      items:
+      - slot: major
+        group: core_cwl_courses
+        units: 3
+        note: Any CWL Course (Major Core)
+      - slot: major
+        group: program_electives
+        count: 2
+        units: 6
+        note: Take Two; footnote 1
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: elective
+        units: 3
+    - units: 15
+      source: p.1283-1284
+      items:
+      - HUM 690
+      - slot: major
+        group: core_cwl_courses
+        units: 3
+        note: Any CWL Course (Major Core)
+      - one_of:
+        - slot: major
+          group: core_cwl_courses
+          units: 3
+        - slot: elective
+          units: 3
+        units: 3
+        note: 'Select One: Any CWL Course (Major Core) or University Elective if Major Core is Complete'
+      - slot: major
+        group: program_electives
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: 3UD
+        units: 3
+drafted_by: claude, 2026-10-23

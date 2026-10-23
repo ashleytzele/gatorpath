@@ -1,0 +1,138 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-environmental-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-environmental-studies
+title: Bachelor of Arts in Environmental Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 42
+source: p.2019
+groups:
+- id: cr_two_courses
+  title: CR grade acceptable in any two courses counted for the major
+  unparsed: true
+  quote: Students are advised that the CR grade is acceptable in any two courses to be counted for the major.
+  source: p.2019
+- id: grade_below_c_minus_limit
+  title: No more than one major course with a grade less than C-
+  unparsed: true
+  quote: No more than one course counted toward major requirements may be completed with a grade less than a C–.
+  source: p.2019
+- id: core_ecology_chemistry
+  title: 'Core: Select One (BIOL 313 or CHEM 380)'
+  one_of:
+  - - BIOL 313
+  - - CHEM 380
+  quote: BIOL 313 Principles of Ecology
+  source: p.2019
+- id: core_general_chemistry
+  title: 'Core: Select One (CHEM 115 or CHEM 180)'
+  one_of:
+  - - CHEM 115
+  - - CHEM 180
+  quote: CHEM 180 Chemistry for Energy and the Environment
+  source: p.2019
+- id: core_climate_gwar
+  title: 'Core: Physical and Human Dimensions of Climate Change (GWAR)'
+  all_of:
+  - ENV 500GW
+  quote: ENV 500GW Physical and Human Dimensions of Climate Change - GWAR
+  source: p.2019
+- id: core_intro
+  title: 'Core: Environmental Studies'
+  all_of:
+  - ENVS 130
+  quote: ENVS 130 Environmental Studies 3
+  source: p.2019
+- id: core_data
+  title: 'Core: Our Environment Through Data'
+  all_of:
+  - ENV 205
+  quote: ENV 205 Our Environment Through Data 3
+  source: p.2019
+- id: core_law_policy
+  title: 'Core: Environmental Law and Policy'
+  all_of:
+  - ENVS 450
+  quote: ENVS 450 Environmental Law and Policy 3
+  source: p.2019
+- id: core_internship
+  title: 'Core: Environmental Studies Internship (1-3 units)'
+  all_of:
+  - ENVS 680
+  quote: ENVS 680 Environmental Studies Internship 1-3
+  source: p.2019
+- id: core_capstone
+  title: 'Core: Capstone Seminar'
+  all_of:
+  - ENV 690
+  quote: ENV 690 Capstone Seminar 3
+  source: p.2019
+- id: core_elective_physical
+  title: 'Core Electives: Physical Environment'
+  one_of:
+  - - ERTH 230
+  - - GEOG 101
+  quote: 'Select one from each category:'
+  source: p.2019
+- id: core_elective_justice
+  title: 'Core Electives: Sustainability and Social Justice'
+  one_of:
+  - - ENVS 460
+  - - ENVS 480
+  - - ENVS 570
+  - - PHIL 470
+  - - USP 514
+  - - USP 515
+  - - GEOG 667
+  quote: 'Select one from each category:'
+  source: p.2019
+- id: core_elective_global
+  title: 'Core Electives: Global/International'
+  one_of:
+  - - ENVS 470
+  - - ENVS 480
+  - - I R 331
+  - - ENVS 331
+  - - I R 428
+  - - GEOG 428
+  quote: 'Select one from each category:'
+  source: p.2019
+- id: guided_electives
+  title: Guided Electives (11-12 units)
+  choose_units: 11
+  from:
+  - approved: true
+  quote: Select 11-12 units not used to satisfy the elective categories above.
+  source: p.2019
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2021
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.2022
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.2022
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.2022
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.2022
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.2022
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.2022
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.2022
+drafted_by: claude, 2026-10-23

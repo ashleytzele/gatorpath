@@ -28,9 +28,20 @@ QR = (r"(?:\bcat(?:egory)?|(?:quantitative reasoning )?placement category) (iv|i
       r"(?:(?: placement)?(?: for)? qr/math\*?(?: placement)?)?")
 # a sentence for one placement: "Category III or IV for QR/Math placement must have completed MATH 197 …"
 PLACED = re.compile(rf"((?>{QR})) (?:must )?(?!or\b)(.+)$", re.I)  # atomic: "placement for QR/Math" isn't the rest
+# one sentence, one way in per placement: "CAT I or II placement for QR/MATH* or CAT III or IV placement for QR/MATH with a
+# grade of C or better in MATH 124* or MATH 197* or MATH 199*" (CHEM 115)
+TWO_PLACEMENTS = re.compile(rf"^((?>{QR})[^.;]*?)\s+or\s+((?>{QR})[^;]*)$", re.I)
+
+
+def placement(text: str) -> dict | None:
+    """A placement and what it needs: "CAT III or IV placement … with a grade of C or better in MATH 124* or …"."""
+    if not (m := PLACED.match(text)):
+        return parse_prereq(text)["expr"]
+    rest = re.sub(r"^(?:with )?a grade of (\S+ or better) in (.+)$", r"\2 with a grade of \1", re.sub(r"^have completed ", "", m[4]))
+    return combine("all", [{"qr_category": [ROMAN[g.lower()] for g in m.groups()[1:3] if g]}, parse_prereq(rest)["expr"]])
 ADVISORY = re.compile(r"\b(recommended|should)\b", I)
 MAY_ENROLL = re.compile(r"(.+?) may enroll with (?:the )?permission of the instructor\.?$", I)
-MAJORS_WITH = re.compile(r"(?:Restricted to )?([A-Za-z][A-Za-z&,\- ]*? majors) with (.+)$", I)
+MAJORS_WITH = re.compile(r"(?:Restricted to )?([A-Za-z][A-Za-z&,\- ]*? majors(?: and minors)?) with (.+)$", I)
 ATC = "Advancement to Candidacy and Culminating Experience forms approved by Graduate Studies"
 
 
@@ -286,11 +297,12 @@ def parse_prereq(text: str) -> dict:
         if sentence.lower().startswith("for students who"):  # audience note, not a requirement
             dropped = True
             continue
-        if (m := PLACED.match(sentence)) and any("qr_category" in leaf for e in sentences for leaf in leaves(e)):
+        if (m := TWO_PLACEMENTS.match(sentence.rstrip("."))):
+            sentences.append(combine("any", [placement(m[1]), placement(m[4])]))
+            continue
+        if PLACED.match(sentence) and any("qr_category" in leaf for e in sentences for leaf in leaves(e)):
             # placements are exclusive, so another placement's sentence is its own way in (CHEM 180), not one more need
-            alt = combine("all", [{"qr_category": [ROMAN[g.lower()] for g in m.groups()[1:3] if g]},
-                                  parse_prereq(re.sub(r"^have completed ", "", m.group(4)))["expr"]])
-            sentences[-1:] = [combine("any", [*sentences[-1:], alt])]
+            sentences[-1:] = [combine("any", [*sentences[-1:], placement(sentence.rstrip("."))])]
             continue
         if m := MAY_ENROLL.match(sentence):  # "Senior … majors may enroll with the permission of the instructor."
             alt = {"all": [{"restricted_to": m.group(1)}, {"permission": "instructor"}]}
@@ -316,7 +328,7 @@ def parse_prereq(text: str) -> dict:
             elif clause.lower().startswith("and "):
                 clause = clause[4:]
             # not "… majors with junior standing", and not "A or B and C or D" (ambiguous: kept whole, flagged)
-            if (m := MAJORS_WITH.match(clause)) and COURSE.search(m[2]) and not (
+            if (m := MAJORS_WITH.match(clause)) and COURSE.search(m[2]) and "standing" not in m[2] and not (
                     " or " in m[2] and " and " in m[2] and "either" not in m[2]):
                 majors.append([{"restricted_to": m.group(1)}])
                 clause = m.group(2)

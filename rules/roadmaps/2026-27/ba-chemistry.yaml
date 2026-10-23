@@ -1,0 +1,368 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-chemistry.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-chemistry
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: Bachelor of Arts in Chemistry Roadmap – Quantitative Reasoning Category 1/2
+    qr_pathway: 1/2
+    total_units: 120
+    source: p.1862-1863
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - PHYS 111 and PHYS 112 are prerequisites for PHYS 121 and PHYS 122. PHYS 220 and PHYS 222 are prerequisites for PHYS
+      240 and PHYS 242. (footnote 2)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 3)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 4)
+    - 'Complementary Studies: Students in the BA Chemistry program will satisfy the Complementary Studies requirement with
+      the completion of courses in physics and mathematics that are required in the major. (footnote 5)'
+    - 'Upper-Division Electives (3 units minimum): A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 1859). (footnote 6)'
+    semesters:
+    - units: 14
+      source: p.1862
+      items:
+      - CHEM 115
+      - MATH 226
+      - slot: GE
+        area: '1'
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1862
+      items:
+      - CHEM 215
+      - MATH 227
+      - slot: major
+        group: physics
+        units: 4
+        note: 'Select One Set of Courses (Major Lower-Division, GE 5A, GE 5C): PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222;
+          footnote 2'
+      - slot: GE
+        area: 1A
+        units: 3
+    - units: 16
+      source: p.1862
+      items:
+      - CHEM 233
+      - CHEM 234
+      - CHEM 321
+      - CHEM 322
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+    - units: 15
+      source: p.1862
+      items:
+      - CHEM 235
+      - CHEM 236
+      - slot: major
+        group: physics
+        units: 4
+        note: 'Select One Set of Courses (Major Lower-Division): PHYS 121 & PHYS 122, PHYS 230 & PHYS 232, or PHYS 240 & PHYS
+          242; footnote 2'
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: 5B
+        units: 3
+    - units: 15
+      source: p.1863
+      items:
+      - CHEM 390GW
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1863
+      items:
+      - slot: major
+        group: physical_chemistry
+        units: 3
+        note: 'Select One (Major Upper-Division): CHEM 300 or CHEM 351'
+      - slot: major
+        group: biochemistry
+        units: 3
+        note: 'Select One (Major Upper-Division): CHEM 340 or CHEM 349'
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1863
+      items:
+      - CHEM 325
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1863
+      items:
+      - slot: major
+        group: upper_division_electives
+        units: 3
+        note: footnote 6
+      - slot: sfss_or_elective
+        units: 12
+        note: Take Four
+  qr-3-4:
+    title: Bachelor of Arts in Chemistry Roadmap – Quantitative Reasoning Category 3/4
+    qr_pathway: 3/4
+    total_units: 120
+    source: p.1864-1865
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 2)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 3)
+    - PHYS 111 and PHYS 112 are prerequisites for PHYS 121 and PHYS 122. PHYS 220 and PHYS 222 are prerequisites for PHYS
+      240 and PHYS 242. (footnote 4)
+    - 'Complementary Studies: Students in the BA Chemistry program will satisfy the Complementary Studies requirement with
+      the completion of courses in physics and mathematics that are required in the major. (footnote 5)'
+    - 'Upper-Division Electives (3 units minimum): A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 1859). (footnote 6)'
+    semesters:
+    - units: 15
+      source: p.1864
+      items:
+      - MATH 197
+      - slot: GE
+        area: '1'
+        units: 6
+        note: Take Two
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 2: one lower-division Area 4 course must meet USH'
+    - units: 16
+      source: p.1864
+      items:
+      - CHEM 115
+      - MATH 198
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: 5B
+        units: 3
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 14
+      source: p.1864
+      items:
+      - CHEM 215
+      - MATH 226
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 2: one lower-division Area 4 course must meet USH'
+    - units: 16
+      source: p.1864
+      items:
+      - CHEM 233
+      - CHEM 234
+      - MATH 227
+      - slot: major
+        group: physics
+        units: 4
+        note: 'Select One Set of Courses (Major Lower-Division, GE 5A, GE 5C): PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222'
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+    - units: 15
+      source: p.1864-1865
+      items:
+      - CHEM 235
+      - CHEM 236
+      - CHEM 390GW
+      - slot: major
+        group: physics
+        units: 4
+        note: 'Select One Set of Courses (Major Lower-Division): PHYS 121 & PHYS 122, PHYS 230 & PHYS 232, or PHYS 240 & PHYS
+          242; footnote 4'
+      - slot: sfss_or_elective
+        units: 3
+    - units: 14
+      source: p.1865
+      items:
+      - slot: major
+        group: physical_chemistry
+        units: 3
+        note: 'Select One (Major Upper-Division): CHEM 300 or CHEM 351'
+      - CHEM 321
+      - CHEM 322
+      - slot: major
+        group: biochemistry
+        units: 3
+        note: 'Select One (Major Upper-Division): CHEM 340 or CHEM 349'
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 15
+      source: p.1865
+      items:
+      - CHEM 325
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1865
+      items:
+      - slot: major
+        group: upper_division_electives
+        units: 3
+        note: footnote 6
+      - slot: sfss_or_elective
+        units: 12
+        note: Take Four
+  adt:
+    title: Bachelor of Arts in Chemistry – CHEM Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: p.1866-1867
+    met_in_transfer:
+    - CHEM 115
+    - CHEM 215
+    - CHEM 233
+    - CHEM 234
+    - CHEM 235
+    - CHEM 236
+    - MATH 226
+    - MATH 227
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Chemistry. Thirty-four units in the major (CHEM 115, CHEM 215, CHEM 233, CHEM 234, CHEM 235, CHEM 236, MATH
+      226, MATH 227, and the required PHYS sequence) and 33 units of lower-division GE have been satisfied. Check with a major
+      advisor about the most appropriate course sequence for you. Degree completion guaranteed in 60 units; see the Associate
+      Degree for Transfer (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 15-21 Units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government requirements if not taken before transfer. Lower-division GE (6 units) – Area 3 (3 units
+      in any subarea) and Area 4 (3 units). Upper-division GE Areas 2UD/5UD, 3UD, and 4UD (9 units) - Courses required for
+      the major may double-count if approved for UD GE. Students entering this major with the AS-T in Chemistry are not required
+      to fulfill SF State Studies requirements. Complementary Studies is met in major with required PHYS and MATH courses.'
+    - 'Chemistry BA: 20 Units. Completed: CHEM 115, CHEM 215, CHEM 233, CHEM 234, CHEM 235, CHEM 236, MATH 226, MATH 227,
+      and the required PHYS sequence. Major Upper-Division Requirements/GWAR (17 units). Major Upper-Division Electives (3
+      units) - Consult with an advisor regarding the selection of elective courses and check course co- and prerequisites
+      before enrolling.'
+    - 'University Electives: 19 or More Units. Depending on course choices made at the community college, how transferred
+      units are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
+      e.g., UD GE and the major. Upper-division electives are recommended to meet the minimum 30-unit upper-division requirement.'
+    - 'Upper-Division Electives (3 units minimum): A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 1859). (footnote 1)'
+    semesters:
+    - units: 15
+      source: p.1866
+      items:
+      - CHEM 321
+      - CHEM 322
+      - CHEM 390GW
+      - slot: ai
+        area: USH
+        units: 3
+        note: or University Elective if US History complete
+      - slot: elective
+        units: 4
+    - units: 15
+      source: p.1866
+      items:
+      - slot: major
+        group: physical_chemistry
+        units: 3
+        note: 'Select One (Major Upper-Division): CHEM 300 or CHEM 351'
+      - slot: major
+        group: biochemistry
+        units: 3
+        note: 'Select One (Major Upper-Division): CHEM 340 or CHEM 349'
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+    - units: 15
+      source: p.1867
+      items:
+      - CHEM 325
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.1867
+      items:
+      - slot: major
+        group: upper_division_electives
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: or University Elective if US/CA Government met before transfer
+      - slot: elective
+        units: 6
+        note: Take Two
+drafted_by: claude, 2026-10-23

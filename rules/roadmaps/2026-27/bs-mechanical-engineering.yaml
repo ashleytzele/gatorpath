@@ -1,0 +1,296 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-mechanical-engineering.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-mechanical-engineering
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: Bachelor of Science in Mechanical Engineering Roadmap – Quantitative Reasoning Category 1/2
+    qr_pathway: 1/2
+    total_units: 125
+    source: p.1981-1982
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 3: Met in Major. Area 1B (Critical Thinking) is satisfied upon completion of either ENGR 205 or ENGR 282 and
+      either ENGR 201 or ENGR 213.'
+    - 'Footnote 3: Met in Major. Area 5UD (Upper-Division Sciences) is satisfied upon completion of ENGR 300, ENGR 302, and
+      ENGR 304.'
+    - 'Footnote 4: Upper-Division Major Electives (9 units). A full list of courses that can fulfill this requirement can
+      be found in the Degree Requirements (p. 1978).'
+    - 'Footnote 5: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - 'Footnote 6: Focus Area Electives (3 units). A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 1978).'
+    - 'Footnote 7: To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG)
+      within Upper-Division GE.'
+    semesters:
+    - units: 16
+      source: p.1981
+      items:
+      - slot: major
+        group: chemistry
+        units: 3
+        note: 'Select One (Major Core): CHEM 115 or CHEM 180; 3-4 units'
+      - ENGR 100
+      - ENGR 104
+      - MATH 226
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 2
+    - units: 15
+      source: p.1981
+      items:
+      - MATH 227
+      - PHYS 220
+      - PHYS 222
+      - ENGR 200
+      - ENGR 213
+      - ENGR 214
+    - units: 17
+      source: p.1981
+      items:
+      - ENGR 102
+      - MATH 228
+      - PHYS 230
+      - PHYS 232
+      - ENGR 282
+      - slot: GE
+        area: 1C
+        units: 3
+    - units: 14
+      source: p.1981
+      items:
+      - ENGR 201
+      - ENGR 205
+      - ENGR 206
+      - MATH 245
+      - PHYS 240
+      - PHYS 242
+    - units: 16
+      source: p.1982
+      items:
+      - ENGR 300
+      - ENGR 303
+      - ENGR 307
+      - ENGR 309
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: 5B
+        units: 3
+    - units: 16
+      source: p.1982
+      items:
+      - ENGR 302
+      - ENGR 304
+      - ENGR 363
+      - slot: major
+        group: upper_division_electives
+        units: 3
+        note: Major Upper-Division Elective; footnote 4
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 5: first-time freshmen take one lower-division Area 4 course that meets USH'
+    - units: 17
+      source: p.1982
+      items:
+      - ENGR 447
+      - ENGR 446
+      - ENGR 467
+      - ENGR 696
+      - slot: major
+        group: upper_division_electives
+        units: 3
+        note: Major Upper-Division Elective; footnote 4
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 5: first-time freshmen take one lower-division Area 4 course that meets USH'
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 14
+      source: p.1982
+      items:
+      - ENGR 697GW
+      - slot: major
+        group: upper_division_electives
+        units: 3
+        note: Major Upper-Division Elective; footnote 4
+      - slot: major
+        group: focus_area
+        units: 3
+        note: Focus Area Elective; footnote 6
+      - slot: GE
+        area: 3UD
+        units: 3
+        note: footnote 7
+      - slot: GE
+        area: 4UD
+        units: 3
+        note: footnote 7
+  qr-3-4:
+    title: Bachelor of Science in Mechanical Engineering Roadmap – Quantitative Reasoning Category 3/4
+    qr_pathway: 3/4
+    total_units: 131
+    source: p.1985-1987
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 3: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - 'Footnote 4: Met in Major. Area 1B (Critical Thinking) is satisfied upon completion of either ENGR 205 or ENGR 282 and
+      either ENGR 201 or ENGR 213.'
+    - 'Footnote 4: Met in Major. Area 5UD (Upper-Division Sciences) is satisfied upon completion of ENGR 300, ENGR 302, and
+      ENGR 304.'
+    - 'Footnote 5: Upper-Division Major Electives (9 units). A full list of courses that can fulfill this requirement can
+      be found in the Degree Requirements (p. 1978).'
+    - 'Footnote 6: Focus Area Electives (3 units). A full list of courses that can fulfill this requirement can be found in
+      the Degree Requirements (p. 1978).'
+    - 'Footnote 7: To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG)
+      within Upper-Division GE.'
+    - MATH 197 (Prelude to Calculus I) is a prerequisite for MATH 226; MATH 198 (Prelude to Calculus II) is a prerequisite
+      for MATH 226 and meets GE 2.
+    semesters:
+    - units: 15
+      source: p.1985
+      items:
+      - ENGR 100
+      - MATH 197
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 2
+      - slot: GE
+        area: 1C
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: first-time freshmen take one lower-division Area 4 course that meets USH'
+    - units: 15
+      source: p.1985
+      items:
+      - slot: major
+        group: chemistry
+        units: 3
+        note: 'Select One (Major Core): CHEM 115 or CHEM 180; 3-4 units'
+      - ENGR 104
+      - MATH 198
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: first-time freshmen take one lower-division Area 4 course that meets USH'
+    - units: 13
+      source: p.1985
+      items:
+      - MATH 226
+      - ENGR 200
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: 5B
+        units: 3
+    - units: 15
+      source: p.1985
+      items:
+      - MATH 227
+      - ENGR 213
+      - ENGR 214
+      - ENGR 282
+      - PHYS 220
+      - PHYS 222
+    - units: 11
+      source: p.1985-1986
+      items:
+      - ENGR 102
+      - MATH 228
+      - PHYS 230
+      - PHYS 232
+    - units: 14
+      source: p.1986
+      items:
+      - ENGR 201
+      - ENGR 205
+      - ENGR 206
+      - MATH 245
+      - PHYS 240
+      - PHYS 242
+    - units: 10
+      source: p.1986
+      items:
+      - ENGR 300
+      - ENGR 303
+      - ENGR 307
+      - ENGR 309
+    - units: 13
+      source: p.1986
+      items:
+      - ENGR 302
+      - ENGR 304
+      - slot: major
+        group: upper_division_electives
+        units: 3
+        note: Major Upper-Division Elective; footnote 5
+      - slot: major
+        group: focus_area
+        units: 3
+        note: Focus Area Elective; footnote 6
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 14
+      source: p.1986
+      items:
+      - ENGR 363
+      - ENGR 447
+      - ENGR 446
+      - ENGR 467
+      - ENGR 696
+      - slot: GE
+        area: 3UD
+        units: 3
+        note: footnote 7
+    - units: 11
+      source: p.1986
+      items:
+      - ENGR 697GW
+      - slot: major
+        group: upper_division_electives
+        count: 2
+        units: 6
+        note: Take Two; footnote 5
+      - slot: GE
+        area: 4UD
+        units: 3
+        note: footnote 7
+drafted_by: claude, 2026-10-23

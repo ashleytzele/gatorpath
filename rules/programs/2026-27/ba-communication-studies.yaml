@@ -1,0 +1,165 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-communication-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-communication-studies
+title: Bachelor of Arts in Communication Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 38
+source: p.1038
+groups:
+- id: intro_courses
+  title: Introductory Courses (6 units)
+  choose_units: 6
+  from:
+  - list:
+    - COMM 120
+    - COMM 150
+    - COMM 220
+    - COMM 230
+    - COMM 240
+    - COMM 250
+  quote: Select two lower-division COMM courses.
+  source: p.1038
+- id: intro_comm_150_condition
+  unparsed: true
+  quote: COMM 150 may only count if another course is taken to satisfy GE Area A1.
+  source: p.1038
+- id: foundation
+  title: Foundation Requirements (4 units)
+  all_of:
+  - COMM 300
+  - COMM 304GW
+  quote: COMM 300 Introduction to Communication Studies 1
+  source: p.1038
+- id: social_contexts
+  title: Social Contexts and Interaction in Communication (8 units)
+  choose_units: 8
+  from:
+  - list:
+    - COMM 400
+    - COMM 401
+    - COMM 403
+    - COMM 425
+    - COMM 427
+    - COMM 428
+    - COMM 442
+    - COMM 502
+    - COMM 503
+    - COMM 504
+    - COMM 515
+    - COMM 522
+    - COMM 525
+    - COMM 527
+    - COMM 531
+    - COMM 533
+    - COMM 534
+    - COMM 537
+    - COMM 538
+    - COMM 539
+    - COMM 541
+    - COMM 543
+    - COMM 544
+  quote: Select 8 units from courses between COMM 400-449 and COMM 500-549.
+  source: p.1038
+- id: rhetoric_performance
+  title: Rhetoric and Performance in Communication (8 units)
+  choose_units: 8
+  from:
+  - list:
+    - COMM 450
+    - COMM 451
+    - COMM 551
+    - COMM 552
+    - COMM 553
+    - COMM 554
+    - COMM 555
+    - COMM 556
+    - COMM 557
+    - LS 403
+    - COMM 559
+    - COMM 560
+    - COMM 561
+    - COMM 564
+    - COMM 565
+    - COMM 566
+    - COMM 572
+    - COMM 573
+    - COMM 574
+    - COMM 575
+    - COMM 595
+  quote: Select 8 units from courses between COMM 450-499 and COMM 550-599.
+  source: p.1038
+- id: communication_inquiry
+  title: Communication Inquiry (4 units)
+  choose_units: 4
+  from:
+  - list:
+    - COMM 601
+    - COMM 661
+    - COMM 662
+    - COMM 663
+    - COMM 664
+    - COMM 665
+  quote: Select 4 units from courses between COMM 600-609 and COMM 660-669.
+  source: p.1038
+- id: electives
+  unparsed: true
+  quote: All upper-division COMM courses between COMM 400-599 may be used as electives only if their corresponding area above
+    is already met with other courses.
+  source: p.1039
+- id: electives_lower_division_cap
+  unparsed: true
+  quote: Only 2 units from a lower-division COMM class may count towards the electives requirement.
+  source: p.1039
+- id: per_course_unit_cap
+  unparsed: true
+  quote: Students may only apply up to 4 units for each course in the major, though some courses are repeatable for credit
+    toward electives.
+  source: p.1038
+- id: senior_seminar
+  title: Senior Seminar (2 units)
+  all_of:
+  - COMM 670
+  quote: COMM 670 Seminar in Communication Studies 2
+  source: p.1039
+transfer_notes:
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.1039
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1039
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1040
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1040
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1040
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1040
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1040
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.1040
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.1040
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.1040
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1040
+drafted_by: claude, 2026-10-23

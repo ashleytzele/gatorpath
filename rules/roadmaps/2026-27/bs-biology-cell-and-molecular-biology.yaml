@@ -1,0 +1,353 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-biology-cell-and-molecular-biology.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-biology-cell-and-molecular-biology
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: 'Bachelor of Science in Biology: Concentration in Cell and Molecular Biology Roadmap – Quantitative Reasoning Category
+      1/2'
+    qr_pathway: 1/2
+    total_units: 120
+    source: p.1799-1800
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 3: GE Area 5B (Life Science) is satisfied upon completion of BIOL 240.'
+    - 'Footnote 4: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - 'Footnote 5: Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355.'
+    - 'Footnote 6: Major Electives (5-6 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1795).'
+    semesters:
+    - units: 14
+      source: p.1799
+      items:
+      - CHEM 115
+      - MATH 226
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+    - units: 16
+      source: p.1799
+      items:
+      - BIOL 230
+      - BIOL 231
+      - CHEM 215
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 15
+      source: p.1799
+      items:
+      - BIOL 240
+      - slot: major
+        group: ld_organic_chemistry
+        units: 3
+        note: 'Select One (Major Lower-Division Core): CHEM 130 or CHEM 233'
+      - slot: major
+        group: ld_physics
+        units: 4
+        note: 'Select One (Major Lower-Division Core, GE 5A, GE 5C): PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222'
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+    - units: 15
+      source: p.1799
+      items:
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.1799-1800
+      items:
+      - BIOL 355
+      - slot: major
+        group: ud_statistics_programming
+        units: 3
+        note: 'Select One (Major Upper-Division Core): BIOL 458 or CSC 306; 3-4 units'
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1800
+      items:
+      - BIOL 337
+      - BIOL 350
+      - slot: major
+        group: ud_biochemistry
+        units: 3
+        note: 'Select One (Major Upper-Division Core): CHEM 340 or CHEM 349'
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+    - units: 16
+      source: p.1800
+      items:
+      - BIOL 351GW
+      - BIOL 351
+      - BIOL 357
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 14
+      source: p.1800
+      items:
+      - slot: major
+        group: ud_lecture_electives
+        units: 5
+        note: Electives, 5-6 units; footnote 6
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+  qr-3-4:
+    title: 'Bachelor of Science in Biology: Concentration in Cell and Molecular Biology Roadmap – Quantitative Reasoning Category
+      3/4'
+    qr_pathway: 3/4
+    total_units: 120
+    source: p.1801-1802
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 3: GE Area 5B (Life Science) is satisfied upon completion of BIOL 240.'
+    - 'Footnote 4: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - 'Footnote 5: Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355.'
+    - 'Footnote 6: Major Electives (5-6 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1795).'
+    semesters:
+    - units: 15
+      source: p.1801
+      items:
+      - BIOL 230
+      - BIOL 231
+      - MATH 197
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+    - units: 15
+      source: p.1801
+      items:
+      - BIOL 240
+      - CHEM 115
+      - MATH 198
+      - slot: GE
+        area: '1'
+        units: 3
+    - units: 15
+      source: p.1801
+      items:
+      - CHEM 215
+      - MATH 226
+      - slot: major
+        group: ld_physics
+        units: 4
+        note: 'Select One (Major Lower-Division Core, GE 5A, GE 5C): PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222'
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 15
+      source: p.1801
+      items:
+      - slot: major
+        group: ld_organic_chemistry
+        units: 3
+        note: 'Select One (Major Lower-Division Core): CHEM 130 or CHEM 233'
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 6
+        note: 'Take Two; footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1801-1802
+      items:
+      - BIOL 355
+      - slot: major
+        group: ud_statistics_programming
+        units: 3
+        note: 'Select One (Major Upper-Division Core): BIOL 458 or CSC 306; 3-4 units'
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1802
+      items:
+      - BIOL 337
+      - BIOL 350
+      - slot: major
+        group: ud_biochemistry
+        units: 3
+        note: 'Select One (Major Upper-Division Core): CHEM 340 or CHEM 349'
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+    - units: 16
+      source: p.1802
+      items:
+      - BIOL 351GW
+      - BIOL 351
+      - BIOL 357
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 14
+      source: p.1802
+      items:
+      - slot: major
+        group: ud_lecture_electives
+        units: 5
+        note: Electives, 5-6 units total; footnote 6
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+  adt:
+    title: 'Bachelor of Science in Biology: Concentration in Cell and Molecular Biology – BIOL Associate Degree for Transfer
+      (ADT) Roadmap'
+    total_units: 60
+    source: p.1803-1804
+    met_in_transfer:
+    - BIOL 230
+    - BIOL 240
+    - MATH 226
+    - CHEM 115
+    - CHEM 215
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Biology. Twenty-six units in the major (BIOL 230/BIOL 240, CHEM 115, CHEM 215, MATH 226, required PHYS sequence)
+      and 33 units of lower-division GE requirements have been satisfied. Check with a major advisor about the most appropriate
+      course sequence. Degree completion guaranteed in 60 units; see the Associate Degree for Transfer (ADT) section for more
+      information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 12-18 Units. American Institutions (0-6 units): US History, US Government, CA Government.
+      If not met in transfer, see next bullets. Lower-Division GE (6 units) – Area 3 (3 units in any subarea) and Area 4 (3
+      units). Upper-Division GE (6 units): Area 5UD met in major. Also, courses may satisfy the US History or US/CA Government
+      requirements, and GE 3UD or GE 4UD at the same time, if approved for multiple areas.'
+    - Students entering this major with the AS-T in Biology are not required to fulfill SF State Studies requirements.
+    - 'Biology – Cell and Molecular Biology Major: 32 Units. Completed: BIOL 230/BIOL 240, MATH 226, all PHYS, and CHEM 115/CHEM
+      215. Lower-Division Requirements (4 units): CHEM 130 or CHEM 233; BIOL 231. Major Upper-Division Requirements/GWAR (22-23
+      units). Major Upper-Division Electives (5-6 units) – upon advisement; includes lab component.'
+    - 'University Electives: 11 or More Units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
+      e.g., UD GE and the major.'
+    - 'Footnote 1: Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355.'
+    - 'Footnote 2: Major Electives (5-6 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1795).'
+    semesters:
+    - units: 16
+      source: p.1803
+      items:
+      - BIOL 231
+      - slot: major
+        group: ld_organic_chemistry
+        units: 3
+        note: 'Select One (Major Lower-Division Core): CHEM 130 or CHEM 233'
+      - slot: ai
+        area: USH
+        units: 3
+        note: US History (p. 2350); or University Elective if met in transfer
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1803
+      items:
+      - BIOL 350
+      - BIOL 355
+      - slot: major
+        group: ud_statistics_programming
+        units: 3
+        note: 'Select One (Major Upper-Division Core): BIOL 458 or CSC 306; 3-4 units'
+      - slot: GE
+        area: '4'
+        units: 3
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 16
+      source: p.1803-1804
+      items:
+      - BIOL 337
+      - BIOL 351GW
+      - BIOL 351
+      - BIOL 357
+      - slot: major
+        group: ud_biochemistry
+        units: 3
+        note: 'Select One (Major Upper-Division Core): CHEM 340 or CHEM 349'
+      - slot: GE
+        area: 4UD
+        units: 3
+    - units: 13
+      source: p.1804
+      items:
+      - slot: major
+        group: ud_lecture_electives
+        units: 5
+        note: Electives, 5-6 units; footnote 2
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: US and California Government (p. 2351); or University Elective if met in transfer
+      - slot: elective
+        units: 5
+        note: Take Two
+drafted_by: claude, 2026-10-23

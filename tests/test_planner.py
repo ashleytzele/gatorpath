@@ -296,6 +296,20 @@ def test_an_approval_beside_a_printed_list_keeps_the_list():
     assert eligible_options(fresh, "application_electives", program, university, CATALOG, PREREQS)["options"] == []
 
 
+def test_a_prereq_outside_the_requirements_and_roadmap_is_added():
+    # BS Physics: PHYS 330 needs MATH 376, which the major doesn't list; the plan stalled. Here Applied Math without MATH
+    # 226 on its list or roadmap: MATH 227 still needs it, so the plan adds it
+    from gatorpath.engine.planner import build_plan
+    program, university, roadmap = rules_for({"program": "bs-applied-math"})
+    groups = [g | {"all_of": [c for c in g["all_of"] if c != "MATH 226"]} if g["id"] == "required" else g for g in program["groups"]]
+    road = roadmap | {"variants": {k: v | {"semesters": [x | {"items": [i for i in x["items"] if i != "MATH 226"]}
+                                                         for x in v["semesters"]]} for k, v in roadmap["variants"].items()}}
+    got = build_plan(FRESH | {"program": "bs-applied-math"}, program | {"groups": groups}, university, road, CATALOG, PREREQS)
+    assert got["check"]["valid"], got["check"]["errors"]
+    why = {c: w for s in got["semesters"] for c, w in s["why"].items()}
+    assert "MATH 226" in why and "MATH 227" in why["MATH 226"]
+
+
 def test_loads_fit_the_graduation_goal_from_the_roadmaps_range():
     # D25: on time on the roadmap's loads: they stay
     assert plan_for(FRESH | {"graduate_by": "2031-spring"})["pace"]["load"] == "roadmap"

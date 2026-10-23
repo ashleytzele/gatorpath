@@ -196,6 +196,12 @@ GOLDEN = [
     # a named, unverifiable requirement (every MUS ensemble), not unparsed text
     ("MUS 370", "Audition.", {"requirement": "Audition"}),
     ("TH A 533", "TH A 433 and audition.", all_(c("TH A 433"), {"requirement": "Audition"})),
+    # one way in per placement, in one sentence: a QR 1/2 student doesn't need the math courses
+    ("CHEM 115", "CAT I or II placement for QR/MATH* or CAT III or IV placement for QR/MATH with a grade of C or better "
+                 "in MATH 124* or MATH 197* or MATH 199*.",
+     any_({"qr_category": [1, 2]}, all_({"qr_category": [3, 4]}, any_(c("MATH 124", "C"), c("MATH 197", "C"), c("MATH 199", "C"))))),
+    ("WGS 698", "Restricted to upper-division WGS majors and minors with WGS 300GW* or permission of the instructor.",
+     all_({"restricted_to": "upper-division WGS majors and minors"}, any_(c("WGS 300GW"), PERM))),
     ("MATH 112", "First-Year Math Advising Module.", FYMAM),
     # Audience notes and "should" advice are not requirements.
     ("MATH 110", "First-Year Math Advising Module. For students who wish to take business calculus in one semester.", FYMAM),

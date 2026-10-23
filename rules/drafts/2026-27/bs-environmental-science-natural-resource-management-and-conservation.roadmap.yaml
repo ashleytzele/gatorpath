@@ -1,0 +1,286 @@
+program: bs-environmental-science-natural-resource-management-and-conservation
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: 'Bachelor of Science in Environmental Science: Concentration in Natural Resource Management and Conservation Roadmap'
+    total_units: 120
+    source: p.2068-2069
+    notes:
+    - '120 Total Units Required. Minimum Number of Units in the Major: 66.'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 2 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 3 First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+    - 4 Ecology and Biodiversity (6-9 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 2058).
+    - 5 Sustainability and Social Justice (3-4 units). A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 2058).
+    - 6 Environmental Management (9-12 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 2058).
+    - 7 Tools and Techniques (3-4 units). A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements (p. 2058).
+    - 8 Ecosystem Interactions (3-4 units). A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements (p. 2058).
+    semesters:
+    - units: 15
+      source: p.2068
+      items:
+      - slot: major
+        group: foundation_human_environment
+        units: 3
+        note: 'Select One (Major Core): ENVS 130 or GEOG 102'
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+        note: footnote 2
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 14
+      source: p.2068
+      items:
+      - BIOL 230
+      - slot: major
+        group: foundation_chemistry
+        units: 3
+        note: 'Select One (Major Core): CHEM 115 or CHEM 180; 3-4 units'
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 14
+      source: p.2068
+      items:
+      - BIOL 240
+      - slot: major
+        group: foundation_physical_environment
+        units: 3
+        note: 'Physical Environment Elective: ERTH 112, ERTH 230 or GEOG 101; 3-4 units'
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: one lower-division Area 4 course must meet USH'
+      - slot: sfss_or_elective
+        units: 3
+    - units: 16
+      source: p.2068
+      items:
+      - ENV 205
+      - GEOG 160
+      - one_of:
+        - slot: GE
+          area: '4'
+          units: 3
+        - slot: sfss_or_elective
+          units: 3
+        units: 3
+        note: 'Select One: GE Area 4 if ENVS 130 taken; SF State Studies or University Elective if GEOG 102 taken'
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 16
+      source: p.2068-2069
+      items:
+      - ENV 500GW
+      - GEOG 603
+      - ENVS 680
+      - slot: major
+        group: topical_ecology_biodiversity
+        units: 3
+        note: 3-5 units; footnote 4
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+    - units: 15
+      source: p.2069
+      items:
+      - ENVS 450
+      - slot: major
+        group: topical_ecology_biodiversity
+        units: 3
+        note: 3-5 units; footnote 4
+      - slot: major
+        group: topical_sustainability_social_justice
+        units: 3
+        note: 3-4 units; footnote 5
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: 3-4 units; footnote 6
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 16
+      source: p.2069
+      items:
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: 3-4 units; footnote 6
+      - slot: major
+        group: topical_tools_techniques
+        units: 3
+        note: 3-4 units; footnote 7
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 4
+    - units: 14
+      source: p.2069
+      items:
+      - slot: major
+        group: core_statistics
+        units: 3
+        note: 'Select One (Major Core): BIOL 458 or GEOG 604; 3-4 units'
+      - ENVS 690
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: 3-4 units; footnote 6
+      - slot: major
+        group: topical_ecosystem_interactions
+        units: 3
+        note: 3-4 units; footnote 8
+      - slot: sfss_or_elective
+        units: 2
+        note: if needed; printed 0-2
+  adt:
+    title: 'Bachelor of Science in Environmental Science: Concentration in Natural Resource Management and Conservation –
+      BIOL Associate Degree for Transfer (ADT) Roadmap'
+    total_units: 60
+    source: p.2070-2071
+    met_in_transfer:
+    - BIOL 230
+    - BIOL 240
+    - GEOG 160
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Biology. Up to 25 units in the major (BIOL 230, BIOL 240, CHEM 115 or CHEM 180, ERTH 112 or ERTH 230 or GEOG
+      101, ENVS 130 or GEOG 102, and GEOG 160) and all lower-division GE requirements have been satisfied. Check with a major
+      advisor about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the Associate Degree
+      for Transfer (ADT) section for more information.
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 9-15 units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government if not taken before transfer. Courses required for the major or UD GE may double-count if
+      approved for USH, USG, and/or CSLG.'
+    - Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD (9 units) – Courses required for the major may double-count if approved
+      for UD GE.
+    - Students entering the major with the AS-T in BIOL are not required to fulfill SF State Studies requirements.
+    - 'Environmental Science Major: 43-55 units. BIOL 230, BIOL 240, CHEM 115 or CHEM 180, ERTH 112 or ERTH 230 or GEOG 101,
+      ENVS 130 or GEOG 102, and GEOG 160 met before transfer. Foundation (3 units): ENV 205. Core (13-16 units). Capstone
+      (3 units): ENV 690. Topical Areas (24-33 units).'
+    - 'University Electives: 2 or more units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State - some courses may meet more than one requirement,
+      e.g., in both UD GE and the major.'
+    - 1 Ecology and Biodiversity (6-9 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements. (p. 2065)
+    - 2 Ecosystem Interactions (3-4 units). A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements. (p. 2065)
+    - 3 Environmental Management (9-12 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements. (p. 2065)
+    - 4 Sustainability and Social Justice (3-4 units). A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements. (p. 2065)
+    - 5 Tools and Techniques (3-4 units). A full list of courses that can fulfill this requirement can be found in the Degree
+      Requirements. (p. 2065)
+    semesters:
+    - units: 15
+      source: p.2070
+      items:
+      - ENV 205
+      - ENV 500GW
+      - slot: major
+        group: topical_ecology_biodiversity
+        units: 3
+        note: 3-5 units; footnote 1
+      - slot: major
+        group: topical_ecosystem_interactions
+        units: 3
+        note: 3-4 units; footnote 2
+      - slot: ai
+        area: USH
+        units: 3
+        note: or University Elective if met in transfer
+    - units: 15
+      source: p.2070
+      items:
+      - ENVS 450
+      - GEOG 603
+      - slot: major
+        group: topical_ecology_biodiversity
+        units: 3
+        note: 3-5 units; footnote 1
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: or University Elective if met in transfer
+    - units: 15
+      source: p.2070-2071
+      items:
+      - ENVS 680
+      - slot: major
+        group: core_statistics
+        units: 3
+        note: 'Select One (Major Core): BIOL 458 or GEOG 604; 3-4 units'
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: major
+        group: topical_sustainability_social_justice
+        units: 3
+        note: 3-4 units; footnote 4
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: elective
+        units: 2
+    - units: 15
+      source: p.2071
+      items:
+      - ENVS 690
+      - slot: major
+        group: topical_environmental_management
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: major
+        group: topical_tools_techniques
+        units: 3
+        note: 3-4 units; footnote 5
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+drafted_by: claude, 2026-10-23

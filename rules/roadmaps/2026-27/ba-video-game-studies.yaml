@@ -1,0 +1,143 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-video-game-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-video-game-studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: Bachelor of Arts in Video Game Studies Roadmap
+    total_units: 120
+    source: p.1299-1300
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 2)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 3)
+    - Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied. (footnote
+      4)
+    - 'Major Electives (12 units): A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 1296). (footnote 5)'
+    semesters:
+    - units: 15
+      source: p.1299
+      items:
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 1
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '2'
+        units: 3
+        note: footnote 2
+      - slot: GE
+        area: 3A
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 15
+      source: p.1299
+      items:
+      - VGS 100
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: first-time freshmen must take one lower-division Area 4 course that meets USH'
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1299
+      items:
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: first-time freshmen must take one lower-division Area 4 course that meets USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 4
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.1299
+      items:
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 4
+      - slot: GE
+        area: '6'
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1299
+      items:
+      - HUM 300GW
+      - slot: major
+        group: field_1_design
+        units: 3
+        note: Major Electives (12 units) - Take One; footnote 5
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.1299
+      items:
+      - VGS 300
+      - slot: major
+        group: field_2_interpretation
+        units: 3
+        note: Major Electives (12 units) - Take One; footnote 5
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.1299
+      items:
+      - slot: major
+        group: field_3_society
+        units: 3
+        note: Major Electives (12 units) - Take One; footnote 5
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.1300
+      items:
+      - VGS 600
+      - slot: major
+        group: electives_additional
+        units: 3
+        note: Major Electives (12 units) - Take One; footnote 5
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+drafted_by: claude, 2026-10-23

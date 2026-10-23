@@ -1,0 +1,165 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-chemistry.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-chemistry
+title: Bachelor of Arts in Chemistry
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 54
+source: p.1859
+global:
+  no_cr_nc: true
+  source: p.1859
+groups:
+- id: general_chemistry
+  title: General Chemistry (8 units)
+  all_of:
+  - CHEM 115
+  - CHEM 215
+  quote: CHEM 115 General Chemistry I 4
+  source: p.1859
+- id: organic_chemistry
+  title: Organic Chemistry and Laboratories (10 units)
+  all_of:
+  - CHEM 233
+  - CHEM 234
+  - CHEM 235
+  - CHEM 236
+  quote: CHEM 233 & CHEM 234 Organic Chemistry I
+  source: p.1859
+- id: calculus
+  title: Calculus (8 units)
+  all_of:
+  - MATH 226
+  - MATH 227
+  quote: MATH 226 Calculus I 4
+  source: p.1859
+- id: physics
+  title: 'Physics: Select one sequence (8 units)'
+  one_of:
+  - - PHYS 111
+    - PHYS 112
+    - PHYS 121
+    - PHYS 122
+  - - PHYS 220
+    - PHYS 222
+    - PHYS 230
+    - PHYS 232
+  - - PHYS 220
+    - PHYS 222
+    - PHYS 240
+    - PHYS 242
+  quote: 'Select one: 8'
+  source: p.1859
+- id: physical_chemistry
+  title: 'Upper-Division Requirements: Select One (CHEM 300 or CHEM 351)'
+  one_of:
+  - - CHEM 300
+  - - CHEM 351
+  quote: 'Select One: 3 CHEM 300 Physical Chemistry for Life Sciences I'
+  source: p.1859
+- id: analytical_inorganic
+  title: Upper-Division Requirements (Quantitative Analysis and Inorganic Chemistry)
+  all_of:
+  - CHEM 321
+  - CHEM 322
+  - CHEM 325
+  quote: CHEM 321 Quantitative Chemical Analysis 3
+  source: p.1859
+- id: biochemistry
+  title: 'Upper-Division Requirements: Select One (CHEM 340, CHEM 349 or CHEM 390GW)'
+  one_of:
+  - - CHEM 340
+  - - CHEM 349
+  - - CHEM 390GW
+  quote: 'Select One: 3 CHEM 340 Biochemistry I'
+  source: p.1859
+- id: upper_division_electives
+  title: Upper-Division Electives (3 units minimum)
+  choose_units: 3
+  approval: Graduate-level courses in chemistry or appropriate courses in biology, physics, geosciences, and computer science
+    may be substituted upon prior approval of an advisor.
+  from:
+  - list:
+    - CHEM 343
+    - CHEM 370
+    - CHEM 420
+    - CHEM 422
+    - CHEM 426
+    - CHEM 451
+    - CHEM 667
+    - CHEM 685
+    - CHEM 686
+    - CHEM 699
+    - CSC 306
+    - CSC 408
+    - CSC 509
+  - approved: true
+  quote: Students must complete at least 3 units of upper-division electives
+  source: p.1859
+- id: elective_no_community_college
+  title: 'Upper-Division Electives: no community college substitutions'
+  unparsed: true
+  quote: Courses from community colleges cannot be substituted for the courses on the list below.
+  source: p.1859
+- id: elective_double_major_chem_343
+  title: 'Upper-Division Electives: CHEM 343 in a double major with the BS Biochemistry'
+  unparsed: true
+  quote: For students who pursue a double major in the BA Chemistry and BS Biochemistry programs, CHEM 343 cannot be used
+    to meet the elective requirement for the BA Chemistry.
+  source: p.1860
+- id: elective_repeat_limit
+  title: 'Upper-Division Electives: repeatable course, 2 units count'
+  unparsed: true
+  quote: May be repeated and up to 2 units used towards Elective requirement.
+  source: p.1860
+- id: elective_petition
+  title: 'Upper-Division Electives: by petition only'
+  unparsed: true
+  quote: By petition only. Units must be taken in the same semester to be used as an upper division elective.
+  source: p.1860
+- id: prerequisite_grade
+  title: Grade of C or better in Chemistry prerequisite courses
+  unparsed: true
+  quote: Grades of C or better are required in Chemistry prerequisite courses.
+  source: p.1859
+transfer_notes:
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.1860
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1861
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1861
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1861
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.1861
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.1861
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.1861
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.1861
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.1861
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.1861
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.1861
+drafted_by: claude, 2026-10-23

@@ -1,0 +1,142 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-cinema.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: ba-cinema
+title: Bachelor of Arts in Cinema
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.987
+groups:
+- id: core
+  title: Core Courses (13 units)
+  all_of:
+  - CINE 200
+  - CINE 202
+  - CINE 204
+  - CINE 211
+  - CINE 212
+  min_grade: C
+  quote: Core courses must be completed with a grade of C or better.
+  source: p.987
+- id: foundation
+  title: Foundation Courses
+  all_of:
+  - CINE 340
+  - CINE 341
+  min_grade: C
+  quote: Foundation courses must be completed with a grade of C or better.
+  source: p.987
+- id: gwar
+  title: 'Foundation and GWAR Courses: Select One (CINE 303GW, CINE 343GW or CINE 350GW)'
+  one_of:
+  - - CINE 303GW
+  - - CINE 343GW
+  - - CINE 350GW
+  min_grade: C
+  quote: Complete the core, foundation, and GWAR courses with a grade of C or better.
+  source: p.987
+- id: upper_division_cinema_studies
+  title: Upper-Division Cinema Studies Courses (9 units)
+  choose_units: 9
+  from:
+  - subject: CINE
+    level: 300
+  - subject: CINE
+    level: 500
+  quote: Select 9 units from 300 or 500-level CINE courses, not including the courses used to fulfill the Foundation and GWAR
+    requirements listed above.
+  source: p.987
+- id: capstone
+  title: Capstone Experience (3 units)
+  unparsed: true
+  quote: Any three units at the 500 or 600-level apply, with the exception of CINE 685, CINE 690, CINE 692, CINE 695, and
+    CINE 699.
+  source: p.988
+- id: electives
+  title: Electives (16 units)
+  choose_units: 16
+  from:
+  - subject: CINE
+    level: 300
+  - subject: CINE
+    level: 400
+  - subject: CINE
+    level: 500
+  - subject: CINE
+    level: 600
+  quote: Select additional upper-division Cinema courses to complete a total of 45 units required for the major.
+  source: p.988
+- id: outside_cinema_courses
+  title: Cinema-related upper-division courses outside the School of Cinema (up to 12 units)
+  unparsed: true
+  quote: With prior approval of an advisor, up to 12 units of Cinema-related upper-division courses outside the School of
+    Cinema may count toward the major.
+  source: p.988
+- id: community_college_core
+  title: Community college units applied to the core
+  unparsed: true
+  quote: With a faculty advisor’s approval, up to 13 units from a community college may be applied to the core courses in
+    the Cinema major.
+  source: p.987
+- id: production_units_per_term
+  unparsed: true
+  quote: No more than seven units of advanced production courses may be taken in any one term unless special permission is
+    granted by the instructor.
+  source: p.988
+- id: online_cap
+  unparsed: true
+  quote: A maximum of 18 units of online coursework may be counted toward the major.
+  source: p.988
+- id: independent_study_cap
+  unparsed: true
+  quote: A maximum of 12 units of independent study and internship courses may be counted toward the major.
+  source: p.988
+- id: cr_nc_cap
+  unparsed: true
+  quote: A maximum of nine CR/NC units may be counted toward the major
+  source: p.988
+- id: complementary_studies
+  title: Complementary Studies (12 units)
+  unparsed: true
+  quote: Bachelor of Arts students must complete at least 12 units of Complementary Studies outside of the primary prefix
+    for the major.
+  source: p.988
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.989
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.989
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.989
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.989
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.989
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.989
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units / 90 quarter units required
+    for admission. Additional units for repeated courses do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.989
+- text: Before leaving the last community college, obtain a summary of completed lower-division GE units (IGETC or CSU GE
+    Breadth), the GE certification worksheet, and keep it for verifying degree progress after transfer.
+  source: p.989
+- text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
+    to SF State, under the Bulletin in effect the year of the exam.'
+  source: p.989
+- text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
+    an associate degree before transfer).
+  source: p.989
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.990
+drafted_by: claude, 2026-10-23

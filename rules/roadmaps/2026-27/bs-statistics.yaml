@@ -1,0 +1,364 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-statistics.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-statistics
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: Bachelor of Science in Statistics Roadmap – Quantitative Reasoning Category 1/2
+    qr_pathway: 1/2
+    total_units: 120
+    source: p.2144-2145
+    notes:
+    - '120 Total Units Required. Minimum Number of Units in the Major: 55.'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 2: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - 'Footnote 3: Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.'
+    - 'Footnote 4: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 5: Guided Electives (9 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 2141).'
+    semesters:
+    - units: 16
+      source: p.2144
+      items:
+      - MATH 226
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 2: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+    - units: 16
+      source: p.2144
+      items:
+      - MATH 227
+      - slot: major
+        group: core_programming
+        units: 3
+        note: 'Select One (Major Core): MATH 209, CSC 101 or CSC 309'
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 14
+      source: p.2144
+      items:
+      - MATH 228
+      - MATH 301GW
+      - MATH 325
+      - MATH 440
+    - units: 16
+      source: p.2144
+      items:
+      - MATH 441
+      - one_of:
+        - CSC 215
+        - slot: sfss_or_elective
+          units: 4
+        units: 4
+        note: CSC 215 if CSC 101 taken; SF State Studies or University Elective if MATH 209 or CSC 309 taken
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 2: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 15
+      source: p.2144
+      items:
+      - MATH 424
+      - MATH 442
+      - MATH 447
+      - slot: sfss_or_elective
+        units: 6
+        note: Take Two
+    - units: 15
+      source: p.2145
+      items:
+      - MATH 338
+      - MATH 448
+      - MATH 449
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: footnote 5
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 16
+      source: p.2145
+      items:
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: footnote 5
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 4
+    - units: 12
+      source: p.2145
+      items:
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: footnote 5
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+  qr-3-4:
+    title: Bachelor of Science in Statistics Roadmap – Quantitative Reasoning Category 3/4
+    qr_pathway: 3/4
+    total_units: 120
+    source: p.2146-2147
+    notes:
+    - '120 Total Units Required. Minimum Number of Units in the Major: 55.'
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 2: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - 'Footnote 3: Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.'
+    - 'Footnote 4: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
+      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
+      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - 'Footnote 5: Guided Electives (9 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 2141).'
+    semesters:
+    - units: 15
+      source: p.2146
+      items:
+      - MATH 197
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 2: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+    - units: 15
+      source: p.2146
+      items:
+      - MATH 198
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 16
+      source: p.2146
+      items:
+      - MATH 226
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 2: one lower-division Area 4 course must meet USH'
+      - slot: GE
+        area: '5'
+        units: 3
+        note: 3-4 units; footnote 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 14
+      source: p.2146
+      items:
+      - MATH 227
+      - slot: major
+        group: core_programming
+        units: 3
+        note: 'Select One (Major Core): MATH 209, CSC 101 or CSC 309'
+      - MATH 301GW
+      - MATH 325
+    - units: 14
+      source: p.2146
+      items:
+      - MATH 228
+      - MATH 440
+      - one_of:
+        - CSC 215
+        - slot: sfss_or_elective
+          units: 4
+        units: 4
+        note: CSC 215 if CSC 101 taken; SF State Studies or University Elective if MATH 209 or CSC 309 taken
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 15
+      source: p.2147
+      items:
+      - MATH 338
+      - MATH 441
+      - MATH 448
+      - MATH 449
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: footnote 5
+    - units: 15
+      source: p.2147
+      items:
+      - MATH 424
+      - MATH 442
+      - MATH 447
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: footnote 5
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+    - units: 16
+      source: p.2147
+      items:
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: footnote 5
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 10
+        note: Take Three
+  adt:
+    title: Bachelor of Science in Statistics – MATH Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: p.2148-2149
+    met_in_transfer:
+    - MATH 226
+    - MATH 227
+    - MATH 228
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Mathematics. At least 12 units in the major (MATH 226, MATH 227, and MATH 228) and all lower-division GE
+      requirements have been satisfied. Additional units in the major may have been satisfied. Check with a major advisor
+      about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the Associate Degree for Transfer
+      (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 9-15 Units. American Institutions (0-6 units): US History, US Government, California
+      State and Local Government requirements if not taken before transfer. Upper-Division GE Areas 2UD/5UD, 3UD, and 4UD
+      (9 units): Courses required for the major may double-count if approved for UD GE. Students entering the major with the
+      AS-T in Mathematics are not required to fulfill SF State Studies requirements.'
+    - 'Statistics Major: 40-43 units. MATH 226, MATH 227, and MATH 228 met in transfer. Core (31-34 units). Guided Electives
+      (9 units) in one of the following areas: Science, Economics, Business: Decision Sciences, or Business: Information Systems.
+      Consult with a department advisor.'
+    - 'University Electives: 4 or More Units. Depends on the number of units transferred, course choices made at the community
+      college, and how transferred units are applied to the requirements above.'
+    - 'Footnote 1: Guided Electives (9 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 2141).'
+    semesters:
+    - units: 16
+      source: p.2148
+      items:
+      - slot: major
+        group: core_programming
+        units: 3
+        note: 'Select One (Major Core): MATH 209, CSC 101 or CSC 309'
+      - MATH 301GW
+      - MATH 325
+      - MATH 440
+      - slot: GE
+        area: 5UD/2UD
+        units: 3
+    - units: 14
+      source: p.2148
+      items:
+      - MATH 338
+      - MATH 441
+      - one_of:
+        - CSC 215
+        - slot: elective
+          units: 4
+        units: 4
+        note: CSC 215 if CSC 101 taken; University Elective if MATH 209 or CSC 309 taken
+      - slot: elective
+        units: 4
+    - units: 15
+      source: p.2148
+      items:
+      - MATH 424
+      - MATH 442
+      - MATH 447
+      - slot: major
+        group: guided_electives
+        count: 2
+        units: 6
+        note: Take Two; footnote 1
+    - units: 15
+      source: p.2149
+      items:
+      - MATH 448
+      - MATH 449
+      - slot: major
+        group: guided_electives
+        units: 3
+        note: Take One; footnote 1
+      - slot: GE
+        area: 3UD
+        units: 3
+        note: 'Select One (GE 3UD, USH, USG/CSLG): HIST 470 or HIST 471'
+      - slot: ai
+        area: USH/USG/CSLG
+        units: 0
+        note: the same HIST 470 or HIST 471 course
+      - slot: GE
+        area: 4UD
+        units: 3
+drafted_by: claude, 2026-10-23

@@ -1,0 +1,357 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-biology-marine-science.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-biology-marine-science
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: 'Bachelor of Science in Biology: Concentration in Marine Science Roadmap – Quantitative Reasoning Category 1/2'
+    qr_pathway: 1/2
+    total_units: 120
+    source: p.1819-1820
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 2)
+    - GE Area 5B (Biological Science) is satisfied upon completion of BIOL 240. (footnote 3)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 4)
+    - Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355. (footnote 5)
+    - Major Upper-Division Core Option - Select One. A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 1815). (footnote 6)
+    - Upper-Division Electives (10-11 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1815). (footnote 7)
+    semesters:
+    - units: 14
+      source: p.1819
+      items:
+      - CHEM 115
+      - MATH 226
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+    - units: 15
+      source: p.1819
+      items:
+      - BIOL 230
+      - BIOL 231
+      - slot: major
+        group: ld_organic_chemistry
+        units: 3
+        note: 'Select One (Major Lower-Division Core): CHEM 130 or CHEM 233'
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 16
+      source: p.1819
+      items:
+      - BIOL 240
+      - CHEM 215
+      - slot: major
+        group: ld_physics
+        units: 4
+        note: 'Select One (Major Lower-Division Core, GE 5A, GE 5C): PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222'
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+    - units: 15
+      source: p.1819
+      items:
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 14
+      source: p.1819-1820
+      items:
+      - BIOL 355
+      - BIOL 458
+      - slot: major
+        group: ud_marine_lab
+        units: 4
+        note: 'GWAR Option - Select One: BIOL 570GW & BIOL 570, or BIOL 586GW & BIOL 586'
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 15
+      source: p.1820
+      items:
+      - BIOL 337
+      - slot: major
+        group: ud_marine_course
+        units: 3
+        note: Upper-Division Core Option - Select One; 3-4 units; footnote 6
+      - slot: major
+        group: lecture_electives
+        units: 6
+        note: Electives (10-11 units total); 6-7 units; footnote 7
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 15
+      source: p.1820
+      items:
+      - slot: major
+        group: lecture_electives
+        units: 3
+        note: Electives (10-11 units total); 3-4 units; footnote 7
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 16
+      source: p.1820
+      items:
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 13
+        note: Take Four
+  qr-3-4:
+    title: 'Bachelor of Science in Biology: Concentration in Marine Science Roadmap – Quantitative Reasoning Category 3/4'
+    qr_pathway: 3/4
+    total_units: 120
+    source: p.1821-1822
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 2)
+    - GE Area 5B (Biological Science) is satisfied upon completion of BIOL 240. (footnote 3)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 4)
+    - Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355. (footnote 5)
+    - Major Upper-Division Core Option - Select One. A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 1815). (footnote 6)
+    - Upper-Division Electives (10-11 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1815). (footnote 7)
+    semesters:
+    - units: 15
+      source: p.1821
+      items:
+      - MATH 197
+      - slot: GE
+        area: 1A
+        units: 3
+      - slot: GE
+        area: '1'
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: sfss_or_elective
+        units: 3
+    - units: 16
+      source: p.1821
+      items:
+      - BIOL 230
+      - BIOL 231
+      - CHEM 115
+      - MATH 198
+      - slot: GE
+        area: '1'
+        units: 3
+    - units: 15
+      source: p.1821
+      items:
+      - BIOL 240
+      - MATH 226
+      - slot: major
+        group: ld_organic_chemistry
+        units: 3
+        note: 'Select One (Major Lower-Division Core): CHEM 130 or CHEM 233'
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+    - units: 14
+      source: p.1821
+      items:
+      - CHEM 215
+      - slot: major
+        group: ld_physics
+        units: 4
+        note: 'Select One (Major Lower-Division Core, GE 5A, GE 5C): PHYS 111 & PHYS 112, or PHYS 220 & PHYS 222'
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+    - units: 15
+      source: p.1821-1822
+      items:
+      - BIOL 355
+      - BIOL 458
+      - slot: major
+        group: ud_marine_lab
+        units: 4
+        note: 'GWAR Option - Select One: BIOL 570GW & BIOL 570, or BIOL 586GW & BIOL 586'
+      - slot: sfss_or_elective
+        units: 4
+    - units: 15
+      source: p.1822
+      items:
+      - BIOL 337
+      - slot: major
+        group: ud_marine_course
+        units: 3
+        note: Major Upper-Division Core Option - Select One; 3-4 units; footnote 6
+      - slot: major
+        group: lecture_electives
+        units: 6
+        note: Electives (10-11 units total); 6-7 units; footnote 7
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 15
+      source: p.1822
+      items:
+      - slot: GE
+        area: 3UD
+        units: 3
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+    - units: 15
+      source: p.1822
+      items:
+      - slot: major
+        group: lecture_electives
+        units: 3
+        note: Electives (10-11 units total); 3-4 units; footnote 7
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+      - slot: sfss_or_elective
+        units: 9
+        note: Take Three
+  adt:
+    title: 'Bachelor of Science in Biology: Concentration in Marine Science – BIOL Associate Degree for Transfer (ADT) Roadmap'
+    total_units: 60
+    source: p.1823-1824
+    met_in_transfer:
+    - BIOL 230
+    - BIOL 240
+    - CHEM 115
+    - CHEM 215
+    - MATH 226
+    notes:
+    - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
+      an AS-T in Biology. Twenty-six units in the major (BIOL 230, BIOL 240, CHEM 115, CHEM 215, MATH 226, and the required
+      PHYS sequence) and 33 units of lower-division GE requirements have been satisfied. Check with a major advisor about
+      the most appropriate course sequence. Degree completion guaranteed in 60 units; see the Associate Degree for Transfer
+      (ADT) section for more information (p. 2304).
+    - 'To Do at SF State: Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level;
+      to include the following:'
+    - 'University-Wide Requirements: 12-18 Units. American Institutions (0-6 units): US History, US Government/CA Government.
+      Lower-Division GE (6 units) - Area 3 (3 units in any subarea) and Area 4 (3 units). Upper-Division GE (6 units) - GE
+      Area 5UD met in major. Courses may satisfy the US History or US/CA Government requirements, and GE 3UD or GE 4UD at
+      the same time, if approved for multiple areas.'
+    - Students entering this major with the AS-T in Biology are not required to fulfill SF State Studies requirements.
+    - 'Biology – Marine Biology Major: 32 Units. BIOL 230, BIOL 240, MATH 226, all PHYS, CHEM 115, and CHEM 215 met in transfer.
+      Lower-Division Requirements (4 units): BIOL 231, CHEM 130 or CHEM 233. Major Upper-Division Requirements (17-18 units).
+      Major Upper-Division Electives (10-11 units) – upon advisement.'
+    - 'University Electives: 11 or More Units. Depends on course choices made at the community college, how transferred units
+      are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
+      e.g. both in UD GE and, the major.'
+    - Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355. (footnote 1)
+    - Major Upper-Division Core Option - Select One. A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 1815). (footnote 2)
+    - Upper-Division Electives (10-11 units). A full list of courses that can fulfill this requirement can be found in the
+      Degree Requirements (p. 1815). (footnote 3)
+    semesters:
+    - units: 16
+      source: p.1823
+      items:
+      - BIOL 231
+      - slot: major
+        group: ld_organic_chemistry
+        units: 3
+        note: 'Select One (Major Lower-Division Core): CHEM 130 or CHEM 233'
+      - slot: ai
+        area: USH
+        units: 3
+        note: or University Elective if met in transfer
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: elective
+        units: 6
+        note: Take Two
+    - units: 16
+      source: p.1823
+      items:
+      - BIOL 355
+      - BIOL 458
+      - slot: major
+        group: ud_marine_course
+        units: 3
+        note: Major Upper-Division Core Option - Select One; 3-4 units; footnote 2
+      - slot: GE
+        area: '4'
+        units: 3
+      - slot: GE
+        area: 3UD
+        units: 3
+    - units: 15
+      source: p.1823-1824
+      items:
+      - BIOL 337
+      - slot: major
+        group: ud_marine_lab
+        units: 4
+        note: 'GWAR Option - Select One: BIOL 570GW & BIOL 570, or BIOL 586GW & BIOL 586'
+      - slot: GE
+        area: 4UD
+        units: 3
+      - slot: elective
+        units: 5
+        note: Take Two
+    - units: 13
+      source: p.1824
+      items:
+      - slot: major
+        group: lecture_electives
+        units: 10
+        note: Major Upper-Division Electives (10-11 units); footnote 3
+      - slot: ai
+        area: USG/CSLG
+        units: 3
+        note: or University Elective if met in transfer
+drafted_by: claude, 2026-10-23

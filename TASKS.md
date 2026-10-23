@@ -456,7 +456,24 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   rebuilt at the roadmap's heaviest semester, then a unit more at a time up to 19, until it ends by then (a 62-unit
   transfer by 2029-fall: 16 a term; a BS CS freshman a term early: 18, an overload, advisor); plan_my_degree asks
   for the goal. Without one, a term past the roadmap's end keeps its last semester's load.
-- [ ] Load all programs as `verified: false`
+- [x] Load all programs as `verified: false`. Done 2026-10-23: 97 of the Bulletin's 110 bachelor's programs are served
+  (BS CS and BS Applied Mathematics hand-written; 95 AI-drafted, `drafted: true` in list_programs). The five pilot
+  programs had a first-pass review against their Bulletin text (fixes in the e26fb86 commit); the other 90 passed the
+  `--load` gate unreviewed: only `unparsed` groups left, codes/pages/quotes/units clean, a new student's plan passes
+  check_plan on every variant (194 variant plans through the server tools, 8-11 terms). Drafting: Sonnet, rules then
+  roadmaps, resumed three times across usage-limit resets (a failed call is reported per program now; only
+  hand-written files are prompt examples). Engine fixes the drafts found: CHEM 115's one-sentence placement
+  alternatives (unlocked 7 science programs); a prereq outside the requirements and roadmap is added to the plan
+  (one per "one of"; PHYS 330 needs MATH 376: Physics, Earth Sciences, Cell and Molecular Biology); all_of/one_of
+  claim before electives (Art History's ART 671); "graduate standing or KIN ITEP …" isn't graduate-only; "majors and
+  minors with …" clauses; variable-unit courses in the units check; an approval beside a list keeps the list.
+  Still drafts, for a person (rules/drafts/2026-27/): BA American Indian Studies, BA Dance, BS Physics: Astrophysics,
+  BM Instrumental and Vocal Performance (roadmap semesters short of their printed units: lessons and other unparsed
+  items left off), BM Music Production (MUS 281 not on its roadmap), BS Environmental Science: NRM&C (ENV 690 not on
+  its roadmap; plan invalid), both Nutrition concentrations (FCS 426 isn't in the catalog), BA Philosophy and
+  Religion (no total printed), BA Early Childhood Studies: Special Education ITEP (graduate credential chain), BA
+  Women and Gender Studies (3 upper-division units short in the plan). BA Family and Community Sciences has no roadmap.
+  Not reviewed: the 90 gate-only programs, and repeated courses (ensembles, lessons taken 4 times) count once.
   Pilot 2026-10-22: one program per college, drafted with `--client "claude -p --model sonnet …"` to save usage
   (about 35 s each), kept in `rules/drafts/2026-27/`. BS Civil Engineering had 0 to fix. BM Composition, BS Business
   Administration: Finance, BA Asian American Studies and BS Public Health had 2-6 unparsed groups each. Those are all

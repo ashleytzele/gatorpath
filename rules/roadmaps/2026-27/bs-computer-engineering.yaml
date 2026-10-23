@@ -1,0 +1,267 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-computer-engineering.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+program: bs-computer-engineering
+catalog_year: 2026-27
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: Bachelor of Science in Computer Engineering Roadmap – Quantitative Reasoning Category 1/2
+    qr_pathway: 1/2
+    total_units: 123
+    source: p.1955-1956
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - '1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '3: GE Area 1B (Critical Thinking) is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR
+      213.'
+    - '4: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - '5: GE Area 5UD (Upper-Division Science) is satisfied upon completion of ENGR 478.'
+    - '6: To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG) within
+      Upper-Division GE.'
+    - '7: Upper-Division Electives (6 units minimum). A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 1951).'
+    semesters:
+    - units: 15
+      source: p.1955
+      items:
+      - slot: major
+        group: chemistry
+        units: 3
+        note: 'Select One (Major Core): CHEM 115 or CHEM 180; 3-4 units'
+      - ENGR 100
+      - ENGR 212
+      - MATH 226
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 2
+    - units: 15
+      source: p.1955
+      items:
+      - ENGR 213
+      - ENGR 214
+      - MATH 227
+      - PHYS 220
+      - PHYS 222
+      - slot: GE
+        area: 1C
+        units: 3
+    - units: 17
+      source: p.1955
+      items:
+      - CSC 230
+      - ENGR 221
+      - PHYS 230
+      - PHYS 232
+      - slot: GE
+        area: 5B
+        units: 3
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 16
+      source: p.1955
+      items:
+      - ENGR 205
+      - ENGR 206
+      - ENGR 282
+      - MATH 245
+      - slot: GE
+        area: '3'
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 4: one lower-division Area 4 course must meet USH'
+    - units: 15
+      source: p.1956
+      items:
+      - ENGR 340
+      - ENGR 356
+      - ENGR 357
+      - ENGR 478
+      - slot: GE
+        area: '3'
+        units: 3
+    - units: 16
+      source: p.1956
+      items:
+      - slot: major
+        group: upper_electronics
+        units: 4
+        note: 'Select One: ENGR 353 & ENGR 301, or ENGR 354'
+      - ENGR 305
+      - ENGR 378
+      - ENGR 456
+      - slot: GE
+        area: '4'
+        units: 3
+    - units: 15
+      source: p.1956
+      items:
+      - ENGR 413
+      - ENGR 451
+      - ENGR 498
+      - ENGR 696
+      - slot: GE
+        area: 4UD
+        units: 3
+        note: footnote 6
+    - units: 14
+      source: p.1956
+      items:
+      - ENGR 476
+      - ENGR 697GW
+      - slot: major
+        group: upper_division_electives
+        count: 2
+        units: 6
+        note: Take Two; footnote 7
+      - slot: GE
+        area: 3UD
+        units: 3
+        note: footnote 6
+  qr-3-4:
+    title: Bachelor of Science in Computer Engineering Roadmap – Quantitative Reasoning Category 3/4
+    qr_pathway: 3/4
+    total_units: 129
+    source: p.1959-1961
+    notes:
+    - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
+      need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
+      and an advisor for further guidance.
+    - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
+      within your GE or major.
+    - '1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
+    - '3: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
+    - '4: GE Area 1B: Critical Thinking is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.'
+    - '5: GE Area 5UD (Upper-Division Science) is satisfied upon completion of ENGR 478.'
+    - '6: Upper-Division Electives (6 units minimum). A full list of courses that can fulfill this requirement can be found
+      in the Degree Requirements (p. 1951).'
+    - '7: To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG) within
+      Upper-Division GE.'
+    semesters:
+    - units: 14
+      source: p.1959
+      items:
+      - ENGR 100
+      - ENGR 212
+      - MATH 197
+      - slot: GE
+        area: 1A
+        units: 3
+        note: footnote 2
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: one lower-division Area 4 course must meet USH'
+    - units: 12
+      source: p.1959
+      items:
+      - slot: major
+        group: chemistry
+        units: 3
+        note: 'Select One (Major Core): CHEM 115 or CHEM 180; 3-4 units'
+      - MATH 198
+      - slot: GE
+        area: 1C
+        units: 3
+      - slot: GE
+        area: '4'
+        units: 3
+        note: 'footnote 3: one lower-division Area 4 course must meet USH'
+    - units: 13
+      source: p.1959
+      items:
+      - MATH 226
+      - slot: GE
+        area: 5B
+        units: 3
+      - slot: GE
+        area: '3'
+        units: 6
+        note: Take Two
+    - units: 12
+      source: p.1959
+      items:
+      - ENGR 213
+      - ENGR 214
+      - MATH 227
+      - PHYS 220
+      - PHYS 222
+    - units: 14
+      source: p.1959
+      items:
+      - CSC 230
+      - ENGR 221
+      - PHYS 230
+      - PHYS 232
+      - slot: GE
+        area: '6'
+        units: 3
+    - units: 10
+      source: p.1960
+      items:
+      - ENGR 205
+      - ENGR 206
+      - ENGR 282
+      - MATH 245
+    - units: 11
+      source: p.1960
+      items:
+      - ENGR 305
+      - ENGR 340
+      - ENGR 356
+      - ENGR 357
+    - units: 14
+      source: p.1960
+      items:
+      - slot: major
+        group: upper_electronics
+        units: 4
+        note: 'Select One: ENGR 353 & ENGR 301, or ENGR 354'
+      - ENGR 378
+      - ENGR 413
+      - ENGR 478
+    - units: 15
+      source: p.1960
+      items:
+      - ENGR 451
+      - ENGR 456
+      - ENGR 476
+      - ENGR 498
+      - ENGR 696
+    - units: 14
+      source: p.1960
+      items:
+      - ENGR 697GW
+      - slot: major
+        group: upper_division_electives
+        count: 2
+        units: 6
+        note: Take Two; footnote 6
+      - slot: GE
+        area: 3UD
+        units: 3
+        note: footnote 7
+      - slot: GE
+        area: 4UD
+        units: 3
+        note: footnote 7
+drafted_by: claude, 2026-10-23
