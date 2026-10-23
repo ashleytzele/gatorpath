@@ -9,13 +9,13 @@ global:
   no_cr_nc: true
   source: p.788
 groups:
-- id: foundation_biology_lecture
+- id: foundation_biol_100
   title: 'Foundation: Human Biology'
   all_of:
   - BIOL 100
   quote: BIOL 100 Human Biology 3
   source: p.788
-- id: foundation_biology_lab
+- id: foundation_biol_101
   title: 'Foundation: Human Biology Laboratory'
   all_of:
   - BIOL 101
@@ -23,25 +23,20 @@ groups:
   source: p.788
 - id: foundation_statistics
   title: 'Foundation: Select One (statistics)'
-  choose_units: 3
-  from:
-    list:
-    - ETHS 116
-    - ETHS 117
-    - ISED 160
-    - MATH 124
-    - PSY 171
-  quote: 'Select One: 3 ETHS 116 Algebra and Statistics for Social Justice ETHS 117 Statistics for Social Justice ISED 160
-    Data Analysis in Education MATH 124 Elementary Statistics PSY 171 Quantitative Reasoning in Psychology'
+  one_of:
+  - - ETHS 116
+  - - ETHS 117
+  - - ISED 160
+  - - MATH 124
+  - - PSY 171
+  quote: ETHS 116 Algebra and Statistics for Social Justice
   source: p.788
-- id: foundation_microbiology
+- id: foundation_biology
   title: 'Foundation: Select One (BIOL 210 or PH 100)'
-  choose_units: 3
-  from:
-    list:
-    - BIOL 210
-    - PH 100
-  quote: 'Select One: 3 BIOL 210 General Microbiology and Public Health PH 100 Public Health Biology'
+  one_of:
+  - - BIOL 210
+  - - PH 100
+  quote: BIOL 210 General Microbiology and Public Health
   source: p.788
 - id: foundation_intro
   title: 'Foundation: Introduction to Public Health'
@@ -62,18 +57,7 @@ groups:
   - PH 480
   - PH 520
   - PH 600
-  quote: PH 400GW Determinants of Health - GWAR 3 PH 410 Public Health Systems 3 PH 420 Epidemiology 3 PH 425 Public Health
-    Research 3 PH 431 Program Planning, Implementation, and Evaluation 3 PH 450 Public Health Policy 3 PH 455 Community Organizing
-    and Community Building for Health 3 PH 480 Fieldwork and Reflective Seminar 9 PH 520 Structural Oppression and Social
-    Foundations of Health 3 PH 600 Public Health Media, Technology, and Communications 3
-  source: p.788
-- id: core_concurrent
-  unparsed: true
   quote: PH 400GW and PH 425 must be taken concurrently.
-  source: p.788
-- id: core_sequence
-  unparsed: true
-  quote: PH 400GW, PH 431, and PH 480 must be taken sequentially.
   source: p.788
 - id: electives
   title: Electives (9 units)
@@ -93,21 +77,25 @@ groups:
     - HH 381
     - HH 382
     - HH 540
-    - I R/BIOL 305
+    - I R 305
+    - BIOL 305
     - LTNS 210
     - LTNS 500
     - NUTR 253
     - PH 200
     - PH 210
-    - PH/ETHS 221
-    - PH/ETHS 241
+    - PH 221
+    - ETHS 221
+    - PH 241
+    - ETHS 241
     - PH 290
     - PH 305
     - PH 315
     - PH 320
     - PH 370
     - PH 414
-    - PH/GEOG 434
+    - PH 434
+    - GEOG 434
     - PH 650
     - PH 655
     - PH 685
@@ -117,7 +105,7 @@ groups:
     - RRS 303
     - WGS 593
   quote: 'Select 9 units from the following courses:'
-  source: p.788-789
+  source: p.788
 transfer_notes:
 - text: Students entering from the community college system, or other four-year universities, should have their transcripts
     evaluated by a Department of Public Health advisor to receive credit for equivalent foundation courses taken elsewhere.
@@ -148,7 +136,7 @@ transfer_notes:
   source: p.789
 - text: 'AP/IB/CLEP credit is not transferred automatically: units are awarded only when an official score report is delivered
     to SF State, under the Bulletin in effect the year of the exam.'
-  source: p.789-790
+  source: p.789
 - text: STEM majors often defer 6-9 units of lower-division GE in Areas C and D until after transfer (not for students completing
     an associate degree before transfer).
   source: p.790

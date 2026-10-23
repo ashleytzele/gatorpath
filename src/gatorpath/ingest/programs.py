@@ -139,8 +139,9 @@ Rules (they're checked by a program, then by a person):
 - A "Select One" between printed courses or bundles is `one_of`, one option each: [[MATH 209], [CSC 101, CSC 215]].
   The plan then schedules a real course, which a later course's prereq may need. "Select N units" / "N courses" from a
   list, and electives, are `choose_units`: the units the Bulletin prints for it (the Units column). Don't use choose_n
-  in a program file: the planner reads it as a 0-unit designation. A cross-listed course ("PH/ETHS 221") is each of
-  its codes: PH 221, ETHS 221.
+  in a program file: the planner reads it as a 0-unit designation. A cross-listed course ("PH/ETHS 221") is one
+  course under two codes: in a list to choose from, write each code (PH 221, ETHS 221); a required one is its own
+  one_of group, one option per code ([[MUS 130], [TH A 131]]), never both codes in an all_of.
 - Major requirements only: GE, SF State Studies and the university's graduation requirements are in other files.
   Include transfer_notes only when the text gives transfer advice; leave out `advising` and `dpr_plan`.
 - A requirement the vocabulary can't express exactly: a group with `unparsed: true`, its `quote` and `source`, and
@@ -180,6 +181,7 @@ Rules (they're checked by a program, then by a person):
   a major choice ("Major Elective", "Concentration Elective", a "Select One" between courses that's a choose group of
   the program rules below) is {{slot: major, group: <that group's id>, units}}; a "Select One" of course codes or
   slots the rules don't make a group is {{one_of: [...], units}}. "Take Two" etc. go in the item's units (and a note).
+- A cross-listed course ("MUS 130/TH A 131", "MUS/TH A 221") is its first code: MUS 130, MUS 221.
 - Numbers printed between a title and its units are footnote marks, not units.
 - Answer with the YAML only, in one ```yaml block. Double-quote every title, note and string with a colon in it.
 
@@ -200,9 +202,12 @@ The Bulletin's roadmap pages ({year}), page by page:
 
 
 def parse_draft(answer: str, key: str = "groups") -> dict:
-    """The YAML in a ```yaml block (or the whole answer), as a mapping that has `key`."""
+    """The YAML in a ```yaml block (or the whole answer), as a mapping that has `key`. A `title:` whose colon a model left
+    unquoted ("Bachelor of Music: Concentration in Composition Roadmap") is quoted first: a title is one line of text."""
     m = re.search(r"```(?:yaml)?\n(.*?)```", answer, re.S)
-    data = yaml.safe_load(m.group(1) if m else answer)
+    text = re.sub(r"^(\s*(?:- )?title: )(?![\"'])(.*:.*)$", lambda t: t[1] + json.dumps(t[2], ensure_ascii=False),
+                  m.group(1) if m else answer, flags=re.M)
+    data = yaml.safe_load(text)
     if not isinstance(data, dict) or key not in data:
         raise ValueError(f"the answer isn't a rules file with {key}")
     return data
@@ -300,6 +305,11 @@ def main() -> None:
         rules = next((f for f in (RULES_DIR / "programs" / year / f"{pid}.yaml", out / f"{pid}.yaml") if f.exists()), None)
         if rules is None:
             ap.error(f"{pid} has no rules or draft yet: run --draft {pid} first")
+        try:  # before spending a call: a draft kept as the raw answer may not be YAML yet
+            program = yaml.safe_load(rules.read_text())
+        except yaml.YAMLError:
+            print(f"{rules}: isn't YAML yet, fix it before drafting its roadmap")
+            continue
         source = source_text(pages, p["roadmap_pages"])
         out.mkdir(parents=True, exist_ok=True)
         (out / f"{pid}.roadmap.source.txt").write_text(source)
@@ -310,7 +320,6 @@ def main() -> None:
             print(f"{out / f'{pid}.roadmap.yaml'}: the answer isn't a roadmap file, fix it by hand ({str(e).splitlines()[0]})")
             continue
         (out / f"{pid}.roadmap.yaml").write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
-        program = yaml.safe_load(rules.read_text())
         problems = check_roadmap(data, program, university, catalog, set(p["roadmap_pages"]), source)
         print(f"{out / f'{pid}.roadmap.yaml'}: {len(problems)} to fix" + "".join(f"\n  {x}" for x in problems)
               + "".join(f"\n  {x}" for x in try_plans(program, data, university, catalog, db.load_prereqs(args.db, year))))

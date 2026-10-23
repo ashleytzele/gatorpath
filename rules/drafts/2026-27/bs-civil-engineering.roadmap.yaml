@@ -9,28 +9,26 @@ variants:
     total_units: 123
     source: p.1942-1943
     notes:
-    - '123 Total Units Required. Minimum Number of Units in Major: 93.'
     - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
       need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
       and an advisor for further guidance.
     - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
       within your GE or major.
-    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
-      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
-      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
-    - 'Footnote 2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
-      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
-      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
-    - 'Footnote 3: GE Area 1B: Critical Thinking is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201
-      or ENGR 213.'
-    - 'Footnote 4: GE Area 5UD: Upper-Division Science is satisfied upon completion of ENGR 300, ENGR 302, and ENGR 304.'
-    - 'Footnote 5: Major Electives (15 units). A full list of courses that can fulfill this requirement can be found in the
-      Degree Requirements (p. 1939).'
-    - 'Footnote 6: You must complete 15 units of upper-division Engineering units before registering for ENGR 696.'
-    - 'Footnote 7: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
-    - 'Footnote 8: To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG)
-      within Upper-Division GE.'
-    - Total Units 123-124.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 2)
+    - 'GE Area 1B: Critical Thinking is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.
+      (footnote 3)'
+    - 'GE Area 5UD: Upper-Division Science is satisfied upon completion of ENGR 300, ENGR 302, and ENGR 304. (footnote 4)'
+    - Major Electives (15 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 1939). (footnote 5)
+    - You must complete 15 units of upper-division Engineering units before registering for ENGR 696. (footnote 6)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 7)
+    - To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG) within Upper-Division
+      GE. (footnote 8)
     semesters:
     - units: 14
       source: p.1942
@@ -41,18 +39,16 @@ variants:
       - slot: GE
         area: 1A
         units: 3
-        note: footnote 2
       - slot: GE
         area: 1C
         units: 3
     - units: 17
       source: p.1942
       items:
-      - one_of:
-        - CHEM 115
-        - CHEM 180
+      - slot: major
+        group: chemistry
         units: 3
-        note: 'Select One (Major Core): 3-4 units'
+        note: 'Select One (Major Core): CHEM 115 or CHEM 180; 3-4 units'
       - ENGR 282
       - MATH 227
       - PHYS 220
@@ -103,7 +99,6 @@ variants:
       - slot: major
         group: upper_division_electives
         units: 3
-        note: footnote 5
     - units: 16
       source: p.1943
       items:
@@ -113,7 +108,7 @@ variants:
         group: upper_division_electives
         count: 2
         units: 6
-        note: Take Two; footnote 5
+        note: Take Two
       - slot: GE
         area: '4'
         units: 6
@@ -126,43 +121,39 @@ variants:
         group: upper_division_electives
         count: 2
         units: 6
-        note: Take Two; footnote 5
+        note: Take Two
       - slot: GE
         area: 3UD
         units: 3
-        note: footnote 8
       - slot: GE
         area: 4UD
         units: 3
-        note: footnote 8
   qr-3-4:
     title: Bachelor of Science in Civil Engineering Roadmap – Quantitative Reasoning Category 3/4
     qr_pathway: 3/4
-    total_units: 123
+    total_units: 129
     source: p.1946-1947
     notes:
-    - '123 Total Units Required. Minimum Number of Units in Major: 93.'
     - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
       need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
       and an advisor for further guidance.
     - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
       within your GE or major.
-    - 'Footnote 1: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
-      appropriate GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway
-      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
-    - 'Footnote 2: Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the
-      appropriate GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway
-      (https://gatorsmartstart.sfsu.edu/howtofindyourpathways). Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)'
-    - 'Footnote 3: First-time freshmen must take one lower-division Area 4 course that meets US History (USH).'
-    - 'Footnote 4: GE Area 1B: Critical Thinking is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201
-      or ENGR 213.'
-    - 'Footnote 5: GE Area 5UD: Upper-Division Science is satisfied upon completion of ENGR 300, ENGR 302, and ENGR 304.'
-    - 'Footnote 6: You must complete 15 units of upper-division Engineering units before registering for ENGR 696.'
-    - 'Footnote 7: Major Electives (15 units). A full list of courses that can fulfill this requirement can be found in the
-      Degree Requirements (p. 1939).'
-    - 'Footnote 8: To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG)
-      within Upper-Division GE.'
-    - Total Units 129-130.
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 2)
+    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 3)
+    - 'GE Area 1B: Critical Thinking is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.
+      (footnote 4)'
+    - 'GE Area 5UD: Upper-Division Science is satisfied upon completion of ENGR 300, ENGR 302, and ENGR 304. (footnote 5)'
+    - You must complete 15 units of upper-division Engineering units before registering for ENGR 696. (footnote 6)
+    - Major Electives (15 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 1939). (footnote 7)
+    - To avoid taking additional units, it is recommended that you meet US and California Government (USG/CSLG) within Upper-Division
+      GE. (footnote 8)
     semesters:
     - units: 13
       source: p.1946
@@ -173,18 +164,16 @@ variants:
       - slot: GE
         area: 1A
         units: 3
-        note: footnote 2
       - slot: GE
         area: 1C
         units: 3
     - units: 15
       source: p.1946
       items:
-      - one_of:
-        - CHEM 115
-        - CHEM 180
+      - slot: major
+        group: chemistry
         units: 3
-        note: 'Select One (Major Core): 3-4 units'
+        note: 'Select One (Major Core): CHEM 115 or CHEM 180; 3-4 units'
       - MATH 198
       - slot: GE
         area: '3'
@@ -257,11 +246,10 @@ variants:
         group: upper_division_electives
         count: 2
         units: 6
-        note: Take Two; footnote 7
+        note: Take Two
       - slot: GE
         area: 3UD
         units: 3
-        note: footnote 8
     - units: 14
       source: p.1947
       items:
@@ -270,9 +258,8 @@ variants:
         group: upper_division_electives
         count: 3
         units: 9
-        note: Take Three; footnote 7
+        note: Take Three
       - slot: GE
         area: 4UD
         units: 3
-        note: footnote 8
 drafted_by: claude, 2026-10-22

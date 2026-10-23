@@ -362,7 +362,8 @@ Added 2026-10-22 (BS Applied Mathematics, the second program, pp.2129-2137):
   options to check), and list_eligible_electives returns the approval text instead of options.
 - Roadmap items: `{one_of: [<item>, …], units}` is the first option still needed (a course in the plan's to-do list,
   or a slot), e.g. "CSC 215 (if CSC 101 taken) / SF State Studies or University Elective"; `{slot: major, group: <id>,
-  count, units}` is a slot of that major choose-group (CS's `senior_elective` takes any major slot). A printed range
+  count, units}` is a slot of that major choose-group (CS's `senior_elective` takes any major slot), or, naming a
+  `one_of` group, that Select One's course. A printed range
   ("3-4") keeps the minimum in `units`, with the range in a comment, so the units still add up to the printed minimum.
 
 **AI-drafted rules (phase 8, D5; added 2026-10-22).** Offline, never at question time (D6):
@@ -373,8 +374,9 @@ line per page, as `<id>.source.txt` next to the rules (public Bulletin text: the
 `--draft <id>` sends that text, this section and the hand-written programs to a headless AI client (`claude -p`, no
 tools) and writes `rules/drafts/<year>/<id>.yaml`, which the server never reads. `check_program` (engine/rules.py)
 then checks any program file, drafted or hand-written: only this vocabulary, every course code in the catalog, every
-`source` page one of the program's pages, every `quote` word for word in the source text, and the groups' minimum
-units adding up to `total_units`. A person fixes what it reports, moves the file to `rules/programs/<year>/`, and a
+`source` page one of the program's pages, every `quote` word for word in the source text, no cross-listed course
+required twice (MUS 130 and TH A 131 in one all_of; the catalog's `crosslisted` says which codes are one course: a
+required one is its own `one_of` of its codes), and the groups' minimum units adding up to `total_units`. A person fixes what it reports, moves the file to `rules/programs/<year>/`, and a
 second person sets `verified`. Draft-only keys: `quote` on a group (the Bulletin words it was written from) and
 `drafted_by` (client, date); a requirement the vocabulary can't express is a group with `unparsed: true`, its
 `quote` and `source`, for the person to write (rule 3: flag, don't guess); until then `audit` gives it status
@@ -392,7 +394,7 @@ cross-listing like "MUS/TH A 221" included), semesters adding up to their printe
 `total_units`, every roadmap page in some variant (else it's a 5-year or 2-year roadmap left out), and every required
 course on a first-time roadmap (that's how 2025-26's missing PHYS 222 shows). Then it builds a plan for a new student
 on each variant and prints check_plan's errors: the end-to-end check. An answer that isn't YAML is kept in the
-draft's file for a person, never lost.
+draft's file for a person, never lost; a `title:` with an unquoted colon (the usual cause) is quoted before parsing.
 
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo

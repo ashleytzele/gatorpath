@@ -397,5 +397,11 @@ def test_check_program_reports_what_a_person_must_fix():
                    "a person adds them up"]
     short = good | {"total_units": 56}
     assert check_program(short, CATALOG)[-1] == "units: the groups' minimums add up to 55, total_units says 56"
+    # MUS 130/TH A 131 (BM Composition, p.1549) is one course: both codes in an all_of would need it twice
+    twins = CATALOG | {"MUS 130": {"units_min": 3, "crosslisted": ["TH A 131"]},
+                       "TH A 131": {"units_min": 3, "crosslisted": ["MUS 130"]}}
+    theory = {"id": "theory", "all_of": ["MUS 130", "TH A 131"], "source": "p.2129"}
+    assert "theory: MUS 130 and TH A 131 are one cross-listed course, so all_of needs it twice; make it its own one_of " \
+           "group [[MUS 130], [TH A 131]]" in check_program(good | {"groups": [theory]}, twins)
     early = good | {"groups": [g | {"source": "p.152"} for g in good["groups"]]}  # a page under 1000
     assert check_program(early, CATALOG, {152}) == []

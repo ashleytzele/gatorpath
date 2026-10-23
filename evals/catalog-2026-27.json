@@ -664,6 +664,10 @@
   "units_min": 3.0
  },
  "ECON 474": {
+  "crosslisted": [
+   "HIST 474",
+   "LABR 474"
+  ],
   "ge_areas": [
    "AERM",
    "SJ",
@@ -712,6 +716,9 @@
   "units_min": 3.0
  },
  "ENVS 401": {
+  "crosslisted": [
+   "LS 401"
+  ],
   "ge_areas": [
    "ESCA",
    "4UD",
@@ -781,6 +788,9 @@
   "units_min": 3.0
  },
  "HIST 308": {
+  "crosslisted": [
+   "PLSI 451"
+  ],
   "ge_areas": [
    "GP",
    "SJ",
@@ -1243,6 +1253,9 @@
   "units_min": 3.0
  },
  "PLSI 355": {
+  "crosslisted": [
+   "PHIL 355"
+  ],
   "ge_areas": [
    "SJ",
    "ESCA",

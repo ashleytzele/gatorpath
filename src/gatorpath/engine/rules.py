@@ -551,6 +551,9 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
                  + [c for f in filters for c in f.get("list", []) + f.get("except", [])]
                  + list(g["min_grade"] if isinstance(g.get("min_grade"), dict) else []))
         out += [f"{gid}: {c} is not in the {program.get('catalog_year', '')} catalog" for c in dict.fromkeys(codes) if c not in catalog]
+        req = g.get("all_of", [])
+        out += [f"{gid}: {a} and {b} are one cross-listed course, so all_of needs it twice; make it its own one_of group "
+                f"[[{a}], [{b}]]" for i, a in enumerate(req) for b in req[i + 1:] if b in catalog.get(a, {}).get("crosslisted", ())]
         grades = g["min_grade"].values() if isinstance(g.get("min_grade"), dict) else [g["min_grade"]] if "min_grade" in g else []
         out += [f"{gid}: min_grade {m!r} isn't a grade" for m in grades if m not in GRADE_POINTS]
         cited = [int(p) for m in PAGE.findall(str(g.get("source", ""))) for p in m if p]

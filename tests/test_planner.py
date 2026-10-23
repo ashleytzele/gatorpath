@@ -523,6 +523,22 @@ def test_a_select_one_plans_an_option_whose_prereqs_can_be_met():
     assert any("planned CSC 101, CSC 215, not MATH 209, which leaves a prereq in this plan unmet" in w for w in got["warnings"])
 
 
+def test_a_roadmap_major_slot_naming_a_select_one_places_its_course():
+    # drafted roadmaps write "Select One (Major Core)" as {slot: major, group: <the one_of group>}. A student past MATH
+    # 376 and MATH 400 doesn't need MATH 209 early, so only the roadmap puts it in the first term.
+    from gatorpath.engine.planner import build_plan
+    program, university, roadmap = rules_for({"program": "bs-applied-math"})
+    done = ["MATH 226", "MATH 227", "MATH 228", "MATH 301GW", "MATH 325", "MATH 376", "MATH 400", "MATH 440"]
+    profile = {"program": "bs-applied-math", "catalog_year": "2026-27", "start_term": "2027-fall", "qr_pathway": "1/2",
+               "completed": [{"code": c, "grade": "A", "term": "2026-spring"} for c in done]}
+    v = roadmap["variants"]["qr-1-2"]
+    sems = [s | {"items": [i for i in s["items"] if not (isinstance(i, dict) and "MATH 209" in i.get("one_of", []))]}
+            for s in v["semesters"]]
+    sems[0] = sems[0] | {"items": sems[0]["items"] + [{"slot": "major", "group": "programming", "units": 3}]}
+    got = build_plan(profile, program, university, roadmap | {"variants": {"qr-1-2": v | {"semesters": sems}}}, CATALOG, PREREQS)
+    assert got["check"]["valid"] and next(s["term"] for s in got["semesters"] if "MATH 209" in s["courses"]) == "2027-fall"
+
+
 def test_compare_programs_says_what_carries_over_to_a_new_major():
     from gatorpath.engine.planner import compare_programs
     profile = eval_profile(ROOT / "evals/profiles/p03-sophomore-qr34.yaml")  # BS CS, QR 3/4, MATH 226 in progress
@@ -566,7 +582,7 @@ def test_check_roadmap_reports_what_a_person_must_fix():
     got = check_roadmap(bad, program, university, CATALOG, set(range(2132, 2139)))
     assert got[:6] == ["unknown key 'drafted'", "qr-1-2 semester 1: MATH 999 is not in the 2026-27 catalog",
                        "qr-1-2 semester 1: area '9Z' matches no GE or American Institutions group",
-                       "qr-1-2 semester 1: group 'required' isn't a choose group of bs-applied-math",
+                       "qr-1-2 semester 1: group 'required' isn't a choose or Select One group of bs-applied-math",
                        "qr-1-2 semester 1: unknown slot 'minor' (one of GE, ai, elective, major, senior_elective, "
                        "sfss_or_elective)", "qr-1-2 semester 1: the items add up to 13, units says 16"]
     assert "qr-1-2: the semesters add up to 105, total_units says 120" in got

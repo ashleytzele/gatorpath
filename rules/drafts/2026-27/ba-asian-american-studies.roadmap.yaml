@@ -14,16 +14,16 @@ variants:
       and an advisor for further guidance.
     - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
       within your GE or major.
-    - 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
       GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
       Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
-    - 2 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
       GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
       Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
-    - 3 Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.
-    - 4 Ethnic Course (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+    - Consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied.
+    - Ethnic Course (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
       (p. 437).
-    - 5 Panethnic Course (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+    - Panethnic Course (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
       (p. 437).
     semesters:
     - units: 15
@@ -32,7 +32,6 @@ variants:
       - slot: GE
         area: 1A
         units: 3
-        note: footnote 1
       - slot: GE
         area: '1'
         units: 3
@@ -51,14 +50,13 @@ variants:
       - slot: major
         group: intro_category_a
         units: 3
-        note: 'Select One from Category A: History/Social Sciences (Major Core): AA S 210, AA S 211 or AA S 213'
+        note: 'Select One from Category A: History/Social Sciences (Major Core)'
       - slot: GE
         area: '1'
         units: 3
       - slot: GE
         area: '2'
         units: 3
-        note: footnote 2
       - one_of:
         - slot: GE
           area: '4'
@@ -66,7 +64,7 @@ variants:
         - slot: sfss_or_elective
           units: 3
         units: 3
-        note: 'Select One: GE Area 4 if taking AA S 213, or SF State Studies or University Elective'
+        note: GE Area 4 if taking AA S 213; otherwise SF State Studies or University Elective
       - slot: sfss_or_elective
         units: 3
     - units: 15
@@ -75,11 +73,11 @@ variants:
       - slot: major
         group: intro_category_b
         units: 3
-        note: 'Select One from Category B: Humanities (Major Core): AA S 212, AA S 216 or AA S 218'
+        note: 'Select One from Category B: Humanities (Major Core)'
       - slot: GE
         area: '5'
         units: 3
-        note: 3-4 units; footnote 3
+        note: 3-4 units
       - slot: sfss_or_elective
         units: 9
         note: Take Three
@@ -90,7 +88,7 @@ variants:
       - slot: GE
         area: '5'
         units: 3
-        note: 3-4 units; footnote 3
+        note: 3-4 units
       - slot: GE
         area: '6'
         units: 3
@@ -106,12 +104,12 @@ variants:
       - slot: major
         group: ethnic_courses
         units: 3
-        note: Ethnic Course (Major Core) (9 units total) - Take One; footnote 4
+        note: Ethnic Course (Major Core) - Take One
       - slot: major
         group: panethnic_courses
         count: 2
         units: 6
-        note: Panethnic Course (Major Core) (9 units total) - Take Two; footnote 5
+        note: Panethnic Course (Major Core) - Take Two
       - slot: GE
         area: 5UD/2UD
         units: 3
@@ -124,11 +122,11 @@ variants:
       - slot: major
         group: ethnic_courses
         units: 3
-        note: Ethnic Course (Major Core) (9 units total) - Take One; footnote 4
+        note: Ethnic Course (Major Core) - Take One
       - slot: major
         group: panethnic_courses
         units: 3
-        note: Panethnic Course (Major Core) (9 units total) - Take One; footnote 5
+        note: Panethnic Course (Major Core) - Take One
       - slot: GE
         area: 3UD
         units: 3
@@ -141,7 +139,7 @@ variants:
       - slot: major
         group: ethnic_courses
         units: 3
-        note: Ethnic Course (Major Core) (9 units total) - Take One; footnote 4
+        note: Ethnic Course (Major Core) - Take One
       - slot: GE
         area: 4UD
         units: 3
@@ -170,17 +168,17 @@ variants:
       State and Local Government requirements if not taken before transfer. Upper-Division GE (9 units): Courses required
       for the major may double-count if approved for UD GE. Students entering the major with an approved ADT are not required
       to fulfill SF State Studies requirements.'
-    - 'Asian American Studies Major: 36 Units. Introduction to Asian American Studies (6 units); Ethnic (9 units): Select
-      three courses representing at least two different ethnic groups; Panethnic (9 units); Additional Courses Required for
-      the Major (9 units); Graduation Writing Assessment Requirement (GWAR) (3 units): ETHS 300GW.'
+    - 'Asian American Studies Major: 36 Units. Introduction to Asian American Studies (6 units). Ethnic (9 units): Select
+      three courses representing at least two different ethnic groups. Panethnic (9 units). Additional Courses Required for
+      the Major (9 units). Graduation Writing Assessment Requirement (GWAR) (3 units): ETHS 300GW.'
     - 'University Electives: 9 or More Units. Units depend on course choices made at the community college, how transferred
       units are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
       e.g., in both UD GE and the major.'
-    - 1 If US History and US/CA Government not met in transfer, it is recommended that students select AA S 210 for US History
+    - If US History and US/CA Government not met in transfer, it is recommended that students select AA S 210 for US History
       or AA S 213 for US/CA Government.
-    - 2 Ethnic Course (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+    - Ethnic Course (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
       (p. 437).
-    - 3 Panethnic Course (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+    - Panethnic Course (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
       (p. 437).
     - 'Associate Degrees for Transfer (ADTs) that are approved for the BA in Asian American Studies are: AA-T in Anthropology;
       AA-T in Asian American Studies; AA-T in Global Studies; AA-T in Law, Public Policy, and Society; AA-T in Social Justice
@@ -192,19 +190,19 @@ variants:
       - slot: major
         group: intro_category_a
         units: 3
-        note: 'History/Social Sciences - Select One: AA S 210, AA S 211 or AA S 213; footnote 1'
+        note: History/Social Sciences - Select One
       - slot: major
         group: intro_category_b
         units: 3
-        note: 'Humanities - Select One: AA S 212, AA S 216 or AA S 218'
+        note: Humanities - Select One
       - slot: major
         group: ethnic_courses
         units: 3
-        note: Ethnic Course (9 units total); footnote 2
+        note: Ethnic Course (9 units total)
       - slot: major
         group: panethnic_courses
         units: 3
-        note: Panethnic Course (9 units total); footnote 3
+        note: Panethnic Course (9 units total)
       - slot: elective
         units: 3
     - units: 15
@@ -214,11 +212,11 @@ variants:
       - slot: major
         group: ethnic_courses
         units: 3
-        note: Ethnic Course (9 units total); footnote 2
+        note: Ethnic Course (9 units total)
       - slot: major
         group: panethnic_courses
         units: 3
-        note: Panethnic Course (9 units total); footnote 3
+        note: Panethnic Course (9 units total)
       - slot: ai
         area: USG/CSLG
         units: 3
@@ -233,7 +231,7 @@ variants:
       - slot: major
         group: panethnic_courses
         units: 3
-        note: Panethnic Course (9 units total); footnote 3
+        note: Panethnic Course (9 units total)
       - slot: GE
         area: 3UD
         units: 3
@@ -248,7 +246,7 @@ variants:
       - slot: major
         group: ethnic_courses
         units: 3
-        note: Ethnic Course (9 units total); footnote 2
+        note: Ethnic Course (9 units total)
       - slot: GE
         area: 5UD/2UD
         units: 3

@@ -475,6 +475,15 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   A one_of option was chosen by units only; fixed 2026-10-22: build_plan keeps the audit's option only while every
   planned course stays reachable with it, else the first by units that does (Applied Math: with MATH 209 out of reach,
   CSC 101 & CSC 215, not CSC 309, since MATH 400 needs CSC 215 or MATH 209).
+  Pilot redrafted 2026-10-22 with the new prompts (Sonnet, 12 calls: 5 rules, 5 roadmaps, Composition's 2 again). Every "Select One" is now `one_of` (13 groups, 0 left as choose_units) and all 9 test plans
+  pass check_plan (8 terms; Civil 10). Public Health: 0 to fix in rules and roadmap. Finance roadmap 0 to fix. What's
+  left is a person's: unparsed groups (CR/NC caps, lessons taken 4 times, ensembles, a GPA floor, ENGR 696's
+  15-unit rule) and the roadmap slots that name them, plus Civil's 5-year roadmap (left out). Fixed on the way: a
+  title's unquoted colon lost two answers (now quoted before parsing; both recovered from the kept answer, no new
+  call); the roadmap step read a not-yet-YAML rules draft after spending its call (now checked first); drafted
+  roadmaps write a Select One as {slot: major, group: <one_of group>} (the planner now places that group's course);
+  my cross-listing prompt line made Composition require MUS 130 and TH A 131 both (now: a required cross-listed
+  course is a one_of of its codes, and check_program flags both codes in an all_of from the catalog's 509 pairs).
   Not redrafted with the new prompt yet (usage): the pilot's 5 come first in the load-all run.
 
 ---

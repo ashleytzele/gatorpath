@@ -8,22 +8,23 @@ variants:
     total_units: 120
     source: p.791-792
     notes:
+    - '120 Total Units Required. Minimum Number of Units in the Major: 58'
     - This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may
       need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner (https://registrar.sfsu.edu/degreeplanner)
       and an advisor for further guidance.
     - To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements
       within your GE or major.
-    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+    - 1 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
       GE 2 course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
-      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 1)
-    - 'GE Area 2 Requirement: A full list of courses that can fulfill this requirement can be found in the Degree Requirements
-      (p. 788). (footnote 2)'
-    - Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 2 GE Area 2 Requirement. A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 788).
+    - 3 Students should use their Pathway/Category (https://gatorsmartstart.sfsu.edu/pathways) to determine the appropriate
       GE 1A course option. For directions on how to view your Pathway/Category, visit how to find your pathway (https://gatorsmartstart.sfsu.edu/howtofindyourpathways).
-      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/) (footnote 3)
-    - First-time freshmen must take one lower-division Area 4 course that meets US History (USH). (footnote 4)
-    - 'Electives (9 units): A full list of courses that can fulfill this requirement can be found in the Degree Requirements
-      (p. 788). (footnote 5)'
+      Questions? Contact Gator Smart Start. (https://gatorsmartstart.sfsu.edu/)
+    - 4 First-time freshmen must take one lower-division Area 4 course that meets US History (USH).
+    - 5 Electives (9 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 788).
     semesters:
     - units: 15
       source: p.791
@@ -31,7 +32,7 @@ variants:
       - slot: GE
         area: '2'
         units: 3
-        note: Major Foundation; 3-4 units; footnotes 1, 2
+        note: 3-4 units; Major Foundation; footnotes 1, 2
       - slot: GE
         area: '1'
         units: 3
@@ -63,7 +64,7 @@ variants:
       source: p.791
       items:
       - slot: major
-        group: foundation_microbiology
+        group: foundation_biology
         units: 3
         note: 'Select One (Major Foundation): BIOL 210 or PH 100'
       - slot: GE
@@ -111,7 +112,6 @@ variants:
       - slot: ai
         area: USG/CSLG
         units: 3
-        note: US and California Government
     - units: 15
       source: p.792
       items:
@@ -162,14 +162,14 @@ variants:
     - 'University Electives: 3 or More Units. Depends on course choices made at the community college, how transferred units
       are applied to the requirements above, and course choices at SF State. Some courses may meet more than one requirement,
       e.g., UD GE and the major.'
-    - 'Electives (6 units): A full list of courses that can fulfill this requirement can be found in the Degree Requirements
-      (p. 788). (footnote 1)'
+    - 1 Electives (6 units). A full list of courses that can fulfill this requirement can be found in the Degree Requirements
+      (p. 788).
     semesters:
     - units: 15
       source: p.793
       items:
       - slot: major
-        group: foundation_microbiology
+        group: foundation_biology
         units: 3
         note: 'Select One (Major Foundation): BIOL 210 or PH 100'
       - PH 400GW
@@ -178,7 +178,7 @@ variants:
       - slot: ai
         area: USG/CSLG
         units: 3
-        note: US and California Government; or University Elective if met in transfer
+        note: US and California Government (p. 2351), or University Elective if met in transfer
     - units: 15
       source: p.793
       items:
@@ -212,7 +212,7 @@ variants:
       - slot: ai
         area: USH
         units: 3
-        note: US History; or University Elective if met in transfer
+        note: US History (p. 2350), or University Elective if met in transfer
       - slot: elective
         units: 3
 drafted_by: claude, 2026-10-22

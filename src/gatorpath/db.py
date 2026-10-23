@@ -53,11 +53,16 @@ def offered(con: sqlite3.Connection) -> dict[str, dict]:
 
 
 def load_catalog(db_path: str | Path, catalog_year: str, codes: set[str] | None = None) -> dict[str, dict]:
-    """{code: {title, units_min, units_max, grading, ge_areas, paired, repeatable, source_page, offered?}}"""
+    """{code: {title, units_min, units_max, grading, ge_areas, paired, repeatable, source_page, offered?, crosslisted?}}"""
     con = connect(db_path)
     history = offered(con)
     paired = {c for row in con.execute(
         "select code_a, code_b from course_link where catalog_year = ? and kind = 'paired'", (catalog_year,)) for c in row}
+    twins: dict[str, list[str]] = {}  # "MUS 130/TH A 131": one course under two codes
+    for a, b in con.execute("select code_a, code_b from course_link where catalog_year = ? and kind = 'crosslisted'",
+                            (catalog_year,)):
+        twins.setdefault(a, []).append(b)
+        twins.setdefault(b, []).append(a)
     rows = con.execute("select code, title, units_min, units_max, grading, ge_areas, description, source_page from course "
                        "where catalog_year = ? and (? is null or code in (select value from json_each(?))) order by code",
                        (catalog_year, *[None if codes is None else json.dumps(sorted(codes))] * 2)).fetchall()
@@ -68,7 +73,8 @@ def load_catalog(db_path: str | Path, catalog_year: str, codes: set[str] | None 
             "paired": code in paired,
             "repeatable": bool(REPEATABLE.search(description or "")),
             "source_page": page,
-        } | ({"offered": history[code]} if code in history else {})
+        } | ({"offered": history[code]} if code in history else {}) | (
+            {"crosslisted": sorted(twins[code])} if code in twins else {})
         for code, title, lo, hi, grading, ge, description, page in rows
     }
 

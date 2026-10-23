@@ -516,7 +516,7 @@ def check_roadmap(roadmap: dict, program: dict, university: dict, catalog: dict,
     covers, and a first-time roadmap missing a required course. [] when it's clean."""
     from gatorpath.engine.rules import PAGE, squashed
     out = [f"unknown key {k!r}" for k in roadmap if k not in ROADMAP_KEYS]
-    choose = {g["id"] for g in program["groups"] if "from" in g}
+    choose = {g["id"] for g in program["groups"] if "from" in g or "one_of" in g}  # a one_of: its course goes there
     unparsed = {g["id"] for g in program["groups"] if g.get("unparsed")}
     text = squashed(source or "")
 
@@ -543,7 +543,7 @@ def check_roadmap(roadmap: dict, program: dict, university: dict, catalog: dict,
         if x["slot"] == "major" and x.get("group") in unparsed:
             return [f"{where}: group {x['group']!r} is unparsed in the program rules: write it there first"]
         if x["slot"] == "major" and x.get("group") not in choose:
-            return [f"{where}: group {x.get('group')!r} isn't a choose group of {program['program']}"]
+            return [f"{where}: group {x.get('group')!r} isn't a choose or Select One group of {program['program']}"]
         return []
 
     for key, v in roadmap.get("variants", {}).items():
@@ -767,10 +767,13 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     # The Bulletin roadmap as the foundation (its GE areas by semester, e.g. "GE Area 1A" in term 2): a roadmap label
     # maps to the university groups taking that GE area ("1" -> 1A/1B/1C, preferring areas the roadmap doesn't name
     # elsewhere; "5UD/2UD" -> the group taking either), or an American Institutions / SF State Studies designation.
-    # A roadmap "Select One" ({one_of: [...]}) is its first option still needed: a course to do, or a slot (§6.2).
+    # A roadmap "Select One" ({one_of: [...]}) is its first option still needed: a course to do, or a slot (§6.2). A
+    # major slot naming a one_of group ("Select One (Major Core)") is that group's courses.
     pick_one = lambda i: next((o for o in i["one_of"] if not isinstance(o, str) or o in todo), None) \
         if isinstance(i, dict) and "one_of" in i else i
-    road = [sem | {"items": [x for x in map(pick_one, sem["items"]) if x is not None]}
+    as_one_of = lambda i: {"one_of": [c for o in groups[i["group"]]["one_of"] for c in o], "units": i.get("units")} \
+        if isinstance(i, dict) and i.get("slot") == "major" and "one_of" in groups.get(i.get("group"), {}) else i
+    road = [sem | {"items": [x for x in (pick_one(as_one_of(i)) for i in sem["items"]) if x is not None]}
             for sem in roadmap["variants"][ref]["semesters"]]
     named = {str(i.get("area")) for sem in road for i in sem["items"] if isinstance(i, dict)}
 
