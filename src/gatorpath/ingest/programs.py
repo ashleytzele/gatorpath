@@ -32,7 +32,7 @@ def clean(page: str) -> list[str]:
 def head(page: str) -> str:
     """The running head without the Bulletin's name ('' if none). A long head wraps: a right-hand page prints the name
     after it (whole title), a left-hand one before it, so there it may be only the first part."""
-    lines = clean(page)[:3]
+    lines = clean(page)[:5]  # a long head wraps over up to 4 lines (BUS ADT roadmaps, p.159)
     k = next((i for i, line in enumerate(lines) if HEAD.search(line)), None)
     return "" if k is None else " ".join(" ".join(lines[:k] + [HEAD.sub(" ", lines[k])]).split())
 
@@ -80,9 +80,9 @@ def index(pages: list[str]) -> list[dict]:
         while (h := at(n)) and t.startswith(h):
             req.append(n)
             n += 1
-        while (h := at(n)) and h.startswith(t):
-            road.append(n)
-            n += 1
+        # roadmap pages: the heads that go on past the title, up to the next program (not only right after: another
+        # roadmap can sit between, e.g. Anthropology's BA + MA Scholars roadmap, p.892)
+        road = [k for k in range(n, stop) if (h := at(k)) and h.startswith(t)]
         out.append({"title": title, "pages": req, "roadmap_pages": road})
     return out
 
@@ -106,7 +106,7 @@ def source_text(pages: list[str], numbers: list[int]) -> str:
     parts = []
     for n in numbers:
         lines = clean(by_page[n])
-        k = next((i for i, line in enumerate(lines[:3]) if HEAD.search(line)), None)
+        k = next((i for i, line in enumerate(lines[:5]) if HEAD.search(line)), None)
         if k is not None:  # the running head, wrapped or not (a left page's second head line stays: it's short)
             lines = lines[k + 1:]
         if lines and lines[-1].isdigit():
@@ -169,7 +169,7 @@ Rules (they're checked by a program, then by a person):
 - program: {program}; catalog_year: {year}; verified: false; verified_by: null.
 - Variants, keyed {", ".join(VARIANTS)} only: a first-time roadmap per Quantitative Reasoning category (qr-1-2 with
   qr_pathway: "1/2", qr-3-4 with "3/4"), or first-time (no qr_pathway) when the program has one first-time roadmap;
-  adt for the Associate Degree for Transfer roadmap. Leave out every other roadmap (5-year, 2-year transfer without
+  adt for the Associate Degree for Transfer roadmap (the first, when there are several). Leave out every other roadmap (5-year, 2-year transfer without
   an ADT, Scholars). Each variant: title (the printed heading), total_units (its last "Total Units" line, the minimum), source
   ("p.NNNN-NNNN", its pages), notes (the printed notes and footnotes, word for word), semesters.
 - Each semester: units (the printed "Units" line; the minimum of a range), source ("p.NNNN"), items. The items' units
@@ -268,13 +268,16 @@ HEADER = ("# AI-drafted from the {year} Bulletin text ({source}) by {drafted_by}
 def load(pid: str, year: str, catalog: dict, prereqs: dict, university: dict, pages: dict) -> list[str]:
     """Move a draft and its roadmap into rules/ when nothing but flagged requirements is left and a new student's plan
     passes check_plan on every variant. [] when it moved; else what keeps it in rules/drafts/."""
-    d = RULES_DIR / "drafts" / year
+    d, rules = RULES_DIR / "drafts" / year, RULES_DIR / "programs" / year
+    home = d if (d / f"{pid}.yaml").exists() else rules  # a redrafted roadmap for a loaded program uses its rules
     try:
-        program = yaml.safe_load((d / f"{pid}.yaml").read_text())
+        program = yaml.safe_load((home / f"{pid}.yaml").read_text())
         roadmap = yaml.safe_load((d / f"{pid}.roadmap.yaml").read_text())
     except (FileNotFoundError, yaml.YAMLError) as e:
         return [f"no readable draft and roadmap ({type(e).__name__})"]
-    source, road_source = (d / f"{pid}.source.txt").read_text(), (d / f"{pid}.roadmap.source.txt").read_text()
+    if not program.get("drafted_by"):
+        return ["hand-written rules: --load only moves AI drafts"]
+    source, road_source = (home / f"{pid}.source.txt").read_text(), (d / f"{pid}.roadmap.source.txt").read_text()
     problems = check_program(program, catalog, set(pages[pid]["pages"]), source) + check_roadmap(
         roadmap, program, university, catalog, set(pages[pid]["roadmap_pages"]), road_source)
     problems = [x for x in problems if not any(k in x for k in LOADABLE)]
@@ -283,13 +286,12 @@ def load(pid: str, year: str, catalog: dict, prereqs: dict, university: dict, pa
     if problems:
         return problems
     head = HEADER.format(year=year, source=f"{pid}.source.txt", drafted_by=program.get("drafted_by", "an AI client"))
-    for kind, data, src, text in (("programs", program, f"{pid}.source.txt", source),
-                                  ("roadmaps", roadmap, f"{pid}.roadmap.source.txt", road_source)):
+    for kind, data, text in (("programs", program, source), ("roadmaps", roadmap, road_source)):
         out = RULES_DIR / kind / year
         (out / f"{pid}.yaml").write_text(head + yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
         (out / (f"{pid}.source.txt")).write_text(text)
     for f in (f"{pid}.yaml", f"{pid}.roadmap.yaml", f"{pid}.source.txt", f"{pid}.roadmap.source.txt"):
-        (d / f).unlink()
+        (d / f).unlink(missing_ok=True)
     return []
 
 
@@ -344,6 +346,9 @@ def main() -> None:
         rules = next((f for f in (RULES_DIR / "programs" / year / f"{pid}.yaml", out / f"{pid}.yaml") if f.exists()), None)
         if rules is None:
             ap.error(f"{pid} has no rules or draft yet: run --draft {pid} first")
+        if not p["roadmap_pages"]:
+            print(f"{pid}: no roadmap pages in the Bulletin; nothing to draft")
+            continue
         try:  # before spending a call: a draft kept as the raw answer may not be YAML yet
             program = yaml.safe_load(rules.read_text())
         except yaml.YAMLError:
@@ -365,7 +370,7 @@ def main() -> None:
 
     if args.load is not None:
         prereqs = db.load_prereqs(args.db, year)
-        ids = args.load or sorted(p.stem for p in (RULES_DIR / "drafts" / year).glob("*.yaml") if "." not in p.stem)
+        ids = args.load or sorted({p.name.split(".")[0] for p in (RULES_DIR / "drafts" / year).glob("*.yaml")})
         for pid in ids:
             why = load(pid, year, catalog, prereqs, university, programs)
             print(f"{pid}: " + ("loaded into rules/ (verified: false)" if not why else "stays a draft"
