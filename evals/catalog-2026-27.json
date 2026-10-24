@@ -995,6 +995,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AFRS 100": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 395,
+  "title": "General Studies Colloquium",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 101": {
   "ge_areas": [
    "SJ",
@@ -1009,6 +1019,20 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AFRS 111": {
+  "ge_areas": [
+   "4",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 396,
+  "title": "Black Cultures and Personalities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 120": {
   "ge_areas": [
    "1C",
@@ -1019,6 +1043,16 @@
   "repeatable": false,
   "source_page": 396,
   "title": "Communicating Realness: Minding the Gap",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 125": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 396,
+  "title": "Black Community Involvement Workshop",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1050,6 +1084,48 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AFRS 204": {
+  "ge_areas": [
+   "3A",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 396,
+  "title": "Black Creative Arts",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 205": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 396,
+  "title": "Black Youth Development, Youth Activism, and Digital Media Literacy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 208": {
+  "ge_areas": [
+   "USH",
+   "SJ",
+   "4",
+   "AERM",
+   "GP"
+  ],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 396,
+  "title": "Introduction to African American History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 210": {
   "ge_areas": [
    "3B",
@@ -1060,6 +1136,112 @@
   "repeatable": false,
   "source_page": 397,
   "title": "Introduction to Africana Literature",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 213": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 397,
+  "title": "Science and Spirituality in Ancient Africa",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 215": {
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "AERM",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 397,
+  "title": "Introduction to Black Family Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 221": {
+  "ge_areas": [
+   "AERM",
+   "3A"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 397,
+  "title": "African American Music: A 20th Century Survey",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 230": {
+  "ge_areas": [
+   "3A",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 397,
+  "title": "African American Gospel Workshop",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 233": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 397,
+  "title": "Critical Race Theory & Critical Black Consciousness",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 256": {
+  "ge_areas": [
+   "ESCA",
+   "GP",
+   "3A",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 397,
+  "title": "Hip Hop Workshop",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 266": {
+  "ge_areas": [
+   "SJ",
+   "GP",
+   "AERM",
+   "3B"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 397,
+  "title": "Black Online: Cyberspace, Culture, and Community",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 290": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 398,
+  "title": "Malcolm X in the Context of Black Nationalism",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1075,6 +1257,58 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AFRS 305": {
+  "ge_areas": [
+   "3UD",
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 398,
+  "title": "Ancient Egypt",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 320": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 398,
+  "title": "Black Politics, Mass Movements, and Liberation Themes",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 326": {
+  "ge_areas": [
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 398,
+  "title": "Black Religion",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 335": {
+  "ge_areas": [
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 398,
+  "title": "The Black Woman: A Cultural Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 345": {
   "ge_areas": [
    "6"
@@ -1084,6 +1318,23 @@
   "repeatable": false,
   "source_page": 398,
   "title": "Blacks in Urban America",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 350": {
+  "crosslisted": [
+   "AIS 350",
+   "LTNS 355"
+  ],
+  "ge_areas": [
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 398,
+  "title": "Black Indians in the Americas",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1176,6 +1427,20 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AFRS 500": {
+  "ge_areas": [
+   "4UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 400,
+  "title": "The Life and Thought of Elijah Muhammad",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 514": {
   "ge_areas": [],
   "grading": null,
@@ -1225,6 +1490,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AFRS 551": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 400,
+  "title": "Applied Africana Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 645": {
   "ge_areas": [
    "3UD",
@@ -1239,6 +1514,31 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AFRS 665": {
+  "ge_areas": [
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 400,
+  "title": "Black Journalism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 675": {
+  "ge_areas": [
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 400,
+  "title": "Variable Topics in Africana Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AFRS 678": {
   "ge_areas": [
    "6"
@@ -1248,6 +1548,16 @@
   "repeatable": false,
   "source_page": 401,
   "title": "Urban Issues of Black Children and Youth",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AFRS 705": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 401,
+  "title": "Seminar in Africana Studies",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1275,6 +1585,20 @@
   "repeatable": false,
   "source_page": 417,
   "title": "American Indians and U.S. Laws",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 310": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 417,
+  "title": "American Indian Religion and Philosophy",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1315,6 +1639,23 @@
   "repeatable": false,
   "source_page": 418,
   "title": "American Indian Law",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 350": {
+  "crosslisted": [
+   "AFRS 350",
+   "LTNS 355"
+  ],
+  "ge_areas": [
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 418,
+  "title": "Black Indians in the Americas",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2919,6 +3260,20 @@
   "repeatable": false,
   "source_page": 948,
   "title": "Audio Journalism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BECA 502": {
+  "ge_areas": [
+   "SJ",
+   "ESCA",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 949,
+  "title": "Environmental Communication on Electronic Media",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -5956,6 +6311,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "CINE 344": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 976,
+  "title": "Film Genre",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "CINE 348": {
   "crosslisted": [
    "CWL 432",
@@ -6980,6 +7345,16 @@
   "units_max": 2.0,
   "units_min": 2.0
  },
+ "COMM 675": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1035,
+  "title": "Climate Ambassadors Practicum",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "COMM 685": {
   "ge_areas": [],
   "grading": null,
@@ -7621,6 +7996,22 @@
   "title": "Independent Study",
   "units_max": 3.0,
   "units_min": 1.0
+ },
+ "CST 300": {
+  "crosslisted": [
+   "PLSI 386"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1661,
+  "title": "Introduction to Critical Social Thought",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "CWL 180": {
   "crosslisted": [
@@ -11484,6 +11875,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ENVS 530": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2009,
+  "title": "Environmental Leadership and Organizing",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ENVS 570": {
   "ge_areas": [
    "ESCA"
@@ -11493,6 +11894,23 @@
   "repeatable": false,
   "source_page": 2009,
   "title": "Applied Local Sustainability",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ENVS 600": {
+  "crosslisted": [
+   "GEOG 600"
+  ],
+  "ge_areas": [
+   "GP",
+   "4UD",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2010,
+  "title": "Environmental Problems and Solutions",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -11542,6 +11960,16 @@
   "title": "Senior Seminar in Environmental Studies",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "ENVS 699": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 2010,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
  },
  "ERTH 112": {
   "ge_areas": [
@@ -12587,6 +13015,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "GEOG 425": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2012,
+  "title": "Economic Geography",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "GEOG 427": {
   "ge_areas": [
    "ESCA",
@@ -12705,6 +13143,23 @@
   "repeatable": false,
   "source_page": 2013,
   "title": "Emerging China",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "GEOG 600": {
+  "crosslisted": [
+   "ENVS 600"
+  ],
+  "ge_areas": [
+   "GP",
+   "4UD",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2013,
+  "title": "Environmental Problems and Solutions",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -12943,6 +13398,16 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "GEOG 685": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2016,
+  "title": "Projects in Teaching Geography",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
  "GEOG 688": {
   "ge_areas": [],
   "grading": null,
@@ -12952,6 +13417,16 @@
   "title": "Geographic Internship",
   "units_max": 6.0,
   "units_min": 2.0
+ },
+ "GEOG 699": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 2016,
+  "title": "Independent Study",
+  "units_max": 3.0,
+  "units_min": 1.0
  },
  "GER 613": {
   "ge_areas": [],
@@ -16366,6 +16841,19 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "IBUS 334": {
+  "crosslisted": [
+   "I R 334"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 235,
+  "title": "International Organizations: New World Order",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "IBUS 430": {
   "ge_areas": [],
   "grading": null,
@@ -18825,6 +19313,23 @@
   "repeatable": false,
   "source_page": 469,
   "title": "Gender, Latina/x, and Women of Color Feminisms",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LTNS 355": {
+  "crosslisted": [
+   "AFRS 350",
+   "AIS 350"
+  ],
+  "ge_areas": [
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 469,
+  "title": "Black Indians in the Americas",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -21435,6 +21940,22 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PHIL 150": {
+  "crosslisted": [
+   "PLSI 150"
+  ],
+  "ge_areas": [
+   "SJ",
+   "3B"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1584,
+  "title": "Contemporary Moral/Political Issues",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PHIL 205": {
   "ge_areas": [],
   "grading": null,
@@ -21557,6 +22078,36 @@
   "repeatable": false,
   "source_page": 1586,
   "title": "Law and Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 351": {
+  "ge_areas": [
+   "ESCA",
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1586,
+  "title": "Philosophy of Risk",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PHIL 355": {
+  "crosslisted": [
+   "PLSI 355"
+  ],
+  "ge_areas": [
+   "SJ",
+   "ESCA",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1586,
+  "title": "Politics and Ethics of the Consumer Society",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -22029,6 +22580,22 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PLSI 150": {
+  "crosslisted": [
+   "PHIL 150"
+  ],
+  "ge_areas": [
+   "SJ",
+   "3B"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1625,
+  "title": "Contemporary Moral/Political Issues",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PLSI 200": {
   "ge_areas": [
    "USG",
@@ -22127,6 +22694,20 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "PLSI 354": {
+  "ge_areas": [
+   "4UD",
+   "SJ",
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Politics, the Environment, and Social Change",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "PLSI 355": {
   "crosslisted": [
    "PHIL 355"
@@ -22173,6 +22754,22 @@
   "title": "Critical Political Theory",
   "units_max": 4.0,
   "units_min": 4.0
+ },
+ "PLSI 386": {
+  "crosslisted": [
+   "CST 300"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Introduction to Critical Social Thought",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "PLSI 408": {
   "crosslisted": [
@@ -24300,6 +24897,20 @@
   "title": "Gender and Society",
   "units_max": 4.0,
   "units_min": 4.0
+ },
+ "SOC 477": {
+  "ge_areas": [
+   "GP",
+   "ESCA",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 848,
+  "title": "Environmental Sociology",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "SOC 483": {
   "ge_areas": [
