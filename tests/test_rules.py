@@ -463,6 +463,8 @@ def test_check_groups_read_the_courses_other_groups_count():
          "source": "p.1784"},
         {"id": "cap", "across": "major", "max_units_from": {"list": ["MATH 226", "MATH 227"], "units": 4}, "source": "p.437"},
         {"id": "two", "across": ["required"], "distinct_subjects": 2, "source": "p.1264"},
+        {"id": "upper2", "across": ["required"], "min_units_from": {"level": "upper", "courses": 2}, "source": "p.1013"},
+        {"id": "lower1", "across": ["required"], "max_units_from": {"level": "lower", "courses": 1}, "source": "p.1278"},
     ]
     only_cr = CATALOG | {"MATH 228": CATALOG["MATH 228"] | {"grading": "cr_nc"}}
     plain = [{k: v for k, v in g.items() if k != "min_grade"} for g in program["groups"]]
@@ -489,6 +491,8 @@ def test_check_groups_read_the_courses_other_groups_count():
     assert status["here"]["status"] == "remaining"
     assert status["cap"]["status"] == "remaining" and "cap: MATH 226, MATH 227: 8 units, at most 4 count (p.437)" in warnings
     assert status["two"]["status"] == "remaining" and status["two"]["subjects"] == ["MATH"]
+    assert status["upper2"]["status"] == "satisfied" and status["upper2"]["min_units_from"]["done"] == 5  # courses, not units
+    assert status["lower1"]["status"] == "remaining" and "lower1: MATH 226, MATH 227: 2 courses, at most 1 count (p.1278)" in warnings
 
 
 def test_a_filter_caps_units_and_takes_a_division():
@@ -501,6 +505,7 @@ def test_a_filter_caps_units_and_takes_a_division():
     g = next(g for g in got["groups"] if g["id"] == "electives")
     assert g["counted"] == ["MATH 226", "MATH 430", "MATH 442"] and g["units_done"] == 10  # one 4-unit lower-division
     assert not matches({"level": "upper"}, "MATH 226", CATALOG["MATH 226"]) and matches({"level": "upper"}, "MATH 430", CATALOG["MATH 430"])
+    assert matches({"level": [400, 600]}, "MATH 430", CATALOG["MATH 430"]) and not matches({"level": [500, 600]}, "MATH 430", CATALOG["MATH 430"])
     approved = electives | {"from": [{"approved": True, "level": "upper"}, {"approved": True, "level": "lower", "max_units": 4}]}
     got = audit({"catalog_year": "2026-27", "completed": rows, "approved": {"electives": [r["code"] for r in rows]}},
                 program | {"groups": [approved]}, university, CATALOG)  # BA American Studies p.1264: a level on approved

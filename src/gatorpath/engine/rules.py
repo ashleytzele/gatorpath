@@ -111,7 +111,10 @@ def filters_for(g: dict, profile: dict) -> list[dict]:
 
 
 def in_level(level: object, n: int) -> bool:
-    """A filter's `level`: lower (below 300) | upper (300-699, p.2391) | "300+" | "300" (300-399) | none."""
+    """A filter's `level`: lower (below 300) | upper (300-699, p.2391) | "300+" | "300" (300-399) | a list of those
+    ("Any three units at the 500 or 600-level", p.988: [500, 600]) | none."""
+    if isinstance(level, list):
+        return any(in_level(x, n) for x in level)
     level = str(level or "")
     if level in ("lower", "upper"):
         return n < 300 if level == "lower" else 300 <= n <= 699
@@ -377,17 +380,20 @@ def check_group(g: dict, done: dict, taken: dict, profile: dict, university: dic
     elif check == "max_units_from":  # "A maximum of 3 units from AA S 685, AA S 688, or AA S 699 can count" (p.437)
         f = g["max_units_from"]
         over = [c for c in counted if matches(f, c, catalog[c])]
-        n = sum(taken[c]["units"] for c in over)
-        broken = n > f["units"] and f"{', '.join(over)}: {n:g} units, at most {f['units']:g} count"
+        n, most, what = (len(over), f["courses"], "courses") if "courses" in f else (
+            sum(taken[c]["units"] for c in over), f["units"], "units")
+        broken = n > most and f"{', '.join(over)}: {n:g} {what}, at most {most:g} count"
     elif check == "distinct_subjects":  # "drawn from at least two disciplines" (p.1264)
         return out | distinct_subjects(g | {"title": out["title"], "across": ids}, done, warnings)
     else:  # min_units_from: "a total of 30 Sociology units must be upper-division", "12 units in biology at SF State"
-        f = g["min_units_from"]
+        f = g["min_units_from"]  # `courses: N` counts courses instead: "at least two of which must be upper-division"
         hit = lambda c: matches(f, c, catalog[c]) and not (f.get("sf_state") and taken.get(c, {}).get("transfer"))
-        done_units = sum(taken[c]["units"] for c in counted if hit(c))
-        both = done_units + sum(catalog[c]["units_min"] for p in parts for c in p["in_progress"] if hit(c))
+        size = (lambda c: 1) if "courses" in f else (lambda c: taken[c]["units"] if c in taken else catalog[c]["units_min"])
+        need = f.get("courses", f.get("units"))
+        done_units = sum(size(c) for c in counted if hit(c))
+        both = done_units + sum(size(c) for p in parts for c in p["in_progress"] if hit(c))
         out["min_units_from"] = f | {"done": done_units}
-        return out | {"status": "satisfied" if done_units >= f["units"] else "in_progress" if both >= f["units"] else "remaining"}
+        return out | {"status": "satisfied" if done_units >= need else "in_progress" if both >= need else "remaining"}
     if broken:
         warnings.append(f"{out['title']}: {broken} ({g['source']})")
         return out | {"status": "remaining"}
@@ -634,11 +640,12 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
             if g.get("max_below", {}).get("grade", "C-") not in GRADE_POINTS or "max_below" in g and "courses" not in g["max_below"]:
                 out.append(f"{gid}: max_below needs a grade and courses")
         mins = [g[k] for k in ("min_units_from", "max_units_from") if k in g]
-        out += [f"{gid}: {k} needs units" for k in ("min_units_from", "max_units_from") if k in g and "units" not in g[k]]
+        out += [f"{gid}: {k} needs units" for k in ("min_units_from", "max_units_from") if k in g
+                and len({"units", "courses"} & set(g[k]) if "across" in g else {"units"} & set(g[k])) != 1]
         filters = [f for key in ("from", "first_time_from") if key in g
                    for f in (g[key] if isinstance(g[key], list) else [g[key]])]
         out += [f"{gid}: unknown filter key {k!r}" for f in filters + mins for k in f
-                if k not in FILTER_KEYS | ({"units", "sf_state"} if f in mins else set())]
+                if k not in FILTER_KEYS | ({"units", "courses", "sf_state"} if f in mins else set())]
         out += [f"{gid}: a filter needs one of {', '.join(SELECTORS)}" for f in filters + mins if not set(SELECTORS) & set(f)]
         codes = (g.get("all_of", []) + [c for opt in g.get("one_of", []) for c in opt]
                  + [c for f in filters + mins for c in f.get("list", []) + f.get("except", [])] + g.get("except", [])

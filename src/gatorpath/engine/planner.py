@@ -166,6 +166,8 @@ def upper_only(g: dict) -> bool:
     filters = filters if isinstance(filters, list) else [filters]
 
     def up(f: dict) -> bool:
+        if isinstance(f.get("level"), list):  # "500 or 600-level": upper division when each is
+            return all(up(f | {"level": x}) for x in f["level"])
         if f.get("level") in ("lower", "upper"):  # a GE filter's level (2024-25 D2: Area 4 + USH, lower division)
             return f["level"] == "upper"
         if "ge_area_all" in f:  # the course carries every area: one UD area makes it upper division
@@ -459,7 +461,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         err("requirement_not_covered", f"{g['title']} isn't covered by the plan", group=g["id"], source=g["source"])
     if slots:
         mins = [f"{g['title']}: at least {g['min_units_from']['units']} units must be {described(g['min_units_from'])}"
-                for g in program["groups"] if "min_units_from" in g]
+                for g in program["groups"] if "min_units_from" in g and "across" not in g]  # a choice's, not a check's
         warnings.append(f"{len(slots)} slot(s) still to fill; pick each from list_eligible_electives for its group"
                         + (f" ({'; '.join(mins)})" if mins else ""))
 
@@ -596,7 +598,8 @@ def check_roadmap(roadmap: dict, program: dict, university: dict, catalog: dict,
 
 def described(f: dict) -> str:
     """A min_units_from filter in words: "CSC", "upper-division SOC", "BIOL at SF State"."""
-    words = [{"lower": "lower-division", "upper": "upper-division"}.get(str(f.get("level")), f"{f['level']}-level" if "level" in f else ""),
+    level = "/".join(map(str, f["level"])) if isinstance(f.get("level"), list) else f.get("level")
+    words = [{"lower": "lower-division", "upper": "upper-division"}.get(str(level), f"{level}-level" if level else ""),
              f.get("subject", "" if "list" in f else "courses"), " or ".join(f.get("list", [])),
              "at SF State" if f.get("sf_state") else ""]
     return " ".join(w for w in words if w)
