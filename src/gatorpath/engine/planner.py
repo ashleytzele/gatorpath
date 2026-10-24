@@ -178,9 +178,9 @@ def upper_only(g: dict) -> bool:
         level = str(f.get("level", "0"))
         return 300 <= int(level.rstrip("+")) <= 699 and not level.endswith("+")
 
-    # A capped option ("one CSC graduate course", max_courses: 1) doesn't decide it: 700+ isn't upper division
-    # (p.2391), and check_plan re-counts real units once the slot holds a course.
-    main = [f for f in filters if "max_courses" not in f]
+    # A capped option ("one CSC graduate course", max_courses: 1; "up to 9 units of lower-division", max_units: 9) doesn't
+    # decide it: 700+ isn't upper division (p.2391), and check_plan re-counts real units once the slot holds a course.
+    main = [f for f in filters if "max_courses" not in f and "max_units" not in f]
     return bool(main) and all(map(up, main))
 
 
@@ -439,6 +439,15 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             warnings.append(f"{g['title']}: not checked, GatorPath can't read this requirement; the Bulletin says "
                             f"\"{g['quote']}\" ({g['source']})")
             continue
+        if "check" in g:  # a rule over other groups' courses (§6.2): grades a plan doesn't choose, units its slots may
+            if g["check"] != "min_units_from":
+                if g["status"] == "remaining":
+                    warnings.append(f"{g['title']}: not met by the grades so far, and a plan can't change them; see an "
+                                    f"advisor ({g['source']})")
+                continue
+            if any(i in slot_count for i in g["across"]):
+                warnings.append(f"{g['title']}: depends on which courses fill the slots ({g['source']})")
+                continue
         if "units_needed" in g and g["units_done"] + slot_units.get(g["id"], 0) >= g["units_needed"]:
             continue
         if "courses_needed" in g and len(g["counted"]) + slot_count.get(g["id"], 0) >= g["courses_needed"]:
@@ -449,7 +458,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         remaining.append(g["id"])
         err("requirement_not_covered", f"{g['title']} isn't covered by the plan", group=g["id"], source=g["source"])
     if slots:
-        mins = [f"{g['title']}: at least {g['min_units_from']['units']} units must be {g['min_units_from']['subject']}"
+        mins = [f"{g['title']}: at least {g['min_units_from']['units']} units must be {described(g['min_units_from'])}"
                 for g in program["groups"] if "min_units_from" in g]
         warnings.append(f"{len(slots)} slot(s) still to fill; pick each from list_eligible_electives for its group"
                         + (f" ({'; '.join(mins)})" if mins else ""))
@@ -583,6 +592,14 @@ def check_roadmap(roadmap: dict, program: dict, university: dict, catalog: dict,
         out.append(f"roadmap pages {', '.join(map(str, left))} aren't in any variant: a roadmap the planner doesn't read "
                    "(a 5-year or 2-year one)? A person checks nothing is lost")
     return out
+
+
+def described(f: dict) -> str:
+    """A min_units_from filter in words: "CSC", "upper-division SOC", "BIOL at SF State"."""
+    words = [{"lower": "lower-division", "upper": "upper-division"}.get(str(f.get("level")), f"{f['level']}-level" if "level" in f else ""),
+             f.get("subject", "" if "list" in f else "courses"), " or ".join(f.get("list", [])),
+             "at SF State" if f.get("sf_state") else ""]
+    return " ".join(w for w in words if w)
 
 
 def approval_only(g: dict) -> bool:
@@ -1421,11 +1438,14 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
     pref_short = bool(pref) and target.get("min_units_from", {}).get("done", 0) < pref.get("units", 0)
     used = {i: sum(1 for c in target["counted"] + target["in_progress"] if matches(f, c, catalog[c]))
             for i, f in enumerate(filters)}
+    used_units = {i: sum(catalog[c]["units_min"] for c in target["counted"] + target["in_progress"] if matches(f, c, catalog[c]))
+                  for i, f in enumerate(filters)}
     options = []
     for code, course in catalog.items():
         if code in taken:
             continue
-        hit = [i for i, f in enumerate(filters) if matches(f, code, course) and used[i] < f.get("max_courses", math.inf)]
+        hit = [i for i, f in enumerate(filters) if matches(f, code, course) and used[i] < f.get("max_courses", math.inf)
+               and used_units[i] + course["units_min"] <= f.get("max_units", math.inf)]
         if not hit:
             continue
         expr = prereqs.get(code, {}).get("expr")
@@ -1443,10 +1463,12 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
                 option["ready_by"] = later
         if any("max_courses" in filters[i] for i in hit):
             option["note"] = f"at most {min(filters[i]['max_courses'] for i in hit)} course(s) from this part of the list"
+        elif any("max_units" in filters[i] for i in hit):
+            option["note"] = f"at most {min(filters[i]['max_units'] for i in hit):g} units from this part of the list"
         options.append(option)
     order = {"ready": 0, "check": 1, "blocked": 2}
     options.sort(key=lambda o: (order[o["readiness"]], -len(o["also_covers"]),
-                                not (pref_short and subject(o["code"]) == pref.get("subject")), o["code"]))
+                                not (pref_short and matches(pref, o["code"], catalog[o["code"]])), o["code"]))
     need = {k: target[k] for k in ("units_needed", "units_done", "courses_needed", "min_units_from") if k in target}
     return {"catalog_year": program["catalog_year"], "group": group_id, "title": g.get("title", group_id),
             "source": g["source"], "by_term": first, "status": target["status"], **need,

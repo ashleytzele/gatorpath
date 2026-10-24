@@ -129,3 +129,15 @@ def test_drafts_are_never_examples():
     for kind in ("programs", "roadmaps"):
         shown = P.hand_written(kind, "2026-27", "bs-public-health")
         assert shown and all("drafted_by:" not in t for t in shown) and len(shown) == 2
+
+
+def test_coverage_counts_what_is_left_for_a_person():
+    a = {"program": "a", "groups": [{"id": "x", "all_of": ["MATH 226"]}, {"id": "y", "unparsed": True},
+                                     {"id": "z", "choose_units": 3, "approval": "With the consent of an advisor",
+                                      "from": {"approved": True}}]}
+    b = {"program": "b", "groups": [{"id": "x", "all_of": ["MATH 226"]}, {"id": "w", "choose_units": 3, "approval": "Or",
+                                     "from": [{"list": ["MATH 227"]}, {"approved": True}]}]}  # a list beside: checked
+    assert P.coverage([a, b], 3) == [
+        "programs served: 2 of 3 in the Bulletin",
+        "requirement groups: 5; GatorPath checks 3 (60.0%); a person 2 (40.0%): 1 unparsed, 1 an advisor approves",
+        "programs with nothing for a person: 1", "most for a person: a 2"]

@@ -720,3 +720,22 @@ def test_check_roadmap_reports_what_a_person_must_fix():
     assert "qr-1-2: required but not on this roadmap: MATH 696" in got
     assert "transfer: the planner reads only the variants qr-1-2, qr-3-4, first-time, adt" in got
     assert got[-1].startswith("roadmap pages 2134, 2135, 2138 aren't in any variant")
+
+
+def test_check_groups_in_a_plan():
+    # §6.2 check groups: grades a plan can't change are a warning (BS CS's "no more than one course below C-" broken by a
+    # D already earned), while units a plan chooses are checked like any requirement ("A total of 30 Sociology units must
+    # be upper-division", p.851: here 70 upper-division CSC units, more than BS CS has)
+    from gatorpath.engine.planner import build_plan
+    low = {"id": "low", "title": "Low grades", "across": "major", "max_below": {"grade": "C-", "courses": 0}, "source": "p.2027"}
+    ud = {"id": "ud", "title": "Upper-division CSC", "across": "major", "source": "p.851",
+          "min_units_from": {"subject": "CSC", "level": "upper", "units": 70}}
+    profile = FRESH | {"completed": FRESH["completed"] + [{"code": "CSC 520", "grade": "D", "term": "2026-fall"}]}  # an elective: no C minimum
+    got = build_plan(profile, PROGRAM | {"groups": PROGRAM["groups"] + [low]}, UNIVERSITY, ROADMAP, CATALOG, PREREQS)
+    assert got["check"]["valid"], got["check"]["errors"]
+    assert any(w.startswith("Low grades: not met by the grades so far") for w in got["warnings"])
+    got = build_plan(FRESH, PROGRAM | {"groups": PROGRAM["groups"] + [ud]}, UNIVERSITY, ROADMAP, CATALOG, PREREQS)
+    assert any("Upper-division CSC: depends on which courses fill the slots" in w for w in got["warnings"])
+    filled = check_plan(FRESH, {"semesters": got["semesters"]}, PROGRAM | {"groups": [g for g in PROGRAM["groups"]
+                        if g["id"] != "senior_electives"] + [ud]}, UNIVERSITY, CATALOG, PREREQS)
+    assert {e.get("group") for e in filled["errors"]} >= {"ud"}  # no slots in its groups: the plan's courses decide

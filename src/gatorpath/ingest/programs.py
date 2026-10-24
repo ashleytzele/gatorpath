@@ -7,13 +7,14 @@ import re
 import shlex
 import subprocess
 import unicodedata
+from collections import Counter
 from datetime import date
 from pathlib import Path
 
 import yaml
 
 from gatorpath import db
-from gatorpath.engine.planner import VARIANTS, build_plan, check_roadmap, ge_areas
+from gatorpath.engine.planner import VARIANTS, approval_only, build_plan, check_roadmap, ge_areas
 from gatorpath.engine.rules import RULES_DIR, check_program
 from gatorpath.ingest.bulletin import extract_pages
 
@@ -145,6 +146,10 @@ Rules (they're checked by a program, then by a person):
   one_of group, one option per code ([[MUS 130], [TH A 131]]), never both codes in an all_of.
 - Major requirements only: GE, SF State Studies and the university's graduation requirements are in other files.
   Include transfer_notes only when the text gives transfer advice; leave out `advising` and `dpr_plan`.
+- Grading rules and unit limits over a program's courses (letter grades only, a CR/NC cap, a GPA floor, "no more than
+  one course below C-", "30 units must be upper-division", "12 units at SF State") are check groups; a cap inside one
+  list ("up to 9 units of lower-division") is a filter's max_units. A rule the university rules already state (a 2.0
+  GPA in all coursework) needs no group.
 - A requirement the vocabulary can't express exactly: a group with `unparsed: true`, its `quote` and `source`, and
   nothing else. Never approximate one.
 - Answer with the YAML only, in one ```yaml block. Double-quote every string with a colon in it.
@@ -325,6 +330,22 @@ def load(pid: str, year: str, catalog: dict, prereqs: dict, university: dict, pa
     return []
 
 
+def coverage(rules: list[dict], listed: int) -> list[str]:
+    """How much of the served rules GatorPath checks itself (the goal: 90%, a person the other 10%). A person's: an
+    unparsed group, and a group only an advisor's approval fills."""
+    groups = [(p["program"], g) for p in rules for g in p["groups"]]
+    unparsed = [x for x in groups if x[1].get("unparsed")]
+    approved = [x for x in groups if approval_only(x[1])]
+    left = Counter(pid for pid, _ in unparsed + approved)
+    person = left.total()
+    pct = lambda n: f"{100 * n / len(groups):.1f}%"
+    return [f"programs served: {len(rules)} of {listed} in the Bulletin",
+            f"requirement groups: {len(groups)}; GatorPath checks {len(groups) - person} ({pct(len(groups) - person)}); "
+            f"a person {person} ({pct(person)}): {len(unparsed)} unparsed, {len(approved)} an advisor approves",
+            f"programs with nothing for a person: {sum(1 for p in rules if not left[p['program']])}",
+            "most for a person: " + ", ".join(f"{pid} {n}" for pid, n in left.most_common(10))]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="List the Bulletin's bachelor's programs, write their source text, draft "
                                              "rules YAML with an AI client, and check program files.")
@@ -336,6 +357,7 @@ def main() -> None:
                                                                "against the program's rules (or its draft)")
     ap.add_argument("--load", nargs="*", metavar="ID", help="move drafts that pass the checks and a test plan into "
                                                              "rules/ (no ids: every draft)")
+    ap.add_argument("--coverage", action="store_true", help="how much of the served rules GatorPath checks vs a person")
     ap.add_argument("--client", default=CLIENT, help=f"headless AI client, prompt on stdin (default: {CLIENT})")
     ap.add_argument("--db", default="data/catalog.db")
     args = ap.parse_args()
@@ -343,6 +365,10 @@ def main() -> None:
     pages = extract_pages(args.pdf)
     have = {yaml.safe_load(p.read_text())["title"]: p.stem for p in (RULES_DIR / "programs" / year).glob("*.yaml")}
     programs = {program_id(p["title"], have): p for p in index(pages)}
+    if args.coverage:
+        print("\n".join(coverage([yaml.safe_load(f.read_text()) for f in sorted((RULES_DIR / "programs" / year).glob("*.yaml"))],
+                                  len(programs))))
+        return
     if args.source is None and not args.draft and not args.roadmap and args.load is None:
         print(json.dumps([{"id": i, **p, "has_rules": p["title"] in have} for i, p in programs.items()], indent=1))
         return

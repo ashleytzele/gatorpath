@@ -445,3 +445,77 @@ def test_check_program_reports_what_a_person_must_fix():
            "group [[MUS 130], [TH A 131]]" in check_program(good | {"groups": [theory]}, twins)
     early = good | {"groups": [g | {"source": "p.152"} for g in good["groups"]]}  # a page under 1000
     assert check_program(early, CATALOG, {152}) == []
+
+
+def test_check_groups_read_the_courses_other_groups_count():
+    # §6.2 check groups, from real Bulletin rules: "Courses fulfilling the ... core requirement may not be taken on a CR/NC
+    # basis" (p.1322), "no more than 6 units of the core may be completed on a CR/NC basis" (p.53), "No more than one
+    # course counted toward major requirements may be completed with a grade less than a C-" (p.2027), "a minimum grade
+    # point average of 2.0 in all Core Requirement Business courses" (p.53), "At least 12 units in biology must be
+    # completed at SF State" (p.1784). Applied Math's required courses stand in for the core.
+    program, university = load_rules("2026-27", "bs-applied-math")
+    checks = [
+        {"id": "letters", "across": ["required"], "letter_grade": True, "source": "p.1322"},
+        {"id": "cr_cap", "across": ["required"], "max_cr": {"units": 8, "except_exam": True}, "source": "p.53"},
+        {"id": "low", "across": "major", "max_below": {"grade": "C-", "courses": 1}, "source": "p.2027"},
+        {"id": "gpa", "across": ["required"], "min_gpa": 2.0, "source": "p.53"},
+        {"id": "here", "across": "major", "min_units_from": {"subject": "MATH", "level": "upper", "units": 12, "sf_state": True},
+         "source": "p.1784"},
+    ]
+    only_cr = CATALOG | {"MATH 228": CATALOG["MATH 228"] | {"grading": "cr_nc"}}
+    plain = [{k: v for k, v in g.items() if k != "min_grade"} for g in program["groups"]]
+
+    def run(rows, catalog=CATALOG):
+        got = audit({"catalog_year": "2026-27", "completed": [{"term": "2026-fall"} | r for r in rows]},
+                    program | {"groups": checks + plain, "global": {}}, university, catalog)  # CR may count
+        return {g["id"]: g for g in got["groups"]}, got["warnings"]
+
+    status, _ = run([])
+    assert [status[i]["status"] for i in ("letters", "cr_cap", "low", "gpa", "here")] == ["in_progress"] * 4 + ["remaining"]
+    assert status["low"]["across"] == ["required", "programming", "theory", "major_electives", "application_electives"]
+    status, warnings = run([{"code": "MATH 226", "grade": "CR"}, {"code": "MATH 227", "grade": "CR", "credit": "exam"},
+                            {"code": "MATH 228", "grade": "CR"}], only_cr)
+    assert status["letters"]["status"] == "remaining"  # MATH 228 is CR/NC-only: only MATH 226 and the exam break it
+    assert "letters: MATH 226, MATH 227: CR, but these courses must be taken for a letter grade (p.1322)" in warnings
+    assert status["cr_cap"]["status"] == "in_progress"  # 12 CR units, but the 4 by exam are outside the cap: 8 <= 8
+    status, warnings = run([{"code": c, "grade": "D"} for c in ("MATH 226", "MATH 227")]
+                           + [{"code": c, "grade": "A", "transfer": True} for c in ("MATH 325", "MATH 376", "MATH 400")]
+                           + [{"code": c, "grade": "B"} for c in ("MATH 440", "MATH 460")])
+    assert status["low"]["status"] == status["gpa"]["status"] == "remaining" and status["gpa"]["gpa"] == 1.857  # D, D, B, B (4, 4, 3, 3 units)
+    assert "low: MATH 226, MATH 227: below C-, at most 1 course(s) may be (p.2027)" in warnings
+    assert status["here"]["min_units_from"]["done"] == 6  # the transfer courses aren't SF State units
+    assert status["here"]["status"] == "remaining"
+
+
+def test_a_filter_caps_units_and_takes_a_division():
+    # BA Sociology p.851: "Upper-division SOC courses ... Up to 9 units of lower-division sociology courses"
+    program, university = load_rules("2026-27", "bs-applied-math")
+    electives = {"id": "electives", "choose_units": 12, "source": "p.851",
+                 "from": [{"subject": "MATH", "level": "upper"}, {"subject": "MATH", "level": "lower", "max_units": 4}]}
+    rows = [{"code": c, "grade": "A", "term": "2026-fall"} for c in ("MATH 226", "MATH 227", "MATH 430", "MATH 442")]
+    got = audit({"catalog_year": "2026-27", "completed": rows}, program | {"groups": [electives]}, university, CATALOG)
+    g = next(g for g in got["groups"] if g["id"] == "electives")
+    assert g["counted"] == ["MATH 226", "MATH 430", "MATH 442"] and g["units_done"] == 10  # one 4-unit lower-division
+    assert not matches({"level": "upper"}, "MATH 226", CATALOG["MATH 226"]) and matches({"level": "upper"}, "MATH 430", CATALOG["MATH 430"])
+    mins = program["groups"][:1] + [electives | {"min_units_from": {"level": "upper", "units": 9}}]
+    got = audit({"catalog_year": "2026-27", "completed": rows}, program | {"groups": mins}, university, CATALOG)
+    assert next(g for g in got["groups"] if g["id"] == "electives")["min_units_from"]["done"] == 6
+
+
+def test_check_program_reads_check_groups():
+    from gatorpath.engine.rules import check_program
+    good = yaml.safe_load((RULES_DIR / "programs/2026-27/bs-applied-math.yaml").read_text())
+    ok = [{"id": "gpa", "across": ["required", "theory"], "min_gpa": 2.0, "source": "p.2129"},
+          {"id": "ud", "across": "major", "min_units_from": {"level": "upper", "units": 30}, "source": "p.2129"}]
+    assert check_program(good | {"groups": good["groups"] + ok}, CATALOG) == []
+    bad = [{"id": "two", "across": ["required"], "min_gpa": 2.0, "letter_grade": True, "source": "p.2129"},
+           {"id": "where", "across": ["nowhere"], "max_cr": {"units": 6, "courses": 1}, "source": "p.2129"},
+           {"id": "low", "across": "major", "max_below": {"grade": "Z"}, "except": ["MATH 999"], "source": "p.2129"},
+           {"id": "any", "choose_units": 0, "from": {"max_units": 3}, "min_units_from": {"subject": "MATH"}, "source": "p.2129"}]
+    assert check_program(good | {"groups": good["groups"] + bad}, CATALOG) == [
+        "two: a check group needs exactly one of letter_grade, max_cr, max_below, min_gpa, min_units_from (has letter_grade, min_gpa)",
+        "where: across must be `major` or ids of this program's course groups (has ['nowhere'])",
+        "where: max_cr needs units or courses",
+        "low: max_below needs a grade and courses", "low: MATH 999 is not in the 2026-27 catalog",
+        "any: min_units_from needs units",
+        "any: a filter needs one of list, subject, level, ge_area, ge_area_all, approved"]
