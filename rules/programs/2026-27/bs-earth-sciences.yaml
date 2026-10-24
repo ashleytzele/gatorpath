@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# focus_select_one_rows (p.2035) "Select One: 3": the focus electives' Select One rows are filters with max_courses: 1
 program: bs-earth-sciences
 title: Bachelor of Science in Earth Sciences
 catalog_year: 2026-27
@@ -11,13 +12,18 @@ total_units: 63
 source: p.2034
 groups:
 - id: cr_limit
-  title: CR grade acceptable in any two major courses
-  unparsed: true
+  title: CR in at most two courses
+  across: major
+  max_cr:
+    courses: 2
   quote: Students are advised that the CR grade is acceptable in any two courses to be counted for the major.
   source: p.2034
 - id: min_grade_limit
-  title: No more than one major course below C-
-  unparsed: true
+  title: At most one course below C-
+  across: major
+  max_below:
+    grade: C-
+    courses: 1
   quote: No more than one course counted toward major requirements may be completed with a grade less than a C-.
   source: p.2034
 - id: intro_earth_sciences
@@ -123,13 +129,8 @@ groups:
   from:
   - list:
     - ERTH 325
-    - ERTH 330
-    - ERTH 335
-    - ERTH 365
     - ERTH 410
     - ERTH 420
-    - ERTH 425
-    - GEOG 312
     - ERTH 446
     - ERTH 470
     - ERTH 515
@@ -141,12 +142,16 @@ groups:
     - GEOG 314
     - GEOG 317
     - GEOG 644
+  - list:
+    - ERTH 330
+    - ERTH 335
+    - ERTH 365
+    max_courses: 1
+  - list:
+    - ERTH 425
+    - GEOG 312
+    max_courses: 1
   quote: Earth Science Focus Electives (15 units minimum)
-  source: p.2035
-- id: focus_select_one_rows
-  title: 'Focus Electives: Select One rows (ERTH 330 / 335 / 365; ERTH 425 / GEOG 312) count once each'
-  unparsed: true
-  quote: 'Select One: 3'
   source: p.2035
 transfer_notes:
 - text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific

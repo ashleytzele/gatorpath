@@ -2,6 +2,8 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# chem_prereq_min_grade (p.1881) "Grades of C or better are required in chemistry prerequisite courses.": min_grade C on the CHEM courses another course in the major names as a prerequisite (CHEM 115, 215, 233, 234, 235, 251, 321, 322, 325, 340, 343, 351, 353, 685), whose prereq text also says C or better
+# chem_343_substitution (p.1882) "Students may substitute CHEM 343 for CHEM 426 or CHEM 451 upon prior approval of advisor.": the upper-division group's exceptions text: an advisor-approved substitution, on the DPR
 program: bs-chemistry
 title: Bachelor of Science in Chemistry
 catalog_year: 2026-27
@@ -13,10 +15,6 @@ global:
   no_cr_nc: true
   source: p.1881
 groups:
-- id: chem_prereq_min_grade
-  unparsed: true
-  quote: Grades of C or better are required in chemistry prerequisite courses.
-  source: p.1881
 - id: lower_division
   title: Lower-Division Requirements (chemistry and mathematics)
   all_of:
@@ -31,6 +29,13 @@ groups:
   - MATH 227
   quote: CHEM 115 General Chemistry I 4
   source: p.1881
+  min_grade:
+    CHEM 115: C
+    CHEM 215: C
+    CHEM 233: C
+    CHEM 234: C
+    CHEM 235: C
+    CHEM 251: C
 - id: lower_physics
   title: 'Lower-Division Requirements: Select One (PHYS 111, 112, 121 & 122, or PHYS 220, 222, 230 & 232)'
   one_of:
@@ -58,10 +63,15 @@ groups:
   - CHEM 451
   quote: Upper-Division Requirements (25 units)
   source: p.1881
-- id: chem_343_substitution
-  unparsed: true
-  quote: Students may substitute CHEM 343 for CHEM 426 or CHEM 451 upon prior approval of advisor.
-  source: p.1882
+  min_grade:
+    CHEM 321: C
+    CHEM 322: C
+    CHEM 325: C
+    CHEM 340: C
+    CHEM 351: C
+    CHEM 353: C
+  exceptions: Students may substitute CHEM 343 for CHEM 426 or CHEM 451 upon prior approval of advisor. If CHEM 343 is used
+    as a substitute, it cannot also be used as an elective.
 - id: upper_division_electives
   title: Upper-Division Electives (9 units minimum)
   choose_units: 9
@@ -90,6 +100,9 @@ groups:
   - approved: true
   quote: A minimum of 9 units of electives must be selected from the following
   source: p.1881
+  min_grade:
+    CHEM 343: C
+    CHEM 685: C
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
   source: p.1882

@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# minimum_gpa (p.1815) "A minimum grade point average of 2.0 in all coursework is required.": the university's 2.0 GPA in all coursework (totals.gpa_all)
 program: bs-biology-marine-science
 title: 'Bachelor of Science in Biology: Concentration in Marine Science'
 catalog_year: 2026-27
@@ -167,12 +168,13 @@ groups:
   source: p.1816
   fill_to_total: true
 - id: sf_state_biology_units
-  unparsed: true
+  title: 12 biology units at SF State
+  across: major
+  min_units_from:
+    subject: BIOL
+    units: 12
+    sf_state: true
   quote: At least 12 units in biology must be completed at SF State.
-  source: p.1815
-- id: minimum_gpa
-  unparsed: true
-  quote: A minimum grade point average of 2.0 in all coursework is required.
   source: p.1815
 transfer_notes:
 - text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific

@@ -166,7 +166,12 @@ groups:
   source: p.1836
   fill_to_total: true
 - id: sf_state_biology_units
-  unparsed: true
+  title: 12 biology units at SF State
+  across: major
+  min_units_from:
+    subject: BIOL
+    units: 12
+    sf_state: true
   quote: At least 12 units in biology must be completed at SF State.
   source: p.1835
 transfer_notes:

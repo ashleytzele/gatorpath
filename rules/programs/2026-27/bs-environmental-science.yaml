@@ -11,11 +11,18 @@ total_units: 70
 source: p.2047
 groups:
 - id: cr_limit
-  unparsed: true
+  title: CR in at most two courses
+  across: major
+  max_cr:
+    courses: 2
   quote: Students are advised that the CR grade is acceptable in any two courses to be counted for the major.
   source: p.2047
 - id: low_grade_limit
-  unparsed: true
+  title: At most one course below C-
+  across: major
+  max_below:
+    grade: C-
+    courses: 1
   quote: No more than one course counted toward major requirements may be completed with a grade less than a C-.
   source: p.2047
 - id: foundation_biology

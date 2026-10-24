@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# chem_prereq_min_grade (p.1868) "Grades of C or better are required in chemistry prerequisite courses.": min_grade C on the CHEM courses another course in the major names as a prerequisite (CHEM 115, 215, 233, 234, 235, 300, 301, 321, 322, 325, 340, 343, 351, 353, 685), whose prereq text also says C or better
 program: bs-biochemistry
 title: Bachelor of Science in Biochemistry
 catalog_year: 2026-27
@@ -13,10 +14,6 @@ global:
   no_cr_nc: true
   source: p.1868
 groups:
-- id: chem_prereq_min_grade
-  unparsed: true
-  quote: Grades of C or better are required in chemistry prerequisite courses.
-  source: p.1868
 - id: lower_required
   title: 'Lower-Division Requirements (37 units): fixed courses'
   all_of:
@@ -30,6 +27,12 @@ groups:
   - MATH 227
   quote: Lower-Division Requirements (37 units)
   source: p.1868
+  min_grade:
+    CHEM 115: C
+    CHEM 215: C
+    CHEM 233: C
+    CHEM 234: C
+    CHEM 235: C
 - id: lower_physics
   title: 'Lower-Division Requirements: Select one physics sequence (8 units)'
   one_of:
@@ -56,6 +59,7 @@ groups:
     - CHEM 353
   quote: 'Select One: 6'
   source: p.1868
+  min_grade: C
 - id: upper_required
   title: 'Upper-Division Requirements (18 units): fixed courses'
   all_of:
@@ -65,6 +69,10 @@ groups:
   - CHEM 343
   quote: Upper-Division Requirements (18 units)
   source: p.1868
+  min_grade:
+    CHEM 321: C
+    CHEM 340: C
+    CHEM 343: C
 - id: upper_electives
   title: Upper-Division Electives (12 units minimum)
   choose_units: 12
@@ -111,10 +119,55 @@ groups:
   - approved: true
   quote: Upper-Division Electives (12 units minimum)
   source: p.1868
+  min_grade:
+    CHEM 322: C
+    CHEM 325: C
+    CHEM 685: C
 - id: upper_electives_must_include
-  title: 'Upper-Division Electives: must include a CHEM course, a GWAR course and two laboratory courses'
-  unparsed: true
-  quote: 'Electives must include at least:'
+  title: 'Electives: a CHEM course'
+  across:
+  - upper_electives
+  min_units_from:
+    subject: CHEM
+    courses: 1
+  quote: a. one course with a CHEM prefix,
+  source: p.1868
+- id: upper_electives_gwar
+  title: 'Electives: a GWAR course'
+  across:
+  - upper_electives
+  min_units_from:
+    list:
+    - CHEM 390GW
+    - CHEM 645GW
+    - BIOL 351GW
+    - BIOL 402GW
+    - BIOL 613GW
+    courses: 1
+  quote: b. one GWAR (GW) course, and
+  source: p.1868
+- id: upper_electives_labs
+  title: 'Electives: two laboratory courses'
+  across:
+  - upper_electives
+  min_units_from:
+    list:
+    - CHEM 322
+    - CHEM 370
+    - CHEM 420
+    - CHEM 422
+    - CHEM 426
+    - CHEM 443
+    - CHEM 451
+    - CHEM 699
+    - BIOL 351GW
+    - BIOL 358
+    - BIOL 402GW
+    - BIOL 436
+    - BIOL 613GW
+    - BIOL 638
+    courses: 2
+  quote: c. two laboratory courses.
   source: p.1868
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
