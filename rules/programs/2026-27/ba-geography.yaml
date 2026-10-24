@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-geography.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-geography
 title: Bachelor of Arts in Geography
 catalog_year: 2026-27
@@ -39,15 +40,23 @@ groups:
   quote: ENV 690 Capstone Seminar 3
   source: p.2027
 - id: distribution_physical
-  title: 'Distribution Requirement A: Physical Geography'
-  unparsed: true
+  title: Distribution A. Physical Geography (310-399)
+  choose_units: 3
+  from:
+  - subject: GEOG
+    level: '300'
+    except:
+    - GEOG 301
+  source: p.2027
   quote: A. Physical Geography – 310-399 numbered courses in Geography
-  source: p.2027
 - id: distribution_human
-  title: 'Distribution Requirement B: Human Geography'
-  unparsed: true
-  quote: B. Human Geography – 400-level courses in Geography
+  title: Distribution B. Human Geography (400-level)
+  choose_units: 3
+  from:
+  - subject: GEOG
+    level: '400'
   source: p.2027
+  quote: B. Human Geography – 400-level courses in Geography
 - id: distribution_regional
   title: 'Distribution Requirement C: Human-Environment Interaction in a Regional Context'
   choose_units: 3
@@ -62,17 +71,27 @@ groups:
   quote: 'C. Human-Environment Interaction in a Regional Context:'
   source: p.2027
 - id: distribution_techniques
-  title: 'Distribution Requirement D: Techniques or Applied Geography'
-  unparsed: true
+  title: Distribution D. Techniques or Applied Geography (GEOG 601-668)
+  choose_units: 3
+  from:
+  - subject: GEOG
+    level: '600'
+    except:
+    - GEOG 600
+    - GEOG 685
+    - GEOG 688
+    - GEOG 699
+  source: p.2027
   quote: D. Techniques or Applied Geography – Courses from either Geographic Techniques – GEOG 601-639 or Applied Geography
     – GEOG 640–668.
-  source: p.2027
 - id: electives
   title: Electives (12 units)
   choose_units: 12
   approval: Units of upper-division geography electives consisting of a minimum of three courses chosen on advisement.
   from:
-    approved: true
+  - subject: GEOG
+    level: 300+
+  - approved: true
   quote: Electives (12 units)
   source: p.2027
 transfer_notes:

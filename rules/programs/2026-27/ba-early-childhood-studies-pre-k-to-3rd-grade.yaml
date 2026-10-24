@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-early-childhood-studies-pre-k-to-3rd-grade.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-early-childhood-studies-pre-k-to-3rd-grade
 title: 'Bachelor of Arts in Early Childhood Studies: Concentration in Pre-K to 3rd Grade'
 catalog_year: 2026-27

@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-comparative-and-world-literature.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-comparative-and-world-literature
 title: Bachelor of Arts in Comparative and World Literature
 catalog_year: 2026-27
@@ -40,6 +41,8 @@ groups:
   approval: In consultation with departmental advisors, students select literature courses that reflect their chosen advising
     pathway.
   from:
+  - subject: CWL
+  - subject: HUM
   - approved: true
   quote: Program Electives (15 Units)
   source: p.1278

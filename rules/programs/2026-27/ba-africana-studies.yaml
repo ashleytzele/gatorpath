@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-africana-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-africana-studies
 title: Bachelor of Arts in Africana Studies
 catalog_year: 2026-27
@@ -24,10 +25,49 @@ groups:
   quote: Core Requirements (27 units)
   source: p.402
 - id: emphasis
-  title: 'Areas of Emphasis (9 units): 9 units from one area'
-  unparsed: true
-  quote: Select 9 units on advisement from one area below to gain a deeper intellectual grasp of the field.
+  title: Areas of Emphasis (9 units)
+  choose_units: 9
+  from:
+  - list:
+    - AFRS 204
+    - AFRS 208
+    - AFRS 213
+    - AFRS 221
+    - AFRS 230
+    - AFRS 266
+    - AFRS 305
+    - AFRS 326
+    - AFRS 400
+    - AFRS 551
+    - AFRS 525
+    - AFRS 665
+    - AFRS 100
+    - AFRS 111
+    - AFRS 125
+    - AFRS 202
+    - AFRS 215
+    - AFRS 256
+    - AFRS 290
+    - AFRS 320
+    - AFRS 335
+    - AFRS 350
+    - AIS 350
+    - LTNS 355
+    - AFRS 376
+    - AFRS 500
+    - AFRS 678
+    - AFRS 705
+    - AFRS 205
+    - AFRS 233
+    - AFRS 675
+  - approved: true
   source: p.402
+  quote: Select 9 units on advisement from one area below
+- id: emphasis_one_area
+  title: 'Areas of Emphasis: from one area'
+  unparsed: true
+  source: p.402
+  quote: Select 9 units on advisement from one area below to gain a deeper intellectual grasp of the field.
 - id: gwar
   title: Graduation Writing Assessment Requirement (3 units)
   all_of:

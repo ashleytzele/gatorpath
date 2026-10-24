@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-environmental-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-environmental-studies
 title: Bachelor of Arts in Environmental Studies
 catalog_year: 2026-27
@@ -103,9 +104,86 @@ groups:
   title: Guided Electives (11-12 units)
   choose_units: 11
   from:
+  - list:
+    - AIS 310
+    - AMST 410
+    - BECA 502
+    - BUS 450
+    - CINE 344
+    - COMM 572
+    - COMM 675
+    - CST 300
+    - ECON 550
+    - ECON 620
+    - ENG 490
+    - ENG 535
+    - ENVS 331
+    - ENVS 401
+    - ENVS 430
+    - ENVS 460
+    - ENVS 470
+    - ENVS 480
+    - ENVS 530
+    - ENVS 570
+    - ENVS 600
+    - ENVS 699
+    - GEOG 421
+    - GEOG 425
+    - GEOG 427
+    - GEOG 432
+    - GEOG 433
+    - GEOG 600
+    - GEOG 647
+    - GEOG 651
+    - GEOG 652
+    - GEOG 658
+    - GEOG 666
+    - GEOG 667
+    - HUM 380
+    - HUM 450
+    - I R 331
+    - I R 334
+    - IBUS 334
+    - JOUR 580
+    - LS 401
+    - LS 430
+    - PH 655
+    - PHIL 150
+    - PHIL 351
+    - PHIL 355
+    - PHIL 383
+    - PHIL 470
+    - PLSI 150
+    - PLSI 354
+    - PLSI 355
+    - PLSI 386
+    - RPT 440
+    - RRS 410
+    - S W 456
+    - SOC 380
+    - SOC 410
+    - SOC 477
+    - SOC 483
+    - USP 370
+    - USP 432
+    - USP 433
+    - USP 456
+    - USP 514
+    - USP 515
+    - USP 530
+    - USP 651
+    - USP 652
+    - USP 658
+    - WGS 593
   - approved: true
   quote: Select 11-12 units not used to satisfy the elective categories above.
   source: p.2019
+  approval: students interested in alternative routes through the elective portion of the major should consult with an advisor.
+- id: guided_electives_shortlist
+  title: 'Guided Electives: two from a pathway''s shortlist'
+  unparsed: true
+  source: p.2020
+  quote: Take 11-12 units. Two courses must be from the shortlist.
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
   source: p.2021

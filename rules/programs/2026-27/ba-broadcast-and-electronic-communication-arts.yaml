@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-broadcast-and-electronic-communication-arts.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-broadcast-and-electronic-communication-arts
 title: Bachelor of Arts in Broadcast and Electronic Communication Arts
 catalog_year: 2026-27
@@ -64,7 +65,9 @@ groups:
     may include Foundation Area courses in the Media Writing and Media, Culture, and Society areas not used to fulfill those
     requirements, and may include up to 3 units from other departments/programs.
   from:
-    approved: true
+  - subject: BECA
+    level: 300+
+  - approved: true
   quote: Electives in a Focus Area (15 units)
   source: p.954
 transfer_notes:

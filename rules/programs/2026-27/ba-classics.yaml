@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-classics.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-classics
 title: Bachelor of Arts in Classics
 catalog_year: 2026-27
@@ -10,10 +11,27 @@ total_units: 36
 source: p.1013
 groups:
 - id: discovery
-  title: Discovery (6 units)
-  unparsed: true
-  quote: Select two lower-division courses from CLAR, CLAS, GRE, and LATN prefixes.
+  title: Discovery (6 Units)
+  choose_units: 6
   source: p.1013
+  from:
+  - subject: CLAR
+    level: '100'
+  - subject: CLAR
+    level: '200'
+  - subject: CLAS
+    level: '100'
+  - subject: CLAS
+    level: '200'
+  - subject: GRE
+    level: '100'
+  - subject: GRE
+    level: '200'
+  - subject: LATN
+    level: '100'
+  - subject: LATN
+    level: '200'
+  quote: Select two lower-division courses from CLAR, CLAS, GRE, and LATN prefixes.
 - id: survey
   title: Survey (9 units), Select Three
   choose_units: 9
@@ -34,16 +52,29 @@ groups:
   quote: 'Select Three:'
   source: p.1013
 - id: synthesis
-  title: Synthesis (3 units)
-  unparsed: true
+  title: 'Synthesis (3 Units): a GWAR course on advisement (the Bulletin names CLAS 400GW, which isn''t in the 2026-27 catalog)'
+  choose_units: 3
+  from:
+    approved: true
+  source: p.1013
   quote: CLAS 400GW or a GWAR course in another department upon advisement.
-  source: p.1013
+  approval: CLAS 400GW or a GWAR course in another department upon advisement.
 - id: electives
-  title: Electives (18 units)
-  unparsed: true
-  quote: Select six elective courses, upon advisement, from CLAS, CLAR, GRE, and LATN prefixes, at least two of which must
-    be upper-division.
+  title: Electives (18 Units)
+  choose_units: 18
   source: p.1013
+  from:
+  - subject: CLAR
+  - subject: CLAS
+  - subject: GRE
+  - subject: LATN
+  - approved: true
+  quote: Select six elective courses, upon advisement, from CLAS, CLAR, GRE, and LATN prefixes
+- id: electives_upper_division
+  title: 'Electives: at least two upper-division'
+  unparsed: true
+  source: p.1013
+  quote: at least two of which must be upper-division.
 - id: complementary_studies
   title: Complementary Studies (12 units outside the primary prefix)
   unparsed: true

@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-communication-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-communication-studies
 title: Bachelor of Arts in Communication Studies
 catalog_year: 2026-27
@@ -105,10 +106,20 @@ groups:
   quote: Select 4 units from courses between COMM 600-609 and COMM 660-669.
   source: p.1038
 - id: electives
-  unparsed: true
+  title: Electives (6 units)
+  choose_units: 6
+  source: p.1039
+  from:
+  - subject: COMM
+    level: '400'
+  - subject: COMM
+    level: '500'
+  - list:
+    - COMM 368
+    - COMM 685
+    - COMM 695
   quote: All upper-division COMM courses between COMM 400-599 may be used as electives only if their corresponding area above
     is already met with other courses.
-  source: p.1039
 - id: electives_lower_division_cap
   unparsed: true
   quote: Only 2 units from a lower-division COMM class may count towards the electives requirement.

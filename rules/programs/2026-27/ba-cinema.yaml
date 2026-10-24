@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-cinema.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-cinema
 title: Bachelor of Arts in Cinema
 catalog_year: 2026-27
@@ -66,6 +67,7 @@ groups:
     level: 500
   - subject: CINE
     level: 600
+  - approved: true
   quote: Select additional upper-division Cinema courses to complete a total of 45 units required for the major.
   source: p.988
 - id: outside_cinema_courses
