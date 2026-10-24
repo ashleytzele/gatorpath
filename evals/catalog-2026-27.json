@@ -13756,6 +13756,22 @@
   "units_max": 3.0,
   "units_min": 1.0
  },
+ "GER 514": {
+  "crosslisted": [
+   "HIST 514",
+   "I R 514",
+   "JS 514",
+   "PLSI 514"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1473,
+  "title": "Political Violence and Terrorism in German History, Film, and Visual Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "GER 613": {
   "ge_areas": [],
   "grading": null,
@@ -17344,6 +17360,22 @@
   "repeatable": false,
   "source_page": 1318,
   "title": "News Media Law",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "I R 514": {
+  "crosslisted": [
+   "GER 514",
+   "HIST 514",
+   "JS 514",
+   "PLSI 514"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1318,
+  "title": "Political Violence and Terrorism in German History, Film, and Visual Media",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -24372,6 +24404,22 @@
   "title": "Regulating the City: Law, Space, and Social Difference",
   "units_max": 4.0,
   "units_min": 4.0
+ },
+ "PLSI 514": {
+  "crosslisted": [
+   "GER 514",
+   "HIST 514",
+   "I R 514",
+   "JS 514"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1635,
+  "title": "Political Violence and Terrorism in German History, Film, and Visual Media",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "PLSI 544": {
   "crosslisted": [

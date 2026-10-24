@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# service_hours (p.476) "Students must complete at least 30 hours of service as part of a local": the hours are served in "a local community service learning internship in an LTNS course", and the core requires LTNS 694 Community Service Learning (to confirm: the footnote mark is not printed on a course)
 program: ba-latina-latino-studies
 title: Bachelor of Arts in Latina/Latino Studies
 catalog_year: 2026-27
@@ -161,14 +162,14 @@ groups:
   unparsed: true
   quote: The following courses may be taken for no more than 4 units towards
   source: p.476
-- id: service_hours
-  unparsed: true
-  quote: Students must complete at least 30 hours of service as part of a local
-  source: p.476
 - id: transfer_unit_cap
-  unparsed: true
-  quote: Nine transfer units in Latina/Latino Studies (or equivalent field) may
+  title: At most 9 transfer units
+  across: major
+  quote: Nine transfer units in Latina/Latino Studies (or equivalent field) may count toward the Major.
   source: p.476
+  max_units_from:
+    units: 9
+    transfer: true
 transfer_notes:
 - text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
     guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division

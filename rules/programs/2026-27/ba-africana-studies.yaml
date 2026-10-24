@@ -64,10 +64,51 @@ groups:
   source: p.402
   quote: Select 9 units on advisement from one area below
 - id: emphasis_one_area
-  title: 'Areas of Emphasis: from one area'
-  unparsed: true
-  source: p.402
+  title: 'Emphasis: 9 units from one area'
+  across:
+  - emphasis
   quote: Select 9 units on advisement from one area below to gain a deeper intellectual grasp of the field.
+  source: p.402
+  one_category: true
+  categories:
+  - - AFRS 204
+    - AFRS 208
+    - AFRS 213
+    - AFRS 221
+    - AFRS 230
+    - AFRS 266
+    - AFRS 305
+    - AFRS 326
+    - AFRS 400
+    - AFRS 551
+    - AFRS 525
+    - AFRS 665
+  - - AFRS 100
+    - AFRS 111
+    - AFRS 125
+    - AFRS 202
+    - AFRS 215
+    - AFRS 256
+    - AFRS 290
+    - AFRS 320
+    - AFRS 335
+    - AFRS 350
+    - AFRS 376
+    - AFRS 500
+    - AFRS 678
+    - AFRS 705
+    - AIS 350
+    - LTNS 355
+  - - AFRS 205
+    - AFRS 233
+    - AFRS 525
+    - AFRS 678
+  - - AFRS 290
+    - AFRS 326
+    - AFRS 500
+  - - AFRS 202
+    - AFRS 335
+    - AFRS 675
 - id: gwar
   title: Graduation Writing Assessment Requirement (3 units)
   all_of:

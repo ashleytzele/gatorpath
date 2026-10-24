@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# core_cr_grade (p.2234) "Majors must achieve a grade of CR in PSY 303 and PSY 690.": PSY 303 and PSY 690 are offered only CR/NC: passing them is a CR
 program: ba-psychology
 title: Bachelor of Arts in Psychology
 catalog_year: 2026-27
@@ -27,10 +28,6 @@ groups:
   - PSY 303
   - PSY 690
   quote: Core Curriculum (14 Units)
-  source: p.2234
-- id: core_cr_grade
-  unparsed: true
-  quote: Majors must achieve a grade of CR in PSY 303 and PSY 690.
   source: p.2234
 - id: basic_area_1
   title: 'Basic Courses, Area 1: Basic Psychological Processes (two courses)'

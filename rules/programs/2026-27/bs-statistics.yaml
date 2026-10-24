@@ -81,11 +81,35 @@ groups:
     - MATH 460
   quote: Guided Electives (9 units)
 - id: guided_electives_one_area
-  title: 'Guided Electives: three courses from one area'
-  unparsed: true
-  source: p.2141
+  title: 'Guided electives: three courses from one area'
+  across:
+  - guided_electives
   quote: 'Select three courses from one of the areas (Science, Economics, Business: Decision Sciences, or Business: Information
     Systems) listed below:'
+  source: p.2141
+  one_category: true
+  categories:
+  - - MATH 370
+    - MATH 376
+    - MATH 400
+    - MATH 425
+    - MATH 430
+    - MATH 460
+  - - ECON 301
+    - ECON 302
+    - ECON 312
+    - ECON 715
+    - ECON 731
+    - ECON 825
+  - - DS 311
+    - DS 408
+    - DS 412
+    - DS 604
+    - DS 624
+  - - ISYS 363
+    - ISYS 463
+    - ISYS 569
+    - ISYS 650
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
     related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation

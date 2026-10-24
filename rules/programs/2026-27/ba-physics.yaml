@@ -11,19 +11,29 @@ total_units: 54
 source: p.2165
 groups:
 - id: cr_for_phys_200
-  title: PHYS 200 must be passed with a grade of CR
-  unparsed: true
+  title: 'Lower-division prerequisites: letter grades'
+  across:
+  - lower_math
+  - phys_200
+  - lower_physics
+  - programming
+  letter_grade: true
   quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
     except for PHYS 200 which must be passed with a grade of CR.
   source: p.2165
 - id: upper_core_letter_grade
-  title: Upper-Division Core courses must be taken for letter grades
-  unparsed: true
+  title: 'Upper-division core: letter grades'
+  across:
+  - upper_core
+  letter_grade: true
   quote: All Major Upper-Division Core courses must be taken for letter grades;
   source: p.2165
 - id: elective_cr_nc_cap
-  title: At most 3 units of Upper-Division Electives on CR/NC
-  unparsed: true
+  title: 'Electives: at most 3 CR/NC units'
+  across:
+  - upper_electives
+  max_cr:
+    units: 3
   quote: Up to a maximum of 3 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
     is allowed.
   source: p.2165

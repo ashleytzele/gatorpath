@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# electives_upper_division (p.504) "At least six elective units should be upper-division.": the electives' min_units_from (6 upper-division units)
 program: ba-race-and-resistance-studies
 title: Bachelor of Arts in Race and Resistance Studies
 catalog_year: 2026-27
@@ -80,11 +81,9 @@ groups:
   - subject: RRS
   quote: Three RRS Courses 9
   source: p.504
-- id: electives_upper_division
-  title: 'Electives: upper-division units'
-  unparsed: true
-  quote: At least six elective units should be upper-division.
-  source: p.504
+  min_units_from:
+    level: upper
+    units: 6
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
   source: p.504

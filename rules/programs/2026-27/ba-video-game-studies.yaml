@@ -11,8 +11,11 @@ total_units: 24
 source: p.1296
 groups:
 - id: upper_division_units
-  title: Upper-division units
-  unparsed: true
+  title: 15 upper-division units
+  across: major
+  min_units_from:
+    level: upper
+    units: 15
   quote: 15 Units must be completed at the upper-division level.
   source: p.1296
 - id: core_intro

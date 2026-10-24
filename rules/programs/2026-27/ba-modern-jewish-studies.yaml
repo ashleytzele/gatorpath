@@ -11,8 +11,11 @@ total_units: 30
 source: p.1357
 groups:
 - id: core_cr_nc
-  title: Core and Culminating Experience courses must be taken for a letter grade
-  unparsed: true
+  title: 'Core and culminating experience: letter grades'
+  across:
+  - major_core
+  - culminating_experience
+  letter_grade: true
   quote: CR/NC grading is not accepted for Core and Culminating Experience courses.
   source: p.1357
 - id: major_core

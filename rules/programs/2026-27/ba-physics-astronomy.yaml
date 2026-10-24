@@ -35,8 +35,14 @@ groups:
   quote: PHYS 200 Planning for Success as a Physics & Astronomy
   source: p.2174
 - id: ld_phys_200_cr
-  unparsed: true
-  quote: and be passed with grades of C or better, except for PHYS 200 which
+  title: 'Lower-division prerequisites: letter grades'
+  across:
+  - ld_prereq_fixed
+  - ld_prereq_phys_200
+  - ld_programming
+  letter_grade: true
+  quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
+    except for PHYS 200 which must be passed with a grade of CR.
   source: p.2174
 - id: ld_programming
   title: 'Lower-Division Prerequisites: Select One (MATH 209 or CSC 309)'
@@ -57,7 +63,10 @@ groups:
   quote: Upper-Division Requirements (11 units)
   source: p.2174
 - id: ud_core_letter_grade
-  unparsed: true
+  title: 'Upper-division core: letter grades'
+  across:
+  - ud_core
+  letter_grade: true
   quote: All Major Upper-Division Core courses must be taken for letter grades;
   source: p.2174
 - id: ud_electives
@@ -76,8 +85,13 @@ groups:
   - approved: true
   quote: Choose 6 units in PHYS and/or ASTR courses numbered 300–499.
 - id: ud_electives_cr_nc
-  unparsed: true
-  quote: Up to a maximum of 6 units of Major Upper-Division Electives may be
+  title: 'Electives: at most 6 CR/NC units'
+  across:
+  - ud_electives
+  max_cr:
+    units: 6
+  quote: Up to a maximum of 6 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
+    is allowed.
   source: p.2174
 - id: culminating_experience
   title: Culminating Experience (2 units)

@@ -69,10 +69,29 @@ groups:
   source: p.437
   quote: Ethnic Courses (9 Units) Select three courses
 - id: ethnic_groups
-  title: 'Ethnic Courses: at least two different ethnic groups'
-  unparsed: true
-  source: p.437
+  title: 'Ethnic courses: at least two ethnic groups'
+  across:
+  - ethnic_courses
   quote: Select three courses representing at least two different ethnic groups.
+  source: p.437
+  min_categories: 2
+  categories:
+  - - AA S 301
+  - - AA S 380
+  - - AA S 320
+    - AA S 322
+    - AA S 323
+  - - AA S 350
+    - AA S 352
+    - AA S 353
+  - - AA S 330
+    - AA S 332
+    - AA S 333
+    - AA S 338
+  - - AA S 360
+  - - AA S 370
+    - AA S 372
+    - AA S 373
 - id: panethnic_courses
   title: Panethnic Courses (9 units)
   choose_units: 9

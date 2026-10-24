@@ -2,6 +2,8 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# gwar_in_department (p.1640) "The GWAR (writing-emphasis) course must be taken in the Political Science Department, even if a student has completed a GWAR course in another department.": PLSI 302GW is a required core course
+# independent_study_field_e (p.1640) "Independent Study units count only in Field E.": PLSI 699 is only in category E of the fields check
 program: ba-political-science
 title: Bachelor of Arts in Political Science
 catalog_year: 2026-27
@@ -11,18 +13,102 @@ total_units: 39
 source: p.1640
 groups:
 - id: letter_grade_cr_cap
-  unparsed: true
+  title: 'PLSI courses: letter grades, except Field E'
+  across:
+  - core_required
+  - core_methods
+  - fields
+  - senior_seminar
+  letter_grade: true
+  except: &id001
+  - PLSI 100
+  - PLSI 105
+  - PLSI 106
+  - PLSI 110
+  - PLSI 112
+  - LCA 112
+  - HIST 112
+  - I R 112
+  - PHIL 112
+  - MATH 112
+  - PLSI 150
+  - PHIL 150
+  - PLSI 216
+  - PLSI 317
+  - PLSI 318
+  - PLSI 320
+  - PLSI 321
+  - I R 321
+  - PLSI 322
+  - I R 322
+  - PLSI 325
+  - I R 325
+  - PLSI 327
+  - I R 327
+  - PLSI 362
+  - I R 362
+  - C J 362
+  - PLSI 373
+  - PLSI 395
+  - PLSI 402
+  - P A 402
+  - PLSI 408
+  - LTNS 670
+  - PLSI 409
+  - I R 409
+  - PLSI 412
+  - I R 412
+  - PLSI 421
+  - FR 421
+  - PLSI 430
+  - JS 430
+  - I R 430
+  - PLSI 432
+  - PLSI 435
+  - I R 435
+  - FIN 435
+  - PLSI 451
+  - HIST 308
+  - PLSI 459
+  - I R 459
+  - PLSI 480
+  - USP 480
+  - PLSI 492
+  - USP 492
+  - PLSI 493
+  - USP 493
+  - PLSI 500
+  - LABR 500
+  - PLSI 507
+  - I R 507
+  - JOUR 307
+  - PLSI 513
+  - USP 513
+  - GEOG 668
+  - PLSI 514
+  - GER 514
+  - HIST 514
+  - I R 514
+  - JS 514
+  - PLSI 544
+  - I R 544
+  - PLSI 560
+  - USP 560
+  - PLSI 580
+  - USP 580
+  - PLSI 610
+  - PLSI 685
+  - PLSI 699
   quote: All PLSI courses used towards the major must be taken for a letter grade (i.e., A-, B, C+, etc.), except for courses
     in Field E (Perspectives in Politics), in which up to 4 units may be completed with a grade of CR (Credit).
   source: p.1640
-- id: gwar_in_department
-  unparsed: true
-  quote: The GWAR (writing-emphasis) course must be taken in the Political Science Department, even if a student has completed
-    a GWAR course in another department.
-  source: p.1640
-- id: independent_study_field_e
-  unparsed: true
-  quote: Independent Study units count only in Field E.
+- id: field_e_cr_cap
+  title: 'Field E: at most 4 CR units'
+  across:
+  - fields
+  max_cr:
+    units: 4
+  quote: in which up to 4 units may be completed with a grade of CR (Credit).
   source: p.1640
 - id: core_required
   title: Core Requirements (fixed courses)
@@ -198,10 +284,94 @@ groups:
   quote: Additional courses can be selected from any category to reach a total of 17 units. Other UD PLSI courses can also
     be used towards the 17 units.
 - id: fields_four_categories
-  title: 'Fields: at least one course in four of the categories A-E'
-  unparsed: true
-  source: p.1640
+  title: 'Fields: one course in four of the categories A-E'
+  across:
+  - fields
   quote: Upper-division Political Science courses selected to include at least one course in four of the following categories.
+  source: p.1640
+  min_categories: 4
+  categories:
+  - - PLSI 351
+    - PLSI 352
+    - PLSI 354
+    - PLSI 355
+    - PHIL 355
+    - PLSI 356
+    - PLSI 360
+    - PLSI 381
+    - PLSI 382
+    - PLSI 386
+    - CST 300
+    - PLSI 388
+    - PLSI 389
+    - PLSI 392
+    - PLSI 393
+    - PLSI 394
+    - LABR 394
+    - PLSI 396
+  - - PLSI 400
+    - P A 400
+    - PLSI 460
+    - PLSI 461
+    - PLSI 462
+    - PLSI 463
+    - PLSI 464
+    - PLSI 467
+    - PLSI 468
+    - PLSI 469
+    - PLSI 472
+    - PLSI 473
+    - PLSI 475
+    - USP 485
+    - PLSI 476
+    - PLSI 477
+    - PLSI 479
+    - PLSI 512
+    - USP 512
+  - - PLSI 342
+    - I R 342
+    - PLSI 403
+    - PLSI 404
+    - I R 404
+    - PLSI 407
+    - I R 407
+    - PLSI 411
+    - I R 411
+    - PLSI 416
+    - I R 416
+    - PLSI 418
+    - PLSI 419
+    - PLSI 422
+    - I R 422
+    - PLSI 423
+    - PLSI 424
+    - SOC 424
+    - I R 424
+    - PLSI 425
+    - I R 425
+    - PLSI 431
+    - MEIS 431
+  - - PLSI 308
+    - PLSI 478
+    - PLSI 481
+    - PLSI 552
+    - PLSI 553
+    - PLSI 554
+    - PLSI 555
+    - PLSI 556
+    - PLSI 561
+    - PLSI 562
+  - *id001
+- id: fields_transfer_cap
+  title: At most one upper-division PLSI course in transfer
+  across: major
+  quote: No more than one UD PLSI course can be accepted in transfer.
+  source: p.1640
+  max_units_from:
+    subject: PLSI
+    level: upper
+    courses: 1
+    transfer: true
 - id: senior_seminar
   title: 'Senior Seminar: Culminating Experience'
   choose_units: 3

@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# upper_studio_arth_substitution (p.927) "Art History (ARTH) course may be substituted for one": the upper-division studio art group's exceptions text: a substitution under advisement, on the DPR
 program: ba-studio-art
 title: Bachelor of Arts in Studio Art
 catalog_year: 2026-27
@@ -138,11 +139,7 @@ groups:
   quote: Choose four upper-division studio art (ART) courses from the following list that haven't been used to fulfill another
     requirement.
   source: p.927
-- id: upper_studio_arth_substitution
-  title: 'Upper-Division Studio Art: an ARTH course may substitute for one ART course'
-  unparsed: true
-  quote: Art History (ARTH) course may be substituted for one
-  source: p.927
+  exceptions: An upper- division Art History (ARTH) course may be substituted for one upper- division ART course under advisement.
 - id: art_professional_practicum
   title: Art Professional Service Practicum (1 unit)
   all_of:

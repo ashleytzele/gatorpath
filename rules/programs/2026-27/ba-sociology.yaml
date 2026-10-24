@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# electives_lower_division_cap (p.851) "courses or courses cross-listed with SOC not used to meet requirements above. Up to 9 units of lower-division sociology": the electives' lower-division filter (max_units: 9)
 program: ba-sociology
 title: Bachelor of Arts in Sociology
 catalog_year: 2026-27
@@ -11,12 +12,32 @@ total_units: 42
 source: p.851
 groups:
 - id: cr_nc_one_course
-  unparsed: true
-  quote: Students are allowed to take one course toward the major as credit/
+  title: CR/NC in at most one course
+  across: major
+  max_cr:
+    courses: 1
+  quote: Students are allowed to take one course toward the major as credit/ no credit (CR/NC).
+  source: p.851
+- id: required_letter_grades
+  title: 'Required courses: letter grades'
+  across:
+  - soc_272
+  - soc_300
+  - soc_300gw
+  - theory
+  - soc_392
+  - soc_483
+  letter_grade: true
+  quote: This course cannot be used as one of the Required Courses.
   source: p.851
 - id: upper_division_units
-  unparsed: true
-  quote: A total of 30 Sociology units must be upper-division. University
+  title: 30 upper-division SOC units
+  across: major
+  min_units_from:
+    subject: SOC
+    level: upper
+    units: 30
+  quote: A total of 30 Sociology units must be upper-division.
   source: p.851
 - id: soc_272
   title: 'Required Courses: Social Inequality'
@@ -70,13 +91,13 @@ groups:
   title: Electives (19 units)
   choose_units: 19
   from:
-    subject: SOC
+  - subject: SOC
+    level: upper
+  - subject: SOC
+    level: lower
+    max_units: 9
   source: p.851
   quote: Upper-division SOC courses or courses cross-listed with SOC not used
-- id: electives_lower_division_cap
-  unparsed: true
-  quote: courses or courses cross-listed with SOC not used to meet requirements above. Up to 9 units of lower-division sociology
-  source: p.851
 transfer_notes:
 - text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
     guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division

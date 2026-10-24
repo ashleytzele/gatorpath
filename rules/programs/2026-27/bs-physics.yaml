@@ -38,8 +38,11 @@ groups:
   quote: Lower-Division Prerequisites (31 units)
   source: p.2183
 - id: lower_division_grading
-  title: Lower-Division Prerequisites, letter grades and PHYS 200 grade of CR
-  unparsed: true
+  title: 'Lower-division prerequisites: letter grades'
+  across:
+  - lower_division
+  - lower_division_programming
+  letter_grade: true
   quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
     except for PHYS 200 which must be passed with a grade of CR.
   source: p.2183
@@ -50,6 +53,7 @@ groups:
   - - CSC 309
   quote: 'Select one: 3'
   source: p.2183
+  min_grade: C
 - id: upper_division
   title: Upper-Division Requirements (27 units)
   all_of:
@@ -72,8 +76,10 @@ groups:
   quote: Upper-Division Requirements (27 units)
   source: p.2183
 - id: upper_division_letter_grades
-  title: Upper-Division Core courses must be taken for letter grades
-  unparsed: true
+  title: 'Upper-division core: letter grades'
+  across:
+  - upper_division
+  letter_grade: true
   quote: All Major Upper-Division Core courses must be taken for letter grades;
   source: p.2183
 - id: upper_division_electives
@@ -86,16 +92,24 @@ groups:
   - subject: ASTR
     level: 300+
   - approved: true
+    max_units: 3
   quote: Electives (11 units)
+  approval: Maximum of 3 units outside of ASTR or PHYS, with prior permission of a faculty advisor.
 - id: electives_caps
-  title: 'Electives: at most 5 units of 600-level, 3 outside PHYS/ASTR'
-  unparsed: true
+  title: 'Electives: at most 5 units of 600-level PHYS and ASTR'
+  across:
+  - upper_division_electives
+  quote: Maximum of 5 units of 600-level PHYS and/or ASTR can be used as electives.
   source: p.2184
-  quote: Maximum of 5 units of 600-level PHYS and/or ASTR can be used as electives. Maximum of 3 units outside of ASTR or
-    PHYS, with prior permission of a faculty advisor.
+  max_units_from:
+    level: 600
+    units: 5
 - id: elective_cr_nc_limit
-  title: Upper-Division Electives, CR/NC limit
-  unparsed: true
+  title: 'Electives: at most 6 CR/NC units'
+  across:
+  - upper_division_electives
+  max_cr:
+    units: 6
   quote: Up to a maximum of 6 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
     is allowed.
   source: p.2183

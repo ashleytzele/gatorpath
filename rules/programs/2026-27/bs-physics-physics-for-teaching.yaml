@@ -11,14 +11,25 @@ total_units: 66
 source: p.2207
 groups:
 - id: letter_grades
-  title: Letter grades for Lower-Division Prerequisites and Upper-Division Core
-  unparsed: true
-  quote: All Major Lower-Division Prerequisites and Major Upper-Division Core
+  title: 'Lower-division prerequisites and upper-division core: letter grades'
+  across:
+  - ld_calculus
+  - ld_linear_algebra_diffeq
+  - ld_phys_200
+  - ld_physics
+  - ud_programming
+  - ud_teaching_experience
+  - ud_core
+  letter_grade: true
+  quote: All Major Lower-Division Prerequisites and Major Upper-Division Core courses must be taken for letter grades.
   source: p.2207
 - id: cr_nc_electives_cap
-  title: CR/NC limit on major electives
-  unparsed: true
-  quote: Up to a maximum of 6 units of major electives may be taken on a CR/
+  title: 'Electives: at most 6 CR/NC units'
+  across:
+  - math_science_electives
+  max_cr:
+    units: 6
+  quote: Up to a maximum of 6 units of major electives may be taken on a CR/ NC basis in courses where CR/NC is allowed.
   source: p.2207
 - id: ld_calculus
   title: 'Lower-Division Prerequisites: Calculus'

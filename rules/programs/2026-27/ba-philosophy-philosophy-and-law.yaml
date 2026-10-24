@@ -2,6 +2,8 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# related_fields_cap (p.1610) "to count up to nine units from related fields.": the electives' related-fields list and exceptions text (6 elective units; more is an advisor's designation, on the DPR)
+# outside_department_cap (p.1610) "up to six units of courses outside the philosophy department may be approved by a department advisor as": the electives' approved courses (max_units: 6, approval text)
 program: ba-philosophy-philosophy-and-law
 title: 'Bachelor of Arts in Philosophy: Concentration in Philosophy and Law'
 catalog_year: 2026-27
@@ -83,16 +85,13 @@ groups:
     - SXS 455
     - WGS 536
     - WGS 563
+  - approved: true
+    max_units: 6
   quote: 6 additional units of other Philosophy courses, or courses from the list
   source: p.1610
-- id: related_fields_cap
-  unparsed: true
-  quote: to count up to nine units from related fields.
-  source: p.1610
-- id: outside_department_cap
-  unparsed: true
-  quote: up to six units of courses outside the philosophy department may be approved by a department advisor as
-  source: p.1610
+  approval: up to six units of courses outside the philosophy department may be approved by a department advisor as elective
+    units for the B.A.
+  exceptions: The Concentration in Philosophy and Law includes the opportunity to count up to nine units from related fields.
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
     related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation

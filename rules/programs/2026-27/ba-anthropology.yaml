@@ -74,27 +74,18 @@ groups:
     - ANTH 695
     - ANTH 699
     units: 6
-- id: subfield_biological
-  title: 'Subfields: one biological anthropology course'
+- id: subfields
+  title: 'Subfields: an upper-division course in each of the three'
   across: major
-  min_units_from:
-    list:
-    - ANTH 302
+  min_categories: 3
+  categories:
+  - - ANTH 302
     - ANTH 333
     - ANTH 530
     - ANTH 531
     - ANTH 535
     - ANTH 545
-    units: 1
-  quote: 'At least one upper-division course (Area One, Area Two, or Electives) must be taken in each of the three subfields:
-    biological, cultural/visual, and archaeology.'
-  source: p.889
-- id: subfield_cultural
-  title: 'Subfields: one cultural/visual anthropology course'
-  across: major
-  min_units_from:
-    list:
-    - ANTH 303
+  - - ANTH 303
     - ANTH 315
     - ANTH 320
     - CST 320
@@ -128,16 +119,7 @@ groups:
     - ANTH 651
     - ANTH 657
     - DANC 657
-    units: 1
-  quote: 'At least one upper-division course (Area One, Area Two, or Electives) must be taken in each of the three subfields:
-    biological, cultural/visual, and archaeology.'
-  source: p.889
-- id: subfield_archaeology
-  title: 'Subfields: one archaeology course'
-  across: major
-  min_units_from:
-    list:
-    - ANTH 301
+  - - ANTH 301
     - ANTH 326
     - ANTH 356
     - ANTH 460
@@ -146,7 +128,6 @@ groups:
     - ANTH 594
     - ANTH 609
     - HIST 366
-    units: 1
   quote: 'At least one upper-division course (Area One, Area Two, or Electives) must be taken in each of the three subfields:
     biological, cultural/visual, and archaeology.'
   source: p.889
