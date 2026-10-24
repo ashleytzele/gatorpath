@@ -560,6 +560,11 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     units"), per-course unit caps, History's A-with-B/C/D overlap, SPAN 215's heritage test-out (0-3 units).
   - [ ] BA Women and Gender Studies draft: its plan ends 3 upper-division units short; the free electives' UD flag
     doesn't survive the roadmap's own elective slots (planner)
+- [x] Footnote marks read from the PDF's layout (2026-10-24): a benchmark of six PDF readers (pdftotext -raw and
+  -bbox-layout, PyMuPDF, pdfplumber, Camelot, MarkItDown) on known answers chose `pdftotext -bbox-layout` (48/48 marks,
+  55/55 units, 14/14 cross-listings, no new dependency; -raw misled a parser on 79 rows' marks across the requirement
+  pages). `course_rows` (ingest/bulletin.py); each page's source text ends with its "Footnote marks" line (19 programs).
+  The LTNS footnotes 1-4 (p.476) have no mark on any course: the PDF prints none on pp.474-476
 - [ ] Cross-check every served program with a second drafter (`--cross`, Codex CLI; ARCHITECTURE §6.2). Pilot
   2026-10-24, 5 programs, about 77 s each: the hand-written Applied Math agreed on every made-up student; the other 4
   had 19 disagreements: 2 Codex errors (a dropped Select One, a required pair read as a Select One), 1 question for a
