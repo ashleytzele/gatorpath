@@ -575,10 +575,15 @@ def check_roadmap(roadmap: dict, program: dict, university: dict, catalog: dict,
             for x in sem.get("items", []):
                 out += bad(where, x)
                 codes |= {o for o in (x.get("one_of", []) if isinstance(x, dict) else [x]) if isinstance(o, str)}
-            units = sum(catalog[x]["units_min"] if isinstance(x, str) else x.get("units", 0)
-                        for x in sem.get("items", []) if not isinstance(x, str) or x in catalog)
-            if units != sem.get("units"):
-                out.append(f"{where}: the items add up to {units:g}, units says {sem.get('units')}")
+            # A variable-unit course ("AIS 694 Community Service Learning", 1-3) may be printed at more than its minimum,
+            # as check_program allows for a program total.
+            # ponytail: the plan still counts its minimum; carry the printed units on the item if a plan's load matters.
+            add = lambda end: sum(catalog[x].get(end, catalog[x]["units_min"]) if isinstance(x, str) else x.get("units", 0)
+                                  for x in sem.get("items", []) if not isinstance(x, str) or x in catalog)
+            units, most = add("units_min"), add("units_max")
+            if not units <= (sem.get("units") or 0) <= most:
+                out.append(f"{where}: the items add up to {units:g}" + (f" ({most:g} with variable-unit courses at their "
+                           "most)" if most != units else "") + f", units says {sem.get('units')}")
             if not cited(sem.get("source")):
                 out.append(f"{where}: source must cite a page like \"p.2132\"")
             covered |= cited(sem.get("source"))

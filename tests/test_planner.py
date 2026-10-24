@@ -720,6 +720,13 @@ def test_check_roadmap_reports_what_a_person_must_fix():
     assert "qr-1-2: required but not on this roadmap: MATH 696" in got
     assert "transfer: the planner reads only the variants qr-1-2, qr-3-4, first-time, adt" in got
     assert got[-1].startswith("roadmap pages 2134, 2135, 2138 aren't in any variant")
+    # a variable-unit course printed at more than its minimum ("AIS 694 Community Service Learning", 1-3, printed 3)
+    variable = CATALOG | {"MATH 226": CATALOG["MATH 226"] | {"units_max": 7}}
+    fixed = roadmap | {"variants": {"qr-1-2": v | {"semesters": [first | {"items": ["MATH 226"], "units": 7}]}}}
+    assert not [x for x in check_roadmap(fixed, program, university, variable) if "semester 1:" in x]
+    assert "qr-1-2 semester 1: the items add up to 4 (7 with variable-unit courses at their most), units says 8" in \
+        check_roadmap(roadmap | {"variants": {"qr-1-2": v | {"semesters": [first | {"items": ["MATH 226"], "units": 8}]}}},
+                      program, university, variable)
 
 
 def test_check_groups_in_a_plan():
