@@ -333,9 +333,13 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   `min_gpa: 2.0` ("a minimum grade point average of 2.0 in all Core Requirement Business courses", p.53; SF State grades,
   as the major GPA), or `min_units_from: {<filter>, units: N}` ("A total of 30 Sociology units must be upper-division",
   p.851: `{subject: SOC, level: upper, units: 30}`; `sf_state: true` for "At least 12 units in biology must be
-  completed at SF State", p.1784). A check group has no units and plans no slot. The audit reports `in_progress` until
+  completed at SF State", p.1784; "at least one upper-division course in each of the three subfields", p.889: a list
+  and `units: 1`), `max_units_from: {<filter>, units: N}` ("A maximum of 3 units from AA S 685, AA S 688, or AA S 699
+  can count towards the ... major", p.437), or `distinct_subjects: N` ("drawn from at least two disciplines", p.1264,
+  as GE Area 4's). A check group has no units and plans no slot. The audit reports `in_progress` until
   its groups are done, then `satisfied`; grades that break it make it `remaining` with a warning, and check_plan
-  warns (a plan can't change a grade). A min_units_from check is met or not by the plan's courses, like a choice.
+  warns (a plan can't change a grade). A min/max_units_from or distinct_subjects check is met or not by the plan's
+  courses, like a choice (a warning while slots in its groups are unfilled).
   A requirement already in the university rules ("A minimum grade point average of 2.0 in all coursework is
   required", the university `min_gpa`) needs no group: a YAML comment says so.
 - Filters (added 2026-10-24): `level: lower | upper` (below 300 / 300-699) works on a subject filter too, and a filter
@@ -343,7 +347,9 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   one filter, as `max_courses` caps courses ("Up to 9 units of lower-division sociology courses", p.851: `{subject:
   SOC, level: lower, max_units: 9}` after `{subject: SOC, level: upper}`); a course that would pass the cap doesn't
   count in part. `min_units_from` on a choose group takes any filter, not only a subject ("At least six elective units
-  should be upper-division", p.504: `{level: upper, units: 6}`).
+  should be upper-division", p.504: `{level: upper, units: 6}`). A level narrows `{approved: true}` too: "Up to 6 units
+  may be in community college or lower-division coursework" (p.1264) = `[{approved: true, level: upper}, {approved:
+  true, level: lower, max_units: 6}]`.
 - `change_of_major` (university, added 2026-10-22): the Bulletin's rule that a student who changes major meets "the
   major requirements in effect at the time they declare or change their major" (pp.2352, 2390), and how (a Change
   of Major through the Student Center after consulting faculty advisors, p.2352). compare_programs quotes it.

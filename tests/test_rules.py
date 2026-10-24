@@ -461,6 +461,8 @@ def test_check_groups_read_the_courses_other_groups_count():
         {"id": "gpa", "across": ["required"], "min_gpa": 2.0, "source": "p.53"},
         {"id": "here", "across": "major", "min_units_from": {"subject": "MATH", "level": "upper", "units": 12, "sf_state": True},
          "source": "p.1784"},
+        {"id": "cap", "across": "major", "max_units_from": {"list": ["MATH 226", "MATH 227"], "units": 4}, "source": "p.437"},
+        {"id": "two", "across": ["required"], "distinct_subjects": 2, "source": "p.1264"},
     ]
     only_cr = CATALOG | {"MATH 228": CATALOG["MATH 228"] | {"grading": "cr_nc"}}
     plain = [{k: v for k, v in g.items() if k != "min_grade"} for g in program["groups"]]
@@ -485,6 +487,8 @@ def test_check_groups_read_the_courses_other_groups_count():
     assert "low: MATH 226, MATH 227: below C-, at most 1 course(s) may be (p.2027)" in warnings
     assert status["here"]["min_units_from"]["done"] == 6  # the transfer courses aren't SF State units
     assert status["here"]["status"] == "remaining"
+    assert status["cap"]["status"] == "remaining" and "cap: MATH 226, MATH 227: 8 units, at most 4 count (p.437)" in warnings
+    assert status["two"]["status"] == "remaining" and status["two"]["subjects"] == ["MATH"]
 
 
 def test_a_filter_caps_units_and_takes_a_division():
@@ -497,6 +501,10 @@ def test_a_filter_caps_units_and_takes_a_division():
     g = next(g for g in got["groups"] if g["id"] == "electives")
     assert g["counted"] == ["MATH 226", "MATH 430", "MATH 442"] and g["units_done"] == 10  # one 4-unit lower-division
     assert not matches({"level": "upper"}, "MATH 226", CATALOG["MATH 226"]) and matches({"level": "upper"}, "MATH 430", CATALOG["MATH 430"])
+    approved = electives | {"from": [{"approved": True, "level": "upper"}, {"approved": True, "level": "lower", "max_units": 4}]}
+    got = audit({"catalog_year": "2026-27", "completed": rows, "approved": {"electives": [r["code"] for r in rows]}},
+                program | {"groups": [approved]}, university, CATALOG)  # BA American Studies p.1264: a level on approved
+    assert next(g for g in got["groups"] if g["id"] == "electives")["counted"] == ["MATH 226", "MATH 430", "MATH 442"]
     mins = program["groups"][:1] + [electives | {"min_units_from": {"level": "upper", "units": 9}}]
     got = audit({"catalog_year": "2026-27", "completed": rows}, program | {"groups": mins}, university, CATALOG)
     assert next(g for g in got["groups"] if g["id"] == "electives")["min_units_from"]["done"] == 6
@@ -513,7 +521,8 @@ def test_check_program_reads_check_groups():
            {"id": "low", "across": "major", "max_below": {"grade": "Z"}, "except": ["MATH 999"], "source": "p.2129"},
            {"id": "any", "choose_units": 0, "from": {"max_units": 3}, "min_units_from": {"subject": "MATH"}, "source": "p.2129"}]
     assert check_program(good | {"groups": good["groups"] + bad}, CATALOG) == [
-        "two: a check group needs exactly one of letter_grade, max_cr, max_below, min_gpa, min_units_from (has letter_grade, min_gpa)",
+        "two: a check group needs exactly one of letter_grade, max_cr, max_below, min_gpa, min_units_from, max_units_from, "
+        "distinct_subjects (has letter_grade, min_gpa)",
         "where: across must be `major` or ids of this program's course groups (has ['nowhere'])",
         "where: max_cr needs units or courses",
         "low: max_below needs a grade and courses", "low: MATH 999 is not in the 2026-27 catalog",

@@ -14,7 +14,7 @@ import re
 from collections import Counter
 
 from gatorpath.engine.prereq import leaves, prereq_warnings, reverse_index
-from gatorpath.engine.rules import GRADE_POINTS, audit, blocks_repeat, number, rank
+from gatorpath.engine.rules import GRADE_CHECKS, GRADE_POINTS, audit, blocks_repeat, number, rank
 
 # Winter Session runs "during the intersession between the Fall and Spring term" (2026-27 p.1716): 2027-winter is
 # January 2027, after 2026-fall and before 2027-spring.
@@ -440,7 +440,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
                             f"\"{g['quote']}\" ({g['source']})")
             continue
         if "check" in g:  # a rule over other groups' courses (§6.2): grades a plan doesn't choose, units its slots may
-            if g["check"] != "min_units_from":
+            if g["check"] in GRADE_CHECKS:
                 if g["status"] == "remaining":
                     warnings.append(f"{g['title']}: not met by the grades so far, and a plan can't change them; see an "
                                     f"advisor ({g['source']})")
@@ -804,7 +804,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     slots: list[dict] = []
     groups = {g["id"]: g for g in program["groups"] + university["groups"]}
     for g in after["groups"]:
-        if g["status"] in ("satisfied", "waived"):
+        if g["status"] in ("satisfied", "waived") or "check" in g:  # a check group reads other groups' courses: no slot
             continue
         if "subjects" in g:  # GE Area 4 "in at least two different disciplines"
             # A rule on which subjects the Area 4 courses come from; an extra course only once they're all done.

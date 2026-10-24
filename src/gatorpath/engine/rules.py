@@ -123,8 +123,8 @@ def matches(f: dict, code: str, course: dict) -> bool:
     {level: upper} is any upper-division course), each with `except`; {approved} matches the courses filters_for gave it."""
     if code in f.get("except", ()):
         return False
-    if "approved" in f:
-        return code in f.get("courses", ())
+    if "approved" in f:  # a level narrows them: "Up to 6 units may be in ... lower-division coursework" (p.1264)
+        return code in f.get("courses", ()) and in_level(f.get("level"), number(code))
     if "list" in f:
         return code in f["list"]
     if "ge_area_all" in f or "ge_area" in f:
@@ -199,7 +199,7 @@ def blocks_repeat(grade: str | None, repeats: dict) -> bool:
 def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, claimed: set | None,
                no_cr_nc: bool, done_groups: dict, warnings: list[str], certified: frozenset = frozenset()) -> dict:
     out = {"id": g["id"], "title": g.get("title", g["id"]), "kind": kind, "source": g["source"],
-           "counted": [], "in_progress": []}
+           "counted": [], "in_progress": []} | ({"exceptions": g["exceptions"]} if "exceptions" in g else {})
     if g.get("amendments"):
         out["amended_by"] = [a["source"] for a in g["amendments"]]
     if g.get("waived"):  # by an amendment
@@ -338,13 +338,15 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
     return out
 
 
-CHECKS = ("letter_grade", "max_cr", "max_below", "min_gpa", "min_units_from")
+CHECKS = ("letter_grade", "max_cr", "max_below", "min_gpa", "min_units_from", "max_units_from", "distinct_subjects")
+GRADE_CHECKS = CHECKS[:4]  # grades a plan can't choose; the others are met or not by the courses chosen
 
 
 def check_group(g: dict, done: dict, taken: dict, profile: dict, university: dict, catalog: dict, warnings: list[str]) -> dict:
     """A rule over the courses other major groups count (§6.2 check groups, `across` their ids or `major`): letter grades
-    only, a CR cap, at most N courses below a grade, a GPA floor, or at least N units matching a filter. A grade rule a
-    student's grades break is `remaining` with a warning; until its groups are done it's `in_progress`."""
+    only, a CR cap, at most N courses below a grade, a GPA floor, at least or at most N units matching a filter, or
+    courses from N subjects. A rule a student's courses break is `remaining` with a warning; until its groups are done
+    it's `in_progress`."""
     out = {"id": g["id"], "title": g.get("title", g["id"]), "kind": "major", "source": g["source"], "counted": [],
            "in_progress": []}
     ids = [i for i, x in done.items() if x["kind"] == "major" and "check" not in x] if g["across"] == "major" else g["across"]
@@ -372,6 +374,13 @@ def check_group(g: dict, done: dict, taken: dict, profile: dict, university: dic
         rows = [r for r in profile["completed"] if r["code"] in codes and not r.get("transfer")]
         out["gpa"] = value = gpa(rows, forgiven(rows, university["repeats"], catalog), catalog)
         broken = value is not None and value < g["min_gpa"] and f"GPA {value:.2f} in these courses, needs {g['min_gpa']:g}"
+    elif check == "max_units_from":  # "A maximum of 3 units from AA S 685, AA S 688, or AA S 699 can count" (p.437)
+        f = g["max_units_from"]
+        over = [c for c in counted if matches(f, c, catalog[c])]
+        n = sum(taken[c]["units"] for c in over)
+        broken = n > f["units"] and f"{', '.join(over)}: {n:g} units, at most {f['units']:g} count"
+    elif check == "distinct_subjects":  # "drawn from at least two disciplines" (p.1264)
+        return out | distinct_subjects(g | {"title": out["title"], "across": ids}, done, warnings)
     else:  # min_units_from: "a total of 30 Sociology units must be upper-division", "12 units in biology at SF State"
         f = g["min_units_from"]
         hit = lambda c: matches(f, c, catalog[c]) and not (f.get("sf_state") and taken.get(c, {}).get("transfer"))
@@ -574,7 +583,8 @@ PROGRAM_KEYS = {"program", "title", "catalog_year", "verified", "verified_by", "
                 "source", "global", "groups", "transfer_notes", "advising"}
 GROUP_KEYS = {"id", "title", "source", "quote", "unparsed", "all_of", "one_of", "choose_n", "choose_units", "from",
               "first_time_from", "min_grade", "min_units_from", "course_units", "exceptions", "approval", "waived_if",
-              "fill_to_total", "across", "letter_grade", "max_cr", "max_below", "min_gpa", "except",
+              "fill_to_total", "across", "letter_grade", "max_cr", "max_below", "min_gpa", "max_units_from",
+              "distinct_subjects", "except",
               "waiver", "amendments"}
 FILTER_KEYS = {"list", "subject", "level", "except", "paired", "max_courses", "max_units", "ge_area", "ge_area_all", "approved"}
 SELECTORS = ("list", "subject", "level", "ge_area", "ge_area_all", "approved")  # a filter needs one, else it takes anything
@@ -623,8 +633,8 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
                 out.append(f"{gid}: max_cr needs units or courses")
             if g.get("max_below", {}).get("grade", "C-") not in GRADE_POINTS or "max_below" in g and "courses" not in g["max_below"]:
                 out.append(f"{gid}: max_below needs a grade and courses")
-        mins = [g["min_units_from"]] if "min_units_from" in g else []
-        out += [f"{gid}: min_units_from needs units" for f in mins if "units" not in f]
+        mins = [g[k] for k in ("min_units_from", "max_units_from") if k in g]
+        out += [f"{gid}: {k} needs units" for k in ("min_units_from", "max_units_from") if k in g and "units" not in g[k]]
         filters = [f for key in ("from", "first_time_from") if key in g
                    for f in (g[key] if isinstance(g[key], list) else [g[key]])]
         out += [f"{gid}: unknown filter key {k!r}" for f in filters + mins for k in f
@@ -644,9 +654,10 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
             out.append(f"{gid}: source must cite a page like \"p.2129\"")
         elif pages and not set(cited) <= pages:
             out.append(f"{gid}: source {g['source']} is outside the program's pages ({min(pages)}-{max(pages)})")
-        for key in ("quote", "approval"):  # both are shown to students as the Bulletin's own words
-            if key in g and source is not None and squashed(g[key]) not in squashed(source):
-                out.append(f"{gid}: {key} isn't word for word in the Bulletin text: {g[key][:80]!r}")
+        for key in ("quote", "approval", "exceptions"):  # shown to students as the Bulletin's own words
+            for text in (g[key] if isinstance(g.get(key), list) else [g[key]] if key in g else []):
+                if source is not None and squashed(text) not in squashed(source):
+                    out.append(f"{gid}: {key} isn't word for word in the Bulletin text: {text[:80]!r}")
         low += (units(g.get("all_of", [])) + g.get("choose_units", 0)
                 + min((units(opt) for opt in g.get("one_of", [])), default=0))
         high += (units(g.get("all_of", []), "units_max") + g.get("choose_units", 0)
