@@ -77,7 +77,7 @@ groups:
     - HUM 496
   quote: 'Select three:'
   source: p.910
-- id: gwar
+- id: major_gwar
   title: Graduate Writing Assessment Requirement (3 units)
   all_of:
   - ARTH 400GW

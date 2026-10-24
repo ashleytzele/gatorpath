@@ -33,7 +33,7 @@ groups:
   min_grade: C
   quote: Foundation courses must be completed with a grade of C or better.
   source: p.987
-- id: gwar
+- id: major_gwar
   title: 'Foundation and GWAR Courses: Select One (CINE 303GW, CINE 343GW or CINE 350GW)'
   one_of:
   - - CINE 303GW

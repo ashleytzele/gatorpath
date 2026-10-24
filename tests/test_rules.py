@@ -399,7 +399,7 @@ def test_program_files_pass_check_program():
     for path in sorted((RULES_DIR / "programs/2026-27").glob("*.yaml")):
         source = path.with_suffix(".source.txt").read_text()
         program = yaml.safe_load(path.read_text())
-        got = check_program(program, CATALOG, source_pages(source), source)
+        got = check_program(program, CATALOG, source_pages(source), source, UNIVERSITY)
         if program.get("drafted_by"):  # a loaded draft may still carry requirements flagged for a person (--load)
             got = [x for x in got if not any(k in x for k in LOADABLE)]
         assert got == [], path.name
@@ -444,6 +444,11 @@ def test_check_program_reports_what_a_person_must_fix():
     theory = {"id": "theory", "all_of": ["MUS 130", "TH A 131"], "source": "p.2129"}
     assert "theory: MUS 130 and TH A 131 are one cross-listed course, so all_of needs it twice; make it its own one_of " \
            "group [[MUS 130], [TH A 131]]" in check_program(good | {"groups": [theory]}, twins)
+    # BA Chemistry's major "gwar" (CHEM 390GW) shared the university GWAR's id: the audit reported the university's
+    # result for it, so CHEM 390GW at CR, or another GWAR course, looked done (found by ingest.programs --cross)
+    clash = good | {"groups": good["groups"] + [{"id": "gwar", "all_of": ["MATH 301GW"], "source": "p.2129"}]}
+    assert "gwar: the university rules use this id too (their result would stand for this group); name it for the major, " \
+           "e.g. major_gwar" in check_program(clash, CATALOG, university=UNIVERSITY)
     early = good | {"groups": [g | {"source": "p.152"} for g in good["groups"]]}  # a page under 1000
     assert check_program(early, CATALOG, {152}) == []
 

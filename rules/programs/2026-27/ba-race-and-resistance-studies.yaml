@@ -11,7 +11,7 @@ verified_by: null
 total_units: 36
 source: p.504
 groups:
-- id: gwar
+- id: major_gwar
   title: 'Core Courses: Writing in Ethnic Studies (GWAR)'
   all_of:
   - ETHS 300GW

@@ -58,7 +58,7 @@ groups:
   - approved: true
   min_grade: C-
   quote: Select four JS upper-division courses.
-- id: gwar
+- id: major_gwar
   title: GWAR Course (3 units)
   choose_units: 3
   min_grade: C

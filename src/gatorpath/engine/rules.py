@@ -635,10 +635,11 @@ def squashed(text: str) -> str:
     return re.sub(r"\s+", "", unicodedata.normalize("NFKC", text)).lower()
 
 
-def check_program(program: dict, catalog: dict, pages: set[int] | None = None, source: str | None = None) -> list[str]:
+def check_program(program: dict, catalog: dict, pages: set[int] | None = None, source: str | None = None,
+                  university: dict | None = None) -> list[str]:
     """What a person must fix before a program file is used (§6.2 "AI-drafted rules"): keys outside the vocabulary, course
-    codes not in the catalog, `source` pages outside the program's `pages`, a `quote` not in its `source` text, and
-    groups whose minimum units don't add up to `total_units`. [] when it's clean."""
+    codes not in the catalog, `source` pages outside the program's `pages`, a `quote` not in its `source` text, a group id
+    the `university` rules use too, and groups whose minimum units don't add up to `total_units`. [] when it's clean."""
     out = [f"unknown key {k!r}" for k in program if k not in PROGRAM_KEYS]
     out += [f"missing {k!r}" for k in ("program", "title", "catalog_year", "total_units", "groups") if k not in program]
     ids, low, high = set(), 0.0, 0.0  # high: variable-unit courses at their most ("KIN 699 Independent Study", 1-3)
@@ -648,6 +649,9 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
         out += [f"{gid}: unknown key {k!r}" for k in g if k not in GROUP_KEYS]
         if gid in ids:
             out.append(f"{gid}: duplicate id")
+        if university and gid in {x["id"] for x in university["groups"]}:  # the audit and planner look groups up by id
+            out.append(f"{gid}: the university rules use this id too (their result would stand for this group); name it "
+                       f"for the major, e.g. major_{gid}")
         ids.add(gid)
         shape = [k for k in SHAPES if k in g]
         if len(shape) != 1:

@@ -3,6 +3,7 @@
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 # foundational_language_replacement (p.1443) "Up to 9 units from the lower-division core can be replaced with high school Advanced Placement (AP) examination credit (see University guidelines). With the consent of a Chinese Program advisor, students able to demonstrate a higher level of Chinese language proficiency may replace lower-division core units with upper-division Chinese language units.": the foundational language group's exceptions text: AP credit and an advisor's substitution come from the DPR (dpr_met)
+# literature_in_translation lists its GWAR options first: the plan takes the first option by default, and a CHIN GWAR course meets both it and major_gwar ("Select a CHIN GWAR course if one is not selected from the Literature in Translation area")
 program: ba-chinese-chinese-language
 title: 'Bachelor of Arts in Chinese: Concentration in Chinese Language'
 catalog_year: 2026-27
@@ -70,15 +71,15 @@ groups:
 - id: literature_in_translation
   title: 'Literature in Translation (3 units): Select One'
   one_of:
-  - - CHIN 600
   - - CHIN 601GW
-  - - CHIN 602
   - - CHIN 611GW
   - - CHIN 612GW
+  - - CHIN 600
+  - - CHIN 602
   - - HUM 530
   quote: HUM 530 Chinese Civilization 3
   source: p.1443
-- id: gwar
+- id: major_gwar
   title: 'GWAR: a CHIN GWAR course (CHIN 601GW, 611GW or 612GW)'
   across: major
   min_units_from:

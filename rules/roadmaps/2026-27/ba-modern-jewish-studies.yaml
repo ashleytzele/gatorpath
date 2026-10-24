@@ -123,7 +123,7 @@ variants:
         units: 3
         note: Electives (12 units) - Take One (footnote 7)
       - slot: major
-        group: gwar
+        group: major_gwar
         units: 3
         note: GWAR Course (footnote 8)
       - slot: GE
@@ -224,7 +224,7 @@ variants:
         units: 3
         note: Major Elective (12 units) (footnote 2)
       - slot: major
-        group: gwar
+        group: major_gwar
         units: 3
         note: GWAR Course (footnote 3)
       - slot: GE

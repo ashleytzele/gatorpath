@@ -1,0 +1,189 @@
+program: bs-applied-math
+title: Bachelor of Science in Applied Mathematics
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 55
+global:
+  no_cr_nc: true
+  source: p.2129
+groups:
+- id: required_courses
+  title: Required Courses
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 301GW
+  - MATH 325
+  - MATH 376
+  - MATH 400
+  - MATH 440
+  - MATH 460
+  - MATH 696
+  - MATH 697
+  min_grade:
+    MATH 226: C
+    MATH 227: C
+    MATH 228: C
+    MATH 301GW: C
+    MATH 325: C
+    MATH 440: C
+  source: p.2129
+  quote: 'Required Courses (40-44 units)
+
+    Code Title Units
+
+    MATH 226 Calculus I 4
+
+    MATH 227 Calculus II 4
+
+    MATH 228 Calculus III 4
+
+    MATH 301GW Exploration and Proof - GWAR 3
+
+    Select One: 3-7
+
+    MATH 209 Mathematical Computing
+
+    CSC 101
+
+    & CSC 215
+
+    Introduction to Computing
+
+    and Intermediate Computer Programming
+
+    CSC 309 Computer Programming
+
+    MATH 325 Linear Algebra 4
+
+    Select One: 3
+
+    MATH 335 Modern Algebra
+
+    MATH 370 Real Analysis I
+
+    MATH 380 Introduction to Complex Analysis
+
+    MATH 376 Ordinary Differential Equations I 3
+
+    MATH 400 Numerical Analysis 3
+
+    MATH 440 Probability and Statistics I 3
+
+    MATH 460 Mathematical Modeling 3
+
+    MATH 696
+
+    & MATH 697
+
+    Applied Mathematics Project I
+
+    and Applied Mathematics Project II
+
+    3'
+- id: computing_choice
+  title: Select One
+  one_of:
+  - - MATH 209
+  - - CSC 101
+    - CSC 215
+  - - CSC 309
+  min_grade:
+    MATH 209: C
+    CSC 101: C
+    CSC 215: C
+    CSC 309: C
+  source: p.2129
+  quote: 'Select One: 3-7
+
+    MATH 209 Mathematical Computing
+
+    CSC 101
+
+    & CSC 215
+
+    Introduction to Computing
+
+    and Intermediate Computer Programming
+
+    CSC 309 Computer Programming'
+- id: advanced_math_choice
+  title: Select One
+  one_of:
+  - - MATH 335
+  - - MATH 370
+  - - MATH 380
+  source: p.2129
+  quote: 'Select One: 3
+
+    MATH 335 Modern Algebra
+
+    MATH 370 Real Analysis I
+
+    MATH 380 Introduction to Complex Analysis'
+- id: mathematics_electives
+  title: Electives
+  choose_units: 6
+  from:
+  - list:
+    - MATH 430
+    - MATH 442
+    - MATH 447
+    - MATH 448
+    - MATH 449
+    - MATH 471
+    - MATH 477
+    - MATH 491
+    - MATH 495
+  source: p.2129
+  quote: 'Select six units of the following: 6
+
+    MATH 430 Mathematics of Optimization
+
+    MATH 442 Probability Models
+
+    MATH 447 Design and Analysis of Experiments
+
+    MATH 448 Introduction to Statistical Learning and Data Mining
+
+    MATH 449 Categorical Data Analysis
+
+    MATH 471 Fourier Analysis and Applications
+
+    MATH 477 Partial Differential Equations
+
+    MATH 491 Game Theory
+
+    MATH 495 Introduction to Wavelets and Frames with Applications'
+- id: applied_mathematics_collection
+  title: Applied Mathematics Course Collection
+  choose_units: 9
+  from:
+    approved: true
+  approval: A coherent collection of three courses emphasizing applications of mathematics, chosen with the consent of the
+    applied mathematics advisor
+  source: p.2129
+  quote: A coherent collection of three courses emphasizing applications of mathematics, chosen with the consent of the applied
+    mathematics advisor
+transfer_notes:
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.2130
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2130
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.2130
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.2130
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.2131
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.2131
+drafted_by: codex, 2026-10-24

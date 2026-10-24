@@ -51,7 +51,7 @@ groups:
   - - SOC 555
   quote: LABR/SOC 555 Labor Rights in the Global Economy 3
   source: p.254
-- id: gwar
+- id: major_gwar
   title: Graduation Writing Assessment Requirement (3 units)
   all_of:
   - HIST 300GW

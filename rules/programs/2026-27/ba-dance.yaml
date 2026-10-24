@@ -66,7 +66,7 @@ groups:
     - 300
     - 400
     units: 6
-- id: gwar
+- id: major_gwar
   title: GWAR Course (3 units)
   choose_units: 3
   from:

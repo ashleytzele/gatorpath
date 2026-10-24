@@ -1,0 +1,133 @@
+program: ba-geography
+title: Bachelor of Arts in Geography
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.2027
+groups:
+- id: core
+  title: Core Requirements
+  all_of:
+  - ENV 205
+  - ENV 500GW
+  - GEOG 101
+  source: p.2027
+  quote: Core Requirements (12 Units)
+- id: core_select_one
+  title: 'Core Requirements: Select One'
+  one_of:
+  - - GEOG 102
+  - - GEOG 107
+  source: p.2027
+  quote: 'Select One: 3
+
+    GEOG 102 The Human Environment
+
+    GEOG 107 World Regions and Interrelations'
+- id: capstone
+  title: Capstone
+  all_of:
+  - ENV 690
+  source: p.2027
+  quote: 'Capstone (3 Units)
+
+    Code Title Units
+
+    ENV 690 Capstone Seminar 3'
+- id: distribution
+  unparsed: true
+  source: p.2027
+  quote: 'Distribution Requirement (12-16 Units)
+
+    One course from each of the following four areas. Courses used to satisfy
+
+    distribution requirements cannot be double-counted as a guided elective.
+
+    A. Physical Geography – 310-399 numbered courses in Geography
+
+    B. Human Geography – 400-level courses in Geography
+
+    C. Human-Environment Interaction in a Regional Context:
+
+    Code Title Units
+
+    GEOG 552 Geography of California 3
+
+    GEOG 575 Emerging China 3
+
+    GEOG 647 Geography of Water Resources 4
+
+    GEOG 648 Management of National Parks and Protected
+
+    Areas
+
+    4
+
+    GEOG/USP 651 San Francisco Bay Area Environmental Issues 4
+
+    D. Techniques or Applied Geography – Courses from either Geographic
+
+    Techniques – GEOG 601-639 or Applied Geography – GEOG 640–668.
+
+    Note: while some of these courses also apply to the ''Human-Environment
+
+    Interaction in a Regional Context'' area, they cannot double count towards
+
+    the major.
+
+    '
+- id: electives
+  unparsed: true
+  source: p.2027
+  quote: 'Electives (12 units)
+
+    Units of upper-division geography electives consisting of a minimum of
+
+    three courses chosen on advisement. These courses will be organized
+
+    around coherent areas of study within geography. Students are
+
+    encouraged to meet with a B.A. Geography major adviser to develop their
+
+    theme to best prepare for suitable careers. On advisement, appropriate
+
+    upper-division courses from other departments and programs may be
+
+    included.
+
+    '
+- id: major_cr_limit
+  title: Major CR Limit
+  across: major
+  max_cr:
+    courses: 2
+  source: p.2027
+  quote: Students are advised that the CR grade is acceptable in any two courses to be counted for the Geography major.
+- id: major_below_c_minus_limit
+  title: Major Grade Limit
+  across: major
+  max_below:
+    grade: C-
+    courses: 1
+  source: p.2027
+  quote: No more than one course counted toward major requirements may be completed with a grade less than a C-.
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.2028
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.2028
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.2028
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2028
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.2028
+drafted_by: codex, 2026-10-24

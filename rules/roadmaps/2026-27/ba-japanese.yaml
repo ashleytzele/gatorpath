@@ -96,7 +96,7 @@ variants:
         units: 3
         note: 'Select One (Major Core): JAPN 301 or JAPN 302'
       - slot: major
-        group: gwar
+        group: major_gwar
         units: 3
         note: 'Select One (GWAR): CWL 400GW or MLL 400GW'
       - slot: GE

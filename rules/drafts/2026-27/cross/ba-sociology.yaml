@@ -1,0 +1,89 @@
+program: ba-sociology
+title: Bachelor of Arts in Sociology
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 42
+source: p.851
+groups:
+- id: required_courses
+  title: Required Courses
+  all_of:
+  - SOC 272
+  - SOC 300
+  - SOC 300GW
+  - SOC 392
+  - SOC 483
+  source: p.851
+  quote: 'Required Courses (20 units) Code Title Units SOC 272 Social Inequality: Poverty, Wealth, and Privilege 4 SOC 300
+    Writing Sociological Analysis 1 SOC 300GW Sociological Analysis - GWAR 3 Select One: 4 SOC 370 Classical Theories of Society
+    SOC 371 Contemporary Theories of Society SOC 392 Introduction to Research Methods 4 SOC 483 Global Sociology 4'
+- id: theory
+  title: 'Required Courses: Select One (SOC 370 or SOC 371)'
+  one_of:
+  - - SOC 370
+  - - SOC 371
+  source: p.851
+  quote: 'Select One: 4 SOC 370 Classical Theories of Society SOC 371 Contemporary Theories of Society'
+- id: capstone
+  title: Capstone
+  one_of:
+  - - SOC 393
+  - - SOC 394
+  - - SOC 395
+  - - SOC 501
+    - SOC 502
+  - - SOC 505
+  source: p.851
+  quote: 'Capstone (3-4 units) Select One: Code Title Units SOC 393 Visualizing Social Data and the Power of Numbers 4 SOC
+    394 Inside the Social World: Qualitative Research Tools 4 SOC 395 Comparative Historical Methods and Postcolonial Critique
+    4 SOC 501 & SOC 502 Sociology Internship: Making Social Change and Sociology Internship Seminar: Making Social Change
+    3 SOC 505 Public Sociology 3'
+- id: electives
+  title: Electives
+  choose_units: 19
+  from:
+  - subject: SOC
+    level: upper
+  - subject: SOC
+    level: lower
+    max_units: 9
+  source: p.851
+  quote: Electives (19 units) Upper-division SOC courses or courses cross-listed with SOC not used to meet requirements above.
+    Up to 9 units of lower-division sociology courses or courses cross-listed with SOC not used to meet requirements above.
+- id: upper_division_sociology
+  across: major
+  min_units_from:
+    subject: SOC
+    level: upper
+    units: 30
+  source: p.851
+  quote: A total of 30 Sociology units must be upper-division.
+- id: cr_nc_limit
+  across: major
+  max_cr:
+    courses: 1
+  source: p.851
+  quote: Students are allowed to take one course toward the major as credit/ no credit (CR/NC).
+- id: cr_nc_exclusion
+  unparsed: true
+  source: p.851
+  quote: This course cannot be used as one of the Required Courses.
+- id: cross_listed_electives
+  unparsed: true
+  source: p.851
+  quote: Upper-division SOC courses or courses cross-listed with SOC not used to meet requirements above. Up to 9 units of
+    lower-division sociology courses or courses cross-listed with SOC not used to meet requirements above.
+- id: lower_division_elective_credit
+  unparsed: true
+  source: p.851
+  quote: A total of 9 lower-division units, including SOC 105, SOC 110, SOC 200, SOC 245 , and those courses completed at
+    community colleges, automatically apply toward the 19 units of electives required for the degree.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.852
+- text: 'Use ASSIST to determine: • Which courses at a CCC satisfy any lower-division major requirements for this major;'
+  source: p.852
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.852
+drafted_by: codex, 2026-10-24

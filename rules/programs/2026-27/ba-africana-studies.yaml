@@ -109,7 +109,7 @@ groups:
   - - AFRS 202
     - AFRS 335
     - AFRS 675
-- id: gwar
+- id: major_gwar
   title: Graduation Writing Assessment Requirement (3 units)
   all_of:
   - ETHS 300GW

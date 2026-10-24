@@ -1,0 +1,126 @@
+program: ba-chemistry
+title: Bachelor of Arts in Chemistry
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 54
+source: p.1859
+global:
+  no_cr_nc: true
+  source: p.1859
+groups:
+- id: major_gpa
+  title: Major GPA
+  min_gpa: 2.0
+  across: major
+  source: p.1859
+  quote: All courses used in the major program must be completed with letter grades (CR/NC not allowed) and a minimum GPA
+    of 2.0 (SF State Major GPA).
+- id: chemistry_lower_division
+  title: Lower-Division Chemistry Requirements
+  all_of:
+  - CHEM 115
+  - CHEM 215
+  - CHEM 233
+  - CHEM 234
+  - CHEM 235
+  - CHEM 236
+  min_grade: C
+  source: p.1859
+  quote: Grades of C or better are required in Chemistry prerequisite courses.
+- id: mathematics
+  title: Lower-Division Mathematics Requirements
+  all_of:
+  - MATH 226
+  - MATH 227
+  source: p.1859
+  quote: 'MATH 226 Calculus I 4
+
+    MATH 227 Calculus II 4'
+- id: physics
+  title: Lower-Division Physics Requirements
+  one_of:
+  - - PHYS 111
+    - PHYS 112
+    - PHYS 121
+    - PHYS 122
+  - - PHYS 220
+    - PHYS 222
+    - PHYS 230
+    - PHYS 232
+  - - PHYS 220
+    - PHYS 222
+    - PHYS 240
+    - PHYS 242
+  source: p.1859
+  quote: 'Select one: 8'
+- id: physical_chemistry
+  title: Upper-Division Physical Chemistry
+  one_of:
+  - - CHEM 300
+  - - CHEM 351
+  source: p.1859
+  quote: 'Select One: 3
+
+    CHEM 300 Physical Chemistry for Life Sciences I
+
+    CHEM 351 Physical Chemistry I: Thermodynamics and Kinetics'
+- id: upper_division_chemistry
+  title: Upper-Division Chemistry Requirements
+  all_of:
+  - CHEM 321
+  - CHEM 322
+  - CHEM 325
+  - CHEM 390GW
+  source: p.1859
+  quote: 'CHEM 321 Quantitative Chemical Analysis 3
+
+    CHEM 322 Quantitative Chemical Analysis Laboratory 2
+
+    CHEM 325 Inorganic Chemistry 3
+
+    CHEM 390GW Contemporary Chemistry and Biochemistry Research - GWAR 3'
+- id: upper_division_electives
+  title: Upper-Division Electives
+  choose_units: 3
+  from:
+  - list:
+    - CHEM 343
+    - CHEM 370
+    - CHEM 420
+    - CHEM 422
+    - CHEM 426
+    - CHEM 451
+    - CHEM 667
+    - CHEM 685
+    - CHEM 686
+    - CSC 306
+    - CSC 408
+    - CSC 509
+  - list:
+    - CHEM 699
+    max_units: 2
+  source: p.1859
+  quote: Students must complete at least 3 units of upper-division electives selected from the list below.
+- id: chemistry_699_petition
+  title: CHEM 699 Elective Conditions
+  unparsed: true
+  source: p.1860
+  quote: By petition only. Units must be taken in the same semester to be used as an upper division elective.
+- id: chemistry_double_major_elective
+  title: CHEM 343 Double-Major Condition
+  unparsed: true
+  source: p.1860
+  quote: For students who pursue a double major in the BA Chemistry and BS Biochemistry programs, CHEM 343 cannot be used
+    to meet the elective requirement for the BA Chemistry. Students must take a different approved elective list to meet this
+    requirement.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1861
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1861
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;'
+  source: p.1861
+drafted_by: codex, 2026-10-24

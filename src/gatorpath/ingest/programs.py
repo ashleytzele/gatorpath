@@ -145,6 +145,7 @@ Rules (they're checked by a program, then by a person):
   course under two codes: in a list to choose from, write each code (PH 221, ETHS 221); a required one is its own
   one_of group, one option per code ([[MUS 130], [TH A 131]]), never both codes in an all_of.
 - Major requirements only: GE, SF State Studies and the university's graduation requirements are in other files.
+  A major group's id is never one of theirs (gwar, ge_1a, …): the major's own GWAR course is e.g. major_gwar.
   Include transfer_notes only when the text gives transfer advice; leave out `advising` and `dpr_plan`.
 - Grading rules and unit limits over a program's courses (letter grades only, a CR/NC cap, a GPA floor, "no more than
   one course below C-", "30 units must be upper-division", "12 units at SF State") are check groups; a cap inside one
@@ -406,7 +407,7 @@ def load(pid: str, year: str, catalog: dict, prereqs: dict, university: dict, pa
     if not program.get("drafted_by"):
         return ["hand-written rules: --load only moves AI drafts"]
     source, road_source = (home / f"{pid}.source.txt").read_text(), (d / f"{pid}.roadmap.source.txt").read_text()
-    problems = check_program(program, catalog, set(pages[pid]["pages"]), source) + check_roadmap(
+    problems = check_program(program, catalog, set(pages[pid]["pages"]), source, university) + check_roadmap(
         roadmap, program, university, catalog, set(pages[pid]["roadmap_pages"]), road_source)
     problems = [x for x in problems if not any(k in x for k in LOADABLE)]
     problems += [x.split("\n")[0] for x in try_plans(program, roadmap, university, catalog, prereqs)
@@ -473,6 +474,7 @@ def main() -> None:
                    if i not in programs]:
         ap.error(f"unknown program id {', '.join(unknown)}; run with only the PDF to list them")
     catalog = db.load_catalog(args.db, year)
+    university = yaml.safe_load((RULES_DIR / "university" / f"{year}.yaml").read_text())
     for pid in (args.source or [i for i, p in programs.items() if p["title"] in have]) if args.source is not None else []:
         # next to the rules; a program without rules yet keeps it with its drafts
         path = RULES_DIR / ("programs" if programs[pid]["title"] in have else "drafts") / year / f"{pid}.source.txt"
@@ -494,9 +496,8 @@ def main() -> None:
             print(f"{out / f'{pid}.yaml'}: the answer isn't a rules file, fix it by hand ({str(e).splitlines()[0]})")
             continue
         (out / f"{pid}.yaml").write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
-        problems = check_program(data, catalog, set(p["pages"]), source)
+        problems = check_program(data, catalog, set(p["pages"]), source, university)
         print(f"{out / f'{pid}.yaml'}: {len(problems)} to fix" + "".join(f"\n  {x}" for x in problems))
-    university = yaml.safe_load((RULES_DIR / "university" / f"{year}.yaml").read_text())
     for pid in args.roadmap or []:
         p, out = programs[pid], RULES_DIR / "drafts" / year
         rules = next((f for f in (RULES_DIR / "programs" / year / f"{pid}.yaml", out / f"{pid}.yaml") if f.exists()), None)
@@ -545,13 +546,14 @@ def main() -> None:
             print(f"{second}: the answer isn't a rules file, fix it by hand ({str(e).splitlines()[0]})")
             continue
         second.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
-        problems = check_program(data, catalog, set(p["pages"]), source)
+        problems = check_program(data, catalog, set(p["pages"]), source, university)
         name = data.get("drafted_by", "second").split(",")[0]
         diff = cross_check(yaml.safe_load((served / f"{pid}.yaml").read_text()), data, university, catalog, ("ours", name))
         print(f"{pid}: " + ("agree on every made-up student" if not diff else f"{len(diff)} disagreement(s)")
               + "".join(f"\n  {x}" for x in diff)
-              + (f"\n  ({name}'s draft has {len(problems)} check_program problem(s), "
-                 f"{sum(1 for g in data['groups'] if g.get('unparsed'))} unparsed group(s))" if problems else ""))
+              + (f"\n  ({name}'s draft has {len(problems)} check_program problem(s))" if problems else "")
+              + "".join(f"\n  {name} left unparsed: \"{' '.join(str(g.get('quote', '')).split())[:110]}\""
+                        for g in data["groups"] if g.get("unparsed")))
 
     if args.load is not None:
         prereqs = db.load_prereqs(args.db, year)

@@ -122,7 +122,7 @@ groups:
   - AA S 697
   quote: Required Major Courses (9 Units)
   source: p.437
-- id: gwar
+- id: major_gwar
   title: Graduation Writing Assessment Requirement (3 units)
   all_of:
   - ETHS 300GW

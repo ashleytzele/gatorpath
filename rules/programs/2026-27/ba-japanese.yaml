@@ -45,7 +45,7 @@ groups:
   - MLL 325
   quote: MLL 325 Linguistics for Foreign Languages 3
   source: p.1492
-- id: gwar
+- id: major_gwar
   title: 'Graduation Writing Requirement (GWAR) (3 units): Select One (MLL 400GW or CWL 400GW)'
   one_of:
   - - MLL 400GW

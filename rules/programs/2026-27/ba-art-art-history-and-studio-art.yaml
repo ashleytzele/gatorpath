@@ -122,7 +122,7 @@ groups:
     - ART 563
   quote: Upper-Division Studio Art (12 units)
   source: p.919
-- id: gwar
+- id: major_gwar
   title: Graduate Writing Assessment Requirement (3 units)
   all_of:
   - ARTH 400GW

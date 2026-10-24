@@ -134,7 +134,7 @@ variants:
       - CINE 340
       - CINE 341
       - slot: major
-        group: gwar
+        group: major_gwar
         units: 3
         note: 'GWAR Course – Select One: CINE 303GW, CINE 343GW or CINE 350GW; footnote 7'
       - slot: GE
@@ -261,7 +261,7 @@ variants:
       - CINE 340
       - CINE 341
       - slot: major
-        group: gwar
+        group: major_gwar
         units: 3
         note: 'GWAR Course – Select One: CINE 303GW, CINE 343GW or CINE 350GW; footnote 2'
       - slot: major

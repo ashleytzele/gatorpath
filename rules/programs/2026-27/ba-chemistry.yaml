@@ -88,7 +88,7 @@ groups:
   quote: 'Select One: 3 CHEM 340 Biochemistry I'
   source: p.1859
   min_grade: C
-- id: gwar
+- id: major_gwar
   title: 'Upper-Division Requirements: CHEM 390GW (GWAR)'
   all_of:
   - CHEM 390GW

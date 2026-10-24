@@ -146,7 +146,7 @@ groups:
   - ART 509
   quote: ART 509 Art Professional Service Practicum 1
   source: p.927
-- id: gwar
+- id: major_gwar
   title: Graduate Writing Assessment Requirement (3 units)
   all_of:
   - ARTH 400GW

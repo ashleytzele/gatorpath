@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# literature_in_translation lists its GWAR options first: the plan takes the first option by default, and a CHIN GWAR course meets both it and major_gwar ("Select a CHIN GWAR course if one is not selected from the Literature in Translation area")
 program: ba-chinese-chinese-integrated-teacher-education-program
 title: 'Bachelor of Arts in Chinese: Concentration in Chinese Integrated Teacher Education Program'
 catalog_year: 2026-27
@@ -72,15 +73,15 @@ groups:
 - id: literature_in_translation
   title: 'Literature in Translation (3 units): Select One'
   one_of:
-  - - CHIN 600
   - - CHIN 601GW
-  - - CHIN 602
   - - CHIN 611GW
   - - CHIN 612GW
+  - - CHIN 600
+  - - CHIN 602
   - - HUM 530
   quote: CHIN 602 The Narrative Tradition 3
   source: p.1438
-- id: gwar
+- id: major_gwar
   title: 'GWAR: a CHIN GWAR course (CHIN 601GW, 611GW or 612GW)'
   across: major
   min_units_from:
