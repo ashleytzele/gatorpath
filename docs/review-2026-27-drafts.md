@@ -106,3 +106,10 @@ QUESTION ba-american-indian-studies: "two courses (6 units) at the lower divisio
 ba-american-indian-studies: LOADED (2026-10-24, roadmap check takes AIS 694's 1-3 units); FIXED the electives' level split was unparsed; 19..21+18 = 39
 ba-dance: LOADED (2026-10-24, DANC 490 1-3 units); FIXED technique levels were unparsed (6 of the 12 units at the 300-400 level); 9+9+1..3+12+3 = 36; Complementary Studies left
 bs-physics-astrophysics: LOADED (2026-10-24, ASTR 697 1-3 units); FIXED electives were unparsed (6u upper-division PHYS/ASTR, 3 at the 400 level, 3 outside by permission); 15+1+12+3+14+18+6+1..3 = 72
+2026-10-24, --cross pilot (Codex CLI drafted 5 served programs again from the same prompt and text; disagreements settled against the Bulletin, Claude):
+bs-applied-math: agree on every made-up student (the hand-written file)
+ba-sociology: 1 disagreement; ours stands: Codex left "This course cannot be used as one of the Required Courses" (CR) unparsed
+ba-chemistry: 10 disagreements. Codex error: it left out the required Select One CHEM 340 / CHEM 349 (p.1859). QUESTION (also bs-chemistry, bs-biochemistry): "Grades of C or better are required in Chemistry prerequisite courses": Codex read it as the lower-division chemistry courses (CHEM 236 included, no upper-division course); ours as the CHEM courses another course in the major names as a prereq (CHEM 300, 321, 322, 325, 340, 349, 351 included, CHEM 236 not). The sentence sits just above "Lower-Division Requirements"
+bs-business-administration-finance: 7 disagreements; ours stands. Codex error: BUS 682 and BUS 690 as a Select One (both are required, 39 core units). Codex left unparsed the C- rule for core prerequisites (ours: the QUESTION above) and ISYS 263 "or a passing score on the ISYS 263 CLEP Exam" (ours: ISYS 263; CLEP is exam credit)
+ba-geography: 1 disagreement, no rule difference: Codex left the distribution areas and the electives unparsed
+Found on the way (engine): a major group id shared with the university rules ("gwar", 17 programs) took the university's result; renamed major_gwar, check_program flags it

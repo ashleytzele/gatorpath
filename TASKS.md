@@ -560,6 +560,13 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     units"), per-course unit caps, History's A-with-B/C/D overlap, SPAN 215's heritage test-out (0-3 units).
   - [ ] BA Women and Gender Studies draft: its plan ends 3 upper-division units short; the free electives' UD flag
     doesn't survive the roadmap's own elective slots (planner)
+- [ ] Cross-check every served program with a second drafter (`--cross`, Codex CLI; ARCHITECTURE §6.2). Pilot
+  2026-10-24, 5 programs, about 77 s each: the hand-written Applied Math agreed on every made-up student; the other 4
+  had 19 disagreements: 2 Codex errors (a dropped Select One, a required pair read as a Select One), 1 question for a
+  person (Chemistry's "prerequisite courses", review log), the rest Codex leaving a rule unparsed that ours expresses.
+  It also led to an engine bug: a major group sharing the university's id "gwar" (17 programs) took its result (fixed).
+  All 100: about 2 hours of Codex time, across usage-limit resets (a failed call is reported per program; a kept
+  second draft is reused). Agreement never sets `verified`; an advisor still confirms
 
 ---
 
