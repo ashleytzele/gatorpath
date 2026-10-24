@@ -96,9 +96,10 @@ ROADMAPS = {(y, n): yaml.safe_load((RULES_DIR / f"roadmaps/{y}/{n}.yaml").read_t
 @pytest.mark.parametrize("key,variant", [(k, v) for k, r in ROADMAPS.items() for v in r["variants"]])
 def test_roadmap_semesters_add_up_to_printed_units(key, variant):
     v = ROADMAPS[key]["variants"][variant]
-    for i, sem in enumerate(v["semesters"], 1):
-        units = sum(CATALOG[x]["units_min"] if isinstance(x, str) else x["units"] for x in sem["items"])
-        assert units == sem["units"], f"{variant} semester {i}"
+    for i, sem in enumerate(v["semesters"], 1):  # a variable-unit course (AIS 694, 1-3) may be printed above its minimum
+        add = lambda end: sum(CATALOG[x].get(end, CATALOG[x]["units_min"]) if isinstance(x, str) else x["units"]
+                              for x in sem["items"])
+        assert add("units_min") <= sem["units"] <= add("units_max"), f"{variant} semester {i}"
     assert sum(s["units"] for s in v["semesters"]) == v["total_units"]
 
 
