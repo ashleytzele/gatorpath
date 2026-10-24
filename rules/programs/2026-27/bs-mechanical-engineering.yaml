@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (bs-mechanical-engineering.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: bs-mechanical-engineering
 title: Bachelor of Science in Mechanical Engineering
 catalog_year: 2026-27
@@ -124,9 +125,11 @@ groups:
   quote: Upper-Division Engineering Electives (9 Units)
   source: p.1979
 - id: electives_study_plan
-  title: 'Upper-Division Engineering Electives: study plan and group minimums'
+  title: 'Upper-Division Engineering Electives: group minimums and study plan'
   unparsed: true
-  quote: A study plan of intended upper-division electives must be
+  quote: A study plan of intended upper-division electives must be approved by the student’s advisor and the program coordinator
+    prior to the seventh semester of the engineering program. A total of 9 units from the following list of courses is required,
+    subject to the minimum number of units specified for each group.
   source: p.1979
 transfer_notes:
 - text: Community college transfers should complete the sequence of mathematics, chemistry, physics, and engineering courses

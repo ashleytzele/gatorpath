@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (bs-interior-design-and-architecture.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: bs-interior-design-and-architecture
 title: Bachelor of Science in Interior Design and Architecture
 catalog_year: 2026-27

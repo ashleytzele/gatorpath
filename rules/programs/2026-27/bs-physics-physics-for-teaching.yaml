@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (bs-physics-physics-for-teaching.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: bs-physics-physics-for-teaching
 title: 'Bachelor of Science in Physics: Concentration in Physics for Teaching'
 catalog_year: 2026-27
@@ -88,9 +89,14 @@ groups:
   source: p.2208
 - id: math_science_electives
   title: Math & Science Electives (9-12 units)
-  unparsed: true
-  quote: For students who choose MATH 245, 12 units of electives are required,
+  choose_units: 9
+  fill_to_total: true
+  from:
+    approved: true
+  approval: Selected in consultation with a faculty advisor to prepare to teach a second subject in addition to physics or
+    general science at a 9th-grade level.
   source: p.2208
+  quote: For students who choose MATH 245, 12 units of electives are required,
 transfer_notes:
 - text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
     guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division

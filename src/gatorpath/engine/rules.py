@@ -571,8 +571,9 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
             out.append(f"{gid}: source must cite a page like \"p.2129\"")
         elif pages and not set(cited) <= pages:
             out.append(f"{gid}: source {g['source']} is outside the program's pages ({min(pages)}-{max(pages)})")
-        if "quote" in g and source is not None and squashed(g["quote"]) not in squashed(source):
-            out.append(f"{gid}: quote isn't word for word in the Bulletin text: {g['quote'][:80]!r}")
+        for key in ("quote", "approval"):  # both are shown to students as the Bulletin's own words
+            if key in g and source is not None and squashed(g[key]) not in squashed(source):
+                out.append(f"{gid}: {key} isn't word for word in the Bulletin text: {g[key][:80]!r}")
         low += (units(g.get("all_of", [])) + g.get("choose_units", 0)
                 + min((units(opt) for opt in g.get("one_of", [])), default=0))
         high += (units(g.get("all_of", []), "units_max") + g.get("choose_units", 0)

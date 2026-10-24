@@ -380,7 +380,7 @@ line per page, as `<id>.source.txt` next to the rules (public Bulletin text: the
 `--draft <id>` sends that text, this section and the hand-written programs to a headless AI client (`claude -p`, no
 tools) and writes `rules/drafts/<year>/<id>.yaml`, which the server never reads. `check_program` (engine/rules.py)
 then checks any program file, drafted or hand-written: only this vocabulary, every course code in the catalog, every
-`source` page one of the program's pages, every `quote` word for word in the source text, no cross-listed course
+`source` page one of the program's pages, every `quote` and `approval` text word for word in the source text, no cross-listed course
 required twice (MUS 130 and TH A 131 in one all_of; the catalog's `crosslisted` says which codes are one course: a
 required one is its own `one_of` of its codes), and the groups' minimum units adding up to `total_units`. A person fixes what it reports, moves the file to `rules/programs/<year>/`, and a
 second person sets `verified`. Draft-only keys: `quote` on a group (the Bulletin words it was written from) and

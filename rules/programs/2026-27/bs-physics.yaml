@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (bs-physics.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: bs-physics
 title: Bachelor of Science in Physics
 catalog_year: 2026-27
@@ -77,10 +78,21 @@ groups:
   source: p.2183
 - id: upper_division_electives
   title: Electives (11 units)
-  unparsed: true
-  quote: Electives (11 units) Maximum of 5 units of 600-level PHYS and/or ASTR can be used as electives. Maximum of 3 units
-    outside of ASTR or PHYS, with prior permission of a faculty advisor.
+  choose_units: 11
   source: p.2184
+  from:
+  - subject: PHYS
+    level: 300+
+  - subject: ASTR
+    level: 300+
+  - approved: true
+  quote: Electives (11 units)
+- id: electives_caps
+  title: 'Electives: at most 5 units of 600-level, 3 outside PHYS/ASTR'
+  unparsed: true
+  source: p.2184
+  quote: Maximum of 5 units of 600-level PHYS and/or ASTR can be used as electives. Maximum of 3 units outside of ASTR or
+    PHYS, with prior permission of a faculty advisor.
 - id: elective_cr_nc_limit
   title: Upper-Division Electives, CR/NC limit
   unparsed: true

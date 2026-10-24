@@ -473,7 +473,16 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   its roadmap; plan invalid), both Nutrition concentrations (FCS 426 isn't in the catalog), BA Philosophy and
   Religion (no total printed), BA Early Childhood Studies: Special Education ITEP (graduate credential chain), BA
   Women and Gender Studies (3 upper-division units short in the plan). BA Family and Community Sciences has no roadmap.
-  Not reviewed: the 90 gate-only programs, and repeated courses (ensembles, lessons taken 4 times) count once.
+  Reviewed 2026-10-23 (first pass, Claude): all 90 gate-loaded programs read against their Bulletin text, group by
+  group with units added up; 37 fixed, 53 correct as drafted; log in docs/review-2026-27-drafts.md. The usual
+  fixes: electives the drafter left unparsed or advisor-only though the Bulletin names their courses or a numbered
+  range (now planned); "as needed to reach a total of N units" electives (new `fill_to_total`, ARCHITECTURE §6.2);
+  a required course merged into a Select One (BA Chemistry's CHEM 390GW); an approval text paraphrased (check_program
+  now checks approval text word for word, like quotes). For a person: BA American Studies, BA Liberal Studies and LS
+  ITEP are "Suspended - Not Accepting New Students"; BECA's Bulletin says both 6 and 3 units of BECA 576/685/695/699;
+  Classics names a CLAS 400GW the catalog doesn't have; Ecology's upper-division heading (23-25) is a unit more than
+  its printed courses. Repeatable courses add up their units in the audit (ensembles), but the planner can't
+  schedule one course four times, so "MUS 260 (1 unit course taken 4 times)" stays flagged.
   Pilot 2026-10-22: one program per college, drafted with `--client "claude -p --model sonnet …"` to save usage
   (about 35 s each), kept in `rules/drafts/2026-27/`. BS Civil Engineering had 0 to fix. BM Composition, BS Business
   Administration: Finance, BA Asian American Studies and BS Public Health had 2-6 unparsed groups each. Those are all

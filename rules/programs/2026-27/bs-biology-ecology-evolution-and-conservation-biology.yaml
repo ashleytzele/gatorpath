@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (bs-biology-ecology-evolution-and-conservation-biology.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: bs-biology-ecology-evolution-and-conservation-biology
 title: 'Bachelor of Science in Biology: Concentration in Ecology, Evolution, and Conservation Biology'
 catalog_year: 2026-27
@@ -119,8 +120,8 @@ groups:
   quote: Laboratory Elective
   source: p.1806
 - id: ud_lecture_electives
-  title: 'Upper-Division Electives: Lecture Electives'
-  choose_units: 3
+  title: 'Lecture Electives: enough for 3 units of electives and 58 in the major'
+  choose_units: 0
   from:
   - list:
     - BIOL 315
@@ -161,6 +162,7 @@ groups:
     - CSC 306
   quote: Select enough to reach a minimum of 3 units of electives.
   source: p.1806
+  fill_to_total: true
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
     related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation

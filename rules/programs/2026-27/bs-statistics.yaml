@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (bs-statistics.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: bs-statistics
 title: Bachelor of Science in Statistics
 catalog_year: 2026-27
@@ -53,9 +54,38 @@ groups:
   source: p.2141
 - id: guided_electives
   title: Guided Electives (9 units)
-  unparsed: true
-  quote: Guided Electives (9 units)
+  choose_units: 9
   source: p.2141
+  from:
+    list:
+    - DS 311
+    - DS 408
+    - DS 412
+    - DS 604
+    - DS 624
+    - ECON 301
+    - ECON 302
+    - ECON 312
+    - ECON 715
+    - ECON 731
+    - ECON 825
+    - ISYS 363
+    - ISYS 463
+    - ISYS 569
+    - ISYS 650
+    - MATH 370
+    - MATH 376
+    - MATH 400
+    - MATH 425
+    - MATH 430
+    - MATH 460
+  quote: Guided Electives (9 units)
+- id: guided_electives_one_area
+  title: 'Guided Electives: three courses from one area'
+  unparsed: true
+  source: p.2141
+  quote: 'Select three courses from one of the areas (Science, Economics, Business: Decision Sciences, or Business: Information
+    Systems) listed below:'
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
     related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation

@@ -82,7 +82,8 @@ prompt now plans from that, and a rerun of that question passes on both.
   to read its program line from); type the courses or use the transcript instead.
 - 95 other bachelor's programs (2026-27 only; `list_programs` marks them `drafted: true`) are AI-drafted from the
   Bulletin's text, then checked by program: every course code, page and word-for-word quote, the unit totals, and a
-  test plan that passes check_plan. A person hasn't checked them against the PDF yet. Rules the format can't express
+  test plan that passes check_plan. Each had a first-pass review against its Bulletin text (Claude, 2026-10-23;
+  docs/review-2026-27-drafts.md); a person hasn't signed them off yet, so they stay `verified: false`. Rules the format can't express
   (a CR/NC unit cap, a course taken four times, a GPA floor) show as `unparsed` with the Bulletin's words: GatorPath
   doesn't check them, and a degree with one is never marked complete. 13 of the Bulletin's 110 aren't served yet
   (`rules/drafts/`, see TASKS.md).

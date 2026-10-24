@@ -9797,6 +9797,36 @@
   "units_max": 3.0,
   "units_min": 1.0
  },
+ "ECON 715": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Mathematical Economics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 731": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 130,
+  "title": "Econometric Methods and Applications",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ECON 825": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 131,
+  "title": "Applied Time Series Forecasting for Economics and Business",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "EDAD 763": {
   "ge_areas": [],
   "grading": null,

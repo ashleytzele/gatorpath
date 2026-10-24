@@ -426,6 +426,11 @@ def test_check_program_reports_what_a_person_must_fix():
                    "odd: unparsed, a person writes this requirement from its quote",
                    "units: can't check total_units with choose_n or unparsed groups (the others add up to 10 of 55); "
                    "a person adds them up"]
+    # approval text is shown to students as the Bulletin's words too: a paraphrase is flagged
+    reworded = good | {"groups": [g | {"approval": "Get your advisor to pick three courses."} if g["id"] == "application_electives"
+                                  else g for g in good["groups"]]}
+    assert "application_electives: approval isn't word for word in the Bulletin text: 'Get your advisor to pick three " \
+           "courses.'" in check_program(reworded, CATALOG, {2129, 2130, 2131}, source)
     short = good | {"total_units": 56}
     assert check_program(short, CATALOG)[-1] == "units: the groups' minimums add up to 55, total_units says 56"
     # a variable-unit course (KIN 699 Independent Study, 1-3 in "Select one: 3", p.710) can reach the printed total
