@@ -43,6 +43,7 @@ uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --draft
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --roadmap <id>   # AI roadmap draft + checks + a test plan
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --load [ids]   # drafts that pass every check -> rules/
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --coverage   # share of rules GatorPath checks vs a person (goal: 90/10)
+uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cross <ids>   # Codex CLI drafts them again; disagreements on made-up students
 uv run gatorpath                   # start MCP server (stdio)
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit

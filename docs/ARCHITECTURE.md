@@ -437,6 +437,16 @@ source text and a header saying how they were made) when nothing is left but req
 check_plan on every variant; otherwise it stays in `rules/drafts/` and the command says why. Loaded drafts keep
 `verified: false` and `drafted_by`; `list_programs` marks them `drafted: true`.
 
+`--cross <ids>` (added 2026-10-24) is a second, independent draft of a served program: the same prompt and Bulletin
+text sent to another client (Codex CLI by default, with a clean CODEX_HOME in `data/`: no MCP server, which would
+hand it our rules, no web search, no shell), written to `rules/drafts/<year>/cross/` (reused on a rerun; delete it to
+draft again). `cross_check` then compares the two on made-up students: one who completes each draft (first and last
+options of each Select One, choices filled from their lists), and that student with one course at CR, D or C-. A
+student the two judge differently is a disagreement, printed with the requirements that say no (for a changed grade,
+only what the grade adds), for a person to settle against the Bulletin. Unparsed and approval-only groups aren't
+compared. Two drafts that agree are likelier right, not proven right: both can misread an unclear sentence the same
+way, so agreement never sets `verified`, and an advisor still confirms (§1 non-goals, §3: complement, don't replace).
+
 `amendments` (a change after the Bulletin was published; §5 "Keeping it current"): a list on a group,
 each `{effective: 2025-03-12, change: {waived: true} | {choose_units: 42}, source: "Dean's memo
 3/12/25 (quoted on DPRs)"}`. It's applied on top of the group and reported in the audit with its source.

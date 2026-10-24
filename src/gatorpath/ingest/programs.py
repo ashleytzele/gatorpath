@@ -15,7 +15,7 @@ import yaml
 
 from gatorpath import db
 from gatorpath.engine.planner import VARIANTS, approval_only, build_plan, check_roadmap, ge_areas
-from gatorpath.engine.rules import RULES_DIR, check_program
+from gatorpath.engine.rules import RULES_DIR, audit, check_program, filters_for, matches
 from gatorpath.ingest.bulletin import extract_pages
 
 LISTED = re.compile(r"• (Bachelor of (?:Arts|Science|Music|Fine Arts)\b[^•()]*?) \(p\. (\d{1,4})\)")
@@ -246,8 +246,8 @@ def ask(client: str, text: str, key: str, keep: Path | None = None) -> dict:
     answer = run.stdout
     if keep:
         keep.write_text(answer)
-    return parse_draft(answer, key) | {"verified": False, "verified_by": None,
-                                       "drafted_by": f"{shlex.split(client)[0]}, {date.today().isoformat()}"}
+    name = next(w for w in shlex.split(client) if w != "env" and "=" not in w)  # "env CODEX_HOME=… codex exec" -> codex
+    return parse_draft(answer, key) | {"verified": False, "verified_by": None, "drafted_by": f"{name}, {date.today().isoformat()}"}
 
 
 def hand_written(kind: str, year: str, program: str) -> list[str]:
@@ -271,6 +271,99 @@ def draft_roadmap(title: str, program: str, year: str, source: str, rules: str, 
     labels = sorted({a for g in university["groups"] for a in ge_areas(g)})
     data = ask(client, roadmap_prompt(title, program, year, source, rules, labels, examples), "variants", keep)
     return {"program": program, "catalog_year": year} | data | {"program": program, "catalog_year": year}
+
+
+def codex_client(work: Path) -> str:
+    """Codex CLI as a second, independent drafter: the prompt only. A clean CODEX_HOME (the user's login and model, no MCP
+    server, which would hand it our rules; no web search, no shell) and an empty working directory."""
+    home, cwd = work / "codex_home", work / "codex_cwd"
+    for d in (home, cwd):
+        d.mkdir(parents=True, exist_ok=True)
+    if not (home / "auth.json").exists():
+        (home / "auth.json").symlink_to(Path.home() / ".codex/auth.json")  # the user's own login, never copied
+    user = Path.home() / ".codex/config.toml"
+    model = "".join(l + "\n" for l in (user.read_text().splitlines() if user.exists() else [])
+                    if re.match(r"(model|model_reasoning_effort)\s*=", l))
+    off = "".join(f"{f} = false\n" for f in ("apps", "browser_use", "browser_use_external", "in_app_browser", "shell_tool",
+                                             "skill_search"))
+    (home / "config.toml").write_text(f'{model}web_search = "disabled"\n[features]\n{off}')
+    return f"env CODEX_HOME={home} codex exec --skip-git-repo-check -s read-only -C {cwd} --ephemeral -"
+
+
+def comparable(g: dict) -> bool:
+    """A course group two drafts can be compared on: not unparsed, not one only an advisor's approval fills."""
+    return not g.get("unparsed") and not approval_only(g) and "across" not in g
+
+
+def student(program: dict, university: dict, catalog: dict, last: bool = False) -> list[dict]:
+    """Completed rows (grade B) meeting every comparable group of `program`: each required course, the first (or last)
+    option of each Select One, and each choice filled from its lists, then the catalog, in code order (or reversed)."""
+    rows, have = [], set()
+
+    def add(c: str) -> bool:
+        if c in catalog and c not in have:
+            have.add(c)
+            rows.append({"code": c, "grade": "B", "term": "2027-fall"})
+            return True
+        return False
+
+    groups = [g for g in program["groups"] if comparable(g)]
+    for g in groups:
+        for c in g.get("all_of", []) + (g["one_of"][-1 if last else 0] if "one_of" in g else []):
+            add(c)
+    pools = {}
+    for g in groups:
+        if "from" in g:
+            fs = filters_for(g, {})
+            pool = list(dict.fromkeys([c for f in fs for c in f.get("list", [])]
+                                      + sorted(c for c in catalog if any(matches(f, c, catalog[c]) for f in fs))))
+            pools[g["id"]] = pool[::-1] if last else pool
+    for _ in range(60):  # one course per open choice at a time, until the audit says each is met
+        got = {x["id"]: x for x in audit({"catalog_year": program["catalog_year"], "completed": rows}, program, university,
+                                         catalog)["groups"]}
+        if not [add(next((c for c in pools[i] if c not in have), "")) for i in pools if got[i]["status"] != "satisfied"]:
+            break
+    return rows
+
+
+def unmet(rows: list[dict], program: dict, university: dict, catalog: dict) -> list[str]:
+    """What keeps `rows` from completing the program's comparable groups (and its check groups: one broken)."""
+    by = {g["id"]: g for g in program["groups"]}
+    out = []
+    for x in audit({"catalog_year": program["catalog_year"], "completed": rows}, program, university, catalog)["groups"]:
+        g = by.get(x["id"])
+        if x["kind"] != "major" or g is None or (not comparable(g) and "across" not in g):
+            continue
+        if x["status"] == "remaining" if "across" in g else x["status"] not in ("satisfied", "waived"):
+            out.append(x["title"] + (f" (still {', '.join(x['remaining'])})" if x.get("remaining") else ""))
+    return out
+
+
+def cross_check(ours: dict, theirs: dict, university: dict, catalog: dict, names: tuple = ("ours", "theirs")) -> list[str]:
+    """Two drafts of one program, compared on made-up students: one who completes each (first and last options), then
+    that student with one course at CR, D or C-. A student the two judge differently is a disagreement for a person,
+    with the requirements that say no; for a changed grade, only what the grade adds. [] when they agree on every one.
+    Unparsed and approval-only groups aren't compared."""
+    out = [f"total_units: {names[0]} {ours.get('total_units')}, {names[1]} {theirs.get('total_units')}"] \
+        if ours.get("total_units") != theirs.get("total_units") else []
+    versions = dict(zip(names, (ours, theirs)))
+    judge = lambda rows: {n: unmet(rows, p, university, catalog) for n, p in versions.items()}
+    says = lambda why: "; ".join(f"{n}: " + (f"not done, {', '.join(w)}" if w else "done") for n, w in why.items())
+    found: dict[tuple, list[str]] = {}
+    for name, program in versions.items():
+        for last in (False, True):
+            base = student(program, university, catalog, last)
+            first = judge(base)
+            if bool(first[names[0]]) != bool(first[names[1]]):
+                found.setdefault(("", says(first)), []).append(f"a student completing the {name} draft")
+            for r in base:
+                for grade in ("CR", "D", "C-"):
+                    then = judge([x | {"grade": grade} if x is r else x for x in base])
+                    added = {n: [re.sub(r" \(still .*\)$", "", w) for w in then[n] if w not in first[n]] for n in names}
+                    if bool(added[names[0]]) != bool(added[names[1]]):
+                        found.setdefault((grade, says(added)), []).append(r["code"])
+    return out + [f"{', '.join(dict.fromkeys(who))}{' at ' + grade if grade else ''}: {why}"
+                  for (grade, why), who in found.items()]
 
 
 def try_plans(program: dict, roadmap: dict, university: dict, catalog: dict, prereqs: dict) -> list[str]:
@@ -358,7 +451,9 @@ def main() -> None:
     ap.add_argument("--load", nargs="*", metavar="ID", help="move drafts that pass the checks and a test plan into "
                                                              "rules/ (no ids: every draft)")
     ap.add_argument("--coverage", action="store_true", help="how much of the served rules GatorPath checks vs a person")
-    ap.add_argument("--client", default=CLIENT, help=f"headless AI client, prompt on stdin (default: {CLIENT})")
+    ap.add_argument("--cross", nargs="+", metavar="ID", help="a second, independent draft of served programs (default "
+                                                              "client: Codex CLI) compared on made-up students")
+    ap.add_argument("--client", default=None, help=f"headless AI client, prompt on stdin (default: {CLIENT})")
     ap.add_argument("--db", default="data/catalog.db")
     args = ap.parse_args()
     year = args.year or re.search(r"\d{4}-\d{2}", Path(args.pdf).name).group()
@@ -369,10 +464,12 @@ def main() -> None:
         print("\n".join(coverage([yaml.safe_load(f.read_text()) for f in sorted((RULES_DIR / "programs" / year).glob("*.yaml"))],
                                   len(programs))))
         return
-    if args.source is None and not args.draft and not args.roadmap and args.load is None:
+    client = args.client or CLIENT
+    if args.source is None and not args.draft and not args.roadmap and args.load is None and not args.cross:
         print(json.dumps([{"id": i, **p, "has_rules": p["title"] in have} for i, p in programs.items()], indent=1))
         return
     if unknown := [i for i in (args.source or []) + (args.draft or []) + (args.roadmap or []) + (args.load or [])
+                   + (args.cross or [])
                    if i not in programs]:
         ap.error(f"unknown program id {', '.join(unknown)}; run with only the PDF to list them")
     catalog = db.load_catalog(args.db, year)
@@ -389,7 +486,7 @@ def main() -> None:
         out.mkdir(parents=True, exist_ok=True)
         (out / f"{pid}.source.txt").write_text(source)
         try:
-            data = draft(p["title"], pid, year, source, args.client, out / f"{pid}.yaml")
+            data = draft(p["title"], pid, year, source, client, out / f"{pid}.yaml")
         except RuntimeError as e:
             print(f"{pid}: no draft, {e}")
             continue
@@ -417,7 +514,7 @@ def main() -> None:
         out.mkdir(parents=True, exist_ok=True)
         (out / f"{pid}.roadmap.source.txt").write_text(source)
         try:
-            data = draft_roadmap(p["title"], pid, year, source, rules.read_text(), university, args.client,
+            data = draft_roadmap(p["title"], pid, year, source, rules.read_text(), university, client,
                                  out / f"{pid}.roadmap.yaml")
         except RuntimeError as e:
             print(f"{pid}: no roadmap draft, {e}")
@@ -429,6 +526,32 @@ def main() -> None:
         problems = check_roadmap(data, program, university, catalog, set(p["roadmap_pages"]), source)
         print(f"{out / f'{pid}.roadmap.yaml'}: {len(problems)} to fix" + "".join(f"\n  {x}" for x in problems)
               + "".join(f"\n  {x}" for x in try_plans(program, data, university, catalog, db.load_prereqs(args.db, year))))
+
+    for pid in args.cross or []:  # a second draft from another client, compared with the served rules
+        served, out = RULES_DIR / "programs" / year, RULES_DIR / "drafts" / year / "cross"
+        if not (served / f"{pid}.yaml").exists():
+            print(f"{pid}: not served, nothing to cross-check")
+            continue
+        out.mkdir(parents=True, exist_ok=True)
+        p, source, second = programs[pid], (served / f"{pid}.source.txt").read_text(), out / f"{pid}.yaml"
+        who = args.client or codex_client(RULES_DIR.parent / "data")
+        try:  # an earlier second draft is reused: delete it to draft again
+            data = read_draft(second, "groups", {"program": pid, "title": p["title"], "catalog_year": year}) \
+                if second.exists() else draft(p["title"], pid, year, source, who, second)
+        except RuntimeError as e:
+            print(f"{pid}: no second draft, {e}")
+            continue
+        except (ValueError, yaml.YAMLError) as e:
+            print(f"{second}: the answer isn't a rules file, fix it by hand ({str(e).splitlines()[0]})")
+            continue
+        second.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
+        problems = check_program(data, catalog, set(p["pages"]), source)
+        name = data.get("drafted_by", "second").split(",")[0]
+        diff = cross_check(yaml.safe_load((served / f"{pid}.yaml").read_text()), data, university, catalog, ("ours", name))
+        print(f"{pid}: " + ("agree on every made-up student" if not diff else f"{len(diff)} disagreement(s)")
+              + "".join(f"\n  {x}" for x in diff)
+              + (f"\n  ({name}'s draft has {len(problems)} check_program problem(s), "
+                 f"{sum(1 for g in data['groups'] if g.get('unparsed'))} unparsed group(s))" if problems else ""))
 
     if args.load is not None:
         prereqs = db.load_prereqs(args.db, year)

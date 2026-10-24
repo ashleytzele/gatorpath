@@ -141,3 +141,22 @@ def test_coverage_counts_what_is_left_for_a_person():
         "programs served: 2 of 3 in the Bulletin",
         "requirement groups: 5; GatorPath checks 3 (60.0%); a person 2 (40.0%): 1 unparsed, 1 an advisor approves",
         "programs with nothing for a person: 1", "most for a person: a 2"]
+
+
+def test_cross_check_finds_where_two_drafts_differ():
+    # a second draft (another client) that requires one more course and asks C- where Applied Math asks C: the made-up
+    # students who complete each, then one course at CR, D or C-, show each difference once
+    import json
+    from pathlib import Path
+    from gatorpath.engine.rules import load_rules
+    catalog = json.loads((Path(__file__).parents[1] / "evals/catalog-2026-27.json").read_text())
+    ours, university = load_rules("2026-27", "bs-applied-math")
+    theirs = ours | {"groups": [g | {"min_grade": "C-"} if g["id"] == "required" else g for g in ours["groups"]]
+                     + [{"id": "extra", "all_of": ["MATH 245"], "source": "p.2129"}]}
+    assert P.cross_check(ours, ours, university, catalog) == []
+    got = P.cross_check(ours, theirs, university, catalog, ("ours", "codex"))
+    assert got[0] == "a student completing the ours draft: ours: done; codex: not done, extra (still MATH 245)"
+    assert "MATH 226, MATH 227, MATH 228, MATH 301GW, MATH 325, MATH 440 at C-: ours: not done, Required Courses; " \
+           "codex: done" in got
+    assert any(x.startswith("MATH 376, MATH 400") and x.endswith("at D: ours: done; codex: not done, Required Courses")
+               for x in got)
