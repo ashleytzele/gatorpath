@@ -341,7 +341,8 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
     return out
 
 
-CHECKS = ("letter_grade", "max_cr", "max_below", "min_gpa", "min_units_from", "max_units_from", "distinct_subjects")
+CHECKS = ("letter_grade", "max_cr", "max_below", "min_gpa", "min_units_from", "max_units_from", "distinct_subjects",
+          "min_categories", "one_category")
 GRADE_CHECKS = CHECKS[:4]  # grades a plan can't choose; the others are met or not by the courses chosen
 
 
@@ -357,6 +358,10 @@ def check_group(g: dict, done: dict, taken: dict, profile: dict, university: dic
     counted = [c for p in parts for c in p["counted"] if c in taken]  # not a DPR-met course: no grade to check
     check = next(k for k in CHECKS if k in g)
     out |= {"check": check, "across": ids}
+    # a units filter may also say where: `sf_state: true` ("at SF State"), `transfer: true` ("Nine transfer units ... may
+    # count toward the Major", p.476)
+    where = lambda f, c: (matches(f, c, catalog[c]) and not (f.get("sf_state") and taken.get(c, {}).get("transfer"))
+                          and not (f.get("transfer") and not taken.get(c, {}).get("transfer")))
     broken = ""
     if check == "letter_grade":  # a course offered only CR/NC has no letter grade to take
         cr = [c for c in counted if taken[c]["grade"] == "CR" and catalog[c].get("grading") != "cr_nc"
@@ -379,15 +384,26 @@ def check_group(g: dict, done: dict, taken: dict, profile: dict, university: dic
         broken = value is not None and value < g["min_gpa"] and f"GPA {value:.2f} in these courses, needs {g['min_gpa']:g}"
     elif check == "max_units_from":  # "A maximum of 3 units from AA S 685, AA S 688, or AA S 699 can count" (p.437)
         f = g["max_units_from"]
-        over = [c for c in counted if matches(f, c, catalog[c])]
+        over = [c for c in counted if where(f, c)]
         n, most, what = (len(over), f["courses"], "courses") if "courses" in f else (
             sum(taken[c]["units"] for c in over), f["units"], "units")
         broken = n > most and f"{', '.join(over)}: {n:g} {what}, at most {most:g} count"
+    elif check in ("min_categories", "one_category"):  # `categories`: the printed lists ("A. Political Theory", ...)
+        cats = [set(x) for x in g["categories"]]
+        ahead = [c for p in parts for c in p["in_progress"]]
+        if check == "min_categories":  # "at least one course in four of the following categories" (p.1640)
+            need = g["min_categories"]
+            status = "satisfied" if categories_met(cats, counted) >= need else \
+                "in_progress" if categories_met(cats, counted + ahead) >= need else "remaining"
+            return out | {"status": status, "categories_met": categories_met(cats, counted)}
+        # "Select 9 units on advisement from one area below" (p.402): every course from the same list
+        mixed = (counted + ahead) and not any(set(counted + ahead) <= cat for cat in cats)
+        broken = mixed and f"{', '.join(counted + ahead)}: not all from one of its lists"
     elif check == "distinct_subjects":  # "drawn from at least two disciplines" (p.1264)
         return out | distinct_subjects(g | {"title": out["title"], "across": ids}, done, warnings)
     else:  # min_units_from: "a total of 30 Sociology units must be upper-division", "12 units in biology at SF State"
         f = g["min_units_from"]  # `courses: N` counts courses instead: "at least two of which must be upper-division"
-        hit = lambda c: matches(f, c, catalog[c]) and not (f.get("sf_state") and taken.get(c, {}).get("transfer"))
+        hit = lambda c: where(f, c)
         size = (lambda c: 1) if "courses" in f else (lambda c: taken[c]["units"] if c in taken else catalog[c]["units_min"])
         need = f.get("courses", f.get("units"))
         done_units = sum(size(c) for c in counted if hit(c))
@@ -398,6 +414,22 @@ def check_group(g: dict, done: dict, taken: dict, profile: dict, university: dic
         warnings.append(f"{out['title']}: {broken} ({g['source']})")
         return out | {"status": "remaining"}
     return out | {"status": "satisfied" if all(p["status"] in ("satisfied", "waived") for p in parts) else "in_progress"}
+
+
+def categories_met(categories: list[set], courses: list[str]) -> int:
+    """Most categories that each get a different course: a course printed in two lists counts for one (matching)."""
+    owner: dict[str, int] = {}
+
+    def place(i: int, seen: set) -> bool:
+        for c in courses:
+            if c in categories[i] and c not in seen:
+                seen.add(c)
+                if c not in owner or place(owner[c], seen):
+                    owner[c] = i
+                    return True
+        return False
+
+    return sum(place(i, set()) for i in range(len(categories)))
 
 
 def distinct_subjects(g: dict, done_groups: dict, warnings: list[str]) -> dict:
@@ -590,7 +622,7 @@ PROGRAM_KEYS = {"program", "title", "catalog_year", "verified", "verified_by", "
 GROUP_KEYS = {"id", "title", "source", "quote", "unparsed", "all_of", "one_of", "choose_n", "choose_units", "from",
               "first_time_from", "min_grade", "min_units_from", "course_units", "exceptions", "approval", "waived_if",
               "fill_to_total", "across", "letter_grade", "max_cr", "max_below", "min_gpa", "max_units_from",
-              "distinct_subjects", "except",
+              "distinct_subjects", "min_categories", "one_category", "categories", "except",
               "waiver", "amendments"}
 FILTER_KEYS = {"list", "subject", "level", "except", "paired", "max_courses", "max_units", "ge_area", "ge_area_all", "approved"}
 SELECTORS = ("list", "subject", "level", "ge_area", "ge_area_all", "approved")  # a filter needs one, else it takes anything
@@ -639,16 +671,20 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
                 out.append(f"{gid}: max_cr needs units or courses")
             if g.get("max_below", {}).get("grade", "C-") not in GRADE_POINTS or "max_below" in g and "courses" not in g["max_below"]:
                 out.append(f"{gid}: max_below needs a grade and courses")
+            if ("min_categories" in g or "one_category" in g) != ("categories" in g):
+                out.append(f"{gid}: min_categories and one_category go with categories (the printed lists)")
         mins = [g[k] for k in ("min_units_from", "max_units_from") if k in g]
         out += [f"{gid}: {k} needs units" for k in ("min_units_from", "max_units_from") if k in g
                 and len({"units", "courses"} & set(g[k]) if "across" in g else {"units"} & set(g[k])) != 1]
         filters = [f for key in ("from", "first_time_from") if key in g
                    for f in (g[key] if isinstance(g[key], list) else [g[key]])]
         out += [f"{gid}: unknown filter key {k!r}" for f in filters + mins for k in f
-                if k not in FILTER_KEYS | ({"units", "courses", "sf_state"} if f in mins else set())]
-        out += [f"{gid}: a filter needs one of {', '.join(SELECTORS)}" for f in filters + mins if not set(SELECTORS) & set(f)]
+                if k not in FILTER_KEYS | ({"units", "courses", "sf_state", "transfer"} if f in mins else set())]
+        out += [f"{gid}: a filter needs one of {', '.join(SELECTORS)}" for f in filters + mins
+                if not set(SELECTORS) & set(f) and not (f in mins and {"sf_state", "transfer"} & set(f))]
         codes = (g.get("all_of", []) + [c for opt in g.get("one_of", []) for c in opt]
                  + [c for f in filters + mins for c in f.get("list", []) + f.get("except", [])] + g.get("except", [])
+                 + [c for cat in g.get("categories", []) for c in cat]
                  + list(g["min_grade"] if isinstance(g.get("min_grade"), dict) else []))
         out += [f"{gid}: {c} is not in the {program.get('catalog_year', '')} catalog" for c in dict.fromkeys(codes) if c not in catalog]
         req = g.get("all_of", [])

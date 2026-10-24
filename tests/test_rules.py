@@ -465,6 +465,11 @@ def test_check_groups_read_the_courses_other_groups_count():
         {"id": "two", "across": ["required"], "distinct_subjects": 2, "source": "p.1264"},
         {"id": "upper2", "across": ["required"], "min_units_from": {"level": "upper", "courses": 2}, "source": "p.1013"},
         {"id": "lower1", "across": ["required"], "max_units_from": {"level": "lower", "courses": 1}, "source": "p.1278"},
+        {"id": "moved", "across": "major", "max_units_from": {"subject": "MATH", "units": 6, "transfer": True}, "source": "p.476"},
+        {"id": "fields", "across": ["required"], "min_categories": 3, "source": "p.1640",
+         "categories": [["MATH 226", "MATH 227"], ["MATH 227"], ["MATH 440", "MATH 460"]]},  # MATH 227 counts once
+        {"id": "area", "across": ["required"], "one_category": True, "source": "p.402",
+         "categories": [["MATH 226", "MATH 227", "MATH 325"], ["MATH 440", "MATH 460"]]},
     ]
     only_cr = CATALOG | {"MATH 228": CATALOG["MATH 228"] | {"grading": "cr_nc"}}
     plain = [{k: v for k, v in g.items() if k != "min_grade"} for g in program["groups"]]
@@ -492,6 +497,9 @@ def test_check_groups_read_the_courses_other_groups_count():
     assert status["cap"]["status"] == "remaining" and "cap: MATH 226, MATH 227: 8 units, at most 4 count (p.437)" in warnings
     assert status["two"]["status"] == "remaining" and status["two"]["subjects"] == ["MATH"]
     assert status["upper2"]["status"] == "satisfied" and status["upper2"]["min_units_from"]["done"] == 5  # courses, not units
+    assert status["moved"]["status"] == "remaining"  # 9 transfer units (MATH 325, 376, 400): at most 6
+    assert status["fields"]["status"] == "satisfied" and status["fields"]["categories_met"] == 3  # 226, 227, 440
+    assert status["area"]["status"] == "remaining" and any(w.startswith("area: MATH 226, MATH 227,") for w in warnings)
     assert status["lower1"]["status"] == "remaining" and "lower1: MATH 226, MATH 227: 2 courses, at most 1 count (p.1278)" in warnings
 
 
@@ -527,7 +535,7 @@ def test_check_program_reads_check_groups():
            {"id": "any", "choose_units": 0, "from": {"max_units": 3}, "min_units_from": {"subject": "MATH"}, "source": "p.2129"}]
     assert check_program(good | {"groups": good["groups"] + bad}, CATALOG) == [
         "two: a check group needs exactly one of letter_grade, max_cr, max_below, min_gpa, min_units_from, max_units_from, "
-        "distinct_subjects (has letter_grade, min_gpa)",
+        "distinct_subjects, min_categories, one_category (has letter_grade, min_gpa)",
         "where: across must be `major` or ids of this program's course groups (has ['nowhere'])",
         "where: max_cr needs units or courses",
         "low: max_below needs a grade and courses", "low: MATH 999 is not in the 2026-27 catalog",
