@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-physics-astrophysics.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: bs-physics-astrophysics
 title: 'Bachelor of Science in Physics: Concentration in Astrophysics'
 catalog_year: 2026-27
@@ -23,8 +26,15 @@ groups:
   quote: PHYS 200 Planning for Success as a Physics & Astronomy
   source: p.2195
 - id: lower_phys_200_grade
-  unparsed: true
-  quote: except for PHYS 200 which must be passed with a grade of CR.
+  title: 'Lower-division prerequisites: letter grades'
+  across:
+  - lower_math
+  - lower_phys_200
+  - lower_physics
+  - lower_programming
+  letter_grade: true
+  quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
+    except for PHYS 200 which must be passed with a grade of CR.
   source: p.2195
 - id: lower_physics
   title: 'Lower-Division Prerequisites: General Physics with Calculus I-III and Laboratories (12 units)'
@@ -80,16 +90,37 @@ groups:
   quote: PHYS 320 Modern Physics I 3
   source: p.2195
 - id: upper_core_letter_grade
-  unparsed: true
+  title: 'Upper-division core: letter grades'
+  across:
+  - upper_astr
+  - upper_physics
+  letter_grade: true
   quote: All Major Upper-Division Core courses must be taken for letter grades;
   source: p.2195
 - id: upper_electives
-  unparsed: true
-  quote: Minimum 3 units numbered 400-499, maximum 3 units outside PHYS or
+  title: Electives (6 units)
+  min_units_from:
+    level: 400
+    units: 3
+  choose_units: 6
+  from:
+  - subject: PHYS
+    level: upper
+  - subject: ASTR
+    level: upper
+  - approved: true
+    max_units: 3
+  approval: maximum 3 units outside PHYS or ASTR with prior permission of a faculty major advisor.
+  quote: Minimum 3 units numbered 400-499, maximum 3 units outside PHYS or ASTR with prior permission of a faculty major advisor.
   source: p.2196
 - id: upper_electives_cr_nc
-  unparsed: true
-  quote: Up to a maximum of 6 units of Major Upper-Division Electives may be
+  title: 'Electives: at most 6 CR/NC units'
+  across:
+  - upper_electives
+  max_cr:
+    units: 6
+  quote: Up to a maximum of 6 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
+    is allowed.
   source: p.2195
 - id: culminating_experience
   title: Culminating Experience (3 units)

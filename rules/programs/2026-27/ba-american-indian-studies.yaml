@@ -1,3 +1,7 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-american-indian-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+# elective_level_split (p.421) "Upon advisement, students select two courses (6 units) at the lower division level and four courses (12 units) at the upper-division level.": the electives: a lower-division list capped at 6 units and min_units_from 6 lower-division units, so the other 12 are upper division
 program: ba-american-indian-studies
 title: Bachelor of Arts in American Indian Studies
 catalog_year: 2026-27
@@ -28,6 +32,9 @@ groups:
     - RRS 103
     - AIS 160
     - AIS 162
+    - AIS 235
+    max_units: 6
+  - list:
     - AIS 310
     - AIS 320
     - AIS 325
@@ -40,7 +47,6 @@ groups:
     - AIS 470
     - AIS 520
     - AIS 560
-    - AIS 235
     - AIS 330
     - AIS 350
     - AFRS 350
@@ -53,12 +59,9 @@ groups:
     - AIS 550
   quote: A total number of six courses (18 units) of electives are required for the degree.
   source: p.421
-- id: elective_level_split
-  title: 'Elective Requirements: two lower-division and four upper-division courses'
-  unparsed: true
-  quote: Upon advisement, students select two courses (6 units) at the lower division level and four courses (12 units) at
-    the upper-division level.
-  source: p.421
+  min_units_from:
+    level: lower
+    units: 6
 transfer_notes:
 - text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
     guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division

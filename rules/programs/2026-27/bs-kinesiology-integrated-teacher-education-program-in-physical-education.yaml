@@ -11,10 +11,14 @@ total_units: 97
 source: p.724
 groups:
 - id: letter_grade_cr_nc
-  unparsed: true
+  title: Letter grades, except S ED 640 and S ED 660
+  across: major
+  letter_grade: true
+  except:
+  - S ED 640
+  - S ED 660
   quote: All courses, including physical activity courses used to satisfy completion of major requirements, must be taken
-    for a letter grade. No CR/NC grades may be used on the major petition for graduation with the exception of S ED 640 and
-    S ED 660.
+    for a letter grade.
   source: p.724
 - id: theory_movement_grades
   unparsed: true

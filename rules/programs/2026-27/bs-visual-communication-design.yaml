@@ -2,6 +2,8 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# grade_policy (p.1091) "except for DES 305, DES 370, and DES 576, which must be completed": the groups' min_grade C (the electives' too); DES 305, DES 370 and DES 576 are offered only CR/NC
+# major_electives_lower_division_cap (p.1092) "Take no more than two classes (6 units total)": the electives' lower-division list, max_courses: 2
 program: bs-visual-communication-design
 title: Bachelor of Science in Visual Communication Design
 catalog_year: 2026-27
@@ -10,11 +12,6 @@ verified_by: null
 total_units: 58
 source: p.1091
 groups:
-- id: grade_policy
-  title: 'Grades: C or better, except CR for DES 305, DES 370 and DES 576'
-  unparsed: true
-  quote: except for DES 305, DES 370, and DES 576, which must be completed
-  source: p.1091
 - id: advancing_to_300_level
   title: Before advancing to courses at the 300 level or higher
   unparsed: true
@@ -70,12 +67,6 @@ groups:
   approval: Other electives as approved by an advisor
   from:
   - list:
-    - CSC 101
-    - DES 220
-    - DES 226
-    - DES 252
-    - DES 256
-    - DES 278
     - DES 305
     - DES 310
     - DES 311
@@ -99,14 +90,45 @@ groups:
     - DES 699
     - JOUR 235
     - JOUR 450
+  - list:
+    - CSC 101
+    - DES 220
+    - DES 226
+    - DES 252
+    - DES 256
+    - DES 278
+    max_courses: 2
   - approved: true
   quote: Select five classes from the list below.
   source: p.1092
-- id: major_electives_lower_division_cap
-  title: 'Major Electives: no more than two lower-division classes'
-  unparsed: true
-  quote: Take no more than two classes (6 units total)
-  source: p.1092
+  min_grade:
+    CSC 101: C
+    DES 220: C
+    DES 226: C
+    DES 252: C
+    DES 256: C
+    DES 278: C
+    DES 310: C
+    DES 311: C
+    DES 320: C
+    DES 321: C
+    DES 367: C
+    DES 405: C
+    DES 411: C
+    DES 448: C
+    DES 456: C
+    DES 475: C
+    DES 485: C
+    DES 523: C
+    DES 525: C
+    DES 527: C
+    DES 575: C
+    DES 625: C
+    DES 627: C
+    DES 628: C
+    DES 699: C
+    JOUR 235: C
+    JOUR 450: C
 - id: culminating
   title: Culminating Requirements (6 units)
   all_of:

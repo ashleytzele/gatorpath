@@ -1,3 +1,7 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-dance.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
+# technique_levels (p.1677) "Select 6 units at the 200-400 level and 6 units at the 300-400 level:": the technique group's min_units_from (6 units at the 300-400 level)
 program: ba-dance
 title: Bachelor of Arts in Dance
 catalog_year: 2026-27
@@ -57,11 +61,11 @@ groups:
     - DANC 476
   quote: Technique (12 units)
   source: p.1677
-- id: technique_levels
-  title: 'Technique: 6 units at the 200-400 level and 6 units at the 300-400 level'
-  unparsed: true
-  quote: 'Select 6 units at the 200-400 level and 6 units at the 300-400 level:'
-  source: p.1677
+  min_units_from:
+    level:
+    - 300
+    - 400
+    units: 6
 - id: gwar
   title: GWAR Course (3 units)
   choose_units: 3

@@ -1561,6 +1561,68 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AIS 100": {
+  "ge_areas": [
+   "6",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 416,
+  "title": "Introduction to American Indian Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 103": {
+  "crosslisted": [
+   "RRS 103"
+  ],
+  "ge_areas": [
+   "USH",
+   "SJ",
+   "GP",
+   "AERM",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 416,
+  "title": "Introduction to Pacific Islander Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 150": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "4",
+   "USH"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 417,
+  "title": "American Indian History in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 160": {
+  "ge_areas": [
+   "ESCA",
+   "6",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 417,
+  "title": "Survey of Native California",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AIS 162": {
   "ge_areas": [
    "6"
@@ -1585,6 +1647,34 @@
   "repeatable": false,
   "source_page": 417,
   "title": "American Indians and U.S. Laws",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 235": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "6"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 417,
+  "title": "American Indians: Image and Issues in the Mass Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 300": {
+  "ge_areas": [
+   "AERM",
+   "SJ",
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 417,
+  "title": "American Indian Studies Research Methodologies",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1659,6 +1749,21 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AIS 400": {
+  "ge_areas": [
+   "AERM",
+   "GP",
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 418,
+  "title": "American Indian Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AIS 410": {
   "ge_areas": [
    "6",
@@ -1670,6 +1775,57 @@
   "repeatable": false,
   "source_page": 418,
   "title": "Perspectives of Native California Indians",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 420": {
+  "crosslisted": [
+   "WGS 420"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 418,
+  "title": "Native Genders and Feminism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 433": {
+  "crosslisted": [
+   "RRS 433"
+  ],
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 418,
+  "title": "Pacific Islanders in Film: Re-Presenting Oceania Through an Indigenous Lens",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 440": {
+  "crosslisted": [
+   "SXS 440",
+   "WGS 440"
+  ],
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 419,
+  "title": "Native Sexualities and Queer Discourse",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1722,6 +1878,21 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "AIS 550": {
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "6",
+   "USH"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 419,
+  "title": "American Indians in Contemporary U.S. History",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "AIS 560": {
   "ge_areas": [
    "SJ",
@@ -1735,6 +1906,26 @@
   "title": "Modern Creative and Performing Arts",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "AIS 680": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 420,
+  "title": "American Indian Studies Senior Seminar",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "AIS 694": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 420,
+  "title": "Community Service Learning",
+  "units_max": 3.0,
+  "units_min": 1.0
  },
  "AMST 200": {
   "crosslisted": [
@@ -3165,6 +3356,26 @@
   "repeatable": false,
   "source_page": 2159,
   "title": "The Big Bang - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ASTR 400": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 2159,
+  "title": "Stellar Astrophysics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ASTR 470": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2159,
+  "title": "Observational Techniques in Astronomy",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -8648,6 +8859,56 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "DANC 232": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1666,
+  "title": "Dance Composition: Choreography I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DANC 263": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1666,
+  "title": "Ballet II",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 275": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1666,
+  "title": "Modern Dance II",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 276": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1666,
+  "title": "Jazz Dance II",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 278": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1666,
+  "title": "Afro-Fusion Dance Technique I/II",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
  "DANC 340": {
   "ge_areas": [],
   "grading": null,
@@ -8671,6 +8932,73 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "DANC 352": {
+  "crosslisted": [
+   "MUS 352",
+   "TH A 352"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1667,
+  "title": "K-Pop: Performance and Pop Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DANC 363": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1667,
+  "title": "Ballet III",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 374": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1667,
+  "title": "Modern Dance III",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 376": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1667,
+  "title": "Jazz Dance III",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 378": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1667,
+  "title": "Afro-Fusion Dance Technique III/IV",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 400": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1667,
+  "title": "Workshop in Contemporary Dance",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
  "DANC 408": {
   "crosslisted": [
    "TH A 408"
@@ -8687,6 +9015,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "DANC 416": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1668,
+  "title": "Advanced Contemporary Dance Repertory and Skills",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
  "DANC 430": {
   "ge_areas": [
    "3UD"
@@ -8698,6 +9036,59 @@
   "title": "Survey of Ballet and Modern Dance History",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "DANC 434": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1668,
+  "title": "Dance Composition: Choreography II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "DANC 465": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1668,
+  "title": "Ballet IV",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 474": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1668,
+  "title": "Modern Dance IV",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 476": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1668,
+  "title": "Jazz Dance IV",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "DANC 490": {
+  "crosslisted": [
+   "TH A 490"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1668,
+  "title": "Dance Theatre Workshop",
+  "units_max": 3.0,
+  "units_min": 1.0
  },
  "DANC 657": {
   "crosslisted": [
@@ -21697,6 +22088,23 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "MUS 352": {
+  "crosslisted": [
+   "DANC 352",
+   "TH A 352"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1533,
+  "title": "K-Pop: Performance and Pop Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "MUS 360": {
   "ge_areas": [],
   "grading": null,
@@ -25415,6 +25823,25 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "RRS 103": {
+  "crosslisted": [
+   "AIS 103"
+  ],
+  "ge_areas": [
+   "USH",
+   "SJ",
+   "GP",
+   "AERM",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 495,
+  "title": "Introduction to Pacific Islander Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "RRS 240": {
   "ge_areas": [
    "USH",
@@ -25626,6 +26053,22 @@
   "repeatable": false,
   "source_page": 500,
   "title": "Critical Exposures: Race, Racism, and Resistance in Photography",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 433": {
+  "crosslisted": [
+   "AIS 433"
+  ],
+  "ge_areas": [
+   "3UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 500,
+  "title": "Pacific Islanders in Film: Re-Presenting Oceania Through an Indigenous Lens",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -26886,6 +27329,24 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "SXS 440": {
+  "crosslisted": [
+   "AIS 440",
+   "WGS 440"
+  ],
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 817,
+  "title": "Native Sexualities and Queer Discourse",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "SXS 455": {
   "ge_areas": [
    "4UD",
@@ -27104,6 +27565,23 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "TH A 352": {
+  "crosslisted": [
+   "DANC 352",
+   "MUS 352"
+  ],
+  "ge_areas": [
+   "3UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1671,
+  "title": "K-Pop: Performance and Pop Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "TH A 401": {
   "ge_areas": [],
   "grading": null,
@@ -27206,6 +27684,19 @@
   "title": "Storytelling and Folk Literature",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "TH A 490": {
+  "crosslisted": [
+   "DANC 490"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1673,
+  "title": "Dance Theatre Workshop",
+  "units_max": 3.0,
+  "units_min": 1.0
  },
  "TH A 504": {
   "ge_areas": [],
@@ -27825,6 +28316,41 @@
   "repeatable": false,
   "source_page": 1698,
   "title": "History of Women in Latin America",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 420": {
+  "crosslisted": [
+   "AIS 420"
+  ],
+  "ge_areas": [
+   "4UD",
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1698,
+  "title": "Native Genders and Feminism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 440": {
+  "crosslisted": [
+   "AIS 440",
+   "SXS 440"
+  ],
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1698,
+  "title": "Native Sexualities and Queer Discourse",
   "units_max": 3.0,
   "units_min": 3.0
  },
