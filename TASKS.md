@@ -567,6 +567,11 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   It also led to an engine bug: a major group sharing the university's id "gwar" (17 programs) took its result (fixed).
   All 100: about 2 hours of Codex time, across usage-limit resets (a failed call is reported per program; a kept
   second draft is reused). Agreement never sets `verified`; an advisor still confirms
+  - [ ] Run it when there's Codex usage to spare (rerun the same command after a usage limit; it skips the second
+    drafts already in `rules/drafts/2026-27/cross/`):
+    `uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cross $(ls rules/programs/2026-27/*.yaml | xargs -n1 basename | sed 's/\.yaml$//') | tee data/cross-2026-27.txt`
+  - [ ] Settle each disagreement in `data/cross-2026-27.txt` against the Bulletin, as in the pilot (review log): fix
+    our rules, or log a question for a person
 
 ---
 
