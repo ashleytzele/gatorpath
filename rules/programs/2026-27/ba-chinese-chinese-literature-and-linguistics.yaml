@@ -75,10 +75,14 @@ groups:
   quote: If not chosen from the 600 level courses above.
   source: p.1450
 - id: chin_electives
-  title: Electives (0-3 Units)
-  unparsed: true
+  title: 'Electives (0-3 units): upper-division CHIN to reach 30 units'
   quote: Additional upper-division CHIN-prefix courses as needed to reach a total
   source: p.1450
+  choose_units: 0
+  fill_to_total: true
+  from:
+    subject: CHIN
+    level: 300+
 - id: complementary_studies
   title: Complementary Studies (12 units)
   unparsed: true

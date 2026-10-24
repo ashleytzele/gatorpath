@@ -319,6 +319,10 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   (`totals.residence.no_residence_credit`, p.2391).
 - `course_units` (choose-group): the unit size the Bulletin names ("five 3-unit senior electives", p.1905). A
   counted course with fewer units gets a ⚠️ (the same list names 1-unit CSC 685/686), never a silent pass or fail.
+- `fill_to_total: true` (choose-group, added 2026-10-23): electives "as many units as needed to reach a total of 58 units
+  in the program" (BA General Biology, p.1785). `choose_units` is the printed minimum (7); the audit raises it to
+  `total_units` minus what the other major groups contribute (a choice group its units, a required course or Select
+  One its courses' units), so a heavier pick elsewhere means fewer electives, never more than the Bulletin asks.
 - `change_of_major` (university, added 2026-10-22): the Bulletin's rule that a student who changes major meets "the
   major requirements in effect at the time they declare or change their major" (pp.2352, 2390), and how (a Change
   of Major through the Student Center after consulting faculty advisors, p.2352). compare_programs quotes it.

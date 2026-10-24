@@ -87,10 +87,14 @@ groups:
   quote: Select a CHIN GWAR course if one is not selected from the Literature in Translation area above.
   source: p.1443
 - id: electives
-  title: Electives (0-9 units)
-  unparsed: true
+  title: 'Electives (0-9 units): upper-division CHIN to reach 39 units'
   quote: Additional upper-division CHIN courses as needed to reach a total of 39 units in the major.
   source: p.1443
+  choose_units: 0
+  fill_to_total: true
+  from:
+    subject: CHIN
+    level: 300+
 - id: complementary_studies
   title: Complementary Studies (12 units)
   unparsed: true

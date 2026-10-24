@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-french.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-french
 title: Bachelor of Arts in French
 catalog_year: 2026-27
@@ -59,13 +60,14 @@ groups:
   quote: GWAR (0-3 units)
   source: p.1464
 - id: french_electives
-  title: French Electives (6-9 units)
-  choose_units: 9
+  title: 'French Electives (6-9 units): to the major''s minimum'
+  choose_units: 6
   from:
   - subject: FR
     level: 300+
   quote: French Electives (6-9 units)
   source: p.1464
+  fill_to_total: true
 - id: study_abroad_cap
   unparsed: true
   quote: A maximum of 12 upper-division units can be transferred in from study abroad

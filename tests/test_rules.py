@@ -376,6 +376,21 @@ def test_a_select_one_claims_its_course_before_an_elective_list_does():
     assert [g["id"] for g in got["groups"]][:2] == ["extra", "required"]  # still in the rules' order
 
 
+def test_electives_fill_to_the_programs_total():
+    # BA General Biology p.1785: "as many units as needed to reach a total of 58 units in the program". Applied Math (55)
+    # stands in: its 6 units of major electives as a fill_to_total group with a minimum of 0
+    program, university = load_rules("2026-27", "bs-applied-math")
+    fill = [g | {"choose_units": 0, "fill_to_total": True} if g["id"] == "major_electives" else g for g in program["groups"]]
+    need = lambda rows: next(g for g in audit({"catalog_year": "2026-27", "completed": rows}, program | {"groups": fill},
+                                              university, CATALOG)["groups"] if g["id"] == "major_electives")["units_needed"]
+    assert need([]) == 6  # MATH 209 (3) for the Select One, as the audit plans it
+    bundle = [{"code": c, "grade": "A", "term": "2026-fall"} for c in ("CSC 101", "CSC 215")]
+    assert need(bundle) == 6 - 4  # CSC 101 & CSC 215 (7 units) instead: 4 fewer elective units
+    low = next(g for g in audit({"catalog_year": "2026-27", "completed": []}, program | {"groups": fill, "total_units": 40},
+                                university, CATALOG)["groups"] if g["id"] == "major_electives")
+    assert low["units_needed"] == 0 and low["status"] == "satisfied"  # nothing left to fill: met, not an error
+
+
 def test_program_files_pass_check_program():
     # ARCHITECTURE §6.2 "AI-drafted rules": the hand-written programs are the bar a draft is held to
     from gatorpath.engine.rules import check_program

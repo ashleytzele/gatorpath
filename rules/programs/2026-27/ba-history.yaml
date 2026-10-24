@@ -275,7 +275,7 @@ groups:
   quote: D. One Upper-Division Course That Focuses Primarily on a Region Outside
   source: p.1230
 - id: electives
-  title: Electives (9-12 units)
+  title: 'Electives (9-12 units): to 21 upper-division elective units'
   choose_units: 9
   from:
   - list:
@@ -391,6 +391,7 @@ groups:
     advisement.
   quote: Three upper-division units (normally one course) outside the major (with a non-HIST prefix) may be counted upon advisement.
   source: p.1230
+  fill_to_total: true
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
     related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation

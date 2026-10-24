@@ -284,7 +284,7 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
     min_from = g.get("min_units_from")
     pref = min_from["subject"] if min_from else None
     units = lambda c: taken[c]["units"] if c in taken and ok(c) else catalog[c]["units_min"]
-    units_met = lambda cs: sum(map(units, cs)) >= need_units if need_units else len(cs) >= need_n
+    units_met = lambda cs: sum(map(units, cs)) >= need_units if need_units is not None else len(cs) >= need_n
     pref_units = lambda cs: sum(units(c) for c in cs if subject(c) == pref)
     enough = lambda cs: units_met(cs) and (not min_from or pref_units(cs) >= min_from["units"])
     used = [0] * len(filters)
@@ -326,7 +326,7 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
     eligible = [c for c in taken if ok(c) and any(matches(f, c, catalog[c]) for f in filters)]
     out |= {"status": status, "counted": done, "in_progress": both[len(done):], "eligible": eligible,
             "units_done": sum(map(units, done))}
-    out |= {"units_needed": need_units} if need_units else {"courses_needed": need_n}
+    out |= {"units_needed": need_units} if need_units is not None else {"courses_needed": need_n}
     if min_from:
         out["min_units_from"] = min_from | {"done": pref_units(done)}
     return out
@@ -475,7 +475,14 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
     for kind, rules in (("major", program), ("university", university)):
         # A requirement naming its courses (all_of, one_of) claims them before a choice does: an elective list that also
         # names a Select One's course doesn't take it from the Select One (BA Art History's ART 671, p.911)
-        for g in sorted(rules["groups"], key=lambda g: kind == "major" and "from" in g):
+        # … and a fill_to_total choice goes last: it's what the others leave of total_units (§6.2)
+        for g in sorted(rules["groups"], key=lambda g: (kind == "major" and "from" in g, bool(g.get("fill_to_total")))):
+            if kind == "major" and g.get("fill_to_total") and "total_units" in program:
+                units = lambda c: taken[c]["units"] if c in taken else catalog[c]["units_min"] if c in catalog else 0
+                given = sum(max(x["units_needed"], x.get("units_done", 0)) if "units_needed" in x else
+                            sum(units(c) for c in x["counted"] + x["in_progress"] + x.get("remaining", []))
+                            for x in done.values() if x["kind"] == "major")
+                g = g | {"choose_units": max(g["choose_units"], program["total_units"] - given)}
             done[g["id"]] = eval_group(amended(g), kind, taken, profile, catalog, claimed if kind == "major" else None,
                                        no_cr_nc and kind == "major", done, warnings, certified)
     groups = [done[g["id"]] for g in program["groups"] + university["groups"]]  # in the rules' order
@@ -511,6 +518,7 @@ PROGRAM_KEYS = {"program", "title", "catalog_year", "verified", "verified_by", "
                 "source", "global", "groups", "transfer_notes", "advising"}
 GROUP_KEYS = {"id", "title", "source", "quote", "unparsed", "all_of", "one_of", "choose_n", "choose_units", "from",
               "first_time_from", "min_grade", "min_units_from", "course_units", "exceptions", "approval", "waived_if",
+              "fill_to_total",
               "waiver", "amendments"}
 FILTER_KEYS = {"list", "subject", "level", "except", "paired", "max_courses", "ge_area", "ge_area_all", "approved"}
 SHAPES = ("all_of", "one_of", "choose_n", "choose_units", "unparsed")
@@ -572,7 +580,8 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
     if any("choose_n" in g or g.get("unparsed") for g in program.get("groups", [])):
         out.append(f"units: can't check total_units with choose_n or unparsed groups (the others add up to {low:g} of "
                    f"{program.get('total_units', 0):g}); a person adds them up")
-    elif "total_units" in program and not low <= program["total_units"] <= high:
+    elif "total_units" in program and not low <= program["total_units"] <= (
+            math.inf if any(g.get("fill_to_total") for g in program.get("groups", [])) else high):
         out.append(f"units: the groups' minimums add up to {low:g}"
                    + (f" ({high:g} with variable-unit courses at their most)" if high != low else "")
                    + f", total_units says {program['total_units']:g}")

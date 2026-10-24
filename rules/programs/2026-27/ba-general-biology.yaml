@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-general-biology.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-general-biology
 title: Bachelor of Arts in General Biology
 catalog_year: 2026-27
@@ -125,8 +126,8 @@ groups:
   quote: Two Ecology, Evolution, or Organismal Biology Courses (6-9 units)
   source: p.1785
 - id: ud_electives
-  title: Upper-Division Electives (7-16 units)
-  choose_units: 16
+  title: 'Upper-Division Electives (7-16 units): to reach 58 units'
+  choose_units: 7
   from:
   - list:
     - AA S 587
@@ -235,6 +236,7 @@ groups:
     max_courses: 1
   quote: Students should take as many units as needed to reach a total of 58
   source: p.1785
+  fill_to_total: true
 - id: elective_biol_699_cap
   unparsed: true
   quote: Up to 3 units of BIOL 699 can also be used towards the total units.

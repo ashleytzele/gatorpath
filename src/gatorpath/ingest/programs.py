@@ -139,7 +139,8 @@ Rules (they're checked by a program, then by a person):
 - A "Select One" between printed courses or bundles is `one_of`, one option each: [[MATH 209], [CSC 101, CSC 215]].
   The plan then schedules a real course, which a later course's prereq may need. "Select N units" / "N courses" from a
   list, and electives, are `choose_units`: the units the Bulletin prints for it (the Units column). Don't use choose_n
-  in a program file: the planner reads it as a 0-unit designation. A cross-listed course ("PH/ETHS 221") is one
+  in a program file: the planner reads it as a 0-unit designation. Electives "as needed to reach a total of N units"
+  are `choose_units` (the printed minimum, 0 if none) with `fill_to_total: true`. A cross-listed course ("PH/ETHS 221") is one
   course under two codes: in a list to choose from, write each code (PH 221, ETHS 221); a required one is its own
   one_of group, one option per code ([[MUS 130], [TH A 131]]), never both codes in an all_of.
 - Major requirements only: GE, SF State Studies and the university's graduation requirements are in other files.
