@@ -2,6 +2,8 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# outside_cinema_courses (p.988) "With prior approval of an advisor, up to 12 units of Cinema-related upper-division courses outside the School of Cinema may count toward the major.": the electives' approved courses (upper division, max_units: 12, approval text)
+# community_college_core (p.987) "With a faculty advisor’s approval, up to 13 units from a community college may be applied to the core courses in the Cinema major.": the core's exceptions text: an advisor's approval, recorded on the DPR (dpr_met)
 program: ba-cinema
 title: Bachelor of Arts in Cinema
 catalog_year: 2026-27
@@ -21,6 +23,8 @@ groups:
   min_grade: C
   quote: Core courses must be completed with a grade of C or better.
   source: p.987
+  exceptions: With a faculty advisor’s approval, up to 13 units from a community college may be applied to the core courses
+    in the Cinema major. Up to 6 of those units may be in screenwriting and/or filmmaking/video production.
 - id: foundation
   title: Foundation Courses
   all_of:
@@ -50,10 +54,24 @@ groups:
     requirements listed above.
   source: p.987
 - id: capstone
-  title: Capstone Experience (3 units)
-  unparsed: true
+  title: 'Capstone: three units of 500 or 600-level CINE'
+  across:
+  - upper_division_cinema_studies
+  - electives
+  min_units_from:
+    subject: CINE
+    level:
+    - 500
+    - 600
+    units: 3
+    except:
+    - CINE 685
+    - CINE 690
+    - CINE 692
+    - CINE 695
+    - CINE 699
   quote: Any three units at the 500 or 600-level apply, with the exception of CINE 685, CINE 690, CINE 692, CINE 695, and
-    CINE 699.
+    CINE 699. This course may contribute to the Upper-Division Cinema Studies Requirement or the Electives Requirement.
   source: p.988
 - id: electives
   title: Electives (16 units)
@@ -68,20 +86,12 @@ groups:
   - subject: CINE
     level: 600
   - approved: true
+    level: upper
+    max_units: 12
   quote: Select additional upper-division Cinema courses to complete a total of 45 units required for the major.
   source: p.988
-- id: outside_cinema_courses
-  title: Cinema-related upper-division courses outside the School of Cinema (up to 12 units)
-  unparsed: true
-  quote: With prior approval of an advisor, up to 12 units of Cinema-related upper-division courses outside the School of
-    Cinema may count toward the major.
-  source: p.988
-- id: community_college_core
-  title: Community college units applied to the core
-  unparsed: true
-  quote: With a faculty advisor’s approval, up to 13 units from a community college may be applied to the core courses in
-    the Cinema major.
-  source: p.987
+  approval: With prior approval of an advisor, up to 12 units of Cinema-related upper-division courses outside the School
+    of Cinema may count toward the major.
 - id: production_units_per_term
   unparsed: true
   quote: No more than seven units of advanced production courses may be taken in any one term unless special permission is
@@ -92,13 +102,35 @@ groups:
   quote: A maximum of 18 units of online coursework may be counted toward the major.
   source: p.988
 - id: independent_study_cap
-  unparsed: true
+  title: 'Independent study and internship: at most 12 units'
+  across: major
   quote: A maximum of 12 units of independent study and internship courses may be counted toward the major.
   source: p.988
+  max_units_from:
+    list:
+    - CINE 690
+    - CINE 692
+    - CINE 695
+    - CINE 699
+    units: 12
 - id: cr_nc_cap
-  unparsed: true
+  title: At most 9 CR/NC units
+  across: major
+  max_cr:
+    units: 9
   quote: A maximum of nine CR/NC units may be counted toward the major
   source: p.988
+- id: cine_325_326_650_cap
+  title: 'CINE 325, 326, 650: at most 4 units'
+  across: major
+  quote: which may include up to a maximum of four units of different CINE 325, CINE 326, or CINE 650 courses.
+  source: p.988
+  max_units_from:
+    list:
+    - CINE 325
+    - CINE 326
+    - CINE 650
+    units: 4
 - id: complementary_studies
   title: Complementary Studies (12 units)
   unparsed: true

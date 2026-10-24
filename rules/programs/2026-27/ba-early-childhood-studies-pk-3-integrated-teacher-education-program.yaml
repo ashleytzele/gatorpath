@@ -16,8 +16,10 @@ groups:
   quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
   source: p.591
 - id: cr_grading_exception
-  title: CR grading only for E ED courses with a CR/NC-only grading option
-  unparsed: true
+  title: 'Credential courses: letter grades'
+  across:
+  - credential
+  letter_grade: true
   quote: CR grading is only acceptable for specific E ED courses that only have CR/NC grading option.
   source: p.591
 - id: core_required

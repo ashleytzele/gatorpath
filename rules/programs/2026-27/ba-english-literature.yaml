@@ -2,6 +2,9 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# major_gpa (p.1154) "Students must have a GPA of 2.0 or higher in the major and no grade": the groups' min_grade (C-, ENG 480GW C) and the university's 2.0 major GPA (totals.gpa_major) say it
+# ld_literature_cap (p.1153) "A maximum of 9 units of work in lower-division literature courses may be": the electives' approved lower-division courses (max_units: 9; exceptions text)
+# other_department_cap (p.1154) "A maximum of 9 units of literature classes from": the electives' approved courses (max_units: 9; approval text)
 program: ba-english-literature
 title: 'Bachelor of Arts in English: Concentration in Literature'
 catalog_year: 2026-27
@@ -107,9 +110,19 @@ groups:
     - SXS 633
     - ENG 636
     - ENG 655
+  - approved: true
+    level: lower
+    max_units: 9
+  - approved: true
+    level: upper
+    max_units: 9
   min_grade: C-
   quote: Electives (9 units)
   source: p.1154
+  approval: A maximum of 9 units of literature classes from other departments (such as Comparative and World Literature) may
+    be accepted for credit in the major upon the permission of an advisor.
+  exceptions: A maximum of 9 units of work in lower-division literature courses may be accepted for credit in the major with
+    the consent of an advisor.
 - id: capstone
   title: 'Concentration: Capstone Experience (3 units)'
   all_of:
@@ -120,18 +133,6 @@ groups:
 - id: capstone_timing
   unparsed: true
   quote: ENG 690 must be completed during one of the semesters of the final
-  source: p.1154
-- id: major_gpa
-  unparsed: true
-  quote: Students must have a GPA of 2.0 or higher in the major and no grade
-  source: p.1154
-- id: ld_literature_cap
-  unparsed: true
-  quote: A maximum of 9 units of work in lower-division literature courses may be
-  source: p.1153
-- id: other_department_cap
-  unparsed: true
-  quote: A maximum of 9 units of literature classes from
   source: p.1154
 - id: complementary_studies
   unparsed: true

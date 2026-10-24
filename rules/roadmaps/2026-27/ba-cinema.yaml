@@ -190,9 +190,9 @@ variants:
         units: 3
         note: footnote 8
       - slot: major
-        group: capstone
+        group: electives
         units: 3
-        note: Capstone Experience; footnote 10
+        note: Capstone Experience; footnote 10 (a 500 or 600-level CINE course, which counts as an elective)
       - slot: major
         group: electives
         units: 3
@@ -303,9 +303,9 @@ variants:
         units: 3
         note: footnote 3
       - slot: major
-        group: capstone
+        group: electives
         units: 3
-        note: Capstone Experience; footnote 5
+        note: Capstone Experience; footnote 5 (a 500 or 600-level CINE course, which counts as an elective)
       - slot: major
         group: electives
         units: 4

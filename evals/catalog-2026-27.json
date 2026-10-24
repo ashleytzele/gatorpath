@@ -4343,6 +4343,26 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "BIOL 607": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1776,
+  "title": "Conservation and Management of Marine Mammals",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 609": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1776,
+  "title": "Physics in Medicine",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "BIOL 612": {
   "ge_areas": [],
   "grading": null,
@@ -4362,6 +4382,26 @@
   "repeatable": false,
   "source_page": 1776,
   "title": "Human Physiology Laboratory - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 614": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1776,
+  "title": "Vertebrate Histology",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "BIOL 616": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1776,
+  "title": "Cardiorespiratory Physiology",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -4385,6 +4425,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "BIOL 620": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1776,
+  "title": "Endocrinology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "BIOL 621": {
   "ge_areas": [],
   "grading": null,
@@ -4402,6 +4452,26 @@
   "repeatable": false,
   "source_page": 1776,
   "title": "Hormones and Behavior",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 623": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": false,
+  "source_page": 1777,
+  "title": "Pharmacology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "BIOL 627": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1777,
+  "title": "Biophysics",
   "units_max": 3.0,
   "units_min": 3.0
  },

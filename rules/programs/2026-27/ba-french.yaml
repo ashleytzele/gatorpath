@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# lower_division (p.1464) "Lower-Division Requirements (0-12 units)": FR 101-216 are the prerequisites of the upper-division French courses ("FR 215 and FR 216 or equivalent"), which the plan adds; 0 units for a student who places beyond them
 program: ba-french
 title: Bachelor of Arts in French
 catalog_year: 2026-27
@@ -10,11 +11,6 @@ verified_by: null
 total_units: 24
 source: p.1464
 groups:
-- id: lower_division
-  title: 'Lower-Division Requirements (0-12 units): FR 101, FR 102, FR 215, FR 216, by placement'
-  unparsed: true
-  quote: Lower-Division Requirements (0-12 units)
-  source: p.1464
 - id: ud_conversation_linguistics
   title: 'Upper-Division: Select One (FR 306, FR 308 or MLL 325)'
   one_of:
@@ -73,8 +69,15 @@ groups:
   quote: A maximum of 12 upper-division units can be transferred in from study abroad
   source: p.1464
 - id: fr_500_501_at_sfsu
-  unparsed: true
-  quote: Either FR 500 or FR 501 must be taken at SFSU. They cannot be replaced by study abroad coursework.
+  title: FR 500 or FR 501 at SF State
+  across: major
+  min_units_from:
+    list:
+    - FR 500
+    - FR 501
+    courses: 1
+    sf_state: true
+  quote: Either FR 500 or FR 501 must be taken at SFSU.
   source: p.1464
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.

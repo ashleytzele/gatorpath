@@ -11,13 +11,18 @@ total_units: 42
 source: p.2019
 groups:
 - id: cr_two_courses
-  title: CR grade acceptable in any two courses counted for the major
-  unparsed: true
+  title: CR in at most two courses
+  across: major
+  max_cr:
+    courses: 2
   quote: Students are advised that the CR grade is acceptable in any two courses to be counted for the major.
   source: p.2019
 - id: grade_below_c_minus_limit
-  title: No more than one major course with a grade less than C-
-  unparsed: true
+  title: At most one course below C-
+  across: major
+  max_below:
+    grade: C-
+    courses: 1
   quote: No more than one course counted toward major requirements may be completed with a grade less than a C–.
   source: p.2019
 - id: core_ecology_chemistry
@@ -180,10 +185,24 @@ groups:
   source: p.2019
   approval: students interested in alternative routes through the elective portion of the major should consult with an advisor.
 - id: guided_electives_shortlist
-  title: 'Guided Electives: two from a pathway''s shortlist'
-  unparsed: true
+  title: 'Guided electives: two from the shortlist'
+  across:
+  - guided_electives
+  min_units_from:
+    list:
+    - ENVS 460
+    - ENVS 470
+    - ENVS 480
+    - ENVS 530
+    - ENVS 570
+    - GEOG 421
+    - PLSI 354
+    - USP 514
+    - USP 515
+    - GEOG 667
+    courses: 2
+  quote: Two courses must be from the shortlist.
   source: p.2020
-  quote: Take 11-12 units. Two courses must be from the shortlist.
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
   source: p.2021

@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# cc_transfer_electives (p.640) "Up to a total of 6 transfer units in the following Criminal Justice courses": the additional electives' exceptions text: transfer articulation (ASSIST) is on the DPR
 program: ba-criminal-justice-studies
 title: Bachelor of Arts in Criminal Justice Studies
 catalog_year: 2026-27
@@ -167,15 +168,13 @@ groups:
     - C J 699
   quote: Select four additional Criminal Justice Studies Electives (12-16
   source: p.639
+  exceptions: 'Up to a total of 6 transfer units in the following Criminal Justice courses completed at a community college
+    may be counted toward meeting the "general electives" requirements for the major: 1. Introduction to Criminal Justice
+    2. Concepts of Criminal Law'
 - id: complementary_studies
   title: Complementary Studies (12 units outside the major prefix)
   unparsed: true
   quote: Bachelor of Arts students must complete at least 12 units of
-  source: p.640
-- id: cc_transfer_electives
-  title: Up to 6 community college transfer units toward general electives
-  unparsed: true
-  quote: Up to a total of 6 transfer units in the following Criminal Justice courses
   source: p.640
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees

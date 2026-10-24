@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# major_gpa (p.1174) "Students must have a GPA of 2.0 or higher in the major, and no grade in the major lower than C- (except for ENG 480GW, which requires a grade of C or higher).": the groups' min_grade (C-, ENG 480GW C) and the university's 2.0 major GPA (totals.gpa_major) say it
 program: ba-english-professional-writing-and-rhetoric
 title: 'Bachelor of Arts in English: Concentration in Professional Writing and Rhetoric'
 catalog_year: 2026-27
@@ -71,12 +72,6 @@ groups:
   unparsed: true
   quote: This course must be completed during the spring semester of the student’s final (senior) year.
   source: p.1173
-- id: major_gpa
-  title: Major GPA and minimum grade
-  unparsed: true
-  quote: Students must have a GPA of 2.0 or higher in the major, and no grade in the major lower than C- (except for ENG 480GW,
-    which requires a grade of C or higher).
-  source: p.1174
 - id: complementary_studies
   title: Complementary Studies Requirement for English Majors (12 units)
   unparsed: true

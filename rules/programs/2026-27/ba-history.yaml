@@ -11,9 +11,18 @@ total_units: 39
 source: p.1228
 groups:
 - id: cr_nc_limit
-  unparsed: true
-  quote: History majors cannot choose CR/NC grading in more than two history courses for their major, nor elect CR/NC grading
-    in HIST 300GW or HIST 696.
+  title: CR/NC in at most two history courses
+  across: major
+  max_cr:
+    courses: 2
+  quote: History majors cannot choose CR/NC grading in more than two history courses for their major
+  source: p.1228
+- id: ud_core_letter_grade
+  title: 'HIST 300GW and HIST 696: letter grades'
+  across:
+  - ud_core
+  letter_grade: true
+  quote: nor elect CR/NC grading in HIST 300GW or HIST 696.
   source: p.1228
 - id: ld_select_three
   title: 'Lower-Division Requirements: Select three (9 units)'

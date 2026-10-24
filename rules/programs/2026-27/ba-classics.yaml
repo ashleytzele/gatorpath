@@ -69,12 +69,18 @@ groups:
   - subject: GRE
   - subject: LATN
   - approved: true
+    max_courses: 3
   quote: Select six elective courses, upon advisement, from CLAS, CLAR, GRE, and LATN prefixes
+  approval: With the permission of an advisor, three electives can be taken in another department.
 - id: electives_upper_division
   title: 'Electives: at least two upper-division'
-  unparsed: true
-  source: p.1013
+  across:
+  - electives
+  min_units_from:
+    level: upper
+    courses: 2
   quote: at least two of which must be upper-division.
+  source: p.1013
 - id: complementary_studies
   title: Complementary Studies (12 units outside the primary prefix)
   unparsed: true

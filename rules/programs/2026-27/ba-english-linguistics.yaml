@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# gpa_major (p.1137) "Students must have a GPA of 2.0 or higher in the major, and no grade in the major lower than a C- (except for ENG 480GW, which requires a grade of C or higher).": the groups' min_grade (C-, ENG 480GW C) and the university's 2.0 major GPA (totals.gpa_major) say it
 program: ba-english-linguistics
 title: 'Bachelor of Arts in English: Concentration in Linguistics'
 catalog_year: 2026-27
@@ -10,12 +11,6 @@ verified_by: null
 total_units: 45
 source: p.1137
 groups:
-- id: gpa_major
-  title: GPA and grade minimum in the major
-  unparsed: true
-  quote: Students must have a GPA of 2.0 or higher in the major, and no grade in the major lower than a C- (except for ENG
-    480GW, which requires a grade of C or higher).
-  source: p.1137
 - id: ld_requirements
   title: Lower-Division Requirements (6 units)
   all_of:
@@ -59,6 +54,7 @@ groups:
     approved: true
   quote: Three courses selected with approval of advisor.
   source: p.1137
+  min_grade: C-
 - id: capstone
   title: Capstone Experience (3 units)
   all_of:

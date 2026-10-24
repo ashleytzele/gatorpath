@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# core_cwl_lower_division_limit (p.1278) "Only one lower-division CWL course may be used in the core.": the core's lower-division CWL filter (max_courses: 1)
 program: ba-comparative-and-world-literature
 title: Bachelor of Arts in Comparative and World Literature
 catalog_year: 2026-27
@@ -28,12 +29,11 @@ groups:
   choose_units: 15
   from:
   - subject: CWL
+    level: upper
+  - subject: CWL
+    level: lower
+    max_courses: 1
   quote: Select five CWL courses.
-  source: p.1278
-- id: core_cwl_lower_division_limit
-  title: 'Core Courses: only one lower-division CWL course'
-  unparsed: true
-  quote: Only one lower-division CWL course may be used in the core.
   source: p.1278
 - id: program_electives
   title: Program Electives (15 units)
@@ -47,10 +47,14 @@ groups:
   quote: Program Electives (15 Units)
   source: p.1278
 - id: program_electives_lower_division_limit
-  title: 'Program Electives: no more than two lower-division courses'
-  unparsed: true
-  quote: No more than two lower-division courses
+  title: 'Electives: at most two lower-division'
+  across:
+  - program_electives
+  quote: No more than two lower-division courses may be used for electives.
   source: p.1278
+  max_units_from:
+    level: lower
+    courses: 2
 transfer_notes:
 - text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
   source: p.1279

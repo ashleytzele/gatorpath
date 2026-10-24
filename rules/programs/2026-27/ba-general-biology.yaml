@@ -2,6 +2,11 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# gwar_c_minus (p.1784) "Students must take at least one GWAR course and earn a C- or better in a GWAR course to satisfy the GWAR requirement.": the university's GWAR group (C- or better, p.2313)
+# major_gpa (p.1784) "A minimum grade point average of 2.0 in all coursework is required.": the university's 2.0 GPA in all coursework (totals.gpa_all)
+# elective_biol_699_cap (p.1785) "Up to 3 units of BIOL 699 can also be used towards the total units.": BIOL 699 has its own filter in the electives, max_units: 3
+# elective_other_biology (p.1785) "Other biology courses that have BIOL 230 and/or BIOL 240 as prerequisites can also be used as electives.": the electives list adds the upper-division BIOL courses whose prerequisites name BIOL 230 or BIOL 240 (BIOL 483GW, BIOL 607, BIOL 609, BIOL 614, BIOL 616, BIOL 620, BIOL 621, BIOL 622, BIOL 623, BIOL 627, BIOL 640, BIOL 654); substitutions are the exceptions text
+# elective_six_unit_cap (p.1786) "Classes can only account for 6 units of upper-division elective courses.": the footnote-1 courses (outside biology) have their own filter in the electives, max_units: 6
 program: ba-general-biology
 title: Bachelor of Arts in General Biology
 catalog_year: 2026-27
@@ -13,16 +18,13 @@ global:
   no_cr_nc: true
   source: p.1784
 groups:
-- id: gwar_c_minus
-  unparsed: true
-  quote: Students must take at least one GWAR course and earn a C- or better in a GWAR course to satisfy the GWAR requirement.
-  source: p.1784
-- id: major_gpa
-  unparsed: true
-  quote: A minimum grade point average of 2.0 in all coursework is required.
-  source: p.1784
 - id: residence_biology
-  unparsed: true
+  title: 12 biology units at SF State
+  across: major
+  min_units_from:
+    subject: BIOL
+    units: 12
+    sf_state: true
   quote: At least 12 units in biology must be completed at SF State.
   source: p.1784
 - id: lower_required
@@ -130,12 +132,6 @@ groups:
   choose_units: 7
   from:
   - list:
-    - AA S 587
-    - AA S 591
-    - AFRS 370
-    - AIS 450
-    - AIS 520
-    - ANTH 630
     - BIOL 315
     - BIOL 318
     - BIOL 328
@@ -202,15 +198,33 @@ groups:
     - BIOL 670
     - BIOL 671
     - BIOL 694
-    - BIOL 699
     - CHEM 343
     - CHEM 349
     - CSC 306
     - CSC 408
+    - BIOL 483GW
+    - BIOL 607
+    - BIOL 609
+    - BIOL 614
+    - BIOL 616
+    - BIOL 620
+    - BIOL 621
+    - BIOL 622
+    - BIOL 623
+    - BIOL 627
+    - BIOL 640
+    - BIOL 654
+  - list:
+    - AA S 587
+    - AA S 591
+    - AFRS 370
+    - AIS 450
+    - AIS 520
+    - ANTH 630
     - CSC 411
     - CSC 509
-    - I R 331
     - ENVS 331
+    - I R 331
     - LTNS 500
     - RRS 303
     - RRS 304
@@ -228,6 +242,10 @@ groups:
     - PHIL 383
     - USP 514
     - WGS 593
+    max_units: 6
+  - list:
+    - BIOL 699
+    max_units: 3
   - list:
     - BIOL 317
     - BIOL 327
@@ -237,18 +255,7 @@ groups:
   quote: Students should take as many units as needed to reach a total of 58
   source: p.1785
   fill_to_total: true
-- id: elective_biol_699_cap
-  unparsed: true
-  quote: Up to 3 units of BIOL 699 can also be used towards the total units.
-  source: p.1785
-- id: elective_other_biology
-  unparsed: true
-  quote: Other biology courses that have BIOL 230 and/or BIOL 240 as prerequisites can also be used as electives.
-  source: p.1785
-- id: elective_six_unit_cap
-  unparsed: true
-  quote: Classes can only account for 6 units of upper-division elective courses.
-  source: p.1786
+  exceptions: Advisor approval is needed IN ADVANCE for any substitutions to elective courses.
 transfer_notes:
 - text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
     guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
