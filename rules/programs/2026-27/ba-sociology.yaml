@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-sociology.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-sociology
 title: Bachelor of Arts in Sociology
 catalog_year: 2026-27
@@ -66,9 +67,12 @@ groups:
   quote: Capstone (3-4 units)
   source: p.851
 - id: electives
-  unparsed: true
-  quote: Upper-division SOC courses or courses cross-listed with SOC not used
+  title: Electives (19 units)
+  choose_units: 19
+  from:
+    subject: SOC
   source: p.851
+  quote: Upper-division SOC courses or courses cross-listed with SOC not used
 - id: electives_lower_division_cap
   unparsed: true
   quote: courses or courses cross-listed with SOC not used to meet requirements above. Up to 9 units of lower-division sociology

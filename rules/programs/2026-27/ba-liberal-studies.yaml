@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-liberal-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-liberal-studies
 title: Bachelor of Arts in Liberal Studies
 catalog_year: 2026-27
@@ -114,9 +115,13 @@ groups:
   quote: Culminating Experience (3 Units)
   source: p.1403
 - id: electives
-  unparsed: true
-  quote: 'Choose one of the following options, in consultation with an advisor:'
+  title: Electives (12 units)
+  choose_units: 12
+  from:
+    approved: true
+  approval: 'Choose one of the following options, in consultation with an advisor:'
   source: p.1403
+  quote: 'Choose one of the following options, in consultation with an advisor:'
 - id: complementary_studies
   unparsed: true
   quote: Complementary Studies for the Liberal Studies major can be satisfied via

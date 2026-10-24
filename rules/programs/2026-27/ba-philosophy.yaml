@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-philosophy.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-philosophy
 title: Bachelor of Arts in Philosophy
 catalog_year: 2026-27
@@ -24,9 +25,11 @@ groups:
   source: p.1595
 - id: electives
   title: Electives (12 units)
-  unparsed: true
-  quote: Any PHIL course not used in the core can be used as an elective.
+  choose_units: 12
+  from:
+    subject: PHIL
   source: p.1595
+  quote: Any PHIL course not used in the core can be used as an elective.
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
     related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation

@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-international-relations.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-international-relations
 title: Bachelor of Arts in International Relations
 catalog_year: 2026-27
@@ -26,10 +27,25 @@ groups:
   quote: Core (19 units)
   source: p.1322
 - id: electives
-  title: Electives (18 units)
-  unparsed: true
-  quote: Students are required to complete 18 elective units related to international relations.
+  title: Electives (18 Units)
+  choose_units: 18
   source: p.1322
+  from:
+  - subject: I R
+    level: 300+
+  - subject: I R
+    level: '200'
+  - approved: true
+  min_units_from:
+    subject: I R
+    units: 12
+  quote: Students are required to complete 18 elective units related to international relations.
+- id: electives_upper_division
+  title: 'Electives: at least 12 upper-division I R units'
+  unparsed: true
+  source: p.1322
+  quote: At least twelve units of coursework must be upper-division I R courses (300-level or above) or be cross-listed with
+    I R.
 - id: culminating
   title: Culminating Requirements (6 units)
   all_of:

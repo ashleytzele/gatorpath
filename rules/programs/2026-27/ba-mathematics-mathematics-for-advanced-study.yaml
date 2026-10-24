@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-mathematics-mathematics-for-advanced-study.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-mathematics-mathematics-for-advanced-study
 title: 'Bachelor of Arts in Mathematics: Concentration in Mathematics for Advanced Study'
 catalog_year: 2026-27
@@ -70,14 +71,27 @@ groups:
   quote: MATH 450 Topology
   source: p.2099
 - id: conc_electives
-  title: 'Concentration Courses: two elective courses numbered 400 or above'
-  unparsed: true
+  title: 'Concentration: two electives numbered 400 or above'
+  choose_units: 6
+  source: p.2099
   quote: Two elective courses numbered 400 or above except MATH 475,
-  source: p.2099
-- id: math_500_not_electives
-  unparsed: true
-  quote: MATH 500 through MATH 599 may not be counted as electives toward the mathematics major or minor.
-  source: p.2099
+  from:
+  - subject: MATH
+    level: '400'
+    except:
+    - MATH 475
+  - subject: MATH
+    level: '600'
+    except:
+    - MATH 475
+  - subject: MATH
+    level: '700'
+    except:
+    - MATH 475
+  - subject: MATH
+    level: '800'
+    except:
+    - MATH 475
 - id: complementary_studies
   title: Complementary Studies
   unparsed: true

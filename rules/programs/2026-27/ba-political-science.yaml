@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-political-science.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-political-science
 title: Bachelor of Arts in Political Science
 catalog_year: 2026-27
@@ -46,9 +47,161 @@ groups:
   source: p.1640
 - id: fields
   title: Fields (17 units)
-  unparsed: true
-  quote: Upper-division Political Science courses selected to include at least one course in four of the following categories.
+  choose_units: 17
   source: p.1640
+  min_grade: C-
+  from:
+  - subject: PLSI
+    level: 300+
+  - list:
+    - C J 362
+    - CST 300
+    - FIN 435
+    - FR 421
+    - GEOG 668
+    - HIST 308
+    - I R 321
+    - I R 322
+    - I R 325
+    - I R 327
+    - I R 337
+    - I R 342
+    - I R 357
+    - I R 362
+    - I R 404
+    - I R 407
+    - I R 409
+    - I R 411
+    - I R 412
+    - I R 416
+    - I R 422
+    - I R 424
+    - I R 425
+    - I R 430
+    - I R 435
+    - I R 459
+    - I R 507
+    - I R 544
+    - JOUR 307
+    - JS 430
+    - JS 514
+    - LABR 394
+    - LABR 500
+    - LTNS 670
+    - MEIS 431
+    - P A 400
+    - P A 402
+    - PHIL 150
+    - PHIL 355
+    - PLSI 100
+    - PLSI 105
+    - PLSI 106
+    - PLSI 110
+    - PLSI 150
+    - PLSI 216
+    - PLSI 308
+    - PLSI 317
+    - PLSI 318
+    - PLSI 320
+    - PLSI 321
+    - PLSI 322
+    - PLSI 325
+    - PLSI 327
+    - PLSI 342
+    - PLSI 351
+    - PLSI 352
+    - PLSI 354
+    - PLSI 355
+    - PLSI 356
+    - PLSI 360
+    - PLSI 362
+    - PLSI 373
+    - PLSI 381
+    - PLSI 382
+    - PLSI 386
+    - PLSI 388
+    - PLSI 389
+    - PLSI 392
+    - PLSI 393
+    - PLSI 394
+    - PLSI 395
+    - PLSI 396
+    - PLSI 400
+    - PLSI 402
+    - PLSI 403
+    - PLSI 404
+    - PLSI 407
+    - PLSI 408
+    - PLSI 409
+    - PLSI 411
+    - PLSI 412
+    - PLSI 416
+    - PLSI 418
+    - PLSI 419
+    - PLSI 421
+    - PLSI 422
+    - PLSI 423
+    - PLSI 424
+    - PLSI 425
+    - PLSI 430
+    - PLSI 431
+    - PLSI 432
+    - PLSI 435
+    - PLSI 451
+    - PLSI 459
+    - PLSI 460
+    - PLSI 461
+    - PLSI 462
+    - PLSI 463
+    - PLSI 464
+    - PLSI 467
+    - PLSI 468
+    - PLSI 469
+    - PLSI 472
+    - PLSI 473
+    - PLSI 475
+    - PLSI 476
+    - PLSI 477
+    - PLSI 478
+    - PLSI 479
+    - PLSI 480
+    - PLSI 481
+    - PLSI 492
+    - PLSI 493
+    - PLSI 500
+    - PLSI 507
+    - PLSI 512
+    - PLSI 513
+    - PLSI 544
+    - PLSI 552
+    - PLSI 553
+    - PLSI 554
+    - PLSI 555
+    - PLSI 556
+    - PLSI 560
+    - PLSI 561
+    - PLSI 562
+    - PLSI 580
+    - PLSI 610
+    - PLSI 611
+    - PLSI 685
+    - PLSI 699
+    - SOC 424
+    - USP 480
+    - USP 485
+    - USP 492
+    - USP 493
+    - USP 512
+    - USP 513
+    - USP 560
+    - USP 580
+  quote: Additional courses can be selected from any category to reach a total of 17 units. Other UD PLSI courses can also
+    be used towards the 17 units.
+- id: fields_four_categories
+  title: 'Fields: at least one course in four of the categories A-E'
+  unparsed: true
+  source: p.1640
+  quote: Upper-division Political Science courses selected to include at least one course in four of the following categories.
 - id: senior_seminar
   title: 'Senior Seminar: Culminating Experience'
   choose_units: 3

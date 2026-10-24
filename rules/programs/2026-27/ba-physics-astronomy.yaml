@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-physics-astronomy.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-physics-astronomy
 title: 'Bachelor of Arts in Physics: Concentration in Astronomy'
 catalog_year: 2026-27
@@ -60,9 +61,20 @@ groups:
   quote: All Major Upper-Division Core courses must be taken for letter grades;
   source: p.2174
 - id: ud_electives
-  unparsed: true
-  quote: Choose 6 units in PHYS and/or ASTR courses numbered 300–499. With
+  title: Electives (6 units)
+  choose_units: 6
   source: p.2175
+  from:
+  - subject: PHYS
+    level: '300'
+  - subject: PHYS
+    level: '400'
+  - subject: ASTR
+    level: '300'
+  - subject: ASTR
+    level: '400'
+  - approved: true
+  quote: Choose 6 units in PHYS and/or ASTR courses numbered 300–499.
 - id: ud_electives_cr_nc
   unparsed: true
   quote: Up to a maximum of 6 units of Major Upper-Division Electives may be

@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-psychology.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 program: ba-psychology
 title: Bachelor of Arts in Psychology
 catalog_year: 2026-27
@@ -156,6 +157,8 @@ groups:
     - PSY 697
     - PSY 698
     - PSY 699
+  - subject: PSY
+    level: 300+
   quote: Choose 3 elective courses from courses in Areas 1–3 not used to satisfy the Basic Course requirement and/or from
     additional upper-division psychology courses.
   source: p.2234

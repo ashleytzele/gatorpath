@@ -16495,6 +16495,67 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "I R 321": {
+  "crosslisted": [
+   "PLSI 321"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1312,
+  "title": "Development and Foreign Policy: Africa",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 322": {
+  "crosslisted": [
+   "PLSI 322"
+  ],
+  "ge_areas": [
+   "SJ",
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1312,
+  "title": "Policy Analysis: The Latin American Cases",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 325": {
+  "crosslisted": [
+   "PLSI 325"
+  ],
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1312,
+  "title": "Chinese Foreign Policy",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 327": {
+  "crosslisted": [
+   "PLSI 327"
+  ],
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1313,
+  "title": "Europe: Forming a More Perfect Union",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "I R 330": {
   "crosslisted": [
    "IBUS 332"
@@ -16538,6 +16599,19 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "I R 337": {
+  "crosslisted": [
+   "PLSI 432"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1313,
+  "title": "Introduction to the European Union",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "I R 341": {
   "crosslisted": [
    "C J 340"
@@ -16548,6 +16622,19 @@
   "repeatable": false,
   "source_page": 1313,
   "title": "Comparative Criminal Justice",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 342": {
+  "crosslisted": [
+   "PLSI 342"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1314,
+  "title": "Outer Space Politics and Policy",
   "units_max": 4.0,
   "units_min": 4.0
  },
@@ -16566,6 +16653,22 @@
   "title": "Europe since 1914",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "I R 357": {
+  "crosslisted": [
+   "PLSI 396"
+  ],
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1314,
+  "title": "Fascism and Communism in Europe",
+  "units_max": 4.0,
+  "units_min": 4.0
  },
  "I R 360": {
   "crosslisted": [
@@ -16639,6 +16742,84 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "I R 404": {
+  "crosslisted": [
+   "PLSI 404"
+  ],
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1315,
+  "title": "Politics of China",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 407": {
+  "crosslisted": [
+   "PLSI 407"
+  ],
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1315,
+  "title": "Politics of Russia",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 409": {
+  "crosslisted": [
+   "PLSI 409"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1315,
+  "title": "Russia and World Order",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 411": {
+  "crosslisted": [
+   "PLSI 411"
+  ],
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1315,
+  "title": "East Asian Politics",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 412": {
+  "crosslisted": [
+   "PLSI 412"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1315,
+  "title": "South Asian Politics",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "I R 413": {
   "crosslisted": [
    "CHIN 411",
@@ -16655,6 +16836,22 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "I R 416": {
+  "crosslisted": [
+   "PLSI 416"
+  ],
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1316,
+  "title": "Ethnicity and Nationalism",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "I R 422": {
   "crosslisted": [
    "PLSI 422"
@@ -16668,6 +16865,36 @@
   "repeatable": false,
   "source_page": 1316,
   "title": "Law and Courts in Comparative Perspective",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 424": {
+  "crosslisted": [
+   "PLSI 424",
+   "SOC 424"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1316,
+  "title": "Social Movements",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "I R 425": {
+  "crosslisted": [
+   "PLSI 425"
+  ],
+  "ge_areas": [
+   "GP",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1316,
+  "title": "Imagining Power in the Middle East",
   "units_max": 4.0,
   "units_min": 4.0
  },
@@ -16791,6 +17018,23 @@
   "title": "News Media Law",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "I R 544": {
+  "crosslisted": [
+   "PLSI 544"
+  ],
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1318,
+  "title": "Women in the World",
+  "units_max": 4.0,
+  "units_min": 4.0
  },
  "I R 550": {
   "ge_areas": [],
@@ -18045,6 +18289,22 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "JS 514": {
+  "crosslisted": [
+   "GER 514",
+   "HIST 514",
+   "I R 514",
+   "PLSI 514"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1355,
+  "title": "Political Violence and Terrorism in German History, Film, and Visual Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "JS 540": {
   "ge_areas": [
    "GP",
@@ -18724,6 +18984,19 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "LABR 394": {
+  "crosslisted": [
+   "PLSI 394"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 251,
+  "title": "Political Theories of Work, Labor, and Free Time",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "LABR 473": {
   "crosslisted": [
    "HIST 473",
@@ -18757,6 +19030,19 @@
   "repeatable": false,
   "source_page": 252,
   "title": "History of Labor in the United States",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "LABR 500": {
+  "crosslisted": [
+   "PLSI 500"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 252,
+  "title": "Labor and Government",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -20427,6 +20713,19 @@
   "units_max": 2.0,
   "units_min": 2.0
  },
+ "MEIS 431": {
+  "crosslisted": [
+   "PLSI 431"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2777,
+  "title": "Constructing Kurdistan",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "MGMT 405": {
   "ge_areas": [],
   "grading": null,
@@ -21560,6 +21859,32 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "P A 400": {
+  "crosslisted": [
+   "PLSI 400"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 774,
+  "title": "Introduction to Public Policy in the U.S.",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "P A 402": {
+  "crosslisted": [
+   "PLSI 402"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 774,
+  "title": "Introduction to Public Administration",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PH 100": {
   "ge_areas": [
    "ESCA"
@@ -22560,6 +22885,51 @@
   "units_max": 1.0,
   "units_min": 1.0
  },
+ "PLSI 100": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1625,
+  "title": "Understanding Politics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 105": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1625,
+  "title": "Principles of Government and Politics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 106": {
+  "ge_areas": [
+   "SJ",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1625,
+  "title": "Capitalism, Socialism, and Democracy: Introduction to Political Economy",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 110": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1625,
+  "title": "Talking Politics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PLSI 112": {
   "crosslisted": [
    "HIST 112",
@@ -22608,6 +22978,16 @@
   "title": "Introduction to American Politics",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "PLSI 216": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1625,
+  "title": "The 2024 Presidential Election: Issues and Analysis",
+  "units_max": 2.0,
+  "units_min": 2.0
  },
  "PLSI 250": {
   "ge_areas": [],
@@ -22694,6 +23074,130 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "PLSI 317": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1626,
+  "title": "Political Issues in a Nutshell",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "PLSI 318": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1626,
+  "title": "Modern Citizenship: Pundits, Podcasts, and Political Know-How in the 21st Century",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "PLSI 320": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1626,
+  "title": "Political Issues",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "PLSI 321": {
+  "crosslisted": [
+   "I R 321"
+  ],
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Development and Foreign Policy: Africa",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 322": {
+  "crosslisted": [
+   "I R 322"
+  ],
+  "ge_areas": [
+   "SJ",
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Policy Analysis: The Latin American Cases",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 325": {
+  "crosslisted": [
+   "I R 325"
+  ],
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Chinese Foreign Policy",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 327": {
+  "crosslisted": [
+   "I R 327"
+  ],
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Europe: Forming a More Perfect Union",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 342": {
+  "crosslisted": [
+   "I R 342"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Outer Space Politics and Policy",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 351": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Political Theory: The Classical Tradition",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 352": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Political Theory: Reformation to Nineteenth Century",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "PLSI 354": {
   "ge_areas": [
    "4UD",
@@ -22725,6 +23229,26 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PLSI 356": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1627,
+  "title": "Understanding Neoliberalism",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 360": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Development of American Political Thought",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "PLSI 362": {
   "crosslisted": [
    "C J 362",
@@ -22755,6 +23279,40 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "PLSI 373": {
+  "ge_areas": [
+   "CSLG"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Essentials of California Politics",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "PLSI 381": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Political Theories of Sexuality",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 382": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Politics and Literature",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "PLSI 386": {
   "crosslisted": [
    "CST 300"
@@ -22770,6 +23328,160 @@
   "title": "Introduction to Critical Social Thought",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "PLSI 388": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Politics and the Popular",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 389": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Latin American Revolutionary Societies",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 392": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Latin American Political Thought",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 393": {
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1628,
+  "title": "Anarchist Political Theory",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 394": {
+  "crosslisted": [
+   "LABR 394"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1629,
+  "title": "Political Theories of Work, Labor, and Free Time",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 395": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1629,
+  "title": "Political Theories of Pedagogy and Community Activism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 396": {
+  "crosslisted": [
+   "I R 357"
+  ],
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1629,
+  "title": "Fascism and Communism in Europe",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 400": {
+  "crosslisted": [
+   "P A 400"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1629,
+  "title": "Introduction to Public Policy in the U.S.",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 402": {
+  "crosslisted": [
+   "P A 402"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1629,
+  "title": "Introduction to Public Administration",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 403": {
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1629,
+  "title": "Cases in Comparative Politics",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 404": {
+  "crosslisted": [
+   "I R 404"
+  ],
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1629,
+  "title": "Politics of China",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 407": {
+  "crosslisted": [
+   "I R 407"
+  ],
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1629,
+  "title": "Politics of Russia",
+  "units_max": 4.0,
+  "units_min": 4.0
  },
  "PLSI 408": {
   "crosslisted": [
@@ -22789,6 +23501,106 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PLSI 409": {
+  "crosslisted": [
+   "I R 409"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1630,
+  "title": "Russia and World Order",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 411": {
+  "crosslisted": [
+   "I R 411"
+  ],
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1630,
+  "title": "East Asian Politics",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 412": {
+  "crosslisted": [
+   "I R 412"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1630,
+  "title": "South Asian Politics",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 416": {
+  "crosslisted": [
+   "I R 416"
+  ],
+  "ge_areas": [
+   "4UD",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1630,
+  "title": "Ethnicity and Nationalism",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 418": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1630,
+  "title": "Political Transitions in East & Southeast Asia",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 419": {
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1630,
+  "title": "Comparative Political Economy",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 421": {
+  "crosslisted": [
+   "FR 421"
+  ],
+  "ge_areas": [
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1630,
+  "title": "Social Movements in the Francophone World",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "PLSI 422": {
   "crosslisted": [
    "I R 422"
@@ -22802,6 +23614,46 @@
   "repeatable": false,
   "source_page": 1631,
   "title": "Law and Courts in Comparative Perspective",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 423": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1631,
+  "title": "Video Games, Politics, and The State",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 424": {
+  "crosslisted": [
+   "I R 424",
+   "SOC 424"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1631,
+  "title": "Social Movements",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 425": {
+  "crosslisted": [
+   "I R 425"
+  ],
+  "ge_areas": [
+   "GP",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1631,
+  "title": "Imagining Power in the Middle East",
   "units_max": 4.0,
   "units_min": 4.0
  },
@@ -22821,6 +23673,32 @@
   "title": "Israeli Democracy: Politics, Institutions, and Society",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "PLSI 431": {
+  "crosslisted": [
+   "MEIS 431"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1631,
+  "title": "Constructing Kurdistan",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 432": {
+  "crosslisted": [
+   "I R 337"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1631,
+  "title": "Introduction to the European Union",
+  "units_max": 4.0,
+  "units_min": 4.0
  },
  "PLSI 435": {
   "crosslisted": [
@@ -22872,6 +23750,94 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "PLSI 460": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1632,
+  "title": "Topics in American Politics",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 461": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1632,
+  "title": "Voting Behavior, Campaigns, and Elections",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 462": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1632,
+  "title": "Applied Public Opinion Research",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 463": {
+  "ge_areas": [
+   "4UD",
+   "AERM",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1632,
+  "title": "The Politics of Immigration in the United States",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 464": {
+  "ge_areas": [
+   "AERM",
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1633,
+  "title": "Race and American Politics",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 467": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1633,
+  "title": "Politics and Community Organizing",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 468": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1633,
+  "title": "Women and American Politics",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 469": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1633,
+  "title": "Women's Political Movements in the United States",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "PLSI 470": {
   "crosslisted": [
    "SXS 470",
@@ -22883,6 +23849,34 @@
   "repeatable": false,
   "source_page": 1633,
   "title": "The Politics of Sex and Reproduction",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 472": {
+  "ge_areas": [
+   "4UD",
+   "USG",
+   "CSLG",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1633,
+  "title": "Civic and Political Engagement",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 473": {
+  "ge_areas": [
+   "SJ",
+   "CSLG"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1633,
+  "title": "California Politics and Government",
   "units_max": 4.0,
   "units_min": 4.0
  },
@@ -22899,6 +23893,28 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "PLSI 476": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1633,
+  "title": "The American Presidency",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 477": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1633,
+  "title": "Congress and the Presidency",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "PLSI 478": {
   "ge_areas": [
    "SJ",
@@ -22909,6 +23925,16 @@
   "repeatable": false,
   "source_page": 1634,
   "title": "Judicial Process",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 479": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1634,
+  "title": "The United States Congress",
   "units_max": 4.0,
   "units_min": 4.0
  },
@@ -22924,6 +23950,16 @@
   "title": "Introduction to Urban Policy and Analysis",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "PLSI 481": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1634,
+  "title": "Race and Public Law",
+  "units_max": 4.0,
+  "units_min": 4.0
  },
  "PLSI 492": {
   "crosslisted": [
@@ -22948,6 +23984,19 @@
   "repeatable": false,
   "source_page": 1634,
   "title": "Data Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 500": {
+  "crosslisted": [
+   "LABR 500"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1634,
+  "title": "Labor and Government",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -22996,6 +24045,23 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "PLSI 544": {
+  "crosslisted": [
+   "I R 544"
+  ],
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1635,
+  "title": "Women in the World",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "PLSI 552": {
   "ge_areas": [
    "SJ"
@@ -23015,6 +24081,36 @@
   "repeatable": false,
   "source_page": 1635,
   "title": "Legal Issues",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 554": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1635,
+  "title": "Separation of Powers and Federalism",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 555": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1635,
+  "title": "Moot Court",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
+ "PLSI 556": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1635,
+  "title": "Constitutional Law: First Amendment",
   "units_max": 4.0,
   "units_min": 4.0
  },
@@ -23043,6 +24139,16 @@
   "title": "Jurisprudence",
   "units_max": 4.0,
   "units_min": 4.0
+ },
+ "PLSI 562": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1635,
+  "title": "Jurisprudence Writing Workshop",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "PLSI 570": {
   "crosslisted": [
@@ -23136,6 +24242,26 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "PLSI 610": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1636,
+  "title": "Legal and Public Service Internship and Seminar",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "PLSI 611": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1637,
+  "title": "Legal and Public Service Internship",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
  "PLSI 613": {
   "ge_areas": [],
   "grading": null,
@@ -23155,6 +24281,26 @@
   "title": "Seminar: Politics of Reproduction",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "PLSI 685": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1637,
+  "title": "Projects in the Teaching of Political Science",
+  "units_max": 4.0,
+  "units_min": 1.0
+ },
+ "PLSI 699": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1637,
+  "title": "Independent Study",
+  "units_max": 4.0,
+  "units_min": 1.0
  },
  "PRSN 260": {
   "crosslisted": [
@@ -24837,6 +25983,20 @@
   "title": "Grassroots Organizing for Change in Communities of Color",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "SOC 424": {
+  "crosslisted": [
+   "I R 424",
+   "PLSI 424"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Social Movements",
+  "units_max": 4.0,
+  "units_min": 4.0
  },
  "SOC 451": {
   "crosslisted": [
