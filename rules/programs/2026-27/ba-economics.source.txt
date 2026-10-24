@@ -115,6 +115,7 @@ FIN 536 International Finance 3
 GEOG 603 Introduction to Geographic Information Systems 3
 GEOG 604 Environmental Data Science 3
 I R 312 Introduction to International Political Economy 4
+Footnote marks on p.133 (from the PDF's layout): MATH 226: footnote 1
 === p.134 ===
 ISYS 363 Information Systems for Management 3
 MATH 227 Calculus II 4

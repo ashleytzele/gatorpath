@@ -160,3 +160,11 @@ def test_cross_check_finds_where_two_drafts_differ():
            "codex: done" in got
     assert any(x.startswith("MATH 376, MATH 400") and x.endswith("at D: ours: done; codex: not done, Required Courses")
                for x in got)
+
+
+def test_marks_line_says_which_course_carries_which_footnote():
+    rows = [{"code": "CHEM 343", "marks": ["1"], "units": "3"}, {"code": "CHEM 420", "marks": [], "units": "3"},
+            {"code": "CHEM 686", "marks": ["2"], "units": "1"}, {"code": "FIN/ECON/ENVS 651", "marks": ["1", "2"], "units": None}]
+    assert P.marks_line(1859, rows) == ("Footnote marks on p.1859 (from the PDF's layout): CHEM 343: footnote 1, 3 units; "
+                                        "CHEM 686: footnote 2, 1 unit; FIN/ECON/ENVS 651: footnote 1, 2")
+    assert P.marks_line(1860, rows[1:2]) == ""  # no mark on the page: no line

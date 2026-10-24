@@ -104,6 +104,7 @@ CHEM 349 General Biochemistry
 CHEM 340 Biochemistry I
 Select One: 3
 BIOL 525 Plant Physiology
+Footnote marks on p.1835 (from the PDF's layout): CHEM 130: footnote 1
 === p.1836 ===
 BIOL 617 Environmental Physiology
 BIOL 618 Biology of Aging

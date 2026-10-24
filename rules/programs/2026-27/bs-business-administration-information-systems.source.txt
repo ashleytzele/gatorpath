@@ -109,6 +109,7 @@ Code Title Units
 ISYS 350 Building Business Applications 3
 ISYS 463 Information Systems Analysis and Design 3
 ISYS 464 Managing Enterprise Data 3
+Footnote marks on p.202 (from the PDF's layout): BUS 682: footnote 1, 3 units; BUS 690: footnote 1, 3 units
 === p.203 ===
 ISYS 565 Managing Enterprise Networks 3
 ISYS 663 Information Technology Project Management 3

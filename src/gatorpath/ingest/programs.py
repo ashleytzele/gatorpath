@@ -16,7 +16,7 @@ import yaml
 from gatorpath import db
 from gatorpath.engine.planner import VARIANTS, approval_only, build_plan, check_roadmap, ge_areas
 from gatorpath.engine.rules import RULES_DIR, audit, check_program, filters_for, matches
-from gatorpath.ingest.bulletin import extract_pages
+from gatorpath.ingest.bulletin import course_rows, extract_pages, extract_words
 
 LISTED = re.compile(r"• (Bachelor of (?:Arts|Science|Music|Fine Arts)\b[^•()]*?) \(p\. (\d{1,4})\)")
 HEAD = re.compile(r"\s*San Francisco State University Bulletin \d{4}-\d{4}\s*")
@@ -101,9 +101,19 @@ def program_id(title: str, existing: dict[str, str]) -> str:
     return f"{DEGREES[degree]}-{slug}" if degree else slug
 
 
-def source_text(pages: list[str], numbers: list[int]) -> str:
-    """The pages' text, one '=== p.NNNN ===' line before each (printed numbers), running head and page number dropped."""
+def marks_line(n: int, rows: list[dict]) -> str:
+    """The footnote marks of a page's courses, as course_rows read them from the PDF's layout: the text above prints a mark
+    as a bare number line, like the units, so this says which course carries which footnote."""
+    marked = [f"{r['code']}: footnote {', '.join(r['marks'])}" + (f", {r['units']} unit{'s' * (r['units'] != '1')}"
+                                                                  if r["units"] else "") for r in rows if r["marks"]]
+    return f"Footnote marks on p.{n} (from the PDF's layout): " + "; ".join(marked) if marked else ""
+
+
+def source_text(pages: list[str], numbers: list[int], pdf: str | Path | None = None) -> str:
+    """The pages' text, one '=== p.NNNN ===' line before each (printed numbers), running head and page number dropped. With
+    the `pdf`, each page ends with its footnote marks (marks_line)."""
     by_page = {printed(p): p for p in pages}
+    index = {printed(p): i for i, p in enumerate(pages)}
     parts = []
     for n in numbers:
         lines = clean(by_page[n])
@@ -112,6 +122,8 @@ def source_text(pages: list[str], numbers: list[int]) -> str:
             lines = lines[k + 1:]
         if lines and lines[-1].isdigit():
             lines = lines[:-1]
+        if pdf is not None and (marks := marks_line(n, course_rows(extract_words(pdf, index[n])))):
+            lines.append(marks)
         parts.append(f"=== p.{n} ===\n" + "\n".join(lines))
     return "\n".join(parts) + "\n"
 
@@ -151,6 +163,9 @@ Rules (they're checked by a program, then by a person):
   one course below C-", "30 units must be upper-division", "12 units at SF State") are check groups; a cap inside one
   list ("up to 9 units of lower-division") is a filter's max_units. A rule the university rules already state (a 2.0
   GPA in all coursework) needs no group.
+- A footnote applies to the courses that carry its mark. The page text prints a mark as a bare number line, like the
+  units; each page's last line, "Footnote marks on p.NNNN", says which course carries which footnote (read from the
+  PDF's layout). Never quote that line.
 - A requirement the vocabulary can't express exactly: a group with `unparsed: true`, its `quote` and `source`, and
   nothing else. Never approximate one.
 - Answer with the YAML only, in one ```yaml block. Double-quote every string with a colon in it.
@@ -479,11 +494,11 @@ def main() -> None:
         # next to the rules; a program without rules yet keeps it with its drafts
         path = RULES_DIR / ("programs" if programs[pid]["title"] in have else "drafts") / year / f"{pid}.source.txt"
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(source_text(pages, programs[pid]["pages"]))
+        path.write_text(source_text(pages, programs[pid]["pages"], args.pdf))
         print(f"{path} ({len(programs[pid]['pages'])} pages)")
     for pid in args.draft or []:
         p = programs[pid]
-        source = source_text(pages, p["pages"])
+        source = source_text(pages, p["pages"], args.pdf)
         out = RULES_DIR / "drafts" / year
         out.mkdir(parents=True, exist_ok=True)
         (out / f"{pid}.source.txt").write_text(source)
@@ -511,7 +526,7 @@ def main() -> None:
         except (ValueError, yaml.YAMLError):
             print(f"{rules}: isn't YAML yet, fix it before drafting its roadmap")
             continue
-        source = source_text(pages, p["roadmap_pages"])
+        source = source_text(pages, p["roadmap_pages"], args.pdf)
         out.mkdir(parents=True, exist_ok=True)
         (out / f"{pid}.roadmap.source.txt").write_text(source)
         try:

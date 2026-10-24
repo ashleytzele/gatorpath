@@ -1,9 +1,11 @@
 """Bulletin PDF -> course rows (ARCHITECTURE §5, §6.1). Offline builder, run once per catalog year."""
 
 import argparse
+import html
 import json
 import re
 import sqlite3
+import statistics
 import subprocess
 import unicodedata
 from collections import Counter
@@ -36,6 +38,118 @@ def extract_pages(pdf_path: str | Path) -> list[str]:
     """`pdftotext -raw` keeps the two-column course pages in logical order (default mode interleaves them)."""
     out = subprocess.run(["pdftotext", "-raw", str(pdf_path), "-"], capture_output=True, text=True, check=True)
     return out.stdout.split("\f")
+
+
+WORD = re.compile(r'<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="([\d.]+)" yMax="([\d.]+)">(.*?)</word>')
+
+
+def extract_words(pdf_path: str | Path, page: int) -> list[dict]:
+    """One page's words with their boxes (`pdftotext -bbox-layout`; `page` is the 0-based PDF index): {t, x0, y0, x1, y1,
+    sup}. A word under 85% of the page's median height is a superscript, a footnote mark ("Biochemistry I Laboratory ¹"),
+    which -raw prints as a bare number line just like the units."""
+    out = subprocess.run(["pdftotext", "-bbox-layout", "-f", str(page + 1), "-l", str(page + 1), str(pdf_path), "-"],
+                         capture_output=True, text=True, check=True).stdout
+    words = [{"t": " ".join(unicodedata.normalize("NFKC", html.unescape(t)).split()), "x0": float(a), "y0": float(b),
+              "x1": float(c), "y1": float(d)} for a, b, c, d, t in WORD.findall(out)]
+    words = [w for w in words if w["t"]]
+    body = statistics.median(w["y1"] - w["y0"] for w in words) if words else 0
+    return [w | {"sup": w["y1"] - w["y0"] < 0.85 * body} for w in words]
+
+
+SUBJ, NUMBER = r"[A-Z]{1,5}(?: [A-Z]{1,2})?", r"\d{3}[A-Z]{0,2}"
+WHOLE_CODE = re.compile(rf"^&?\s*(?:{SUBJ}(?: {NUMBER})?/ ?)*{SUBJ} {NUMBER}$")  # "PLSI/GER/HIST/I R/JS 514", "& BIOL 351"
+CODE_PIECE = re.compile(rf"^&?\s*(?:{SUBJ}(?: {NUMBER})?/ ?)*(?:{SUBJ}(?: {NUMBER})?/?|{NUMBER})$")  # wrapped: "PLSI/GER/HIST/I"
+UNITS = re.compile(r"^\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?$")
+MARKS = re.compile(r"^\d(?:,\d)*$")
+GUTTER, MIDDLE = (302.0, 310.0), 306.0  # between the columns of a 612pt page: left text ends by x≈300.5, right starts at 311.4
+TABLE = {"left": (103.0, 297.5), "right": (378.0, 575.5), "wide": (170.0, 575.5)}  # Title column x, Units right edge
+
+
+def codes_in(code: str) -> list[str]:
+    """'PLSI/GER/HIST/I R/JS 514' -> PLSI 514, GER 514, …; 'PLSI 386/CST 300' -> both; 'BIOL 351GW & BIOL 351' -> both."""
+    out = []
+    for part in re.split(r"\s*&\s*", code):
+        subjects = []
+        for seg in (s.strip() for s in part.split("/") if s.strip()):
+            m = re.fullmatch(rf"({SUBJ})(?: ({NUMBER}))?", seg)
+            subjects = subjects + [m.group(1)] if m else []
+            if m and m.group(2):
+                out += [f"{s} {m.group(2)}" for s in subjects]
+                subjects = []
+    return out
+
+
+def course_rows(words: list[dict]) -> list[dict]:
+    """A page's course-table rows from its words: [{code, codes, units, marks}]. Each column (or a table that spans the
+    page) is read as Code | Title | Units: a code wrapped over lines is joined ("PLSI/GER/HIST/I" + "R/JS 514"), a "&"
+    line is a bundle, the units are the number in the narrow Units column, and the marks are the superscripts on the
+    course's lines, each on the line its box overlaps most. Column positions come from each "Code Title Units" header."""
+    body = sorted((w for w in words if not w["sup"]), key=lambda w: (w["y0"] + w["y1"]) / 2)
+    bands = []  # lines across the whole page: a line crossing the gutter is a full-width table's
+    for w in body:
+        if bands and (w["y0"] + w["y1"]) / 2 - bands[-1]["c"] < 3.6:
+            bands[-1]["w"].append(w)
+        else:
+            bands.append({"c": (w["y0"] + w["y1"]) / 2, "w": [w]})
+    wide, wide_y, run = set(), [], []
+    # ponytail: a full-width table is the run of lines around one that crosses the gutter, up to a 20pt gap; two-column
+    # text right below one without a gap would be read as full width. Upgrade to a gutter test per column block.
+    for b in bands + [None]:
+        if b is None or run and b["c"] - run[-1]["c"] > 20:
+            if any(GUTTER[0] < w["x1"] and w["x0"] < GUTTER[1] for r in run for w in r["w"]):
+                wide |= {id(w) for r in run for w in r["w"]}
+                wide_y.append((min(w["y0"] for r in run for w in r["w"]) - 3, max(w["y1"] for r in run for w in r["w"]) + 3))
+            run = []
+        if b is not None:
+            run.append(b)
+
+    def side(w: dict) -> str:
+        if id(w) in wide or w["sup"] and any(a <= w["y0"] <= b for a, b in wide_y):
+            return "wide"
+        return "right" if w["x0"] >= MIDDLE else "left"
+
+    rows, geometry = [], dict(TABLE)
+    for column in ("left", "right", "wide"):
+        lines = []
+        for w in (w for w in body if side(w) == column):
+            if lines and abs((w["y0"] + w["y1"]) / 2 - lines[-1]["c"]) < 3.6:
+                lines[-1]["w"].append(w)
+                lines[-1]["y0"], lines[-1]["y1"] = min(lines[-1]["y0"], w["y0"]), max(lines[-1]["y1"], w["y1"])
+            else:
+                lines.append({"c": (w["y0"] + w["y1"]) / 2, "w": [w], "y0": w["y0"], "y1": w["y1"]})
+        for s in (w for w in words if w["sup"] and side(w) == column):
+            overlap = lambda line: min(line["y1"], s["y1"]) - max(line["y0"], s["y0"])
+            best = max(lines, key=overlap, default=None)
+            if best is not None and overlap(best) > 0:
+                best["w"].append(s)
+        current = None
+        for line in lines:
+            ws = sorted(line["w"], key=lambda w: w["x0"])
+            if ws[0]["t"] == "Code" and any(w["t"] == "Units" for w in ws):
+                title = next((w for w in ws if w["t"] == "Title"), None)
+                geometry[column] = (title["x0"] if title else geometry[column][0], next(w for w in ws if w["t"] == "Units")["x1"])
+                current = None
+                continue
+            title_x, units_right = geometry[column]
+            code = " ".join(w["t"] for w in ws if w["x0"] < title_x - 3 and not w["sup"])
+            rest = [w for w in ws if w["x0"] >= title_x - 3]
+            if current and not re.search(rf"{NUMBER}$", current["code"]) and code and CODE_PIECE.match(code):
+                current["code"] = join(current["code"], code)  # a code wrapped over lines
+            elif current and code.startswith("&") and WHOLE_CODE.match(code):
+                current["code"] += " " + code
+            elif WHOLE_CODE.match(code) or "/" in code and CODE_PIECE.match(code):  # "FIN/ECON/ENVS" (651 below)
+                current = {"code": code, "units": None, "marks": []}
+                rows.append(current)
+            elif code or not rest or re.match(r"(Select|Total)", " ".join(w["t"] for w in rest)):
+                current = None
+            if current is None:
+                continue
+            units = [w["t"] for w in rest if not w["sup"] and UNITS.match(w["t"]) and w["x1"] > units_right - 15
+                     and w["x0"] >= units_right - 22]  # in the narrow Units column: never a year ending a title
+            if units and current["units"] is None:
+                current["units"] = units[0]
+            current["marks"] += [m for w in rest if w["sup"] and MARKS.match(w["t"]) for m in w["t"].split(",")]
+    return [r | {"codes": codes_in(r["code"])} for r in rows]
 
 
 def join(a: str, b: str) -> str:

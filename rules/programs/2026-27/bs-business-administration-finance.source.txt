@@ -106,6 +106,7 @@ Code Title Units
 Select One: 3
 FIN 351 Financial Management
 FIN 357 Financial Statement and Data Analysis
+Footnote marks on p.152 (from the PDF's layout): BUS 682: footnote 1, 3 units; BUS 690: footnote 1, 3 units
 === p.153 ===
 FIN 353 Financial Institutions 3
 FIN 355 Investments 3

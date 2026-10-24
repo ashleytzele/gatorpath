@@ -128,6 +128,7 @@ CSC 408 Machine Learning and Data Science for
 Personalized Medicine
 CSC 509 Data Science and Machine Learning for Medical
 Image Analysis
+Footnote marks on p.1881 (from the PDF's layout): CHEM 426: footnote 1, 2 units; CHEM 451: footnote 1, 3 units; CHEM 343: footnote 1, 3 units; CHEM 686: footnote 2, 1 unit; CHEM 699: footnote 3, 2-3 units
 === p.1882 ===
 1
 Students may substitute CHEM 343 for CHEM 426 or CHEM 451 upon

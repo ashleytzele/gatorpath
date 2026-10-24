@@ -108,6 +108,7 @@ Select One: 3
 DS/ECON 212 Business Statistics
 MATH 124 Elementary Statistics
 DS 412 Operations Management 3
+Footnote marks on p.53 (from the PDF's layout): BUS 682: footnote 1, 3 units; BUS 690: footnote 1, 3 units
 === p.54 ===
 ECON 102 Introduction to Macroeconomic Analysis 3
 FIN 350 Business Finance 3

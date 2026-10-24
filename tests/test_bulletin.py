@@ -252,3 +252,37 @@ def test_legacy_ge_report_counts_co_tagged_codes():
     assert "UD-D      on    1 course entries; with: 4UD 1" in report
     assert "C1        on    1 course entries; with: 3A 1" in report
     assert "E         on    1 course entries; with: no current GE code" in report
+
+
+# Words of four real pages as `pdftotext -bbox-layout` gives them (extract_words): [text, x0, y0, x1, y1, superscript]
+WORDS = {int(n): [dict(zip(("t", "x0", "y0", "x1", "y1", "sup"), w)) for w in ws]
+         for n, ws in json.loads((Path(__file__).parent / "fixtures/bulletin_words.json").read_text()).items()}
+
+
+def rows_on(page: int) -> dict:
+    from gatorpath.ingest.bulletin import course_rows
+    return {r["code"]: (r["marks"], r["units"]) for r in course_rows(WORDS[page])}
+
+
+def test_course_rows_read_footnote_marks_and_units_from_the_layout():
+    # BA Chemistry p.1859: -raw prints "CHEM 686 … Biochemistry / 2 / 1", where 2 is footnote 2 and 1 the units
+    chem = rows_on(1859)
+    assert chem["CHEM 343"] == (["1"], "3") and chem["CHEM 686"] == (["2"], "1") and chem["CHEM 699"] == (["3"], "2-3")
+    assert chem["CHEM 420"] == ([], "3") and chem["CHEM 115"] == ([], "4")
+    assert sum(bool(m) for m, _ in chem.values()) == 3  # no other mark on the page
+    # BS Biochemistry p.1869: two marks on one course, a mark on a wrapped title's second line, a bundle
+    bio = rows_on(1869)
+    assert bio["CHEM 322"] == (["1", "2"], "2") and bio["CHEM 699"] == (["2", "5"], "2-3") and bio["CHEM 390GW"] == (["3"], "3")
+    assert bio["CHEM 370"] == (["2"], "3") and bio["BIOL 351GW & BIOL 351"] == (["2"], "4") and bio["CHEM 433"] == ([], "3")
+
+
+def test_course_rows_join_wrapped_cross_listings_and_read_full_width_tables():
+    from gatorpath.ingest.bulletin import codes_in, course_rows
+    plsi = {r["code"]: r["codes"] for r in course_rows(WORDS[1641])}  # Political Science p.1641, Field E
+    assert plsi["PLSI/GER/HIST/I R/JS 514"] == ["PLSI 514", "GER 514", "HIST 514", "I R 514", "JS 514"]  # "…/I" + "R/JS 514"
+    assert plsi["PLSI/LCA/HIST/I R/PHIL/MATH 112"] == ["PLSI 112", "LCA 112", "HIST 112", "I R 112", "PHIL 112", "MATH 112"]
+    assert codes_in("PLSI 386/CST 300") == ["PLSI 386", "CST 300"] and codes_in("LTNS 533/HIST 355/WGS 355") == \
+        ["LTNS 533", "HIST 355", "WGS 355"]
+    # Creative Writing p.1062: one table across the page, continued from the page before (no header)
+    cw = rows_on(1062)
+    assert cw["C W 609"] == (["2"], "3") and cw["C W/TH A 605"] == (["1"], "3") and cw["C W 699"] == ([], "1-3")

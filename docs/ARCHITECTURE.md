@@ -125,7 +125,7 @@ human review, never at question time.
 
 | Source | What we take | How | Notes |
 |---|---|---|---|
-| **SF State Bulletin 2026-27 PDF** (2,932 pp) | Courses, units, grading, prereqs, program requirements, roadmaps, GE & graduation rules | `pdftotext -raw` (the default mode interleaves the two-column course pages) → NFKC (ligatures) → parse | Official, frozen per year → solves "catalog year" versioning |
+| **SF State Bulletin 2026-27 PDF** (2,932 pp) | Courses, units, grading, prereqs, program requirements, roadmaps, GE & graduation rules | `pdftotext -raw` (the default mode interleaves the two-column course pages) → NFKC (ligatures) → parse; `-bbox-layout` word boxes for footnote marks and units in program tables | Official, frozen per year → solves "catalog year" versioning |
 | **Class Search** `webapps.sfsu.edu/public/classservices/classsearch` | Sections per term: days/times, mode, seats, GE attributes. History back to 2000 | Polite scraper: HTML form POST with CSRF token, cached, a few requests per term | Check SFSU terms of use; later ask SFSU IT for an official feed |
 | **Hand-written rules** `rules/` | Major requirement logic + roadmap variants | Humans translate Bulletin text → YAML, cite page | Reviewed like code |
 | **SF State office pages** (`international.sfsu.edu/rcl`, `advising.sfsu.edu`, `cs.sfsu.edu/undergrads/advising`, …) | Only what the Bulletin leaves to that office: the F-1 final-term Reduced Course Load (`f1_final_term`) and who to see / how to book (`advising:`) | Humans copy it into `rules/` with `source: "<page>, checked <date>"` and the page's words quoted in a comment | Re-check with each Bulletin year (D21) |
@@ -407,6 +407,12 @@ Added 2026-10-22 (BS Applied Mathematics, the second program, pp.2129-2137):
 ("• Bachelor of … (p. 2129)"), with its requirement pages (the pages from there whose running head is its title) and
 roadmap pages (heads that start with it). `--source <id>` writes the requirement pages' text, one `=== p.NNNN ===`
 line per page, as `<id>.source.txt` next to the rules (public Bulletin text: the snapshot §5's yearly diff reads).
+Each page with footnote marks ends with a "Footnote marks on p.NNNN" line (added 2026-10-24): `pdftotext -raw` prints a
+mark as a bare number line, the same as the units ("CHEM 686 … / 2 / 1"), so `course_rows` (ingest/bulletin.py) reads
+the course tables from `pdftotext -bbox-layout`'s word boxes instead: a word under 85% of the page's median height is a
+superscript, each on the course line its box overlaps; units in the narrow Units column; codes wrapped over lines
+joined; a table across the page read as one column. A benchmark of six PDF readers on known answers (marks, units,
+cross-listings) found it as accurate as PyMuPDF and pdfplumber, with no new dependency (poppler is already required).
 `--draft <id>` sends that text, this section and the hand-written programs to a headless AI client (`claude -p`, no
 tools) and writes `rules/drafts/<year>/<id>.yaml`, which the server never reads. `check_program` (engine/rules.py)
 then checks any program file, drafted or hand-written: only this vocabulary, every course code in the catalog, every

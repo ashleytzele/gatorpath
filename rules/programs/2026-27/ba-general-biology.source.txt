@@ -236,6 +236,7 @@ BIOL 357 Molecular Genetics 3
 BIOL 358 Forensic Genetics: Math Matters 4
 BIOL 360 Cancer Biology 3
 BIOL 380 Evolutionary Developmental Biology 3
+Footnote marks on p.1785 (from the PDF's layout): AA S 587: footnote 1, 3 units; AA S 591: footnote 1, 3 units; AFRS 370: footnote 1, 3 units; AIS 450: footnote 1, 3 units; AIS 520: footnote 1, 3 units; ANTH 630: footnote 1, 3 units
 === p.1786 ===
 BIOL 382 Developmental Biology 3
 BIOL 401 General Microbiology 3
@@ -395,6 +396,7 @@ Reasoning
 LD 3 2
 Arts LD 3 3A
 Humanities LD 3 3B
+Footnote marks on p.1786 (from the PDF's layout): CSC 411: footnote 1, 3 units; CSC 509: footnote 1, 3 units; I R/ENVS 331: footnote 1, 4 units; LTNS 500: footnote 1, 3 units; RRS 303: footnote 1, 3 units; RRS 304: footnote 1, 3 units; ENVS 460: footnote 1, 3 units; ENVS 480: footnote 1, 3 units; ERTH 330: footnote 1, 3 units; ERTH 335: footnote 1, 3 units; FIN/ECON/ENVS 651: footnote 1, 3 units; GEOG/USP 433: footnote 1, 4 units; GEOG 435: footnote 1, 4 units; PH 414: footnote 1, 3 units; PHIL 383: footnote 1, 3 units; USP 514: footnote 1, 4 units; WGS 593: footnote 1, 3 units
 === p.1787 ===
 Social and
 Behavioral

@@ -107,6 +107,7 @@ Code Title Units
 BIOL 337 Evolution 3
 BIOL 355 Genetics 3
 BIOL 458 Biostatistics 4
+Footnote marks on p.1815 (from the PDF's layout): PHYS 220 & PHYS 222: footnote 1
 === p.1816 ===
 Select One: 3-4
 BIOL 555 Marine Invertebrate Zoology

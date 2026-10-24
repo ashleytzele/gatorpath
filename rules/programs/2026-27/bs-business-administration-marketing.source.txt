@@ -108,6 +108,7 @@ MKTG 450 Social Media Marketing with Artificial Intelligence
 3
 MKTG 460 Content Marketing with Artificial Intelligence (AI) 3
 MKTG 469 Digital Marketing 3
+Footnote marks on p.283 (from the PDF's layout): BUS 682: footnote 1, 3 units; BUS 690: footnote 1, 3 units
 === p.284 ===
 MKTG 480 Search, Display, and Video Advertising 3
 MKTG 567 Internship in Marketing 3
@@ -333,3 +334,4 @@ GWAR (Major Core)
 3
 FIN 350 Business Finance (Major Core) 3
 MKTG 431 Principles of Marketing (Major Core) 3
+Footnote marks on p.286 (from the PDF's layout): MATH 124: footnote 2
