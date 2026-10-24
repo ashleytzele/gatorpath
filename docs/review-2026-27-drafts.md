@@ -93,3 +93,16 @@ bs-physics-physics-for-teaching: FIXED electives (9-12, advisor-chosen) fill to 
 bs-physics: FIXED electives (11u UD PHYS/ASTR or approved; caps flagged) were unparsed (31+27+11+3=72)
 bs-statistics: FIXED guided electives (9u from the four area lists; "one area" flagged) were unparsed (46+9=55)
 bs-visual-communication-design: OK (9+13+15+15+6=58)
+2026-10-24, unparsed groups written with check groups (Claude; reasons for removed groups are in each file's header). Interpretations for a person to confirm:
+QUESTION business concentrations: "All concentration courses" and "concentration GPA" read as including the Electives heading (Finance's "seven concentration courses" are its 4 required + 3 electives)
+QUESTION bs-business-administration-finance: "C- or better in core Business courses required as prerequisites for other core Business courses" = the core courses another core course's prereq names (ECON 102 left out: FIN 350 names it only for Economics majors)
+QUESTION ba-chemistry, bs-chemistry, bs-biochemistry: "Chemistry prerequisite courses" = CHEM courses another course in the major names as a prereq (their prereq text says C or better too)
+QUESTION ba-latina-latino-studies: the 30 service hours are LTNS 694 Community Service Learning's (the footnote mark isn't printed on a course)
+QUESTION ba-anthropology: "field schools" in the 6-unit cap: no catalog course is one, so the cap covers ANTH 695 and ANTH 699
+QUESTION ba-general-biology: "Other biology courses that have BIOL 230 and/or BIOL 240 as prerequisites" = upper-division BIOL courses whose catalog prereqs name either (12 added to the electives)
+QUESTION ba-international-relations: the 12 upper-division I R units count I R codes only, not courses cross-listed with I R under another code
+QUESTION bs-physics: "Maximum of 5 units of 600-level PHYS and/or ASTR" checks every 600-level elective (an approved outside 600-level course counts toward the 5 too)
+QUESTION ba-american-indian-studies: "two courses (6 units) at the lower division level and four courses (12 units) at the upper-division level" read as exact (at least and at most 6 lower-division units)
+ba-american-indian-studies: LOADED (2026-10-24, roadmap check takes AIS 694's 1-3 units); FIXED the electives' level split was unparsed; 19..21+18 = 39
+ba-dance: LOADED (2026-10-24, DANC 490 1-3 units); FIXED technique levels were unparsed (6 of the 12 units at the 300-400 level); 9+9+1..3+12+3 = 36; Complementary Studies left
+bs-physics-astrophysics: LOADED (2026-10-24, ASTR 697 1-3 units); FIXED electives were unparsed (6u upper-division PHYS/ASTR, 3 at the 400 level, 3 outside by permission); 15+1+12+3+14+18+6+1..3 = 72

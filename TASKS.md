@@ -525,6 +525,41 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   my cross-listing prompt line made Composition require MUS 130 and TH A 131 both (now: a required cross-listed
   course is a one_of of its codes, and check_program flags both codes in an all_of from the catalog's 509 pairs).
   Not redrafted with the new prompt yet (usage): the pilot's 5 come first in the load-all run.
+- [x] 90/10: GatorPath checks 90% of the rules itself, a person the other 10%. Done 2026-10-24 (`--coverage`):
+  91.6% of the 892 requirement groups in the 100 served programs (was 76.5% of 918 in 97); 75 left for a person (67
+  unparsed, 8 an advisor approves); 53 programs have nothing left for a person (was 14). Unparsed groups were mostly
+  rules over other groups' courses, now check groups (ARCHITECTURE §6.2): letter grades only, CR/NC caps, a GPA
+  floor, at most N courses below a grade, at least/at most N units or courses matching a filter (upper division, at
+  SF State, in transfer), N subjects, one course in N of the printed categories, all from one category. Filters
+  gained max_units, level lower/upper (and lists) on any filter. Caps inside one list are filters; alternatives the
+  DPR records (test-outs, AP credit, substitutions with consent, a double major) are `exceptions` text, checked word
+  for word. A rule the university rules already state (2.0 GPA in all coursework, GWAR C-, 12 major units in
+  residence) or the structure already enforces was removed, with the reason in the file's header. check_roadmap
+  takes a variable-unit course's range (AIS 694, 1-3, printed 3), which loaded BA American Indian Studies, BA Dance
+  and BS Physics: Astrophysics (first-pass reviewed, rules converted). Interpretations to confirm are in
+  docs/review-2026-27-drafts.md ("2026-10-24"). What's left for a person:
+  - [ ] (?) Complementary Studies (23 BA groups): one question for an advisor first. Can GE courses count toward the
+    12 units "outside of the primary prefix" (p.2353)? If yes, it's a check over every course; if no, 12 units of
+    electives outside the prefix (the roadmaps' "Complementary Studies or SF State Studies or University Elective"
+    slots suggest no). Either answer converts them all.
+  - [ ] Ordering rules in the planner (15): "Before advancing to the 300-level or higher courses ... completed the
+    lower-division courses for the major" (4 art and design programs), a capstone "in the senior year" / "the spring
+    semester of the student's final (senior) year" (Economics, 3 English), a GPA before credential coursework (2
+    ITEPs), Social Work's GE 1A first and 24 junior units before practicum, ENGR 696 after 15 UD ENGR units, Speech's
+    semester sequence. A planner order constraint, then a check.
+  - [ ] Repeated courses in a plan (4, and the BM Instrumental/Vocal Performance drafts): "MUS 260 Applied Music
+    Lessons (1 unit course taken 4 times)". The audit adds up a repeatable course's units; the planner places a
+    course once. MUS 443 "taken 4 times" isn't repeatable in its catalog entry: a question for the department.
+  - Advisor approvals (genuinely a person's, 16): 8 approval-only elective groups, 4 engineering study plans,
+    Classics' culminating demonstration, Kinesiology ITEP's 12 activity areas and certifications, Art History's
+    change-of-major consultation.
+  - Bulletin text to clarify (5): BECA says 3 and 6 units of BECA 576/685/695/699; LTNS's "no more than 4 units" per
+    course or combined; Kinesiology ITEP's "theory" vs "movement-based" courses and "content areas" aren't listed.
+  - Data GatorPath doesn't have (12): online units (Cinema), study abroad units (French), units per term in
+    production courses, the college of a GWAR course (French), COMM 150 with GE A1, partial units (COMM's "only 2
+    units"), per-course unit caps, History's A-with-B/C/D overlap, SPAN 215's heritage test-out (0-3 units).
+  - [ ] BA Women and Gender Studies draft: its plan ends 3 upper-division units short; the free electives' UD flag
+    doesn't survive the roadmap's own elective slots (planner)
 
 ---
 
