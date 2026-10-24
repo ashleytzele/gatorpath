@@ -739,3 +739,6 @@ def test_check_groups_in_a_plan():
     filled = check_plan(FRESH, {"semesters": got["semesters"]}, PROGRAM | {"groups": [g for g in PROGRAM["groups"]
                         if g["id"] != "senior_electives"] + [ud]}, UNIVERSITY, CATALOG, PREREQS)
     assert {e.get("group") for e in filled["errors"]} >= {"ud"}  # no slots in its groups: the plan's courses decide
+    from gatorpath.engine.planner import eligible_options
+    assert eligible_options(FRESH, "ud", PROGRAM | {"groups": PROGRAM["groups"] + [ud]}, UNIVERSITY, CATALOG,
+                            PREREQS)["error"] == "not_a_choice"

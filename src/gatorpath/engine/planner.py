@@ -1379,7 +1379,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
     g = groups.get(group_id)
     if g is None:
         return {"error": "unknown_group", "groups": list(groups)}
-    if "across" in g:  # "GE Area 4 in at least two disciplines": the options are its groups', picked across subjects
+    if "distinct_subjects" in g:  # "GE Area 4 in at least two disciplines": the options are its groups', picked across subjects
         parts = [eligible_options(profile, a, program, university, catalog, prereqs, plan, by_term, limit) for a in g["across"]]
         parts = [r for r in parts if "options" in r]
         if not parts:
