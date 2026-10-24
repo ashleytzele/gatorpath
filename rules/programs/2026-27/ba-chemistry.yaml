@@ -2,6 +2,11 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# elective_no_community_college (p.1859) "Courses from community colleges cannot be substituted for the courses on the list below.": the list is upper-division courses, and community college work is never upper division (p.2304: the university's community_college_upper_division)
+# elective_double_major_chem_343 (p.1860) "For students who pursue a double major in the BA Chemistry and BS Biochemistry programs, CHEM 343 cannot be used to meet the elective requirement for the BA Chemistry.": the electives' exceptions text: a double major isn't modeled
+# elective_repeat_limit (p.1860) "May be repeated and up to 2 units used towards Elective requirement.": CHEM 686 (footnote 2) has its own filter in the electives, max_units: 2
+# elective_petition (p.1860) "By petition only. Units must be taken in the same semester to be used as an upper division elective.": CHEM 699 (footnote 3) counts only as an approved course in the electives; the footnote is in their exceptions text
+# prerequisite_grade (p.1859) "Grades of C or better are required in Chemistry prerequisite courses.": min_grade C on the CHEM courses another course in the major names as a prerequisite (CHEM 115, 215, 233, 234, 235, 300, 321, 322, 325, 340, 349, 351, 685), whose prereq text also says C or better
 program: ba-chemistry
 title: Bachelor of Arts in Chemistry
 catalog_year: 2026-27
@@ -20,6 +25,7 @@ groups:
   - CHEM 215
   quote: CHEM 115 General Chemistry I 4
   source: p.1859
+  min_grade: C
 - id: organic_chemistry
   title: Organic Chemistry and Laboratories (10 units)
   all_of:
@@ -29,6 +35,10 @@ groups:
   - CHEM 236
   quote: CHEM 233 & CHEM 234 Organic Chemistry I
   source: p.1859
+  min_grade:
+    CHEM 233: C
+    CHEM 234: C
+    CHEM 235: C
 - id: calculus
   title: Calculus (8 units)
   all_of:
@@ -60,6 +70,7 @@ groups:
   - - CHEM 351
   quote: 'Select One: 3 CHEM 300 Physical Chemistry for Life Sciences I'
   source: p.1859
+  min_grade: C
 - id: analytical_inorganic
   title: Upper-Division Requirements (Quantitative Analysis and Inorganic Chemistry)
   all_of:
@@ -68,6 +79,7 @@ groups:
   - CHEM 325
   quote: CHEM 321 Quantitative Chemical Analysis 3
   source: p.1859
+  min_grade: C
 - id: biochemistry
   title: 'Upper-Division Requirements: Select One (CHEM 340 or CHEM 349)'
   one_of:
@@ -75,6 +87,7 @@ groups:
   - - CHEM 349
   quote: 'Select One: 3 CHEM 340 Biochemistry I'
   source: p.1859
+  min_grade: C
 - id: gwar
   title: 'Upper-Division Requirements: CHEM 390GW (GWAR)'
   all_of:
@@ -96,40 +109,21 @@ groups:
     - CHEM 451
     - CHEM 667
     - CHEM 685
-    - CHEM 686
-    - CHEM 699
     - CSC 306
     - CSC 408
     - CSC 509
+  - list:
+    - CHEM 686
+    max_units: 2
   - approved: true
   quote: Students must complete at least 3 units of upper-division electives
   source: p.1859
-- id: elective_no_community_college
-  title: 'Upper-Division Electives: no community college substitutions'
-  unparsed: true
-  quote: Courses from community colleges cannot be substituted for the courses on the list below.
-  source: p.1859
-- id: elective_double_major_chem_343
-  title: 'Upper-Division Electives: CHEM 343 in a double major with the BS Biochemistry'
-  unparsed: true
-  quote: For students who pursue a double major in the BA Chemistry and BS Biochemistry programs, CHEM 343 cannot be used
-    to meet the elective requirement for the BA Chemistry.
-  source: p.1860
-- id: elective_repeat_limit
-  title: 'Upper-Division Electives: repeatable course, 2 units count'
-  unparsed: true
-  quote: May be repeated and up to 2 units used towards Elective requirement.
-  source: p.1860
-- id: elective_petition
-  title: 'Upper-Division Electives: by petition only'
-  unparsed: true
-  quote: By petition only. Units must be taken in the same semester to be used as an upper division elective.
-  source: p.1860
-- id: prerequisite_grade
-  title: Grade of C or better in Chemistry prerequisite courses
-  unparsed: true
-  quote: Grades of C or better are required in Chemistry prerequisite courses.
-  source: p.1859
+  min_grade:
+    CHEM 685: C
+  exceptions:
+  - For students who pursue a double major in the BA Chemistry and BS Biochemistry programs, CHEM 343 cannot be used to meet
+    the elective requirement for the BA Chemistry. Students must take a different approved elective list to meet this requirement.
+  - By petition only. Units must be taken in the same semester to be used as an upper division elective.
 transfer_notes:
 - text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
     guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division

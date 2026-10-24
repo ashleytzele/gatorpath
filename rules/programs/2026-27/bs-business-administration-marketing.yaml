@@ -111,23 +111,43 @@ groups:
   quote: 'Select four of the following or other courses on advisement:'
   source: p.283
 - id: core_cr_nc_limit
-  unparsed: true
+  title: 'Core: at most 6 CR/NC units'
+  across: &id001
+  - core_accounting
+  - core_communication
+  - core_seminars
+  - core_statistics
+  - core_business
+  max_cr:
+    units: 6
+    except_exam: true
   quote: Except in cases of credit by examination, no more than 6 units of the core may be completed on a CR/NC basis.
   source: p.283
 - id: core_gpa
-  unparsed: true
+  title: Core GPA 2.0
+  across: *id001
+  min_gpa: 2.0
   quote: Students must have a minimum grade point average of 2.0 in all Core Requirement Business courses.
   source: p.283
 - id: core_letter_grade
-  unparsed: true
+  title: 'BUS 682 and BUS 690: letter grade'
+  across:
+  - core_seminars
+  letter_grade: true
   quote: Course must be taken for a letter grade.
   source: p.283
 - id: concentration_letter_grade
-  unparsed: true
+  title: 'Concentration: letter grades'
+  across: &id002
+  - concentration_required
+  - electives
+  letter_grade: true
   quote: All concentration courses must be taken on a letter-grade basis.
   source: p.283
 - id: concentration_gpa
-  unparsed: true
+  title: Concentration GPA 2.0
+  across: *id002
+  min_gpa: 2.0
   quote: Students must have a minimum grade point average of 2.0 in all concentration courses.
   source: p.283
 transfer_notes:

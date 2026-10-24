@@ -10,14 +10,24 @@ total_units: 36
 source: p.437
 groups:
 - id: cr_nc_cap
-  unparsed: true
+  title: At most 9 CR/NC units
+  across: major
+  max_cr:
+    units: 9
   quote: No more than 9 units can be taken with CR/NC grading.
   source: p.437
 - id: independent_study_cap
-  unparsed: true
+  title: 'AA S 685, 688, 699: at most 3 units'
+  across: major
   quote: A maximum of 3 units from AA S 685, AA S 688, or AA S 699 can count towards the Asian American Studies major’s total
     unit requirement of 36 units.
   source: p.437
+  max_units_from:
+    list:
+    - AA S 685
+    - AA S 688
+    - AA S 699
+    units: 3
 - id: intro_category_a
   title: 'Introduction to Asian American Studies: Category A, History/Social Sciences (3 units)'
   one_of:

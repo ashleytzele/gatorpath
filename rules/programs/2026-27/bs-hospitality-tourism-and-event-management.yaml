@@ -18,7 +18,14 @@ groups:
   quote: Major Prerequisites (6 units)
   source: p.187
 - id: core_cr_nc_limit
-  unparsed: true
+  title: 'Core: at most 6 CR/NC units'
+  across:
+  - core_accounting
+  - core_statistics
+  - core_courses
+  max_cr:
+    units: 6
+    except_exam: true
   quote: Except in cases of credit by examination, no more than six units of the core requirements may be taken on a CR/NC
     basis.
   source: p.187

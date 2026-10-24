@@ -1901,6 +1901,49 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "ANTH 315": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": true,
+  "source_page": 883,
+  "title": "Regional Ethnography",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 320": {
+  "crosslisted": [
+   "CST 320"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 883,
+  "title": "Racism: Cross-Cultural Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 321": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 883,
+  "title": "Endangered Cultures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 325": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 883,
+  "title": "Work, Money, and Power",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "ANTH 326": {
   "ge_areas": [],
   "grading": "letter",
@@ -1908,6 +1951,22 @@
   "repeatable": false,
   "source_page": 883,
   "title": "Origins of Art and Visual Representation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 327": {
+  "crosslisted": [
+   "CINE 327"
+  ],
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 883,
+  "title": "Anthropology and Film",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1933,6 +1992,29 @@
   "title": "Women and Work",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "ANTH 356": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 884,
+  "title": "Archaeology of California",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 420": {
+  "crosslisted": [
+   "SOC 420"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 884,
+  "title": "Media and Dissent",
+  "units_max": 4.0,
+  "units_min": 4.0
  },
  "ANTH 424": {
   "crosslisted": [
@@ -1961,6 +2043,26 @@
   "repeatable": false,
   "source_page": 884,
   "title": "Art and Archaeology of Ancient Rome",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 460": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 884,
+  "title": "Historical Archaeology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 470": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 884,
+  "title": "Archaeology of Mexico and Central America",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -1997,6 +2099,36 @@
   "title": "Fossil Humans Practicum",
   "units_max": 4.0,
   "units_min": 4.0
+ },
+ "ANTH 535": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": true,
+  "repeatable": false,
+  "source_page": 885,
+  "title": "Paleopathology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 545": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 885,
+  "title": "Bioarchaeology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 551": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 885,
+  "title": "Anthropology of the Body",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "ANTH 555": {
   "crosslisted": [
@@ -2036,6 +2168,33 @@
   "repeatable": false,
   "source_page": 885,
   "title": "Cross-Cultural Aspects of Sex and Gender",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 585": {
+  "crosslisted": [
+   "CST 585"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 885,
+  "title": "Globalization and World Cultures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 590": {
+  "crosslisted": [
+   "CST 590",
+   "WGS 595"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 885,
+  "title": "Feminist Anthropology",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -2108,6 +2267,19 @@
   "repeatable": false,
   "source_page": 886,
   "title": "Medical Anthropology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "ANTH 631": {
+  "ge_areas": [
+   "4UD",
+   "SJ"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 886,
+  "title": "STEM and Social Justice",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -6269,6 +6441,22 @@
   "units_max": 1.0,
   "units_min": 1.0
  },
+ "CINE 327": {
+  "crosslisted": [
+   "ANTH 327"
+  ],
+  "ge_areas": [
+   "GP",
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 974,
+  "title": "Anthropology and Film",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "CINE 336": {
   "ge_areas": [],
   "grading": null,
@@ -8010,6 +8198,46 @@
   "repeatable": false,
   "source_page": 1661,
   "title": "Introduction to Critical Social Thought",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CST 320": {
+  "crosslisted": [
+   "ANTH 320"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1661,
+  "title": "Racism: Cross-Cultural Analysis",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CST 585": {
+  "crosslisted": [
+   "ANTH 585"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1661,
+  "title": "Globalization and World Cultures",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "CST 590": {
+  "crosslisted": [
+   "ANTH 590",
+   "WGS 595"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1661,
+  "title": "Feminist Anthropology",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -26014,6 +26242,19 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "SOC 420": {
+  "crosslisted": [
+   "ANTH 420"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 847,
+  "title": "Media and Dissent",
+  "units_max": 4.0,
+  "units_min": 4.0
+ },
  "SOC 424": {
   "crosslisted": [
    "I R 424",
@@ -27659,6 +27900,20 @@
   "repeatable": false,
   "source_page": 1701,
   "title": "Gender, Health, and the Environment",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 595": {
+  "crosslisted": [
+   "ANTH 590",
+   "CST 590"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1701,
+  "title": "Feminist Anthropology",
   "units_max": 3.0,
   "units_min": 3.0
  }

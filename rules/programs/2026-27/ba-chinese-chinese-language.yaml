@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# foundational_language_replacement (p.1443) "Up to 9 units from the lower-division core can be replaced with high school Advanced Placement (AP) examination credit (see University guidelines). With the consent of a Chinese Program advisor, students able to demonstrate a higher level of Chinese language proficiency may replace lower-division core units with upper-division Chinese language units.": the foundational language group's exceptions text: AP credit and an advisor's substitution come from the DPR (dpr_met)
 program: ba-chinese-chinese-language
 title: 'Bachelor of Arts in Chinese: Concentration in Chinese Language'
 catalog_year: 2026-27
@@ -19,13 +20,9 @@ groups:
   - CHIN 303
   quote: CHIN 101 First Semester Chinese 3
   source: p.1443
-- id: foundational_language_replacement
-  title: 'Foundational Language: replacement of lower-division core units'
-  unparsed: true
-  quote: Up to 9 units from the lower-division core can be replaced with high school Advanced Placement (AP) examination credit
-    (see University guidelines). With the consent of a Chinese Program advisor, students able to demonstrate a higher level
-    of Chinese language proficiency may replace lower-division core units with upper-division Chinese language units.
-  source: p.1443
+  exceptions: Up to 9 units from the lower-division core can be replaced with high school Advanced Placement (AP) examination
+    credit (see University guidelines). With the consent of a Chinese Program advisor, students able to demonstrate a higher
+    level of Chinese language proficiency may replace lower-division core units with upper-division Chinese language units.
 - id: language_core
   title: Language Core (15 units)
   all_of:
@@ -82,8 +79,14 @@ groups:
   quote: HUM 530 Chinese Civilization 3
   source: p.1443
 - id: gwar
-  title: Graduation Writing Requirement (GWAR) (0-3 units)
-  unparsed: true
+  title: 'GWAR: a CHIN GWAR course (CHIN 601GW, 611GW or 612GW)'
+  across: major
+  min_units_from:
+    list:
+    - CHIN 601GW
+    - CHIN 611GW
+    - CHIN 612GW
+    units: 1
   quote: Select a CHIN GWAR course if one is not selected from the Literature in Translation area above.
   source: p.1443
 - id: electives

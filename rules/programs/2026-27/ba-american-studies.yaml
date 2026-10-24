@@ -2,6 +2,8 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# electives_lower_division_cap (p.1264) "Up to 6 units may be in community college or lower-division coursework.": the electives' lower-division filter (max_units: 6)
+# electives_independent_study (p.1264) "For students with GPA 3.0 or higher, electives can include a senior course on advisement: Independent Study (699) on a specific topic connected to prior course work, to be developed through consultation with the coordinator and faculty from the appropriate department (3-6 units).": an advisor-approved elective like the others: the electives group is approval-only
 program: ba-american-studies
 title: Bachelor of Arts in American Studies
 catalog_year: 2026-27
@@ -63,25 +65,19 @@ groups:
   approval: Courses, by choice and advisement, on a topic or theme in American Studies, drawn from at least two disciplines.
   from:
   - approved: true
+    level: upper
+  - approved: true
+    level: lower
+    max_units: 6
   quote: Elective Courses (21 units)
   source: p.1264
 - id: electives_two_disciplines
-  title: 'Electives: drawn from at least two disciplines'
-  unparsed: true
+  title: 'Electives: at least two disciplines'
+  across:
+  - electives
   quote: drawn from at least two disciplines.
   source: p.1264
-- id: electives_lower_division_cap
-  title: 'Electives: up to 6 units community college or lower-division'
-  unparsed: true
-  quote: Up to 6 units may be in community college or lower-division coursework.
-  source: p.1264
-- id: electives_independent_study
-  title: 'Electives: Independent Study (699) for students with GPA 3.0 or higher'
-  unparsed: true
-  quote: 'For students with GPA 3.0 or higher, electives can include a senior course on advisement: Independent Study (699)
-    on a specific topic connected to prior course work, to be developed through consultation with the coordinator and faculty
-    from the appropriate department (3-6 units).'
-  source: p.1264
+  distinct_subjects: 2
 transfer_notes:
 - text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
     related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation

@@ -136,15 +136,10 @@ variants:
         group: literature_in_translation
         units: 3
         note: Literature in Translation (footnote 7)
-      - one_of:
-        - slot: major
-          group: gwar
-          units: 3
-        - slot: major
-          group: chin_electives
-          units: 3
+      - slot: major
+        group: chin_electives
         units: 3
-        note: 'Select One: GWAR Course (footnote 8) or Chinese Elective (footnote 9)'
+        note: 'Select One: GWAR Course (footnote 8) or Chinese Elective (footnote 9); a CHIN GWAR course is an upper-division CHIN elective'
       - slot: GE
         area: 3UD
         units: 3

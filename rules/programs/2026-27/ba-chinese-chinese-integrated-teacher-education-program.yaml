@@ -15,7 +15,10 @@ groups:
   quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
   source: p.1438
 - id: credential_cr_nc
-  unparsed: true
+  title: 'Credential courses: letter grades'
+  across:
+  - single_subject_credential
+  letter_grade: true
   quote: CR grading is only acceptable for credential courses that only have CR/NC grading option.
   source: p.1438
 - id: language_core_required
@@ -78,7 +81,14 @@ groups:
   quote: CHIN 602 The Narrative Tradition 3
   source: p.1438
 - id: gwar
-  unparsed: true
+  title: 'GWAR: a CHIN GWAR course (CHIN 601GW, 611GW or 612GW)'
+  across: major
+  min_units_from:
+    list:
+    - CHIN 601GW
+    - CHIN 611GW
+    - CHIN 612GW
+    units: 1
   quote: Select a 600 level CHIN GWAR course if not already taken for the Literature in Translation requirement above.
   source: p.1439
 - id: single_subject_credential

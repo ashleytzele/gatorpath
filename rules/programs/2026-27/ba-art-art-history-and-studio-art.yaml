@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# transfer_residence (p.918) "For students transferring from other institutions, a minimum of 12 units": the university rules' 12 major units in residence (totals.residence.major)
 program: ba-art-art-history-and-studio-art
 title: 'Bachelor of Arts in Art: Concentration in Art History and Studio Art'
 catalog_year: 2026-27
@@ -10,10 +11,6 @@ verified_by: null
 total_units: 43
 source: p.918
 groups:
-- id: transfer_residence
-  unparsed: true
-  quote: For students transferring from other institutions, a minimum of 12 units
-  source: p.918
 - id: ld_before_advancing
   unparsed: true
   quote: Before advancing to the 300-level or higher courses or declaring a

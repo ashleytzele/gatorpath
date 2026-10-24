@@ -145,9 +145,9 @@ variants:
         units: 3
         note: Literature in Translation; footnote 9
       - slot: major
-        group: gwar
+        group: electives
         units: 3
-        note: GWAR Course, 0-3 units; footnote 10
+        note: GWAR Course, 0-3 units; footnote 10 (a CHIN GWAR course is an upper-division CHIN elective)
       - slot: GE
         area: 3UD
         units: 3

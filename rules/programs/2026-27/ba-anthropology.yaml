@@ -65,11 +65,88 @@ groups:
   quote: Anthropology Electives (15 Units)
   source: p.889
 - id: elective_internship_cap
-  unparsed: true
+  title: 'Internships and independent study: at most 6 units'
+  across: major
   quote: No more than 6 units can be taken in internships (ANTH 695), field schools, and independent study (ANTH 699) combined.
   source: p.889
-- id: subfields
-  unparsed: true
+  max_units_from:
+    list:
+    - ANTH 695
+    - ANTH 699
+    units: 6
+- id: subfield_biological
+  title: 'Subfields: one biological anthropology course'
+  across: major
+  min_units_from:
+    list:
+    - ANTH 302
+    - ANTH 333
+    - ANTH 530
+    - ANTH 531
+    - ANTH 535
+    - ANTH 545
+    units: 1
+  quote: 'At least one upper-division course (Area One, Area Two, or Electives) must be taken in each of the three subfields:
+    biological, cultural/visual, and archaeology.'
+  source: p.889
+- id: subfield_cultural
+  title: 'Subfields: one cultural/visual anthropology course'
+  across: major
+  min_units_from:
+    list:
+    - ANTH 303
+    - ANTH 315
+    - ANTH 320
+    - CST 320
+    - ANTH 321
+    - ANTH 325
+    - ANTH 327
+    - CINE 327
+    - ANTH 420
+    - SOC 420
+    - ANTH 501
+    - LTNS 501
+    - HIST 358
+    - ANTH 551
+    - ANTH 555
+    - USP 555
+    - ANTH 557
+    - USP 557
+    - ANTH 569
+    - SXS 567
+    - ANTH 585
+    - CST 585
+    - ANTH 590
+    - CST 590
+    - WGS 595
+    - ANTH 595
+    - CINE 635
+    - ANTH 596
+    - CINE 636
+    - ANTH 630
+    - ANTH 631
+    - ANTH 651
+    - ANTH 657
+    - DANC 657
+    units: 1
+  quote: 'At least one upper-division course (Area One, Area Two, or Electives) must be taken in each of the three subfields:
+    biological, cultural/visual, and archaeology.'
+  source: p.889
+- id: subfield_archaeology
+  title: 'Subfields: one archaeology course'
+  across: major
+  min_units_from:
+    list:
+    - ANTH 301
+    - ANTH 326
+    - ANTH 356
+    - ANTH 460
+    - ANTH 470
+    - ANTH 592
+    - ANTH 594
+    - ANTH 609
+    - HIST 366
+    units: 1
   quote: 'At least one upper-division course (Area One, Area Two, or Electives) must be taken in each of the three subfields:
     biological, cultural/visual, and archaeology.'
   source: p.889

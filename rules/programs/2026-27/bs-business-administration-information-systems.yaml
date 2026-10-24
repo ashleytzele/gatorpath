@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# concentration_outside_courses (p.202) "A maximum of two courses (6 units) in the information systems concentration may be courses not listed in the bulletin for the concentration including courses from other disciplines at SF State and courses from other AACSB accredited schools of business or institutions of equal caliber. All such courses must be approved in advance by an Information Systems advisor.": the electives' approved courses (at most two, approval text) say it
 program: bs-business-administration-information-systems
 title: 'Bachelor of Science in Business Administration: Concentration in Information Systems'
 catalog_year: 2026-27
@@ -11,26 +12,38 @@ total_units: 69
 source: p.202
 groups:
 - id: cr_nc_limit
-  unparsed: true
+  title: 'Core: at most 6 CR/NC units'
+  across: &id001
+  - core_accounting
+  - core_communication
+  - core_seminars
+  - core_statistics
+  - core_business
+  max_cr:
+    units: 6
+    except_exam: true
   quote: Except in cases of credit by examination, no more than 6 units of the core may be completed on a CR/NC basis.
   source: p.202
 - id: core_gpa
-  unparsed: true
+  title: Core GPA 2.0
+  across: *id001
+  min_gpa: 2.0
   quote: Students must have a minimum grade point average of 2.0 in all Core Requirement Business courses.
   source: p.202
 - id: concentration_letter_grade
-  unparsed: true
+  title: 'Concentration: letter grades'
+  across: &id002
+  - concentration_first
+  - concentration_second
+  - electives
+  letter_grade: true
   quote: All concentration courses must be taken on a letter-grade basis.
   source: p.202
 - id: concentration_gpa
-  unparsed: true
+  title: Concentration GPA 2.0
+  across: *id002
+  min_gpa: 2.0
   quote: Students must have a minimum grade point average of 2.0 in all concentration courses.
-  source: p.202
-- id: concentration_outside_courses
-  unparsed: true
-  quote: A maximum of two courses (6 units) in the information systems concentration may be courses not listed in the bulletin
-    for the concentration including courses from other disciplines at SF State and courses from other AACSB accredited schools
-    of business or institutions of equal caliber. All such courses must be approved in advance by an Information Systems advisor.
   source: p.202
 - id: prereq_calculus
   title: 'Prerequisite Courses: Select One (DS 110, MATH 107 & MATH 108, or MATH 110)'
@@ -75,7 +88,10 @@ groups:
   quote: BUS 682 Seminar on Business and Society
   source: p.202
 - id: core_seminars_letter_grade
-  unparsed: true
+  title: 'BUS 682 and BUS 690: letter grade'
+  across:
+  - core_seminars
+  letter_grade: true
   quote: Course must be taken for a letter grade.
   source: p.202
 - id: core_statistics
@@ -129,8 +145,12 @@ groups:
     - ISYS 575
     - ISYS 650
   - approved: true
+    max_courses: 2
   quote: Electives (6 units)
   source: p.203
+  approval: A maximum of two courses (6 units) in the information systems concentration may be courses not listed in the bulletin
+    for the concentration including courses from other disciplines at SF State and courses from other AACSB accredited schools
+    of business or institutions of equal caliber. All such courses must be approved in advance by an Information Systems advisor.
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
   source: p.203

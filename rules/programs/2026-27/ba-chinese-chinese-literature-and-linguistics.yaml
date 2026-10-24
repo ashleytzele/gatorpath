@@ -70,8 +70,14 @@ groups:
   quote: Literature in Translation (3 units)
   source: p.1449
 - id: gwar
-  title: Graduation Writing Requirement (GWAR) (0-3 Units)
-  unparsed: true
+  title: 'GWAR: a CHIN GWAR course (CHIN 601GW, 611GW or 612GW)'
+  across: major
+  min_units_from:
+    list:
+    - CHIN 601GW
+    - CHIN 611GW
+    - CHIN 612GW
+    units: 1
   quote: If not chosen from the 600 level courses above.
   source: p.1450
 - id: chin_electives
