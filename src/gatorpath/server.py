@@ -44,7 +44,8 @@ mcp = MCPServer(
         "Institutions area only where a tool shows it (`ge_areas`, `counted`, `major_courses`): never infer one from "
         "a course's subject or title. "
         "Never guess what transfer credit covers or when a student will graduate: ask for the DPR, and use the planner "
-        "tools when they exist. "
+        "tools when they exist. After a plan passes check_plan, show its first term's sections (class number, days, "
+        "times, room, instructor, seats) with get_sections when that term's schedule is out. "
         "Student profiles are passed in per call and never stored, except by save_profile: one file on the student's "
         "machine, only when they ask."
     ),
@@ -816,9 +817,10 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      office without stating visa rules yourself
    - the first term's schedule, after the plan: `get_sections` with that term and its courses (slots filled). Per
      course, a table of its sections: class number, days, time, where, mode, instructor, seats open (0: full, give
-     waitlist_open), and attributes (a permission number, GE tags); a lecture with labs shows both. A course in not_offered has no section
-     that term: move it and re-run check_plan. For courses in unknown, and for later terms (schedules aren't out
-     yet), say to check Class Search. Don't pick sections for them; say seats change (scraped_at)
+     waitlist_open), and attributes (a permission number, GE tags); a lecture with labs shows both. The student
+     picks the sections: list them all, and point out times that clash. A course in not_offered has no section that
+     term: move it and re-run check_plan. For courses in unknown, and for later terms (their schedules aren't out
+     yet), say to check Class Search. Say the seats are as of scraped_at and change
    - a checklist: confirm each course is offered that term in Class Search (GatorPath's history covers only some
      subjects, and past terms don't promise future ones), compare with the DPR, see the advisor
    Then offer what-ifs: graduating earlier (step 6; "a year early" means a year before the plan's
