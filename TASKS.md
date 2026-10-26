@@ -294,8 +294,9 @@ comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see
   and 70 SXS. A term that was scraped is exact, not history: `offered.schedule` {term: ran}, so build_plan doesn't place
   a course that isn't on that term's schedule, check_plan warns ("not on the 2027-spring Class Search schedule"), and
   list_eligible_electives marks it `not_offered` and lists it after the offered ones (it ignored seasons before).
-  25 of the major's 63 listed courses aren't on the Spring 2027 schedule. CSC, MATH and PHYS stop at 2026-fall: rerun
-  with `--subjects CSC,MATH,PHYS --through 2027-spring` (only the new term is fetched; the rest is cached)
+  25 of the major's 63 listed courses aren't on the Spring 2027 schedule. CSC, MATH and PHYS too (6 searches, the rest
+  cached): CSC 121 sections, MATH 164, PHYS 53. Every BS CS required course runs; 12 listed electives don't (CSC 600,
+  620, 621, 630, 631, 652, 653, 664, 668, 676, MATH 425, 448). The 12 synthetic profiles' plans are unchanged
 
 **Done when:** the planner never places a fall-only course in spring without a warning. **Met 2026-10-17** (`tests/test_planner.py`).
 
