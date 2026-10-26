@@ -24,6 +24,7 @@ NOT_TITLE = ("Units Required", "Total Units Required", "(", "Complete ", "One co
              "View All")
 PRINT_CHROME = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}, \d{1,2}:\d{2} [AP]M\s.*|https?://\S+.*")  # browser header/footer
 TRANSFER = re.compile(r"\d+N?TR$")
+AREA_TITLE = re.compile(r"Area \w+(?::| -) [^.]+")  # 'Area 1A: English Composition', not a sentence about an area
 
 
 def term_of(when: str) -> str:
@@ -36,19 +37,31 @@ def parse(text: str) -> dict:
     out = {"plan": None, "catalog_term": None, "gpa": None, "sf_state_gpa": None, "requirements": [], "warnings": []}
     recent: list[str] = []
     block: dict | None = None
+    in_ge = True  # "Area …" titles are GE areas only in the General Education section, not a major's "Area 1: …"
+    title_only = None  # a requirement's title, until the next line shows whether the print collapsed it
     for line in text.splitlines():
         s = line.strip()
         if PRINT_CHROME.fullmatch(s):  # a page break can fall between a requirement's title and its tag
             continue
-        if m := re.search(r"Plan:\s+(.+?)\s{2,}((?:Fall|Spring|Summer|Winter) \d{4})", line):
+        if s and title_only:  # collapsed (met, printed without Expand All): the next title follows, no tag or rows
+            if not s.startswith(NOT_TITLE) and not TAG.fullmatch(line):
+                out["requirements"].append({"id": "collapsed", "title": title_only, "rows": [], "needed": None,
+                                            "waived": None, "kind": "course" if COURSE_TITLE.fullmatch(title_only) else "ge"})
+            title_only = None
+        if COURSE_TITLE.fullmatch(s) or in_ge and AREA_TITLE.fullmatch(s):
+            title_only = s
+        m = re.search(r"Plan:\s+(.+?)\s{2,}((?:Fall|Spring|Summer|Winter) \d{4})", line)
+        if m and out["plan"] is None and not m[1].endswith("-MN"):  # the major's; a minor's Plan line has its own term
             out["plan"], out["catalog_term"] = m[1], m[2]
         for key, label in (("gpa", "Overall GPA:"), ("sf_state_gpa", "SF State GPA:")):
             if m := re.search(rf"{label}\s+(\d\.\d+)", line):
                 out[key] = float(m[1])
         if m := TAG.fullmatch(line):
             title = next((r for r in reversed(recent) if not r.startswith(NOT_TITLE)), "")
+            if m[1].startswith("G"):  # a section: GE, University Requirements, the major
+                in_ge = "General Education" in title
             block = {"id": m[1] + (f"/{m[2]}" if m[2] else ""), "title": title, "kind": "group" if not m[2] else
-                     "course" if COURSE_TITLE.fullmatch(title) else "ge" if title.startswith("Area ") else "other",
+                     "course" if COURSE_TITLE.fullmatch(title) else "ge" if in_ge and title.startswith("Area ") else "other",
                      "rows": [], "needed": None, "waived": None}
             out["requirements"].append(block)
             recent = []
@@ -81,8 +94,13 @@ def parse(text: str) -> dict:
         going = [r for r in b["rows"] if r["term"] and not r["grade"]]
         # A "needed" line wins over waiver wording: "Area E and/or Area C waived … Min Units Changed from 48 to 42"
         # changes a minimum that can still be short.
-        b["status"] = ("needed" if b["needed"] and b["needed"]["needed"] > 0 else "waived" if b["waived"]
+        b["status"] = ("collapsed" if b["id"] == "collapsed" else
+                       "needed" if b["needed"] and b["needed"]["needed"] > 0 else "waived" if b["waived"]
                        else "in_progress" if going else "done" if used else "needed" if b["kind"] == "course" else "info")
+    if folded := [b["title"] for b in out["requirements"] if b["status"] == "collapsed"]:
+        out["warnings"].append(f"Collapsed in this print, so their courses don't show: {', '.join(folded)}. Click Expand "
+                               "All above the Degree Progress Report (and View All on long lists), print to PDF again and "
+                               "import that one; until then GatorPath can't count them as met")
     return out
 
 
@@ -159,7 +177,7 @@ def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
                for a in (g["from"]["ge_area"] if isinstance(g["from"]["ge_area"], list) else [g["from"]["ge_area"]])}
     out, seen = [], set()
     for b in dpr["requirements"]:
-        if b["status"] in ("info", "waived"):
+        if b["status"] in ("info", "waived", "collapsed"):
             if b["kind"] == "ge":
                 seen.update(by_area[a] for a in translate_ge([b["title"]], university)[0] if a in by_area)
             continue

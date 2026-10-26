@@ -1,0 +1,202 @@
+# Bachelor of Arts in Psychology, Bulletin 2025-26 (printed pp.2220-2222; the PDF's running heads wrongly say
+# 2026-2027, its cover and text are 2025-26). Written from the 2026-27 file by a rule diff (ARCHITECTURE §5): the
+# requirement text is the same word for word (ba-psychology.source.txt vs the 2026-27 one); only the pages and
+# PSY 698's title ("Senior Project", was "Honors Project") differ. Reviewed against this Bulletin text and a Fall 2025
+# DPR: Claude, 2026-10-26. verified: false until a person checks it against the PDF.
+# core_cr_grade (p.2220) "Majors must achieve a grade of CR in PSY 303 and PSY 690.": PSY 303 and PSY 690 are offered only CR/NC: passing them is a CR
+program: ba-psychology
+title: Bachelor of Arts in Psychology
+catalog_year: 2025-26
+verified: false
+verified_by: null
+total_units: 41
+dpr_plan: Psychology-BA   # how the DPR's "Plan:" line names this program (DPR sample, 2026-10-26)
+source: p.2220
+groups:
+- id: core_graded
+  title: Core Curriculum (letter grade, C or better)
+  all_of:
+  - PSY 200
+  - PSY 371
+  - PSY 400
+  - PSY 305GW
+  min_grade: C
+  quote: Psychology majors must take PSY 200, PSY 305GW, PSY 371, and PSY 400 for a letter grade and achieve a grade of C
+    or better in all four courses.
+  source: p.2220
+- id: core_cr
+  title: Core Curriculum (online courses taken for CR)
+  all_of:
+  - PSY 303
+  - PSY 690
+  quote: Core Curriculum (14 Units)
+  source: p.2220
+- id: basic_area_1
+  title: 'Basic Courses, Area 1: Basic Psychological Processes (two courses)'
+  choose_units: 6
+  from:
+  - list:
+    - PSY 432
+    - PSY 490
+    - PSY 491
+    - PSY 492
+    - PSY 493
+    - PSY 494
+    - PSY 495
+    - PSY 498
+    - PSY 531
+    - PSY 581
+    - PSY 582
+  quote: 'Area 1: Basic Psychological Processes (6)'
+  source: p.2220
+- id: basic_area_2
+  title: 'Basic Courses, Area 2: Psychological Development and Individual Differences (two courses)'
+  choose_units: 6
+  from:
+  - list:
+    - PSY 430
+    - PSY 431
+    - PSY 433
+    - PSY 435
+    - PSY 436
+    - SXS 436
+    - PSY 442
+    - PSY 451
+    - PSY 452
+    - PSY 521
+  quote: 'Area 2: Psychological Development and Individual Differences (6-7)'
+  source: p.2220
+- id: basic_area_3
+  title: 'Basic Courses, Area 3: Social, Cultural, Organizational, and Community Contexts (two courses)'
+  choose_units: 6
+  from:
+  - list:
+    - PSY 440
+    - PSY 441
+    - PSY 455
+    - PSY 456
+    - SXS 456
+    - PSY 461
+    - PSY 462
+    - PSY 463
+    - PSY 464
+    - PSY 465
+    - PSY 466
+    - PSY 472
+    - PSY 474
+    - PSY 475
+    - PSY 525
+    - PSY 540
+    - PSY 547
+    - PSY 558
+    - PSY 559
+    - PSY 645
+  quote: 'Area 3: Social, Cultural, Organizational, and Community Contexts (6-8)'
+  source: p.2220
+- id: electives
+  title: Electives (3 courses)
+  choose_units: 9
+  from:
+  - list:
+    - PSY 432
+    - PSY 490
+    - PSY 491
+    - PSY 492
+    - PSY 493
+    - PSY 494
+    - PSY 495
+    - PSY 498
+    - PSY 531
+    - PSY 581
+    - PSY 582
+    - PSY 430
+    - PSY 431
+    - PSY 433
+    - PSY 435
+    - PSY 436
+    - SXS 436
+    - PSY 442
+    - PSY 451
+    - PSY 452
+    - PSY 521
+    - PSY 440
+    - PSY 441
+    - PSY 455
+    - PSY 456
+    - SXS 456
+    - PSY 461
+    - PSY 462
+    - PSY 463
+    - PSY 464
+    - PSY 465
+    - PSY 466
+    - PSY 472
+    - PSY 474
+    - PSY 475
+    - PSY 525
+    - PSY 540
+    - PSY 547
+    - PSY 558
+    - PSY 559
+    - PSY 645
+    - PSY 300
+    - PSY 320
+    - SXS 320
+    - PSY 330
+    - PSY 443
+    - PSY 450
+    - SXS 400
+    - SOC 400
+    - PSY 453
+    - PSY 571
+    - PSY 680
+    - PSY 685
+    - PSY 693
+    - PSY 694
+    - PSY 697
+    - PSY 698
+    - PSY 699
+  # "additional upper-division psychology courses" is the "Additional Courses That May be Used for Electives" table
+  # (p.2221): every PSY course numbered 300-699 is in a list here, and a Fall 2025 DPR's Electives says "from the
+  # following additional upper-division psychology courses" over a closed list. No PSY 700+ (graduate) courses
+  quote: Choose 3 elective courses from courses in Areas 1–3 not used to satisfy the Basic Course requirement and/or from
+    additional upper-division psychology courses.
+  source: p.2220
+transfer_notes:
+- text: 'Note: no specific degree is required for admission as an upper-division student. However, the ADT includes specific
+    guarantees related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division
+    preparation for the major.'
+  source: p.2221
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.2221
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.2222
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2222
+- text: A course in U.S. History and a course in U.S. & California Government are not required for admission but are required
+    for graduation; students are strongly encouraged to complete them before transfer.
+  source: p.2222
+- text: Use ASSIST (assist.org) to find which California Community College courses satisfy lower-division major requirements,
+    CSU GE, US History, and US & CA Government.
+  source: p.2222
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer.
+  source: p.2222
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth), often called a GE certification worksheet, and retain it for verifying
+    degree progress after transfer.
+  source: p.2222
+- text: AP/IB/CLEP credit is not automatically transferred from the previous institution. Units are transferred only when
+    an official score report is delivered to SF State.
+  source: p.2222
+- text: Students pursuing STEM majors often defer 6-9 units of lower-division General Education in Areas C and D until after
+    transfer to focus on preparation courses for the major. This advice does not apply to students pursuing associate degree
+    completion before transfer.
+  source: p.2222
+- text: 'From outside CCCs and CSUs: the four basic skills courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1,
+    and 2/B4. Critical thinking (1B/A3) may not be widely offered outside the CCC and CSU systems: identify and take an appropriate
+    course no later than the term of application to the CSU. Waiting until after transfer to take a single SF State course
+    that meets both US and CA/local government may be an option, particularly from outside California.'
+  source: p.2222

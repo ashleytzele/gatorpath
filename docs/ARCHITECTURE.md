@@ -667,6 +667,11 @@ As built (D20, 2026-10-18): `import_dpr` is the main import and `plan_my_degree`
   were complete in the sample (`1 of 1`, `1-3 of 3`); the long summary lists (120 units, residence,
   GE minimum units) were cut at 10. If `1-10 of N` (N > 10) appears in a table the import needs, emit a ⚠️ asking the student to
   click "View All" before printing. The summary lists aren't needed: use their `Units:` lines.
+- **Collapsed requirements** (added 2026-10-26, a Fall 2025 DPR): printed without "Expand All", a met requirement is only
+  its title ("Area 1A: English Composition", "PSY 200"), then the next title, with no tag or rows. The parser keeps it as
+  status `collapsed` (not met, not missing: the cross-check doesn't call it "Not found") and asks for an Expand All
+  print. In the same print the major's "Area 1: Basic Psychological Processes" is not GE (only titles inside the
+  General Education section are), and a minor's `Plan:` line follows the major's.
 - Fixture: `tests/fixtures/dpr_synthetic.txt` (fake name/ID, invented courses, same layout).
 
 ### 7.4 MCP prompt: `plan_my_degree`

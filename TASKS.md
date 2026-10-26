@@ -391,6 +391,13 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     upper-division USH course was offered, then failed check_plan); GE Area 4 in ge_done alone no longer meets US
     History; a course retaken now drops its old grade for prereqs (build_plan blocked everything after it); a DPR page
     break's print header and "One course is required." are no longer requirement titles.
+  - Test user 2 (2026-10-26: a BA Psychology DPR on the Fall 2025 catalog). GatorPath had Psychology for 2026-27 only:
+    2025-26 BA Psychology rules and roadmaps written by a rule diff, and the major reviewed a second time (review log:
+    electives no longer take graduate PSY courses; one question). Fixed in the DPR import: a minor's `Plan:` line came
+    after the major's and replaced it (unknown_program, the minor's catalog term); a major's "Area 1: …" groups were
+    read as GE areas; a print without Expand All shows met requirements as bare titles, so nothing in them counted and
+    the cross-check said "Not found on this DPR … add it to not_on_dpr" for every GE area. Now they're `collapsed`, with
+    a warning to print again with Expand All. Minors aren't modeled (their DPR groups are left out of the plan)
   - Winter Session terms (2026-10-21): `YYYY-winter` (January, between fall and spring; "The maximum number of units a
     student may earn in Winter Session is 4 units", each year's Bulletin), checked by check_plan with no F-1 minimum or
     normal-load rule; `include_winter` lets build_plan use them for GE, American Institutions and free-elective slots

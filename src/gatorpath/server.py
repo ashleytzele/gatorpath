@@ -653,7 +653,7 @@ def local_pdf(pdf_path: str, example: str) -> Path | dict:
 @mcp.tool(annotations=READ_ONLY)
 def import_dpr(pdf_path: str) -> dict:
     """Read the student's Degree Progress Report on their own machine (Student Center → Degree Progress Report,
-    printed to PDF; click View All on long lists first) and return a ready `profile` (completed SF State and transfer
+    printed to PDF; click Expand All and View All on long lists first) and return a ready `profile` (completed SF State and transfer
     courses, in_progress, ge_done, dpr_met substitutions, gpa, catalog_year from the DPR's "Requirement (Catalog)
     Term") plus `remaining`: what the DPR itself says is still needed, and `cross_check`: where GatorPath's audit
     disagrees with the DPR (the DPR wins). Name, ID and the PDF text never leave this tool,
@@ -707,8 +707,8 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    (their courses; what their transfer credit meets, e.g. a GE certification and no major courses; or that they have
    none yet), use it and don't ask for one; the answer says to compare with the DPR. A unit total alone isn't a
    record. Otherwise ask for their record. Best is the
-   path to their DPR saved as a PDF on this computer (Student Center → Degree Progress Report → View All on long
-   lists → print to PDF): `import_dpr` reads it locally and returns a ready profile, and no name or ID reaches you.
+   path to their DPR saved as a PDF on this computer (Student Center → Degree Progress Report → Expand All, View
+   All on long lists → print to PDF): `import_dpr` reads it locally and returns a ready profile, and no name or ID reaches you.
    The unofficial transcript PDF works the same way (`import_transcript`), but it doesn't say which requirements
    transfer credit meets. If they'd rather attach or paste instead, say once, before they share, that an attached
    PDF includes their name and student ID, which go to the AI provider, so they may black those out or paste only

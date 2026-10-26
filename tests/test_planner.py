@@ -698,7 +698,7 @@ def test_roadmap_files_pass_check_roadmap(path):
     if program.get("drafted_by"):  # a loaded draft may name a group still flagged for a person (--load)
         got = [x for x in got if not any(k in x for k in LOADABLE)]
     # the 2025-26 QR 3/4 roadmap never prints PHYS 222, which the major requires (p.1905): the check finds it
-    assert got == (["qr-3-4: required but not on this roadmap: PHYS 222"] if path.parent.name == "2025-26" else [])
+    assert got == (["qr-3-4: required but not on this roadmap: PHYS 222"] if f"{path.parent.name}/{path.stem}" == "2025-26/bs-cs" else [])
 
 
 def test_check_roadmap_reports_what_a_person_must_fix():

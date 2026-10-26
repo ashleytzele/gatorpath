@@ -78,3 +78,77 @@ def test_cross_check_flags_only_real_disagreements():
     audit["groups"][0]["status"] = "remaining"
     assert cross_check(DPR, audit, university)[0].startswith(
         "Area A1 - Oral Communication: the DPR says done, GatorPath says needed. The DPR wins")
+
+
+def test_a_minor_and_a_majors_own_areas_dont_pass_for_the_major_and_ge():
+    # A Fall 2025 DPR (2026-10-26; layout copied, plans and rows invented): the minor's Plan line came second and
+    # replaced the major's, and the major's "Area 1: Basic Psychological Processes" was read as GE Area 1
+    text = """
+   Plan:         Psychology-BA                      Fall 2025
+   Plan:         Spanish-MN                         Spring 2027                       Overall GPA:            3.100
+      General Education Requirements
+   The University requires students to complete 43 units of General Education requirements.
+   [G11368]
+          Area 1A: English Composition
+           Units Required = 3 Units
+           [R12828 / L0010]
+         Course             Description                               Units        When                    Grade Status
+         ENG 114            WRITING FIRST YEAR                3.00                Fall 2025               B
+      University Requirements
+   University Requirements
+   [G10000]
+      B.A. in Psychology
+   Total Units Required = 40.68 - 41 Units
+   [G10005]
+          Area 1: Basic Psychological Processes
+           Units Required = 6 Units
+           [R10084 / L0010]
+         Course             Description                               Units        When                    Grade Status
+         PSY 492            PERCEPTION                        3.00                Fall 2025               A-
+         PSY 493            MOTIVATION                        3.00                Fall 2025               B+
+"""
+    got = parse(text)
+    assert (got["plan"], got["catalog_term"]) == ("Psychology-BA", "Fall 2025")
+    kinds = {r["title"]: r["kind"] for r in got["requirements"] if r["kind"] != "group"}
+    assert kinds == {"Area 1A: English Composition": "ge", "Area 1: Basic Psychological Processes": "other"}
+    assert to_profile(got, {}, {})["ge_done"] == ["Area 1A: English Composition"]
+
+
+def test_collapsed_requirements_are_flagged_not_missing():
+    # The same DPR printed without Expand All: a met requirement shows only its title, no tag or rows
+    text = """
+      General Education Requirements
+   The University requires students to complete 43 units of General Education requirements.
+   [G11368]
+       Area 1: English Communication
+        Complete one course in each area.
+        [R12828]
+          Area 1A: English Composition
+          Area 1B: Critical Thinking
+       Upper Division General Education
+        Complete one course in the three areas (2UD/5UD, 3UD, and 4UD) for a minimum of 9
+        [R12831]
+          Area 3UD: Arts or Humanities
+           Units Required = 3 Units
+           [R12831 / L0060]
+         Course             Description                               Units        When                    Grade Status
+         HUM 325            ART AND IDEAS                     3.00                Spring 2027
+      B.A. in Psychology
+   Total Units Required = 40.68 - 41 Units
+   [G10005]
+       Core Curriculum
+        Units Required = 13.68 to 14 Units
+        [R10080]
+          PSY 200
+          PSY 400
+           Units Required = 3 Units
+           [R10080 / L0040]
+"""
+    got = parse(text)
+    collapsed = [r["title"] for r in got["requirements"] if r["status"] == "collapsed"]
+    assert collapsed == ["Area 1A: English Composition", "Area 1B: Critical Thinking", "PSY 200"]
+    assert any("Expand All" in w and "Area 1A" in w for w in got["warnings"])
+    from gatorpath.engine.rules import load_rules
+    _, university = load_rules("2026-27", "bs-cs")
+    audit = {"groups": [{"id": "ge_3ud", "status": "in_progress"}], "totals": {"units": {"value": 0.0}}}
+    assert not any("GE 1A" in w for w in cross_check(got, audit, university))  # on the DPR, just collapsed
