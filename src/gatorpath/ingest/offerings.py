@@ -21,7 +21,7 @@ BASE = "https://webapps.sfsu.edu/public/classservices"
 USER_AGENT = "GatorPath/0.1 (SF State degree-planning tool; +https://github.com/ashleytzele/gatorpath)"
 DELAY = 2.0  # seconds between requests (AGENTS.md: at least 2)
 TERM_DIGIT = {"spring": 3, "summer": 5, "fall": 7}  # PeopleSoft term code: 2 + YY + digit, e.g. 2257 = fall 2025
-SECTION = re.compile(rf"({CODE}) \[(\w+)\]")
+SECTION = re.compile(rf"({CODE}) \[(\w+)[^\]]*\]")  # Spring 2027 prints one "ERTH 870 [01`]"
 
 DETAILS = {"class_nbr": "text", "meetings": "text", "dates": "text", "instructor": "text", "seats_open": "integer",
            "waitlist_open": "integer", "attributes": "text"}  # 2026-10-26 (get_sections); meetings, attributes: JSON

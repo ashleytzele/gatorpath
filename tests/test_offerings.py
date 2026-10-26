@@ -47,6 +47,7 @@ def test_parse_reads_both_row_shapes_and_rejects_another_terms_rows():
     online[6] = ("<div class='row'><div class='col-md-5'></div><div class='col-md-12'>Online </div></div><hr/>"
                  "<div style='font-size: .90em;'>To be arranged </div>")
     assert parse([online], "2025-fall")[0]["meetings"] == [{"where": "Online"}, {"time": "To be arranged"}]
+    assert parse([row("2027-spring", "ERTH 870 [01`]")], "2027-spring")[0]["section"] == "01"  # a stray mark in the data
     with pytest.raises(ValueError, match="isn't from 2025-spring"):
         parse([row("2025-fall", "CSC 653 [01]")], "2025-spring")
 

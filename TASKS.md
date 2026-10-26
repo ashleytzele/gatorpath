@@ -304,6 +304,13 @@ comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see
   from the cached JSON (no new searches; two requests to the results page read its column names: the trailing cells are
   remaining seats, remaining waitlist, section, enrolled; there is no capacity). scraped_at is now the cache file's
   fetch time, not the time the database was written. Not done: a week-level conflict check (Later)
+- [x] GE departments for Spring 2027 (2026-10-26): the 89 subjects whose courses carry a GE, SF State Studies or American
+  Institutions tag (GWAR-only subjects left out), `--years 0 --through 2027-spring`, 178 requests: 2,163 sections, 1,238
+  courses; 94 subjects now have Spring 2027. AMST, ARAB, CST, GER, HEBR, HSS, KOR, MGS and RUSS have no Spring 2027
+  sections yet (GER has 2 in Fall 2026, so the search works). These subjects have no earlier terms: a later term's
+  history for them is that one spring, so a course missing from it gets "not offered in any term checked". The 4-year
+  history is about 89 x 12 x 4 s = 70 minutes. Class Search printed one section as "ERTH 870 [01`]": the section
+  pattern ignores a stray mark
 
 **Done when:** the planner never places a fall-only course in spring without a warning. **Met 2026-10-17** (`tests/test_planner.py`).
 
