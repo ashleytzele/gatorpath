@@ -36,11 +36,12 @@ def term_code(term: str) -> str:
     return f"2{year % 100:02d}{TERM_DIGIT[season]}"
 
 
-def recent_terms(today: date, years: int = 4) -> list[str]:
-    """Spring/summer/fall terms of the last `years` years, through the current term ('2023-spring' … '2026-fall')."""
+def recent_terms(today: date, years: int = 4, through: str | None = None) -> list[str]:
+    """Spring/summer/fall terms of the last `years` years, through the current term ('2023-spring' … '2026-fall') or
+    `through`, a next term whose schedule is out ('2027-spring')."""
     current = f"{today.year}-{'fall' if today.month >= 8 else 'summer' if today.month >= 6 else 'spring'}"
     term, out = f"{today.year - years}-{current[5:]}", []
-    while term_key(term) < term_key(current):
+    while term_key(term) < term_key(through or current):
         term = next_term(term, True)
         out.append(term)
     return out
@@ -96,10 +97,11 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Scrape Class Search offering history into data/catalog.db.")
     ap.add_argument("--subjects", default="CSC,MATH,PHYS")
     ap.add_argument("--years", type=int, default=4, help="how many years back, through the current term")
+    ap.add_argument("--through", help="last term, when the next term's schedule is out (e.g. 2027-spring)")
     ap.add_argument("--db", default="data/catalog.db")
     ap.add_argument("--cache", default="data/cache/offerings")
     args = ap.parse_args()
-    terms = recent_terms(date.today(), args.years)
+    terms = recent_terms(date.today(), args.years, args.through)
     with httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=30, follow_redirects=True) as client:
         for subject in args.subjects.upper().split(","):
             for term in terms:

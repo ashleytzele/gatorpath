@@ -251,6 +251,9 @@ offering(                                  -- ingest/offerings.py, Class Search 
 )
 offering_scrape(term TEXT, subject TEXT, sections INTEGER, scraped_at TEXT)   -- what was checked, even if empty
 -- Days, times and instructors stay in the cached JSON (data/cache/offerings/) until a schedule builder needs them.
+-- A published next term is scraped with the history (--through 2027-spring, added 2026-10-26). Every scraped term is
+-- exact (offered.schedule {term: ran}): a course missing from that term's schedule isn't planned there, whatever its
+-- history says, and the tools show only the latest scraped term's entry.
 
 -- db.load_catalog adds `offered` to each course of a scraped subject (offered_terms):
 -- {fall: [terms it ran, terms checked], spring: […], summer: […], since: '2023-spring', until: '2026-fall',

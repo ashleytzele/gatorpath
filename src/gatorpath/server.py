@@ -126,7 +126,9 @@ def offering_note(path: Path, year: str) -> str:
 
 
 def offered(code: str) -> dict | str:
-    return catalog(DB, YEAR).get(code, {}).get("offered", "unknown")
+    """History per season, and whether it's on the latest scraped term's schedule (a published next term)."""
+    o = catalog(DB, YEAR).get(code, {}).get("offered")
+    return {k: v for k, v in o.items() if k != "schedule"} | {"schedule": {o["until"]: o["schedule"][o["until"]]}} if o else "unknown"
 
 
 @cache

@@ -37,6 +37,9 @@ def season_ok(c: str, term: str, catalog: dict, seasons=tuple(SEASONS)) -> tuple
     o = catalog.get(c, {}).get("offered")
     if not o:
         return True, None
+    if term in o.get("schedule", {}):  # that term's own schedule was scraped (a published next term): a fact, not history
+        return (True, None) if o["schedule"][term] else (False, f"{c} in {term}: not on the {term} Class Search schedule; "
+                                                                 "check Class Search")
     season, span = term[5:], f"Class Search {o['since']} to {o['until']}"
     if season not in o:  # Winter Session isn't in the offering history
         return True, f"{c}: Class Search history doesn't cover {season} terms; check that term's schedule"
@@ -1465,6 +1468,8 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
                   "offered": "unknown"}
         if state != OK:
             option["blocked_by" if state == NO else "cannot_check"] = why
+        if not (runs := season_ok(code, first, catalog))[0]:  # not on that term's schedule, or never runs that season
+            option["not_offered"] = runs[1]
         if state == NO:
             later = next((t for t in terms[1:] if evaluate(expr, ctxs[t])[0] != NO), None)
             if later:
@@ -1475,7 +1480,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
             option["note"] = f"at most {min(filters[i]['max_units'] for i in hit):g} units from this part of the list"
         options.append(option)
     order = {"ready": 0, "check": 1, "blocked": 2}
-    options.sort(key=lambda o: (order[o["readiness"]], -len(o["also_covers"]),
+    options.sort(key=lambda o: ("not_offered" in o, order[o["readiness"]], -len(o["also_covers"]),
                                 not (pref_short and matches(pref, o["code"], catalog[o["code"]])), o["code"]))
     need = {k: target[k] for k in ("units_needed", "units_done", "courses_needed", "min_units_from") if k in target}
     return {"catalog_year": program["catalog_year"], "group": group_id, "title": g.get("title", group_id),

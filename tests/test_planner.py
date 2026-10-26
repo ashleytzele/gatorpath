@@ -489,6 +489,27 @@ def test_rare_and_summer_only_courses_are_flagged_not_blocked():
                                                              "2023-spring to 2026-fall); ask the department when it runs")
 
 
+
+def test_a_published_terms_schedule_is_exact():
+    # Spring 2027's schedule (2026-10-26): a term Class Search was scraped for says which courses run, not history
+    from gatorpath.engine.planner import season_ok
+    every_spring = {"fall": [4, 4], "spring": [4, 5], "summer": [0, 4], "since": "2023-spring", "until": "2027-spring",
+                    "last": "2026-fall", "schedule": {"2026-spring": True, "2027-spring": False}}
+    ok, why = season_ok("PSY 441", "2027-spring", {"PSY 441": {"offered": every_spring}})
+    assert not ok and why == "PSY 441 in 2027-spring: not on the 2027-spring Class Search schedule; check Class Search"
+    fall_only = {"fall": [4, 4], "spring": [1, 5], "summer": [0, 4], "since": "2023-spring", "until": "2027-spring",
+                 "last": "2027-spring", "schedule": {"2027-spring": True}}
+    assert season_ok("PSY 441", "2027-spring", {"PSY 441": {"offered": fall_only}}) == (True, None)
+    assert season_ok("PSY 441", "2028-spring", {"PSY 441": {"offered": every_spring}})[0]  # not scraped: history
+    from gatorpath.engine.planner import eligible_options
+    off = {"fall": [4, 4], "spring": [4, 5], "summer": [0, 4], "since": "2023-spring", "until": "2027-spring",
+           "last": "2026-fall", "schedule": {"2027-spring": False}}
+    first = lambda cat: eligible_options(FRESHMAN, "ge_1a", PROGRAM, UNIVERSITY, cat, PREREQS, by_term="2027-spring")["options"]
+    top = first(CATALOG)[0]["code"]
+    got = first(CATALOG | {top: CATALOG[top] | {"offered": off}})
+    assert got[0]["code"] != top and next(o for o in got if o["code"] == top)["not_offered"].startswith(
+        f"{top} in 2027-spring: not on the 2027-spring Class Search schedule")  # offered options first
+
 def test_finished_math_adds_no_pathway_courses():
     # Trial 7: MATH 226 met by transfer, QR 3/4: the plan added MATH 197 and 198 from the chain below MATH 226
     p = {"catalog_year": "2026-27", "program": "bs-cs", "qr_pathway": "3/4", "start_term": "2027-spring",

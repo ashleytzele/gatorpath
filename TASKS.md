@@ -289,6 +289,14 @@ comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see
   MATH 324 2025-spring, PHYS 222 2025-fall (labs), CSC 300GW 2026-spring: all match; the CSC 653 detail page agrees.
   Found: CSC 652 last ran 2023-summer and CSC 653 2024-summer (summers only), so trial 6's security picks now warn
 
+- [x] A published next term (2026-10-26): `--through 2027-spring` scrapes the Spring 2027 schedule with the history.
+  PSY and SXS (for BA Psychology), 2023-spring to 2027-spring, 26 searches; Spring 2027 has 98 PSY sections (63 courses)
+  and 70 SXS. A term that was scraped is exact, not history: `offered.schedule` {term: ran}, so build_plan doesn't place
+  a course that isn't on that term's schedule, check_plan warns ("not on the 2027-spring Class Search schedule"), and
+  list_eligible_electives marks it `not_offered` and lists it after the offered ones (it ignored seasons before).
+  25 of the major's 63 listed courses aren't on the Spring 2027 schedule. CSC, MATH and PHYS stop at 2026-fall: rerun
+  with `--subjects CSC,MATH,PHYS --through 2027-spring` (only the new term is fetched; the rest is cached)
+
 **Done when:** the planner never places a fall-only course in spring without a warning. **Met 2026-10-17** (`tests/test_planner.py`).
 
 ---

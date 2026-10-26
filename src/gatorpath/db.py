@@ -22,8 +22,9 @@ def connect(db_path: str | Path) -> sqlite3.Connection:
 
 
 def offered(con: sqlite3.Connection) -> dict[str, dict]:
-    """{code: {fall: [ran, checked], spring: …, summer: …, since, until, last}} from Class Search history (ingest.offerings),
-    for every catalog course whose subject was scraped. Subjects never scraped are left out: unknown, not "never"."""
+    """{code: {fall: [ran, checked], spring: …, summer: …, since, until, last, schedule: {term: ran}}} from Class Search
+    history (ingest.offerings), for every catalog course whose subject was scraped. Subjects never scraped are left
+    out: unknown, not "never"."""
     if not con.execute("select 1 from sqlite_master where name = 'offering_scrape'").fetchone():
         return {}
     checked: dict[str, list[str]] = {}
@@ -46,7 +47,8 @@ def offered(con: sqlite3.Connection) -> dict[str, dict]:
             out[code] = {s: [sum(t in runs for t in terms if t.endswith(s)), sum(t.endswith(s) for t in terms)]
                          for s in ("fall", "spring", "summer")} | {"since": min(terms, key=term_key),
                                                                     "until": max(terms, key=term_key),
-                                                                    "last": max(runs, key=term_key, default=None)}
+                                                                    "last": max(runs, key=term_key, default=None),
+                                                                    "schedule": {t: t in runs for t in sorted(terms, key=term_key)}}
             if online:
                 out[code]["online_only"] = online
     return out

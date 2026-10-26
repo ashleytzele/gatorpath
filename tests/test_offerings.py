@@ -28,6 +28,7 @@ def test_term_codes_and_recent_terms():
     assert [term_code(t) for t in ("2025-fall", "2026-summer", "2027-spring")] == ["2257", "2265", "2273"]
     terms = recent_terms(date(2026, 10, 17))
     assert (terms[0], terms[-1], len(terms)) == ("2023-spring", "2026-fall", 12)
+    assert recent_terms(date(2026, 10, 26), through="2027-spring")[-2:] == ["2026-fall", "2027-spring"]  # published
 
 
 def test_parse_reads_both_row_shapes_and_rejects_another_terms_rows():
@@ -48,7 +49,9 @@ def test_offering_history_counts_runs_per_season(tmp_path):
                                                   if term.endswith("fall") else []), term))
     cat = db.load_catalog(path, "2026-27")
     assert cat["CSC 653"]["offered"] == {"fall": [2, 2], "spring": [0, 2], "summer": [0, 0],
-                                         "since": "2024-fall", "until": "2026-spring", "last": "2025-fall"}
+                                         "since": "2024-fall", "until": "2026-spring", "last": "2025-fall",
+                                         "schedule": {"2024-fall": True, "2025-spring": False, "2025-fall": True,
+                                                      "2026-spring": False}}
     assert cat["CSC 101"]["offered"]["spring"] == [2, 2]
     assert "offered" not in cat["MATH 226"]  # MATH wasn't scraped: unknown, not "never"
 
