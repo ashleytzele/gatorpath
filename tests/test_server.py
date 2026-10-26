@@ -187,6 +187,25 @@ TRANSFER_SENIOR = {"catalog_year": "2026-27", "program": "bs-cs", "transfer_unit
                    "completed": [{"code": "AA S 213", "grade": "A", "term": "2026-fall"}]}
 
 
+
+def test_sections_for_a_terms_courses(tmp_path, monkeypatch):
+    # After a plan: the first term's sections, from Class Search (names and numbers invented, real cell layout)
+    from gatorpath.ingest.offerings import write_offerings
+    path = tmp_path / "catalog.db"
+    write_catalog(path, "2026-27", ROWS)
+    lec = {"term": "2027-spring", "code": "CSC 653", "section": "01", "component": "LEC", "mode": "In-Person",
+           "enrolled": 0, "class_nbr": "4321", "meetings": [{"days": "Tu Th", "time": "9:30 AM - 10:45 AM",
+                                                              "where": "Thornton Hall 329"}],
+           "dates": None, "instructor": "Pat Example", "seats_open": 40, "waitlist_open": 5, "attributes": ["Upper-Division"]}
+    write_offerings(path, "2027-spring", "CSC", [lec], "2026-10-26T21:00:00+00:00")
+    monkeypatch.setattr(server, "DB", path)
+    got = server.get_sections("2027-spring", ["csc653", "CSC 648", "MATH 226"])
+    assert got["sections"] == {"CSC 653": [{k: v for k, v in lec.items() if k not in ("term", "code", "dates")}]}
+    assert got["not_offered"] == ["CSC 648"] and got["unknown"] == ["MATH 226"]  # MATH wasn't scraped that term
+    assert got["scraped_at"] == "2026-10-26T21:00:00+00:00" and any("Class Search" in w for w in got["warnings"])
+    assert server.get_sections("2027-fall", ["CSC 653"])["unknown"] == ["CSC 653"]  # schedule not out
+    assert server.get_sections("spring", ["CSC 653"])["error"] == "bad_term"
+
 def test_eligible_electives_rank_triple_duty_courses_first():
     got = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-spring")
     top = got["options"][:2]
@@ -299,6 +318,7 @@ def test_only_save_profile_writes_a_file(tmp_path, tmp_path_factory, monkeypatch
         "import_dpr": lambda: server.import_dpr(str(pdf)),
         "ge_combinations": lambda: server.ge_combinations(profile, plan),
         "compare_programs": lambda: server.compare_programs(profile, "bs-applied-math"),
+        "get_sections": lambda: server.get_sections("2027-spring", ["CSC 653"]),
     }
     assert set(calls) == {t.name for t in asyncio.run(server.mcp.list_tools())} - {"save_profile"}
     for call in calls.values():

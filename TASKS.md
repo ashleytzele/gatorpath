@@ -298,6 +298,13 @@ comparison that says what has to give. **Met 2026-10-17 (trial 6, Codex CLI; see
   cached): CSC 121 sections, MATH 164, PHYS 53. Every BS CS required course runs; 12 listed electives don't (CSC 600,
   620, 621, 630, 631, 652, 653, 664, 668, 676, MATH 425, 448). The 12 synthetic profiles' plans are unchanged
 
+- [x] Sections after the plan (2026-10-26): `get_sections(term, codes)` gives each course's Class Search sections in
+  a scraped term: class number, days, time, room, mode, instructor, seats open, waitlist open, enrolled, attributes
+  (permission numbers, GE tags), summer dates. `plan_my_degree` shows the first term's after the plan. The details come
+  from the cached JSON (no new searches; two requests to the results page read its column names: the trailing cells are
+  remaining seats, remaining waitlist, section, enrolled; there is no capacity). scraped_at is now the cache file's
+  fetch time, not the time the database was written. Not done: a week-level conflict check (Later)
+
 **Done when:** the planner never places a fall-only course in spring without a warning. **Met 2026-10-17** (`tests/test_planner.py`).
 
 ---

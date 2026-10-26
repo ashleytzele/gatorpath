@@ -21,6 +21,24 @@ def connect(db_path: str | Path) -> sqlite3.Connection:
     return sqlite3.connect(Path(db_path).resolve().as_uri() + "?mode=ro", uri=True)  # as_uri escapes '#', '?', '%'
 
 
+def sections(db_path: str | Path, term: str, codes: list[str]) -> tuple[dict[str, list[dict]], dict[str, str]]:
+    """Class Search sections of `codes` in one term, and {subject: scraped_at} for the subjects scraped that term."""
+    con = connect(db_path)
+    if not con.execute("select 1 from sqlite_master where name = 'offering_scrape'").fetchone():
+        con.close()
+        return {}, {}
+    scraped = dict(con.execute("select subject, scraped_at from offering_scrape where term = ?", (term,)).fetchall())
+    con.row_factory = sqlite3.Row
+    rows = con.execute(f"select * from offering where term = ? and code in ({', '.join('?' * len(codes))}) "
+                       "order by code, section, component", (term, *codes)).fetchall()
+    con.close()
+    out: dict[str, list[dict]] = {}
+    for r in map(dict, rows):
+        r |= {k: json.loads(r[k]) for k in ("meetings", "attributes") if r.get(k)}  # JSON lists (ingest.offerings)
+        out.setdefault(r["code"], []).append({k: v for k, v in r.items() if k not in ("term", "code") and v is not None})
+    return out, scraped
+
+
 def offered(con: sqlite3.Connection) -> dict[str, dict]:
     """{code: {fall: [ran, checked], spring: …, summer: …, since, until, last, schedule: {term: ran}}} from Class Search
     history (ingest.offerings), for every catalog course whose subject was scraped. Subjects never scraped are left

@@ -250,7 +250,10 @@ offering(                                  -- ingest/offerings.py, Class Search 
   PRIMARY KEY (term, code, section, component)
 )
 offering_scrape(term TEXT, subject TEXT, sections INTEGER, scraped_at TEXT)   -- what was checked, even if empty
--- Days, times and instructors stay in the cached JSON (data/cache/offerings/) until a schedule builder needs them.
+-- Section details (added 2026-10-26 for get_sections): class_nbr, meetings (JSON [{days, time, where}]), dates (summer),
+-- instructor, seats_open, waitlist_open, attributes (JSON), from the cached JSON; the results page names the trailing
+-- cells remainingSeats, remainingWaitList, classSection, enrollTotal. offering_scrape.scraped_at is the cache file's
+-- fetch time.
 -- A published next term is scraped with the history (--through 2027-spring, added 2026-10-26). Every scraped term is
 -- exact (offered.schedule {term: ran}): a course missing from that term's schedule isn't planned there, whatever its
 -- history says, and the tools show only the latest scraped term's entry.
@@ -585,6 +588,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | Tool | Input | Output |
 |---|---|---|
 | `search_courses` | `query`, `subject?`, `level?` (`lower`/`upper`/`600`…), `limit=10` | `[{code, title, units, ge_areas, offered: "fall-only"\|"both"\|"rare"\|"unknown"}]` (FTS5 keyword search; embeddings later if needed) |
+| `get_sections` | `term`, `codes` | Added 2026-10-26: Class Search sections per course for a scraped term (the plan's first term once its schedule is out): `class_nbr`, `meetings` [{days, time, where}], `mode`, `instructor`, `seats_open`, `waitlist_open`, `enrolled`, `attributes`, summer `dates`; `not_offered` (subject scraped, no section), `unknown` (not scraped), `scraped_at`. Class Search prints no capacity. `plan_my_degree` shows them after the plan |
 | `get_course` | `code` | Full record: description, units, grading, `prereq: {raw_text, expr, status, needs_permission}`, `links`, `offered_terms`, `unlocks` (courses whose prereqs name it: "CSC 340 → CSC 413, CSC 415, CSC 510"), `source_page` |
 | `get_prereq_chain` | `code` | Everything that must come before it, as a tree plus a flat ordered list, with min grades and non-course conditions. Answers "what do I need before CSC 653?" |
 

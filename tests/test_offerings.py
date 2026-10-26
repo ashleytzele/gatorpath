@@ -20,8 +20,8 @@ def row(term: str, course: str, component: str = "LEC", summer: bool = False, mo
     cells = [link, component, "Network Security", "3", "7557", "<span>Upper-Division</span>",
              "<div class='row'><div>We </div><div>7:00 PM - 9:45 PM</div><div>Hensill Hall 543</div></div>",
              f'{mode}<div><span class="description-toggle">(see description)</span></div>',
-             "<div> Pat Example</div>", "0", "0", course.split("[")[1].rstrip("]"), "40", ""]
-    return cells[:7] + ["Jun 2, 2025 - Aug 8, 2025"] + cells[7:] if summer else cells
+             "<div> Pat Example</div>", "2", "5", course.split("[")[1].rstrip("]"), "40", ""]
+    return cells[:7] + ["<div style='font-size: .83em;'>Jun 2, 2025 - Aug 8, 2025</div>"] + cells[7:] if summer else cells
 
 
 def test_term_codes_and_recent_terms():
@@ -33,10 +33,20 @@ def test_term_codes_and_recent_terms():
 
 def test_parse_reads_both_row_shapes_and_rejects_another_terms_rows():
     got = parse([row("2025-fall", "CSC 653 [01]"), row("2025-fall", "CSC 300GW [02]", "SEM")], "2025-fall")
+    # cells after the mode, as the results page's comment names them: instructor, remainingSeats, remainingWaitList,
+    # classSection, enrollTotal
     assert got[1] == {"term": "2025-fall", "code": "CSC 300GW", "section": "02", "component": "SEM",
-                      "mode": "In-Person", "enrolled": 40}
+                      "mode": "In-Person", "enrolled": 40, "class_nbr": "7557",
+                      "meetings": [{"days": "We", "time": "7:00 PM - 9:45 PM", "where": "Hensill Hall 543"}],
+                      "dates": None, "instructor": "Pat Example", "seats_open": 2, "waitlist_open": 5,
+                      "attributes": ["Upper-Division"]}
     [summer] = parse([row("2025-summer", "CSC 642 [02]", summer=True)], "2025-summer")
     assert (summer["code"], summer["section"], summer["mode"], summer["enrolled"]) == ("CSC 642", "02", "In-Person", 40)
+    assert (summer["dates"], summer["instructor"], summer["waitlist_open"]) == ("Jun 2, 2025 - Aug 8, 2025", "Pat Example", 5)
+    online = row("2025-fall", "CSC 653 [03]")  # the other two meeting shapes Class Search prints
+    online[6] = ("<div class='row'><div class='col-md-5'></div><div class='col-md-12'>Online </div></div><hr/>"
+                 "<div style='font-size: .90em;'>To be arranged </div>")
+    assert parse([online], "2025-fall")[0]["meetings"] == [{"where": "Online"}, {"time": "To be arranged"}]
     with pytest.raises(ValueError, match="isn't from 2025-spring"):
         parse([row("2025-fall", "CSC 653 [01]")], "2025-spring")
 

@@ -18,7 +18,7 @@ from gatorpath import db, dpr, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import compare_programs as engine_compare_programs
 from gatorpath.engine.planner import check_plan as engine_check_plan
-from gatorpath.engine.planner import cover_combinations, eligible_options, see_advisor
+from gatorpath.engine.planner import TERM, cover_combinations, eligible_options, see_advisor
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, min_grade_of, number, translate_ge
 
@@ -206,6 +206,31 @@ def get_course(code: str) -> dict:
         return unknown_course(code)
     return course | {"offered_terms": offered(code), "unlocks": unlocks(DB, YEAR).get(code, []),
                      "warnings": prereq_warnings(code, course["prereq"]) + [offering_note(DB, YEAR)]}
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_sections(term: str, codes: list[str]) -> dict:
+    """Class Search sections of courses in one term (e.g. '2027-spring'), to show after a plan for its first term once
+    that term's schedule is out: class number (class_nbr, what Student Center asks for), meetings (days, time,
+    where), mode, instructor, seats_open, waitlist_open, enrolled, and attributes (permission numbers, GE tags; Class
+    Search shows no capacity). `not_offered`:
+    no section that term (move it in the plan, then check_plan). `unknown`: GatorPath has no schedule for that
+    subject and term (not out yet, or a subject it didn't scrape): check Class Search. A snapshot from scraped_at:
+    seats, rooms and instructors change, so the student confirms in Class Search before registering."""
+    if not TERM.fullmatch(term):
+        return {"catalog_year": YEAR, "error": "bad_term", "warnings": ["term looks like 2027-spring"]}
+    want = list(dict.fromkeys(norm_code(c) for c in codes))
+    known = [c for c in want if c in catalog(DB, YEAR)]
+    found, scraped = db.sections(DB, term, known)
+    subject = lambda c: c.rsplit(" ", 1)[0]
+    stamp = min((scraped[subject(c)] for c in found), default=None)
+    return {"catalog_year": YEAR, "term": term, "sections": found,
+            "not_offered": [c for c in known if c not in found and subject(c) in scraped],
+            "unknown": [c for c in known if c not in found and subject(c) not in scraped], "scraped_at": stamp,
+            "warnings": ([f"Not in the {YEAR} Bulletin: {', '.join(c for c in want if c not in known)}"]
+                         if len(known) < len(want) else [])
+                        + [f"Class Search as of {stamp or 'never'}: seats, rooms and instructors change; confirm in "
+                           "Class Search (webapps.sfsu.edu/public/classservices/classsearch) before registering"]}
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -789,6 +814,11 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      Bulletin's 12-unit minimum and continuous enrollment, and the international office's final-semester Reduced
      Course Load (check_plan's warning): send every other visa question (I-20 dates, OPT) to the international
      office without stating visa rules yourself
+   - the first term's schedule, after the plan: `get_sections` with that term and its courses (slots filled). Per
+     course, a table of its sections: class number, days, time, where, mode, instructor, seats open (0: full, give
+     waitlist_open), and attributes (a permission number, GE tags); a lecture with labs shows both. A course in not_offered has no section
+     that term: move it and re-run check_plan. For courses in unknown, and for later terms (schedules aren't out
+     yet), say to check Class Search. Don't pick sections for them; say seats change (scraped_at)
    - a checklist: confirm each course is offered that term in Class Search (GatorPath's history covers only some
      subjects, and past terms don't promise future ones), compare with the DPR, see the advisor
    Then offer what-ifs: graduating earlier (step 6; "a year early" means a year before the plan's
