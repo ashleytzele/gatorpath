@@ -569,11 +569,11 @@ def test_a_prereq_gatorpath_cant_check_waits_for_the_roadmap():
     text = "Restricted to Asian American Studies majors; 24 upper-division units in AA S courses; or permission of the instructor."
     prereqs = PREREQS | {"AA S 696": {"raw_text": text, **parse_prereq(text)}}
     program, university, roadmap = rules_for({"program": name})
-    term = lambda extra: next(i for i, s in enumerate(build_plan(
-        {"catalog_year": "2026-27", "program": name, "start_term": "2027-fall", "completed": []} | extra,
-        program, university, roadmap, CATALOG, prereqs)["semesters"], 1) if "AA S 696" in s["courses"])
-    assert term({}) >= 6
-    assert term({"transfer_units": 60}) == 2
+    plan = lambda extra: build_plan({"catalog_year": "2026-27", "program": name, "start_term": "2027-fall", "completed": []}
+                                    | extra, program, university, roadmap, CATALOG, prereqs)["semesters"]
+    [(term, why)] = [(i, s["why"]["AA S 696"]) for i, s in enumerate(plan({}), 1) if "AA S 696" in s["courses"]]
+    assert term >= 6 and "stays with the Bulletin roadmap, which has it in semester 7" in why
+    assert next(i for i, s in enumerate(plan({"transfer_units": 60}), 1) if "AA S 696" in s["courses"]) == 2
 
 
 def test_ge_the_major_meets_plans_no_ge_course():

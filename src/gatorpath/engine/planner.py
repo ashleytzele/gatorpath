@@ -928,6 +928,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         done, grades, units = set(have), dict(grades0), units0
         left = sorted(todo, key=rank_of)
         first_ok: dict[str, str] = {}  # the first term a course could have gone in
+        waited: set[str] = set()  # D28: waited for the roadmap semester
         semesters, notes, term, slot_areas, carry, queue = [], [], start, set(), [], list(queue)
         regular = 0  # spring/fall terms planned: the roadmap semesters gone by (D28)
         for _ in range(20):
@@ -960,6 +961,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 # courses": semester 7, so term 6, not 1). The student's semester: where their units start them, one more
                 # per spring/fall term, or their units' when further (summer terms)
                 early = printed_in.get(c, -1) > max(road_at(units), road_at(units0) + regular) + 1
+                if state == UNVERIFIED and not waiting and early:
+                    waited.add(c)
                 return (state == OK or (state == UNVERIFIED and not waiting and not early)) and season_ok(c, term, catalog, seasons)[0]
 
             def ready_options(gid: str) -> float:
@@ -1097,12 +1100,12 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             units += used
             regular += term[5:] in ("spring", "fall")
             term = next_term(term, summer, winter)
-        return semesters, first_ok, notes
+        return semesters, first_ok, notes, waited
 
     # Build both and keep the roadmap-led plan unless the plain greedy finishes sooner. Both use the same caps, and each
     # term carries its own (max_units), so the plan passes check_plan as given.
-    def plan_at(cap: float | None) -> tuple[list, dict, list]:
-        semesters, first_ok, notes = schedule([], cap)
+    def plan_at(cap: float | None) -> tuple[list, dict, list, set]:
+        semesters, first_ok, notes, waited = schedule([], cap)
         if not summer:
             led = schedule([list(sem["items"]) for sem in road], cap)
             if check_plan(profile, {"semesters": led[0]}, program, university, catalog, prereqs)["valid"] \
@@ -1110,10 +1113,10 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 v = roadmap["variants"][ref]
                 return led[0], led[1], led[2] + [f"Laid out on the Bulletin's {v['title']} ({v['source']}): each term "
                                                  "starts from that roadmap semester's courses and GE areas, adjusted for "
-                                                 "what's done"]
-        return semesters, first_ok, notes
+                                                 "what's done"], led[3]
+        return semesters, first_ok, notes, waited
 
-    semesters, first_ok, notes = plan_at(fixed)
+    semesters, first_ok, notes, waited = plan_at(fixed)
     # D25: the graduation goal sets the load; the roadmap is the normal range. With graduate_by (and no cap of the
     # student's), a roadmap plan that ends after it is rebuilt with every term at the roadmap's heaviest semester, then
     # one unit more at a time up to the fall/spring maximum, until it ends by then. Past that, why_not says why.
@@ -1127,7 +1130,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             trial = plan_at(x)
             if not late(trial[0]) and check_plan(profile, {"semesters": trial[0]}, program, university, catalog,
                                                  prereqs)["valid"]:
-                semesters, first_ok, notes = trial
+                semesters, first_ok, notes, waited = trial
                 fit = {"graduate_by": target, "units_per_term": x,
                        "note": f"to finish by {target}, terms go up to {x:g} units: "
                                + (f"the roadmap's heaviest semester ({heaviest:g})" if x == heaviest else
@@ -1211,6 +1214,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             if opens[c]:
                 more = f", +{len(opens[c]) - 5} more" if len(opens[c]) > 5 else ""
                 parts.append(f"opens {len(opens[c])} senior-elective option(s): {', '.join(opens[c][:5])}{more}")
+            if c in waited:
+                parts.append(f"GatorPath can't check its prereq, so it stays with the Bulletin roadmap, which has it in "
+                             f"semester {printed_in[c] + 1} (at most a term earlier)")
             if not (dependents[c] or coreqs[c] or opens[c]):
                 parts.append("no later course in this plan needs it, so it can move if needed")
             if len(path) >= 3:
