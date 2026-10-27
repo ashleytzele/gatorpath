@@ -53,6 +53,11 @@ def text(cell: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", cell)).strip()
 
 
+def instructors(cell: str) -> str:
+    """One <div> per instructor (co-taught, or "Pat Example" and "To be announced"), so the names stay apart."""
+    return ", ".join(dict.fromkeys(n for n in map(text, re.findall(r"<div[^>]*>(.*?)</div>", cell)) if n)) or text(cell)
+
+
 def meetings(cell: str) -> list[dict]:
     """One {days, time, where} per meeting; an online one has no time, and "To be arranged" is all some print."""
     out = []
@@ -78,7 +83,7 @@ def parse(rows: list[list[str]], term: str) -> list[dict]:
         mode = text(r[-7]).split(" (see description)")[0]
         out.append({"term": term, "code": m[1], "section": m[2], "component": text(r[1]), "mode": mode,
                     "enrolled": int(text(r[-2]) or 0), "class_nbr": text(r[4]), "meetings": meetings(r[6]),
-                    "dates": text(r[7]) if len(r) == 15 else None, "instructor": text(r[-6]),
+                    "dates": text(r[7]) if len(r) == 15 else None, "instructor": instructors(r[-6]),
                     "seats_open": int(text(r[-5]) or 0), "waitlist_open": int(text(r[-4]) or 0),
                     "attributes": [n for n in map(text, r[5].split("<hr/>")) if n]})
     return out

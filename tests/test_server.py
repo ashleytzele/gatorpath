@@ -198,13 +198,14 @@ def test_sections_for_a_terms_courses(tmp_path, monkeypatch):
                                                               "where": "Thornton Hall 329"}],
            "dates": None, "instructor": "Pat Example", "seats_open": 40, "waitlist_open": 5, "attributes": ["Upper-Division"]}
     tba = lec | {"section": "02", "class_nbr": "4322", "instructor": "To be announced"}
-    write_offerings(path, "2027-spring", "CSC", [lec, tba], "2026-10-26T21:00:00+00:00")
+    both = lec | {"section": "03", "class_nbr": "4323", "instructor": "Pat Example, To be announced"}
+    write_offerings(path, "2027-spring", "CSC", [lec, tba, both], "2026-10-26T21:00:00+00:00")
     monkeypatch.setattr(server, "DB", path)
     got = server.get_sections("2027-spring", ["csc653", "CSC 648", "MATH 226"])
     shown = lambda s: {k: v for k, v in s.items() if k not in ("term", "code", "dates")}
-    # A named instructor gets a Rate My Professors search link (SF State, school 880); "To be announced" doesn't
-    rmp = {"rate_my_professors": "https://www.ratemyprofessors.com/search/professors/880?q=Pat%20Example"}
-    assert got["sections"] == {"CSC 653": [shown(lec) | rmp, shown(tba)]}
+    # Each named instructor gets a Rate My Professors search link (SF State, school 880); "To be announced" doesn't
+    rmp = {"rate_my_professors": {"Pat Example": "https://www.ratemyprofessors.com/search/professors/880?q=Pat%20Example"}}
+    assert got["sections"] == {"CSC 653": [shown(lec) | rmp, shown(tba), shown(both) | rmp]}
     assert got["not_offered"] == ["CSC 648"] and got["unknown"] == ["MATH 226"]  # MATH wasn't scraped that term
     assert got["scraped_at"] == "2026-10-26T21:00:00+00:00" and any("Class Search" in w for w in got["warnings"])
     assert server.get_sections("2027-fall", ["CSC 653"])["unknown"] == ["CSC 653"]  # schedule not out
