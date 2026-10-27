@@ -9,6 +9,7 @@ from datetime import date
 from functools import cache
 from pathlib import Path
 from typing import NotRequired, TypedDict
+from urllib.parse import quote
 
 import yaml
 from mcp.server.mcpserver import MCPServer
@@ -30,6 +31,7 @@ DB = REPO / "data/catalog.db"
 PROFILE_PATH = "~/.gatorpath/profile.yaml"
 LEVELS = {"lower": (100, 300), "upper": (300, 700), "graduate": (700, 1000)}
 NO_OFFERINGS = "Offering history isn't loaded (run ingest.offerings), so `offered` is 'unknown'; check Class Search"
+RMP = "https://www.ratemyprofessors.com/search/professors/880?q="  # 880: SF State on RMP, checked 2026-10-27
 READ_ONLY = ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False)
 WRITES_FILE = ToolAnnotations(readOnlyHint=False, destructiveHint=True, idempotentHint=True, openWorldHint=False)
 
@@ -214,7 +216,8 @@ def get_sections(term: str, codes: list[str]) -> dict:
     """Class Search sections of courses in one term (e.g. '2027-spring'), to show after a plan for its first term once
     that term's schedule is out: class number (class_nbr, what Student Center asks for), meetings (days, time,
     where), mode, instructor, seats_open, waitlist_open, enrolled, and attributes (permission numbers, GE tags; Class
-    Search shows no capacity). `not_offered`:
+    Search shows no capacity). rate_my_professors: a Rate My Professors search for a named instructor, a link for the
+    student to open (anonymous student opinion, not SF State's). `not_offered`:
     no section that term (move it in the plan, then check_plan). `unknown`: GatorPath has no schedule for that
     subject and term (not out yet, or a subject it didn't scrape): check Class Search. A snapshot from scraped_at:
     seats, rooms and instructors change, so the student confirms in Class Search before registering."""
@@ -223,6 +226,9 @@ def get_sections(term: str, codes: list[str]) -> dict:
     want = list(dict.fromkeys(norm_code(c) for c in codes))
     known = [c for c in want if c in catalog(DB, YEAR)]
     found, scraped = db.sections(DB, term, known)
+    for sec in (x for xs in found.values() for x in xs):  # D26: a link, never fetched (RMP's terms ban scraping)
+        if (who := sec.get("instructor")) and who != "To be announced":
+            sec["rate_my_professors"] = RMP + quote(who)
     subject = lambda c: c.rsplit(" ", 1)[0]
     stamp = min((scraped[subject(c)] for c in found), default=None)
     return {"catalog_year": YEAR, "term": term, "sections": found,
@@ -816,7 +822,8 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      Course Load (check_plan's warning): send every other visa question (I-20 dates, OPT) to the international
      office without stating visa rules yourself
    - the first term's schedule, after the plan: `get_sections` with that term and its courses (slots filled). Per
-     course, a table of its sections: class number, days, time, where, mode, instructor, seats open (0: full, give
+     course, a table of its sections: class number, days, time, where, mode, instructor (linked to its
+     rate_my_professors search, labeled student opinion), seats open (0: full, give
      waitlist_open), and attributes (a permission number, GE tags); a lecture with labs shows both. The student
      picks the sections: list them all, and point out times that clash. A course in not_offered has no section that
      term: move it and re-run check_plan. For courses in unknown, and for later terms (their schedules aren't out
