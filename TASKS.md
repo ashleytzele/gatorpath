@@ -507,6 +507,9 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   is rejected; --load accepts a required course the printed roadmap leaves out (noted on the variant); "must/may be
   taken concurrently with X" is a corequisite (it read "X first"). Left: BA Philosophy and Religion (suspended,
   nothing printed), BA Family and Community Sciences (no roadmap).
+  - [ ] BS Kinesiology ITEP's test plan puts KIN 750, S ED 701 and S ED 720 in a new student's first term: their only
+    prereq is "KIN ITEP credential students", which GatorPath can't check, so nothing makes them wait for the
+    credential phase (2.50 GPA "before starting credential coursework", p.725). Before D27 too
   - [ ] "May not be taken concurrently with M S 684" (M S 683, and M S 684 / JOUR 617 alike) parses as a requirement
     (M S 684 first); it's an exclusion. A `not_with` leaf, or `unknown` until then
   Still drafts, for a person (rules/drafts/2026-27/): BA American Indian Studies, BA Dance, BS Physics: Astrophysics,

@@ -86,6 +86,9 @@ def test_an_itep_student_takes_credential_courses_by_permission():
     assert evaluate(staff, ctx)[0] == UNVERIFIED
     other = ctx | {"program": {"title": "Bachelor of Science in Computer Science"}}
     assert evaluate(grad, other)[0] == NO and evaluate(staff, other)[0] == NO
+    # Only what no order of courses can fix: GE areas still to take wait for them, as in any program (SPED 671, PK-3 ITEP)
+    ge_first = parse_prereq("GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better; or permission of the instructor.")["expr"]
+    assert evaluate(ge_first, ctx)[0] == NO
 
 def test_restricted_to_major_and_standing():
     # CSC 300GW: "Restricted to upper-division Computer Science majors and minors; GE Area 1A; CSC 210 or CSC 215"

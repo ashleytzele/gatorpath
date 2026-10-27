@@ -103,7 +103,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         reasons = [r for _, rs in parts for r in rs]
         if state == NO and perm and all(r.startswith("GPA ") for r in reasons):
             state = UNVERIFIED  # ordering can't fix a GPA: the student needs permission (or a higher GPA)
-        elif state == NO and perm and itep(ctx):  # D27: an ITEP student takes credential courses by permission
+        elif state == NO and perm and itep(ctx) and all(r.startswith("graduate standing") for r in reasons):
+            # D27: an ITEP student takes graduate credential courses by permission; what ordering fixes still waits
             return UNVERIFIED, [f"needs {x['permission']} permission" for x in perm]
         if len(parts) > 1:
             reasons = ["one of: " + "; ".join(reasons)]
