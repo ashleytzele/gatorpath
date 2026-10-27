@@ -8,6 +8,24 @@ verified: false
 verified_by: null
 total_units: 70
 source: p.677
+ge_met:
+- area: 5A
+  one_of:
+  - - CHEM 130
+  quote: Area 5A (Physical Science) is satisfied upon completion of CHEM 130.
+  source: p.677
+- area: 5B
+  one_of:
+  - - BIOL 210
+    - BIOL 220
+  quote: Area 5B (Biological Science) is satisfied upon completion of BIOL 210 and BIOL 220.
+  source: p.677
+- area: 5C
+  one_of:
+  - - CHEM 115
+    - BIOL 211
+  quote: Area 5C (Laboratory) is satisfied upon completion of CHEM 115 and BIOL 211.
+  source: p.677
 groups:
 - id: core
   title: Core Requirements (37 units)

@@ -199,6 +199,24 @@ def blocks_repeat(grade: str | None, repeats: dict) -> bool:
     return (grade == "CR" and repeats["cr_blocks_repeat"]) or (rank(grade) or 0) >= GRADE_POINTS[repeats["no_repeat_at_or_above"]]
 
 
+def ge_areas(g: dict) -> list[str]:
+    """The GE area labels a university group takes ("1A", "USH"), from its `from` filters."""
+    return [str(a) for f in ([g["from"]] if isinstance(g.get("from"), dict) else g.get("from") or [])
+            for a in ([f.get("ge_area")] if not isinstance(f.get("ge_area"), list) else f["ge_area"]) if a]
+
+
+def ge_met_in_major(program: dict, done: set[str], doing: set[str] = frozenset()) -> dict[str, tuple[str, str]]:
+    """{GE area: (status, source)} the major meets (`ge_met`, §6.2): satisfied once every course of one option is in
+    `done`, in_progress while they're all in `done` or `doing`."""
+    out = {}
+    for m in program.get("ge_met", []):
+        if any(set(o) <= done for o in m["one_of"]):
+            out[str(m["area"])] = ("satisfied", m["source"])
+        elif any(set(o) <= done | doing for o in m["one_of"]):
+            out[str(m["area"])] = ("in_progress", m["source"])
+    return out
+
+
 def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, claimed: set | None,
                no_cr_nc: bool, done_groups: dict, warnings: list[str], certified: frozenset = frozenset()) -> dict:
     out = {"id": g["id"], "title": g.get("title", g["id"]), "kind": kind, "source": g["source"],
@@ -571,6 +589,9 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
     done: dict[str, dict] = {}
     claimed: set[str] = set()
     no_cr_nc = program.get("global", {}).get("no_cr_nc", False)
+    # GE areas the major's own courses meet (`ge_met`, §6.2: "Area 1B … is satisfied upon completion of ENGR 205 or …")
+    in_major = ge_met_in_major(program, {c for c, t in taken.items() if (rank(t["grade"]) or -1) >= PASSING},
+                               {c for c in profile.get("in_progress", []) if c in catalog})
     certified = frozenset(university.get("transfer", {}).get("certified_ld_ge", [])) if profile.get("ge_certified") else frozenset()
     if profile.get("ge_certified") and not certified:
         warnings.append(f"ge_certified: the {university['catalog_year']} Bulletin doesn't say which GE areas a transfer "
@@ -589,8 +610,14 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
                             sum(units(c) for c in x["counted"] + x["in_progress"] + x.get("remaining", []))
                             for x in done.values() if x["kind"] == "major")
                 g = g | {"choose_units": max(g["choose_units"], program["total_units"] - given)}
-            done[g["id"]] = eval_group(amended(g), kind, taken, profile, catalog, claimed if kind == "major" else None,
-                                       no_cr_nc and kind == "major", done, warnings, certified)
+            done[g["id"]] = r = eval_group(amended(g), kind, taken, profile, catalog, claimed if kind == "major" else None,
+                                           no_cr_nc and kind == "major", done, warnings, certified)
+            m = next((m for m in program.get("ge_met", []) if str(m["area"]) in ge_areas(g)), None) if kind == "university" else None
+            if m and r["status"] in ("remaining", "in_progress"):  # still open: say which major courses will meet it
+                status = in_major.get(str(m["area"]), ("remaining",))[0]
+                if status == "satisfied" or status == "in_progress" and r["status"] == "remaining":
+                    r = r | {"status": status, "met_by": "major"}
+                done[g["id"]] = r | {"met_in_major": {"one_of": m["one_of"], "source": m["source"]}}
     groups = [done[g["id"]] for g in program["groups"] + university["groups"]]  # in the rules' order
     # A major course counts for GE too (p.2352): name the required ones still ahead that carry an open area, so the
     # client doesn't guess which open area a course meets.
@@ -621,7 +648,8 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
 
 # The §6.2 vocabulary a program file may use (check_program); `quote`, `unparsed` and `drafted_by` come from drafts.
 PROGRAM_KEYS = {"program", "title", "catalog_year", "verified", "verified_by", "drafted_by", "total_units", "dpr_plan",
-                "source", "global", "groups", "transfer_notes", "advising"}
+                "source", "global", "groups", "transfer_notes", "advising", "ge_met"}
+GE_MET_KEYS = {"area", "one_of", "quote", "source"}
 GROUP_KEYS = {"id", "title", "source", "quote", "unparsed", "all_of", "one_of", "choose_n", "choose_units", "from",
               "first_time_from", "min_grade", "min_units_from", "course_units", "exceptions", "approval", "waived_if",
               "fill_to_total", "across", "letter_grade", "max_cr", "max_below", "min_gpa", "max_units_from",
@@ -646,6 +674,20 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
     out = [f"unknown key {k!r}" for k in program if k not in PROGRAM_KEYS]
     out += [f"missing {k!r}" for k in ("program", "title", "catalog_year", "total_units", "groups") if k not in program]
     ids, low, high = set(), 0.0, 0.0  # high: variable-unit courses at their most ("KIN 699 Independent Study", 1-3)
+
+    def cites(label: str, x: dict) -> list[str]:
+        """A page in `source`, inside the program's pages, and the Bulletin's own words where it's quoted."""
+        found, cited = [], [int(p) for m in PAGE.findall(str(x.get("source", ""))) for p in m if p]
+        if not cited:
+            found.append(f"{label}: source must cite a page like \"p.2129\"")
+        elif pages and not set(cited) <= pages:
+            found.append(f"{label}: source {x['source']} is outside the program's pages ({min(pages)}-{max(pages)})")
+        for key in ("quote", "approval", "exceptions"):  # shown to students as the Bulletin's own words
+            for text in (x[key] if isinstance(x.get(key), list) else [x[key]] if key in x else []):
+                if source is not None and squashed(text) not in squashed(source):
+                    found.append(f"{label}: {key} isn't word for word in the Bulletin text: {text[:80]!r}")
+        return found
+
     units = lambda cs, end="units_min": sum(catalog[c].get(end, catalog[c]["units_min"]) for c in cs if c in catalog)
     for g in program.get("groups", []):
         gid = g.get("id", "?")
@@ -708,19 +750,24 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
                 f"[[{a}], [{b}]]" for i, a in enumerate(req) for b in req[i + 1:] if b in catalog.get(a, {}).get("crosslisted", ())]
         grades = g["min_grade"].values() if isinstance(g.get("min_grade"), dict) else [g["min_grade"]] if "min_grade" in g else []
         out += [f"{gid}: min_grade {m!r} isn't a grade" for m in grades if m not in GRADE_POINTS]
-        cited = [int(p) for m in PAGE.findall(str(g.get("source", ""))) for p in m if p]
-        if not cited:
-            out.append(f"{gid}: source must cite a page like \"p.2129\"")
-        elif pages and not set(cited) <= pages:
-            out.append(f"{gid}: source {g['source']} is outside the program's pages ({min(pages)}-{max(pages)})")
-        for key in ("quote", "approval", "exceptions"):  # shown to students as the Bulletin's own words
-            for text in (g[key] if isinstance(g.get(key), list) else [g[key]] if key in g else []):
-                if source is not None and squashed(text) not in squashed(source):
-                    out.append(f"{gid}: {key} isn't word for word in the Bulletin text: {text[:80]!r}")
+        out += cites(gid, g)
         low += (units(g.get("all_of", [])) + g.get("choose_units", 0)
                 + min((units(opt) for opt in g.get("one_of", [])), default=0))
         high += (units(g.get("all_of", []), "units_max") + g.get("choose_units", 0)
                  + min((units(opt, "units_max") for opt in g.get("one_of", [])), default=0))
+    labels = {a for x in (university or {}).get("groups", []) for a in ge_areas(x)}
+    for m in program.get("ge_met", []):
+        label, opts = f"ge_met {m.get('area', '?')}", m.get("one_of")
+        out += [f"{label}: unknown key {k!r}" for k in m if k not in GE_MET_KEYS]
+        out += [f"{label}: missing {k!r}" for k in sorted(GE_MET_KEYS - m.keys())]
+        if university and str(m.get("area")) not in labels:
+            out.append(f"{label}: not a GE area the university rules take")
+        if not (isinstance(opts, list) and opts and all(isinstance(o, list) and o for o in opts)):
+            out.append(f"{label}: one_of is a list of options, each a list of courses")
+            opts = []
+        out += [f"{label}: {c} is not in the {program.get('catalog_year', '')} catalog"
+                for c in dict.fromkeys(c for o in opts for c in o) if c not in catalog]
+        out += cites(label, m)
     if any("choose_n" in g or g.get("unparsed") for g in program.get("groups", [])):
         out.append(f"units: can't check total_units with choose_n or unparsed groups (the others add up to {low:g} of "
                    f"{program.get('total_units', 0):g}); a person adds them up")

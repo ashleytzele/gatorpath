@@ -12,6 +12,14 @@ source: p.710
 global:
   no_cr_nc: true
   source: p.710
+ge_met:
+- area: 5B
+  one_of:
+  - - BIOL 212
+    - BIOL 220
+  - - BIOL 328
+  quote: Area 5B (Biological Science) is satisfied upon completion of either BIOL 212 and BIOL 220 or BIOL 328.
+  source: p.710
 groups:
 - id: premajor_biology_intro
   title: 'Pre-Major Prerequisites: Select One (BIOL 100 & BIOL 101, or BIOL 230)'

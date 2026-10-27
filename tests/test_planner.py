@@ -560,6 +560,25 @@ def test_finished_math_adds_no_pathway_courses():
     assert "MATH 227" in planned and not planned & {"MATH 197", "MATH 198"}
 
 
+def test_ge_the_major_meets_plans_no_ge_course():
+    # BS Civil Engineering p.1939: GE 1B and 5UD are met by major courses; the plan added a course for each and ran a
+    # term past the printed roadmap (9 terms, not 8)
+    from gatorpath.engine.planner import NO, OK, evaluate
+    name = "bs-civil-engineering"
+    got = plan_for({"catalog_year": "2026-27", "program": name, "qr_pathway": "1/2", "start_term": "2027-fall", "completed": []})
+    slots = {c["slot"] for s in got["semesters"] for c in s["courses"] if isinstance(c, dict)}
+    assert got["check"]["valid"] and len(got["semesters"]) == 8 and not slots & {"ge_1b", "ge_ud_sci"}
+    assert "ge_3ud" in slots  # upper-division GE needs 1B first (p.2319): the major's 1B counts
+    from gatorpath.engine.planner import cover_combinations
+    program, university = load_rules("2026-27", name)
+    new = {"catalog_year": "2026-27", "program": name, "qr_pathway": "1/2", "completed": []}
+    shown = cover_combinations(new, program, university, CATALOG, PREREQS, by_term="2027-fall")["open"]
+    assert "GE 1A English Composition" in shown and not [x for x in shown if x.startswith(("GE 1B", "GE 5UD"))]
+    ctx = {"done": {"ENGR 282"}, "ge_done": set(), "catalog": CATALOG, "program": program, "profile": {}}
+    assert evaluate({"ge_area": "1B"}, ctx)[0] == NO
+    assert evaluate({"ge_area": "1B"}, ctx | {"done": {"ENGR 282", "ENGR 201"}})[0] == OK
+
+
 def test_upper_division_and_graduate_isnt_graduate_only():
     # MUS 434: "Restricted to upper-division and graduate Broadcast & Electronic Communication Arts and Music majors"
     from gatorpath.engine.planner import NO, OK, evaluate

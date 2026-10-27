@@ -14,7 +14,7 @@ import re
 from collections import Counter
 
 from gatorpath.engine.prereq import leaves, prereq_warnings, reverse_index
-from gatorpath.engine.rules import GRADE_CHECKS, GRADE_POINTS, audit, blocks_repeat, number, rank
+from gatorpath.engine.rules import GRADE_CHECKS, GRADE_POINTS, audit, blocks_repeat, ge_areas, ge_met_in_major, number, rank
 
 # Winter Session runs "during the intersession between the Fall and Spring term" (2026-27 p.1716): 2027-winter is
 # January 2027, after 2026-fall and before 2027-spring.
@@ -130,7 +130,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
     if "ge_area" in e:
         area = str(e["ge_area"])
         ok = (area in ctx["ge_done"] or area in ctx.get("slot_areas", ())
-              or any(area in ctx["catalog"][c]["ge_areas"] for c in ctx["done"] if c in ctx["catalog"]))
+              or any(area in ctx["catalog"][c]["ge_areas"] for c in ctx["done"] if c in ctx["catalog"])
+              or ge_met_in_major(ctx.get("program", {}), set(ctx["done"])).get(area, ("",))[0] == "satisfied")
         if not ok and ctx["profile"].get("prior_bachelors"):  # GE is waived for them (p.2313); a prereq isn't
             return UNVERIFIED, [f"GE Area {area} (your prior bachelor's degree waives GE; confirm it covers this "
                                 "prerequisite)"]
@@ -532,12 +533,6 @@ def next_term(term: str, summer: bool, winter: bool = False) -> str:
             y, i = y + 1, 0
         if seasons[i] in ("spring", "fall") or (seasons[i] == "summer" and summer) or (seasons[i] == "winter" and winter):
             return f"{y}-{seasons[i]}"
-
-
-def ge_areas(g: dict) -> list[str]:
-    """The GE area labels a university group takes ("1A", "USH"), from its `from` filters."""
-    return [str(a) for f in ([g["from"]] if isinstance(g.get("from"), dict) else g.get("from") or [])
-            for a in ([f.get("ge_area")] if not isinstance(f.get("ge_area"), list) else f["ge_area"]) if a]
 
 
 def area_groups(label: str, university: dict) -> list[str]:
@@ -1359,12 +1354,13 @@ def cover_combinations(profile: dict, program: dict, university: dict, catalog: 
     from gatorpath.engine.rules import matches
 
     required = [c for g in program["groups"] for c in g.get("all_of", []) if c in catalog]
+    in_major = {str(m["area"]) for m in program.get("ge_met", [])}  # "met in the major" (§6.2 ge_met)
     results = {}
     for g in university["groups"]:
         filters = g.get("from", [])
         filters = filters if isinstance(filters, list) else [filters]
-        if not filters or any(matches(f, c, catalog[c]) for f in filters for c in required):
-            continue  # the major's own courses cover it (GWAR via CSC 300GW): not the student's pick
+        if not filters or any(matches(f, c, catalog[c]) for f in filters for c in required) or in_major & set(ge_areas(g)):
+            continue  # the major's own courses cover it (GWAR via CSC 300GW; Civil's GE 1B, p.1939): not the student's pick
         r = eligible_options(profile, g["id"], program, university, catalog, prereqs, plan, by_term, limit=10**6)
         if r.get("error"):
             return r

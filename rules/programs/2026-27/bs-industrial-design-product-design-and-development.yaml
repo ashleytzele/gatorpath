@@ -10,6 +10,12 @@ verified: false
 verified_by: null
 total_units: 59
 source: p.1083
+ge_met:
+- area: 3UD
+  one_of:
+  - - DES 356
+  quote: Area 3UD (Upper-Division Arts or Humanities) is satisfied upon completion of DES 356.
+  source: p.1083
 groups:
 - id: foundation
   title: Foundation Requirements (6 units)

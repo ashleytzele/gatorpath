@@ -13,6 +13,13 @@ source: p.1868
 global:
   no_cr_nc: true
   source: p.1868
+ge_met:
+- area: 5B
+  one_of:
+  - - BIOL 240
+  - - CHEM 341
+  quote: Area 5B (Biological Science) is satisfied upon completion of either BIOL 240 or CHEM 341.
+  source: p.1868
 groups:
 - id: lower_required
   title: 'Lower-Division Requirements (37 units): fixed courses'

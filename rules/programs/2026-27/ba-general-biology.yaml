@@ -17,6 +17,17 @@ source: p.1784
 global:
   no_cr_nc: true
   source: p.1784
+ge_met:
+- area: 5B
+  one_of:
+  - - BIOL 240
+  quote: Area 5B (Biological Science) is satisfied upon completion of BIOL 240.
+  source: p.1784
+- area: 5UD
+  one_of:
+  - - BIOL 355
+  quote: Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355.
+  source: p.1784
 groups:
 - id: residence_biology
   title: 12 biology units at SF State

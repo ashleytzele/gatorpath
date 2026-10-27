@@ -12,6 +12,24 @@ source: p.1965
 global:
   no_cr_nc: true
   source: p.1965
+ge_met:
+- area: 1B
+  one_of:
+  - - ENGR 205
+    - ENGR 201
+  - - ENGR 205
+    - ENGR 213
+  - - ENGR 282
+    - ENGR 201
+  - - ENGR 282
+    - ENGR 213
+  quote: Area 1B (Critical Thinking) is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213.
+  source: p.1966
+- area: 5UD
+  one_of:
+  - - ENGR 478
+  quote: Upper-Division General Education, Physical and Life Sciences (5UD) is satisfied upon completion of ENGR 478.
+  source: p.1966
 groups:
 - id: math_science_chemistry
   title: 'Lower-Division Math and Science: Select One (CHEM 115 or CHEM 180)'

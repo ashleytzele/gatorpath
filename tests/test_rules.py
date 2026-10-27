@@ -403,6 +403,28 @@ def test_electives_fill_to_the_programs_total():
     assert low["units_needed"] == 0 and low["status"] == "satisfied"  # nothing left to fill: met, not an error
 
 
+def test_ge_areas_the_major_meets():
+    # BS Civil Engineering p.1939: "Area 1B (Critical Thinking) is satisfied upon completion of ENGR 205 or ENGR 282 and
+    # either ENGR 201 or ENGR 213", though neither course carries a GE area
+    from gatorpath.engine.rules import check_program
+    program, university = load_rules("2026-27", "bs-civil-engineering")
+    row = lambda c, grade="B": {"code": c, "grade": grade, "term": "2026-fall"}
+    ge = lambda rows, doing=(): {g["id"]: g for g in audit({"catalog_year": "2026-27", "completed": rows, "in_progress": list(doing)},
+                                                          program, university, CATALOG)["groups"]}
+    got = ge([row("ENGR 282")])["ge_1b"]
+    assert got["status"] == "remaining" and got["met_in_major"]["source"] == "p.1939"  # open, and what will meet it
+    assert ["ENGR 282", "ENGR 213"] in got["met_in_major"]["one_of"]
+    assert ge([row("ENGR 282"), row("ENGR 213", "F")])["ge_1b"]["status"] == "remaining"
+    got = ge([row("ENGR 282")], ["ENGR 201"])["ge_1b"]
+    assert (got["status"], got["met_by"]) == ("in_progress", "major")
+    assert ge([row("ENGR 282"), row("ENGR 213")])["ge_1b"]["status"] == "satisfied"
+    assert ge([row(c) for c in ("ENGR 300", "ENGR 302", "ENGR 304")])["ge_ud_sci"]["status"] == "satisfied"
+    bad = program | {"ge_met": [{"area": "9Z", "one_of": [["ENGR 999"]], "quote": "Area 9Z", "source": "p.1"}]}
+    got = [x for x in check_program(bad, CATALOG, None, "", university) if x.startswith("ge_met")]
+    assert got == ["ge_met 9Z: not a GE area the university rules take", "ge_met 9Z: ENGR 999 is not in the 2026-27 catalog",
+                   "ge_met 9Z: quote isn't word for word in the Bulletin text: 'Area 9Z'"]
+
+
 def test_program_files_pass_check_program():
     # ARCHITECTURE §6.2 "AI-drafted rules": the hand-written programs are the bar a draft is held to
     from gatorpath.engine.rules import check_program

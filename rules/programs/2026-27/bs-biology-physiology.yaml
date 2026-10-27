@@ -12,6 +12,17 @@ source: p.1835
 global:
   no_cr_nc: true
   source: p.1835
+ge_met:
+- area: 5B
+  one_of:
+  - - BIOL 240
+  quote: Area 5B (Biological Science) is satisfied upon completion of BIOL 240.
+  source: p.1835
+- area: 5UD
+  one_of:
+  - - BIOL 355
+  quote: Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355.
+  source: p.1835
 groups:
 - id: lower_fixed
   title: Lower-Division Requirements (BIOL, CHEM, MATH)

@@ -12,6 +12,15 @@ source: p.724
 global:
   itep: true
   source: p.724
+ge_met:
+- area: 5B
+  one_of:
+  - - BIOL 212
+    - BIOL 220
+  - - BIOL 212
+    - BIOL 328
+  quote: Area 5B (Biological Science) is satisfied upon completion of BIOL 212 and either BIOL 220 or BIOL 328.
+  source: p.724
 groups:
 - id: letter_grade_cr_nc
   title: Letter grades, except S ED 640 and S ED 660

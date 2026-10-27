@@ -157,7 +157,8 @@ Rules (they're checked by a program, then by a person):
   course under two codes: in a list to choose from, write each code (PH 221, ETHS 221); a required one is its own
   one_of group, one option per code ([[MUS 130], [TH A 131]]), never both codes in an all_of.
 - Major requirements only: GE, SF State Studies and the university's graduation requirements are in other files.
-  A major group's id is never one of theirs (gwar, ge_1a, …): the major's own GWAR course is e.g. major_gwar.
+  A major group's id is never one of theirs (gwar, ge_1a, …): the major's own GWAR course is e.g. major_gwar. One
+  exception: "General Education Requirements Met in the Major" goes in `ge_met`, one entry per area.
   Include transfer_notes only when the text gives transfer advice; leave out `advising` and `dpr_plan`.
 - Grading rules and unit limits over a program's courses (letter grades only, a CR/NC cap, a GPA floor, "no more than
   one course below C-", "30 units must be upper-division", "12 units at SF State") are check groups; a cap inside one

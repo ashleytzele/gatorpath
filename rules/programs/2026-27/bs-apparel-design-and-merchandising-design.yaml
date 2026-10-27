@@ -12,6 +12,17 @@ source: p.667
 global:
   no_cr_nc: true
   source: p.667
+ge_met:
+- area: 5C
+  one_of:
+  - - ADM 365
+  quote: Area 5C (Laboratory) is satisfied upon completion of ADM 365.
+  source: p.667
+- area: 3UD
+  one_of:
+  - - ADM 561
+  quote: Area 3UD (Upper-Division Arts or Humanities) is satisfied upon completion of ADM 561.
+  source: p.667
 groups:
 - id: core
   title: Core Requirements (37 units)

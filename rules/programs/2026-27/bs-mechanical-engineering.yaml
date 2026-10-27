@@ -12,6 +12,27 @@ source: p.1978
 global:
   no_cr_nc: true
   source: p.1978
+ge_met:
+- area: 1B
+  one_of:
+  - - ENGR 205
+    - ENGR 201
+  - - ENGR 205
+    - ENGR 213
+  - - ENGR 282
+    - ENGR 201
+  - - ENGR 282
+    - ENGR 213
+  quote: Area 1B (Critical Thinking) is satisfied upon completion of either ENGR 205 or ENGR 282 and either ENGR 201 or ENGR
+    213.
+  source: p.1978
+- area: 5UD
+  one_of:
+  - - ENGR 300
+    - ENGR 302
+    - ENGR 304
+  quote: Area 5UD (Upper-Division Science) is satisfied upon completion of ENGR 300, ENGR 302, and ENGR 304.
+  source: p.1978
 groups:
 - id: math_physics
   title: Lower-Division Math and Science Courses (fixed courses)

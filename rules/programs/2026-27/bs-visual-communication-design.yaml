@@ -11,6 +11,12 @@ verified: false
 verified_by: null
 total_units: 58
 source: p.1091
+ge_met:
+- area: 3UD
+  one_of:
+  - - DES 356
+  quote: Upper-Division General Education, Arts or Humanities (GE 3UD) is satisfied upon completion of DES 356.
+  source: p.1091
 groups:
 - id: advancing_to_300_level
   title: Before advancing to courses at the 300 level or higher

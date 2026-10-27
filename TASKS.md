@@ -505,13 +505,16 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     transferred nothing (BS Public Health's ADT test plan schedules BIOL 100/101 and PH 205)
   - [x] Read the other 2026-10-22 pilots against the Bulletin, as BS Public Health (2026-10-27): BA Asian American
     Studies, BM Composition, BS Civil Engineering (review log). Rules and roadmaps as printed; what they turned up:
-  - [ ] "General Education Requirements Met in the Major" (18 programs in 2026-27: Civil, Computer, Electrical and
+  - [x] "General Education Requirements Met in the Major" (18 programs in 2026-27: Civil, Computer, Electrical and
     Mechanical Engineering, the six Biology programs, Biochemistry, both Apparel Design and Merchandising, Industrial
     Design, Visual Communication Design, both Kinesiology, Dietetics and Nutrition Science): "Area 1B (Critical
     Thinking) is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213" (p.1939). No rule
     type says so, and the courses carry no GE area in the catalog, so audits leave those areas open and plans add them:
     BS Civil's plans add GE 1B and 5UD (6 units) and run a term past the printed roadmaps (9 terms, not 8; 11, not 10).
-    A program-level `ge_met` (area, the courses, source) read by the audit; ARCHITECTURE §6.2 first
+    A program-level `ge_met` (area, the courses, source) read by the audit; ARCHITECTURE §6.2 first. Done 2026-10-27:
+    `ge_met` on all 18 (32 areas, each quoted with its page); the audit marks the area met (or says which major courses
+    will meet it), build_plan and ge_combinations leave it out, and a "GE Area X" prereq counts it. The four
+    engineering programs' plans now end with their printed roadmaps (8 terms; 10 on QR 3/4)
   - [ ] A course whose prereq GatorPath can't check goes in the first term it fits, whatever its roadmap semester:
     BA Asian American Studies' AA S 696 ("24 upper-division units in AA S courses") in term 1 (roadmap: 7), BM
     Composition's MUS 361 (audition, department permission) in term 2 (roadmap: 8). A scan of every first-time

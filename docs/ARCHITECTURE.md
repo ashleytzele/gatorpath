@@ -364,6 +364,16 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   should be upper-division", p.504: `{level: upper, units: 6}`). A level narrows `{approved: true}` too: "Up to 6 units
   may be in community college or lower-division coursework" (p.1264) = `[{approved: true, level: upper}, {approved:
   true, level: lower, max_units: 6}]`.
+- `ge_met` (program, added 2026-10-27): "General Education Requirements Met in the Major", areas "deemed 'met in the
+  major' upon completion of the courses listed (even though the courses and their prerequisites are not approved for
+  GE)" (18 programs, e.g. BS Civil Engineering p.1939). A list of `{area, one_of: [[codes], ...], quote, source}`: the
+  area is met once every course of one option is passed, as a Select One ("ENGR 205 or ENGR 282 and either ENGR 201 or
+  ENGR 213" = four options). The audit marks the university GE groups taking that area `satisfied` (`met_by: major`)
+  once an option is passed, `in_progress` while one is done or in progress, and gives each such group
+  `met_in_major: {one_of, source}`, so an open one says which major courses will meet it; build_plan plans no GE course
+  for it and ge_combinations leaves it out. A prereq "GE Area X" and the upper-division GE rule (1A, 1B, 1C and 2 first,
+  p.2319) count it from the term after. check_program checks the area (one a university GE group takes), the codes,
+  the page and the quote.
 - `change_of_major` (university, added 2026-10-22): the Bulletin's rule that a student who changes major meets "the
   major requirements in effect at the time they declare or change their major" (pp.2352, 2390), and how (a Change
   of Major through the Student Center after consulting faculty advisors, p.2352). compare_programs quotes it.
