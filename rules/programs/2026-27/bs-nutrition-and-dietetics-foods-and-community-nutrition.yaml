@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-nutrition-and-dietetics-foods-and-community-nutrition.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: bs-nutrition-and-dietetics-foods-and-community-nutrition
 title: 'Bachelor of Science in Nutrition and Dietetics: Concentration in Foods and Community Nutrition'
 catalog_year: 2026-27
@@ -30,7 +33,8 @@ groups:
   quote: FCS 600 Professional Development 3
   source: p.682
 - id: recommended_electives
-  title: 'Recommended Electives (6 units): Select two'
+  title: 'Recommended Electives (6 units): Select two (the Bulletin also lists FCS 426, with no title or units; it isn''t
+    in the 2026-27 catalog)'
   choose_units: 6
   from:
   - list:
@@ -48,7 +52,6 @@ groups:
     - ECON 102
     - ENVS 130
     - FCS 220
-    - FCS 426
     - FCS 543
     - GEOG 427
     - HH 380

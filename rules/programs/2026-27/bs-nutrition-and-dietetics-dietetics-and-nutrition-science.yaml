@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-nutrition-and-dietetics-dietetics-and-nutrition-science.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: bs-nutrition-and-dietetics-dietetics-and-nutrition-science
 title: 'Bachelor of Science in Nutrition and Dietetics: Concentration in Dietetics and Nutrition Science'
 catalog_year: 2026-27
@@ -35,21 +38,16 @@ groups:
   - CHEM 349
   - NUTR 450
   - NUTR 550
-  quote: Professional Requirements (30 units)
-  source: p.677
-- id: professional_mnt
-  title: 'Professional Requirements: Medical Nutrition Therapy'
-  all_of:
   - NUTR 484
   - NUTR 584
-  quote: NUTR 484 Medical Nutrition Therapy I 3
-  source: p.678
+  quote: Professional Requirements (30 units)
+  source: p.677-678
 - id: recommended_elective
-  title: 'Recommended Electives (3-4 units): Select One'
+  title: 'Recommended Electives (3-4 units): Select One (the Bulletin also lists FCS 426, with no title or units; it isn''t
+    in the 2026-27 catalog)'
   one_of:
   - - A U 220
   - - BIOL 326
-  - - FCS 426
   - - FCS 543
   - - GEOG 427
   - - HH 380

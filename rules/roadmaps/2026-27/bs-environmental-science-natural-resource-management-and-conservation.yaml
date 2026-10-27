@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (bs-environmental-science-natural-resource-management-and-conservation.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: bs-environmental-science-natural-resource-management-and-conservation
 catalog_year: 2026-27
 verified: false
@@ -31,6 +34,8 @@ variants:
       Requirements (p. 2058).
     - 8 Ecosystem Interactions (3-4 units). A full list of courses that can fulfill this requirement can be found in the Degree
       Requirements (p. 2058).
+    - 'GatorPath: the major requires ENV 690 Capstone Seminar (p.2065); this printed roadmap''s eighth semester has ENVS 690
+      Senior Seminar in Environmental Studies (Major Core) instead. A GatorPath plan takes ENV 690.'
     semesters:
     - units: 15
       source: p.2068

@@ -497,6 +497,12 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   (one per "one of"; PHYS 330 needs MATH 376: Physics, Earth Sciences, Cell and Molecular Biology); all_of/one_of
   claim before electives (Art History's ART 671); "graduate standing or KIN ITEP …" isn't graduate-only; "majors and
   minors with …" clauses; variable-unit courses in the units check; an approval beside a list keeps the list.
+  Last drafts reviewed 2026-10-27 (review log): 7 loaded (Music Production, Instrumental and Vocal Performance, ENV
+  NRM&C, both Nutrition concentrations, Women and Gender Studies); 107 of 110 served, 91.6% of 978 groups checked by
+  GatorPath. Engine fixes on the way: two Select Ones sharing a course plan different options; a group id "elective"
+  is rejected; --load accepts a required course the printed roadmap leaves out (noted on the variant). Left: BA
+  Philosophy and Religion (suspended, nothing printed), the ECS Special Education ITEP (graduate-standing credential
+  courses an ITEP student takes by permission: a question for a person), BA Family and Community Sciences (no roadmap).
   Still drafts, for a person (rules/drafts/2026-27/): BA American Indian Studies, BA Dance, BS Physics: Astrophysics,
   BM Instrumental and Vocal Performance (roadmap semesters short of their printed units: lessons and other unparsed
   items left off), BM Music Production (MUS 281 not on its roadmap), BS Environmental Science: NRM&C (ENV 690 not on
@@ -577,7 +583,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     semester of the student's final (senior) year" (Economics, 3 English), a GPA before credential coursework (2
     ITEPs), Social Work's GE 1A first and 24 junior units before practicum, ENGR 696 after 15 UD ENGR units, Speech's
     semester sequence. A planner order constraint, then a check.
-  - [ ] Repeated courses in a plan (4, and the BM Instrumental/Vocal Performance drafts): "MUS 260 Applied Music
+  - [ ] Repeated courses in a plan (6 with BM Instrumental/Vocal Performance, loaded 2026-10-27 with their lessons as
+    slots naming the unparsed groups): "MUS 260 Applied Music
     Lessons (1 unit course taken 4 times)". The audit adds up a repeatable course's units; the planner places a
     course once. MUS 443 "taken 4 times" isn't repeatable in its catalog entry: a question for the department.
   - Advisor approvals (genuinely a person's, 16): 8 approval-only elective groups, 4 engineering study plans,
@@ -588,8 +595,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   - Data GatorPath doesn't have (12): online units (Cinema), study abroad units (French), units per term in
     production courses, the college of a GWAR course (French), COMM 150 with GE A1, partial units (COMM's "only 2
     units"), per-course unit caps, History's A-with-B/C/D overlap, SPAN 215's heritage test-out (0-3 units).
-  - [ ] BA Women and Gender Studies draft: its plan ends 3 upper-division units short; the free electives' UD flag
-    doesn't survive the roadmap's own elective slots (planner)
+  - [x] BA Women and Gender Studies draft: its plan ended 3 upper-division units short. Its major group "elective" shared
+    the planner's free-elective slot name (renamed; check_program rejects it). Loaded 2026-10-27
 - [x] Footnote marks read from the PDF's layout (2026-10-24): a benchmark of six PDF readers (pdftotext -raw and
   -bbox-layout, PyMuPDF, pdfplumber, Camelot, MarkItDown) on known answers chose `pdftotext -bbox-layout` (48/48 marks,
   55/55 units, 14/14 cross-listings, no new dependency; -raw misled a parser on 79 rows' marks across the requirement

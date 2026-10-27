@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-women-and-gender-studies.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: ba-women-and-gender-studies
 title: Bachelor of Arts in Women and Gender Studies
 catalog_year: 2026-27
@@ -11,7 +14,10 @@ groups:
   quote: Students may double-count a maximum of 12 units for both General Education and the Women and Gender Studies major.
   source: p.1704
 - id: cr_nc_cap
-  unparsed: true
+  title: At most 9 CR/NC units
+  across: major
+  max_cr:
+    units: 9
   quote: A maximum of 9 units within the major can be taken credit/no credit, but students are strongly urged to take all
     courses within the major for letter grades.
   source: p.1704
@@ -95,7 +101,7 @@ groups:
   - - WGS 621
   quote: Social Movements (3 units)
   source: p.1704
-- id: elective
+- id: major_elective
   title: Elective (3 units)
   choose_units: 3
   from:

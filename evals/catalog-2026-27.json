@@ -3486,6 +3486,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "BECA 330": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 945,
+  "title": "The Sound Studio I: Consoles & Signal Flow",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "BECA 340": {
   "ge_areas": [],
   "grading": null,
@@ -3646,6 +3656,23 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "BECA 485": {
+  "crosslisted": [
+   "WGS 485"
+  ],
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 948,
+  "title": "Women and Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "BECA 502": {
   "ge_areas": [
    "SJ",
@@ -3790,6 +3817,16 @@
   "title": "General Microbiology and Public Health",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "BIOL 211": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1769,
+  "title": "General Microbiology and Public Health Laboratory",
+  "units_max": 1.0,
+  "units_min": 1.0
  },
  "BIOL 212": {
   "ge_areas": [],
@@ -4822,6 +4859,16 @@
   "title": "Independent Study in Biology",
   "units_max": 3.0,
   "units_min": 1.0
+ },
+ "BUS 216": {
+  "ge_areas": [],
+  "grading": "letter_or_cr_nc",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 70,
+  "title": "Foundations in Business",
+  "units_max": 3.0,
+  "units_min": 3.0
  },
  "BUS 300GW": {
   "ge_areas": [
@@ -13078,6 +13125,18 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "FCS 220": {
+  "ge_areas": [
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 661,
+  "title": "Young Children and Families",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "FCS 543": {
   "ge_areas": [
    "ESCA",
@@ -13734,6 +13793,19 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "GEOG 423": {
+  "crosslisted": [
+   "WGS 423"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 2012,
+  "title": "Geographies of Gender and Sexuality: Exploring Experiences, Identities, and Liberatory Possibilities",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "GEOG 425": {
   "ge_areas": [],
   "grading": null,
@@ -14318,6 +14390,18 @@
   "repeatable": false,
   "source_page": 801,
   "title": "Holistic Health: Human Nature and Global Perspectives",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "HH 383": {
+  "ge_areas": [
+   "4UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 801,
+  "title": "Chinese Perspectives in Holistic Health",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -19353,6 +19437,18 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "KIN 355": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 704,
+  "title": "Science, Sport, and Fitness",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "KIN 384GW": {
   "ge_areas": [
    "GW"
@@ -22315,6 +22411,36 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "MUS 406": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1535,
+  "title": "Song Writing Workshop",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "MUS 408": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1536,
+  "title": "Electronic Music Production",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
+ "MUS 418": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1536,
+  "title": "Advanced Electronic Music Production",
+  "units_max": 2.0,
+  "units_min": 2.0
+ },
  "MUS 420": {
   "ge_areas": [],
   "grading": "letter",
@@ -22324,6 +22450,16 @@
   "title": "20th Century Techniques",
   "units_max": 3.0,
   "units_min": 3.0
+ },
+ "MUS 426": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1536,
+  "title": "Marketing and Law in the Music Industry",
+  "units_max": 2.0,
+  "units_min": 2.0
  },
  "MUS 431": {
   "ge_areas": [],
@@ -22624,6 +22760,130 @@
   "repeatable": false,
   "source_page": 663,
   "title": "Introduction to Nutrition and Dietetics",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 353GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 663,
+  "title": "Foodservice Systems Management - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 356": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Foods and World Culture",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 357": {
+  "ge_areas": [
+   "5UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Principles of Food Preparation",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 450": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Advanced Nutrition I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 453": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Nutrition in the Life Cycle",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 457": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Management of Quantity Food Purchasing and Production",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 484": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Medical Nutrition Therapy I",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 550": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Advanced Nutrition II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 551": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Nutrition Education and Communication",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 557": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Experimental Food Study",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 584": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Medical Nutrition Therapy II",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "NUTR 651": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 664,
+  "title": "Community Nutrition and Assessment",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -26133,6 +26393,24 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "RRS 566": {
+  "crosslisted": [
+   "WGS 566"
+  ],
+  "ge_areas": [
+   "6",
+   "SJ",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 502,
+  "title": "Gender and Modernity in the Muslim and Arab Worlds",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "RRS 571": {
   "ge_areas": [
    "GP",
@@ -26192,6 +26470,34 @@
   "repeatable": false,
   "source_page": 502,
   "title": "History of People of Color in the U.S.",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 640": {
+  "crosslisted": [
+   "SXS 640",
+   "WGS 640"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 503,
+  "title": "Race and Sexual Migration",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "RRS 645": {
+  "crosslisted": [
+   "SXS 645",
+   "WGS 645"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 503,
+  "title": "Sex, Race, Lies, and Love in San Francisco",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -27453,6 +27759,34 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "SXS 640": {
+  "crosslisted": [
+   "RRS 640",
+   "WGS 640"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 819,
+  "title": "Race and Sexual Migration",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SXS 645": {
+  "crosslisted": [
+   "RRS 645",
+   "WGS 645"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 819,
+  "title": "Sex, Race, Lies, and Love in San Francisco",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "TH A 131": {
   "crosslisted": [
    "MUS 130"
@@ -28281,6 +28615,105 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "WGS 105": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 1696,
+  "title": "Feminism and Self-Care: Perspectives and Practices",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "WGS 150": {
+  "ge_areas": [
+   "4",
+   "USH",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1696,
+  "title": "Women and Gender in U.S. History and Society",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 160": {
+  "ge_areas": [
+   "AERM",
+   "USG",
+   "CSLG"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1696,
+  "title": "Gender, Politics, and Citizenship",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 200": {
+  "ge_areas": [
+   "GP",
+   "AERM",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1697,
+  "title": "Introduction to Women and Gender Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 210": {
+  "ge_areas": [
+   "SJ",
+   "4"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1697,
+  "title": "Introduction to Feminism and the State",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 220": {
+  "ge_areas": [
+   "3B"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1697,
+  "title": "Introduction to Feminist Disability Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 280": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1697,
+  "title": "Introduction to Feminist Science Studies",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 300GW": {
+  "ge_areas": [
+   "GW"
+  ],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1697,
+  "title": "Gender, Race, and Nation - GWAR",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "WGS 303": {
   "ge_areas": [
    "3UD",
@@ -28305,6 +28738,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "WGS 305": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": true,
+  "repeatable": true,
+  "source_page": 1698,
+  "title": "Women and Gender Studies Lecture Series",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "WGS 355": {
   "crosslisted": [
    "HIST 355",
@@ -28316,6 +28759,16 @@
   "repeatable": false,
   "source_page": 1698,
   "title": "History of Women in Latin America",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 400": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1698,
+  "title": "That's Not What I Said: Feminism, Oral History, and Research Methods in Women and Gender Studies",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -28333,6 +28786,19 @@
   "repeatable": false,
   "source_page": 1698,
   "title": "Native Genders and Feminism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 423": {
+  "crosslisted": [
+   "GEOG 423"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1698,
+  "title": "Geographies of Gender and Sexuality: Exploring Experiences, Identities, and Liberatory Possibilities",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -28385,6 +28851,23 @@
   "units_max": 4.0,
   "units_min": 4.0
  },
+ "WGS 485": {
+  "crosslisted": [
+   "BECA 485"
+  ],
+  "ge_areas": [
+   "SJ",
+   "AERM",
+   "3UD"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1699,
+  "title": "Women and Media",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "WGS 505": {
   "crosslisted": [
    "LTNS 505"
@@ -28397,6 +28880,16 @@
   "repeatable": false,
   "source_page": 1699,
   "title": "Latina/o/x Sexualities and Genders",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 511": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1699,
+  "title": "Women and Violence",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -28427,6 +28920,20 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "WGS 515": {
+  "ge_areas": [
+   "4UD",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1699,
+  "title": "Gender, Race, and Reproductive Justice",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "WGS 536": {
   "ge_areas": [
    "4UD",
@@ -28451,6 +28958,20 @@
   "repeatable": false,
   "source_page": 1699,
   "title": "Women Writers and Social Change",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 542": {
+  "ge_areas": [
+   "3UD",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1700,
+  "title": "Gender and Popular Music",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -28500,6 +29021,33 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "WGS 561": {
+  "ge_areas": [
+   "SJ",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1700,
+  "title": "Women, Ethnicity, and Social Movements",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 562": {
+  "ge_areas": [
+   "SJ",
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1700,
+  "title": "History of African American Women",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
  "WGS 563": {
   "ge_areas": [
    "GP",
@@ -28510,6 +29058,49 @@
   "repeatable": false,
   "source_page": 1700,
   "title": "Gender, Sexuality, and the Politics of Disability",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 565": {
+  "ge_areas": [
+   "AERM",
+   "GP"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1700,
+  "title": "Muslim Feminisms",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 566": {
+  "crosslisted": [
+   "RRS 566"
+  ],
+  "ge_areas": [
+   "6",
+   "SJ",
+   "GP",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1701,
+  "title": "Gender and Modernity in the Muslim and Arab Worlds",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 578": {
+  "ge_areas": [
+   "ESCA"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1701,
+  "title": "Feminist Environmental and Climate Justice",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -28530,6 +29121,16 @@
   "repeatable": false,
   "source_page": 1701,
   "title": "Gaming from the Margins",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 591": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1701,
+  "title": "Critical Approaches to Transgender Health, Science, and Medicine",
   "units_max": 3.0,
   "units_min": 3.0
  },
@@ -28558,6 +29159,79 @@
   "repeatable": false,
   "source_page": 1701,
   "title": "Feminist Anthropology",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 612": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1701,
+  "title": "Queer Theory",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 621": {
+  "ge_areas": [
+   "GP",
+   "SJ",
+   "4UD",
+   "AERM"
+  ],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1701,
+  "title": "Feminist Theories",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 640": {
+  "crosslisted": [
+   "RRS 640",
+   "SXS 640"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1702,
+  "title": "Race and Sexual Migration",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 645": {
+  "crosslisted": [
+   "RRS 645",
+   "SXS 645"
+  ],
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1702,
+  "title": "Sex, Race, Lies, and Love in San Francisco",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 690": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1702,
+  "title": "Senior Seminar",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "WGS 698": {
+  "ge_areas": [],
+  "grading": null,
+  "paired": false,
+  "repeatable": false,
+  "source_page": 1702,
+  "title": "Feminist Praxis and the Non-Profit Industrial Complex",
   "units_max": 3.0,
   "units_min": 3.0
  }

@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (bm-instrumental-performance.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: bm-instrumental-performance
 catalog_year: 2026-27
 verified: false
@@ -51,7 +54,10 @@ variants:
       - MUS 200
       - MUS 201
       - MUS 221
-      - MUS 260
+      - slot: major
+        group: conc_applied_lessons
+        units: 2
+        note: MUS 260 Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
       - slot: GE
         area: '1'
         units: 3
@@ -67,7 +73,10 @@ variants:
         units: 1
         note: 'Select One (Lower-Division Core): MUS 202 or MUS 206'
       - MUS 222
-      - MUS 260
+      - slot: major
+        group: conc_applied_lessons
+        units: 2
+        note: MUS 260 Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
       - MUS 281
       - slot: GE
         area: '4'
@@ -82,7 +91,10 @@ variants:
       items:
       - MUS 232
       - MUS 237
-      - MUS 260
+      - slot: major
+        group: conc_applied_lessons
+        units: 2
+        note: MUS 260 Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
       - slot: GE
         area: '5'
         units: 3
@@ -96,7 +108,10 @@ variants:
     - units: 15
       source: p.1557-1558
       items:
-      - MUS 360
+      - slot: major
+        group: conc_advanced_lessons
+        units: 2
+        note: MUS 360 Advanced Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
       - MUS 365
       - slot: major
         group: ud_theory
@@ -113,7 +128,10 @@ variants:
     - units: 16
       source: p.1558
       items:
-      - MUS 360
+      - slot: major
+        group: conc_advanced_lessons
+        units: 2
+        note: MUS 360 Advanced Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
       - MUS 365
       - slot: major
         group: conc_ensembles
@@ -131,7 +149,10 @@ variants:
     - units: 16
       source: p.1558
       items:
-      - MUS 360
+      - slot: major
+        group: conc_advanced_lessons
+        units: 2
+        note: MUS 360 Advanced Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
       - MUS 365
       - slot: major
         group: conc_ensembles
