@@ -497,6 +497,10 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   (one per "one of"; PHYS 330 needs MATH 376: Physics, Earth Sciences, Cell and Molecular Biology); all_of/one_of
   claim before electives (Art History's ART 671); "graduate standing or KIN ITEP …" isn't graduate-only; "majors and
   minors with …" clauses; variable-unit courses in the units check; an approval beside a list keeps the list.
+  - [ ] BS Applied Math's ADT test plan (try_plans' made-up AS-T student, nothing transferred) stops at 18 terms: the
+    printed ADT semesters (9, 7, 4, 2 units) become the term caps (D24) and all lower-division GE has to fit under them.
+    Invalid before 2026-10-27 too (hand-written, so --load never ran it). Give the test student the AS-T's met_in_transfer
+    and lower-division GE, or cap a past-roadmap term differently
   Last drafts reviewed 2026-10-27 (review log): 7 loaded (Music Production, Instrumental and Vocal Performance, ENV
   NRM&C, both Nutrition concentrations, Women and Gender Studies); 107 of 110 served, 91.6% of 978 groups checked by
   GatorPath. Engine fixes on the way: two Select Ones sharing a course plan different options; a group id "elective"

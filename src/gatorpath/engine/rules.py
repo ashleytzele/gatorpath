@@ -263,7 +263,8 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
         # most done or in progress, then one with no attempt that didn't count (a CR can't be retaken, p.2392), then one
         # an earlier major group isn't already planning (a course counts once: GEOG 604 in two NRM&C Select Ones,
         # pp.2065-2066), then the fewest units left, then the first printed (§6.2).
-        planned = {c for x in done_groups.values() if x["kind"] == kind for c in x.get("remaining", [])}
+        planned = {c for x in done_groups.values() if x["kind"] == "major" for c in x.get("remaining", [])} \
+            if claimed is not None else set()
         opts = []
         for opt in g["one_of"]:
             done = [c for c in opt if ok(c)]
