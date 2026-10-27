@@ -466,6 +466,13 @@ def test_check_program_reports_what_a_person_must_fix():
                                                 "source": "p.2129"}]}
     assert "elective: the planner names its free-elective slots this; name it for the major, e.g. major_elective" \
         in check_program(free, CATALOG)
+    # `after` names all_of / one_of groups of the program (KIN ITEP's credential group after its core, p.725)
+    late = good | {"groups": [g | {"after": ["programming", "nope", "major_electives"]} if g["id"] == "required" else g
+                              for g in good["groups"]]}
+    got = check_program(late, CATALOG)
+    assert "required: after names 'nope', not a group of this program" in got
+    assert "required: after names 'major_electives', which isn't an all_of or one_of group" in got
+    assert not any("'programming'" in x for x in got)
     early = good | {"groups": [g | {"source": "p.152"} for g in good["groups"]]}  # a page under 1000
     assert check_program(early, CATALOG, {152}) == []
 

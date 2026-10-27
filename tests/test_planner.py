@@ -90,6 +90,27 @@ def test_an_itep_student_takes_credential_courses_by_permission():
     ge_first = parse_prereq("GE Areas 1A/A2*, 1B/A3*, 1C/A1*, and 2/B4* all with grades of C- or better; or permission of the instructor.")["expr"]
     assert evaluate(ge_first, ctx)[0] == NO
 
+
+def test_a_group_after_others_waits_for_their_courses():
+    # BS Kinesiology ITEP p.725: students "apply to the Single Subject Physical Education Credential program when in the
+    # final semester of completing unit requirements" (prerequisites, core, concentration). Its credential courses' only
+    # prereq is being a credential student, which GatorPath can't check, so a new student's plan had KIN 750, S ED 701
+    # and S ED 720 in the first term
+    name = "bs-kinesiology-integrated-teacher-education-program-in-physical-education"
+    program, university, _ = rules_for({"program": name})
+    got = plan_for({"catalog_year": "2026-27", "program": name, "start_term": "2027-fall", "completed": []})
+    assert got["check"]["valid"]
+    when = {c: i for i, s in enumerate(got["semesters"]) for c in s["courses"] if isinstance(c, str)}
+    groups = {g["id"]: g for g in program["groups"]}
+    codes = lambda g: g.get("all_of", []) + [c for o in g.get("one_of", []) for c in o]
+    credential = [c for c in codes(groups["credential"]) if c in when]
+    before = [c for a in groups["credential"]["after"] for c in codes(groups[a]) if c in when]
+    assert credential and before and min(when[c] for c in credential) > max(when[c] for c in before)
+    plan = {"semesters": [{"term": "2027-fall", "courses": ["KIN 750"]}, {"term": "2028-spring", "courses": ["KIN 240"]}]}
+    bad = check_plan({"catalog_year": "2026-27", "program": name, "completed": []}, plan, program, university, CATALOG, PREREQS)
+    [e] = [e for e in bad["errors"] if e["error"] == "order"]
+    assert e["course"] == "KIN 750" and "KIN 240" in e["message"] and "p.725" in e["message"]
+
 def test_restricted_to_major_and_standing():
     # CSC 300GW: "Restricted to upper-division Computer Science majors and minors; GE Area 1A; CSC 210 or CSC 215"
     p = FRESHMAN | {"ge_done": ["1A"]}

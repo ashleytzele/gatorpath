@@ -626,7 +626,7 @@ GROUP_KEYS = {"id", "title", "source", "quote", "unparsed", "all_of", "one_of", 
               "first_time_from", "min_grade", "min_units_from", "course_units", "exceptions", "approval", "waived_if",
               "fill_to_total", "across", "letter_grade", "max_cr", "max_below", "min_gpa", "max_units_from",
               "distinct_subjects", "min_categories", "one_category", "categories", "except",
-              "waiver", "amendments"}
+              "waiver", "amendments", "after"}
 FILTER_KEYS = {"list", "subject", "level", "except", "paired", "max_courses", "max_units", "ge_area", "ge_area_all", "approved"}
 SELECTORS = ("list", "subject", "level", "ge_area", "ge_area_all", "approved")  # a filter needs one, else it takes anything
 SHAPES = ("all_of", "one_of", "choose_n", "choose_units", "across", "unparsed")
@@ -657,6 +657,13 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
                        f"for the major, e.g. major_{gid}")
         if gid == "elective":  # build_plan's free electives are {"slot": "elective"}; a group's slot would merge into them
             out.append("elective: the planner names its free-elective slots this; name it for the major, e.g. major_elective")
+        for a in g.get("after", []):  # build_plan and check_plan order exact courses, so only all_of / one_of groups
+            other = next((x for x in program["groups"] if x.get("id") == a), None)
+            if other is None:
+                out.append(f"{gid}: after names {a!r}, not a group of this program")
+            elif not ({"all_of", "one_of"} & other.keys() and {"all_of", "one_of"} & g.keys()):
+                out.append(f"{gid}: after names {a!r}, which isn't an all_of or one_of group" if {"all_of", "one_of"} & g.keys()
+                           else f"{gid}: after is only for an all_of or one_of group")
         ids.add(gid)
         shape = [k for k in SHAPES if k in g]
         if len(shape) != 1:

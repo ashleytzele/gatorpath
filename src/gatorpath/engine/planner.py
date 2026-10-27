@@ -172,6 +172,11 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
     return UNVERIFIED, [f"{kind}: {e[kind]}"]
 
 
+def exact_courses(g: dict) -> list[str]:
+    """The courses an all_of or one_of group names (every option of a Select One)."""
+    return g.get("all_of", []) + [c for o in g.get("one_of", []) for c in o]
+
+
 def upper_only(g: dict) -> bool:
     """True when every course that can fill the group is upper-division (300+), so its slots add upper-division units."""
     filters = g.get("from", [])
@@ -437,6 +442,16 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     sim = profile | {"completed": profile.get("completed", []) + planned
                      + [{"code": c, "grade": ASSUMED} for c in profile.get("in_progress", []) if c in catalog],
                      "in_progress": []}
+    # `after` (§6.2): a group's courses in a later term than every planned course of the groups it names (KIN ITEP's
+    # credential courses after its prerequisites, core and concentration, p.725)
+    when = {x["code"]: x["term"] for x in planned}
+    for g in (g for g in program["groups"] if "after" in g):
+        for c in (c for c in exact_courses(g) if c in when):
+            late = [d for a in g["after"] for d in exact_courses(groups[a]) if term_key(when.get(d, "0000-spring")) >= term_key(when[c])]
+            if late:
+                err("order", f"{c} in {when[c]} comes before {', '.join(late)} finish: {g['title']} follows "
+                    f"{', '.join(groups[a].get('title', a) for a in g['after'])} ({g['source']})", term=when[c], course=c)
+
     result = audit(sim, program, university, catalog)
     slot_units: dict[str, float] = {}
     slot_count: dict[str, int] = {}
@@ -817,6 +832,10 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         return depth[c]
 
     rank_of = lambda c: (-chain(c), order.get(c, len(order)), c)
+    # `after` (§6.2): {course: the planned courses of the groups its group follows}
+    mine = {g["id"]: g for g in program["groups"]}
+    follows = {c: {d for a in g["after"] for d in exact_courses(mine[a]) if d in todo}
+             for g in program["groups"] if "after" in g for c in exact_courses(g) if c in todo}
 
     # Slots for what the courses leave open, plus free electives up to the unit totals.
     sim = base | {"completed": base["completed"] + [{"code": c, "grade": ASSUMED} for c in todo]}
@@ -927,6 +946,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                    "program": program, "class_level": levels, "slot_areas": slot_areas}
 
             def ok(c: str, same: set) -> bool:
+                if follows.get(c, set()) - done:  # `after`: those groups' courses in an earlier term first
+                    return False
                 state, _ = evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": same})
                 # An unverifiable branch ("or equivalent", high-school courses) doesn't let a course jump ahead of a
                 # prereq that's still in the plan: wait for it, in an earlier term (or this one, for corequisites).

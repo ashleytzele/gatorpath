@@ -107,6 +107,11 @@ groups:
   source: p.725
 - id: credential
   title: Credential Courses (33 units)
+  # p.725 "Application to the Credential Program": "Students should formally apply to the Single Subject Physical
+  # Education Credential program when in the final semester of completing unit requirements (pre-requisites,
+  # 17-18 units; core requirements, 18 units; and physical education teaching education requirements, 22 units)."
+  # The roadmap (pp.728-729) has every prerequisite, core and concentration course by semester 6, credential 7-8.
+  after: [prereq_biology_intro, prereq_anatomy, prereq_chem, prereq_physiology, prereq_statistics, core, concentration]
   all_of:
   - KIN 750
   - KIN 751

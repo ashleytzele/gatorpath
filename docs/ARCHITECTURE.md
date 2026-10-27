@@ -307,7 +307,11 @@ groups:
 Rule vocabulary (keep it small; add only when a real major needs it):
 `all_of`, `choose_n`, `choose_units`, `from` (list | subject+level filter | `ge_area`,
 `except`, `paired`, `max_courses`), `min_units_from`, `min_grade`, `no_cr_nc`, `global: {itep: true}` (an Integrated Teacher
-Education Program: a credential course's "or permission" and "credential students" count toward a plan, D27), `source`,
+Education Program: a credential course's "or permission" and "credential students" count toward a plan, D27), `after: [group ids]`
+(on an all_of / one_of group, naming all_of / one_of groups: its courses go in a later term than every course the
+plan has for those groups; KIN ITEP p.725 "apply to the … Credential program when in the final semester of
+completing unit requirements": the credential group after the prerequisites, core and concentration. build_plan waits
+for them, check_plan reports `order`), `source`,
 `waived_if` (a profile flag, e.g. `adt`: SF State Studies are waived for a verified AA-T/AS-T, p.2313),
 `distinct_subjects` + `across` (GE Area 4: "the three courses … must be in at least two different
 disciplines", p.2317).

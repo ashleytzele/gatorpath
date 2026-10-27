@@ -507,9 +507,10 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   is rejected; --load accepts a required course the printed roadmap leaves out (noted on the variant); "must/may be
   taken concurrently with X" is a corequisite (it read "X first"). Left: BA Philosophy and Religion (suspended,
   nothing printed), BA Family and Community Sciences (no roadmap).
-  - [ ] BS Kinesiology ITEP's test plan puts KIN 750, S ED 701 and S ED 720 in a new student's first term: their only
-    prereq is "KIN ITEP credential students", which GatorPath can't check, so nothing makes them wait for the
-    credential phase (2.50 GPA "before starting credential coursework", p.725). Before D27 too
+  - [x] BS Kinesiology ITEP's test plan put KIN 750, S ED 701 and S ED 720 in a new student's first term: their only
+    prereq is "KIN ITEP credential students", which GatorPath can't check. Fixed 2026-10-27 with `after` (§6.2): p.725
+    has students apply to the credential program "when in the final semester of completing unit requirements", so the
+    credential group follows the prerequisites, core and concentration (as the roadmap, pp.728-729)
   - [ ] "May not be taken concurrently with M S 684" (M S 683, and M S 684 / JOUR 617 alike) parses as a requirement
     (M S 684 first); it's an exclusion. A `not_with` leaf, or `unknown` until then
   Still drafts, for a person (rules/drafts/2026-27/): BA American Indian Studies, BA Dance, BS Physics: Astrophysics,
@@ -591,7 +592,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     lower-division courses for the major" (4 art and design programs), a capstone "in the senior year" / "the spring
     semester of the student's final (senior) year" (Economics, 3 English), a GPA before credential coursework (2
     ITEPs), Social Work's GE 1A first and 24 junior units before practicum, ENGR 696 after 15 UD ENGR units, Speech's
-    semester sequence. A planner order constraint, then a check.
+    semester sequence. A planner order constraint, then a check. `after` (2026-10-27) orders one all_of / one_of group
+    after others: the art programs' "lower-division courses for the major" first may fit it
   - [ ] Repeated courses in a plan (6 with BM Instrumental/Vocal Performance, loaded 2026-10-27 with their lessons as
     slots naming the unparsed groups): "MUS 260 Applied Music
     Lessons (1 unit course taken 4 times)". The audit adds up a repeatable course's units; the planner places a
