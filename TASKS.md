@@ -500,7 +500,11 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   - [ ] BS Applied Math's ADT test plan (try_plans' made-up AS-T student, nothing transferred) stops at 18 terms: the
     printed ADT semesters (9, 7, 4, 2 units) become the term caps (D24) and all lower-division GE has to fit under them.
     Invalid before 2026-10-27 too (hand-written, so --load never ran it). Give the test student the AS-T's met_in_transfer
-    and lower-division GE, or cap a past-roadmap term differently
+    and lower-division GE, or cap a past-roadmap term differently. Same root for every program: the engine never reads
+    `met_in_transfer` (a real AS-T student's DPR lists those courses), so each ADT test plan is a transfer student who
+    transferred nothing (BS Public Health's ADT test plan schedules BIOL 100/101 and PH 205)
+  - [ ] Read the other 2026-10-22 pilots against the Bulletin, as BS Public Health (2026-10-27): BA Asian American
+    Studies, BM Composition, BS Civil Engineering
   Last drafts reviewed 2026-10-27 (review log): 8 loaded (Music Production, Instrumental and Vocal Performance, ENV
   NRM&C, both Nutrition concentrations, Women and Gender Studies, and the ECS Special Education ITEP once ITEP
   permission counted, D27); 108 of 110 served. Engine fixes on the way: two Select Ones sharing a course plan different options; a group id "elective"

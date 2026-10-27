@@ -32,10 +32,10 @@ variants:
     - units: 15
       source: p.791
       items:
-      - slot: GE
-        area: '2'
+      - slot: major
+        group: foundation_statistics
         units: 3
-        note: 3-4 units; Major Foundation; footnotes 1, 2
+        note: GE Area 2 Requirement (Major Foundation); 3-4 units; footnotes 1, 2
       - slot: GE
         area: '1'
         units: 3
