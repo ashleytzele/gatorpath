@@ -143,6 +143,9 @@ GOLDEN = [
     ("PHYS 111", "MATH 198 or MATH 199 or MATH 226 or equivalent with a grade of C-minus or higher. Concurrent enrollment "
                  "in PHYS 112 required.",
      all_(any_(c("MATH 198", "C-"), c("MATH 199", "C-"), c("MATH 226", "C-"), EQ), c("PHYS 112", conc=True))),
+    # "must/may be taken concurrently with X": X in the same term (or before), never "X first" (SPED 729's ITEP pair)
+    ("ISED 782", "Graduate standing or permission of the instructor; must be taken concurrently with ISED 781.",
+     all_(any_(GRAD, PERM), c("ISED 781", conc=True))),
     ("PHYS 121", "PHYS 111 with a grade of C- or better; concurrent enrollment in PHYS 122.",
      all_(c("PHYS 111", "C-"), c("PHYS 122", conc=True))),
     ("PHYS 220", "MATH 226 with a grade of C or better; concurrent enrollment in PHYS 222; concurrent enrollment in MATH 227 recommended.",
@@ -252,6 +255,18 @@ def test_golden(code, text, expected):
     assert got["expr"] == expected
     assert got["status"] == "ok"
 
+
+
+def test_taken_concurrently_with_is_a_corequisite_even_beside_unknown_text():
+    # SPED 729 and SPED 730 point at each other in the same term; read as "SPED 730 first", neither could ever be planned
+    got = parse_prereq("Permission of the program or instructor; must be taken concurrently with SPED 730 or SPED 731.")
+    assert got["expr"] == all_(any_({"unknown": "Permission of the program"}, {"unknown": "instructor"}),
+                               any_(c("SPED 730", conc=True), c("SPED 731", conc=True))) and got["status"] == "partial"
+    got = parse_prereq("FR 215 and FR 216 or equivalents; may be taken concurrently with FR 305.")
+    assert got["expr"] == all_(any_(all_(c("FR 215"), c("FR 216")), {"unknown": "equivalents"}), c("FR 305", conc=True))
+    # an exclusion isn't a corequisite (M S 683: "May not be taken concurrently with M S 684"), and CINE's "may be taken
+    # concurrently without a formal exception" names no course after it
+    assert "concurrent_ok" not in str(parse_prereq("May not be taken concurrently with M S 684.")["expr"])
 
 def test_empty_text_is_none():
     assert parse_prereq("") == {"expr": None, "status": "none", "needs_permission": False}

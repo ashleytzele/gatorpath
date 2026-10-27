@@ -78,6 +78,11 @@ def major_name(program: dict) -> str:
     return program["title"].split(" in ", 1)[-1]  # "Bachelor of Science in Computer Science" -> "Computer Science"
 
 
+def itep(ctx: dict) -> bool:
+    """An Integrated Teacher Education Program: a bachelor's blended with a preliminary credential (`global: itep`, D27)."""
+    return bool(ctx.get("program", {}).get("global", {}).get("itep"))
+
+
 def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
     """Tri-state prereq check: ok / no / unverified, with the reasons behind anything not ok."""
     if e is None:
@@ -98,6 +103,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         reasons = [r for _, rs in parts for r in rs]
         if state == NO and perm and all(r.startswith("GPA ") for r in reasons):
             state = UNVERIFIED  # ordering can't fix a GPA: the student needs permission (or a higher GPA)
+        elif state == NO and perm and itep(ctx):  # D27: an ITEP student takes credential courses by permission
+            return UNVERIFIED, [f"needs {x['permission']} permission" for x in perm]
         if len(parts) > 1:
             reasons = ["one of: " + "; ".join(reasons)]
         return state, reasons + [f"or {x['permission']} permission" for x in perm]
@@ -151,7 +158,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         text = e["restricted_to"]
         # graduate-only unless it also opens to undergraduates: "upper-division and graduate … majors" (MUS 434), "graduate
         # standing or KIN ITEP credential students" (KIN 750, taken in the integrated teacher education program)
-        if re.search(r"(?<!under)graduate", text, re.I) and not re.search(r"upper|undergraduate|junior|senior|\bor\b", text, re.I):
+        if re.search(r"(?<!under)graduate", text, re.I) and not re.search(r"upper|undergraduate|junior|senior|\bor\b", text, re.I) \
+                and not (itep(ctx) and re.search(r"credential", text, re.I)):  # "graduate and … credential students": ITEP's are
             return NO, [f"restricted to {text}"]
         if major_name(ctx["program"]).lower() not in text.lower():
             return UNVERIFIED, [f"restricted to {text}"]

@@ -69,6 +69,24 @@ def test_standing_gpa_and_permission():
     assert errors(got) == [] and any("SF State GPA (3.0)" in w for w in got["warnings"])  # (12 + 12 + 6) / 10
 
 
+
+def test_an_itep_student_takes_credential_courses_by_permission():
+    # BA Early Childhood Studies: Special Education ITEP (p.612) "blends a bachelor's degree … with an Education
+    # Specialist … preliminary credential": its SPED 7xx courses are "Graduate standing or permission of the instructor"
+    # and "Restricted to graduate and education credential students". An ITEP undergraduate takes them by permission
+    # (D27): planned, flagged for an advisor. Any other program still can't plan them
+    from gatorpath.engine.planner import NO, UNVERIFIED, evaluate
+    itep = {"title": "Bachelor of Arts in Early Childhood Studies: Concentration in Special Education Integrated Teacher "
+                     "Education Program", "global": {"itep": True, "source": "p.612"}}
+    ctx = {"done": set(), "same_term": set(), "grades": {}, "units": 90, "profile": {}, "gpa": None, "ge_done": set(),
+           "catalog": {}, "class_level": {"upper": 60, "senior": 90}, "program": itep}
+    grad = parse_prereq("Graduate standing or permission of the instructor.")["expr"]
+    staff = parse_prereq("Restricted to graduate and education credential students.")["expr"]
+    assert evaluate(grad, ctx) == (UNVERIFIED, ["needs instructor permission"])
+    assert evaluate(staff, ctx)[0] == UNVERIFIED
+    other = ctx | {"program": {"title": "Bachelor of Science in Computer Science"}}
+    assert evaluate(grad, other)[0] == NO and evaluate(staff, other)[0] == NO
+
 def test_restricted_to_major_and_standing():
     # CSC 300GW: "Restricted to upper-division Computer Science majors and minors; GE Area 1A; CSC 210 or CSC 215"
     p = FRESHMAN | {"ge_done": ["1A"]}

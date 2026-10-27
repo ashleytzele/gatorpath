@@ -62,7 +62,10 @@ def permissions(m: re.Match) -> dict:
 LEAF, AND, OR, COMMA, EITHER, BOTH, GRADE_T, CONC_MARK, CONC_PREFIX, WORD = range(10)
 RULES = [
     (re.compile(r"\(may be taken concurrently\)", I), lambda m: (CONC_MARK, None)),
-    (re.compile(r"concurrent(?:ly)? enroll(?:ment)? in|be enrolled in an?\b", I), lambda m: (CONC_PREFIX, None)),
+    # "must/may be taken concurrently with X" too, but not "May not be taken concurrently with" (an exclusion) nor CINE's
+    # "may be taken concurrently without a formal exception"
+    (re.compile(r"concurrent(?:ly)? enroll(?:ment)? in|be enrolled in an?\b|(?:must |may )?(?<!not )be taken concurrently with\b",
+                I), lambda m: (CONC_PREFIX, None)),
     (GRADE, lambda m: (GRADE_T, (m.group(2) + ("+" if m.group(3) == "+" else "-" if m.group(3) else ""), bool(m.group(1)),
                                  "max_grade" if (m.group(4) or "").lower() == "lower" else "min_grade"))),
     # Placement "Category 1/2" is the roadmap QR pathway 1/2 (Bulletin p.1906 -> p.1908).

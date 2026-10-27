@@ -306,7 +306,8 @@ groups:
 
 Rule vocabulary (keep it small; add only when a real major needs it):
 `all_of`, `choose_n`, `choose_units`, `from` (list | subject+level filter | `ge_area`,
-`except`, `paired`, `max_courses`), `min_units_from`, `min_grade`, `no_cr_nc`, `source`,
+`except`, `paired`, `max_courses`), `min_units_from`, `min_grade`, `no_cr_nc`, `global: {itep: true}` (an Integrated Teacher
+Education Program: a credential course's "or permission" and "credential students" count toward a plan, D27), `source`,
 `waived_if` (a profile flag, e.g. `adt`: SF State Studies are waived for a verified AA-T/AS-T, p.2313),
 `distinct_subjects` + `across` (GE Area 4: "the three courses … must be in at least two different
 disciplines", p.2317).
@@ -520,7 +521,8 @@ total, and a `source:` page.
 ]}
 ```
 
-Leaf types: `course` (+ `min_grade`, `max_grade` for "C- or lower" retakes, `concurrent_ok`),
+Leaf types: `course` (+ `min_grade`, `max_grade` for "C- or lower" retakes, `concurrent_ok`: "concurrent enrollment
+in X", "(may be taken concurrently)", "must/may be taken concurrently with X"; never "May not be taken concurrently"),
 `ge_area` (+ `min_grade`; e.g. "GE Area 1A/A2" → `1A`), `qr_category` (list, e.g. `[1, 2]`;
 **Category = roadmap QR pathway**: p.1906 "QR Pathway 1/2" links to p.1908 "Quantitative Reasoning
 Category 1/2"; checked against `profile.qr_pathway`), `standing` (`lower|upper|senior|graduate`),
@@ -954,6 +956,7 @@ students; 0 hallucinated courses."*
 | D24 | The roadmap is the default load: each spring/fall term's cap is the printed units of the roadmap semester the student's units have reached (the last semester's past its end, at most 19, at least 12 for F-1); `max_units_per_term` is the student's own cap and overrides it; `pace.normal_load` reports the normal-15 plan as the lighter option. Replaces D18 | The roadmap is the planner's foundation; the student sets a cap if they want less. A term at its roadmap semester's load is the Bulletin's own suggested plan, so it gets "as on the Bulletin roadmap (p.X)", not an overload handoff | 2026-10-22 |
 | D25 | The graduation goal sets the load: with `graduate_by`, a roadmap plan that ends later is rebuilt with every term at the roadmap's heaviest semester, then a unit more at a time up to 19, until it ends by then; `plan_my_degree` asks for the goal | The student's own words (2026-10-22): ask when they're graduating and fit the units to it; the roadmap is the foundation that shows the normal range. A past-the-end term has no roadmap semester of its own, so the goal, not a guessed load, decides it | 2026-10-22 |
 | D26 | `get_sections` links each named instructor to a Rate My Professors search at SF State (school 880, checked 2026-10-27). The server never fetches it, and the link is labeled student opinion | Requested 2026-10-27: professor ratings beside the schedule. RMP has no public API, and its terms of use (§§4, 6) ban automated access and reuse without written consent, so a link the student opens is as far as GatorPath goes. Nothing from RMP goes into `rules/` or `catalog.db`, so §5 still holds | 2026-10-27 |
+| D27 | In an ITEP (`global: itep`), a prereq's permission branch counts toward a plan when its other branches can't be met (graduate standing), and "graduate and … credential students" admits the student: planned, with a see-advisor item for the permission | An ITEP blends the bachelor's with a preliminary credential (p.612): its students take SPED 737/738/780/885 ("Graduate standing or permission of the instructor") as undergraduates. Without it the ECS Special Education ITEP couldn't be planned. Decided by ashleytzele, 2026-10-27 | 2026-10-27 |
 
 ---
 
