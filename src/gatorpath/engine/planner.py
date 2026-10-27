@@ -716,11 +716,14 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     ends = [sum(x["units"] for x in road_sems[:k]) for k in range(len(road_sems) + 1)]  # 0, 16, 32, …
     away = status["totals"]["units"]["value"] - status["totals"]["residence_units"]["value"] if ref == "adt" else 0
 
+    def road_at(units: float) -> int:
+        """The roadmap semester (from 0) the student's units have reached: the nearest end of one, the last past it."""
+        return min(min(range(len(ends)), key=lambda k: (abs(ends[k] - (units - away)), -k)), len(road_sems) - 1)
+
     def road_load(units: float) -> dict | None:
         if not road_sems:
             return None
-        k = min(range(len(ends)), key=lambda k: (abs(ends[k] - (units - away)), -k))
-        sem = road_sems[min(k, len(road_sems) - 1)]
+        sem = road_sems[road_at(units)]
         return {"units": min(sem["units"], university["max_units"]["fall_spring"]), "source": sem["source"]}
 
     def cap_for(term: str, cap: float | None, units: float) -> float:
@@ -891,6 +894,11 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     road = [sem | {"items": [x for x in (pick_one(as_one_of(i)) for i in sem["items"]) if x is not None]}
             for sem in roadmap["variants"][ref]["semesters"]]
     named = {str(i.get("area")) for sem in road for i in sem["items"] if isinstance(i, dict)}
+    printed_in: dict[str, int] = {}  # each roadmap course's semester (a Select One's: the option planned)
+    for k, sem in enumerate(road):
+        for i in sem["items"]:
+            if isinstance(i, str):
+                printed_in.setdefault(i, k)
 
     def groups_for(label: str) -> list[str]:
         return sorted(area_groups(label, university), key=lambda i: any(a in named for a in ge_areas(groups[i])))
@@ -921,6 +929,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         left = sorted(todo, key=rank_of)
         first_ok: dict[str, str] = {}  # the first term a course could have gone in
         semesters, notes, term, slot_areas, carry, queue = [], [], start, set(), [], list(queue)
+        regular = 0  # spring/fall terms planned: the roadmap semesters gone by (D28)
         for _ in range(20):
             if not left and not slots:
                 break
@@ -947,7 +956,11 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 # An unverifiable branch ("or equivalent", high-school courses) doesn't let a course jump ahead of a
                 # prereq that's still in the plan: wait for it, in an earlier term (or this one, for corequisites).
                 waiting = (hard[c] - done) | (needs[c] - hard[c] - done - same)
-                return (state == OK or (state == UNVERIFIED and not waiting)) and season_ok(c, term, catalog, seasons)[0]
+                # D28: nor more than a semester before its roadmap semester (AA S 696, "24 upper-division units in AA S
+                # courses": semester 7, so term 6, not 1). The student's semester: where their units start them, one more
+                # per spring/fall term, or their units' when further (summer terms)
+                early = printed_in.get(c, -1) > max(road_at(units), road_at(units0) + regular) + 1
+                return (state == OK or (state == UNVERIFIED and not waiting and not early)) and season_ok(c, term, catalog, seasons)[0]
 
             def ready_options(gid: str) -> float:
                 if approval_only(groups[gid]):  # the advisor's pick: no options to check, so ready at the standing
@@ -1082,6 +1095,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 grades.pop(c, None)
             slot_areas = slot_areas | {a for x in term_slots for a in slot_ge_areas(x, groups)}
             units += used
+            regular += term[5:] in ("spring", "fall")
             term = next_term(term, summer, winter)
         return semesters, first_ok, notes
 

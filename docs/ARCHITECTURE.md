@@ -779,6 +779,12 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
      early), ties broken by position in the roadmap variant
    - eligible = prereqs satisfied by courses completed in *earlier* terms (or in this term if `concurrent_ok`);
      corequisites go together or not at all
+   - **a prereq GatorPath can't check waits for the roadmap (D28):** a course whose prereq is unverifiable (permission,
+     an audition, "24 upper-division units in AA S courses", a restriction to majors named otherwise than the program,
+     a GPA not given) goes at most one semester before the roadmap semester that prints it. The student is at the
+     semester their units start them on (the nearest semester end, as the load in step 5), one more per spring/fall
+     term, or further when their units say so (summer terms). AA S 696 (semester 7) goes in term 6, not term 1.
+     Courses not on the roadmap don't wait
    - offered this season according to `offered_terms`: a course that ran in other seasons but in none of the
      checked terms of this one waits (check_plan warns if a plan puts it there); unknown, or never seen in any
      checked term, is allowed with a ⚠️ (rare isn't never)
@@ -971,6 +977,7 @@ students; 0 hallucinated courses."*
 | D25 | The graduation goal sets the load: with `graduate_by`, a roadmap plan that ends later is rebuilt with every term at the roadmap's heaviest semester, then a unit more at a time up to 19, until it ends by then; `plan_my_degree` asks for the goal | The student's own words (2026-10-22): ask when they're graduating and fit the units to it; the roadmap is the foundation that shows the normal range. A past-the-end term has no roadmap semester of its own, so the goal, not a guessed load, decides it | 2026-10-22 |
 | D26 | `get_sections` links each named instructor to a Rate My Professors search at SF State (school 880, checked 2026-10-27). The server never fetches it, and the link is labeled student opinion | Requested 2026-10-27: professor ratings beside the schedule. RMP has no public API, and its terms of use (§§4, 6) ban automated access and reuse without written consent, so a link the student opens is as far as GatorPath goes. Nothing from RMP goes into `rules/` or `catalog.db`, so §5 still holds | 2026-10-27 |
 | D27 | In an ITEP (`global: itep`), a prereq's permission branch counts toward a plan when its other branches need graduate standing (nothing an order of courses fixes: GE areas or a prereq course still wait), and "graduate and … credential students" admits the student: planned, with a see-advisor item for the permission | An ITEP blends the bachelor's with a preliminary credential (p.612): its students take SPED 737/738/780/885 ("Graduate standing or permission of the instructor") as undergraduates. Without it the ECS Special Education ITEP couldn't be planned. Decided by ashleytzele, 2026-10-27 | 2026-10-27 |
+| D28 | build_plan places a course whose prereq GatorPath can't check (UNVERIFIED) no more than one semester before the roadmap semester that prints it (the student's semester: where their units start them, plus one per spring/fall term, or their units' if further); check_plan still only warns about such a prereq | A prereq GatorPath can't check let the course go in the first term it fit: AA S 696 ("24 upper-division units in AA S courses", roadmap semester 7) in a new student's term 1, BM Composition's capstone MUS 361 (roadmap 8) in term 2, ART 509 ("upper-division Art majors", roadmap 8) in term 1. Checking a restriction's class standing whatever the program's title would contradict printed roadmaps (BS Kinesiology ITEP has three "upper-division" KIN courses in semester 4, at 47 units); the roadmap is the Bulletin's own order. The semester of slack: held to the exact semester, chains behind a held course ran past the roadmap (BA Mathematics QR 3/4: MATH 335 → 380 → 435, 9 terms; Kinesiology ITEP 9), and progress counted by units alone lagged roadmaps that print a 3-unit US/CA Government course the plan meets inside others (Kinesiology ITEP stalled at 53 units). Decided by ashleytzele | 2026-10-27 |
 
 ---
 

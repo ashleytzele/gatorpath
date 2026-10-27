@@ -560,6 +560,22 @@ def test_finished_math_adds_no_pathway_courses():
     assert "MATH 227" in planned and not planned & {"MATH 197", "MATH 198"}
 
 
+def test_a_prereq_gatorpath_cant_check_waits_for_the_roadmap():
+    # D28: AA S 696's prereq can't be checked ("24 upper-division units in AA S courses"), so a new student's plan had it
+    # in term 1; the roadmap prints it in semester 7 (p.441). At most a semester early, counted from where the student
+    # starts: a 60-unit transfer is at semester 5
+    from gatorpath.engine.planner import build_plan
+    name = "ba-asian-american-studies"
+    text = "Restricted to Asian American Studies majors; 24 upper-division units in AA S courses; or permission of the instructor."
+    prereqs = PREREQS | {"AA S 696": {"raw_text": text, **parse_prereq(text)}}
+    program, university, roadmap = rules_for({"program": name})
+    term = lambda extra: next(i for i, s in enumerate(build_plan(
+        {"catalog_year": "2026-27", "program": name, "start_term": "2027-fall", "completed": []} | extra,
+        program, university, roadmap, CATALOG, prereqs)["semesters"], 1) if "AA S 696" in s["courses"])
+    assert term({}) >= 6
+    assert term({"transfer_units": 60}) == 2
+
+
 def test_ge_the_major_meets_plans_no_ge_course():
     # BS Civil Engineering p.1939: GE 1B and 5UD are met by major courses; the plan added a course for each and ran a
     # term past the printed roadmap (9 terms, not 8)

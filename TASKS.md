@@ -515,7 +515,7 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     `ge_met` on all 18 (32 areas, each quoted with its page); the audit marks the area met (or says which major courses
     will meet it), build_plan and ge_combinations leave it out, and a "GE Area X" prereq counts it. The four
     engineering programs' plans now end with their printed roadmaps (8 terms; 10 on QR 3/4)
-  - [ ] A course whose prereq GatorPath can't check goes in the first term it fits, whatever its roadmap semester:
+  - [x] A course whose prereq GatorPath can't check goes in the first term it fits, whatever its roadmap semester:
     BA Asian American Studies' AA S 696 ("24 upper-division units in AA S courses") in term 1 (roadmap: 7), BM
     Composition's MUS 361 (audition, department permission) in term 2 (roadmap: 8). A scan of every first-time
     roadmap found 66 named courses 3+ terms ahead of their printed semester (some are fine: no prereq, or only GE
@@ -526,7 +526,12 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     upper-division Kinesiology majors") in semester 4, at 47 units, and its plan stalls at 50; Industrial Design's
     stalls at 59 (every course left needs the standing; no free units to reach it); Kinesiology EMS's roadmap reaches
     59 units by semester 5 and its plan takes a term more. Decide: standing first plus a way past those stalls, or an
-    unverifiable course waits for its printed roadmap semester (fixes AA S 696 and MUS 361 too)
+    unverifiable course waits for its printed roadmap semester (fixes AA S 696 and MUS 361 too). Decided (ashleytzele,
+    2026-10-27): the roadmap, D28. Such a course goes at most one semester before its roadmap semester (held to the
+    exact one, chains behind it ran past the roadmap); AA S 696 now term 6, MUS 361 term 7, ART 509 term 7, and no
+    unverifiable course is 3+ semesters early (the 24 left are courses whose prereqs GatorPath checks and the plan
+    meets). Every plan the same length but BS CS 2024-25's for a student who gives no GPA: CSC 648 ("GPA of 3.0 or
+    higher") waits for semester 7 and a 3-unit GE course spills into a 9th term, which fold_last_term offers to move
   - [ ] Prereq wordings still read as unknown: "GE Area A2" alone (ENGR 697GW; the 1A/A2 pair parses), "Restricted
     to senior standing and LS 300GW" (LS 690: the course is swallowed into the restriction), "sophomore standing"
   Last drafts reviewed 2026-10-27 (review log): 8 loaded (Music Production, Instrumental and Vocal Performance, ENV
