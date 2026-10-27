@@ -503,8 +503,29 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     and lower-division GE, or cap a past-roadmap term differently. Same root for every program: the engine never reads
     `met_in_transfer` (a real AS-T student's DPR lists those courses), so each ADT test plan is a transfer student who
     transferred nothing (BS Public Health's ADT test plan schedules BIOL 100/101 and PH 205)
-  - [ ] Read the other 2026-10-22 pilots against the Bulletin, as BS Public Health (2026-10-27): BA Asian American
-    Studies, BM Composition, BS Civil Engineering
+  - [x] Read the other 2026-10-22 pilots against the Bulletin, as BS Public Health (2026-10-27): BA Asian American
+    Studies, BM Composition, BS Civil Engineering (review log). Rules and roadmaps as printed; what they turned up:
+  - [ ] "General Education Requirements Met in the Major" (18 programs in 2026-27: Civil, Computer, Electrical and
+    Mechanical Engineering, the six Biology programs, Biochemistry, both Apparel Design and Merchandising, Industrial
+    Design, Visual Communication Design, both Kinesiology, Dietetics and Nutrition Science): "Area 1B (Critical
+    Thinking) is satisfied upon completion of ENGR 205 or ENGR 282 and either ENGR 201 or ENGR 213" (p.1939). No rule
+    type says so, and the courses carry no GE area in the catalog, so audits leave those areas open and plans add them:
+    BS Civil's plans add GE 1B and 5UD (6 units) and run a term past the printed roadmaps (9 terms, not 8; 11, not 10).
+    A program-level `ge_met` (area, the courses, source) read by the audit; ARCHITECTURE §6.2 first
+  - [ ] A course whose prereq GatorPath can't check goes in the first term it fits, whatever its roadmap semester:
+    BA Asian American Studies' AA S 696 ("24 upper-division units in AA S courses") in term 1 (roadmap: 7), BM
+    Composition's MUS 361 (audition, department permission) in term 2 (roadmap: 8). A scan of every first-time
+    roadmap found 66 named courses 3+ terms ahead of their printed semester (some are fine: no prereq, or only GE
+    areas). Many are restrictions whose class standing is never checked: `restricted_to` checks "upper"/"senior"
+    only when the text names the program's title ("Art: Concentration in …" isn't in "upper-division Art majors"),
+    so ART 509 goes in term 1 and "senior standing" (C J 680) is never checked. Checking the standing first is right
+    by p.2390 but conflicts with printed roadmaps: BS Kinesiology ITEP puts KIN 331, 384GW and 487 ("Restricted to
+    upper-division Kinesiology majors") in semester 4, at 47 units, and its plan stalls at 50; Industrial Design's
+    stalls at 59 (every course left needs the standing; no free units to reach it); Kinesiology EMS's roadmap reaches
+    59 units by semester 5 and its plan takes a term more. Decide: standing first plus a way past those stalls, or an
+    unverifiable course waits for its printed roadmap semester (fixes AA S 696 and MUS 361 too)
+  - [ ] Prereq wordings still read as unknown: "GE Area A2" alone (ENGR 697GW; the 1A/A2 pair parses), "Restricted
+    to senior standing and LS 300GW" (LS 690: the course is swallowed into the restriction), "sophomore standing"
   Last drafts reviewed 2026-10-27 (review log): 8 loaded (Music Production, Instrumental and Vocal Performance, ENV
   NRM&C, both Nutrition concentrations, Women and Gender Studies, and the ECS Special Education ITEP once ITEP
   permission counted, D27); 108 of 110 served. Engine fixes on the way: two Select Ones sharing a course plan different options; a group id "elective"

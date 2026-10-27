@@ -246,6 +246,9 @@ GOLDEN = [
      any_(c("MATH 198", "C"), c("MATH 199", "C"), EQ, {"course": "MATH 226", "max_grade": "C-"},
           {"high_school": "pre-calculus", "min_grade": "B"}, {"high_school": "calculus", "min_grade": "C"})),
     ("PHYS 697", "PHYS 491; permission of the faculty adviser.", all_(c("PHYS 491"), ADVISOR)),
+    # no space before "or better": was read as "C" plus an unknown "-or better"
+    ("ENGR 309", "ENGR 102* and ENGR 200* or equivalents with grades of C-or better.",
+     any_(all_(c("ENGR 102", "C-"), c("ENGR 200", "C-")), EQ)),
 ]
 
 
@@ -263,7 +266,7 @@ def test_taken_concurrently_with_is_a_corequisite_even_beside_unknown_text():
     assert got["expr"] == all_(any_({"unknown": "Permission of the program"}, {"unknown": "instructor"}),
                                any_(c("SPED 730", conc=True), c("SPED 731", conc=True))) and got["status"] == "partial"
     got = parse_prereq("FR 215 and FR 216 or equivalents; may be taken concurrently with FR 305.")
-    assert got["expr"] == all_(any_(all_(c("FR 215"), c("FR 216")), {"unknown": "equivalents"}), c("FR 305", conc=True))
+    assert got["expr"] == all_(any_(all_(c("FR 215"), c("FR 216")), EQ), c("FR 305", conc=True)) and got["status"] == "ok"
     # an exclusion isn't a corequisite (M S 683: "May not be taken concurrently with M S 684"), and CINE's "may be taken
     # concurrently without a formal exception" names no course after it
     assert "concurrent_ok" not in str(parse_prereq("May not be taken concurrently with M S 684.")["expr"])

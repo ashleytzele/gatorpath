@@ -15,9 +15,9 @@ import re
 
 I = re.I
 COURSE = re.compile(r"([A-Z]{1,5}(?: [A-Z]{1,3})? \d{3}[A-Z]{0,3})\*?(?!\w)")
-GRADE = re.compile(
-    r"(all\s+)?(?:completed\s+)?with\s+(?:a\s+)?(?:grades?\s+of\s+)?((?-i:[A-D]))(\+|-\s*minus|-|\s+minus)?(?![A-Za-z])"
-    r"(?:\s+or\s+(better|higher|lower))?",
+GRADE = re.compile(  # "C-or better" too, with no space (ENGR 304); it was read as "C"
+    r"(all\s+)?(?:completed\s+)?with\s+(?:a\s+)?(?:grades?\s+of\s+)?((?-i:[A-D]))(\+|-\s*minus|-|\s+minus)?"
+    r"(?:(?![A-Za-z])|(?<=[+-])(?=or\b))(?:\s*or\s+(better|higher|lower))?",
     I,
 )
 UP, SENIOR, GRAD = {"standing": "upper"}, {"standing": "senior"}, {"standing": "graduate"}
@@ -99,7 +99,7 @@ RULES = [
      lambda m: (LEAF, {"restricted_to": m.group(1).strip()})),
     (re.compile(r"(\d[a-c]?)/[a-d]\d\*?(?: course\b| requirement\b)?", I), lambda m: (LEAF, {"ge_area": m.group(1).upper()})),
     (COURSE, lambda m: (LEAF, {"course": m.group(1)})),
-    (re.compile(r"equivalent\b", I), lambda m: (LEAF, {"equivalent": True})),
+    (re.compile(r"equivalents?\b", I), lambda m: (LEAF, {"equivalent": True})),  # "… or equivalents with grades of …"
     (re.compile(r"and/or\b|or\b|/", I), lambda m: (OR, None)),
     (re.compile(r"and\b|&", I), lambda m: (AND, None)),
     (re.compile(r","), lambda m: (COMMA, None)),
