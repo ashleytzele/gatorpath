@@ -9,6 +9,9 @@ verified: false
 verified_by: null
 total_units: 72
 source: p.1418
+global:
+  itep: true
+  source: p.1418
 groups:
 - id: interdisciplinary_studies
   title: Interdisciplinary Studies (6 units)

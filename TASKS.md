@@ -501,12 +501,14 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     printed ADT semesters (9, 7, 4, 2 units) become the term caps (D24) and all lower-division GE has to fit under them.
     Invalid before 2026-10-27 too (hand-written, so --load never ran it). Give the test student the AS-T's met_in_transfer
     and lower-division GE, or cap a past-roadmap term differently
-  Last drafts reviewed 2026-10-27 (review log): 7 loaded (Music Production, Instrumental and Vocal Performance, ENV
-  NRM&C, both Nutrition concentrations, Women and Gender Studies); 107 of 110 served, 91.6% of 978 groups checked by
-  GatorPath. Engine fixes on the way: two Select Ones sharing a course plan different options; a group id "elective"
-  is rejected; --load accepts a required course the printed roadmap leaves out (noted on the variant). Left: BA
-  Philosophy and Religion (suspended, nothing printed), the ECS Special Education ITEP (graduate-standing credential
-  courses an ITEP student takes by permission: a question for a person), BA Family and Community Sciences (no roadmap).
+  Last drafts reviewed 2026-10-27 (review log): 8 loaded (Music Production, Instrumental and Vocal Performance, ENV
+  NRM&C, both Nutrition concentrations, Women and Gender Studies, and the ECS Special Education ITEP once ITEP
+  permission counted, D27); 108 of 110 served. Engine fixes on the way: two Select Ones sharing a course plan different options; a group id "elective"
+  is rejected; --load accepts a required course the printed roadmap leaves out (noted on the variant); "must/may be
+  taken concurrently with X" is a corequisite (it read "X first"). Left: BA Philosophy and Religion (suspended,
+  nothing printed), BA Family and Community Sciences (no roadmap).
+  - [ ] "May not be taken concurrently with M S 684" (M S 683, and M S 684 / JOUR 617 alike) parses as a requirement
+    (M S 684 first); it's an exclusion. A `not_with` leaf, or `unknown` until then
   Still drafts, for a person (rules/drafts/2026-27/): BA American Indian Studies, BA Dance, BS Physics: Astrophysics,
   BM Instrumental and Vocal Performance (roadmap semesters short of their printed units: lessons and other unparsed
   items left off), BM Music Production (MUS 281 not on its roadmap), BS Environmental Science: NRM&C (ENV 690 not on

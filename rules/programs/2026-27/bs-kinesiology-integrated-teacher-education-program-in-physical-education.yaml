@@ -9,6 +9,9 @@ verified: false
 verified_by: null
 total_units: 97
 source: p.724
+global:
+  itep: true
+  source: p.724
 groups:
 - id: letter_grade_cr_nc
   title: Letter grades, except S ED 640 and S ED 660

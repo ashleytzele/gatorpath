@@ -1,3 +1,6 @@
+# AI-drafted from the 2026-27 Bulletin text (ba-early-childhood-studies-special-education-integrated-teacher-education-program.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
+# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
+# the PDF (AGENTS.md, "Adding or changing a program's rules").
 program: ba-early-childhood-studies-special-education-integrated-teacher-education-program
 title: 'Bachelor of Arts in Early Childhood Studies: Concentration in Special Education Integrated Teacher Education Program'
 catalog_year: 2026-27
@@ -5,6 +8,9 @@ verified: false
 verified_by: null
 total_units: 72
 source: p.612
+global:
+  itep: true
+  source: p.612
 groups:
 - id: core_cad_210
   title: 'Core: Introduction to Applied Child and Adolescent Development'
@@ -36,6 +42,7 @@ groups:
   source: p.612
 - id: credential_required
   title: Early Childhood Special Education Credential (45 units minimum)
+  min_grade: B-
   all_of:
   - SPED 370
   - SPED 601
@@ -55,17 +62,18 @@ groups:
   source: p.612
 - id: credential_autism
   title: 'Early Childhood Special Education Credential: Select One (SPED 791 or SPED 825)'
+  min_grade: B-
   one_of:
   - - SPED 791
   - - SPED 825
   quote: 'Select One: 3'
   source: p.612
-- id: credential_grade
-  unparsed: true
-  quote: Credential courses must be completed with a grade of B- or better.
-  source: p.612
 - id: credential_cr_exception
-  unparsed: true
+  title: 'Credential courses: letter grades'
+  across:
+  - credential_required
+  - credential_autism
+  letter_grade: true
   quote: CR grading is only acceptable for specific SPED courses that have only CR/NC grading option.
   source: p.612
 - id: credential_entry_gpa

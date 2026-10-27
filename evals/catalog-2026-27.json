@@ -27457,6 +27457,16 @@
   "units_max": 3.0,
   "units_min": 3.0
  },
+ "SPED 601": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 355,
+  "title": "Observation and Participation in Special Education",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
  "SPED 620": {
   "ge_areas": [
    "SJ",
@@ -27569,6 +27579,126 @@
   "repeatable": false,
   "source_page": 356,
   "title": "Autism in the Contemporary World",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 702": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 356,
+  "title": "Education Specialist Teacher Support Seminar for California Teaching Performance Assessment",
+  "units_max": 3.0,
+  "units_min": 1.0
+ },
+ "SPED 729": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 357,
+  "title": "Student Teaching Workshop: Early Childhood Special Education",
+  "units_max": 1.0,
+  "units_min": 1.0
+ },
+ "SPED 730": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 357,
+  "title": "Student Teaching: Special Education",
+  "units_max": 9.0,
+  "units_min": 9.0
+ },
+ "SPED 731": {
+  "ge_areas": [],
+  "grading": "cr_nc",
+  "paired": false,
+  "repeatable": true,
+  "source_page": 357,
+  "title": "Special Education Field Experience",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 737": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 357,
+  "title": "Inclusive Learning and Supports in Early Intervention (Infants & Toddlers)",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 738": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 357,
+  "title": "Inclusive Curriculum Development and Supports in Early Childhood Settings (Preschool - Kindergarten)",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 780": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 360,
+  "title": "Equitable Assessment Practices for Young Children with Disabilities and Their Families",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 788": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 360,
+  "title": "Law, Ethics, and Instructional Planning",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 791": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 360,
+  "title": "Nature of the Autism Spectrum",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 801": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 361,
+  "title": "Development, Diversity, and English Language Learners: Special Education",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 825": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 361,
+  "title": "Communication, Behavior and Instructional Supports: Autism",
+  "units_max": 3.0,
+  "units_min": 3.0
+ },
+ "SPED 885": {
+  "ge_areas": [],
+  "grading": "letter",
+  "paired": false,
+  "repeatable": false,
+  "source_page": 361,
+  "title": "Allyship, Leadership, and Collaboration for Young Children with Disabilities",
   "units_max": 3.0,
   "units_min": 3.0
  },

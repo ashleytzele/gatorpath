@@ -34,8 +34,9 @@ variants:
       Requirements (p. 2058).
     - 8 Ecosystem Interactions (3-4 units). A full list of courses that can fulfill this requirement can be found in the Degree
       Requirements (p. 2058).
-    - 'GatorPath: the major requires ENV 690 Capstone Seminar (p.2065); this printed roadmap''s eighth semester has ENVS 690
-      Senior Seminar in Environmental Studies (Major Core) instead. A GatorPath plan takes ENV 690.'
+    - 'GatorPath: this printed roadmap''s eighth semester has ENVS 690 Senior Seminar in Environmental Studies (Major Core),
+      the Environmental Studies capstone; the major requires ENV 690 Capstone Seminar (p.2065). Read as ENV 690 (ashleytzele,
+      2026-10-27).'
     semesters:
     - units: 15
       source: p.2068
@@ -163,7 +164,7 @@ variants:
         group: core_statistics
         units: 3
         note: 'Select One (Major Core): BIOL 458 or GEOG 604; 3-4 units'
-      - ENVS 690
+      - ENV 690
       - slot: major
         group: topical_environmental_management
         units: 3
@@ -214,6 +215,8 @@ variants:
       in the Degree Requirements. (p. 2065)
     - 5 Tools and Techniques (3-4 units). A full list of courses that can fulfill this requirement can be found in the Degree
       Requirements. (p. 2065)
+    - 'GatorPath: this printed roadmap has ENVS 690 Senior Seminar in Environmental Studies where its own summary says
+      "Capstone (3 units): ENV 690" (p.2071). Read as ENV 690 (ashleytzele, 2026-10-27).'
     semesters:
     - units: 15
       source: p.2070
@@ -273,7 +276,7 @@ variants:
     - units: 15
       source: p.2071
       items:
-      - ENVS 690
+      - ENV 690
       - slot: major
         group: topical_environmental_management
         units: 3
