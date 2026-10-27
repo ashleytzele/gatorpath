@@ -445,7 +445,9 @@ on each variant and prints check_plan's errors: the end-to-end check. An answer 
 draft's file for a person, never lost; a `title:` with an unquoted colon (the usual cause) is quoted before parsing.
 `--load [ids]` moves a draft and its roadmap into `rules/programs/<year>/` and `rules/roadmaps/<year>/` (with their
 source text and a header saying how they were made) when nothing is left but requirements flagged for a person
-(`unparsed` groups, the roadmap slots naming them, a roadmap the planner doesn't read) and a new student's plan passes
+(`unparsed` groups, the roadmap slots naming them, a roadmap the planner doesn't read, a required course the
+printed roadmap leaves out while every semester still adds up to its printed units: the plan adds it, and a note on the
+variant says so) and a new student's plan passes
 check_plan on every variant; otherwise it stays in `rules/drafts/` and the command says why. Loaded drafts keep
 `verified: false` and `drafted_by`; `list_programs` marks them `drafted: true`.
 

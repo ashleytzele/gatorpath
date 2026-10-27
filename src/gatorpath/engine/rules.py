@@ -260,8 +260,10 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
 
     if "one_of" in g:
         # "Select One" of course bundles: met when every course of one option counts. What's left is one option: the
-        # most done or in progress, then one with no attempt that didn't count (a CR can't be retaken, p.2392), then
-        # the fewest units left, then the first printed (§6.2).
+        # most done or in progress, then one with no attempt that didn't count (a CR can't be retaken, p.2392), then one
+        # an earlier major group isn't already planning (a course counts once: GEOG 604 in two NRM&C Select Ones,
+        # pp.2065-2066), then the fewest units left, then the first printed (§6.2).
+        planned = {c for x in done_groups.values() if x["kind"] == kind for c in x.get("remaining", [])}
         opts = []
         for opt in g["one_of"]:
             done = [c for c in opt if ok(c)]
@@ -270,7 +272,7 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
         for c in {c for opt in g["one_of"] for c in opt}:
             note_grade(c)
         best = min(opts, key=lambda o: (bool(o["left"]), bool(o["in_progress"]), -len(o["done"] + o["in_progress"]),
-                                        any(c in taken for c in o["left"]),
+                                        any(c in taken for c in o["left"]), any(c in planned for c in o["left"]),
                                         sum(catalog[c]["units_min"] for c in o["left"] if c in catalog)))
         if claimed is not None:
             claimed.update(best["done"] + best["in_progress"])
@@ -652,6 +654,8 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
         if university and gid in {x["id"] for x in university["groups"]}:  # the audit and planner look groups up by id
             out.append(f"{gid}: the university rules use this id too (their result would stand for this group); name it "
                        f"for the major, e.g. major_{gid}")
+        if gid == "elective":  # build_plan's free electives are {"slot": "elective"}; a group's slot would merge into them
+            out.append("elective: the planner names its free-elective slots this; name it for the major, e.g. major_elective")
         ids.add(gid)
         shape = [k for k in SHAPES if k in g]
         if len(shape) != 1:

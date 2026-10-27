@@ -400,9 +400,11 @@ def try_plans(program: dict, roadmap: dict, university: dict, catalog: dict, pre
     return out
 
 
-# check_program / check_roadmap lines a loaded draft may still carry: requirements left for a person, flagged
+# check_program / check_roadmap lines a loaded draft may still carry: requirements left for a person, flagged. A required
+# course the printed roadmap leaves out (MUS 281, p.1569) is the Bulletin's omission when every semester still adds up to
+# its printed units (checked, never loadable); the plan adds the course, and a person notes it on the variant.
 LOADABLE = ("unparsed, a person writes", "units: can't check total_units", "is unparsed in the program rules",
-            "aren't in any variant")
+            "aren't in any variant", "required but not on this roadmap")
 HEADER = ("# AI-drafted from the {year} Bulletin text ({source}) by {drafted_by}; checked by check_program, check_roadmap\n"
           "# and a test plan per variant (ingest.programs --load). verified: false until a person checks it against\n"
           "# the PDF (AGENTS.md, \"Adding or changing a program's rules\").\n")

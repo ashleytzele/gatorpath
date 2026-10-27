@@ -377,6 +377,17 @@ def test_a_select_one_claims_its_course_before_an_elective_list_does():
     assert [g["id"] for g in got["groups"]][:2] == ["extra", "required"]  # still in the rules' order
 
 
+
+def test_two_select_ones_sharing_a_course_plan_different_options():
+    # BS Environmental Science: NRM&C (pp.2065-2066): GEOG 604 is in the Statistics core's Select One and in Tools and
+    # Techniques'; both planned it, the plan took it once, and no course counts twice, so Tools was left uncovered.
+    # Applied Math stands in: an earlier Select One that also offers MATH 209
+    program, university = load_rules("2026-27", "bs-applied-math")
+    stats = {"id": "stats", "one_of": [["MATH 209"], ["MATH 430"]], "source": "p.2129"}
+    got = {g["id"]: g for g in audit({"catalog_year": "2026-27", "completed": []},
+                                     program | {"groups": [stats] + program["groups"]}, university, CATALOG)["groups"]}
+    assert got["stats"]["remaining"] == ["MATH 209"] and got["programming"]["remaining"] == ["CSC 309"]
+
 def test_electives_fill_to_the_programs_total():
     # BA General Biology p.1785: "as many units as needed to reach a total of 58 units in the program". Applied Math (55)
     # stands in: its 6 units of major electives as a fill_to_total group with a minimum of 0
@@ -449,6 +460,12 @@ def test_check_program_reports_what_a_person_must_fix():
     clash = good | {"groups": good["groups"] + [{"id": "gwar", "all_of": ["MATH 301GW"], "source": "p.2129"}]}
     assert "gwar: the university rules use this id too (their result would stand for this group); name it for the major, " \
            "e.g. major_gwar" in check_program(clash, CATALOG, university=UNIVERSITY)
+    # BA Women and Gender Studies' "elective" (3 upper-division units) shared the planner's free-elective slot name: its
+    # slot merged into the free electives and lost its upper-division units, so the plan ended 3 short
+    free = good | {"groups": good["groups"] + [{"id": "elective", "choose_units": 3, "from": {"list": ["MATH 430"]},
+                                                "source": "p.2129"}]}
+    assert "elective: the planner names its free-elective slots this; name it for the major, e.g. major_elective" \
+        in check_program(free, CATALOG)
     early = good | {"groups": [g | {"source": "p.152"} for g in good["groups"]]}  # a page under 1000
     assert check_program(early, CATALOG, {152}) == []
 
