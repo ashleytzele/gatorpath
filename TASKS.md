@@ -651,7 +651,7 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     slots suggest no). Either answer converts them all.
   - [x] A `units` prereq leaf (2026-10-28, ARCHITECTURE §6.3): "24 upper-division units in AA S courses" (AA S 696),
     "15* upper-division ENGR units" (ENGR 696, per major), "6 units of upper-division KIN courses", "Nine units of SXS
-    coursework". 8 prereqs in 2026-27 parse further (7 now `ok`). BS Civil's unparsed "15 upper-division ENGR units and
+    coursework". 7 prereqs in 2026-27 parse further (5 now `ok`). BS Civil's unparsed "15 upper-division ENGR units and
     ENGR 300 and ENGR 323 before registering for ENGR 696" was removed: ENGR 696's own prereq says it, and is checked
     (the file's header says so). A planned slot counts when every option of its group fits, and may when some do or
     it's a free elective (unverified, a warning). Found: BA Asian American Studies' ADT roadmap prints AA S 696 in
