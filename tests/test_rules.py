@@ -593,3 +593,18 @@ def test_check_program_reads_check_groups():
         "low: max_below needs a grade and courses", "low: MATH 999 is not in the 2026-27 catalog",
         "any: min_units_from needs units",
         "any: a filter needs one of list, subject, level, ge_area, ge_area_all, approved"]
+
+
+def test_a_choice_counts_a_claimed_courses_own_units():
+    # BM Composition (p.1549): "MUS 260 Applied Music Lessons (1 unit course taken 4 times)", repeatable for credit. The
+    # choice counted its courses at the catalog's minimum once it claimed them: four lessons were 1 unit, and a
+    # variable-unit course given as 3 units counted 1
+    program, university = load_rules("2026-27", "bm-composition")
+    lessons = {"id": "lessons", "title": "Lessons", "choose_units": 4, "course_units": 1, "from": {"list": ["MUS 260"]},
+               "source": "p.1549"}
+    program = program | {"groups": [lessons]}
+    terms = ["2026-fall", "2027-spring", "2027-fall", "2028-spring"]
+    got = lambda rows: next(g for g in audit({"catalog_year": "2026-27", "completed": rows}, program, university,
+                                             CATALOG)["groups"] if g["id"] == "lessons")
+    assert got([{"code": "MUS 260", "grade": "A", "term": t} for t in terms[:3]])["units_done"] == 3
+    assert got([{"code": "MUS 260", "grade": "A", "term": t} for t in terms])["status"] == "satisfied"

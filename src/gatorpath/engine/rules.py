@@ -248,9 +248,11 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
     free = lambda c: claimed is None or c not in claimed
     bar = lambda c: GRADE_POINTS[min_grade_of(g, c)] if min_grade_of(g, c) else PASSING
 
-    def ok(c: str) -> bool:
+    def earned(c: str) -> bool:  # passed with the grade this group asks for, whoever claims it
         t = taken.get(c)
-        return bool(t) and free(c) and not (no_cr_nc and t["grade"] == "CR") and (rank(t["grade"]) or -1) >= bar(c)
+        return bool(t) and not (no_cr_nc and t["grade"] == "CR") and (rank(t["grade"]) or -1) >= bar(c)
+
+    ok = lambda c: earned(c) and free(c)
 
     def note_grade(c: str) -> None:
         if c in taken and free(c) and not ok(c) and c not in in_progress:
@@ -311,7 +313,7 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
     need_units, need_n = g.get("choose_units"), g.get("choose_n")
     min_from = g.get("min_units_from")  # a filter + units: "at least 12 units in CSC", "at least six units upper-division"
     pref = lambda c: bool(min_from) and matches(min_from, c, catalog[c])
-    units = lambda c: taken[c]["units"] if c in taken and ok(c) else catalog[c]["units_min"]
+    units = lambda c: taken[c]["units"] if c in taken and earned(c) else catalog[c]["units_min"]  # claimed ones too
     units_met = lambda cs: sum(map(units, cs)) >= need_units if need_units is not None else len(cs) >= need_n
     pref_units = lambda cs: sum(units(c) for c in cs if pref(c))
     enough = lambda cs: units_met(cs) and (not min_from or pref_units(cs) >= min_from["units"])
