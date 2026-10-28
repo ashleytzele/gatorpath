@@ -147,7 +147,7 @@ def render(profile: dict | None, goal: str | None, plan: bool) -> str:
 def first_message(q: dict, profile: dict | None) -> str:
     text = " ".join(x for x in (render(profile, q.get("goal"), bool(q.get("prompt"))), q["ask"]) if x)
     if q.get("prompt"):
-        lead = server.plan_my_degree(goal=q.get("goal", ""), graduate_by=(profile or {}).get("graduate_by", ""))
+        lead = server.plan_my_degree(graduate_by=(profile or {}).get("graduate_by", ""))
         return f"{lead}\n\n---\n\nStudent: {text}"
     return text
 

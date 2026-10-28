@@ -730,7 +730,7 @@ def import_dpr(pdf_path: str) -> dict:
 
 PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath (Bulletins {years}). Every course, prereq,
 requirement and date comes from the tools: never add one they didn't return, and never present a plan check_plan
-hasn't passed.{goal}{deadline}
+hasn't passed.{deadline}
 
 Keep it fast. Ask once, in one message, for everything still missing, then work through to a finished plan without
 stopping for confirmation. Never ask one question at a time or re-ask what they gave. Fill optional gaps with stated
@@ -752,7 +752,10 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    and AP / IB / transfer credit if any. In the same message, ask only for what a DPR can't show and isn't given
    above: the
    goal, a graduation target, whether they're on an F-1 student visa (it sets a 12-unit minimum every spring and
-   fall), and the math placement (QR "1/2" or "3/4") if lower-division math isn't done.
+   fall), and the math placement (QR "1/2" or "3/4") if lower-division math isn't done. If your client has a
+   multiple-choice question tool (Claude Code's AskUserQuestion), put the ones with fixed answers in it, as part of
+   the same ask: F-1 student visa (yes / no) and math placement (QR "1/2" / "3/4"). Write the free-text ones (their
+   record, the goal, the graduation term) before it, since the dialog can cover your message.
 2. Build the profile. From import_dpr, use its `profile` as is, and tell the student its warnings (grades it had
    to assume for transfer rows, Notes codes) and every cross_check line (where GatorPath disagrees with the DPR; the
    DPR wins). Otherwise build it from what they shared:
@@ -840,8 +843,12 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 
 
 @mcp.prompt(title="Plan my degree")
-def plan_my_degree(goal: str = "", graduate_by: str = "") -> str:
-    """Step-by-step workflow: profile → audit → plan → electives by goal → check_plan → pace/what-ifs → advisor."""
-    return PLAN_MY_DEGREE.format(year=YEAR, years=", ".join(YEARS), goal=f"\n\nThe student's goal: {goal}." if goal else "",
+def plan_my_degree(graduate_by: str = "") -> str:
+    """Step-by-step workflow: profile → audit → plan → electives by goal → check_plan → pace/what-ifs → advisor.
+
+    graduate_by: optional target term, one word like 2030-spring."""
+    # One argument, one word: Claude Code splits a prompt's arguments on spaces and drops the extra words (checked
+    # 2026-10-28), so a free-text goal can't be one. The prompt asks for the goal.
+    return PLAN_MY_DEGREE.format(year=YEAR, years=", ".join(YEARS),
                                  deadline=f" They'd like to graduate by {graduate_by} (pass it as graduate_by)."
                                  if graduate_by else "")

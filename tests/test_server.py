@@ -261,8 +261,8 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     import asyncio
     import re as regex
 
-    text = server.plan_my_degree(goal="AI / machine learning", graduate_by="2029-spring")
-    assert "The student's goal: AI / machine learning." in text and "graduate by 2029-spring" in text
+    text = server.plan_my_degree(graduate_by="2029-spring")
+    assert "graduate by 2029-spring" in text and "AskUserQuestion" in text
     tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
     fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last", "profile",
               "approval", "options"}  # data
@@ -271,6 +271,7 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named
     prompts = asyncio.run(server.mcp.list_prompts())
     assert [p.name for p in prompts] == ["plan_my_degree"]
+    assert [a.name for a in prompts[0].arguments] == ["graduate_by"]  # one word each: no free-text goal
 
 
 def test_not_on_dpr_leaves_a_requirement_out_and_sends_to_an_advisor():

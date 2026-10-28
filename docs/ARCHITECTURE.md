@@ -757,7 +757,10 @@ local. Defaults instead of questions (15 units, no summer). A catalog year Gator
 audited with that year's rules (D23); another year is planned with the newest rules and a warning, not refused (the DPR
 wins on disagreements). Transfer rows the DPR lists under a
 requirement become that course with `transfer: true`; substitutions go in `dpr_met`; GE areas in the DPR's own
-codes. Then run through to a checked plan without confirmation stops. A test fails if the prompt names a tool that
+codes. Then run through to a checked plan without confirmation stops. Revised 2026-10-28: a client with a
+multiple-choice question tool (Claude Code's AskUserQuestion) asks the fixed-answer questions (F-1, QR placement)
+with it, in the same ask; the prompt's only argument is `graduate_by`, because Claude Code splits prompt arguments on
+spaces and drops the extra words, so a free-text goal argument came through as its first word. A test fails if the prompt names a tool that
 doesn't exist.
 
 What-ifs map to tools, not to new server logic:
