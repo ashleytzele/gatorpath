@@ -649,6 +649,14 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     12 units "outside of the primary prefix" (p.2353)? If yes, it's a check over every course; if no, 12 units of
     electives outside the prefix (the roadmaps' "Complementary Studies or SF State Studies or University Elective"
     slots suggest no). Either answer converts them all.
+  - [x] A `units` prereq leaf (2026-10-28, ARCHITECTURE §6.3): "24 upper-division units in AA S courses" (AA S 696),
+    "15* upper-division ENGR units" (ENGR 696, per major), "6 units of upper-division KIN courses", "Nine units of SXS
+    coursework". 8 prereqs in 2026-27 parse further (7 now `ok`). BS Civil's unparsed "15 upper-division ENGR units and
+    ENGR 300 and ENGR 323 before registering for ENGR 696" was removed: ENGR 696's own prereq says it, and is checked
+    (the file's header says so). A planned slot counts when every option of its group fits, and may when some do or
+    it's a free elective (unverified, a warning). Found: BA Asian American Studies' ADT roadmap prints AA S 696 in
+    semester 3 (p.443), before a transfer can have 24 upper-division AA S units at SF State; its plan takes 5 terms,
+    not 4. The first-time plan keeps AA S 696 in term 6 (D28)
   - [ ] Ordering rules in the planner (15): "Before advancing to the 300-level or higher courses ... completed the
     lower-division courses for the major" (4 art and design programs), a capstone "in the senior year" / "the spring
     semester of the student's final (senior) year" (Economics, 3 English), a GPA before credential coursework (2

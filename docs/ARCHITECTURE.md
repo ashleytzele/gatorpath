@@ -554,7 +554,11 @@ First-Year Math Advising Module, Advancement to Candidacy forms, approved study 
 "a college-level X course"), `not_after` (an exclusion: "Not open to students who have completed ERTH 112" fails
 once that course is done or planned earlier; never a prereq of the course), `not_with` ("May not be taken concurrently
 with M S 684": fails when that course is in the same term; build_plan keeps the two apart when only one says so,
-JOUR 617 of JOUR 605), `unknown` (raw fragment).
+JOUR 617 of JOUR 605), `units` (+ `subject`, `level: upper`: units done before the term, "24 upper-division units in AA
+S courses" = `{units: 24, subject: AA S, level: upper}`; without either, total units, "30 units of coursework"; a
+subject named in words, "Psychology coursework", stays `unknown`; an earlier slot counts when every option of its group
+fits, and when only some do, or it's a free elective, the leaf is unverified: the student's pick decides), `unknown`
+(raw fragment).
 `permission`/`restricted_to`/`equivalent`/`requirement`/`high_school`/`unknown` are **unverifiable**.
 They produce a ⚠️, never a silent pass.
 

@@ -154,6 +154,24 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         c = e["not_after"]
         return (NO, [f"no {c} before this term (not open to students who have completed it)"]) if c in ctx["done"] \
             else (OK, [])
+    if "units" in e:  # "24 upper-division units in AA S courses" (AA S 696): done before this term
+        subj, upper = e.get("subject"), "level" in e
+        fits = lambda c: c in ctx["catalog"] and subj in (None, c.rsplit(" ", 1)[0]) and (not upper or 300 <= number(c) <= 699)
+        # an earlier slot counts when every option would (kinds: subjects, upper-division subjects, all upper), and may
+        # when some would: then it depends on the student's pick
+        sure = lambda k: (not subj or k[0] == {subj}) and (not upper or k[2])
+        can = lambda k: k is FREE or ((subj in k[1]) if subj and upper else (subj in k[0]) if subj else bool(k[1]))
+        slotted = ctx.get("slot_units", ())
+        have = ctx["units"] if not subj and not upper else (sum(ctx["catalog"][c]["units_min"] for c in ctx["done"] if fits(c))
+                                                             + sum(u for u, k in slotted if sure(k)))
+        maybe = 0 if not subj and not upper else sum(u for u, k in slotted if not sure(k) and can(k))
+        what = " ".join(x for x in ("upper-division" if upper else "", subj or "") if x)
+        need = f"{e['units']} {what + ' ' if what else ''}units"
+        if have >= e["units"]:
+            return OK, []
+        if have + maybe >= e["units"]:
+            return UNVERIFIED, [f"{need}: depends on which courses fill the slots"]
+        return NO, [f"{need} ({have:g} by then)"]
     if "not_with" in e:  # "May not be taken concurrently with M S 684" (M S 683)
         c = e["not_with"]
         return (NO, [f"not in the same term as {c} (may not be taken concurrently)"]) if c in ctx["same_term"] \
@@ -212,6 +230,30 @@ def slot_ge_areas(slot: dict, groups: dict) -> set[str]:
     f = groups.get(slot.get("slot"), {}).get("from", {})
     areas = f.get("ge_area", []) if isinstance(f, dict) else []
     return {str(a) for a in (areas if isinstance(areas, list) else [areas])}
+
+
+def slot_kinds(program: dict, catalog: dict) -> dict[str, tuple]:
+    """What a major choose-slot's course is, whatever the student picks, for a `units` prereq (AA S 696, "24
+    upper-division units in AA S courses"): (its options' subjects, its upper-division options' subjects, every option
+    upper division)."""
+    from gatorpath.engine.rules import matches
+    out = {}
+    for g in program["groups"]:
+        if "from" in g:
+            fs = g["from"] if isinstance(g["from"], list) else [g["from"]]
+            opts = [c for c in catalog if any(matches(f, c, catalog[c]) for f in fs)]
+            subject = lambda c: c.rsplit(" ", 1)[0]
+            ud = [c for c in opts if 300 <= number(c) <= 699]
+            out[g["id"]] = (frozenset(map(subject, opts)), frozenset(map(subject, ud)), bool(opts) and len(ud) == len(opts))
+    return out
+
+
+FREE = (frozenset(), frozenset(), False)  # a free-elective slot: any course, so it may count toward any `units` prereq
+
+
+def slotted_units(term_slots: list[dict], kinds: dict) -> list[tuple]:
+    return [(x.get("units", 0), FREE if x.get("slot") == "elective" else kinds[x["slot"]]) for x in term_slots
+            if x.get("slot") in kinds or x.get("slot") == "elective"]
 
 
 def see_advisor(triggers: list[tuple[str, str]], program: dict, university: dict, into: list[dict] | None = None) -> list[dict]:
@@ -278,6 +320,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     planned: list[dict] = []
     slots: list[dict] = []
     slot_areas: set[str] = set()
+    kinds, slotted = slot_kinds(program, catalog), []
     seen_terms, terms_out = [], []
     for sem in plan.get("semesters", []):
         term = str(sem.get("term", ""))
@@ -329,7 +372,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
 
         ctx = {"done": done, "same_term": set(codes), "grades": grades, "units": units, "profile": profile, "gpa": gpa,
                "ge_done": ge_done_areas(profile, university), "catalog": catalog,
-               "program": program, "class_level": levels, "slot_areas": slot_areas}
+               "program": program, "class_level": levels, "slot_areas": slot_areas, "slot_units": slotted}
         for c in codes:
             if c not in catalog:
                 continue
@@ -428,6 +471,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         for c in codes:  # a planned retake replaces the old grade for later prereqs
             grades.pop(c, None)
         slot_areas |= {a for x in term_slots for a in slot_ge_areas(x, groups)}
+        slotted = slotted + slotted_units(term_slots, kinds)
         units += term_units
 
     if f1_min and rcl:
@@ -787,8 +831,10 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     # planned; CHEM 340 needs CHEM 233 and CHEM 235, p.1796; CSC 309 brings MATH 209 for MATH 400), among the options
     # that leave every planned course ready: none with a prereq the student can't meet (another placement, graduate
     # standing), the added prereqs' own included.
+    kinds = slot_kinds(program, catalog)
     later = {"same_term": set(), "grades": {}, "profile": profile, "gpa": profile.get("gpa"),
              "ge_done": ge_done_areas(profile, university), "slot_areas": {a for g in university["groups"] for a in ge_areas(g)},
+             "slot_units": [(math.inf, FREE)],
              "catalog": catalog, "program": program, "class_level": levels, "units": university["totals"]["min_units"]}
 
     def reachable(left: list[str], instead: list[str]) -> bool:
@@ -949,6 +995,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         first_ok: dict[str, str] = {}  # the first term a course could have gone in
         waited: set[str] = set()  # D28: waited for the roadmap semester
         semesters, notes, term, slot_areas, carry, queue = [], [], start, set(), [], list(queue)
+        slotted: list[tuple] = []
         regular = 0  # spring/fall terms planned: the roadmap semesters gone by (D28)
         for _ in range(20):
             if not left and not slots:
@@ -967,7 +1014,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             used = 0.0
             ctx = {"done": done, "grades": grades, "units": units, "profile": profile, "gpa": gpa,
                    "ge_done": ge_done_areas(profile, university), "catalog": catalog,
-                   "program": program, "class_level": levels, "slot_areas": slot_areas}
+                   "program": program, "class_level": levels, "slot_areas": slot_areas, "slot_units": slotted}
 
             def ok(c: str, same: set) -> bool:
                 if follows.get(c, set()) - done:  # `after`: those groups' courses in an earlier term first
@@ -1118,6 +1165,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             for c in placed:  # a planned retake replaces the old grade
                 grades.pop(c, None)
             slot_areas = slot_areas | {a for x in term_slots for a in slot_ge_areas(x, groups)}
+            slotted = slotted + slotted_units(term_slots, kinds)
             units += used
             regular += term[5:] in ("spring", "fall")
             term = next_term(term, summer, winter)
@@ -1508,8 +1556,11 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
                 "profile": profile, "gpa": gpa, "ge_done": ge_done_areas(profile, university),
                 "catalog": catalog, "program": program, "class_level": university["class_level"],
                 "slot_areas": {a for s in semesters if term_key(s["term"]) < term_key(term)
-                               for x in s["courses"] if isinstance(x, dict) for a in slot_ge_areas(x, groups)}}
+                               for x in s["courses"] if isinstance(x, dict) for a in slot_ge_areas(x, groups)},
+                "slot_units": [u for s in semesters if term_key(s["term"]) < term_key(term)
+                               for u in slotted_units([x for x in s["courses"] if isinstance(x, dict)], kinds)]}
 
+    kinds = slot_kinds(program, catalog)
     ctxs = {t: ctx_at(t) for t in terms}
     target = status[group_id]
     pref = g.get("min_units_from", {})

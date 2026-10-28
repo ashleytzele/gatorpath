@@ -584,13 +584,15 @@ def test_finished_math_adds_no_pathway_courses():
 
 
 def test_a_prereq_gatorpath_cant_check_waits_for_the_roadmap():
-    # D28: AA S 696's prereq can't be checked ("24 upper-division units in AA S courses"), so a new student's plan had it
-    # in term 1; the roadmap prints it in semester 7 (p.441). At most a semester early, counted from where the student
-    # starts: a 60-unit transfer is at semester 5
+    # D28: AA S 696's prereq couldn't be checked ("24 upper-division units in AA S courses", read as unknown before the
+    # `units` leaf), so a new student's plan had it in term 1; the roadmap prints it in semester 7 (p.441). At most a
+    # semester early, counted from where the student starts: a 60-unit transfer is at semester 5
     from gatorpath.engine.planner import build_plan
     name = "ba-asian-american-studies"
     text = "Restricted to Asian American Studies majors; 24 upper-division units in AA S courses; or permission of the instructor."
-    prereqs = PREREQS | {"AA S 696": {"raw_text": text, **parse_prereq(text)}}
+    unknown = {"any": [{"all": [{"restricted_to": "Asian American Studies majors"},
+                                {"unknown": "24 upper-division units in AA S courses"}]}, {"permission": "instructor"}]}
+    prereqs = PREREQS | {"AA S 696": {"raw_text": text, "expr": unknown, "status": "partial", "needs_permission": True}}
     program, university, roadmap = rules_for({"program": name})
     plan = lambda extra: build_plan({"catalog_year": "2026-27", "program": name, "start_term": "2027-fall", "completed": []}
                                     | extra, program, university, roadmap, CATALOG, prereqs)["semesters"]
@@ -660,6 +662,25 @@ def test_may_not_be_taken_concurrently_is_an_exclusion():
     plan = {"semesters": [{"term": "2027-fall", "courses": ["CSC 413", "CSC 415"]}]}
     errors = check_plan(adt, plan, program, university, CATALOG, apart)["errors"]
     assert any("not in the same term as CSC 415" in e["message"] for e in errors)
+
+
+def test_units_in_a_subject_count_what_is_done_before_the_term():
+    # AA S 696: "24 upper-division units in AA S courses" (it waited for nothing, then for its roadmap semester, D28)
+    from gatorpath.engine.planner import NO, OK, evaluate
+    leaf = {"units": 24, "subject": "AA S", "level": "upper"}
+    catalog = {f"AA S {n}": {"units_min": 3.0} for n in (210, 310, 320, 330, 340, 350, 360, 370, 380)}
+    ctx = {"catalog": catalog, "units": 60, "done": {"AA S 210"} | {f"AA S {n}" for n in (310, 320, 330, 340, 350, 360, 370)}}
+    assert evaluate(leaf, ctx) == (NO, ["24 upper-division AA S units (21 by then)"])  # AA S 210 is lower division
+    assert evaluate(leaf, ctx | {"done": ctx["done"] | {"AA S 380"}})[0] == OK
+    assert evaluate({"units": 30}, ctx)[0] == OK and evaluate({"units": 30}, ctx | {"units": 29})[0] == NO
+    # an earlier slot counts when every option is upper-division AA S, and may when only some are (panethnic courses
+    # list RRS 657) or it's a free elective: then the student's pick decides
+    from gatorpath.engine.planner import FREE, UNVERIFIED
+    aas, mixed = (frozenset({"AA S"}), frozenset({"AA S"}), True), (frozenset({"AA S", "RRS"}), frozenset({"AA S", "RRS"}), True)
+    assert evaluate(leaf, ctx | {"slot_units": [(3, aas)]})[0] == OK
+    assert evaluate(leaf, ctx | {"slot_units": [(3, mixed)]}) == (UNVERIFIED, [
+        "24 upper-division AA S units: depends on which courses fill the slots"])
+    assert evaluate(leaf, ctx | {"slot_units": [(3, FREE)]})[0] == UNVERIFIED
 
 
 def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():

@@ -255,6 +255,13 @@ GOLDEN = [
      any_({"standing": "sophomore"}, c("TH A 202", conc=True))),
     ("CINE 422", "Restricted to sophomore standing or above or permission of the instructor.",
      any_({"standing": "sophomore"}, PERM)),
+    # units done in a subject (not a degree: "24 units of MA coursework", ISED 895, stays unknown)
+    ("AA S 696", "Restricted to Asian American Studies majors; 24 upper-division units in AA S courses; or permission of "
+                 "the instructor.",
+     any_(all_(r("Asian American Studies majors"), {"units": 24, "subject": "AA S", "level": "upper"}), PERM)),
+    ("SXS 550", "Nine units of SXS coursework or permission of the instructor.", any_({"units": 9, "subject": "SXS"}, PERM)),
+    ("JAPN 510", "JAPN 250; 6 units of upper-division JAPN coursework; or permission of the instructor.",
+     any_(all_(c("JAPN 250"), {"units": 6, "subject": "JAPN", "level": "upper"}), PERM)),
     ("MUS 460", "Restricted to Music majors; Junior standing; MUS 420; must be taken concurrently with MUS 425 and MUS 450; "
                 "or permission of the instructor.",
      any_(all_(r("Music majors"), UP, c("MUS 420"), c("MUS 425", conc=True), c("MUS 450", conc=True)), PERM)),
@@ -365,12 +372,12 @@ def test_per_major_clauses_are_alternatives():
                        "concurrently); Computer and Electrical Engineering majors with 18* upper-division ENGR units and "
                        "ENGR 478*.")["expr"]
     assert got == {"any": [
-        {"all": [{"restricted_to": "Civil Engineering majors"}, {"unknown": "15* upper-division ENGR units"},
+        {"all": [{"restricted_to": "Civil Engineering majors"}, {"units": 15, "subject": "ENGR", "level": "upper"},
                  c("ENGR 300"), c("ENGR 323")]},
-        {"all": [{"restricted_to": "Mechanical Engineering majors"}, {"unknown": "18* upper-division ENGR units"},
+        {"all": [{"restricted_to": "Mechanical Engineering majors"}, {"units": 18, "subject": "ENGR", "level": "upper"},
                  c("ENGR 302", conc=True)]},
         {"all": [{"restricted_to": "Computer and Electrical Engineering majors"},
-                 {"unknown": "18* upper-division ENGR units"}, c("ENGR 478")]}]}
+                 {"units": 18, "subject": "ENGR", "level": "upper"}, c("ENGR 478")]}]}
     # DES 485: what every Design major needs, then each concentration's courses
     des = parse_prereq("Restricted to Design majors and minors; DES 200*, DES 300*, and DES 322*; Visual Communication "
                        "Design majors with DES 325* and DES 327*; Industrial Design majors with DES 305 and DES 310; or "

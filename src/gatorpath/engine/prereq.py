@@ -20,6 +20,9 @@ GRADE = re.compile(  # "C-or better" too, with no space (ENGR 304); it was read 
     r"(?:(?![A-Za-z])|(?<=[+-])(?=or\b))(?:\s*or\s+(better|higher|lower))?",
     I,
 )
+# a course's subject: KIN, AA S; not a degree or GE ("24 units of MA coursework", ISED 895)
+SUBJECT = r"(?-i:(?!(?:MA|MS|MFA|MBA|BA|BS|GE)\b)[A-Z]{1,5}(?: [A-Z]{1,3})?)"
+NUMBERS = {"six": 6, "nine": 9, "twelve": 12}
 OLD_GE = r"(?-i:[A-F][1-5]?)\*?(?![\w/])"  # an older GE code: A2, B4, E (this Bulletin's start with a digit)
 SOPH, UP, SENIOR, GRAD = {"standing": "sophomore"}, {"standing": "upper"}, {"standing": "senior"}, {"standing": "graduate"}
 ROMAN = {"i": 1, "ii": 2, "iii": 3, "iv": 4}
@@ -77,6 +80,12 @@ RULES = [
     # and not in the same term: "May not be taken concurrently with M S 684" (M S 683); "with JOUR 605* and JOUR 609*"
     (re.compile(rf"(?i:may not be taken concurrently with )((?:{COURSE.pattern}(?:,? (?:or|and) |, )?)+)"),
      lambda m: (LEAF, combine("all", [{"not_with": c} for c in COURSE.findall(m.group(1))]))),
+    # units done: "24 upper-division units in AA S courses" (AA S 696), "6 units of upper-division KIN courses", "15*
+    # upper-division ENGR units" (ENGR 696), "Nine units of SXS coursework", "30 units of coursework" (A U 220)
+    (re.compile(rf"(?:a minimum of |at least )?(\d+|{'|'.join(NUMBERS)})\*? (upper-division )?(?:units (?:of|in) "
+                rf"(upper-division )?(?:({SUBJECT}) )?(?:coursework|courses)\b|({SUBJECT}) units\b)", I),
+     lambda m: (LEAF, {"units": int(NUMBERS.get(m[1].lower(), m[1]))} | ({"subject": m[4] or m[5]} if m[4] or m[5] else {})
+                | ({"level": "upper"} if m[2] or m[3] else {}))),
     (re.compile(r"first-year math advising module", I), lambda m: (LEAF, {"requirement": "First-Year Math Advising Module"})),
     (re.compile(r"(?:by |an )?audition\b", I), lambda m: (LEAF, {"requirement": "Audition"})),  # MUS ensembles: "Audition."
     # Named non-course requirements: understood, but unverifiable (⚠️ like permission).
