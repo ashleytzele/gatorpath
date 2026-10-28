@@ -1,0 +1,158 @@
+# BS Applied Mathematics roadmaps, Bulletin 2025-26 (written from the 2026-27 file by a rule diff: the same
+# semesters; pages, and the ADT note's unit ranges, differ; Claude, 2026-10-28). Suggested plans only ("does not replace meeting with an advisor").
+# The Bulletin has QR Category 1/2 (p.2113), 3/4 (p.2115), the MATH ADT roadmap (p.2120) and an Applied Mathematics BS
+# + Mathematics MA SF State Scholars roadmap (p.2117).
+# ponytail: the Scholars roadmap (bachelor's + master's, graduate courses) isn't encoded; add it with MA rules.
+# Items: a course code, a slot {slot: GE | ai | major | sfss_or_elective | elective, units, …}, or {one_of: [...]} for a
+# "Select One" (ARCHITECTURE §6.2). `units` on a semester is the printed total (the minimum of a printed range);
+# tests check that the items add up to it.
+program: bs-applied-math
+catalog_year: 2025-26
+verified: false
+verified_by: null
+variants:
+  qr-1-2:
+    title: Bachelor of Science in Applied Mathematics Roadmap – Quantitative Reasoning Category 1/2
+    qr_pathway: "1/2"
+    total_units: 120               # printed "120-122"
+    source: "p.2113-2114"
+    notes:
+      - "This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner and an advisor for further guidance."
+      - "To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major."
+      - "GE 2 and GE 1A: use your Pathway/Category to pick the course option (footnotes 1, 3). Find it at https://gatorsmartstart.sfsu.edu/pathways (directions: https://gatorsmartstart.sfsu.edu/howtofindyourpathways); questions go to Gator Smart Start, https://gatorsmartstart.sfsu.edu/."
+      - "First-time freshmen must take one lower-division Area 4 course that meets US History (USH) (footnote 2)."
+      - "GE Area 5: consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied (footnote 4)."
+      - "Major Application Electives (9 units): a coherent collection of three courses emphasizing applications of mathematics, chosen with the consent of the applied mathematics advisor (footnote 5)."
+      - "Major Electives (6 units): the full list is in the Degree Requirements, p.2110 (footnote 6)."
+      - "MATH 696/MATH 697 serve as the capstone experience for the major (footnote 7)."
+    semesters:
+      - units: 16
+        source: "p.2113"
+        items: [MATH 226, {slot: GE, area: "1", units: 3}, {slot: GE, area: "3", units: 3},
+                {slot: GE, area: "4", units: 3, note: "footnote 2: one lower-division Area 4 course must meet USH"},
+                {slot: sfss_or_elective, units: 3}]
+      - units: 16
+        source: "p.2113"
+        items: [{one_of: [MATH 209, CSC 101, CSC 309], units: 3, note: "Select One (Major Core)"}, MATH 227,
+                {slot: GE, area: 1A, units: 3}, {slot: GE, area: "1", units: 3},
+                {slot: GE, area: "4", units: 3, note: "footnote 2: one lower-division Area 4 course must meet USH"}]
+      - units: 14                  # printed 14-15: GE Area 5 is 3-4 units
+        source: "p.2113"
+        items: [MATH 228, MATH 301GW,
+                {one_of: [CSC 215, {slot: sfss_or_elective, units: 4}], units: 4,
+                 note: "CSC 215 if CSC 101 taken; SF State Studies or University Elective if MATH 209 or CSC 309 taken"},
+                {slot: GE, area: "5", units: 3, note: "3-4 units; footnote 4"}]
+      - units: 16                  # printed 16-17: GE Area 5 is 3-4 units
+        source: "p.2113"
+        items: [MATH 325, MATH 440, {slot: GE, area: "3", units: 3}, {slot: GE, area: "5", units: 3, note: "3-4 units; footnote 4"},
+                {slot: sfss_or_elective, units: 3}]
+      - units: 15
+        source: "p.2113"
+        items: [MATH 376, MATH 400, {slot: major, group: application_electives, units: 3}, {slot: GE, area: "6", units: 3},
+                {slot: GE, area: 5UD/2UD, units: 3}]
+      - units: 15
+        source: "p.2114"
+        items: [{slot: major, group: theory, units: 3, note: "Select One (Major Core): MATH 335, MATH 370 or MATH 380"},
+                MATH 460, {slot: major, group: major_electives, units: 3}, {slot: GE, area: 4UD, units: 3},
+                {slot: ai, area: USG/CSLG, units: 3}]
+      - units: 15
+        source: "p.2114"
+        items: [MATH 696, {slot: major, group: application_electives, units: 3}, {slot: major, group: major_electives, units: 3},
+                {slot: sfss_or_elective, units: 5, note: "Take Two"}, {slot: GE, area: 3UD, units: 3}]
+      - units: 13
+        source: "p.2114"
+        items: [MATH 697, {slot: major, group: application_electives, units: 3}, {slot: sfss_or_elective, units: 8, note: "Take Three"}]
+
+  qr-3-4:
+    title: Bachelor of Science in Applied Mathematics Roadmap – Quantitative Reasoning Category 3/4
+    qr_pathway: "3/4"
+    total_units: 120               # printed "120-121"
+    source: "p.2115-2116"
+    notes:
+      - "This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual sequence of courses based on course availability. Please consult your Degree Planner and an advisor for further guidance."
+      - "To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ESCA, SJ) requirements within your GE or major."
+      - "MATH 197 (Prelude to Calculus I) is a prerequisite for MATH 226; MATH 198 (Prelude to Calculus II) is a prerequisite for MATH 226 and meets GE 2."
+      - "GE 2 and GE 1A: use your Pathway/Category to pick the course option (footnotes 1, 3). Find it at https://gatorsmartstart.sfsu.edu/pathways (directions: https://gatorsmartstart.sfsu.edu/howtofindyourpathways); questions go to Gator Smart Start, https://gatorsmartstart.sfsu.edu/."
+      - "First-time freshmen must take one lower-division Area 4 course that meets US History (USH) (footnote 2)."
+      - "GE Area 5: consider taking a class combined with a laboratory or a separate lab to fulfill 5C if not already satisfied (footnote 4)."
+      - "Major Application Electives (9 units): a coherent collection of three courses emphasizing applications of mathematics, chosen with the consent of the applied mathematics advisor (footnote 5)."
+      - "Major Electives (6 units): the full list is in the Degree Requirements, p.2110 (footnote 6)."
+      - "MATH 696/MATH 697 serve as the capstone experience for the major (footnote 7)."
+    semesters:
+      - units: 15
+        source: "p.2115"
+        items: [MATH 197, {slot: GE, area: "1", units: 3}, {slot: GE, area: "3", units: 3},
+                {slot: GE, area: "4", units: 3, note: "footnote 2: one lower-division Area 4 course must meet USH"},
+                {slot: sfss_or_elective, units: 3}]
+      - units: 15
+        source: "p.2115"
+        items: [MATH 198, {slot: GE, area: 1A, units: 3}, {slot: GE, area: "1", units: 3},
+                {slot: GE, area: "4", units: 3, note: "footnote 2: one lower-division Area 4 course must meet USH"},
+                {slot: sfss_or_elective, units: 3}]
+      - units: 16                  # printed 16-17: GE Area 5 is 3-4 units
+        source: "p.2115"
+        items: [MATH 226, {slot: GE, area: "3", units: 3}, {slot: GE, area: "5", units: 3, note: "3-4 units; footnote 4"},
+                {slot: GE, area: "6", units: 3}, {slot: sfss_or_elective, units: 3}]
+      - units: 14
+        source: "p.2115"
+        items: [{one_of: [MATH 209, CSC 101, CSC 309], units: 3, note: "Select One (Major Core)"}, MATH 227, MATH 301GW, MATH 325]
+      - units: 14
+        source: "p.2115"
+        items: [{one_of: [CSC 215, {slot: sfss_or_elective, units: 4}], units: 4,
+                 note: "CSC 215 if CSC 101 taken; SF State Studies or University Elective if MATH 209 or CSC 309 taken"},
+                MATH 228, {slot: major, group: application_electives, units: 3}, {slot: GE, area: 5UD/2UD, units: 3}]
+      - units: 15
+        source: "p.2116"
+        items: [{slot: major, group: theory, units: 3, note: "Select One (Major Core): MATH 335, MATH 370 or MATH 380"},
+                MATH 376, MATH 400, MATH 440, {slot: major, group: major_electives, units: 3}]
+      # As printed, MATH 696 comes a term before MATH 460, which its prereq names ("MATH 460 with a grade of C or
+      # better. May be replaced by permission of the instructor.", p.2076); the planner keeps the prereq order.
+      - units: 16
+        source: "p.2116"
+        items: [MATH 696, {slot: major, group: application_electives, units: 3}, {slot: major, group: major_electives, units: 3},
+                {slot: GE, area: 3UD, units: 3}, {slot: GE, area: 4UD, units: 3}, {slot: ai, area: USG/CSLG, units: 3}]
+      - units: 15
+        source: "p.2116"
+        items: [MATH 460, MATH 697, {slot: major, group: application_electives, units: 3},
+                {slot: sfss_or_elective, units: 7, note: "Take Two"}]
+
+  adt:
+    title: Bachelor of Science in Applied Mathematics – MATH Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: "p.2120-2121"
+    # "At least 12 units in the major (MATH 226, MATH 227, MATH 228) and all lower-division GE requirements have been satisfied."
+    met_in_transfer: [MATH 226, MATH 227, MATH 228]
+    notes:
+      - "For students who transfer in the current Bulletin year with an AS-T in Mathematics. At least 12 units in the major (MATH 226, MATH 227, MATH 228) and all lower-division GE requirements have been satisfied. Additional units in the major may have been satisfied: check with a major advisor about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the ADT section, p.2292 (p.2120)."
+      - "Students entering the major with the AS-T in Mathematics are not required to fulfill SF State Studies requirements (p.2120)."
+      - "University-Wide Requirements 9-15 units: American Institutions 0-6 (if not taken before transfer) and upper-division GE 9; courses required for the major may double-count if approved for UD GE. Applied Mathematics Major: 39-42 units (Required Courses 24-27, Major Electives 15, including three courses emphasizing applications of mathematics, chosen on advisement). University Electives: 4 or more units (p.2120)."
+      # Footnote 2 says MATH 460 is fall-only, but Class Search history (2023-spring to 2026-fall) shows it only in
+      # spring; the planner goes by the history (season_ok).
+      - "MATH 376 and MATH 460 offered fall semesters only (footnote 2, p.2121)."
+    semesters:
+      - units: 13
+        source: "p.2120"
+        items: [{one_of: [MATH 209, CSC 101, CSC 309], units: 3, note: "Select One (Major Core)"}, MATH 301GW, MATH 325, MATH 440]
+      - units: 13
+        source: "p.2120"
+        items: [{one_of: [CSC 215, {slot: sfss_or_elective, units: 4}], units: 4,
+                 note: "CSC 215 if CSC 101 taken; SF State Studies or University Elective if MATH 209 or CSC 309 taken"},
+                {slot: major, group: theory, units: 3, note: "Select One (Major Core): MATH 335, MATH 370 or MATH 380"},
+                {slot: major, group: major_electives, count: 2, units: 6, note: "Take Two"}]
+      - units: 9
+        source: "p.2120-2121"
+        items: [MATH 376, MATH 400,
+                {slot: GE, area: 3UD, units: 3, note: "Select One (GE 3UD, USH, USG/CSLG): HIST 470 or HIST 471"},
+                {slot: ai, area: USH/USG/CSLG, units: 0, note: "the same HIST 470 or HIST 471 course"}]
+      - units: 12
+        source: "p.2121"
+        items: [{slot: major, group: application_electives, count: 3, units: 9, note: "Take Three"}, {slot: GE, area: 4UD, units: 3}]
+      - units: 7
+        source: "p.2121"
+        items: [MATH 460, {slot: sfss_or_elective, units: 4}]
+      - units: 4
+        source: "p.2121"
+        items: [MATH 696, {slot: GE, area: 5UD/2UD, units: 3}]
+      - units: 2
+        source: "p.2121"
+        items: [MATH 697]

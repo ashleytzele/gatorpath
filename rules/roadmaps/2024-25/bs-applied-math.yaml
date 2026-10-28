@@ -1,0 +1,102 @@
+# BS Applied Mathematics roadmaps, Bulletin 2024-25. Suggested plans only ("does not replace meeting with an advisor").
+# The Bulletin has one First-Time Student Roadmap (no QR pathways yet, p.2121), the MATH ADT roadmap (p.2124) and an
+# Applied Mathematics BS + Mathematics MA SF State Scholars roadmap (p.2123), left out as in 2026-27. Transcribed from
+# this Bulletin's text (bs-applied-math.source.txt): Claude, 2026-10-28. GE slots name the area by the newest
+# Bulletin's code (A is 1, B4 is 2, C is 3, D is 4, F is 6, UD-B is 5UD: ARCHITECTURE §5, D23), with the Bulletin's
+# own label in `note`. `units` on a semester is the printed total (the minimum of a printed range).
+program: bs-applied-math
+catalog_year: 2024-25
+verified: false
+verified_by: null
+variants:
+  first-time:
+    title: Bachelor of Science in Applied Mathematics Roadmap
+    total_units: 120               # printed "120-121"
+    source: "p.2121-2122"
+    notes:
+      - "This roadmap is a suggested plan of study and does not replace meeting with an advisor. Please note that students may need to adjust the actual sequence of courses based on course availability. Please consult an advisor in your major program for further guidance."
+      - "ENG 114 can only be taken if you complete Directed Self-Placement (DSP) and select ENG 114; if you choose ENG 104/ENG 105 through DSP you will satisfy A2 upon successful completion of ENG 105 in the second semester; multilingual students may be advised into alternative English courses (footnote 1)."
+      - "To determine the best B4 course option, complete the online advising activity at mathadvising.sfsu.edu; questions go to Gator Smart Start, https://gatorsmartstart.sfsu.edu/ (footnote 2)."
+      - "To avoid taking additional units, it is recommended that you meet the SF State Studies (AERM, GP, ES, SJ) requirements within your GE or major (footnote 3)."
+      - "Consider taking a class combined with a laboratory or a separate lab to fulfill B3 if not already satisfied (footnote 4)."
+      - "Major Application Electives (9 units): a coherent collection of three courses emphasizing applications of mathematics, chosen with the consent of the applied mathematics advisor (footnote 5)."
+      - "Major Electives (6 units): MATH 430, 442, 447, 448, 449, 471, 477, 491, 495 (footnote 6, p.2122)."
+      - "MATH 696/MATH 697 serve as the capstone experience for the major (footnote 7)."
+      - "Given catalog rights, fall 2023 transfer students do not need to complete an Area F course (footnote ±)."
+    semesters:
+      - units: 16
+        source: "p.2121"
+        items: [ENG 114, MATH 226, {slot: GE, area: "1", units: 3, note: "GE Area A (ENG 114 is A2)"},
+                {slot: GE, area: "3", units: 3, note: "GE Area C"}, {slot: GE, area: "4", units: 3, note: "GE Area D"}]
+      - units: 16
+        source: "p.2121-2122"
+        items: [{one_of: [MATH 209, CSC 101, CSC 309], units: 3, note: "Select One (Major Core)"}, MATH 227,
+                {slot: GE, area: "1", units: 3, note: "GE Area A"}, {slot: GE, area: "4", units: 3, note: "GE Area D"},
+                {slot: GE, area: E, units: 3, note: "GE Area E"}]
+      - units: 14                  # printed 14-15: GE Area B is 3-4 units
+        source: "p.2122"
+        items: [MATH 228, MATH 301GW,
+                {one_of: [CSC 215, {slot: sfss_or_elective, units: 4}], units: 4,
+                 note: "CSC 215 if CSC 101 taken; SF State Studies or University Elective if MATH 209 or CSC 309 taken"},
+                {slot: GE, area: 5A, units: 3, note: "GE Area B: Physical Science (B1) and Laboratory Science (B3), 3-4 units; footnote 4"}]
+      - units: 16
+        source: "p.2122"
+        items: [MATH 325, MATH 440, {slot: GE, area: 5B, units: 3, note: "GE Area B: Life Science (B2) and Laboratory Science (B3); footnote 4"},
+                {slot: GE, area: "3", units: 6, note: "GE Area C - Take Two"}]
+      - units: 15
+        source: "p.2122"
+        items: [MATH 376, MATH 400, {slot: major, group: application_electives, units: 3}, {slot: GE, area: "6", units: 3, note: "GE Area F (footnote ±)"},
+                {slot: GE, area: 5UD, units: 3, note: "GE Area UD-B"}]
+      - units: 15
+        source: "p.2122"
+        items: [{slot: major, group: theory, units: 3, note: "Select One (Major Core): MATH 335, MATH 370 or MATH 380"},
+                MATH 460, {slot: major, group: major_electives, units: 3}, {slot: GE, area: 4UD, units: 3, note: "GE Area UD-D"},
+                {slot: ai, area: USG/CSLG, units: 3}]
+      - units: 15
+        source: "p.2122"
+        items: [MATH 696, {slot: major, group: application_electives, units: 3}, {slot: major, group: major_electives, units: 3},
+                {slot: GE, area: 3UD, units: 3, note: "GE Area UD-C"}, {slot: sfss_or_elective, units: 5, note: "Take Two"}]
+      - units: 13
+        source: "p.2122"
+        items: [MATH 697, {slot: major, group: application_electives, units: 3}, {slot: sfss_or_elective, units: 8, note: "Take Three"}]
+
+  adt:
+    title: Bachelor of Science in Applied Mathematics – MATH Associate Degree for Transfer (ADT) Roadmap
+    total_units: 60
+    source: "p.2124-2126"
+    # "At least 12 units in the major (MATH 226, MATH 227, MATH 228) and all lower-division GE requirements have been satisfied."
+    met_in_transfer: [MATH 226, MATH 227, MATH 228]
+    notes:
+      - "For students who transfer in the current Bulletin year with an AS-T in Mathematics. At least 12 units in the major (MATH 226, MATH 227, MATH 228) and all lower-division GE requirements have been satisfied. Additional units in the major may have been satisfied: check with a major advisor about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the ADT section, p.2251 (p.2124)."
+      - "Students entering the major with the AS-T in Mathematics are not required to fulfill SF State Studies or Complementary Studies requirements (p.2124)."
+      - "University-Wide Requirements 9-15 units: American Institutions 0-6 (if not taken before transfer) and upper-division GE 9; courses required for the major may double-count if approved for UD GE. Applied Mathematics Major: 39-42 units (Required Courses 24-27, Major Electives 15, including three courses emphasizing applications of mathematics, chosen on advisement). University Electives: 1 or more units (p.2124-2125)."
+      - "MATH 400 offered spring semesters only (footnote 2, p.2126). MATH 376 offered fall semesters only (footnote 3, p.2126)."
+    semesters:
+      - units: 16
+        source: "p.2125"
+        items: [{one_of: [MATH 209, CSC 309, CSC 101], units: 3, note: "Select One (Major Core)"}, MATH 325, MATH 440,
+                {slot: major, group: major_electives, units: 3}, {slot: GE, area: 5UD, units: 3, note: "GE Area UD-B"}]
+      # The second semester prints MATH 440 again (it's in the first): a misprint. Its 3 units are an elective here, so
+      # the semester keeps its printed 16.
+      - units: 16
+        source: "p.2125"
+        items: [MATH 301GW, MATH 400, {slot: elective, units: 3, note: "printed as MATH 440, which the first semester has"},
+                {one_of: [CSC 215, {slot: elective, units: 4}], units: 4,
+                 note: "CSC 215 if CSC 101 taken; University Elective if MATH 209 or CSC 309 taken"},
+                {slot: major, group: major_electives, units: 3}]
+      - units: 10
+        source: "p.2125"
+        items: [{slot: major, group: theory, units: 3, note: "Select One (Major Core): MATH 335, MATH 370 or MATH 380"}, MATH 376,
+                {slot: GE, area: 3UD, units: 3, note: "Select One (UD-C, USH, USG/CSLG): HIST 470 or HIST 471"},
+                {slot: ai, area: USH/USG/CSLG, units: 0, note: "the same HIST 470 or HIST 471 course"},
+                {slot: elective, units: 1}]
+      - units: 15
+        source: "p.2125"
+        items: [MATH 460, {slot: major, group: application_electives, count: 3, units: 9, note: "Take Three"},
+                {slot: GE, area: 4UD, units: 3, note: "GE Area UD-D"}]
+      - units: 1
+        source: "p.2125"
+        items: [MATH 696]
+      - units: 2
+        source: "p.2125"
+        items: [MATH 697]

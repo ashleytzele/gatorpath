@@ -458,6 +458,16 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     fall-only, the history says spring; MATH 400's prereq names "MATH 309" (not in the Bulletin), not CSC 309.
     Not done: the Scholars BS + MA roadmap (graduate rules), older catalog years, `dpr_plan` (waits on a real Applied
     Math DPR), and a second person's check against the PDF
+  - [x] Older catalog years (2026-10-28, `verified: false`): 2025-26 by a rule diff from 2026-27 (the same requirement
+    text but for 2026-27's new "Grades of C or better are required in MATH 226, ..." list, so no min_grade; the same
+    roadmap semesters; the ADT note's unit ranges differ, 39-42 major units, 4+ electives). 2024-25 by a rule diff from
+    2025-26 (same requirement text; transfer advice in the older GE codes) and its roadmaps transcribed: one
+    first-time roadmap (no QR pathways yet, ENG 114 in semester 1, GE in A-F codes) and the ADT roadmap, whose second
+    semester prints MATH 440 again (a misprint: its 3 units are an elective slot, so the semester keeps its 16). Every
+    variant's test plan is valid in its printed semesters (8; ADT 7 and 6). The ADT test plan for a year whose rules
+    can't apply a GE certification (2024-25, no `transfer` block) lists the lower-division GE areas in `ge_done`
+  - [ ] Still for Applied Math: the Scholars BS + MA roadmap (graduate rules), `dpr_plan` (waits on a real Applied Math
+    DPR), and a second person's check against the PDF
 - [x] `compare_programs(profile, target)`: what counts, what's left, extra semesters. Done 2026-10-22: both majors'
   audits and build_plan at the same load; `courses` count_in_both / only_current / only_target, `extra_terms`. The new
   major is the Bulletin in effect at the change ("must fulfill the major requirements in effect at the time they

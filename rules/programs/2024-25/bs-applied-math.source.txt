@@ -1,0 +1,200 @@
+=== p.2119 ===
+MATH 375 Field Study for Secondary Teachers (Major
+Concentration)
+1
+3
+GE Area UD-D: Upper-Division Social Sciences 3
+U.S. and California Government (p. 2294) 3
+or University Elective if US/CA Government met before transfer
+Units 15
+Fourth Semester
+MATH 370 Real Analysis I (Major Core) 3
+MATH 475 Capstone Course for Secondary Teachers of
+Mathematics (Major Concentration)
+2
+3
+Select One (Major Concentration): 3
+MATH 575 Mathematics in the Middle School
+Classroom
+MATH 576 Math in Middle Schools II
+MATH 577 Math in Middle School III
+University Elective 4
+Units 13
+Total Units 60
+1
+MATH 310 and MATH 375 are offered in Fall Semesters only.
+2
+MATH 475 is offered Spring Semesters only.
+Bachelor of Science in Applied
+Mathematics
+The primary aim of applied mathematics is to elucidate scientific
+concepts and to describe and predict phenomena through the use of
+mathematics. The applied mathematician is at once a mathematical
+specialist and a systems analyst whose task is to confront complex real-
+world problems with mathematical analysis. In business and industry,
+the applied mathematician has opportunities to utilize both background
+and training in solving problems of a practical nature. To do so, one
+must know the mathematical theories involved and have an appreciation
+for the specific science or technology that provides the source of the
+problem. CR/NC grades are not acceptable in courses to be counted for a
+mathematics major or minor program.
+Program Learning Outcomes
+Upon completion of the Bachelor of Science in Applied Mathematics a
+student will be able to:
+a. develop basic programming skills and use of various software
+such as Mathematica, Matlab, SAS, and R; apply these skills to
+solve problems in optimization, applied linear algebra, differential
+equations, and statistical inference.
+b. formulate and analyze mathematical conjectures, construct proofs in
+sound mathematical English, and use these skills to write proofs of
+statements in linear algebra, abstract algebra, and analysis.
+c. develop practical insights in modeling real-world phenomena using a
+model toolbox of (partial) differential equations, optimization, applied
+analysis and linear algebra, and use numerical methods to obtain
+solutions in probing such models.
+d. communicate effectively to a variety of audiences using oral, written,
+and visual modes.
+Applied Mathematics (B.S.) — 55 units
+minimum
+CR/NC grades are not acceptable in courses to be counted for a
+mathematics major program.
+Required Courses (40-44 units)
+Code Title Units
+MATH 226 Calculus I 4
+MATH 227 Calculus II 4
+MATH 228 Calculus III 4
+MATH 301GW Exploration and Proof - GWAR 3
+Select One: 3-7
+MATH 209 Mathematical Computing
+CSC 101
+& CSC 215
+Introduction to Computing
+and Intermediate Computer Programming
+CSC 309 Computer Programming
+MATH 325 Linear Algebra 4
+Select One: 3
+MATH 335 Modern Algebra
+MATH 370 Real Analysis I
+MATH 380 Introduction to Complex Analysis
+MATH 376 Ordinary Differential Equations I 3
+MATH 400 Numerical Analysis 3
+MATH 440 Probability and Statistics I 3
+MATH 460 Mathematical Modeling 3
+MATH 696
+& MATH 697
+Applied Mathematics Project I
+and Applied Mathematics Project II
+3
+=== p.2120 ===
+Electives (15 units)
+Code Title Units
+Select six units of the following: 6
+MATH 430 Mathematics of Optimization
+MATH 442 Probability Models
+MATH 447 Design and Analysis of Experiments
+MATH 448 Introduction to Statistical Learning and Data
+Mining
+MATH 449 Categorical Data Analysis
+MATH 471 Fourier Analysis and Applications
+MATH 477 Partial Differential Equations
+MATH 491 Game Theory
+MATH 495 Introduction to Wavelets and Frames with
+Applications
+A coherent collection of three courses emphasizing applications of
+mathematics, chosen with the consent of the applied mathematics
+advisor
+9
+General Education Requirements
+Requirement Course Level Units Area Designation
+Oral
+Communication
+LD 3 A1
+Written English
+Communication
+LD 3 A2
+Critical Thinking LD 3 A3
+Physical Science LD 3 B1
+Life Science LD 3 B2
+Lab Science LD 1 B3
+Mathematics/
+Quantitative
+Reasoning
+LD 3 B4
+Arts LD 3 C1
+Humanities LD 3 C2
+Arts or
+Humanities
+LD 3 C1 or C2
+Social Sciences LD 3 D1
+Social Sciences:
+US History
+LD 3 D2
+Lifelong Learning
+and Self-
+Development
+(LLD)
+LD 3 E
+Ethnic Studies LD 3 F
+Physical and/or
+Life Science
+UD 3 UD-B
+Arts and/or
+Humanities
+UD 3 UD-C
+Social Sciences UD 3 UD-D
+SF State Studies
+Courses certified as meeting the SF State Studies
+requirements may be upper or lower division in General
+Education (GE), a major or minor, or an elective.
+American Ethnic
+and Racial
+Minorities
+LD or UD 3 AERM
+Environmental
+Sustainability
+LD or UD 3 ES
+Global
+Perspectives
+LD or UD 3 GP
+Social Justice LD or UD 3 SJ
+Note: LD = Lower-Division; UD = Upper-Division.
+First-Time Student Roadmap (4 Year)
+The roadmaps presented in this Bulletin are intended as suggested
+plans of study and do not replace meeting with an advisor. For a
+more personalized roadmap, please use the Degree Planner (https://
+registrar.sfsu.edu/degreeplanner/) tool found in your Student Center.
+First-Time Student Roadmap (p. 2121)
+SF State Scholars Roadmap
+The San Francisco State Scholars program provides undergraduate
+students with an accelerated pathway to a graduate degree. Students in
+this program pursue a bachelor’s and master’s degree simultaneously.
+This program allows students to earn graduate credit while in their
+junior and/or senior year, reducing the number of semesters required for
+completion of a master’s degree.
+Bachelor of Science in Applied Mathematics, Master of Arts in
+Mathematics Scholars Roadmap (p. 2123)
+Transfer Student Roadmap (2 Year)
+For students with an AS-T in Mathematics.
+MATH ADT Roadmap (p. 2124)
+This degree program is an approved pathway
+(“similar” major) for students earning the ADT in
+Applied Mathematics
+California legislation SB 1440 (2009) mandated the creation of the
+Associate Degree for Transfer (ADT) to be awarded by the California
+Community Colleges. Two types of ADTs are awarded: Associate in Arts
+for Transfer (AA-T) and Associate in Science for Transfer (AS-T).
+Note: no specific degree is required for admission as an upper-division
+student. However, the ADT includes specific guarantees related to
+admission and graduation and is designed to clarify the transfer process
+and strengthen lower-division preparation for the major.
+An ADT totals 60 units and in most cases includes completion of all
+lower-division General Education requirements and at least 18 units in a
+specific major. (The Biology, Chemistry, and Environmental Science AS-
+T degrees defer 3 units in lower-division GE area C and 3 units in lower-
+division GE area D until after transfer.) Students pursuing an ADT are
+guaranteed admission to the CSU if minimum eligibility requirements are
+met, though not necessarily to the CSU campus of primary choice.
+Upon verification that the ADT has been awarded prior to matriculation
+at SF State, students are guaranteed B.A. or B.S. completion in 60 units
+if pursuing a “similar” major after transfer. Determinations about “similar”
+majors at SF State are made by faculty in the discipline.

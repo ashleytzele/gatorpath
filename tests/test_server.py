@@ -526,10 +526,12 @@ def test_the_students_catalog_year_picks_the_rules():
     assert warn("Fall 2026") == warn("2026-27") == []
     assert warn("Spring 2024")[0].startswith("The student's catalog year is Spring 2024, but GatorPath has bs-cs rules "
                                              "only for 2024-25, 2025-26, 2026-27")
-    # a program with fewer years names its own: BS Applied Mathematics has only 2026-27 rules
-    math = {"program": "bs-applied-math", "catalog_year": "Fall 2025"}
-    assert server.rules_year(math) == "2026-27"
-    assert "has bs-applied-math rules only for 2026-27, so this uses 2026-27" in server.year_warning(math, "2026-27")[0]
+    # a program with fewer years names its own: BA Economics has only 2026-27 rules
+    econ = {"program": "ba-economics", "catalog_year": "Fall 2025"}
+    assert server.rules_year(econ) == "2026-27"
+    assert "has ba-economics rules only for 2026-27, so this uses 2026-27" in server.year_warning(econ, "2026-27")[0]
+    # BS Applied Mathematics 2025-26 is a rule diff of 2026-27 (no "Grades of C or better" list yet)
+    assert server.rules_year({"program": "bs-applied-math", "catalog_year": "Fall 2025"}) == "2025-26"
 
 
 def test_a_2025_26_student_needs_c_only_in_csc_510_and_648():

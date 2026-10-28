@@ -1,0 +1,508 @@
+=== p.2121 ===
+Degree completion in 60 units cannot be guaranteed when a student
+simultaneously pursues an additional major, a minor, certificate, or
+credential.
+A sample advising roadmap for students who have earned an ADT and
+continue in a "similar" major at SF State is available on the Roadmaps tab
+on the degree requirements page for the major. The roadmap displays:
+• How many lower-division units required for the major have been
+completed upon entry based on the award of a specific ADT;
+• Which lower-division requirements are considered complete upon
+entry based on the award of a specific ADT;
+• How to complete the remaining 60 units for the degree in four
+semesters.
+Students who have earned an ADT should seek advising in the major
+department during the first semester of attendance.
+General Advising Information for Transfer
+Students
+a. Before transfer, complete as many lower-division requirements or
+electives for this major as possible.
+b. The following courses are not required for admission but are required
+for graduation. Students are strongly encouraged to complete these
+units before transfer; doing so will provide more flexibility in course
+selection after transfer.
+• a course in U.S. History
+• a course in U.S. & California Government
+For information about satisfying the requirements described in (1) and
+(2) above at a California Community College (CCC), please visit http://
+www.assist.org (http://assist.org). Check any geographically accessible
+CCCs; sometimes options include more than one college. Use ASSIST to
+determine:
+• Which courses at a CCC satisfy any lower-division major
+requirements for this major;
+• Which courses at a CCC satisfy CSU GE, US History, and US & CA
+Government requirements.
+Remedial courses are not transferable and do not apply to the minimum
+60 semester units/90 quarter units required for admission.
+Additional units for courses that are repeated do not apply to the
+minimum 60 units required for upper-division transfer (for example, if
+a course was not passed on the first attempt or was taken to earn a
+better grade).
+Before leaving the last California Community College of attendance,
+obtain a summary of completion of lower-division General Education
+units (IGETC or CSU GE Breadth). This is often referred to as a GE
+certification worksheet. SF State does not require delivery of this
+certification to Admissions, but students should retain this document for
+verifying degree progress after transfer.
+Credit for Advanced Placement, International Baccalaureate, or
+College-Level Examination Program courses: AP/IB/CLEP credit is
+not automatically transferred from the previous institution. Units are
+transferred only when an official score report is delivered to SF State.
+Credit is based on the academic year during which exams were taken.
+Refer to the University Bulletin in effect during the year of AP/IB/CLEP
+examination(s) for details regarding the award of credit for AP/IB/CLEP.
+Students pursuing majors in science, technology, engineering, and
+mathematics (STEM) disciplines often defer 6-9 units of lower-division
+General Education in Areas C and D until after transfer to focus on
+preparation courses for the major. This advice does not apply to students
+pursuing associate degree completion before transfer.
+Transferring From Institutions Other Than CCCs
+or CSUs
+Review SF State's lower-division General Education requirements.
+Note that, as described below, the four basic skills courses required for
+admission meet A1, A2, A3, and B4 in the SF State GE pattern. Courses
+that fulfill the remaining areas of SF State’s lower-division GE pattern are
+available at most two-year and four-year colleges and universities.
+Of the four required basic skills courses, a course in critical thinking (A3)
+may not be widely offered outside the CCC and CSU systems. Students
+should attempt to identify and take an appropriate course no later than
+the term of application to the CSU. To review more information about the
+A3 requirement, please visit bulletin.sfsu.edu/undergraduate-education/
+general-education/lower-division/#AAEL.
+Waiting until after transfer to take a single course at SF State that meets
+both US and CA/local government requirements may be an appropriate
+option, particularly if transferring from outside of California.
+Bachelor of Science in Applied
+Mathematics Roadmap
+120 Total Units Required
+Minimum Number of Units in the Major: 55
+This roadmap is a suggested plan of study and does not replace meeting
+with an advisor. Please note that students may need to adjust the actual
+sequence of courses based on course availability. Please consult an
+advisor in your major program for further guidance.
+Course Title Units
+First Semester
+ENG 114 Writing the First Year:
+Finding Your Voice
+(A2)
+1
+3
+MATH 226 Calculus I (Major
+Core, B4)
+2
+4
+GE Area A
+3
+3
+GE Area C 3
+GE Area D 3
+Units 16
+Second Semester
+Select One (Major Core): 3
+MATH 209 Mathematical
+Computing
+CSC 101 Introduction to
+Computing
+CSC 309 Computer
+Programming
+Footnote marks on p.2121 (from the PDF's layout): ENG 114: footnote 1, 3 units; MATH 226: footnote 2, 4 units
+=== p.2122 ===
+MATH 227 Calculus II (Major
+Core)
+4
+GE Area A 3
+GE Area D 3
+GE Area E 3
+Units 16
+Third Semester
+MATH 228 Calculus III (Major
+Core)
+4
+MATH 301GW Exploration and
+Proof - GWAR (Major
+Core)
+3
+Select One: 4
+CSC 215 Intermediate
+Computer
+Programming (if
+CSC 101 taken)
+SF State Studies or University Elective (if MATH 209 or CSC
+309 taken)
+GE Area B: Physical Science (B1) and Laboratory Science (B3)
+4
+3-4
+Units 14-15
+Fourth Semester
+MATH 325 Linear Algebra (Major
+Core)
+4
+MATH 440 Probability and
+Statistics I (Major
+Core)
+3
+GE Area B: Life Science (B2) and Laboratory Science (B3)
+4
+3
+GE Area C - Take Two 6
+Units 16
+Fifth Semester
+MATH 376 Ordinary Differential
+Equations I (Major
+Core)
+3
+MATH 400 Numerical Analysis
+(Major Core)
+3
+Major Application Elective (9 Units Total) - Take One
+5
+3
+GE Area F
+±
+3
+GE Area UD-B: Upper-Division Physical and/or Life Sciences 3
+Units 15
+Sixth Semester
+Select One (Major Core): 3
+MATH 335 Modern Algebra
+MATH 370 Real Analysis I
+MATH 380 Introduction to
+Complex Analysis
+MATH 460 Mathematical
+Modeling (Major
+Core)
+3
+Major Elective (6 Units Total) - Take One
+6
+3
+GE Area UD-D: Upper-Division Social Sciences 3
+U.S. and California Government (p. 2294) 3
+Units 15
+Seventh Semester
+MATH 696 Applied Mathematics
+Project I (Major Core)
+7
+1
+Major Application Elective (9 Units Total) - Take One
+5
+3
+Major Elective (6 Units Total) - Take One
+6
+3
+GE Area UD-C: Upper-Division Arts and/or Humanities 3
+SF State Studies or University Elective - Take Two 5
+Units 15
+Eighth Semester
+MATH 697 Applied Mathematics
+Project II (Major
+Core)
+7
+2
+Major Application Elective (9 Units Total) - Take One
+5
+3
+SF State Studies or University Elective - Take Three 8
+Units 13
+Total Units 120-121
+1
+ENG 114 can only be taken if you complete Directed Self-Placement
+(DSP) and select ENG 114 if you choose ENG 104/ENG 105 through
+DSP you will satisfy A2 upon successful completion of ENG 105 in the
+second semester; multilingual students may be advised into alternative
+English courses.
+2
+To determine the best B4 course option, students should complete
+the online advising activity at mathadvising.sfsu.edu (https://
+mathadvising.sfsu.edu/). Questions? Contact Gator Smart Start.
+(https://gatorsmartstart.sfsu.edu/)
+3
+To avoid taking additional units, it is recommended that you meet the
+SF State Studies (AERM, GP, ES, SJ) requirements within your GE or
+major.
+4
+Consider taking a class combined with a laboratory or a separate lab to
+fulfill B3 if not already satisfied.
+5
+Major Application Electives (9 units)
+A coherent collection of three courses emphasizing applications of
+mathematics, chosen with the consent of the applied mathematics
+advisor.
+6
+Major Electives (6 units)
+MATH 430 Mathematics of Optimization (3 units)
+MATH 442 Probability Models (3 units)
+MATH 447 Design and Analysis of Experiments (3 units)
+MATH 448 Introduction to Statistical Learning and Data Mining (3
+units)
+MATH 449 Categorical Data Analysis (3 units)
+MATH 471 Fourier Analysis and Applications (3 units)
+MATH 477 Partial Differential Equations (3 units)
+MATH 491 Game Theory (3 units)
+MATH 495 Introduction to Wavelets and Frames with Applications (3
+units)
+7
+MATH 696/MATH 697 serve as the capstone experience for the major.
+± Given catalog rights, fall 2023 transfer students do not need to
+complete an Area F course.
+Footnote marks on p.2122 (from the PDF's layout): MATH 696: footnote 7, 1 unit; MATH 697: footnote 7, 2 units
+=== p.2124 ===
+Transfer (ADT) Roadmap
+SF State Studies or University Elective - Take Three 9
+Units 14
+Fifth Year
+Fall Semester
+Graduate Elective - Take One
+8
+3
+SF State Studies or University Elective - Take Two 6
+Units 9
+Spring Semester
+Graduate Electives - Take Two or Three
+8
+6-9
+Select One (Culminating Experience): 0-3
+MATH 896EXM Culminating
+Experience
+Examination
+MATH 898 Master's Thesis
+Units 6-12
+Total Units 136-144
+1
+ENG 114 can only be taken if you complete Directed Self-Placement
+(DSP) and select ENG 114; if you select ENG 104/ENG 105 through
+DSP you will satisfy A2 upon successful completion of ENG 105 in the
+second semester; multilingual students may be advised into alternative
+English courses.
+2
+To determine the best B4 course option, students should complete
+the online advising activity at mathadvising.sfsu.edu (https://
+mathadvising.sfsu.edu/). Questions? Contact Gator Smart Start.
+(https://gatorsmartstart.sfsu.edu/)
+3
+To avoid taking additional units, it is recommended that you meet the
+SF State Studies (AERM, GP, ES, SJ) requirements within your GE or
+major.
+4
+Consider taking a class combined with a laboratory or a separate lab to
+fulfill B3 if not already satisfied.
+5
+Major Application Electives (9 units)
+A coherent collection of three courses emphasizing applications of
+mathematics, chosen with the consent of the applied mathematics
+advisor.
+6
+Graduate core courses
+9
+, except MATH 735 and MATH 770, may double
+count for this requirement for a max of 12 units.
+7
+Major Electives (6 units)
+MATH 430 Mathematics of Optimization (3 units)
+MATH 442 Probability Models (3 units)
+MATH 447 Design and Analysis of Experiments (3 units)
+MATH 448 Introduction to Statistical Learning and Data Mining (3
+units)
+MATH 449 Categorical Data Analysis (3 units)
+MATH 471 Fourier Analysis and Applications (3 units)
+MATH 477 Partial Differential Equations (3 units)
+MATH 491 Game Theory (3 units)
+MATH 495 Introduction to Wavelets and Frames with Applications (3
+units)
+8
+Upper-Division/Graduate Mathematics or Related Courses (9-12 units)
+MATH 730 must be included among these units unless the student
+had earned a B or higher grade in an undergraduate complex analysis
+course. No more than 9 units may be selected from approved unpaired
+undergraduate upper-division courses. Students must complete either
+a thesis with oral defense (MATH 898) or take the comprehensive
+examinations and write an expository paper (MATH 896EXM).
+Students who plan to take MATH 898 must complete 9 units of
+elective courses. Students who plan to take MATH 896EXM must
+complete 12 units of elective courses, including at least 3 units of
+unpaired graduate courses.
+9
+Graduate Core
+Select Three:
+MATH 710 Measure and Integration (3 units)
+MATH 711 Functional Analysis (3 units)
+or MATH 730 Theory of Functions of a Complex Variable (3 units)
+MATH 725 Advanced Linear Algebra (3 units)
+MATH 850 Algebra (3 units)
+Select an additional 3 units from unpaired graduate courses other than
+MATH 898 or MATH 899.
+Bachelor of Science in Applied
+Mathematics – MATH Associate
+Degree for Transfer (ADT) Roadmap
+This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with an AS-T in Mathematics. At
+least 12 units in the major (MATH 226, MATH 227, MATH 228) and all lower-division GE requirements have been satisfied. Additional units in the major
+may have been satisfied. Check with a major advisor about the most appropriate course sequence. Degree completion guaranteed in 60 units; see the
+Associate Degree for Transfer (ADT) section for more information (p. 2251).
+To Do at SF State:
+Enough total units to reach 120 minimum for graduation; 30 units minimum at the upper-division level; to include the following:
+University-Wide Requirements: 9-15 Units
+• American Institutions (0-6 units): US History, US Government, California State and Local Government requirements if not taken before transfer.
+• Upper-Division GE (9 units): Courses required for the major may double-count if approved for UD GE.
+• Students entering the major with the AS-T in Mathematics are not required to fulfill SF State Studies or Complementary Studies requirements.
+Applied Mathematics Major: 39-42 Units
+MATH 226, MATH 227, and MATH 228 met in transfer.
+• Required Courses (24-27 units)
+• Major Electives (15 units), including three courses emphasizing applications of mathematics, chosen on advisement.
+=== p.2125 ===
+University Electives: 1 or More Units
+Depends on course choices made at the community college, how transferred units are applied to the requirements above, and course choices at SF
+State. Some courses may meet more than one requirement, e.g., UD GE and the major.
+Course Title Units
+First Semester
+Select One (Major Core): 3
+MATH 209 Mathematical Computing
+CSC 309 Computer Programming
+CSC 101 Introduction to Computing
+MATH 325 Linear Algebra (Major Core) 4
+MATH 440 Probability and Statistics I (Major Core) 3
+Major Elective (6 Units Total) - Take One
+1
+3
+GE Area UD-B: Upper-Division Physical and/or Life Sciences 3
+Units 16
+Second Semester
+MATH 301GW Exploration and Proof - GWAR (Major Core) 3
+MATH 400 Numerical Analysis (Major Core)
+2
+3
+MATH 440 Probability and Statistics I (Major Core) 3
+Select One: 4
+CSC 215 Intermediate Computer Programming (if
+CSC 101 taken)
+Unviersity Elective (if MATH 209 or CSC 309 taken)
+Major Elective (6 Units Total) - Take One
+1
+3
+Units 16
+Third Semester
+Select One (Major Core): 3
+MATH 335 Modern Algebra
+MATH 370 Real Analysis I
+MATH 380 Introduction to Complex Analysis
+MATH 376 Ordinary Differential Equations I (Major
+Core)
+3
+3
+Select One (UD-C, USH, USG/CSLG): 3
+HIST 470 The U.S. Constitution to 1896
+HIST 471 The U.S. Constitution Since 1896
+University Elective 1
+Units 10
+Fourth Semester
+MATH 460 Mathematical Modeling (Major Core) 3
+Major Application Elective (9 Units Total) - Take Three
+4
+9
+GE Area UD-D: Upper-Division Social Sciences 3
+Units 15
+Fifth Semester
+MATH 696 Applied Mathematics Project I (Major Core) 1
+Units 1
+Sixth Semester
+MATH 697 Applied Mathematics Project II (Major Core) 2
+Units 2
+Total Units 60
+1
+Major Electives (6 units)
+Select six units of the following:
+MATH 430 Mathematics of Optimization (3 units)
+Footnote marks on p.2125 (from the PDF's layout): MATH 400: footnote 2, 3 units; MATH 376: footnote 3, 3 units
+=== p.2126 ===
+MATH 442 Probability Models (3 units)
+MATH 447 Design and Analysis of Experiments (3 units)
+MATH 448 Introduction to Statistical Learning and Data Mining (3 units)
+MATH 449 Categorical Data Analysis (3 units)
+MATH 471 Fourier Analysis and Applications (3 units)
+MATH 477 Partial Differential Equations (3 units)
+MATH 491 Game Theory (3 units)
+MATH 495 Introduction to Wavelets and Frames with Applications (3 units)
+2
+MATH 400 offered spring semesters only.
+3
+MATH 376 offered fall semesters only.
+4
+Major Application Electives (9 units)
+A coherent collection of three courses emphasizing applications of mathematics, chosen with the consent of the applied mathematics advisor.
+Bachelor of Science in Statistics
+The Bachelor of Science in Statistics is an interdisciplinary program
+offered for students who intend to pursue an advanced degree, or who
+are planning careers as statisticians in industry, business, government, or
+scientific research.
+To give the students both breadth and depth and to introduce them to a
+variety of fields where statistics may be applied, we offer three emphases
+for the degree: science, business, and economics.
+CR/NC grades are not acceptable in courses to be counted for a
+mathematics major or minor program.
+Program Learning Outcomes
+Upon completion of the Bachelor of Science in Statistics a student will be
+able to:
+a. Apply statistical knowledge and computational skills to formulate
+problems, plan data collection, and analyze data to provide insight.
+b. Build and assess statistical and machine learning models, and
+employ a variety of formal inference procedures.
+c. Use mathematics to understand the underlying structure of common
+models used in statistical and machine learning.
+d. Prepare data for use with a variety of statistical methods and models,
+and recognize how the quality of data and data collection affect
+conclusions.
+e. Communicate effectively to a variety of audiences using oral, written,
+and visual modes.
+Statistics (B.S.) — 55 units minimum
+All major courses must be completed for a letter grade. CR/NC grades are
+not accepted.
+Core Requirements (46 units)
+Code Title Units
+MATH 226 Calculus I 4
+MATH 227 Calculus II 4
+MATH 228 Calculus III 4
+MATH 301GW Exploration and Proof - GWAR 3
+Select One: 3-7
+MATH 209 Mathematical Computing
+CSC 101
+& CSC 215
+Introduction to Computing
+and Intermediate Computer Programming
+CSC 309 Computer Programming
+MATH 325 Linear Algebra 4
+MATH 338 Introduction to SAS 3
+MATH 424 Introduction to Linear Models 3
+MATH 440 Probability and Statistics I 3
+MATH 441 Probability and Statistics II 3
+MATH 442 Probability Models 3
+MATH 447 Design and Analysis of Experiments 3
+MATH 448 Introduction to Statistical Learning and Data
+Mining
+3
+MATH 449 Categorical Data Analysis 3
+Guided Electives (9 units)
+Select three courses from one of the areas (Science, Economics,
+Business: Decision Sciences, or Business: Information Systems) listed
+below:
+Science
+Code Title Units
+Select three courses in consultation with a statistics advisor:
+MATH 370 Real Analysis I 3
+MATH 376 Ordinary Differential Equations I 3
+MATH 400 Numerical Analysis 3
+MATH 425 Applied and Computational Linear Algebra 3
+MATH 430 Mathematics of Optimization 3
+MATH 460 Mathematical Modeling 3
+Economics
+Code Title Units
+Select three courses in consultation with a statistics advisor:
+ECON 301 Intermediate Microeconomic Theory 3
+ECON 302 Intermediate Macroeconomic Theory 3
+ECON 312 Introduction to Econometrics 3
+ECON 715 Mathematical Economics 3
+ECON 731 Econometric Methods and Applications 3
+ECON 825 Applied Time Series Econometrics 3
+Business: Decision Sciences
+Code Title Units
+Select three courses in consultation with a statistics advisor:
+DS 311 Technologies in Data Analytics 3
+DS 408 Computer Simulation 3
+DS 412 Operations Management 3
