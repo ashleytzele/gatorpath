@@ -384,13 +384,16 @@ def cross_check(ours: dict, theirs: dict, university: dict, catalog: dict, names
 
 
 def try_plans(program: dict, roadmap: dict, university: dict, catalog: dict, prereqs: dict) -> list[str]:
-    """build_plan for a new student on each variant (an ADT transfer on `adt`), as check_plan sees it: the end-to-end
-    check that a drafted program and roadmap can be planned at all."""
+    """build_plan for a new student on each variant, as check_plan sees it: the end-to-end check that a drafted program
+    and roadmap can be planned at all. On `adt`, the transfer its roadmap prints: 60 units, lower-division GE certified,
+    the variant's `met_in_transfer` courses (a real AS-T student's DPR lists them; of a printed "A or B", the first)."""
     out = []
     for key, v in roadmap.get("variants", {}).items():
+        took = [c for x in v.get("met_in_transfer", []) for c in ([x] if isinstance(x, str) else x["one_of"][0])]
         profile = {"program": program["program"], "catalog_year": program["catalog_year"], "start_term": "2027-fall",
                    "completed": []} | ({"qr_pathway": v["qr_pathway"]} if v.get("qr_pathway") else {}) | (
-                      {"adt": True} if key == "adt" else {})
+                      {"adt": True, "first_time": False, "transfer_units": 60, "ge_certified": True,
+                       "completed": [{"code": c, "grade": "B", "transfer": True} for c in took]} if key == "adt" else {})
         plan = build_plan(profile, program, university, roadmap, catalog, prereqs)
         if "check" not in plan:
             out.append(f"plan {key}: none ({plan.get('needs_input') or plan.get('error')})")

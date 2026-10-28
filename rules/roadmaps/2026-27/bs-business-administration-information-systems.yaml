@@ -280,6 +280,7 @@ variants:
       Transfer (ADT) with 15 Lower-Division Units Roadmap'
     total_units: 60
     source: p.209-210
+    met_in_transfer: [ACCT 100, ACCT 101, DS 212, ECON 101, ECON 102]
     notes:
     - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
       an AS-T in Business Administration (VERSION 2.0, established Spring 2021). 15 units in the major [ACCT 100/ACCT 101,

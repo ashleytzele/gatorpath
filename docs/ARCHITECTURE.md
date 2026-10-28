@@ -518,7 +518,10 @@ groups:
 The p.1906 "Transfer Student Roadmap (2 Year)" heading links to the ADT roadmap, so there's no separate
 transfer variant. Each is a list of semesters. Each semester lists course codes or placeholders
 (`{slot: GE, area: "1A", units: 3}`, `{slot: senior_elective, count: 3, units: 9}`), its printed unit
-total, and a `source:` page.
+total, and a `source:` page. An `adt` variant's `met_in_transfer` lists the major courses its print says the AS-T
+student has met (`{one_of: [[CHEM 115], [CHEM 180]]}` for a printed "CHEM 115 or CHEM 180"; a printed requirement
+that isn't a course, "3 units of Focus Electives", is left out). Only the `--load` test plan reads it (that student
+also has 60 transfer units and lower-division GE certified); a real student's DPR lists their transfer courses.
 
 ### 6.3 Prerequisite expression (JSON)
 

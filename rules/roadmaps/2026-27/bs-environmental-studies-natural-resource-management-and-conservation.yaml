@@ -187,6 +187,8 @@ variants:
     met_in_transfer:
     - BIOL 230
     - BIOL 240
+    - {one_of: [[CHEM 115], [CHEM 180]]}
+    - {one_of: [[ERTH 230], [GEOG 101]]}
     notes:
     - Discontinued - Not Accepting New Students
     - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with

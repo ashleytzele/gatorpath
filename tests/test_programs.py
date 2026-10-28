@@ -168,3 +168,21 @@ def test_marks_line_says_which_course_carries_which_footnote():
     assert P.marks_line(1859, rows) == ("Footnote marks on p.1859 (from the PDF's layout): CHEM 343: footnote 1, 3 units; "
                                         "CHEM 686: footnote 2, 1 unit; FIN/ECON/ENVS 651: footnote 1, 2")
     assert P.marks_line(1860, rows[1:2]) == ""  # no mark on the page: no line
+
+
+def test_an_adt_test_plan_is_the_transfer_its_roadmap_prints():
+    # the Applied Math AS-T student has MATH 226-228 and lower-division GE (p.2136): a valid plan in the 7 printed
+    # semesters, not 18 terms for a transfer who brought nothing; a printed "A or B" transfers its first option
+    import json
+    from pathlib import Path
+    from gatorpath.engine.prereq import parse_prereq
+    from gatorpath.engine.rules import load_rules
+    root = Path(__file__).parents[1]
+    catalog = json.loads((root / "evals/catalog-2026-27.json").read_text())
+    prereqs = {r["code"]: {"raw_text": r["prereq_text"], **parse_prereq(r["prereq_text"])}
+               for r in json.loads((root / "tests/fixtures/catalog_rows.json").read_text())}
+    program, university = load_rules("2026-27", "bs-applied-math")
+    adt = yaml.safe_load((root / "rules/roadmaps/2026-27/bs-applied-math.yaml").read_text())["variants"]["adt"]
+    assert P.try_plans(program, {"variants": {"adt": adt}}, university, catalog, prereqs) == ["plan adt: valid, 7 terms"]
+    either = adt | {"met_in_transfer": ["MATH 226", {"one_of": [["MATH 227", "MATH 228"], ["MATH 245"]]}]}
+    assert P.try_plans(program, {"variants": {"adt": either}}, university, catalog, prereqs) == ["plan adt: valid, 7 terms"]

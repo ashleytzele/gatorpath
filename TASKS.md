@@ -497,12 +497,24 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   (one per "one of"; PHYS 330 needs MATH 376: Physics, Earth Sciences, Cell and Molecular Biology); all_of/one_of
   claim before electives (Art History's ART 671); "graduate standing or KIN ITEP …" isn't graduate-only; "majors and
   minors with …" clauses; variable-unit courses in the units check; an approval beside a list keeps the list.
-  - [ ] BS Applied Math's ADT test plan (try_plans' made-up AS-T student, nothing transferred) stops at 18 terms: the
+  - [x] BS Applied Math's ADT test plan (try_plans' made-up AS-T student, nothing transferred) stops at 18 terms: the
     printed ADT semesters (9, 7, 4, 2 units) become the term caps (D24) and all lower-division GE has to fit under them.
     Invalid before 2026-10-27 too (hand-written, so --load never ran it). Give the test student the AS-T's met_in_transfer
     and lower-division GE, or cap a past-roadmap term differently. Same root for every program: the engine never reads
     `met_in_transfer` (a real AS-T student's DPR lists those courses), so each ADT test plan is a transfer student who
-    transferred nothing (BS Public Health's ADT test plan schedules BIOL 100/101 and PH 205)
+    transferred nothing (BS Public Health's ADT test plan schedules BIOL 100/101 and PH 205). Done 2026-10-27: the test
+    student is the printed transfer (60 units, lower-division GE certified, the variant's `met_in_transfer`, which now
+    takes a printed "A or B" as `{one_of}`, ARCHITECTURE §6.2). Written from their print where the drafter left it out
+    (Business Information Systems and Management, Physiology, Environmental Science), and the printed alternatives
+    added (the PHYS sequence, CHEM 115 or 180, ...) to those and to Cell and Molecular Biology and both NRM&C programs.
+    79 of 79 ADT test plans valid (before: 78, most in 8 terms; Applied Math invalid at 18), in 4 terms as printed but
+    6: Applied Math 7 and the ECS PK-3
+    ITEP 5 as printed; Physics and Astrophysics (PHYS 330 needs MATH 376, which the roadmap never schedules), Earth
+    Sciences (its AS-T meets "the Introduction to Earth Sciences requirement, and 3 units of Focus Electives", groups
+    a course list can't name) and Cell and Molecular Biology (below) take 5
+  - [ ] BS Cell and Molecular Biology plans CHEM 130 and CHEM 233 both: CHEM 233 comes in as CHEM 340's prereq (the
+    biochemistry Select One), but "Select One (CHEM 130 or CHEM 233)" still takes CHEM 130; the 3 units push BIOL 350
+    a term late and its ADT plan to 5 terms. The Select One should prefer an option the plan already takes as a prereq
   - [x] Read the other 2026-10-22 pilots against the Bulletin, as BS Public Health (2026-10-27): BA Asian American
     Studies, BM Composition, BS Civil Engineering (review log). Rules and roadmaps as printed; what they turned up:
   - [x] "General Education Requirements Met in the Major" (18 programs in 2026-27: Civil, Computer, Electrical and

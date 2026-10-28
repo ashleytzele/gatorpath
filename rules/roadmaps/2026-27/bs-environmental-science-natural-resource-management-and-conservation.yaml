@@ -185,6 +185,9 @@ variants:
     - BIOL 230
     - BIOL 240
     - GEOG 160
+    - {one_of: [[CHEM 115], [CHEM 180]]}
+    - {one_of: [[ERTH 112], [ERTH 230], [GEOG 101]]}
+    - {one_of: [[ENVS 130], [GEOG 102]]}
     notes:
     - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
       an AS-T in Biology. Up to 25 units in the major (BIOL 230, BIOL 240, CHEM 115 or CHEM 180, ERTH 112 or ERTH 230 or GEOG

@@ -278,6 +278,7 @@ variants:
     title: 'Bachelor of Science in Biology: Concentration in Physiology – BIOL Associate Degree for Transfer (ADT) Roadmap'
     total_units: 60
     source: p.1843-1844
+    met_in_transfer: [BIOL 230, BIOL 240, CHEM 115, CHEM 215, MATH 226, {one_of: [[PHYS 111, PHYS 112], [PHYS 220, PHYS 222]]}]
     notes:
     - This is a sample pathway for students who transfer to San Francisco State University in the current Bulletin year with
       an AS-T in Biology. Twenty-six units in the major (BIOL 230/BIOL 240, CHEM 115, CHEM 215, MATH 226, required PHYS sequence)
