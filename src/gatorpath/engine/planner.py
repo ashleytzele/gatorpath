@@ -154,6 +154,10 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         c = e["not_after"]
         return (NO, [f"no {c} before this term (not open to students who have completed it)"]) if c in ctx["done"] \
             else (OK, [])
+    if "not_with" in e:  # "May not be taken concurrently with M S 684" (M S 683)
+        c = e["not_with"]
+        return (NO, [f"not in the same term as {c} (may not be taken concurrently)"]) if c in ctx["same_term"] \
+            else (OK, [])
     if "restricted_to" in e:
         # ponytail: word match on the restriction text. Upgrade to a parsed {majors, standing, level} leaf if it misfires.
         text = e["restricted_to"]
@@ -847,6 +851,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     mine = {g["id"]: g for g in program["groups"]}
     follows = {c: {d for a in g["after"] for d in exact_courses(mine[a]) if d in todo}
              for g in program["groups"] if "after" in g for c in exact_courses(g) if c in todo}
+    # courses a planned course may not share a term with ({not_with}), for placing the other one second
+    apart = {c: {l["not_with"] for l in leaves(prereqs.get(c, {}).get("expr")) if "not_with" in l} for c in todo}
 
     # Slots for what the courses leave open, plus free electives up to the unit totals.
     sim = base | {"completed": base["completed"] + [{"code": c, "grade": ASSUMED} for c in todo]}
@@ -965,6 +971,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
 
             def ok(c: str, same: set) -> bool:
                 if follows.get(c, set()) - done:  # `after`: those groups' courses in an earlier term first
+                    return False
+                if any(c in apart.get(p, ()) for p in same):  # JOUR 617 "may not be taken concurrently with JOUR 605"
                     return False
                 state, _ = evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": same})
                 # An unverifiable branch ("or equivalent", high-school courses) doesn't let a course jump ahead of a

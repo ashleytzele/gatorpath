@@ -74,6 +74,9 @@ RULES = [
     # an exclusion, not a requirement: "Not open to students who have completed ERTH 110 or ERTH 111" (ERTH 112)
     (re.compile(rf"(?i:not open to students who have completed )((?:{COURSE.pattern}(?:,? (?:or|and) |, )?)+)"),
      lambda m: (LEAF, combine("all", [{"not_after": c} for c in COURSE.findall(m.group(1))]))),
+    # and not in the same term: "May not be taken concurrently with M S 684" (M S 683); "with JOUR 605* and JOUR 609*"
+    (re.compile(rf"(?i:may not be taken concurrently with )((?:{COURSE.pattern}(?:,? (?:or|and) |, )?)+)"),
+     lambda m: (LEAF, combine("all", [{"not_with": c} for c in COURSE.findall(m.group(1))]))),
     (re.compile(r"first-year math advising module", I), lambda m: (LEAF, {"requirement": "First-Year Math Advising Module"})),
     (re.compile(r"(?:by |an )?audition\b", I), lambda m: (LEAF, {"requirement": "Audition"})),  # MUS ensembles: "Audition."
     # Named non-course requirements: understood, but unverifiable (⚠️ like permission).

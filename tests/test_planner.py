@@ -638,6 +638,30 @@ def test_not_open_after_a_course_is_an_exclusion():
     assert state == NO and why == ["no ERTH 112 before this term (not open to students who have completed it)"]
 
 
+def test_may_not_be_taken_concurrently_is_an_exclusion():
+    # M S 683: "May not be taken concurrently with M S 684." (it read as "M S 684 first", and M S 684 the reverse: neither
+    # could be planned). Only one course need say so (JOUR 617, of JOUR 605): the plan keeps them in different terms
+    from gatorpath.engine.planner import NO, OK, build_plan, evaluate
+    leaf = parse_prereq("May not be taken concurrently with M S 684.")["expr"]
+    assert leaf == {"not_with": "M S 684"} and evaluate(leaf, {"same_term": set()})[0] == OK
+    assert evaluate(leaf, {"same_term": {"M S 684"}}) == (NO, ["not in the same term as M S 684 (may not be taken concurrently)"])
+    # the BS CS ADT roadmap puts CSC 413 and CSC 415 in one semester (p.1912); say CSC 413 can't share it with CSC 415
+    text = PREREQS["CSC 413"]["raw_text"] + " May not be taken concurrently with CSC 415."
+    apart = PREREQS | {"CSC 413": {"raw_text": text, **parse_prereq(text)}}
+    program, university, roadmap = rules_for({})
+    adt = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall", "adt": True, "ge_certified": True,
+           "first_time": False, "transfer_units": 60, "completed": [{"code": c, "grade": "B", "transfer": True} for c in
+                                                                   roadmap["variants"]["adt"]["met_in_transfer"]]}
+    together = build_plan(adt, program, university, roadmap, CATALOG, PREREQS)
+    when = lambda plan: {c: s["term"] for s in plan["semesters"] for c in s["courses"] if isinstance(c, str)}
+    assert when(together)["CSC 413"] == when(together)["CSC 415"]
+    got = build_plan(adt, program, university, roadmap, CATALOG, apart)
+    assert got["check"]["valid"] and when(got)["CSC 413"] != when(got)["CSC 415"]
+    plan = {"semesters": [{"term": "2027-fall", "courses": ["CSC 413", "CSC 415"]}]}
+    errors = check_plan(adt, plan, program, university, CATALOG, apart)["errors"]
+    assert any("not in the same term as CSC 415" in e["message"] for e in errors)
+
+
 def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():
     # Trial 7: MATH 325 met MATH 225 on the DPR; electives needing MATH 225 showed as blocked
     from gatorpath.engine.planner import UNVERIFIED, evaluate

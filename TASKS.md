@@ -569,8 +569,11 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     prereq is "KIN ITEP credential students", which GatorPath can't check. Fixed 2026-10-27 with `after` (§6.2): p.725
     has students apply to the credential program "when in the final semester of completing unit requirements", so the
     credential group follows the prerequisites, core and concentration (as the roadmap, pp.728-729)
-  - [ ] "May not be taken concurrently with M S 684" (M S 683, and M S 684 / JOUR 617 alike) parses as a requirement
-    (M S 684 first); it's an exclusion. A `not_with` leaf, or `unknown` until then
+  - [x] "May not be taken concurrently with M S 684" (M S 683, and M S 684 / JOUR 617 alike) parses as a requirement
+    (M S 684 first); it's an exclusion. A `not_with` leaf, or `unknown` until then. Done 2026-10-27 (ARCHITECTURE §6.3):
+    `not_with` fails when that course is in the same term; build_plan also keeps a course out of a term holding one
+    that excludes it (JOUR 617 names JOUR 605, not the reverse). M S 683 and M S 684 named each other as prereqs, so
+    neither could be planned; both parse `ok` now. Catalog rebuilt; no test plan changed
   Still drafts, for a person (rules/drafts/2026-27/): BA American Indian Studies, BA Dance, BS Physics: Astrophysics,
   BM Instrumental and Vocal Performance (roadmap semesters short of their printed units: lessons and other unparsed
   items left off), BM Music Production (MUS 281 not on its roadmap), BS Environmental Science: NRM&C (ENV 690 not on

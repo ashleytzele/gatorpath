@@ -540,7 +540,8 @@ also has 60 transfer units and lower-division GE certified); a real student's DP
 ```
 
 Leaf types: `course` (+ `min_grade`, `max_grade` for "C- or lower" retakes, `concurrent_ok`: "concurrent enrollment
-in X", "(may be taken concurrently)", "must/may be taken concurrently with X"; never "May not be taken concurrently"),
+in X", "(may be taken concurrently)", "must/may be taken concurrently with X"; never "May not be taken concurrently",
+which is `not_with`),
 `ge_area` (+ `min_grade`; e.g. "GE Area 1A/A2" → `1A`; an older code alone, "GE Area A2" or "GE Areas A1*, A2*,
 A3*, and B4*", is read through the year's `legacy_ge_areas`, A2 → `1A`; one with no current area, E, stays `unknown`), `qr_category` (list, e.g. `[1, 2]`;
 **Category = roadmap QR pathway**: p.1906 "QR Pathway 1/2" links to p.1908 "Quantitative Reasoning
@@ -551,7 +552,9 @@ Category 1/2"; checked against `profile.qr_pathway`), `standing` (`lower|sophomo
 `equivalent` ("or equivalent"), `requirement` (a named non-course requirement from a fixed list:
 First-Year Math Advising Module, Advancement to Candidacy forms, approved study proposal,
 "a college-level X course"), `not_after` (an exclusion: "Not open to students who have completed ERTH 112" fails
-once that course is done or planned earlier; never a prereq of the course), `unknown` (raw fragment).
+once that course is done or planned earlier; never a prereq of the course), `not_with` ("May not be taken concurrently
+with M S 684": fails when that course is in the same term; build_plan keeps the two apart when only one says so,
+JOUR 617 of JOUR 605), `unknown` (raw fragment).
 `permission`/`restricted_to`/`equivalent`/`requirement`/`high_school`/`unknown` are **unverifiable**.
 They produce a ⚠️, never a silent pass.
 
