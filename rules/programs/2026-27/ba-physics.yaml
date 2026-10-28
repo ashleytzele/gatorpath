@@ -90,9 +90,9 @@ groups:
   choose_units: 3
   from:
   - subject: PHYS
-    level: 300+
+    level: upper
   - subject: ASTR
-    level: 300+
+    level: upper
   quote: Choose 3 upper-division units in PHYS or ASTR.
   source: p.2165
 - id: culminating

@@ -167,6 +167,7 @@ groups:
 - id: conc_electives
   title: 'Concentration Requirements: Electives on advisement (3 units)'
   choose_units: 3
+  approval: Electives on advisement
   from:
   - approved: true
   quote: 3 units of Electives on advisement 3

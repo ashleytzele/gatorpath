@@ -99,6 +99,11 @@ groups:
   - PLSI 610
   - PLSI 685
   - PLSI 699
+  - PLSI 570
+  - USP 570
+  - LABR 570
+  - I R 337
+  - PLSI 611
   quote: All PLSI courses used towards the major must be taken for a letter grade (i.e., A-, B, C+, etc.), except for courses
     in Field E (Perspectives in Politics), in which up to 4 units may be completed with a grade of CR (Credit).
   source: p.1640
@@ -138,7 +143,7 @@ groups:
   min_grade: C-
   from:
   - subject: PLSI
-    level: 300+
+    level: upper
   - list:
     - C J 362
     - CST 300
@@ -267,6 +272,9 @@ groups:
     - PLSI 560
     - PLSI 561
     - PLSI 562
+    - PLSI 570
+    - USP 570
+    - LABR 570
     - PLSI 580
     - PLSI 610
     - PLSI 611

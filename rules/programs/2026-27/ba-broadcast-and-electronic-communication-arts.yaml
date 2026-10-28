@@ -66,8 +66,10 @@ groups:
     requirements, and may include up to 3 units from other departments/programs.
   from:
   - subject: BECA
-    level: 300+
+    level: upper
   - approved: true
+    level: upper
+    max_units: 3
   quote: Electives in a Focus Area (15 units)
   source: p.954
 transfer_notes:

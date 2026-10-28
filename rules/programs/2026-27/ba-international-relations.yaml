@@ -35,7 +35,7 @@ groups:
   source: p.1322
   from:
   - subject: I R
-    level: 300+
+    level: upper
   - subject: I R
     level: '200'
   - approved: true

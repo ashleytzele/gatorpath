@@ -88,9 +88,9 @@ groups:
   source: p.2184
   from:
   - subject: PHYS
-    level: 300+
+    level: upper
   - subject: ASTR
-    level: 300+
+    level: upper
   - approved: true
     max_units: 3
   quote: Electives (11 units)

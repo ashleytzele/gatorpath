@@ -97,7 +97,7 @@ groups:
   approval: Units of upper-division geography electives consisting of a minimum of three courses chosen on advisement.
   from:
   - subject: GEOG
-    level: 300+
+    level: upper
   - approved: true
   quote: Electives (12 units)
   source: p.2027

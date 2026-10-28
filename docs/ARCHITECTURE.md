@@ -321,7 +321,8 @@ p.1092, the plan's last term. build_plan waits for it, check_plan reports `order
 `waived_if` (a profile flag, e.g. `adt`: SF State Studies are waived for a verified AA-T/AS-T, p.2313),
 `before_upper: <prereq expression>` (program, added 2026-10-28: "Before advancing to courses at the 300 level or
 higher", p.1091, joined to the prereq of every 300-699 course the major names or offers; `{group: <id>}` leaves say
-"the lower-division courses for the major", p.910; a lower-division GE area is a `ge_area` leaf, one course each),
+"the lower-division courses for the major", p.910; a lower-division GE area is a `ge_area` leaf, one course each; the
+courses it names are its gateway, not held by it: BA Cinema's 300-level foundation and GWAR courses, p.987),
 `distinct_subjects` + `across` (GE Area 4: "the three courses … must be in at least two different
 disciplines", p.2317).
 `min_grade` compares letter grades; CR counts as C- ("equivalent to grades A through C-", p.2403), so CR

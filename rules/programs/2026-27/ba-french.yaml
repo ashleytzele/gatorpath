@@ -60,7 +60,7 @@ groups:
   choose_units: 6
   from:
   - subject: FR
-    level: 300+
+    level: upper
   quote: French Electives (6-9 units)
   source: p.1464
   fill_to_total: true

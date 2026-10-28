@@ -62,7 +62,7 @@ groups:
   choose_units: 15
   from:
     subject: LABR
-    level: 300+
+    level: upper
   source: p.254
   quote: Upper-division LABR courses or cross-listed with LABR not used to satisfy core requirements can be used as electives.
 - id: final_experience

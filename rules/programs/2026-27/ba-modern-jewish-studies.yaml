@@ -54,8 +54,10 @@ groups:
   source: p.1357
   from:
   - subject: JS
-    level: 300+
+    level: upper
   - approved: true
+    max_units: 6
+  approval: A maximum of 6 units outside Jewish Studies may be counted toward the major with the approval of a major advisor.
   min_grade: C-
   quote: Select four JS upper-division courses.
 - id: major_gwar

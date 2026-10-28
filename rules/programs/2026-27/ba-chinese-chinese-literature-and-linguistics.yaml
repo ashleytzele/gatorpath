@@ -89,7 +89,7 @@ groups:
   fill_to_total: true
   from:
     subject: CHIN
-    level: 300+
+    level: upper
 - id: complementary_studies
   title: Complementary Studies (12 units)
   unparsed: true

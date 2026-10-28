@@ -283,6 +283,10 @@ def with_needs(program: dict, prereqs: dict, catalog: dict) -> dict:
     if not upper and not any("needs" in g for g in program["groups"]):
         return prereqs
     from gatorpath.engine.rules import matches
+    groups = {g["id"]: g for g in program["groups"]}
+    # the courses `before_upper` names are its gateway, not held by it: BA Cinema's 300-level foundation and GWAR courses
+    gateway = {c for leaf in leaves(upper) for c in ([leaf["course"]] if "course" in leaf else
+                                                     exact_courses(groups[leaf["group"]]) if "group" in leaf else [])}
     extra: dict[str, list] = {}
     for g in program["groups"]:
         if "needs" not in g and not upper:
@@ -290,7 +294,7 @@ def with_needs(program: dict, prereqs: dict, catalog: dict) -> dict:
         fs = (g["from"] if isinstance(g["from"], list) else [g["from"]]) if "from" in g else []
         for c in set(exact_courses(g)) | {c for c in catalog if fs and any(matches(f, c, catalog[c]) for f in fs)}:
             extra.setdefault(c, []).extend(([g["needs"]] if "needs" in g else [])
-                                           + ([upper] if upper and 300 <= number(c) <= 699 else []))
+                                           + ([upper] if upper and 300 <= number(c) <= 699 and c not in gateway else []))
     out = dict(prereqs)
     for c, more in extra.items():
         if more:

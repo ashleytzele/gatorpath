@@ -4,6 +4,7 @@
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 # outside_cinema_courses (p.988) "With prior approval of an advisor, up to 12 units of Cinema-related upper-division courses outside the School of Cinema may count toward the major.": the electives' approved courses (upper division, max_units: 12, approval text)
 # community_college_core (p.987) "With a faculty advisor’s approval, up to 13 units from a community college may be applied to the core courses in the Cinema major.": the core's exceptions text: an advisor's approval, recorded on the DPR (dpr_met)
+# before_upper (p.987) "Before advancing to courses at the 300 level or higher, however, all majors must: Complete the core, foundation, and GWAR courses with a grade of C or better. Have upper-division standing. Complete the lower-division General Education requirements": added 2026-10-28, missing until the --cross check (each lower-division GE area: one course for Area 4's two); "The School of Cinema enforces the completion of the core courses before enrollment in all other courses" (p.987) is its core part
 program: ba-cinema
 title: Bachelor of Arts in Cinema
 catalog_year: 2026-27
@@ -11,6 +12,41 @@ verified: false
 verified_by: null
 total_units: 45
 source: p.987
+before_upper:
+  all:
+  - course: CINE 200
+    min_grade: C
+  - course: CINE 202
+    min_grade: C
+  - course: CINE 204
+    min_grade: C
+  - course: CINE 211
+    min_grade: C
+  - course: CINE 212
+    min_grade: C
+  - course: CINE 340
+    min_grade: C
+  - course: CINE 341
+    min_grade: C
+  - any:
+    - course: CINE 303GW
+      min_grade: C
+    - course: CINE 343GW
+      min_grade: C
+    - course: CINE 350GW
+      min_grade: C
+  - standing: upper
+  - ge_area: 1A
+  - ge_area: 1B
+  - ge_area: 1C
+  - ge_area: '2'
+  - ge_area: 3A
+  - ge_area: 3B
+  - ge_area: '4'
+  - ge_area: 5A
+  - ge_area: 5B
+  - ge_area: 5C
+  - ge_area: '6'
 groups:
 - id: core
   title: Core Courses (13 units)

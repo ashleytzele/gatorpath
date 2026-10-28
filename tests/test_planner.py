@@ -713,6 +713,11 @@ def test_a_programs_own_order_rules_are_checked():
         "(9 units): Select Three first"]
     lower = [{"code": c, "grade": "B", "transfer": True} for c in ("ARTH 201", "ARTH 202", "ART 210", "ART 222", "ART 231")]
     assert errors("ba-studio-art", ("2027-fall", ["ART 600"]), transfer_units=60, ge_certified=True, completed=lower) == []
+    # BA Cinema (p.987): the 300-level foundation and GWAR courses the rule names are its gateway, not held by it
+    core = [{"code": c, "grade": "B", "term": "2027-spring"} for c in ("CINE 200", "CINE 202", "CINE 204", "CINE 211", "CINE 212")]
+    assert errors("ba-cinema", ("2027-fall", ["CINE 340"]), completed=core) == []
+    assert errors("ba-cinema", ("2027-fall", ["CINE 414"]), completed=core)[0].startswith(
+        "CINE 414 in 2027-fall needs: CINE 340 with C or better before this term")
 
 
 def test_a_course_taken_four_times_goes_in_four_terms():
