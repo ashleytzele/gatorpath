@@ -3,6 +3,7 @@
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 # gpa_major (p.1137) "Students must have a GPA of 2.0 or higher in the major, and no grade in the major lower than a C- (except for ENG 480GW, which requires a grade of C or higher).": the groups' min_grade (C-, ENG 480GW C) and the university's 2.0 major GPA (totals.gpa_major) say it
+# capstone_timing (p.1137) "This course must be completed during the spring semester of the student’s final (senior) year.": `when: senior_spring` on ENG 422 (capstone)
 program: ba-english-linguistics
 title: 'Bachelor of Arts in English: Concentration in Linguistics'
 catalog_year: 2026-27
@@ -62,11 +63,8 @@ groups:
   min_grade: C-
   quote: ENG 422 English and Empire 3
   source: p.1137
-- id: capstone_timing
-  title: 'Capstone Experience: spring of the final year'
-  unparsed: true
-  quote: This course must be completed during the spring semester of the student’s final (senior) year.
-  source: p.1137
+  when:
+    ENG 422: senior_spring
 - id: complementary_studies
   title: Complementary Studies Requirement for English Majors (12 units)
   unparsed: true

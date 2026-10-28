@@ -311,8 +311,17 @@ Education Program: a credential course's "or permission" and "credential student
 (on an all_of / one_of group, naming all_of / one_of groups: its courses go in a later term than every course the
 plan has for those groups; KIN ITEP p.725 "apply to the … Credential program when in the final semester of
 completing unit requirements": the credential group after the prerequisites, core and concentration. build_plan waits
-for them, check_plan reports `order`), `source`,
+for them, check_plan reports `order`), `needs: <prereq expression, §6.3>` (added 2026-10-28: a prereq the program
+sets for every course a group names or offers, joined to the course's own; "a minimum cumulative Grade Point Average
+(GPA) of 2.50 before starting credential coursework", p.1438 = `{gpa: 2.5}` on the credential group; "complete a GE
+Area 1A course prior to taking BASW major courses", p.830 = `{ge_area: 1A}`), `when: {<code>: senior | senior_spring
+| last}` (a course's term: "must be taken in the senior year", p.133, is a term begun with senior standing, 90 units;
+"the spring semester of the student's final (senior) year", p.1137, a spring one; "to be taken in the last semester",
+p.1092, the plan's last term. build_plan waits for it, check_plan reports `order`), `source`,
 `waived_if` (a profile flag, e.g. `adt`: SF State Studies are waived for a verified AA-T/AS-T, p.2313),
+`before_upper: <prereq expression>` (program, added 2026-10-28: "Before advancing to courses at the 300 level or
+higher", p.1091, joined to the prereq of every 300-699 course the major names or offers; `{group: <id>}` leaves say
+"the lower-division courses for the major", p.910; a lower-division GE area is a `ge_area` leaf, one course each),
 `distinct_subjects` + `across` (GE Area 4: "the three courses … must be in at least two different
 disciplines", p.2317).
 `min_grade` compares letter grades; CR counts as C- ("equivalent to grades A through C-", p.2403), so CR
@@ -557,8 +566,9 @@ with M S 684": fails when that course is in the same term; build_plan keeps the 
 JOUR 617 of JOUR 605), `units` (+ `subject`, `level: upper`: units done before the term, "24 upper-division units in AA
 S courses" = `{units: 24, subject: AA S, level: upper}`; without either, total units, "30 units of coursework"; a
 subject named in words, "Psychology coursework", stays `unknown`; an earlier slot counts when every option of its group
-fits, and when only some do, or it's a free elective, the leaf is unverified: the student's pick decides), `unknown`
-(raw fragment).
+fits, and when only some do, or it's a free elective, the leaf is unverified: the student's pick decides), `group`
+(only in a program's `needs` / `before_upper`: that group of the program met before the term, by its courses or, for a
+choice, its courses and earlier slots), `unknown` (raw fragment).
 `permission`/`restricted_to`/`equivalent`/`requirement`/`high_school`/`unknown` are **unverifiable**.
 They produce a ⚠️, never a silent pass.
 

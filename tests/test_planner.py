@@ -683,6 +683,38 @@ def test_units_in_a_subject_count_what_is_done_before_the_term():
     assert evaluate(leaf, ctx | {"slot_units": [(3, FREE)]})[0] == UNVERIFIED
 
 
+def test_a_programs_own_order_rules_are_checked():
+    # `when`: ECON 690GW "must be taken in the senior year" (p.133); ENG 422 "the spring semester of the student's final
+    # (senior) year" (p.1137); DES 505 "to be taken in the last semester" (p.1092). `needs`: Social Work's "GE Area 1A
+    # course prior to taking BASW major courses" (p.830). `before_upper`: Studio Art's "Before advancing to the 300-level
+    # or higher courses ... the lower-division courses for the major" (p.926)
+    def errors(pid, *terms, **extra):
+        program, university, _ = rules_for({"program": pid})
+        plan = {"semesters": [{"term": t, "courses": cs} for t, cs in terms]}
+        return [e["message"] for e in check_plan({"program": pid, "catalog_year": "2026-27", "completed": []} | extra, plan,
+                                                 program, university, CATALOG, PREREQS)["errors"]
+                if e["error"] in ("order", "prereq_not_met") and e.get("course") in {c for _, cs in terms for c in cs}]
+    assert errors("ba-economics", ("2027-fall", ["ECON 690GW"])) == [
+        "ECON 690GW in 2027-fall: it's taken in the senior year (senior standing, 90 units, by the start of the term) (p.133)"]
+    assert errors("ba-economics", ("2027-fall", ["ECON 690GW"]), transfer_units=95) == []
+    econ = plan_for({"program": "ba-economics", "catalog_year": "2026-27", "qr_pathway": "1/2", "start_term": "2027-fall",
+                     "completed": []})  # build_plan waits for the senior year: check_plan passes it
+    assert econ["check"]["valid"] and any("ECON 690GW" in s["courses"] for s in econ["semesters"])
+    assert "spring semester of the senior year" in errors("ba-english-linguistics", ("2027-fall", ["ENG 422"]), transfer_units=95)[0]
+    assert errors("ba-english-linguistics", ("2028-spring", ["ENG 422"]), transfer_units=95) == []
+    foundation = [{"code": c, "grade": "B", "term": "2027-spring"} for c in ("DES 200", "DES 222")]
+    assert errors("bs-visual-communication-design", ("2027-fall", ["DES 505"]), ("2028-spring", ["DES 570"]),
+                  transfer_units=95, ge_certified=True, completed=foundation) == [
+        "DES 505 in 2027-fall: it's taken in the last semester (p.1092)"]
+    assert errors("ba-social-work", ("2027-fall", ["S W 300"])) == ["S W 300 in 2027-fall needs: a GE Area 1A course"]
+    assert errors("ba-social-work", ("2027-fall", ["S W 300"]), ge_done=["1A"]) == []
+    assert errors("ba-studio-art", ("2027-fall", ["ART 600"]), transfer_units=60, ge_certified=True) == [
+        "ART 600 in 2027-fall needs: Lower-Division Art History (6 units): Select Two first; Lower-Division Studio Art "
+        "(9 units): Select Three first"]
+    lower = [{"code": c, "grade": "B", "transfer": True} for c in ("ARTH 201", "ARTH 202", "ART 210", "ART 222", "ART 231")]
+    assert errors("ba-studio-art", ("2027-fall", ["ART 600"]), transfer_units=60, ge_certified=True, completed=lower) == []
+
+
 def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():
     # Trial 7: MATH 325 met MATH 225 on the DPR; electives needing MATH 225 showed as blocked
     from gatorpath.engine.planner import UNVERIFIED, evaluate

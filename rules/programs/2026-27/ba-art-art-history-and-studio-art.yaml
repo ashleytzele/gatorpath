@@ -3,6 +3,7 @@
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 # transfer_residence (p.918) "For students transferring from other institutions, a minimum of 12 units": the university rules' 12 major units in residence (totals.residence.major)
+# ld_before_advancing (p.918) "Before advancing to the 300-level or higher courses or declaring a": `before_upper`: each lower-division GE area (one course for Area 4's two) and ld_art_history, ld_studio_art
 program: ba-art-art-history-and-studio-art
 title: 'Bachelor of Arts in Art: Concentration in Art History and Studio Art'
 catalog_year: 2026-27
@@ -10,11 +11,22 @@ verified: false
 verified_by: null
 total_units: 43
 source: p.918
+before_upper:
+  all:
+  - ge_area: 1A
+  - ge_area: 1B
+  - ge_area: 1C
+  - ge_area: '2'
+  - ge_area: 3A
+  - ge_area: 3B
+  - ge_area: '4'
+  - ge_area: 5A
+  - ge_area: 5B
+  - ge_area: 5C
+  - ge_area: '6'
+  - group: ld_art_history
+  - group: ld_studio_art
 groups:
-- id: ld_before_advancing
-  unparsed: true
-  quote: Before advancing to the 300-level or higher courses or declaring a
-  source: p.918
 - id: ld_art_history
   title: 'Lower-Division Art History: Select Two (6 units)'
   choose_units: 6

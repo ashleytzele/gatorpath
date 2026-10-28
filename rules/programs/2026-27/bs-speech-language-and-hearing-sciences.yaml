@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# advancement_gpa (p.382) "Maintain an overall grade point average of C or better (2.0 GPA)": the university rules' 2.0 in all coursework (min_gpa) says it
 program: bs-speech-language-and-hearing-sciences
 title: Bachelor of Science in Speech, Language, and Hearing Sciences
 catalog_year: 2026-27
@@ -35,10 +36,6 @@ groups:
   - SLHS 680
   min_grade: C-
   quote: SLHS 680 Practicum in Communication Therapy 1
-  source: p.382
-- id: advancement_gpa
-  unparsed: true
-  quote: Maintain an overall grade point average of C or better (2.0 GPA)
   source: p.382
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.

@@ -4,6 +4,8 @@
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 # grade_policy (p.1091) "except for DES 305, DES 370, and DES 576, which must be completed": the groups' min_grade C (the electives' too); DES 305, DES 370 and DES 576 are offered only CR/NC
 # major_electives_lower_division_cap (p.1092) "Take no more than two classes (6 units total)": the electives' lower-division list, max_courses: 2
+# advancing_to_300_level (p.1091) "Before advancing to courses at the 300 level or higher, however, all majors must:": `before_upper` (DES 200 and DES 222 with C or better, upper-division standing, each lower-division GE area: one course for Area 4's two)
+# senior_project_last_semester (p.1092) "to be taken in the last": `when: last` on DES 505 (culminating)
 program: bs-visual-communication-design
 title: Bachelor of Science in Visual Communication Design
 catalog_year: 2026-27
@@ -11,6 +13,24 @@ verified: false
 verified_by: null
 total_units: 58
 source: p.1091
+before_upper:
+  all:
+  - course: DES 200
+    min_grade: C
+  - course: DES 222
+    min_grade: C
+  - standing: upper
+  - ge_area: 1A
+  - ge_area: 1B
+  - ge_area: 1C
+  - ge_area: '2'
+  - ge_area: 3A
+  - ge_area: 3B
+  - ge_area: '4'
+  - ge_area: 5A
+  - ge_area: 5B
+  - ge_area: 5C
+  - ge_area: '6'
 ge_met:
 - area: 3UD
   one_of:
@@ -18,11 +38,6 @@ ge_met:
   quote: Upper-Division General Education, Arts or Humanities (GE 3UD) is satisfied upon completion of DES 356.
   source: p.1091
 groups:
-- id: advancing_to_300_level
-  title: Before advancing to courses at the 300 level or higher
-  unparsed: true
-  quote: 'Before advancing to courses at the 300 level or higher, however, all majors must:'
-  source: p.1091
 - id: foundation
   title: Foundation Requirements (9 units)
   all_of:
@@ -143,11 +158,8 @@ groups:
   min_grade: C
   quote: Culminating Requirements (6 units)
   source: p.1092
-- id: senior_project_last_semester
-  title: DES 505 is taken in the last semester
-  unparsed: true
-  quote: to be taken in the last
-  source: p.1092
+  when:
+    DES 505: last
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
   source: p.1093

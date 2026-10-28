@@ -3,6 +3,7 @@
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 # upper_studio_arth_substitution (p.927) "Art History (ARTH) course may be substituted for one": the upper-division studio art group's exceptions text: a substitution under advisement, on the DPR
+# lower_division_before_300 (p.926) "Before advancing to the 300-level or higher courses or declaring a concentration, all majors must have completed the University's": `before_upper`: each lower-division GE area (one course for Area 4's two) and lower_art_history, lower_studio_art
 program: ba-studio-art
 title: Bachelor of Arts in Studio Art
 catalog_year: 2026-27
@@ -10,6 +11,21 @@ verified: false
 verified_by: null
 total_units: 43
 source: p.926
+before_upper:
+  all:
+  - ge_area: 1A
+  - ge_area: 1B
+  - ge_area: 1C
+  - ge_area: '2'
+  - ge_area: 3A
+  - ge_area: 3B
+  - ge_area: '4'
+  - ge_area: 5A
+  - ge_area: 5B
+  - ge_area: 5C
+  - ge_area: '6'
+  - group: lower_art_history
+  - group: lower_studio_art
 groups:
 - id: lower_art_history
   title: 'Lower-Division Art History (6 units): Select Two'
@@ -35,12 +51,6 @@ groups:
     - ART 245
     - ART 260
   quote: 'Select Three:'
-  source: p.926
-- id: lower_division_before_300
-  title: Lower-division courses before advancing to the 300-level
-  unparsed: true
-  quote: Before advancing to the 300-level or higher courses or declaring a concentration, all majors must have completed
-    the University's
   source: p.926
 - id: upper_art_history
   title: 'Upper-Division Art History (6 units): Select two'

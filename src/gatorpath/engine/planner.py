@@ -13,7 +13,7 @@ import math
 import re
 from collections import Counter
 
-from gatorpath.engine.prereq import leaves, prereq_warnings, reverse_index
+from gatorpath.engine.prereq import combine, leaves, prereq_warnings, reverse_index
 from gatorpath.engine.rules import GRADE_CHECKS, GRADE_POINTS, audit, blocks_repeat, ge_areas, ge_met_in_major, number, rank
 
 # Winter Session runs "during the intersession between the Fall and Spring term" (2026-27 p.1716): 2027-winter is
@@ -154,6 +154,21 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         c = e["not_after"]
         return (NO, [f"no {c} before this term (not open to students who have completed it)"]) if c in ctx["done"] \
             else (OK, [])
+    if "group" in e:  # a program's own prereq: "the lower-division courses for the major" (p.910), met before this term
+        g = next(g for g in ctx["program"]["groups"] if g["id"] == e["group"])
+        if ctx.get("assume_groups"):  # Select One reachability: planned groups count as met
+            return OK, []
+        done = ctx["done"]
+        if "all_of" in g or "one_of" in g:
+            ok = all(c in done for c in g.get("all_of", [])) and (
+                "one_of" not in g or any(all(c in done for c in o) for o in g["one_of"]))
+        else:
+            from gatorpath.engine.rules import matches
+            fs = g["from"] if isinstance(g["from"], list) else [g["from"]]
+            have = sum(ctx["catalog"][c]["units_min"] for c in done if c in ctx["catalog"]
+                       and any(matches(f, c, ctx["catalog"][c]) for f in fs))
+            ok = have + sum(x[0] for x in ctx.get("slot_units", ()) if x[2:] == (g["id"],)) >= g.get("choose_units", 0)
+        return (OK, []) if ok else (NO, [f"{g.get('title', g['id'])} first"])
     if "units" in e:  # "24 upper-division units in AA S courses" (AA S 696): done before this term
         subj, upper = e.get("subject"), "level" in e
         fits = lambda c: c in ctx["catalog"] and subj in (None, c.rsplit(" ", 1)[0]) and (not upper or 300 <= number(c) <= 699)
@@ -163,8 +178,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
         can = lambda k: k is FREE or ((subj in k[1]) if subj and upper else (subj in k[0]) if subj else bool(k[1]))
         slotted = ctx.get("slot_units", ())
         have = ctx["units"] if not subj and not upper else (sum(ctx["catalog"][c]["units_min"] for c in ctx["done"] if fits(c))
-                                                             + sum(u for u, k in slotted if sure(k)))
-        maybe = 0 if not subj and not upper else sum(u for u, k in slotted if not sure(k) and can(k))
+                                                             + sum(x[0] for x in slotted if sure(x[1])))
+        maybe = 0 if not subj and not upper else sum(x[0] for x in slotted if not sure(x[1]) and can(x[1]))
         what = " ".join(x for x in ("upper-division" if upper else "", subj or "") if x)
         need = f"{e['units']} {what + ' ' if what else ''}units"
         if have >= e["units"]:
@@ -248,12 +263,40 @@ def slot_kinds(program: dict, catalog: dict) -> dict[str, tuple]:
     return out
 
 
+WHEN = {"senior": "it's taken in the senior year (senior standing, 90 units, by the start of the term)",
+        "senior_spring": "it's taken in the spring semester of the senior year (90 units by then)",
+        "last": "it's taken in the last semester"}
 FREE = (frozenset(), frozenset(), False)  # a free-elective slot: any course, so it may count toward any `units` prereq
 
 
 def slotted_units(term_slots: list[dict], kinds: dict) -> list[tuple]:
-    return [(x.get("units", 0), FREE if x.get("slot") == "elective" else kinds[x["slot"]]) for x in term_slots
+    """(units, kind, group id) of each choice and free-elective slot: what a `units` or `group` prereq may count."""
+    return [(x.get("units", 0), FREE if x.get("slot") == "elective" else kinds[x["slot"]], x["slot"]) for x in term_slots
             if x.get("slot") in kinds or x.get("slot") == "elective"]
+
+
+def with_needs(program: dict, prereqs: dict, catalog: dict) -> dict:
+    """The program's own prereqs joined to its courses' (§6.2): a group's `needs` on every course it names or offers
+    (BA Social Work, "a GE Area 1A course prior to taking BASW major courses", p.830), `before_upper` on every 300-699
+    course the major names or offers ("Before advancing to courses at the 300 level or higher", p.1091)."""
+    upper = program.get("before_upper")
+    if not upper and not any("needs" in g for g in program["groups"]):
+        return prereqs
+    from gatorpath.engine.rules import matches
+    extra: dict[str, list] = {}
+    for g in program["groups"]:
+        if "needs" not in g and not upper:
+            continue
+        fs = (g["from"] if isinstance(g["from"], list) else [g["from"]]) if "from" in g else []
+        for c in set(exact_courses(g)) | {c for c in catalog if fs and any(matches(f, c, catalog[c]) for f in fs)}:
+            extra.setdefault(c, []).extend(([g["needs"]] if "needs" in g else [])
+                                           + ([upper] if upper and 300 <= number(c) <= 699 else []))
+    out = dict(prereqs)
+    for c, more in extra.items():
+        if more:
+            row = out.get(c, {"raw_text": "", "expr": None, "status": "none", "needs_permission": False})
+            out[c] = row | {"expr": combine("all", [row.get("expr"), *more])}
+    return out
 
 
 def see_advisor(triggers: list[tuple[str, str]], program: dict, university: dict, into: list[dict] | None = None) -> list[dict]:
@@ -295,6 +338,7 @@ def ud_ge_ready(ctx: dict, university: dict) -> tuple[bool, list[str]]:
 
 def check_plan(profile: dict, plan: dict, program: dict, university: dict, catalog: dict, prereqs: dict) -> dict:
     """{valid, errors, warnings, terms, remaining}. Errors make a plan invalid; warnings don't."""
+    prereqs = with_needs(program, prereqs, catalog)
     errors: list[dict] = []
     warnings: list[str] = ["Assumes in-progress and planned courses are passed with the grades their requirements need"]
     advise: list[tuple[str, str]] = []
@@ -499,6 +543,15 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
             if late:
                 err("order", f"{c} in {when[c]} comes before {', '.join(late)} finish: {g['title']} follows "
                     f"{', '.join(groups[a].get('title', a) for a in g['after'])} ({g['source']})", term=when[c], course=c)
+    # `when` (§6.2): ECON 690GW "must be taken in the senior year" (p.133), DES 505 "in the last semester" (p.1092)
+    start_units = {x["term"]: x["units_before"] for x in terms_out}
+    last = max((x["term"] for x in terms_out if TERM.fullmatch(x["term"])), key=term_key, default="")
+    for g in program["groups"]:
+        for c, w in (x for x in g.get("when", {}).items() if x[0] in when):
+            t = when[c]
+            if w == "last" and t != last or w != "last" and (start_units.get(t, 0) < levels["senior"]
+                                                             or w == "senior_spring" and not t.endswith("spring")):
+                err("order", f"{c} in {t}: {WHEN[w]} ({g['source']})", term=t, course=c)
 
     result = audit(sim, program, university, catalog)
     slot_units: dict[str, float] = {}
@@ -729,6 +782,7 @@ def chunks(units: float, size: float = 3) -> list[float]:
 def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, catalog: dict, prereqs: dict) -> dict:
     """Deterministic baseline plan (ARCHITECTURE §8): roadmap semester first, then required courses by critical path,
     then slots. Passes check_plan."""
+    prereqs = with_needs(program, prereqs, catalog)
     summer, winter = profile.get("include_summer", False), profile.get("include_winter", False)
     seasons = ("spring", "summer", "fall") if summer else ("spring", "fall")  # a course waits only for these
     winter_max = university["max_units"].get("winter_session", {}).get("units", 0)
@@ -834,7 +888,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     kinds = slot_kinds(program, catalog)
     later = {"same_term": set(), "grades": {}, "profile": profile, "gpa": profile.get("gpa"),
              "ge_done": ge_done_areas(profile, university), "slot_areas": {a for g in university["groups"] for a in ge_areas(g)},
-             "slot_units": [(math.inf, FREE)],
+             "slot_units": [(math.inf, FREE)], "assume_groups": True,
              "catalog": catalog, "program": program, "class_level": levels, "units": university["totals"]["min_units"]}
 
     def reachable(left: list[str], instead: list[str]) -> bool:
@@ -897,6 +951,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     mine = {g["id"]: g for g in program["groups"]}
     follows = {c: {d for a in g["after"] for d in exact_courses(mine[a]) if d in todo}
              for g in program["groups"] if "after" in g for c in exact_courses(g) if c in todo}
+    timing = {c: w for g in program["groups"] for c, w in g.get("when", {}).items()}  # `when` (§6.2)
     # courses a planned course may not share a term with ({not_with}), for placing the other one second
     apart = {c: {l["not_with"] for l in leaves(prereqs.get(c, {}).get("expr")) if "not_with" in l} for c in todo}
 
@@ -1020,6 +1075,10 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 if follows.get(c, set()) - done:  # `after`: those groups' courses in an earlier term first
                     return False
                 if any(c in apart.get(p, ()) for p in same):  # JOUR 617 "may not be taken concurrently with JOUR 605"
+                    return False
+                if (w := timing.get(c)) and not (  # `when`: the senior year (90 units by the term), or the last term
+                        w == "last" and not set(todo) - done - same - {c}
+                        or w != "last" and units >= levels["senior"] and (w == "senior" or term.endswith("spring"))):
                     return False
                 state, _ = evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": same})
                 # An unverifiable branch ("or equivalent", high-school courses) doesn't let a course jump ahead of a
@@ -1498,6 +1557,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
     Ranked: ready first, then courses that also cover the most other open requirements (ENVS 401 = 4UD + ESCA + GP),
     then the preferred subject while a `min_units_from` minimum is short (12 CSC units of senior electives).
     """
+    prereqs = with_needs(program, prereqs, catalog)
     from gatorpath.engine.rules import filters_for, matches, subject
 
     groups = {g["id"]: g for g in program["groups"] + university["groups"]}

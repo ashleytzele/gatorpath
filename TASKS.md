@@ -632,7 +632,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   my cross-listing prompt line made Composition require MUS 130 and TH A 131 both (now: a required cross-listed
   course is a one_of of its codes, and check_program flags both codes in an all_of from the catalog's 509 pairs).
   Not redrafted with the new prompt yet (usage): the pilot's 5 come first in the load-all run.
-- [x] 90/10: GatorPath checks 90% of the rules itself, a person the other 10%. Done 2026-10-24 (`--coverage`):
+- [x] 90/10: GatorPath checks 90% of the rules itself, a person the other 10%. 2026-10-28: 93.0% of 970 groups in
+  108 programs, 68 for a person (60 unparsed, 8 an advisor approves), 64 programs with nothing left. Done 2026-10-24 (`--coverage`):
   91.6% of the 892 requirement groups in the 100 served programs (was 76.5% of 918 in 97); 75 left for a person (67
   unparsed, 8 an advisor approves); 53 programs have nothing left for a person (was 14). Unparsed groups were mostly
   rules over other groups' courses, now check groups (ARCHITECTURE §6.2): letter grades only, CR/NC caps, a GPA
@@ -657,12 +658,22 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     it's a free elective (unverified, a warning). Found: BA Asian American Studies' ADT roadmap prints AA S 696 in
     semester 3 (p.443), before a transfer can have 24 upper-division AA S units at SF State; its plan takes 5 terms,
     not 4. The first-time plan keeps AA S 696 in term 6 (D28)
-  - [ ] Ordering rules in the planner (15): "Before advancing to the 300-level or higher courses ... completed the
+  - [x] Ordering rules in the planner (15): "Before advancing to the 300-level or higher courses ... completed the
     lower-division courses for the major" (4 art and design programs), a capstone "in the senior year" / "the spring
     semester of the student's final (senior) year" (Economics, 3 English), a GPA before credential coursework (2
     ITEPs), Social Work's GE 1A first and 24 junior units before practicum, ENGR 696 after 15 UD ENGR units, Speech's
     semester sequence. A planner order constraint, then a check. `after` (2026-10-27) orders one all_of / one_of group
-    after others: the art programs' "lower-division courses for the major" first may fit it
+    after others: the art programs' "lower-division courses for the major" first may fit it. Done 2026-10-28
+    (ARCHITECTURE §6.2, §6.3), 14 of 15: `when` (senior / senior_spring / last) on Economics' ECON 690GW, the three
+    English capstones and VCD's DES 505; group `needs` (a prereq the program sets for a group's courses) on the three
+    ITEPs' credential groups (GPA 2.5) and Social Work's required courses (GE 1A); program `before_upper` (joined to
+    every 300-699 course) on VCD (DES 200 and DES 222 with C or better, upper-division standing, each lower-division GE
+    area) and the three art programs (each lower-division GE area and the lower-division major groups, a new `group`
+    leaf); ENGR 696 by the `units` leaf; Speech's 2.0 GPA is the university's. Each removed group is quoted in its
+    file's header. build_plan waits for them, check_plan reports `order` / `prereq_not_met`; no test plan changed
+    length (the printed roadmaps already order them). Approximation: a `ge_area` leaf takes one course, so Area 4's
+    second isn't checked by `before_upper`. Left for a person: Social Work's "24 units of their junior year courses
+    with a grade of C or better" before practicum (which courses are the junior year's isn't printed)
   - [ ] Repeated courses in a plan (6 with BM Instrumental/Vocal Performance, loaded 2026-10-27 with their lessons as
     slots naming the unparsed groups): "MUS 260 Applied Music
     Lessons (1 unit course taken 4 times)". The audit adds up a repeatable course's units; the planner places a

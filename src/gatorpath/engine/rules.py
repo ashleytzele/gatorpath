@@ -648,13 +648,13 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
 
 # The §6.2 vocabulary a program file may use (check_program); `quote`, `unparsed` and `drafted_by` come from drafts.
 PROGRAM_KEYS = {"program", "title", "catalog_year", "verified", "verified_by", "drafted_by", "total_units", "dpr_plan",
-                "source", "global", "groups", "transfer_notes", "advising", "ge_met"}
+                "source", "global", "groups", "transfer_notes", "advising", "ge_met", "before_upper"}
 GE_MET_KEYS = {"area", "one_of", "quote", "source"}
 GROUP_KEYS = {"id", "title", "source", "quote", "unparsed", "all_of", "one_of", "choose_n", "choose_units", "from",
               "first_time_from", "min_grade", "min_units_from", "course_units", "exceptions", "approval", "waived_if",
               "fill_to_total", "across", "letter_grade", "max_cr", "max_below", "min_gpa", "max_units_from",
               "distinct_subjects", "min_categories", "one_category", "categories", "except",
-              "waiver", "amendments", "after"}
+              "waiver", "amendments", "after", "needs", "when"}
 FILTER_KEYS = {"list", "subject", "level", "except", "paired", "max_courses", "max_units", "ge_area", "ge_area_all", "approved"}
 SELECTORS = ("list", "subject", "level", "ge_area", "ge_area_all", "approved")  # a filter needs one, else it takes anything
 SHAPES = ("all_of", "one_of", "choose_n", "choose_units", "across", "unparsed")
@@ -706,6 +706,11 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
             elif not ({"all_of", "one_of"} & other.keys() and {"all_of", "one_of"} & g.keys()):
                 out.append(f"{gid}: after names {a!r}, which isn't an all_of or one_of group" if {"all_of", "one_of"} & g.keys()
                            else f"{gid}: after is only for an all_of or one_of group")
+        for c, w in g.get("when", {}).items():
+            if w not in ("senior", "senior_spring", "last"):
+                out.append(f"{gid}: when {c}: {w!r} isn't senior, senior_spring or last")
+            if c not in g.get("all_of", []) + [x for o in g.get("one_of", []) for x in o]:
+                out.append(f"{gid}: when names {c}, which the group doesn't list")
         ids.add(gid)
         shape = [k for k in SHAPES if k in g]
         if len(shape) != 1:
@@ -768,6 +773,14 @@ def check_program(program: dict, catalog: dict, pages: set[int] | None = None, s
         out += [f"{label}: {c} is not in the {program.get('catalog_year', '')} catalog"
                 for c in dict.fromkeys(c for o in opts for c in o) if c not in catalog]
         out += cites(label, m)
+    from gatorpath.engine.prereq import leaves  # a program's own prereqs (`needs`, `before_upper`): real courses and groups
+    for label, e in ([("before_upper", program["before_upper"])] if "before_upper" in program else []) + [
+            (f"{g.get('id', '?')}: needs", g["needs"]) for g in program.get("groups", []) if "needs" in g]:
+        for leaf in leaves(e):
+            if "group" in leaf and leaf["group"] not in ids:
+                out.append(f"{label}: group {leaf['group']!r} is not a group of this program")
+            if "course" in leaf and leaf["course"] not in catalog:
+                out.append(f"{label}: {leaf['course']} is not in the {program.get('catalog_year', '')} catalog")
     if any("choose_n" in g or g.get("unparsed") for g in program.get("groups", [])):
         out.append(f"units: can't check total_units with choose_n or unparsed groups (the others add up to {low:g} of "
                    f"{program.get('total_units', 0):g}); a person adds them up")

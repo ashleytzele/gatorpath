@@ -1,6 +1,7 @@
 # AI-drafted from the 2026-27 Bulletin text (ba-early-childhood-studies-special-education-integrated-teacher-education-program.source.txt) by claude, 2026-10-23; checked by check_program, check_roadmap
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
+# credential_entry_gpa (p.612) "Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.": `needs: {gpa: 2.5}` on credential_required and credential_autism
 program: ba-early-childhood-studies-special-education-integrated-teacher-education-program
 title: 'Bachelor of Arts in Early Childhood Studies: Concentration in Special Education Integrated Teacher Education Program'
 catalog_year: 2026-27
@@ -60,6 +61,8 @@ groups:
   - SPED 885
   quote: Early Childhood Special Education Credential (45 units
   source: p.612
+  needs:
+    gpa: 2.5
 - id: credential_autism
   title: 'Early Childhood Special Education Credential: Select One (SPED 791 or SPED 825)'
   min_grade: B-
@@ -68,6 +71,8 @@ groups:
   - - SPED 825
   quote: 'Select One: 3'
   source: p.612
+  needs:
+    gpa: 2.5
 - id: credential_cr_exception
   title: 'Credential courses: letter grades'
   across:
@@ -75,10 +80,6 @@ groups:
   - credential_autism
   letter_grade: true
   quote: CR grading is only acceptable for specific SPED courses that have only CR/NC grading option.
-  source: p.612
-- id: credential_entry_gpa
-  unparsed: true
-  quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
   source: p.612
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.

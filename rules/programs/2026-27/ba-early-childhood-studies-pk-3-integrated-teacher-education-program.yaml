@@ -2,6 +2,7 @@
 # and a test plan per variant (ingest.programs --load). verified: false until a person checks it against
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
+# gpa_before_credential (p.591) "Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.": `needs: {gpa: 2.5}` on credential
 program: ba-early-childhood-studies-pk-3-integrated-teacher-education-program
 title: 'Bachelor of Arts in Early Childhood Studies: Concentration in PK-3 Integrated Teacher Education Program'
 catalog_year: 2026-27
@@ -13,11 +14,6 @@ global:
   itep: true
   source: p.591
 groups:
-- id: gpa_before_credential
-  title: Minimum cumulative GPA before starting credential coursework
-  unparsed: true
-  quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
-  source: p.591
 - id: cr_grading_exception
   title: 'Credential courses: letter grades'
   across:
@@ -105,6 +101,8 @@ groups:
   min_grade: B-
   quote: Credential (33 units)
   source: p.592
+  needs:
+    gpa: 2.5
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
   source: p.592

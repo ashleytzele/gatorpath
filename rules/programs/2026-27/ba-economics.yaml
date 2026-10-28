@@ -3,6 +3,7 @@
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 # electives_outside_cap (p.133) "taken outside the Economics department to the elective requirement.": the electives' list of non-Economics courses, max_courses: 2
+# capstone_senior_year (p.133) "ECON 690GW is the capstone course and must be taken in the senior": `when: senior` on ECON 690GW (core_required)
 program: ba-economics
 title: Bachelor of Arts in Economics
 catalog_year: 2026-27
@@ -23,6 +24,8 @@ groups:
   min_grade: C-
   quote: Core Courses (24-27 Units)
   source: p.133
+  when:
+    ECON 690GW: senior
 - id: core_statistics
   title: 'Core Courses: Select One (DS/ECON 212 or MATH 124)'
   one_of:
@@ -51,11 +54,6 @@ groups:
   - core_calculus
   letter_grade: true
   quote: CR/NC grading is not allowed for core courses.
-  source: p.133
-- id: capstone_senior_year
-  title: ECON 690GW is taken in the senior year
-  unparsed: true
-  quote: ECON 690GW is the capstone course and must be taken in the senior
   source: p.133
 - id: upper_division_electives
   title: Upper-Division Electives (18 Units)

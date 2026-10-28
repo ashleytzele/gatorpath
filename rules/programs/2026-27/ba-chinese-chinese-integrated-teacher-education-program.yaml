@@ -3,6 +3,7 @@
 # the PDF (AGENTS.md, "Adding or changing a program's rules").
 # First-pass review against this Bulletin text: Claude, 2026-10-23 (fixes listed in TASKS.md).
 # literature_in_translation lists its GWAR options first: the plan takes the first option by default, and a CHIN GWAR course meets both it and major_gwar ("Select a CHIN GWAR course if one is not selected from the Literature in Translation area")
+# gpa_before_credential (p.1438) "Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.": `needs: {gpa: 2.5}` on single_subject_credential
 program: ba-chinese-chinese-integrated-teacher-education-program
 title: 'Bachelor of Arts in Chinese: Concentration in Chinese Integrated Teacher Education Program'
 catalog_year: 2026-27
@@ -14,10 +15,6 @@ global:
   itep: true
   source: p.1438
 groups:
-- id: gpa_before_credential
-  unparsed: true
-  quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
-  source: p.1438
 - id: credential_cr_nc
   title: 'Credential courses: letter grades'
   across:
@@ -110,6 +107,8 @@ groups:
   min_grade: B-
   quote: Single Subject Teaching Credential (33 units)
   source: p.1439
+  needs:
+    gpa: 2.5
 transfer_notes:
 - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
   source: p.1439

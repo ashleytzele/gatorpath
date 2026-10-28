@@ -5,6 +5,7 @@
 # major_gpa (p.1154) "Students must have a GPA of 2.0 or higher in the major and no grade": the groups' min_grade (C-, ENG 480GW C) and the university's 2.0 major GPA (totals.gpa_major) say it
 # ld_literature_cap (p.1153) "A maximum of 9 units of work in lower-division literature courses may be": the electives' approved lower-division courses (max_units: 9; exceptions text)
 # other_department_cap (p.1154) "A maximum of 9 units of literature classes from": the electives' approved courses (max_units: 9; approval text)
+# capstone_timing (p.1154) "ENG 690 must be completed during one of the semesters of the final": `when: senior` on ENG 690 (capstone)
 program: ba-english-literature
 title: 'Bachelor of Arts in English: Concentration in Literature'
 catalog_year: 2026-27
@@ -130,10 +131,8 @@ groups:
   min_grade: C-
   quote: Capstone Experience (3 units)
   source: p.1154
-- id: capstone_timing
-  unparsed: true
-  quote: ENG 690 must be completed during one of the semesters of the final
-  source: p.1154
+  when:
+    ENG 690: senior
 - id: complementary_studies
   unparsed: true
   quote: Twelve units of Complementary Studies are required of all candidates in
