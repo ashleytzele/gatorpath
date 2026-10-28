@@ -1,0 +1,58 @@
+program: ba-modern-jewish-studies
+title: Bachelor of Arts in Modern Jewish Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 30
+source: p.1357
+groups:
+- id: major_core
+  title: Major Core
+  unparsed: true
+  quote: 'Select four courses from the following:'
+  source: p.1357
+- id: major_electives
+  title: Electives
+  choose_units: 12
+  from:
+  - subject: JS
+    level: upper
+  - approved: true
+    max_units: 6
+  approval: A maximum of 6 units outside Jewish Studies may be counted toward the major with the approval of a major advisor.
+  min_grade: C-
+  source: p.1357
+  quote: Select four JS upper-division courses. These can include courses from the major core list. Courses from the major
+    core cannot be double-counted to fulfill both the core and elective requirements. A maximum of 6 units outside Jewish
+    Studies may be counted toward the major with the approval of a major advisor.
+- id: major_gwar
+  title: GWAR Course
+  unparsed: true
+  quote: Select any GWAR course from any discipline or department with the approval of a major advisor.
+  source: p.1357
+- id: culminating_experience
+  title: Culminating Experience
+  one_of:
+  - - JS 600
+  - - JS 699
+  min_grade: C-
+  source: p.1357
+  quote: 'Select One:'
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  quote: Twelve units of Complementary Studies are required of all candidates for the B.A. in Modern Jewish Studies. These
+    units are courses with a prefix other than JS and not cross-listed with Jewish Studies. Students can satisfy this requirement
+    by completing a related minor, a second major, studying a pertinent foreign language, including Hebrew, or through an
+    approved study abroad program. Complementary Studies courses should relate to the Jewish Studies major and deepen and
+    enrich students' focus in the major, whether that focus is religion, literature, philosophy, history, social responsibility,
+    or the study of Israel. Such courses are typically found through the College of Liberal & Creative Arts.
+  source: p.1357
+transfer_notes:
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1358
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1358
+- text: 'Use ASSIST to determine: Which courses at a CCC satisfy any lower-division major requirements for this major;'
+  source: p.1358
+drafted_by: codex, 2026-10-28

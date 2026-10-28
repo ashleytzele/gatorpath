@@ -1,0 +1,131 @@
+program: ba-early-childhood-studies-special-education-integrated-teacher-education-program
+title: 'Bachelor of Arts in Early Childhood Studies: Concentration in Special Education Integrated Teacher Education Program'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 72
+source: p.612
+global:
+  itep: true
+  source: p.612
+groups:
+- id: core
+  title: Core
+  all_of:
+  - CAD 210
+  - CAD 223
+  - CAD 260
+  - CAD 280
+  - CAD 300
+  - CAD 330
+  - CAD 410GW
+  - CAD 660
+  min_grade: C
+  source: p.612
+  quote: 'Core (27 units)
+
+    CAD 210 Introduction to Applied Child and Adolescent Development
+
+    CAD 223 Infants, Toddlers, and Families
+
+    CAD 260 Children, Families, and Community: An Ecological Perspective
+
+    CAD 280 Practicum in Early Childhood Education
+
+    CAD 300 Professional Roles and Careers in Child and Adolescent Development
+
+    CAD 330 Curriculum and Development in Early Childhood
+
+    CAD 410GW Applied Developmental Science: Prenatal Through Early Childhood - GWAR
+
+    CAD 660 Applied Advanced Developmental Science in Child and Adolescent Development
+
+    '
+- id: core_select_one
+  title: 'Core: Select One'
+  one_of:
+  - - CAD 215
+  - - CAD 230
+  min_grade: C
+  source: p.612
+  quote: 'Select One: 3
+
+    CAD 215 Foundations in Early Childhood
+
+    CAD 230 Principles and Practices in Early Childhood Programs
+
+    '
+- id: special_education_credential
+  title: Early Childhood Special Education Credential
+  all_of:
+  - SPED 370
+  - SPED 601
+  - SPED 671
+  - SPED 675
+  - SPED 702
+  - SPED 729
+  - SPED 730
+  - SPED 731
+  - SPED 737
+  - SPED 738
+  - SPED 780
+  - SPED 788
+  - SPED 801
+  - SPED 885
+  min_grade: B-
+  source: p.612
+  quote: 'Early Childhood Special Education Credential (45 units minimum)
+
+    SPED 370 Early Development and Neurodiversity 3
+
+    SPED 601 Observation and Participation in Special Education 1-3
+
+    SPED 671 Inclusive Social-Emotional Development & Equitable Practices for Children & Families in Early Educ 3
+
+    SPED 675 Working with Families of Young Children with Disabilities 3
+
+    SPED 702 Education Specialist Teacher Support Seminar for California Teaching Performance Assessment 1-3
+
+    SPED 729 Student Teaching Workshop: Early Childhood Special Education 1
+
+    SPED 730 Student Teaching: Special Education 9
+
+    SPED 731 Special Education Field Experience 3
+
+    SPED 737 Inclusive Learning and Supports in Early Intervention (Infants & Toddlers) 3
+
+    SPED 738 Inclusive Curriculum Development and Supports in Early Childhood Settings (Preschool - Kindergarten) 3
+
+    SPED 780 Equitable Assessment Practices for Young Children with Disabilities and Their Families 3
+
+    SPED 788 Law, Ethics, and Instructional Planning 3
+
+    SPED 801 Development, Diversity, and English Language Learners: Special Education 3
+
+    SPED 885 Allyship, Leadership, and Collaboration for Young Children with Disabilities 3
+
+    '
+- id: credential_select_one
+  title: 'Early Childhood Special Education Credential: Select One'
+  one_of:
+  - - SPED 791
+  - - SPED 825
+  min_grade: B-
+  source: p.612
+  quote: 'Select One: 3
+
+    SPED 791 Nature of the Autism Spectrum
+
+    SPED 825 Communication, Behavior and Instructional Supports: Autism
+
+    '
+- id: credential_gpa
+  unparsed: true
+  source: p.612
+  quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
+- id: cr_nc_grading
+  unparsed: true
+  source: p.612
+  quote: CR/NC grading is not accepted. CR grading is only acceptable for specific SPED courses that have only CR/NC grading
+    option.
+drafted_by: codex, 2026-10-27

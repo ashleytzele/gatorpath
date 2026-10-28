@@ -1,0 +1,145 @@
+program: ba-economics
+title: Bachelor of Arts in Economics
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 42
+source: p.133
+groups:
+- id: core
+  title: Core Courses
+  all_of:
+  - ECON 101
+  - ECON 102
+  - ECON 301
+  - ECON 302
+  - ECON 312
+  - ECON 690GW
+  min_grade: C-
+  source: p.133
+  quote: Core Courses (24-27 Units)
+- id: core_statistics
+  title: 'Core Courses: Select One (DS/ECON 212 Business Statistics or MATH 124 Elementary Statistics)'
+  one_of:
+  - - DS 212
+  - - ECON 212
+  - - MATH 124
+  min_grade: C-
+  source: p.133
+  quote: 'Select One: 3'
+- id: core_calculus
+  title: 'Core Courses: Select One (Calculus)'
+  one_of:
+  - - DS 110
+  - - MATH 107
+    - MATH 108
+  - - MATH 110
+  - - MATH 226
+  min_grade: C-
+  source: p.133
+  quote: 'Select One:'
+- id: core_letter_grade
+  title: Core courses taken for a letter grade
+  across:
+  - core
+  - core_statistics
+  - core_calculus
+  letter_grade: true
+  source: p.133
+  quote: Majors must take the core courses for a letter grade and earn a minimum grade of C- in each. (CR/NC grading is not
+    allowed for core courses.)
+- id: capstone_senior_year
+  title: ECON 690GW taken in the senior year
+  unparsed: true
+  source: p.133
+  quote: ECON 690GW is the capstone course and must be taken in the senior year.
+- id: upper_division_electives
+  title: Upper-Division Electives
+  choose_units: 18
+  from:
+  - list:
+    - ECON 400
+    - ECON 450
+    - ECON 474
+    - HIST 474
+    - LABR 474
+    - ECON 500
+    - ECON 505
+    - ECON 510
+    - LABR 510
+    - ECON 511
+    - LABR 511
+    - ECON 520
+    - ECON 540
+    - ECON 541
+    - ECON 550
+    - ECON 605
+    - ECON 611
+    - ECON 612
+    - ECON 616
+    - ECON 618
+    - ECON 620
+    - ECON 635
+    - I R 635
+    - ECON 640
+    - ECON 651
+    - ENVS 651
+    - FIN 651
+    - ECON 675
+    - ECON 680
+    - ECON 699
+  - list:
+    - ACCT 301
+    - DS 311
+    - DS 312
+    - DS 408
+    - DS 412
+    - DS 612
+    - DS 624
+    - ENG 620
+    - FIN 350
+    - FIN 420
+    - FIN 520
+    - FIN 536
+    - GEOG 603
+    - GEOG 604
+    - I R 312
+    - ISYS 363
+    - MATH 227
+    - MATH 228
+    - MATH 245
+    - MATH 324
+    - MATH 325
+    - MATH 338
+    - MATH 376
+    - MATH 400
+    - MATH 424
+    - MATH 440
+    - MATH 441
+    - MATH 448
+    max_courses: 2
+  source: p.133
+  quote: Upper-Division Electives (18 Units)
+- id: six_elective_courses
+  title: Six upper-division elective courses
+  unparsed: true
+  source: p.133
+  quote: Economics majors are required to take six upper-division elective courses in economics.
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  source: p.134
+  quote: 'Bachelor of Arts students must complete at least 12 units of Complementary Studies outside of the primary prefix
+    for the major. (Note: Students may not use an alternate prefix that is cross-listed with the primary prefix for the major.)'
+transfer_notes:
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.135
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.135
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.135
+- text: 'Use ASSIST to determine: Which courses at a CCC satisfy any lower-division major requirements for this major; Which
+    courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.135
+drafted_by: codex, 2026-10-27

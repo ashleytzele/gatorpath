@@ -1,0 +1,74 @@
+program: ba-psychology
+title: Bachelor of Arts in Psychology
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 41
+source: p.2234
+groups:
+- id: core
+  title: Core Curriculum
+  all_of:
+  - PSY 200
+  - PSY 303
+  - PSY 371
+  - PSY 400
+  - PSY 305GW
+  - PSY 690
+  min_grade:
+    PSY 200: C
+    PSY 305GW: C
+    PSY 371: C
+    PSY 400: C
+  quote: Psychology majors must take PSY 200, PSY 305GW, PSY 371, and PSY 400 for a letter grade and achieve a grade of C
+    or better in all four courses.
+  source: p.2234
+- id: core_cr_grades
+  title: Core course CR grades
+  unparsed: true
+  quote: Majors must achieve a grade of CR in PSY 303 and PSY 690.
+  source: p.2234
+- id: area_1
+  title: 'Area 1: Basic Psychological Processes'
+  unparsed: true
+  quote: 'Choose two courses from each of the following Areas 1 through 3:
+
+    • Area 1: Basic Psychological Processes (6)'
+  source: p.2234
+- id: area_2
+  title: 'Area 2: Psychological Development and Individual Differences'
+  unparsed: true
+  quote: 'Choose two courses from each of the following Areas 1 through 3:
+
+    • Area 2: Psychological Development and Individual Differences (6-7)'
+  source: p.2234
+- id: area_3
+  title: 'Area 3: Social, Cultural, Organizational, and Community Contexts'
+  unparsed: true
+  quote: 'Choose two courses from each of the following Areas 1 through 3:
+
+    • Area 3: Social, Cultural, Organizational, and Community Contexts (6-8)'
+  source: p.2234
+- id: electives
+  title: Electives
+  unparsed: true
+  quote: Choose 3 elective courses from courses in Areas 1–3 not used to satisfy the Basic Course requirement and/or from
+    additional upper-division psychology courses.
+  source: p.2234
+transfer_notes:
+- text: 'This degree program is an approved pathway
+
+    (“similar” major) for students earning the ADT in
+
+    Psychology'
+  source: p.2235
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2236
+- text: 'The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+
+    • a course in U.S. History
+
+    • a course in U.S. & California Government'
+  source: p.2236
+drafted_by: codex, 2026-10-28

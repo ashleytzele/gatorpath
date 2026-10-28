@@ -1,0 +1,120 @@
+program: bs-interior-design-and-architecture
+title: Bachelor of Science in Interior Design and Architecture
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 54
+source: p.689
+global:
+  no_cr_nc: true
+  source: p.689
+groups:
+- id: prerequisite_work
+  unparsed: true
+  quote: The major includes 6 units of prerequisite work and 48 units of additional major courses.
+  source: p.689
+- id: core_requirements
+  title: Core Requirements
+  all_of:
+  - ADM 260
+  - FCS 600
+  - ID 240
+  - ID 242
+  - ID 244
+  - ID 245
+  - ID 340GW
+  - ID 343
+  - ID 345
+  - ID 440
+  - ID 445
+  - ID 540
+  - ID 640
+  - ID 641
+  - ID 645
+  min_grade: C-
+  quote: Core Requirements (45 units)
+  source: p.689
+- id: electives
+  title: Electives
+  choose_units: 9
+  course_units: 3
+  approval: with the approval of an advisor
+  from:
+  - list:
+    - A U 220
+    - ADM 569
+    - ARTH 201
+    - ARTH 202
+    - ART 210
+    - ART 222
+    - ART 231
+    - ART 260
+    - DES 210
+    - DES 220
+    - DES 221
+    - DES 222
+    - DES 256
+    - DES 300
+    - ENVS 130
+    - FCS 543
+    - FCS 685
+    - FCS 699
+    - GEOG 455
+    - HTM 110
+    - HUM 375
+    - HUM 376
+    - ID 366
+    - ADM 366
+    - MKTG 431
+    - USP 580
+    - PLSI 580
+  min_grade: C-
+  quote: 'Select three of the following with the approval of an advisor:'
+  source: p.689
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.690
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.690
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.690
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.690
+- text: Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+  source: p.690
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.690
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.690
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.690
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+    Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+  source: p.690
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.690
+- text: Review SF State's lower-division General Education requirements. Note that, as described below, the four basic skills
+    courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State GE pattern. Courses that fulfill
+    the remaining areas of SF State’s lower-division GE pattern are available at most two-year and four-year colleges and
+    universities.
+  source: p.690
+- text: Of the four required basic skills courses, a course in critical thinking (1B/A3) may not be widely offered outside
+    the CCC and CSU systems. Students should attempt to identify and take an appropriate course no later than the term of
+    application to the CSU.
+  source: p.690
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.690
+drafted_by: codex, 2026-10-28

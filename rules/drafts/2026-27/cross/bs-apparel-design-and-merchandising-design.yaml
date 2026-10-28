@@ -1,0 +1,187 @@
+program: bs-apparel-design-and-merchandising-design
+title: 'Bachelor of Science in Apparel Design and Merchandising: Concentration in Design'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 58
+source: p.667
+groups:
+- id: core_requirements
+  title: Core Requirements
+  all_of:
+  - ADM 260
+  - ADM 262
+  - ADM 265
+  - ADM 360GW
+  - ADM 365
+  - ADM 560
+  - ADM 561
+  - ADM 665
+  - ECON 101
+  - FCS 600
+  - ID 240
+  - ISYS 263
+  - PSY 200
+  source: p.667
+  quote: 'Core Requirements (37 units)
+
+    ADM 260 Textiles 3
+
+    ADM 262 Fashion Illustration and Design Communication 3
+
+    ADM 265 Introduction to the Fashion Industry 3
+
+    ADM 360GW Fashion, Clothing, and Society - GWAR 3
+
+    ADM 365 Textile Laboratory 1
+
+    ADM 560 Supply Chain Management in the Textile and
+
+    Apparel World Marketplace
+
+    3
+
+    ADM 561 Culture and Historical Costume 3
+
+    ADM 665 Product Development for Apparel 3
+
+    ECON 101 Introduction to Microeconomic Analysis 3
+
+    FCS 600 Professional Development 3
+
+    ID 240 Color and Design 3
+
+    ISYS 263 Introduction to Information Systems 3
+
+    PSY 200 General Psychology 3
+
+    '
+- id: design_concentration
+  title: Design Concentration Requirements
+  all_of:
+  - ADM 261
+  - ADM 361
+  - ADM 362
+  - ADM 661
+  source: p.667
+  quote: 'Design Concentration Requirements (12 units)
+
+    ADM 261 Apparel Construction: Industry Methods 3
+
+    ADM 361 Apparel Design I: Patternmaking Foundations 3
+
+    ADM 362 Apparel Design II: Advanced Patternmaking with
+
+    2D/3D CAD
+
+    3
+
+    ADM 661 Advanced Apparel Design 3
+
+    '
+- id: design_electives
+  title: Electives
+  choose_units: 9
+  from:
+  - list:
+    - A U 220
+    - ACCT 100
+    - ACCT 101
+    - ADM 366
+    - ID 366
+    - ADM 369
+    - ADM 466
+    - ADM 566
+    - ADM 569
+    - ADM 675
+    - ART 222
+    - ART 322
+    - ART 422
+    - ART 424
+    - ART 527
+    - BUS 354
+    - DES 221
+    - DES 222
+    - FCS 543
+    - FCS 685
+    - IBUS 330
+    - IBUS 430
+    - JOUR 235
+    - TH A 411
+  - approved: true
+  approval: Other courses may be used with approval from an advisor.
+  source: p.667
+  quote: 'Electives (9 units)
+
+    Select 9 units from the list below. An ADM course in the Merchandising
+
+    Concentration may also be used an elective. Other courses may be used
+
+    with approval from an advisor.
+
+    '
+- id: merchandising_concentration_electives
+  unparsed: true
+  source: p.667
+  quote: An ADM course in the Merchandising Concentration may also be used an elective.
+- id: major_letter_grade
+  across: major
+  letter_grade: true
+  source: p.667
+  quote: All major courses must be passed with a letter grade of C- or better. CR/NC is not allowed.
+- id: major_minimum_grade
+  across: major
+  max_below:
+    grade: C-
+    courses: 0
+  source: p.667
+  quote: All major courses must be passed with a letter grade of C- or better. CR/NC is not allowed.
+ge_met:
+- area: 5C
+  one_of:
+  - - ADM 365
+  quote: Area 5C (Laboratory) is satisfied upon completion of ADM 365.
+  source: p.667
+- area: 3UD
+  one_of:
+  - - ADM 561
+  quote: Area 3UD (Upper-Division Arts or Humanities) is satisfied upon completion of ADM 561.
+  source: p.667
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.668
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.668
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.668
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.668
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.668
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.669
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+    Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+  source: p.669
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.669
+- text: Of the four required basic skills courses, a course in critical thinking (1B/A3) may not be widely offered outside
+    the CCC and CSU systems. Students should attempt to identify and take an appropriate course no later than the term of
+    application to the CSU.
+  source: p.669
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.669
+drafted_by: codex, 2026-10-28

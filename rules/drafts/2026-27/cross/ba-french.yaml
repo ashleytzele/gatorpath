@@ -1,0 +1,95 @@
+program: ba-french
+title: Bachelor of Arts in French
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 24
+source: p.1464
+groups:
+- id: lower_division
+  unparsed: true
+  quote: Lower-Division Requirements (0-12 units) Code Title Units FR 101 First Semester French 3 FR 102 Second Semester French
+    3 FR 215 Intermediate French I 3 FR 216 Intermediate French II 3
+  source: p.1464
+- id: advanced_conversation
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - FR 306
+  - - FR 308
+  - - MLL 325
+  source: p.1464
+  quote: 'Select One: 3 FR 306 Advanced Conversation FR 308 La Chanson Française/French Chanson MLL 325 Linguistics for Foreign
+    Languages'
+- id: writing
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - FR 305
+  - - FR 310
+  source: p.1464
+  quote: 'Select One: 3 FR 305 French Composition FR 310 Creative Writing in French'
+- id: professional_french
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - FR 350
+  - - FR 360
+  - - FR 450
+  source: p.1464
+  quote: 'Select One: 3 FR 350 French for the Business World FR 360 Press and Social Media in French FR 450 Translating Themes:
+    English/French'
+- id: culture
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - FR 400GW
+  - - FR 410
+  - - FR 421
+  - - FR 469
+  source: p.1464
+  quote: 'Select One: 3 FR 400GW French Culture - GWAR FR 410 Contemporary French Civilization FR 421 Social Movements in
+    the Francophone World FR 469 Doing and Undoing Gender in French Culture'
+- id: literature
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - FR 500
+  - - FR 501
+  source: p.1464
+  quote: 'Select One: 3 FR 500 Introduction to Literary Texts FR 501 Contes et Poemes'
+- id: french_electives
+  title: French Electives
+  choose_units: 6
+  fill_to_total: true
+  from:
+    subject: FR
+    level: upper
+  source: p.1464
+  quote: Select enough upper-division FR courses not taken to satisfy an upper- division requirement to meet the minimum units
+    required for the major. Any additional courses taken in the requirement categories count as electives once the requirement
+    is satisfied.
+- id: french_500_or_501_at_sfsu
+  title: French 500 or 501 taken at SFSU
+  min_units_from:
+    list:
+    - FR 500
+    - FR 501
+    units: 3
+    sf_state: true
+  across:
+  - literature
+  source: p.1464
+  quote: Either FR 500 or FR 501 must be taken at SFSU. They cannot be replaced by study abroad coursework.
+- id: study_abroad_transfer_limit
+  unparsed: true
+  quote: A maximum of 12 upper-division units can be transferred in from study abroad
+  source: p.1464
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1465
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1465
+- text: 'Use ASSIST to determine: • Which courses at a CCC satisfy any lower-division major requirements for this major; •
+    Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1465
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.1466
+drafted_by: codex, 2026-10-28

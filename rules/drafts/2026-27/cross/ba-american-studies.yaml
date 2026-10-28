@@ -1,0 +1,83 @@
+program: ba-american-studies
+title: Bachelor of Arts in American Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.1264
+groups:
+- id: required_courses_1
+  title: 'Required Courses: Select One'
+  one_of:
+  - - HUM 225
+  - - AMST 225
+  - - LS 200
+  - - AMST 200
+  quote: 'Select One: 3'
+  source: p.1264
+- id: major_gwar
+  title: GWAR
+  all_of:
+  - HUM 300GW
+  quote: HUM 300GW Reading and Writing Across Creative Forms - GWAR 3
+  source: p.1264
+- id: california_culture
+  title: California Culture
+  one_of:
+  - - HUM 450
+  - - AMST 410
+  quote: HUM 450/ AMST 410 California Culture 3
+  source: p.1264
+- id: required_courses_2
+  title: 'Required Courses: Select One'
+  one_of:
+  - - HUM 485
+  - - AMST 310
+  - - HUM 490
+  quote: 'Select One: 3'
+  source: p.1264
+- id: required_courses_3
+  title: 'Required Courses: Select One'
+  one_of:
+  - - GEOG 421
+  - - GEOG 433
+  - - GEOG 455
+  - - GEOG 552
+  quote: 'Select One: 3'
+  source: p.1264
+- id: hist_400
+  unparsed: true
+  quote: One 400-level HIST course 3
+  source: p.1264
+- id: electives
+  title: Elective Courses
+  choose_units: 21
+  approval: Courses, by choice and advisement, on a topic or theme in American Studies, drawn from at least two disciplines.
+  from:
+  - approved: true
+    level: upper
+  - approved: true
+    level: lower
+  quote: Courses, by choice and advisement, on a topic or theme in American Studies, drawn from at least two disciplines.
+  source: p.1264
+- id: elective_disciplines
+  title: Electives from at least two disciplines
+  distinct_subjects: 2
+  across:
+  - electives
+  quote: Courses, by choice and advisement, on a topic or theme in American Studies, drawn from at least two disciplines.
+  source: p.1264
+- id: elective_limits_and_independent_study
+  unparsed: true
+  quote: 'Up to 6 units may be in community college or lower-division coursework. For students with GPA 3.0 or higher, electives
+    can include a senior course on advisement: Independent Study (699) on a specific topic connected to prior course work,
+    to be developed through consultation with the coordinator and faculty from the appropriate department (3-6 units).'
+  source: p.1264
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1265
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1265
+- text: 'Use ASSIST to determine: Which courses at a CCC satisfy any lower-division major requirements for this major;'
+  source: p.1265
+drafted_by: codex, 2026-10-27

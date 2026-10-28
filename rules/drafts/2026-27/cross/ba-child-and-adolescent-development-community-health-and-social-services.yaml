@@ -1,0 +1,165 @@
+program: ba-child-and-adolescent-development-community-health-and-social-services
+title: 'Bachelor of Arts in Child and Adolescent Development: Concentration in Community, Health, and Social Services'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.534
+global:
+  no_cr_nc: true
+  source: p.534
+groups:
+- id: core_requirements
+  title: Core Requirements
+  all_of:
+  - CAD 210
+  - CAD 260
+  - CAD 300
+  - CAD 410GW
+  - CAD 411
+  - CAD 500
+  - CAD 625
+  - CAD 660
+  min_grade: C
+  source: p.534
+  quote: Core Requirements – 24 units
+- id: community_youth_development
+  title: Community Youth Development
+  all_of:
+  - CAD 400
+  min_grade: C
+  source: p.534
+  quote: Community Youth Development (3 units)
+- id: families_context
+  title: Families & Context
+  choose_units: 6
+  from:
+  - list:
+    - AFRS 515
+    - CAD 223
+    - CAD 426
+    - CAD 450
+    - CAD 560
+    - RRS 480
+  min_grade: C
+  source: p.534
+  quote: 'Families & Context (6 units)
+
+    Select Two:
+
+    '
+- id: concentration_electives
+  title: Concentration Electives
+  choose_units: 12
+  from:
+  - list:
+    - AFRS 525
+    - AFRS 678
+    - AIS 470
+    - ANTH 302
+    - AA S 584
+    - AA S 591
+    - AA S 593
+    - BIOL 330
+    - CAD 120
+    - CAD 280
+    - CAD 326
+    - CAD 550
+    - CAD 600
+    - CAD 601
+    - CAD 680
+    - CAD 685
+    - COUN 690
+    - COUN 691
+    - C J 470
+    - SOC 452
+    - C J 471
+    - C J 475
+    - C J 485
+    - LTNS 485
+    - E ED 250
+    - E ED 450
+    - E ED 616
+    - HIST 484
+    - HUM 440
+    - LS 440
+    - PHIL 440
+    - I R 259
+    - I R 315
+    - GPS 315
+    - PHIL 315
+    - KIN 240
+    - KIN 401
+    - KIN 487
+    - LTNS 500
+    - LTNS 505
+    - WGS 505
+    - LTNS 580
+    - RRS 580
+    - SOC 580
+    - LS 310
+    - LS 402
+    - PSY 430
+    - PSY 433
+    - PSY 435
+    - PSY 441
+    - PSY 456
+    - SXS 456
+    - PH 315
+    - PH 320
+    - PH 370
+    - PH 455
+    - RRS 303
+    - RRS 380
+    - SXS 380
+    - RRS 410
+    - SOC 410
+    - RRS 420
+    - RRS 571
+    - RPT 280
+    - RPT 300
+    - RPT 340
+    - RPT 410
+    - RPT 440
+    - SXS 400
+    - SOC 400
+    - PSY 450
+    - SXS 567
+    - ANTH 569
+    - S W 350
+    - SOC 330
+    - RRS 330
+    - SOC 464
+    - SOC 469
+    - SPED 620
+    - SPED 330
+    - SPED 630
+    - SPED 662
+    - SPED 671
+    - SPED 675
+    - SPED 688
+    - SPED 689
+    - SPED 691
+    - SLHS 300
+    - USP 515
+    - GEOG 667
+  min_grade: C
+  source: p.534
+  quote: 'Concentration Electives (12 units)
+
+    Select 12 units from the following courses:
+
+    '
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.536
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.536
+- text: a course in U.S. History
+  source: p.536
+- text: a course in U.S. & California Government
+  source: p.536
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.536
+drafted_by: codex, 2026-10-27

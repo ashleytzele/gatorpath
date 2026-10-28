@@ -1,0 +1,252 @@
+program: bm-music-production
+title: 'Bachelor of Music: Concentration in Music Production'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 55
+source: p.1569
+groups:
+- id: foundational
+  title: Foundational (3 units)
+  one_of:
+  - - MUS 130
+  - - TH A 131
+  quote: 'Foundational (3 units)
+
+    Code Title Units
+
+    MUS 130/
+
+    TH A 131
+
+    The Foundations of Music Theory 3'
+  source: p.1569
+- id: modern_musicianship
+  title: 'Theory/Musicianship: Fundamentals of Modern Musicianship'
+  one_of:
+  - - MUS 200
+  - - TH A 234
+  quote: 'Theory/Musicianship (10 units)
+
+    Code Title Units
+
+    MUS 200/
+
+    TH A 234
+
+    Fundamentals of Modern Musicianship 3'
+  source: p.1569
+- id: ear_training_one
+  title: 'Theory/Musicianship: Ear Training I'
+  one_of:
+  - - MUS 221
+  - - TH A 221
+  quote: MUS/TH A 221 Ear Training I 2
+  source: p.1569
+- id: ear_training_two
+  title: 'Theory/Musicianship: Ear Training II'
+  all_of:
+  - MUS 222
+  quote: MUS 222 Ear Training II 2
+  source: p.1569
+- id: diatonic_harmony
+  title: 'Theory/Musicianship: Diatonic Harmony'
+  all_of:
+  - MUS 232
+  quote: MUS 232 Diatonic Harmony 3
+  source: p.1569
+- id: class_piano_one
+  title: 'Piano: Class Piano I'
+  all_of:
+  - MUS 201
+  quote: 'Piano (2 units)
+
+    Code Title Units
+
+    MUS 201 Class Piano I 1'
+  source: p.1569
+- id: class_piano_choice
+  title: 'Piano: Select One'
+  one_of:
+  - - MUS 202
+  - - MUS 206
+  quote: 'Select One: 1
+
+    MUS 202 Class Piano II
+
+    MUS/TH A 206 Beginning Jazz/Pop Piano'
+  source: p.1569
+- id: music_technology
+  title: Technology (2 units)
+  all_of:
+  - MUS 237
+  quote: 'Technology (2 units)
+
+    Code Title Units
+
+    MUS 237 Introduction to Music Technology 2'
+  source: p.1569
+- id: american_musical_experience
+  title: History (3 units)
+  all_of:
+  - MUS 281
+  quote: 'History (3 units)
+
+    Code Title Units
+
+    MUS 281 The American Musical Experience 3'
+  source: p.1569
+- id: music_culture_context
+  title: 'Upper-Division Core: Music in Culture and Context'
+  all_of:
+  - MUS 542GW
+  quote: 'Upper-Division Core (13 Units)
+
+    Core (4 units)
+
+    Code Title Units
+
+    MUS 542GW Music in Culture and Context - GWAR 3'
+  source: p.1569
+- id: capstone
+  title: 'Upper-Division Core: Select One'
+  one_of:
+  - - MUS 361
+  - - MUS 598
+  quote: 'Select One: 1
+
+    MUS 361 Capstone Composition or Performance Project
+
+    MUS 598 Senior Thesis'
+  source: p.1569
+- id: upper_division_theory
+  title: 'Upper-Division Core: Theory Select One'
+  one_of:
+  - - MUS 403
+  - - MUS 440
+  quote: 'Theory (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    MUS 403 Chromatic Harmony 3
+
+    MUS 440 Jazz Harmony 3'
+  source: p.1569
+- id: music_history
+  title: 'Music History: Select Two'
+  choose_units: 6
+  course_units: 3
+  from:
+    list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+  quote: 'Music History (6 units)
+
+    Select Two:
+
+    Code Title Units
+
+    AFRS 514 African Musical Diaspora 3
+
+    AIS 320 American Indian Music 3
+
+    MUS 505 Music of the World''s Peoples 3
+
+    MUS 506 Survey of Jazz 3
+
+    MUS 513 Asian Musical Diaspora 3
+
+    MUS 515 Latin American Musical Diaspora 3
+
+    MUS 550 Western European Music History from the Middle
+
+    Ages to 1750
+
+    3
+
+    MUS 551 European and American Classical Music History of
+
+    the 18th and 19th Century
+
+    3
+
+    MUS 552 Classical Music History of Europe and the
+
+    Americas in the 20th Century
+
+    3
+
+    MUS 558 Music of John Coltrane 3
+
+    MUS 559 Women in Jazz 3'
+  source: p.1569
+- id: concentration_core
+  title: Concentration Requirements
+  all_of:
+  - BECA 231
+  - BECA 330
+  - MUS 406
+  - MUS 408
+  - MUS 418
+  - MUS 426
+  quote: 'Concentration Requirements (22 units)
+
+    Code Title Units
+
+    BECA 231 Audio Production Basics 3
+
+    BECA 330 The Sound Studio I: Consoles & Signal Flow 3
+
+    MUS 406 Song Writing Workshop 3
+
+    MUS 408 Electronic Music Production 2
+
+    MUS 418 Advanced Electronic Music Production 2
+
+    MUS 426 Marketing and Law in the Music Industry 2'
+  source: p.1569
+- id: concentration_electives
+  title: 'Concentration Requirements: Electives on advisement'
+  choose_units: 3
+  approval: Electives on advisement
+  from:
+    approved: true
+  quote: 3 units of Electives on advisement 3
+  source: p.1569
+- id: concentration_course_range
+  title: 'Concentration Requirements: course range'
+  unparsed: true
+  quote: 4 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390 4
+  source: p.1569
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1570
+- text: 'The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+
+    • a course in U.S. History
+
+    • a course in U.S. & California Government'
+  source: p.1570
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1570
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1570
+drafted_by: codex, 2026-10-28

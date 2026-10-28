@@ -642,8 +642,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   my cross-listing prompt line made Composition require MUS 130 and TH A 131 both (now: a required cross-listed
   course is a one_of of its codes, and check_program flags both codes in an all_of from the catalog's 509 pairs).
   Not redrafted with the new prompt yet (usage): the pilot's 5 come first in the load-all run.
-- [x] 90/10: GatorPath checks 90% of the rules itself, a person the other 10%. 2026-10-28: 94.0% of 970 groups in
-  108 programs, 58 for a person (50 unparsed, 8 an advisor approves), 67 programs with nothing left. Done 2026-10-24 (`--coverage`):
+- [x] 90/10: GatorPath checks 90% of the rules itself, a person the other 10%. 2026-10-28: 93.9% of 970 groups in
+  108 programs, 59 for a person (50 unparsed, 9 an advisor approves), 66 programs with nothing left. Done 2026-10-24 (`--coverage`):
   91.6% of the 892 requirement groups in the 100 served programs (was 76.5% of 918 in 97); 75 left for a person (67
   unparsed, 8 an advisor approves); 53 programs have nothing left for a person (was 14). Unparsed groups were mostly
   rules over other groups' courses, now check groups (ARCHITECTURE §6.2): letter grades only, CR/NC caps, a GPA
@@ -710,18 +710,31 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   55/55 units, 14/14 cross-listings, no new dependency; -raw misled a parser on 79 rows' marks across the requirement
   pages). `course_rows` (ingest/bulletin.py); each page's source text ends with its "Footnote marks" line (19 programs).
   The LTNS footnotes 1-4 (p.476) have no mark on any course: the PDF prints none on pp.474-476
-- [ ] Cross-check every served program with a second drafter (`--cross`, Codex CLI; ARCHITECTURE §6.2). Pilot
+- [x] Cross-check every served program with a second drafter (`--cross`, Codex CLI; ARCHITECTURE §6.2). Pilot
   2026-10-24, 5 programs, about 77 s each: the hand-written Applied Math agreed on every made-up student; the other 4
   had 19 disagreements: 2 Codex errors (a dropped Select One, a required pair read as a Select One), 1 question for a
   person (Chemistry's "prerequisite courses", review log), the rest Codex leaving a rule unparsed that ours expresses.
   It also led to an engine bug: a major group sharing the university's id "gwar" (17 programs) took its result (fixed).
   All 100: about 2 hours of Codex time, across usage-limit resets (a failed call is reported per program; a kept
   second draft is reused). Agreement never sets `verified`; an advisor still confirms
-  - [ ] Run it when there's Codex usage to spare (rerun the same command after a usage limit; it skips the second
-    drafts already in `rules/drafts/2026-27/cross/`):
+  - [x] Run it when there's Codex usage to spare (rerun the same command after a usage limit; it skips the second
+    drafts already in `rules/drafts/2026-27/cross/`). Done 2026-10-28: all 108, about 2.5 hours of Codex time, no
+    failed call. It stopped once at ba-classics (a second draft with an id-less group crashed cross_check); now such a
+    draft is reported for its program and the batch goes on:
     `uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cross $(ls rules/programs/2026-27/*.yaml | xargs -n1 basename | sed 's/\.yaml$//') | tee data/cross-2026-27.txt`
-  - [ ] Settle each disagreement in `data/cross-2026-27.txt` against the Bulletin, as in the pilot (review log): fix
-    our rules, or log a question for a person
+  - [x] Settle each disagreement in `data/cross-2026-27.txt` against the Bulletin, as in the pilot (review log): fix
+    our rules, or log a question for a person. Done 2026-10-28 (review log, "the full --cross run"): 48 agree, 52
+    differ (162 cases, all settled), 8 not compared (Codex's draft can't be audited). Ours was short in 7 programs and
+    one pattern, fixed: BA Cinema had no "Before advancing to courses at the 300 level or higher" rule (now
+    before_upper; the engine exempts the 300-level courses it names, its gateway); BECA's and Modern Jewish Studies'
+    approved outside courses had no 3- and 6-unit caps; Political Science's Field E missed PLSI/USP/LABR 570 and five
+    CR exemptions; Music Production's advisor-approved electives had no approval text; VCD's lower-division cap
+    missed JOUR 235; and 10 programs' "upper-division" electives were `level: 300+`, which takes graduate 700-899
+    courses (now `upper`). The rest: ours stands, mostly Codex leaving a rule unparsed or erring (course codes
+    without the space, cross-listed courses as required together, Select Ones swallowing a required course, GE met
+    in the major written as a group); two new questions for a person (Journalism's "All JOUR courses" C rule on a
+    cross-listed course; WGS Praxis' 1-unit WGS 105), and the known ones (chemistry prerequisite courses, General
+    Biology's added electives, LTNS's cap, BECA's 3 or 6 units, business concentration electives, FCS 426)
 
 ---
 

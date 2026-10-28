@@ -1,0 +1,84 @@
+program: ba-race-and-resistance-studies
+title: Bachelor of Arts in Race and Resistance Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.504
+groups:
+- id: major_gwar
+  title: 'Ethnic Studies Writing: GWAR'
+  all_of:
+  - ETHS 300GW
+  source: p.504
+  quote: ETHS 300GW Writing in Ethnic Studies - GWAR 3
+- id: core_courses
+  title: Core Courses
+  all_of:
+  - RRS 100
+  - RRS 240
+  - RRS 250
+  - RRS 590
+  source: p.504
+  quote: 'RRS 100 Introduction to Ethnic Studies 3 RRS 240 All Power to the People: Comparative Freedom Movements of the "Sixties"
+    3 RRS 250 Race, Ethnicity and Power in America 3 RRS 590 Senior Capstone 3'
+- id: rrs_art
+  title: 'RRS and Art: Select One'
+  one_of:
+  - - RRS 280
+  - - RRS 290
+  - - RRS 295
+  - - RRS 425
+  source: p.504
+  quote: 'RRS and Art - Select One: 3 RRS 280 Disrupting Science Fiction: Race, Gender, and Alternative Futures RRS 290 Sounds
+    of Resistance: Race, Rhythm, Rhyme, and Revolution RRS 295 Race, Public Art, and Creative Resistance RRS 425 Critical
+    Exposures: Race, Racism, and Resistance in Photography'
+- id: rrs_pop_culture
+  title: 'RRS and Pop Culture: Select One'
+  one_of:
+  - - RRS 365
+  - - RRS 480
+  - - RRS 490
+  source: p.504
+  quote: 'RRS and Pop Culture - Select One: 3 RRS 365 Race and Comedy in the United States RRS 480 Youth Culture, Race and
+    Resistance RRS 490 Race, Art, and Social Justice'
+- id: queer_trans_ethnic_studies
+  title: 'Select One: Queer and Trans Ethnic Studies or Women, Race, and Class'
+  one_of:
+  - - RRS 380
+  - - SXS 380
+  - - RRS 571
+  source: p.504
+  quote: 'Select One: 3 RRS/SXS 380 Queer and Trans Ethnic Studies RRS 571 Women, Race, and Class'
+- id: community_engaged_learning
+  title: 'Select One: Community Engaged Learning'
+  one_of:
+  - - RRS 410
+  - - SOC 410
+  - - RRS 694
+  source: p.504
+  quote: 'Select One: 3 RRS/SOC 410 Grassroots Organizing for Change in Communities of Color RRS 694 Community Engaged Learning:
+    Praxis in Race and Resistance Studies'
+- id: electives
+  title: Electives
+  choose_units: 9
+  from:
+    subject: RRS
+  min_units_from:
+    level: upper
+    units: 6
+  source: p.504
+  quote: Electives (9 units) At least six elective units should be upper-division. Code Title Units Three RRS Courses 9
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.504
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer. •
+    a course in U.S. History • a course in U.S. & California Government
+  source: p.505
+- text: 'Use ASSIST to determine: • Which courses at a CCC satisfy any lower-division major requirements for this major; •
+    Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.505
+- text: Students should attempt to identify and take an appropriate course no later than the term of application to the CSU.
+  source: p.505
+drafted_by: codex, 2026-10-28

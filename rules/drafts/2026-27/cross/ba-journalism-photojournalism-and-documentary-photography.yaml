@@ -1,0 +1,118 @@
+program: ba-journalism-photojournalism-and-documentary-photography
+title: 'Bachelor of Arts in Journalism: Concentration in Photojournalism and Documentary Photography'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.1386
+groups:
+- id: equity_core
+  title: 'Core: Equity (12 Units)'
+  all_of:
+  - JOUR 205
+  - JOUR 304
+  - JOUR 310
+  min_grade: C
+  quote: 'Core: Equity (12 Units)
+
+    Code Title Units
+
+    JOUR 205 Social Impact of Journalism 3
+
+    JOUR 304 Cultural Diversity and News Media 3
+
+    JOUR 307/
+
+    I R 507/PLSI 507
+
+    News Media Law 3
+
+    JOUR 310 Journalism Ethics 3'
+  source: p.1386
+- id: news_media_law
+  title: News Media Law
+  one_of:
+  - - JOUR 307
+  - - IR 507
+  - - PLSI 507
+  min_grade: C
+  quote: 'JOUR 307/
+
+    I R 507/PLSI 507
+
+    News Media Law 3'
+  source: p.1386
+- id: skills_core
+  title: 'Core: Skills (12 units)'
+  all_of:
+  - JOUR 221
+  - JOUR 226
+  - JOUR 300GW
+  - JOUR 400
+  min_grade: C
+  quote: 'Core: Skills (12 units)
+
+    Code Title Units
+
+    JOUR 221 Newswriting 3
+
+    JOUR 226 Content Creation and Journalistic Storytelling 3
+
+    JOUR 300GW Reporting - GWAR 3
+
+    JOUR 400 Video Journalism 3'
+  source: p.1386
+- id: concentration
+  title: Concentration Requirements (9 units)
+  all_of:
+  - JOUR 235
+  - JOUR 335
+  - JOUR 435
+  min_grade: C
+  quote: 'Concentration Requirements (9 units)
+
+    Code Title Units
+
+    JOUR 235 Photojournalism I: Foundations of
+
+    Photojournalism
+
+    3
+
+    JOUR 335 Photojournalism II: Staff Photojournalism 3
+
+    JOUR 435 Photojournalism III: Editorial Photography and
+
+    Business Practices
+
+    3'
+  source: p.1386
+- id: practicum
+  title: Practicum (3 units)
+  all_of:
+  - JOUR 609
+  min_grade: C
+  quote: 'Practicum (3 units)
+
+    Code Title Units
+
+    JOUR 609 Newspaper Publication Laboratory 3'
+  source: p.1386
+- id: capstone
+  title: Capstone (3 units)
+  all_of:
+  - JOUR 535
+  min_grade: C
+  quote: 'Capstone (3 units)
+
+    Code Title Units
+
+    JOUR 535 Photojournalism IV: Documentary Capstone 3'
+  source: p.1387
+- id: complementary_studies
+  unparsed: true
+  quote: 'Twelve units of Complementary Studies are required of all candidates for the Bachelor of Arts in Journalism: Concentration
+    in Photojournalism and Documentary Photography, in the form of a minor offered by any other school, department or program.
+    The completed minor fulfills the Complementary Studies Requirement.'
+  source: p.1387
+drafted_by: codex, 2026-10-28

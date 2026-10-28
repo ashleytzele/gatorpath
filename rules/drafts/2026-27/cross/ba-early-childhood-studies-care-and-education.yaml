@@ -1,0 +1,93 @@
+program: ba-early-childhood-studies-care-and-education
+title: 'Bachelor of Arts in Early Childhood Studies: Concentration in Care and Education'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.574
+groups:
+- id: core_requirements
+  title: Core Requirements
+  all_of:
+  - CAD 210
+  - CAD 260
+  - CAD 280
+  - CAD 300
+  - CAD 330
+  - CAD 410GW
+  - CAD 660
+  min_grade: C
+  quote: Core Requirements (24 units)
+  source: p.574
+- id: core_select_one
+  title: 'Core Requirements: Select One'
+  one_of:
+  - - CAD 215
+  - - CAD 230
+  min_grade: C
+  quote: 'Select One: 3'
+  source: p.574
+- id: observation_assessment
+  title: Observation and Assessment
+  one_of:
+  - - CAD 420
+  - - E ED 610
+  min_grade: C
+  quote: 'Observation and Assessment (3 units)
+
+    Select One:'
+  source: p.574
+- id: concentration_electives
+  title: Concentration Electives
+  choose_units: 18
+  from:
+  - list:
+    - CAD 120
+    - CAD 223
+    - CAD 326
+    - CAD 423
+    - CAD 450
+    - CAD 500
+    - CAD 510
+    - CAD 625
+    - CAD 680
+    - CAD 685
+    - E ED 603
+    - E ED 604
+    - E ED 607
+    - E ED 611
+    - E ED 614
+    - E ED 616
+    - E ED 668
+    - KIN 487
+    - MUS 601
+    - PSY 330
+    - SPED 330
+    - SPED 370
+    - SPED 620
+    - SPED 671
+    - SPED 672
+    - SPED 675
+    - SPED 688
+    - SPED 689
+    - SPED 691
+  min_grade: C
+  quote: 'Select 18 units from the following:'
+  source: p.574
+transfer_notes:
+- text: This degree program is an approved pathway (“similar” major) for students earning the ADT in Early Childhood Education
+  source: p.575
+- text: Upon verification that the ADT has been awarded prior to matriculation at SF State, students are guaranteed B.A. or
+    B.S. completion in 60 units if pursuing a “similar” major after transfer.
+  source: p.575
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.576
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.576
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.576
+drafted_by: codex, 2026-10-27

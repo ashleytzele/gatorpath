@@ -1,0 +1,233 @@
+program: ba-english-english-education
+title: 'Bachelor of Arts in English: Concentration in English Education'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.1121
+groups:
+- id: core_requirements
+  title: Core Requirements (21 units, excluding ENG 480GW)
+  all_of:
+  - ENG 218
+  - ENG 250
+  - ENG 402
+  - ENG 420
+  - ENG 461
+  - ENG 583
+  - ENG 640
+  source: p.1121
+  quote: 'Core Requirements (24 units)
+
+    Code Title Units
+
+    Lower-Division (6 units)
+
+    ENG 218 Literature Is Not A Luxury: Writing For Self and
+
+    Community
+
+    3
+
+    ENG 250 Topics in Literature and Culture 3
+
+    Upper-Division (18 units)
+
+    ENG 402 Introduction to Professional Writing and Rhetoric 3
+
+    ENG 420 Introduction to the Study of Language 3
+
+    ENG 461 Literature in English Since 1800 3
+
+    ENG 480GW Writing in English: GWAR Seminar 3
+
+    ENG 583 Shakespeare: Representative Plays 3
+
+    ENG 640 Global Texts and Practices 3'
+- id: major_gwar
+  title: ENG 480GW GWAR requirement
+  all_of:
+  - ENG 480GW
+  min_grade: C
+  source: p.1121
+  quote: Completion of ENG 480GW with a grade of C or higher fulfills the Graduation Writing Assessment Requirement (GWAR)
+    for all English majors.
+- id: applied_linguistics
+  title: Applied Linguistics (3 units)
+  one_of:
+  - - ENG 423
+  - - ENG 425
+  - - ENG 426
+  source: p.1121
+  quote: 'Applied Linguistics (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    ENG 423 Language Analysis for Language Teachers 3
+
+    ENG 425 Sociolinguistics 3
+
+    ENG 426 Second Language Acquisition 3'
+- id: adolescent_literature
+  title: 'Literature: Adolescent (3 units)'
+  all_of:
+  - ENG 655
+  source: p.1121
+  quote: 'Literature: Adolescent (3 units)
+
+    Code Title Units
+
+    ENG 655 Literature and the Adolescent Reader 3'
+- id: literacy
+  title: Literacy (3 units)
+  all_of:
+  - ENG 417
+  source: p.1121
+  quote: 'Literacy (3 units)
+
+    Includes 25 hours of community service learning.
+
+    Code Title Units
+
+    ENG 417 Academic Literacy and the Urban Adolescent 3'
+- id: advanced_composition
+  title: Advanced Composition (3 units)
+  all_of:
+  - ENG 419
+  source: p.1121
+  quote: 'Advanced Composition (3 units)
+
+    Includes 20 hours of community service learning.
+
+    Code Title Units
+
+    ENG 419 Advanced Composition for Teachers 3'
+- id: mythology_oral_traditions
+  title: Mythology and Oral Traditions (3 units)
+  one_of:
+  - - AIS 162
+  - - CLAS 230
+  - - CWL 250
+  - - CWL 260
+  - - CWL 421
+  - - ENG 636
+  - - LTNS 435
+  source: p.1122
+  quote: 'Mythology and Oral Traditions (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    AIS 162 American Indian Oral Literature 3
+
+    CLAS 230 Ancient Epic Tales 3
+
+    CWL 250 Fables and Tales 3
+
+    CWL 260 Myths of the World 3
+
+    CWL 421 Celtic Literature 3
+
+    ENG 636 Myth, Literature, and Adaptation 3
+
+    LTNS 435 Oral History, Community Memory, and Collective
+
+    Stories
+
+    3'
+- id: speech_performance
+  title: Speech Performance (3-4 units)
+  one_of:
+  - - COMM 220
+  - - COMM 553
+  source: p.1122
+  quote: 'Speech Performance (3-4 units)
+
+    Select One:
+
+    Code Title Units
+
+    COMM 220 Introduction to the Performance of Literature 3
+
+    COMM 553 Performance and Identity 4'
+- id: capstone_experience
+  title: Capstone Experience (3 units)
+  all_of:
+  - ENG 688
+  source: p.1122
+  quote: 'Capstone Experience (3 units)
+
+    This course must be completed during the final semester and will include an English Education e-portfolio.
+
+    Code Title Units
+
+    ENG 688 Assessment in English Language Arts 3'
+- id: complementary_studies
+  unparsed: true
+  quote: 'Twelve units of Complementary Studies are required of all candidates in any of the four concentrations (Literature,
+    Linguistics, English Education and Professional Writing and Rhetoric) in the Bachelor of Arts degree in English. These
+    units must come from courses bearing a prefix other than ENG, and must not be cross-listed with ENG. English majors will
+    be offered four pathways for satisfying this requirement; each pathway is designed to facilitate graduation in a timely
+    manner.
+
+    1. Foreign Language: 12 units in a single foreign language;
+
+    2. 2nd Major, Minor, or Certificate: 12 units of coursework taken as part of a second major, a minor or a certificate;
+
+    3. Study Abroad: 12 units of coursework taken in an approved study abroad program (such as CSU Study Abroad);
+
+    4. Related Subjects: 12 units of coursework in related disciplines with the approval of an English Department advisor.
+
+    Related subjects typically include (but are not limited to) Comparative and World Literature, Classics, Creative Writing,
+    Ethnic Studies, Foreign Languages, History, Journalism, and Women and Gender Studies, Communication Studies, Instructional
+    Technology, or Marketing. For these related subjects, six units must be from classes in a non-literary related field.
+
+    Depending on the concentration within the major, Complementary Studies pathway, and approval of a departmental advisor,
+    up to 12 units from courses with non-ENG prefixes that count towards the Complementary Studies requirement may also count
+    as English electives in fulfillment of degree requirements.
+
+    Students who have earned AA-T or AS-T degrees and are pursuing a similar B.A. degree at SF State are required to fulfill
+    the Complementary Studies requirement as defined by the major department. Students should consult with a major advisor
+    about how transfer units and/or SF State units can best be applied to this requirement in order to ensure degree completion
+    within 60 units.'
+  source: p.1122
+- id: lower_division_credit_limit
+  unparsed: true
+  quote: A maximum of six units of lower-division coursework may be accepted for credit in the English major upon consent
+    of an advisor. Advanced Placement (A.P.) credit in composition cannot be used to fulfill the six-unit lower-division requirement
+    in the major.
+  source: p.1121
+- id: major_gpa
+  min_gpa: 2.0
+  across: major
+  source: p.1121
+  quote: Students must have a GPA of 2.0 or higher in the major
+- id: major_grade_floor
+  max_below:
+    grade: C-
+    courses: 0
+  across: major
+  source: p.1121
+  quote: no grade in the major lower than a C-
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1123
+- text: 'The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+
+    • a course in U.S. History
+
+    • a course in U.S. & California Government'
+  source: p.1123
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1123
+drafted_by: codex, 2026-10-28

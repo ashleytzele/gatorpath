@@ -1,0 +1,128 @@
+program: bm-vocal-performance
+title: 'Bachelor of Music: Concentration in Vocal Performance'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 65
+source: p.1573
+groups:
+- id: foundational
+  title: Foundational
+  one_of:
+  - - MUS 130
+  - - TH A 131
+  quote: MUS 130/ TH A 131 The Foundations of Music Theory 3
+  source: p.1573
+- id: theory_musicianship
+  title: Theory/Musicianship
+  all_of:
+  - MUS 222
+  - MUS 232
+  one_of:
+  - - MUS 221
+  - - TH A 221
+  quote: MUS 200/ TH A 234 Fundamentals of Modern Musicianship 3; MUS/TH A 221 Ear Training I 2; MUS 222 Ear Training II 2;
+    MUS 232 Diatonic Harmony 3
+  source: p.1573
+- id: piano
+  title: Piano
+  all_of:
+  - MUS 201
+  choose_units: 1
+  from:
+  - list:
+    - MUS 202
+    - MUS 206
+    - TH A 206
+  quote: 'MUS 201 Class Piano I 1; Select One: 1; MUS 202 Class Piano II; MUS/TH A 206 Beginning Jazz/Pop Piano'
+  source: p.1573
+- id: technology
+  title: Technology
+  all_of:
+  - MUS 237
+  quote: MUS 237 Introduction to Music Technology 2
+  source: p.1573
+- id: history
+  title: History
+  all_of:
+  - MUS 281
+  quote: MUS 281 The American Musical Experience 3
+  source: p.1573
+- id: upper_division_core
+  title: 'Upper-Division Core: Core'
+  all_of:
+  - MUS 542GW
+  one_of:
+  - - MUS 361
+  - - MUS 598
+  quote: 'MUS 542GW Music in Culture and Context - GWAR 3; Select One: 1; MUS 361 Capstone Composition or Performance Project;
+    MUS 598 Senior Thesis'
+  source: p.1573
+- id: theory
+  title: 'Upper-Division Core: Theory'
+  one_of:
+  - - MUS 403
+  - - MUS 440
+  quote: 'Select One: MUS 403 Chromatic Harmony 3; MUS 440 Jazz Harmony 3'
+  source: p.1573
+- id: music_history
+  title: 'Upper-Division Core: Music History'
+  choose_units: 6
+  from:
+  - list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+    - TH A 559
+  quote: 'Select Two: AFRS 514 African Musical Diaspora 3; AIS 320 American Indian Music 3; MUS 505 Music of the World''s
+    Peoples 3; MUS 506 Survey of Jazz 3; MUS 513 Asian Musical Diaspora 3; MUS 515 Latin American Musical Diaspora 3; MUS
+    550 Western European Music History from the Middle Ages to 1750 3; MUS 551 European and American Classical Music History
+    of the 18th and 19th Century 3; MUS 552 Classical Music History of Europe and the Americas in the 20th Century 3; MUS
+    558 Music of John Coltrane 3; MUS/TH A 559 Women in Jazz 3'
+  source: p.1573
+- id: applied_music_lessons
+  title: 'Concentration Requirements: Applied Music Lessons'
+  choose_units: 6
+  course_units: 2
+  from:
+    list:
+    - MUS 260
+  quote: MUS 260 Applied Music Lessons (2 units per semester for 3 semesters) 6
+  source: p.1573
+- id: advanced_applied_music_lessons
+  title: 'Concentration Requirements: Advanced Applied Music Lessons'
+  choose_units: 6
+  course_units: 2
+  from:
+    list:
+    - MUS 360
+  quote: MUS 360 Advanced Applied Music Lessons (2 units per semester for 3 semesters) 6
+  source: p.1573
+- id: vocal_performance_electives
+  unparsed: true
+  quote: 10 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390
+  source: p.1573
+- id: vocal_performance_seminar
+  title: 'Concentration Requirements: Vocal Performance and Research Seminar'
+  choose_units: 8
+  course_units: 2
+  from:
+    list:
+    - MUS 394
+  quote: MUS 394 Vocal Performance and Research Seminar (2 unit course taken 4 times) 8
+  source: p.1573
+- id: ensemble_conducting
+  title: 'Concentration Requirements: Ensemble Conducting'
+  all_of:
+  - MUS 640
+  quote: MUS 640 Ensemble Conducting 2
+  source: p.1573
+drafted_by: codex, 2026-10-28

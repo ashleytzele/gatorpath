@@ -1,0 +1,252 @@
+program: ba-chinese-chinese-integrated-teacher-education-program
+title: 'Bachelor of Arts in Chinese: Concentration in Chinese Integrated Teacher Education Program'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 60
+source: p.1438
+global:
+  itep: true
+  source: p.1438
+groups:
+- id: language_core
+  title: Language Core
+  all_of:
+  - CHIN 311
+  - CHIN 312
+  - CHIN 401
+  - MLL 325
+  source: p.1438
+  quote: 'Language Core (15 units)
+
+    Code Title Units
+
+    CHIN 311 Conversation and Reading 3
+
+    CHIN 312 Speech and Writing 3
+
+    CHIN 401 Advanced Chinese 3
+
+    MLL 325 Linguistics for Foreign Languages 3'
+- id: language_core_select_one
+  title: 'Language Core: Select One'
+  one_of:
+  - - CHIN 501
+  - - CHIN 502
+  source: p.1438
+  quote: 'Select One: 3
+
+    CHIN 501 Introduction to Classical Chinese
+
+    CHIN 502 Readings in Literary Chinese'
+- id: civilization_and_culture
+  title: Civilization and Culture
+  one_of:
+  - - CHIN 228
+  - - CHIN 270
+  - - CHIN 271
+  - - HUM 271
+  source: p.1438
+  quote: 'Civilization and Culture (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHIN 228 Chinese Language and Society 3
+
+    CHIN 270 Writing China & the West: Written Communication
+
+    and Cross-Cultural Encounters in Word and Image
+
+    3
+
+    CHIN/HUM 271 The Classic Chinese Novel in Contemporary Pop
+
+    Culture
+
+    3'
+- id: media_literacy
+  title: Media Literacy
+  one_of:
+  - - CHIN 410
+  - - JOUR 410
+  - - CHIN 411
+  - - I R 413
+  - - JOUR 411
+  source: p.1438
+  quote: 'Media Literacy (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHIN/JOUR 410 Building Chinese Media Literacy 3
+
+    CHIN 411/
+
+    I R 413/
+
+    JOUR 411
+
+    Media Chinese 3'
+- id: content_course
+  title: Content Course
+  one_of:
+  - - CHIN 521
+  - - CHIN 537
+  - - CHIN 580
+  source: p.1438
+  quote: 'Content Course (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHIN 521 Chinese Modern Fiction 3
+
+    CHIN 537 Chinese Language and Modern China 3
+
+    CHIN 580 Topics in Modern Chinese Language and Literature 3'
+- id: literature_in_translation
+  title: Literature in Translation
+  one_of:
+  - - CHIN 600
+  - - CHIN 601GW
+  - - CHIN 602
+  - - CHIN 611GW
+  - - CHIN 612GW
+  - - HUM 530
+  source: p.1438
+  quote: 'Literature in Translation (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHIN 600 Topics in Chinese Language, Literature, and
+
+    Culture in English
+
+    3
+
+    CHIN 601GW The Poetic Tradition - GWAR 3
+
+    CHIN 602 The Narrative Tradition 3
+
+    CHIN 611GW The Revolutionary Tradition in Modern Chinese
+
+    Literature - GWAR
+
+    3
+
+    CHIN 612GW Negotiating Chineseness in the Late 20th and 21st
+
+    Centuries - GWAR
+
+    3
+
+    HUM 530 Chinese Civilization 3'
+- id: major_gwar
+  unparsed: true
+  source: p.1439
+  quote: 'Graduation Writing Requirement (GWAR) (0-3 units)
+
+    Select a 600 level CHIN GWAR course if not already taken for the
+
+    Literature in Translation requirement above.'
+- id: credential_courses
+  title: Single Subject Teaching Credential
+  all_of:
+  - S ED 640
+  - S ED 660
+  - S ED 701
+  - S ED 720
+  - S ED 751
+  - S ED 752
+  - S ED 790
+  - MLL 750
+  - MLL 751
+  min_grade: B-
+  after:
+  - language_core
+  - language_core_select_one
+  - civilization_and_culture
+  - media_literacy
+  - content_course
+  - literature_in_translation
+  source: p.1439
+  quote: 'Single Subject Teaching Credential (33 units)
+
+    Code Title Units
+
+    S ED 640 Supervised Observation and Participation in Public
+
+    Schools
+
+    3
+
+    S ED 660 Student Teaching - Single Subject 9
+
+    S ED 701 Teaching for Equity in Secondary Schools 3
+
+    S ED 720 Critical and Digital Literacy Across Content Areas 3
+
+    S ED 751 Classroom Environment and Management 3
+
+    S ED 752 Professional Perspectives and Practices 3
+
+    S ED 790 Teaching Multilingual Learners in Secondary
+
+    Schools
+
+    3
+
+    MLL 750 Curriculum and Instruction I: World Languages 3
+
+    MLL 751 Curriculum and Instruction II: Foreign Languages 3'
+- id: credential_gpa
+  unparsed: true
+  source: p.1438
+  quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
+- id: credential_cr_grading
+  unparsed: true
+  source: p.1438
+  quote: CR grading is only acceptable for credential courses that only have CR/NC grading option.
+- id: study_abroad_limit
+  unparsed: true
+  source: p.1439
+  quote: For students opting to study abroad, all study abroad units will count as units in residence and can be used for
+    graduation credit, but no more than half of the units required for the major or minor may be taken outside of the home
+    campus. Flagship Language Concentration students, however, may apply all of their Study Abroad units towards the major.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1439
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1439
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1439
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.1439
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.1440
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.1440
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+    Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+  source: p.1440
+drafted_by: codex, 2026-10-27

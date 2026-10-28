@@ -1,0 +1,345 @@
+program: bs-environmental-studies-natural-resource-management-and-conservation
+title: 'Bachelor of Science in Environmental Studies: Concentration in Natural Resource Management and Conservation'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 65
+source: p.2058
+groups:
+- id: required_courses
+  title: Required Courses
+  all_of:
+  - BIOL 230
+  - BIOL 240
+  - ENV 500GW
+  - ENVS 130
+  - ENVS 450
+  - ENVS 680
+  - ENVS 690
+  - GEOG 603
+  source: p.2058
+  quote: 'Required Courses (35-40 units)
+
+    Code Title Units
+
+    BIOL 230 Introductory Biology I 5
+
+    BIOL 240 Introductory Biology II 5
+
+    ENV 500GW Physical and Human Dimensions of Climate
+
+    Change - GWAR
+
+    3
+
+    ENVS 130 Environmental Studies 3
+
+    ENVS 450 Environmental Law and Policy 3
+
+    ENVS 680 Environmental Studies Internship 1-3
+
+    ENVS 690 Senior Seminar in Environmental Studies 3
+
+    GEOG 603 Introduction to Geographic Information Systems 3
+
+    '
+- id: conservation_biology_or_resource_management
+  title: 'Required Courses: Select One (BIOL 530 or GEOG/ENVS 657)'
+  one_of:
+  - - BIOL 530
+  - - GEOG 657
+  - - ENVS 657
+  source: p.2058
+  quote: 'Select One: 3-4
+
+    BIOL 530 Conservation Biology
+
+    GEOG/ENVS
+
+    657
+
+    Natural Resource Management: Biotic Resources
+
+    '
+- id: chemistry
+  title: 'Required Courses: Select One (CHEM 115 or CHEM 180)'
+  one_of:
+  - - CHEM 115
+  - - CHEM 180
+  source: p.2058
+  quote: 'Select One: 3-4
+
+    CHEM 115 General Chemistry I
+
+    CHEM 180 Chemistry for Energy and the Environment
+
+    '
+- id: research_methods_or_data
+  title: 'Required Courses: Select One (ENV 205 or ENVS 224)'
+  one_of:
+  - - ENV 205
+  - - ENVS 224
+  source: p.2058
+  quote: 'Select One: 3-4
+
+    ENV 205 Our Environment Through Data
+
+    ENVS 224 Research Methods for Environmental Studies
+
+    '
+- id: physical_environment
+  title: Physical Environment
+  choose_units: 3
+  from:
+    list:
+    - ERTH 230
+    - GEOG 101
+  source: p.2058
+  quote: 'Physical Environment 3-4
+
+    ERTH 230 Environmental Geology
+
+    GEOG 101 Our Physical Environment
+
+    '
+- id: sustainability_and_social_justice
+  title: Sustainability and Social Justice
+  choose_units: 3
+  from:
+    list:
+    - ENVS 460
+    - ENVS 480
+    - ENVS 570
+    - PHIL 470
+    - USP 514
+    - USP 515
+    - GEOG 667
+  source: p.2058
+  quote: 'Sustainability and Social Justice 3-4
+
+    ENVS 460 Energy, Justice, and Sustainability
+
+    ENVS 480 Climate Change Adaptation and Justice
+
+    ENVS 570 Applied Local Sustainability
+
+    PHIL 470 Environmental Ethics
+
+    USP 514 Sustainable Development in Cities
+
+    USP 515/
+
+    GEOG 667
+
+    Environmental Justice: Race, Poverty, and the
+
+    Environment
+
+    '
+- id: global_international
+  title: Global/International
+  choose_units: 3
+  from:
+    list:
+    - ENVS 331
+    - I R 331
+    - ENVS 470
+    - ENVS 480
+    - I R 428
+    - GEOG 428
+  source: p.2058
+  quote: 'Global/International 3-4
+
+    ENVS/I R 331 Global Environmental Crisis
+
+    ENVS 470 Climate Politics and Policy
+
+    ENVS 480 Climate Change Adaptation and Justice
+
+    I R/GEOG 428 International Political Economy of Food and
+
+    Hunger
+
+    '
+- id: tools_and_techniques
+  title: Tools and Techniques
+  choose_units: 3
+  from:
+    list:
+    - BIOL 458
+    - GEOG 602
+    - GEOG 604
+    - GEOG 610
+    - GEOG 621
+    - GEOG 652
+    - USP 652
+  source: p.2058
+  quote: 'Tools and Techniques 3-4
+
+    BIOL 458 Biostatistics
+
+    GEOG 602 Field Methods in Environmental Science &
+
+    Physical Geography
+
+    GEOG 604 Environmental Data Science
+
+    GEOG 610 Remote Sensing of the Environment I
+
+    GEOG 621 Geographic Information Systems for
+
+    Environmental Analysis
+
+    GEOG/USP
+
+    652
+
+    Environmental Impact Analysis
+
+    '
+- id: ecology_and_biodiversity
+  title: Ecology and Biodiversity
+  choose_units: 6
+  from:
+    list:
+    - BIOL 460
+    - BIOL 470
+    - BIOL 482
+    - BIOL 530
+    - BIOL 532
+    - BIOL 534
+    - BIOL 514
+    - GEOG 316
+    - LS 430
+  source: p.2058
+  quote: 'Ecology and Biodiversity 6-9
+
+    BIOL 460 General Entomology
+
+    BIOL 470 Natural History of Vertebrates
+
+    BIOL 482 Ecology
+
+    BIOL 530 Conservation Biology
+
+    BIOL 532 Restoration Ecology
+
+    '
+- id: ecosystem_interactions
+  title: Ecosystem Interactions
+  choose_units: 3
+  from:
+    list:
+    - CHEM 380
+    - ERTH 335
+    - ERTH 577
+    - BIOL 577
+    - GEOG 314
+    - GEOG 642
+    - ERTH 642
+    - GEOG 644
+  source: p.2059
+  quote: 'Ecosystem Interactions 3-4
+
+    CHEM 380 Chemistry Behind Environmental Pollution
+
+    ERTH 335 Global Warming
+
+    ERTH/BIOL
+
+    577
+
+    Climate and Ecological Interactions
+
+    GEOG 314 Bioclimatology
+
+    GEOG/ERTH
+
+    642
+
+    Watershed Assessment and Restoration
+
+    GEOG 644 Water Quality
+
+    '
+- id: resources
+  title: Resources
+  choose_units: 6
+  from:
+    list:
+    - ENVS 460
+    - GEOG 317
+    - GEOG 427
+    - GEOG 647
+    - GEOG 657
+    - ENVS 657
+    - GEOG 666
+  source: p.2059
+  quote: 'Resources 6-8
+
+    ENVS 460 Energy, Justice, and Sustainability
+
+    GEOG 317 Soils
+
+    GEOG 427 Agriculture and Food Supply
+
+    GEOG 647 Geography of Water Resources
+
+    GEOG/ENVS
+
+    657
+
+    Natural Resource Management: Biotic Resources
+
+    GEOG 666 Geography of Garbage: Recycling and Waste
+
+    Reduction
+
+    '
+- id: environmental_management_and_policy
+  title: Environmental Management and Policy
+  choose_units: 3
+  from:
+    list:
+    - ENVS 470
+    - ENVS 480
+    - GEOG 652
+    - USP 652
+    - GEOG 658
+    - USP 658
+    - GEOG 648
+    - SOC 410
+    - RRS 410
+  source: p.2059
+  quote: 'Environmental Management and Policy 3-4
+
+    ENVS 470 Climate Politics and Policy
+
+    ENVS 480 Climate Change Adaptation and Justice
+
+    GEOG/USP
+
+    652
+
+    Environmental Impact Analysis
+
+    GEOG/USP
+
+    658
+
+    Land-Use Planning
+
+    GEOG 648 Management of National Parks and Protected
+
+    Areas
+
+    SOC/RRS 410 Grassroots Organizing for Change in Communities
+
+    of Color
+
+    '
+- id: category_exclusivity
+  unparsed: true
+  source: p.2058
+  quote: No course can be used to fulfill more than one core or elective category requirement.
+drafted_by: codex, 2026-10-28

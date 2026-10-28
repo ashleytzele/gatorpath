@@ -1,0 +1,166 @@
+program: ba-classics
+title: Bachelor of Arts in Classics
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.1013
+groups:
+- id: discovery
+  title: Discovery
+  choose_units: 6
+  from:
+  - subject: CLAR
+    level: lower
+  - subject: CLAS
+    level: lower
+  - subject: GRE
+    level: lower
+  - subject: LATN
+    level: lower
+  quote: Select two lower-division courses from CLAR, CLAS, GRE, and LATN prefixes.
+  source: p.1013
+- id: survey
+  title: Survey
+  choose_units: 9
+  from:
+  - list:
+    - CLAS 410
+    - HUM 401
+    - CLAS 415
+    - HUM 402
+    - CLAR 420
+    - ANTH 424
+    - ARTH 401
+    - M S 420
+    - CLAR 425
+    - ANTH 425
+    - ARTH 402
+    - M S 425
+  quote: 'Select Three:
+
+    CLAS 410/
+
+    HUM 401
+
+    Ancient Greek Literature 3
+
+    CLAS 415/
+
+    HUM 402
+
+    Ancient Roman Literature 3
+
+    CLAR 420/
+
+    ANTH 424/
+
+    ARTH 401/
+
+    M S 420
+
+    Art and Archaeology of Ancient Greece 3
+
+    CLAR/ANTH
+
+    425/ARTH 402/
+
+    M S 425
+
+    Art and Archaeology of Ancient Rome 3'
+  source: p.1013
+- id: unparsed_1
+  unparsed: true
+  quote: 'CLAS 400GW
+
+    or a GWAR course in another department upon advisement.'
+  source: p.1013
+- id: electives
+  title: Electives
+  choose_units: 18
+  from:
+  - subject: CLAS
+  - subject: CLAR
+  - subject: GRE
+  - subject: LATN
+  min_units_from:
+    level: upper
+    courses: 2
+  quote: 'Select six elective courses, upon advisement, from CLAS, CLAR, GRE,
+
+    and LATN prefixes, at least two of which must be upper-division. With
+
+    the permission of an advisor, three electives can be taken in another
+
+    department.'
+  source: p.1013
+- id: unparsed_2
+  unparsed: true
+  quote: 'All undergraduate students will complete a culminating experience
+
+    project with one of the following components:
+
+    • A demonstration of oral and written skills in Latin and/or Greek.
+
+    This demonstration has three parts: oral declamation of a prose
+
+    passage; written transcription of a prose passage dictated by a test
+
+    administrator; and oral declamation of passage of poetry (scansion)
+
+    in dactylic hexameter.
+
+    • A comprehensive reflective statement focused on the role that
+
+    receiving a Classical education at SF State has and will play in the
+
+    student’s life.
+
+    • A display of the student’s best projects from their Classics
+
+    coursework (e.g. term papers, translations, archaeological
+
+    reconstructions).
+
+    These components may be fulfilled through in-person meetings with a
+
+    Classics undergraduate advisor, but students wishing to develop and
+
+    display information competency are encouraged to complete these
+
+    components in electronic form (website, etc.).'
+  source: p.1013
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1014
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1014
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.1014
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.1014
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.1014
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.1014
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+    Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+  source: p.1014
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.1015
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.1015
+drafted_by: codex, 2026-10-27

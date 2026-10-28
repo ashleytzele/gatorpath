@@ -1,0 +1,162 @@
+program: ba-criminal-justice-studies
+title: Bachelor of Arts in Criminal Justice Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.639
+groups:
+- id: core_courses
+  title: Core Courses (18 units)
+  all_of:
+  - C J 200
+  - C J 230
+  - C J 300
+  - C J 330
+  - C J 330GW
+  - C J 680
+  source: p.639
+  quote: 'Core Courses (18 units) Code Title Units C J 200 Construction of Crime and Justice 3 C J 230 Crime, Data, and Analysis
+    3 C J 300 Criminal Justice: A Cross-Disciplinary Perspective 4 C J 330 Research Methods in Criminal Justice Studies Activity
+    1 C J 330GW Research Methods in Criminal Justice - GWAR 3 C J 680 Capstone in Criminal Justice Studies 4'
+- id: power_and_inequality
+  title: Power and Inequality (3 units)
+  one_of:
+  - - C J 435
+  - - LTNS 430
+  - - C J 485
+  - - LTNS 485
+  - - C J 530
+  - - C J 605
+  source: p.639
+  quote: 'Power and Inequality (3 units) Select one: Code Title Units C J 435/ LTNS 430 Race, Crime, and Justice 3 C J/LTNS
+    485 Latina/o Youth, Crime, and Justice 3 C J 530 Geographies of Social Control and Urban Diversity 3 C J 605 Criminalization
+    of Gender and Sexuality 3'
+- id: criminal_justice_law_and_administration
+  title: Criminal Justice Law and Administration (3 units)
+  one_of:
+  - - C J 400
+  - - C J 450
+  - - C J 480
+  - - C J 501
+  - - C J 502
+  source: p.639
+  quote: 'Criminal Justice Law and Administration (3 units) Select one: Code Title Units C J 400 Police and Public Policy
+    3 C J 450 Jails and Prisons 3 C J 480 California Corrections System 3 C J 501 Criminal Law 3 C J 502 Criminal Procedure
+    3'
+- id: additional_criminal_justice_studies_electives
+  title: Select four additional Criminal Justice Studies Electives (12-16 units)
+  choose_units: 12
+  from:
+  - list:
+    - AA S 595
+    - AFRS 375
+    - AFRS 376
+    - AIS 330
+    - AIS 460
+    - COMM 503
+    - COMM 525
+    - COMM 531
+    - COMM 541
+    - COMM 543
+    - COMM 564
+    - COMM 573
+    - COUN 630
+    - COUN 631
+    - C J 306
+    - I R 306
+    - C J 320
+    - C J 323
+    - C J 335
+    - C J 340
+    - I R 341
+    - C J 360
+    - I R 360
+    - C J 362
+    - I R 362
+    - PLSI 362
+    - C J 400
+    - C J 401
+    - C J 405
+    - C J 410
+    - C J 420
+    - C J 435
+    - LTNS 430
+    - C J 450
+    - C J 452
+    - SOC 451
+    - C J 460
+    - C J 461
+    - I R 361
+    - C J 470
+    - SOC 452
+    - C J 471
+    - C J 475
+    - C J 480
+    - C J 485
+    - LTNS 485
+    - C J 490
+    - C J 501
+    - C J 502
+    - C J 510
+    - SOC 510
+    - C J 511
+    - SOC 511
+    - USP 511
+    - C J 515
+    - C J 525
+    - C J 530
+    - C J 535
+    - C J 550
+    - C J 570
+    - C J 600
+    - C J 605
+    - C J 690
+    - HIST 465
+    - HIST 470
+    - HIST 471
+    - HIST 472
+    - I R 259
+    - I R 334
+    - I R 436
+    - PHIL 435
+    - I R 453
+    - BECA 453
+    - I R 459
+    - PLSI 459
+    - LTNS 415
+    - LTNS 470
+    - PHIL 335
+    - PHIL 378
+    - PHIL 380
+    - PLSI 478
+    - PLSI 512
+    - USP 512
+    - PSY 472
+    - PSY 475
+    - PSY 547
+    - RRS 330
+    - SOC 330
+    - RRS 571
+    - SOC 455
+    - SXS 455
+    - SXS 569
+    - PHIL 455
+    - WGS 513
+    - WGS 514
+    - WGS 554
+  - subject: C J
+    level: upper
+    except:
+    - C J 685
+    - C J 699
+  source: p.639
+  quote: Select four additional Criminal Justice Studies Electives (12-16 units) Other upper-division C J courses, except
+    C J 685 and C J 699, in addition to those listed below can be used as electives.
+- id: transfer_elective_limit
+  unparsed: true
+  source: p.640
+  quote: 'Up to a total of 6 transfer units in the following Criminal Justice courses completed at a community college may
+    be counted toward meeting the "general electives" requirements for the major: 1. Introduction to Criminal Justice 2. Concepts
+    of Criminal Law; for applicable courses, go to the ASSIST website: http://www.assist.org/web-assist/welcome.html.'
+drafted_by: codex, 2026-10-27

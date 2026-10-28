@@ -1,0 +1,177 @@
+program: ba-latina-latino-studies
+title: Bachelor of Arts in Latina/Latino Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 33
+source: p.475
+groups:
+- id: core_courses
+  title: Core Courses
+  all_of:
+  - LTNS 215
+  - LTNS 350
+  - LTNS 680
+  - LTNS 694
+  min_grade: C-
+  quote: For the core courses, a passing grade of C- or better is required.
+  source: p.475
+- id: core_history
+  title: History of Latinas/Latinos in the U.S.
+  one_of:
+  - - LTNS 278
+  - - HIST 278
+  min_grade: C-
+  quote: LTNS/HIST 278 History of Latinas/Latinos in the U.S. 3
+  source: p.475
+- id: performance_art_literature_media
+  title: Performance, Art, Literature, & Media
+  choose_units: 3
+  from:
+  - list:
+    - LTNS 222
+    - LTNS 225
+    - LTNS 230
+    - LTNS 270
+    - LTNS 301
+    - ARTH 301
+    - LTNS 305
+    - LTNS 409
+    - CINE 309
+    - LTNS 425
+    - LTNS 530
+    - LTNS 531
+    - SPAN 531
+    - LTNS 536
+    - JOUR 536
+    - LTNS 560
+    - LTNS 565
+    - LTNS 679
+  quote: Performance, Art, Literature, & Media
+  source: p.475
+- id: feminisms_sexualities_queer_of_color_critique
+  title: Feminisms, Sexualities, & Queer of Color Critique
+  choose_units: 3
+  from:
+  - list:
+    - LTNS 211
+    - LTNS 340
+    - LTNS 385
+    - LTNS 400
+    - LTNS 445
+    - WGS 445
+    - LTNS 505
+    - WGS 505
+    - LTNS 533
+    - HIST 355
+    - WGS 355
+    - LTNS 640
+    - SOC 640
+  quote: Feminisms, Sexualities, & Queer of Color Critique
+  source: p.475
+- id: politics_policy_law_economics
+  title: Politics, Policy, Law, & Economics
+  choose_units: 3
+  from:
+  - list:
+    - LTNS 276
+    - LTNS 315
+    - LTNS 415
+    - LTNS 430
+    - C J 435
+    - LTNS 470
+    - LTNS 485
+    - C J 485
+    - LTNS 501
+    - ANTH 501
+    - HIST 358
+    - LTNS 640
+    - SOC 640
+    - LTNS 660
+    - LTNS 670
+    - PLSI 408
+  quote: Politics, Policy, Law, & Economics
+  source: p.475
+- id: education_history_decolonial_knowledges
+  title: Education, History, & Decolonial Knowledges
+  choose_units: 3
+  from:
+  - list:
+    - LTNS 110
+    - LTNS 222
+    - LTNS 265
+    - LTNS 301
+    - ARTH 301
+    - LTNS 315
+    - LTNS 390
+    - LTNS 435
+    - LTNS 450
+    - LTNS 460
+    - LTNS 465
+    - LTNS 467
+    - LTNS 470
+    - LTNS 475
+    - LTNS 487
+    - SOC 487
+    - LTNS 501
+    - ANTH 501
+    - HIST 358
+    - LTNS 580
+    - SOC 580
+    - RRS 580
+    - LTNS 685
+    - LTNS 690
+  quote: Education, History, & Decolonial Knowledges
+  source: p.475
+- id: health_migration_transnational_studies
+  title: Health, Migration, & Transnational Studies
+  choose_units: 3
+  from:
+  - list:
+    - LTNS 210
+    - LTNS 211
+    - LTNS 380
+    - LTNS 445
+    - WGS 445
+    - LTNS 455
+    - LTNS 460
+    - LTNS 465
+    - LTNS 467
+    - LTNS 470
+    - LTNS 487
+    - SOC 487
+    - LTNS 500
+    - LTNS 640
+    - SOC 640
+  quote: Health, Migration, & Transnational Studies
+  source: p.476
+- id: major_gwar
+  title: Graduation Writing Assessment Requirement
+  all_of:
+  - ETHS 300GW
+  quote: Graduation Writing Assessment Requirement (3 units)
+  source: p.476
+- id: ltns_course_unit_cap
+  title: LTNS major course unit cap
+  across: major
+  max_units_from:
+    list:
+    - LTNS 685
+    - LTNS 690
+    - LTNS 694
+    - LTNS 707
+    units: 4
+  quote: 'The following courses may be taken for no more than 4 units towards the LTNS major: LTNS 685 Projects in the Teaching
+    of Latina/o Studies (1-4 units) LTNS 690 Community Fieldwork in Latina/o Studies (3 units) LTNS 694 Community Service
+    Learning (3 units) LTNS 707 Seminar in Latina/o Studies (3 units)'
+  source: p.476
+- id: community_service_hours
+  unparsed: true
+  quote: Students must complete at least 30 hours of service as part of a local community service learning internship in an
+    LTNS course.
+  source: p.476
+- id: transfer_units
+  unparsed: true
+  quote: Nine transfer units in Latina/Latino Studies (or equivalent field) may count toward the Major.
+  source: p.476
+drafted_by: codex, 2026-10-28

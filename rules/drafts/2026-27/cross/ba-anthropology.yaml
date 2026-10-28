@@ -1,0 +1,137 @@
+program: ba-anthropology
+title: Bachelor of Arts in Anthropology
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 40
+source: p.889
+global:
+  no_cr_nc: true
+  source: p.889
+groups:
+- id: foundation_core
+  title: Foundation Core
+  all_of:
+  - ANTH 100
+  - ANTH 110
+  - ANTH 120
+  - ANTH 130
+  - ANTH 300
+  - ANTH 305GW
+  source: p.889
+  quote: Foundation Core (18 units) Courses taken to fulfill major requirements must be taken for a letter grade (no CR/NC).
+- id: area_one
+  title: 'Area One: Theory and Foundations'
+  one_of:
+  - - ANTH 301
+  - - ANTH 302
+  - - ANTH 303
+  source: p.889
+  quote: 'Area One: Theory and Foundations (3 units) Select one: ANTH 301 Foundations of Archaeology ANTH 302 Foundations
+    of Human Variation ANTH 303 Foundations of Visual Anthropology'
+- id: area_two
+  title: 'Area Two: Methods and Practicum'
+  one_of:
+  - - ANTH 333
+  - - ANTH 530
+  - - ANTH 531
+  - - ANTH 557
+  - - USP 557
+  - - ANTH 592
+  - - ANTH 594
+  - - ANTH 595
+  - - CINE 635
+  - - ANTH 596
+  - - CINE 636
+  - - ANTH 651
+  - - ANTH 652
+  source: p.889
+  quote: 'Area Two: Methods and Practicum (4 units) Select one: ANTH 333 Primate Behavior ANTH 530 Human Osteology Practicum
+    ANTH 531 Fossil Humans Practicum ANTH/USP 557 Ethnography of Urban Inequality ANTH 592 Archaeological Methods ANTH 594
+    Zooarchaeology ANTH 595/ CINE 635 Anthropological Filmmaking I ANTH 596/ CINE 636 Anthropological Filmmaking II ANTH 651
+    Ethnographic Field Methods ANTH 652 Anthropological Statistics'
+- id: anthropology_electives
+  title: Anthropology Electives
+  choose_units: 15
+  from:
+    subject: ANTH
+    level: upper
+  source: p.889
+  quote: Anthropology Electives (15 Units) Select upper-division ANTH courses, which may include courses from Area One and
+    Two above that were not used to fulfill those requirements.
+- id: subfields
+  title: Anthropology Subfields
+  categories:
+  - - ANTH 302
+    - ANTH 333
+    - ANTH 530
+    - ANTH 531
+    - ANTH 535
+    - ANTH 545
+  - - ANTH 303
+    - ANTH 315
+    - ANTH 320
+    - CST 320
+    - ANTH 321
+    - ANTH 325
+    - ANTH 327
+    - CINE 327
+    - ANTH 420
+    - SOC 420
+    - ANTH 501
+    - HIST 358
+    - ANTH 551
+    - ANTH 555
+    - USP 555
+    - ANTH 557
+    - USP 557
+    - ANTH 569
+    - SXS 567
+    - ANTH 585
+    - CST 585
+    - ANTH 590
+    - CST 590
+    - WGS 595
+    - ANTH 595
+    - CINE 635
+    - ANTH 596
+    - CINE 636
+    - ANTH 630
+    - ANTH 631
+    - ANTH 651
+    - ANTH 657
+    - DANC 657
+  - - ANTH 301
+    - ANTH 326
+    - ANTH 356
+    - ANTH 460
+    - ANTH 470
+    - ANTH 592
+    - ANTH 594
+    - ANTH 609
+    - HIST 366
+  min_categories: 3
+  across:
+  - area_one
+  - area_two
+  - anthropology_electives
+  source: p.889
+  quote: 'At least one upper-division course (Area One, Area Two, or Electives) must be taken in each of the three subfields:
+    biological, cultural/visual, and archaeology.'
+- id: internship_field_school_independent_study_limit
+  unparsed: true
+  source: p.889
+  quote: No more than 6 units can be taken in internships (ANTH 695), field schools, and independent study (ANTH 699) combined.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.891
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.891
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.891
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.891
+drafted_by: codex, 2026-10-27

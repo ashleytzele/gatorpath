@@ -1,0 +1,142 @@
+program: ba-mathematics-mathematics-for-advanced-study
+title: 'Bachelor of Arts in Mathematics: Concentration in Mathematics for Advanced Study'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 49
+source: p.2099
+global:
+  no_cr_nc: true
+  source: p.2099
+groups:
+- id: core_courses
+  title: Core Courses
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 301GW
+  - MATH 325
+  - MATH 335
+  - MATH 370
+  min_grade:
+    MATH 226: C
+    MATH 227: C
+    MATH 228: C
+    MATH 301GW: C
+    MATH 325: C
+  source: p.2099
+  quote: 'Core Courses (28-32 units)
+
+    Code Title Units
+
+    MATH 226 Calculus I 4
+
+    MATH 227 Calculus II 4
+
+    MATH 228 Calculus III 4
+
+    MATH 301GW Exploration and Proof - GWAR 3
+
+    MATH 325 Linear Algebra 4
+
+    MATH 335 Modern Algebra 3
+
+    MATH 370 Real Analysis I 3'
+- id: core_programming
+  title: 'Core Courses: Select One'
+  one_of:
+  - - MATH 209
+  - - CSC 101
+    - CSC 215
+  - - CSC 309
+  min_grade:
+    MATH 209: C
+    CSC 101: C
+    CSC 215: C
+    CSC 309: C
+  source: p.2099
+  quote: 'Select One: 3-7
+
+    MATH 209 Mathematical Computing
+
+    CSC 101
+
+    & CSC 215
+
+    Introduction to Computing
+
+    and Intermediate Computer Programming
+
+    CSC 309 Computer Programming'
+- id: concentration_courses
+  title: Concentration Courses
+  all_of:
+  - MATH 435
+  - MATH 440
+  source: p.2099
+  quote: 'Concentration Courses (21 units)
+
+    Code Title Units
+
+    MATH 435 Modern Algebra II 3
+
+    MATH 440 Probability and Statistics I 3'
+- id: concentration_differential_equations
+  title: 'Concentration Courses: Select One'
+  one_of:
+  - - MATH 310
+  - - MATH 376
+  - - MATH 380
+  source: p.2099
+  quote: 'Select One: 3
+
+    MATH 310 Elementary Number Theory
+
+    MATH 376 Ordinary Differential Equations I
+
+    MATH 380 Introduction to Complex Analysis 3'
+- id: concentration_analysis
+  title: 'Concentration Courses: Select One'
+  one_of:
+  - - MATH 450
+  - - MATH 470
+  - - MATH 471
+  source: p.2099
+  quote: 'Select One: 3
+
+    MATH 450 Topology
+
+    MATH 470 Real Analysis II: Several Variables
+
+    MATH 471 Fourier Analysis and Applications'
+- id: concentration_electives
+  title: 'Concentration Courses: Electives'
+  unparsed: true
+  source: p.2099
+  quote: 'Two elective courses numbered 400 or above except MATH 475,
+
+    MATH 565, MATH 575, MATH 576, and MATH 577
+
+    6'
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  source: p.2099
+  quote: Students in the B.A. Math program will satisfy the Complementary Studies requirement by taking 12 units of courses
+    in the College of Science and Engineering outside of Math.
+transfer_notes:
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.2100
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2100
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.2100
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.2100
+drafted_by: codex, 2026-10-28

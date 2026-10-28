@@ -1,0 +1,268 @@
+program: ba-early-childhood-studies-pk-3-integrated-teacher-education-program
+title: 'Bachelor of Arts in Early Childhood Studies: Concentration in PK-3 Integrated Teacher Education Program'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 72
+source: p.591
+global:
+  itep: true
+  source: p.591
+groups:
+- id: core
+  title: Core
+  all_of:
+  - CAD 210
+  - CAD 260
+  - CAD 280
+  - CAD 300
+  - CAD 326
+  - CAD 330
+  - CAD 410GW
+  - CAD 660
+  - MATH 165
+  - SPED 370
+  min_grade: C
+  source: p.591
+  quote: 'Core (33 units)
+
+    Code Title Units
+
+    CAD 210 Introduction to Applied Child and Adolescent Development 3
+
+    CAD 260 Children, Families, and Community: An Ecological Perspective 3
+
+    CAD 280 Practicum in Early Childhood Education 3
+
+    CAD 300 Professional Roles and Careers in Child and Adolescent Development 3
+
+    CAD 326 Developing Language and Literacy Skills in Young Children 3
+
+    CAD 330 Curriculum and Development in Early Childhood 3
+
+    CAD 410GW Applied Developmental Science: Prenatal Through Early Childhood - GWAR 3
+
+    CAD 660 Applied Advanced Developmental Science in Child and Adolescent Development 3
+
+    MATH 165 Concepts of the Number System 3
+
+    SPED 370 Early Development and Neurodiversity 3'
+- id: core_early_childhood
+  title: 'Core: Select One'
+  one_of:
+  - - CAD 215
+  - - CAD 230
+  min_grade: C
+  source: p.591
+  quote: 'Select One: 3
+
+    CAD 215 Foundations in Early Childhood
+
+    CAD 230 Principles and Practices in Early Childhood Programs'
+- id: science
+  title: Science
+  choose_units: 3
+  from:
+  - list:
+    - BIOL 300
+    - BIOL 310
+    - BIOL 318
+    - ERTH 310
+    - ERTH 335
+    - ERTH 365
+    - GEOG 301
+    - LS 430
+    - ENVS 430
+  min_grade: C
+  source: p.591
+  quote: 'Science (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    BIOL 300 Nature Study 3
+
+    BIOL 310 Biology for Today''s World 3
+
+    BIOL 318 Our Endangered Planet 3
+
+    ERTH 310 The Violent Earth 3
+
+    ERTH 335 Global Warming 3
+
+    ERTH 365 Extreme Weather in a Warming World 3
+
+    GEOG 301 Bay Area Environments 3
+
+    LS/ENVS 430 Future of the Forests 3'
+- id: arts
+  title: Arts
+  choose_units: 3
+  from:
+  - list:
+    - AFRS 400
+    - AIS 325
+    - AIS 560
+    - DANC 350
+    - DANC 430
+    - DANC 657
+    - ANTH 657
+    - E ED 450
+    - HUM 361
+    - I R 363
+    - HUM 485
+    - AMST 310
+    - LTNS 425
+    - MUS 505
+    - TH A 408
+    - DANC 408
+    - TH A 451
+    - WGS 303
+  min_grade: C
+  source: p.591
+  quote: 'Arts (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    AFRS 400 Black Arts and Humanities 3
+
+    AIS 325 American Indian Art 3
+
+    AIS 560 Modern Creative and Performing Arts 3
+
+    DANC 350 Dance Aesthetics: Cultural/Historical Perspectives 3
+
+    DANC 430 Survey of Ballet and Modern Dance History 3
+
+    DANC/ANTH 657 Ethnography of Dance 3
+
+    E ED 450 Art and Learning 3
+
+    HUM 361/I R 363 Cultural Expression in Islam 3
+
+    HUM 485/
+
+    AMST 310
+
+    The Arts and American Culture 3
+
+    LTNS 425 Popular and Traditional Music of the Latinx U.S. 3
+
+    MUS 505 Music of the World''s Peoples 3
+
+    TH A/DANC 408 Performance in Asia and the Asian Diaspora 3
+
+    TH A 451 Storytelling and Folk Literature 3
+
+    WGS 303 Feminist Artivism & Praxis 3'
+- id: credential
+  title: PK-3 Early Childhood Education Specialist Instruction Credential
+  all_of:
+  - E ED 608
+  - E ED 628
+  - E ED 719
+  - E ED 733
+  - E ED 734
+  - E ED 735
+  - E ED 738
+  - E ED 748
+  - E ED 758
+  - E ED 768
+  - SPED 671
+  source: p.592
+  quote: 'PK-3 Early Childhood Education Specialist Instruction Credential (33 units)
+
+    Code Title Units
+
+    E ED 608 Supervised Fieldwork Phase I, PK-3 3
+
+    E ED 628 Teaching Practicum Seminar Phase I: PK-3 3
+
+    E ED 719 Play & Inquiry-Based Learning 3
+
+    E ED 733 Integrated Teaching through the Arts 3
+
+    E ED 734 Teaching Early Childhood Math, Pre-K-3 3
+
+    E ED 735 Science and Environmental Education 3
+
+    E ED 738 Language and Literacy in Multilingual PK-3 Settings 3
+
+    E ED 748 Teaching Practicum Phase III 3
+
+    E ED 758 Teaching Practicum Seminar Phase III 3
+
+    E ED 768 Culturally Sustaining Teaching & Learning 3
+
+    SPED 671 Inclusive Social-Emotional Development & Equitable Practices for Children & Families in Early Educ 3'
+- id: grading_basis
+  title: Letter-grade basis
+  letter_grade: true
+  across: major
+  source: p.591
+  quote: CR/NC grading is not accepted.
+- id: credential_grades
+  title: Credential course grade requirements and CR grading exception
+  unparsed: true
+  source: p.591
+  quote: All Credential courses must be completed with a grade of B- or better. CR grading is only acceptable for specific
+    E ED courses that only have CR/NC grading option.
+- id: credential_gpa
+  title: GPA before credential coursework
+  unparsed: true
+  source: p.591
+  quote: Students are required to have a minimum cumulative Grade Point Average (GPA) of 2.50 before starting credential coursework.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.592
+- text: 'The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+
+    • a course in U.S. History
+
+    • a course in U.S. & California Government'
+  source: p.592
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.592
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.592
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.592
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.592
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+    Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+  source: p.593
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.593
+- text: Review SF State's lower-division General Education requirements. Note that, as described below, the four basic skills
+    courses required for admission meet GE Areas 1A/A2, 1B/A3, 1C/A1, and 2/B4 in the SF State GE pattern. Courses that fulfill
+    the remaining areas of SF State’s lower-division GE pattern are available at most two-year and four-year colleges and
+    universities.
+  source: p.593
+- text: Of the four required basic skills courses, a course in critical thinking (1B/A3) may not be widely offered outside
+    the CCC and CSU systems. Students should attempt to identify and take an appropriate course no later than the term of
+    application to the CSU.
+  source: p.593
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.593
+drafted_by: codex, 2026-10-27

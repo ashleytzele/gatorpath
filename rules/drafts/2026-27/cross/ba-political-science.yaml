@@ -1,0 +1,533 @@
+program: ba-political-science
+title: Bachelor of Arts in Political Science
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.1640
+groups:
+- id: core_requirements
+  title: Core Requirements
+  all_of:
+  - PLSI 200
+  - PLSI 250
+  - PLSI 275
+  - PLSI 302GW
+  - PLSI 303
+  min_grade: C-
+  source: p.1640
+  quote: Core Requirements (19 units)
+- id: methods
+  title: Methods (Select One)
+  one_of:
+  - - PLSI 304
+  - - PLSI 307
+    - I R 307
+  - - PLSI 309
+  min_grade: C-
+  source: p.1640
+  quote: 'Methods (Select One): 4 PLSI 304 Quantitative Methods and Approaches in Political Science PLSI/I R 307 Qualitative
+    Approaches and Methods in Political Science and International Relations PLSI 309 Theoretical Methods and Approaches in
+    Political Science'
+- id: fields
+  title: Fields
+  choose_units: 17
+  from:
+  - list:
+    - PLSI 351
+    - PLSI 352
+    - PLSI 354
+    - PLSI 355
+    - PHIL 355
+    - PLSI 356
+    - PLSI 360
+    - PLSI 372
+    - HUM 372
+    - I R 372
+    - PLSI 381
+    - PLSI 382
+    - PLSI 386
+    - CST 300
+    - PLSI 388
+    - PLSI 389
+    - PLSI 392
+    - PLSI 393
+    - PLSI 394
+    - LABR 394
+    - PLSI 396
+    - I R 357
+  - list:
+    - PLSI 400
+    - P A 400
+    - PLSI 460
+    - PLSI 461
+    - PLSI 462
+    - PLSI 463
+    - PLSI 464
+    - PLSI 467
+    - PLSI 468
+    - PLSI 469
+    - PLSI 470
+    - SXS 470
+    - WGS 470
+    - PLSI 472
+    - PLSI 473
+    - PLSI 475
+    - USP 485
+    - PLSI 476
+    - PLSI 477
+    - PLSI 479
+    - PLSI 512
+    - USP 512
+  - list:
+    - PLSI 342
+    - I R 342
+    - PLSI 403
+    - PLSI 404
+    - I R 404
+    - PLSI 407
+    - I R 407
+    - PLSI 411
+    - I R 411
+    - PLSI 416
+    - I R 416
+    - PLSI 418
+    - PLSI 419
+    - PLSI 422
+    - I R 422
+    - PLSI 423
+    - PLSI 424
+    - SOC 424
+    - I R 424
+    - PLSI 425
+    - I R 425
+    - PLSI 431
+    - MEIS 431
+  - list:
+    - PLSI 308
+    - PLSI 478
+    - PLSI 481
+    - PLSI 552
+    - PLSI 553
+    - PLSI 554
+    - PLSI 555
+    - PLSI 556
+    - PLSI 561
+    - PLSI 562
+  - list:
+    - PLSI 100
+    - PLSI 105
+    - PLSI 106
+    - PLSI 110
+    - PLSI 112
+    - LCA 112
+    - HIST 112
+    - I R 112
+    - PHIL 112
+    - MATH 112
+    - PLSI 150
+    - PHIL 150
+    - PLSI 216
+    - PLSI 317
+    - PLSI 318
+    - PLSI 320
+    - PLSI 321
+    - I R 321
+    - PLSI 322
+    - I R 322
+    - PLSI 325
+    - I R 325
+    - PLSI 327
+    - I R 327
+    - PLSI 362
+    - I R 362
+    - C J 362
+    - PLSI 373
+    - PLSI 395
+    - PLSI 402
+    - P A 402
+    - PLSI 408
+    - LTNS 670
+    - PLSI 409
+    - I R 409
+    - PLSI 412
+    - I R 412
+    - PLSI 421
+    - FR 421
+    - PLSI 430
+    - JS 430
+    - I R 430
+    - PLSI 432
+    - I R 337
+    - PLSI 435
+    - I R 435
+    - FIN 435
+    - PLSI 451
+    - HIST 308
+    - PLSI 459
+    - I R 459
+    - PLSI 480
+    - USP 480
+    - PLSI 492
+    - USP 492
+    - PLSI 493
+    - USP 493
+    - PLSI 500
+    - LABR 500
+    - PLSI 507
+    - I R 507
+    - JOUR 307
+    - PLSI 513
+    - USP 513
+    - GEOG 668
+    - PLSI 514
+    - GER 514
+    - HIST 514
+    - I R 514
+    - JS 514
+    - PLSI 544
+    - I R 544
+    - PLSI 560
+    - USP 560
+    - PLSI 570
+    - USP 570
+    - LABR 570
+    - PLSI 580
+    - USP 580
+    - PLSI 685
+    - PLSI 699
+  - subject: PLSI
+    level: upper
+  min_grade: C-
+  source: p.1640
+  quote: Fields (17 units) Upper-division Political Science courses selected to include at least one course in four of the
+    following categories. Additional courses can be selected from any category to reach a total of 17 units. Other UD PLSI
+    courses can also be used towards the 17 units.
+- id: field_e_internship
+  title: Field E internship course bundle
+  unparsed: true
+  source: p.1641
+  quote: PLSI 610 & PLSI 611 Legal and Public Service Internship and Seminar and Legal and Public Service Internship 4
+- id: senior_seminar
+  title: 'Senior Seminar: Culminating Experience'
+  choose_units: 3
+  from:
+  - list:
+    - PLSI 602
+    - PLSI 605
+    - PLSI 606
+    - PLSI 607
+    - PLSI 608
+    - PLSI 609
+    - PLSI 613
+    - PLSI 614
+  min_grade: C-
+  source: p.1641
+  quote: 'Senior Seminar: Culminating Experience (3-4 units) Code Title Units PLSI 602 Seminar: Politics As Story 3 PLSI 605
+    Seminar: Student''s Choice Empirical Research Project 3 PLSI 606 Senior Seminar in American Politics 3 PLSI 607 Senior
+    Seminar in Comparative Politics 3 PLSI 608 Senior Seminar in Political Theory 3 PLSI 609 Senior Seminar in Public Law
+    3 PLSI 613 Senior Seminar: The Politics of Harry Potter 3 PLSI 614 Seminar: Politics of Reproduction 3'
+- id: field_categories
+  title: Field categories
+  across:
+  - fields
+  categories:
+  - - PLSI 351
+    - PLSI 352
+    - PLSI 354
+    - PLSI 355
+    - PHIL 355
+    - PLSI 356
+    - PLSI 360
+    - PLSI 372
+    - HUM 372
+    - I R 372
+    - PLSI 381
+    - PLSI 382
+    - PLSI 386
+    - CST 300
+    - PLSI 388
+    - PLSI 389
+    - PLSI 392
+    - PLSI 393
+    - PLSI 394
+    - LABR 394
+    - PLSI 396
+    - I R 357
+  - - PLSI 400
+    - P A 400
+    - PLSI 460
+    - PLSI 461
+    - PLSI 462
+    - PLSI 463
+    - PLSI 464
+    - PLSI 467
+    - PLSI 468
+    - PLSI 469
+    - PLSI 470
+    - SXS 470
+    - WGS 470
+    - PLSI 472
+    - PLSI 473
+    - PLSI 475
+    - USP 485
+    - PLSI 476
+    - PLSI 477
+    - PLSI 479
+    - PLSI 512
+    - USP 512
+  - - PLSI 342
+    - I R 342
+    - PLSI 403
+    - PLSI 404
+    - I R 404
+    - PLSI 407
+    - I R 407
+    - PLSI 411
+    - I R 411
+    - PLSI 416
+    - I R 416
+    - PLSI 418
+    - PLSI 419
+    - PLSI 422
+    - I R 422
+    - PLSI 423
+    - PLSI 424
+    - SOC 424
+    - I R 424
+    - PLSI 425
+    - I R 425
+    - PLSI 431
+    - MEIS 431
+  - - PLSI 308
+    - PLSI 478
+    - PLSI 481
+    - PLSI 552
+    - PLSI 553
+    - PLSI 554
+    - PLSI 555
+    - PLSI 556
+    - PLSI 561
+    - PLSI 562
+  - - PLSI 100
+    - PLSI 105
+    - PLSI 106
+    - PLSI 110
+    - PLSI 112
+    - LCA 112
+    - HIST 112
+    - I R 112
+    - PHIL 112
+    - MATH 112
+    - PLSI 150
+    - PHIL 150
+    - PLSI 216
+    - PLSI 317
+    - PLSI 318
+    - PLSI 320
+    - PLSI 321
+    - I R 321
+    - PLSI 322
+    - I R 322
+    - PLSI 325
+    - I R 325
+    - PLSI 327
+    - I R 327
+    - PLSI 362
+    - I R 362
+    - C J 362
+    - PLSI 373
+    - PLSI 395
+    - PLSI 402
+    - P A 402
+    - PLSI 408
+    - LTNS 670
+    - PLSI 409
+    - I R 409
+    - PLSI 412
+    - I R 412
+    - PLSI 421
+    - FR 421
+    - PLSI 430
+    - JS 430
+    - I R 430
+    - PLSI 432
+    - I R 337
+    - PLSI 435
+    - I R 435
+    - FIN 435
+    - PLSI 451
+    - HIST 308
+    - PLSI 459
+    - I R 459
+    - PLSI 480
+    - USP 480
+    - PLSI 492
+    - USP 492
+    - PLSI 493
+    - USP 493
+    - PLSI 500
+    - LABR 500
+    - PLSI 507
+    - I R 507
+    - JOUR 307
+    - PLSI 513
+    - USP 513
+    - GEOG 668
+    - PLSI 514
+    - GER 514
+    - HIST 514
+    - I R 514
+    - JS 514
+    - PLSI 544
+    - I R 544
+    - PLSI 560
+    - USP 560
+    - PLSI 570
+    - USP 570
+    - LABR 570
+    - PLSI 580
+    - USP 580
+    - PLSI 685
+    - PLSI 699
+  min_categories: 4
+  source: p.1640
+  quote: Upper-division Political Science courses selected to include at least one course in four of the following categories.
+- id: field_e_cr_cap
+  title: Field E CR cap
+  across:
+  - fields
+  max_cr:
+    units: 4
+  source: p.1640
+  quote: except for courses in Field E (Perspectives in Politics), in which up to 4 units may be completed with a grade of
+    CR (Credit).
+- id: major_letter_grades
+  title: Letter grades in the major
+  across: major
+  letter_grade: true
+  except:
+  - PLSI 100
+  - PLSI 105
+  - PLSI 106
+  - PLSI 110
+  - PLSI 112
+  - LCA 112
+  - HIST 112
+  - I R 112
+  - PHIL 112
+  - MATH 112
+  - PLSI 150
+  - PHIL 150
+  - PLSI 216
+  - PLSI 317
+  - PLSI 318
+  - PLSI 320
+  - PLSI 321
+  - I R 321
+  - PLSI 322
+  - I R 322
+  - PLSI 325
+  - I R 325
+  - PLSI 327
+  - I R 327
+  - PLSI 362
+  - I R 362
+  - C J 362
+  - PLSI 373
+  - PLSI 395
+  - PLSI 402
+  - P A 402
+  - PLSI 408
+  - LTNS 670
+  - PLSI 409
+  - I R 409
+  - PLSI 412
+  - I R 412
+  - PLSI 421
+  - FR 421
+  - PLSI 430
+  - JS 430
+  - I R 430
+  - PLSI 432
+  - I R 337
+  - PLSI 435
+  - I R 435
+  - FIN 435
+  - PLSI 451
+  - HIST 308
+  - PLSI 459
+  - I R 459
+  - PLSI 480
+  - USP 480
+  - PLSI 492
+  - USP 492
+  - PLSI 493
+  - USP 493
+  - PLSI 500
+  - LABR 500
+  - PLSI 507
+  - I R 507
+  - JOUR 307
+  - PLSI 513
+  - USP 513
+  - GEOG 668
+  - PLSI 514
+  - GER 514
+  - HIST 514
+  - I R 514
+  - JS 514
+  - PLSI 544
+  - I R 544
+  - PLSI 560
+  - USP 560
+  - PLSI 570
+  - USP 570
+  - LABR 570
+  - PLSI 580
+  - USP 580
+  - PLSI 685
+  - PLSI 699
+  source: p.1640
+  quote: All PLSI courses used towards the major must be taken for a letter grade (i.e., A-, B, C+, etc.), except for courses
+    in Field E (Perspectives in Politics), in which up to 4 units may be completed with a grade of CR (Credit).
+- id: transfer_limit
+  title: Transfer limit for upper-division Political Science courses
+  unparsed: true
+  source: p.1640
+  quote: No more than one UD PLSI course can be accepted in transfer.
+- id: independent_study_conditions
+  title: Independent study conditions
+  unparsed: true
+  source: p.1640
+  quote: Students who want to do an independent study/special study must arrange it with faculty, submit a Petition for Course
+    by Individual Study (PLSI 699) form, and have at least a 3.0 grade-point average. Independent Study units count only in
+    Field E.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1643
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer. •
+    a course in U.S. History • a course in U.S. & California Government
+  source: p.1643
+- text: 'Use ASSIST to determine: • Which courses at a CCC satisfy any lower-division major requirements for this major; •
+    Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1643
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.1643
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.1643
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+    Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+  source: p.1643
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.1643
+drafted_by: codex, 2026-10-28

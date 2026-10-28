@@ -1,0 +1,117 @@
+program: ba-dance
+title: Bachelor of Arts in Dance
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.1677
+groups:
+- id: dance_studies
+  title: Dance Studies
+  choose_units: 9
+  from:
+  - list:
+    - DANC 350
+    - DANC 352
+    - TH A 352
+    - MUS 352
+    - TH A 408
+    - DANC 408
+    - DANC 430
+    - DANC 657
+    - ANTH 657
+  quote: 'Dance Studies (9 units) Select Three: DANC 350 Dance Aesthetics: Cultural/Historical Perspectives 3; DANC/TH A/MUS
+    352 K-Pop: Performance and Pop Culture 3; DANC/TH A 408 Performance in Asia and the Asian Diaspora 3; DANC 430 Survey
+    of Ballet and Modern Dance History 3; DANC/ANTH 657 Ethnography of Dance 3'
+  source: p.1677
+- id: composition_performance_production
+  title: Composition, Performance, and Production
+  all_of:
+  - DANC 232
+  - DANC 434
+  - TH A 347
+  quote: 'Composition, Performance, and Production (12 units) DANC 232 Dance Composition: Choreography I 3; DANC 434 Dance
+    Composition: Choreography II 3; TH A 347 Technical Theatre and Design 3'
+  source: p.1677
+- id: dance_theatre_workshop
+  title: Dance Theatre Workshop
+  one_of:
+  - - DANC 490
+  - - TH A 490
+  quote: DANC/TH A 490 Dance Theatre Workshop 3
+  source: p.1677
+- id: technique_200_400
+  title: Technique, 200-400 level
+  choose_units: 6
+  from:
+  - list:
+    - DANC 263
+    - DANC 275
+    - DANC 276
+    - DANC 278
+    - DANC 363
+    - DANC 374
+    - DANC 376
+    - DANC 378
+    - DANC 400
+    - DANC 416
+    - DANC 465
+    - DANC 474
+    - DANC 476
+  quote: 'Select 6 units at the 200-400 level and 6 units at the 300-400 level:'
+  source: p.1677
+- id: technique_300_400
+  title: Technique, 300-400 level
+  choose_units: 6
+  from:
+  - list:
+    - DANC 363
+    - DANC 374
+    - DANC 376
+    - DANC 378
+    - DANC 400
+    - DANC 416
+    - DANC 465
+    - DANC 474
+    - DANC 476
+  quote: 'Select 6 units at the 200-400 level and 6 units at the 300-400 level:'
+  source: p.1677
+- id: major_gwar
+  title: GWAR Course
+  choose_units: 3
+  from:
+    ge_area: GW
+  quote: GWAR Course (3 units) Select a GWAR course from any discipline or department.
+  source: p.1677
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  quote: 'Bachelor of Arts students must complete at least 12 units of Complementary Studies outside of the primary prefix
+    for the major. (Note: Students may not use an alternate prefix that is cross-listed with the primary prefix for the major.)
+    Students who complete two majors or a major and a minor automatically complete the Complementary Studies requirement.
+    Additional ways to complete Complementary Studies for students in the Dance major include, with the approval of a Dance
+    Program advisor, completing 12 units in a single foreign language of their choosing, 12 units from courses taken in a
+    study abroad program, 12 units of courses taken as partial completion of a second major, minor or certificate, or 12 units
+    of courses in related disciplines. Related disciplines typically include theater, music, cinema, broadcast and electronic
+    communications, creative writing, journalism, kinesiology, physical education, health education, holistic health, biology,
+    elementary education, English, history, anthropology, business, and journalism. The dance program allows up to 12 units
+    of dance-related disciplines to count toward the dance major.'
+  source: p.1677
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1678
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer. •
+    a course in U.S. History • a course in U.S. & California Government
+  source: p.1678
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine: • Which courses at a CCC satisfy any lower-division major requirements
+    for this major; • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1678
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.1678
+drafted_by: codex, 2026-10-27

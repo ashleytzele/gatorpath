@@ -1,0 +1,98 @@
+program: bs-speech-language-and-hearing-sciences
+title: Bachelor of Science in Speech, Language, and Hearing Sciences
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 40
+source: p.382
+groups:
+- id: required
+  title: Required Courses
+  all_of:
+  - SLHS 300
+  - SLHS 651
+  - SLHS 652
+  - SLHS 654
+  - SLHS 655
+  - SLHS 656GW
+  - SLHS 657
+  - SLHS 658
+  - SLHS 659
+  - SLHS 661
+  - SLHS 663
+  - SLHS 664
+  - SLHS 668
+  - SLHS 680
+  min_grade: C-
+  needs:
+    gpa: 2.0
+  source: p.382
+  quote: 'Required Courses (40 units)
+
+    SLHS 300 Introduction to Speech, Language, and Hearing Sciences 3
+
+    SLHS 651 Anatomy and Physiology of the Speech Mechanism 3
+
+    SLHS 652 Audiology 3
+
+    SLHS 654 Audiometry 3
+
+    SLHS 655 Language Development 3
+
+    SLHS 656GW Diagnosis of Communicative Disabilities - GWAR 3
+
+    SLHS 657 Aural Rehabilitation 3
+
+    SLHS 658 Developmental Speech-Language Disabilities 3
+
+    SLHS 659 Speech and Voice Science 3
+
+    SLHS 661 Neurolinguistics 3
+
+    SLHS 663 Introduction to Augmentative and Alternative Communication 3
+
+    SLHS 664 Clinical Phonetics 3
+
+    SLHS 668 Social Communication and Linguistic Justice 3
+
+    SLHS 680 Practicum in Communication Therapy 1
+
+    '
+- id: sequence_progression
+  title: Sequence progression
+  unparsed: true
+  source: p.382
+  quote: Successfully complete all courses in each semester sequence. Students who do not meet these criteria cannot take
+    any additional courses in the sequence. Courses with less than a C– grade must be retaken before enrollment in the complete
+    sequence may continue.
+- id: advisor_meeting
+  title: Advisor meeting before enrollment
+  unparsed: true
+  source: p.382
+  quote: Meet with an advisor to review the requirements of the professions in speech-language pathology, audiology, and related
+    fields.
+- id: senior_capstone
+  title: Capstone ePortfolio
+  unparsed: true
+  source: p.382
+  quote: A capstone ePortfolio assignment is required in the fall semester of the senior year, as a part of the course requirements
+    for SLHS 656GW.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.383
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.383
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.383
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.383
+- text: Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+  source: p.383
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.383
+drafted_by: codex, 2026-10-28

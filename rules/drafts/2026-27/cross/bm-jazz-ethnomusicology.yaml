@@ -1,0 +1,211 @@
+program: bm-jazz-ethnomusicology
+title: 'Bachelor of Music: Concentration in Jazz/Ethnomusicology'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 65
+source: p.1559
+groups:
+- id: foundational
+  title: Foundational
+  one_of:
+  - - MUS 130
+  - - TH A 131
+  quote: MUS 130/TH A 131 The Foundations of Music Theory 3
+  source: p.1559
+- id: modern_musicianship
+  title: 'Theory/Musicianship: Fundamentals of Modern Musicianship'
+  one_of:
+  - - MUS 200
+  - - TH A 234
+  quote: MUS 200/TH A 234 Fundamentals of Modern Musicianship 3
+  source: p.1559
+- id: ear_training_i
+  title: 'Theory/Musicianship: Ear Training I'
+  one_of:
+  - - MUS 221
+  - - TH A 221
+  quote: MUS/TH A 221 Ear Training I 2
+  source: p.1559
+- id: ear_training_ii
+  title: 'Theory/Musicianship: Ear Training II'
+  all_of:
+  - MUS 222
+  quote: MUS 222 Ear Training II 2
+  source: p.1559
+- id: diatonic_harmony
+  title: 'Theory/Musicianship: Diatonic Harmony'
+  all_of:
+  - MUS 232
+  quote: MUS 232 Diatonic Harmony 3
+  source: p.1559
+- id: class_piano_i
+  title: 'Piano: Class Piano I'
+  all_of:
+  - MUS 201
+  quote: MUS 201 Class Piano I 1
+  source: p.1559
+- id: class_piano_choice
+  title: 'Piano: Select One'
+  one_of:
+  - - MUS 202
+  - - MUS 206
+  - - TH A 206
+  quote: 'Select One: 1 MUS 202 Class Piano II MUS/TH A 206 Beginning Jazz/Pop Piano'
+  source: p.1559
+- id: music_technology
+  title: Technology
+  all_of:
+  - MUS 237
+  quote: MUS 237 Introduction to Music Technology 2
+  source: p.1559
+- id: american_musical_experience
+  title: History
+  all_of:
+  - MUS 281
+  quote: MUS 281 The American Musical Experience 3
+  source: p.1559
+- id: gwar
+  title: 'Upper-Division Core: Core'
+  all_of:
+  - MUS 542GW
+  quote: MUS 542GW Music in Culture and Context - GWAR 3
+  source: p.1559
+- id: capstone
+  title: 'Upper-Division Core: Select One'
+  one_of:
+  - - MUS 361
+  - - MUS 598
+  quote: 'Select One: 1 MUS 361 Capstone Composition or Performance Project MUS 598 Senior Thesis'
+  source: p.1559
+- id: theory_choice
+  title: 'Upper-Division Core: Theory: Select One'
+  one_of:
+  - - MUS 403
+  - - MUS 440
+  quote: 'Select One: MUS 403 Chromatic Harmony 3 MUS 440 Jazz Harmony 3'
+  source: p.1559
+- id: music_history
+  title: 'Upper-Division Core: Music History'
+  choose_units: 6
+  from:
+  - list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+  quote: 'Select Two: AFRS 514 African Musical Diaspora 3 AIS 320 American Indian Music 3 MUS 505 Music of the World''s Peoples
+    3 MUS 506 Survey of Jazz 3 MUS 513 Asian Musical Diaspora 3 MUS 515 Latin American Musical Diaspora 3 MUS 550 Western
+    European Music History from the Middle Ages to 1750 3 MUS 551 European and American Classical Music History of the 18th
+    and 19th Century 3 MUS 552 Classical Music History of Europe and the Americas in the 20th Century 3 MUS 558 Music of John
+    Coltrane 3 MUS 559 Women in Jazz 3'
+  source: p.1559
+- id: applied_music_lessons
+  title: 'Concentration Requirements: Applied Music Lessons'
+  choose_units: 4
+  from:
+  - list:
+    - MUS 260
+    - MUS 360
+  quote: 'Take 4 units in any combination: 4 MUS 260 Applied Music Lessons MUS 360 Advanced Applied Music Lessons'
+  source: p.1559
+- id: improvisation_techniques
+  title: 'Concentration Requirements: Improvisation Techniques'
+  all_of:
+  - MUS 270
+  quote: MUS 270 Improvisation Techniques 2
+  source: p.1559
+- id: performance_research_seminar
+  title: 'Concentration Requirements: Select One'
+  one_of:
+  - - MUS 365
+  - - MUS 394
+  quote: 'Select One: 2 MUS 365 Instrumental Performance and Research Seminar MUS 394 Vocal Performance and Research Seminar'
+  source: p.1559
+- id: performance_study
+  title: 'Concentration Requirements: Performance Study'
+  unparsed: true
+  quote: 8 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390
+  source: p.1560
+- id: jazz_improvisation
+  title: 'Concentration Requirements: Jazz Improvisation'
+  all_of:
+  - MUS 431
+  quote: MUS 431 Jazz Improvisation 2
+  source: p.1560
+- id: creative_concepts
+  title: 'Concentration Requirements: Creative Concepts in Music'
+  all_of:
+  - MUS 445
+  quote: MUS 445 Creative Concepts in Music 2
+  source: p.1560
+- id: ethnomusicology
+  title: 'Concentration Requirements: Introduction to Ethnomusicology'
+  all_of:
+  - MUS 524
+  quote: MUS 524 Introduction to Ethnomusicology 3
+  source: p.1560
+- id: additional_music_history
+  title: 'Concentration Requirements: Additional Music History'
+  choose_units: 3
+  from:
+  - list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+  quote: 3 additional units selected from the Music History options not already used to satisfy the Core
+  source: p.1560
+- id: electives
+  title: 'Concentration Requirements: Electives'
+  choose_units: 6
+  from:
+  - approved: true
+  approval: 6 units of Electives on advisement
+  quote: 6 units of Electives on advisement 6
+  source: p.1560
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1560
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer. •
+    a course in U.S. History • a course in U.S. & California Government
+  source: p.1560
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine: • Which courses at a CCC satisfy any lower-division major requirements
+    for this major; • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1560
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission. Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+    transfer (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.1560
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.1560
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+    Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+  source: p.1560
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.1560
+drafted_by: codex, 2026-10-28

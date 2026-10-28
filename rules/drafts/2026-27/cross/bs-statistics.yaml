@@ -1,0 +1,155 @@
+program: bs-statistics
+title: Bachelor of Science in Statistics
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 55
+source: p.2141
+global:
+  no_cr_nc: true
+  source: p.2141
+groups:
+- id: core_required
+  title: Core Requirements
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 301GW
+  - MATH 325
+  - MATH 338
+  - MATH 424
+  - MATH 440
+  - MATH 441
+  - MATH 442
+  - MATH 447
+  - MATH 448
+  - MATH 449
+  min_grade:
+    MATH 226: C
+    MATH 227: C
+    MATH 228: C
+    MATH 301GW: C
+    MATH 325: C
+    MATH 440: C
+  quote: 'Core Requirements (46 units)
+
+    MATH 226 Calculus I 4
+
+    MATH 227 Calculus II 4
+
+    MATH 228 Calculus III 4
+
+    MATH 301GW Exploration and Proof - GWAR 3
+
+    MATH 325 Linear Algebra 4
+
+    MATH 338 Introduction to SAS 3
+
+    MATH 424 Introduction to Linear Models 3
+
+    MATH 440 Probability and Statistics I 3
+
+    MATH 441 Probability and Statistics II 3
+
+    MATH 442 Probability Models 3
+
+    MATH 447 Design and Analysis of Experiments 3
+
+    MATH 448 Introduction to Statistical Learning and Data Mining 3
+
+    MATH 449 Categorical Data Analysis 3'
+  source: p.2141
+- id: programming
+  title: 'Core Requirements: Select One'
+  one_of:
+  - - MATH 209
+  - - CSC 101
+    - CSC 215
+  - - CSC 309
+  min_grade:
+    MATH 209: C
+    CSC 101: C
+    CSC 215: C
+    CSC 309: C
+  quote: 'Select One: 3-7
+
+    MATH 209 Mathematical Computing
+
+    CSC 101
+
+    & CSC 215
+
+    Introduction to Computing
+
+    and Intermediate Computer Programming
+
+    CSC 309 Computer Programming'
+  source: p.2141
+- id: guided_electives
+  title: Guided Electives
+  unparsed: true
+  quote: 'Guided Electives (9 units)
+
+    Select three courses from one of the areas (Science, Economics, Business: Decision Sciences, or Business: Information
+    Systems) listed below:
+
+    Science
+
+    Select three courses in consultation with a statistics advisor:
+
+    MATH 370 Real Analysis I 3
+
+    MATH 376 Ordinary Differential Equations I 3
+
+    MATH 400 Numerical Analysis 3
+
+    MATH 425 Applied and Computational Linear Algebra 3
+
+    MATH 430 Mathematics of Optimization 3
+
+    MATH 460 Mathematical Modeling 3
+
+    Economics
+
+    Select three courses in consultation with a statistics advisor:
+
+    ECON 301 Intermediate Microeconomic Theory 3
+
+    ECON 302 Intermediate Macroeconomic Theory 3
+
+    ECON 312 Introduction to Econometrics 3
+
+    ECON 715 Mathematical Economics 3
+
+    ECON 731 Econometric Methods and Applications 3
+
+    ECON 825 Applied Time Series Forecasting for Economics and Business 3
+
+    Business: Decision Sciences
+
+    Select three courses in consultation with a statistics advisor:
+
+    DS 311 Technologies in Data Analytics 3
+
+    DS 408 Simulation Modeling for Business 3
+
+    DS 412 Operations Management 3
+
+    DS 604 Business Forecasting 3
+
+    DS 624 Quality Management 3
+
+    Business: Information Systems
+
+    Select three courses in consultation with a statistics advisor:
+
+    ISYS 363 Information Systems for Management 3
+
+    ISYS 463 Information Systems Analysis and Design 3
+
+    ISYS 569 Information Systems for Business Process Management 3
+
+    ISYS 650 Business Intelligence 3'
+  source: p.2141
+drafted_by: codex, 2026-10-28

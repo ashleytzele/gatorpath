@@ -1,0 +1,352 @@
+program: ba-studio-art
+title: Bachelor of Arts in Studio Art
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 43
+source: p.926
+groups:
+- id: lower_division_art_history
+  title: Lower-Division Art History
+  choose_units: 6
+  from:
+  - list:
+    - ARTH 201
+    - ARTH 202
+    - ARTH 205
+    - HUM 205
+  quote: 'Art History 6
+
+    Select Two:
+
+    ARTH 201 Global Art History I 3
+
+    ARTH 202 Global Art History II 3
+
+    ARTH/HUM 205 Asian Art History 3'
+  source: p.926
+- id: lower_division_studio_art
+  title: Lower-Division Studio Art
+  choose_units: 9
+  from:
+  - list:
+    - ART 210
+    - ART 222
+    - ART 231
+    - ART 235
+    - ART 240
+    - ART 245
+    - ART 260
+  quote: 'Studio Art 9
+
+    Select Three:
+
+    ART 210 Introduction to Digital Media Arts 3
+
+    ART 222 Introduction to Textile Art 3
+
+    ART 231 Introduction to Drawing 3
+
+    ART 235 Introduction to Printmaking 3
+
+    ART 240 Introduction to Contemporary Sculpture 3
+
+    ART 245 Introduction to Ceramics 3
+
+    ART 260 Introduction to the Darkroom 3'
+  source: p.926
+- id: upper_division_art_history
+  title: Upper-Division Art History
+  choose_units: 6
+  from:
+  - list:
+    - ARTH 301
+    - LTNS 301
+    - ARTH 306
+    - ARTH 401
+    - ANTH 424
+    - CLAR 420
+    - M S 420
+    - ARTH 402
+    - ANTH 425
+    - CLAR 425
+    - M S 425
+    - ARTH 404
+    - CLAR 550
+    - ARTH 406
+    - ARTH 407
+    - CLAR 500
+    - M S 500
+    - ARTH 409
+    - CLAR 530
+    - ARTH 410
+    - CLAR 531
+    - ARTH 411
+    - ARTH 412
+    - ARTH 421
+    - ARTH 496
+    - HUM 496
+  quote: 'Select two courses from the following list:
+
+    Code Title Units
+
+    ARTH/LTNS 301 Latin American and Latino/a/x Art, 1492 to the Present 3
+
+    ARTH 306 Modern and Contemporary Art in a North American and European Context, 1945-present 3
+
+    ARTH 401/ANTH 424/CLAR 420/M S 420 Art and Archaeology of Ancient Greece 3
+
+    ARTH 402/ANTH 425/CLAR/M S 425 Art and Archaeology of Ancient Rome 3
+
+    ARTH 404/CLAR 550 Art and Archaeology of the Mediterranean Bronze Age 3
+
+    ARTH 406 Global Renaissance and Baroque Art 3
+
+    ARTH 407/CLAR 500/M S 500 Art and Archaeology of Ancient Egypt 3
+
+    ARTH 409/CLAR 530 Greek Vase Painting 3
+
+    ARTH 410/CLAR 531 Greek Sculpture 3
+
+    ARTH 411 South Asian Art I: Neolithic to Medieval Periods 3
+
+    ARTH 412 South Asian Art II: Early Modern to Contemporary Periods 3
+
+    ARTH 421 Special Topics in Art History 3
+
+    ARTH/HUM 496 Art, Architecture, and Space in the Islamic World 3'
+  source: p.926
+- id: foundation_studio_art
+  title: 300-level Foundation Studio Art
+  choose_units: 3
+  from:
+  - list:
+    - ART 310
+    - ART 330
+    - ART 322
+    - ART 335
+    - ART 340
+    - ART 345
+    - ART 360
+    - ART 361
+  quote: 'Select one course from the following list:
+
+    Code Title Units
+
+    ART 310 Foundations in Digital Media Art 3
+
+    ART 330 Foundations in Painting 3
+
+    ART 322 Foundations in Fiber and Textiles 3
+
+    ART 335 Foundations in Printmaking Processes: Drawing the Multiple 3
+
+    ART 340 Foundations in Contemporary Sculpture: Materials & Concepts 3
+
+    ART 345 Foundations in Ceramics 3
+
+    ART 360 Foundations in Photography 3
+
+    ART 361 Foundations in Darkroom Photography 3'
+  source: p.927
+- id: upper_division_studio_art
+  title: Upper-Division Studio Art
+  choose_units: 12
+  from:
+  - list:
+    - ART 310
+    - ART 322
+    - ART 330
+    - ART 335
+    - ART 340
+    - ART 345
+    - ART 360
+    - ART 361
+    - ART 410
+    - ART 411
+    - ART 413
+    - ART 422
+    - ART 423
+    - ART 424
+    - ART 431
+    - ART 432
+    - ART 433
+    - ART 434
+    - ART 435
+    - ART 439
+    - ART 440
+    - ART 445
+    - ART 456
+    - ART 460
+    - ART 511
+    - ART 514
+    - ART 525
+    - ART 527
+    - ART 530
+    - ART 534
+    - ART 535
+    - ART 536
+    - ART 541
+    - ART 543
+    - ART 545
+    - ART 546
+    - ART 548
+    - ART 549
+    - ART 555
+    - ART 556
+    - ART 563
+  - subject: ARTH
+    level: upper
+    max_courses: 1
+  approval: An upper-division Art History (ARTH) course may be substituted for one upper-division ART course under advisement.
+  quote: 'Choose four upper-division studio art (ART) courses from the following list that haven''t been used to fulfill another
+    requirement. An upper-division Art History (ARTH) course may be substituted for one upper-division ART course under advisement.
+
+    Code Title Units
+
+    ART 310 Foundations in Digital Media Art 3
+
+    ART 322 Foundations in Fiber and Textiles 3
+
+    ART 330 Foundations in Painting 3
+
+    ART 335 Foundations in Printmaking Processes: Drawing the Multiple 3
+
+    ART 340 Foundations in Contemporary Sculpture: Materials & Concepts 3
+
+    ART 345 Foundations in Ceramics 3
+
+    ART 360 Foundations in Photography 3
+
+    ART 361 Foundations in Darkroom Photography 3
+
+    ART 410 Conceptual Art After Conceptual Art 3
+
+    ART 411 Interactive Arts 3
+
+    ART 413 Video Art 3
+
+    ART 422 Weaving I: Beginning 3
+
+    ART 423 Constructed Surfaces 3
+
+    ART 424 Surface Design Studio 3
+
+    ART 431 Intermediate Painting 3
+
+    ART 432 Further Explorations in Drawing 3
+
+    ART 433 Figure Drawing 3
+
+    ART 434 Color Workshop 3
+
+    ART 435 Intermediate Printmaking Workshop 3
+
+    ART 439 Screen Printing 3
+
+    ART 440 Sculpture and Expanded Practice 3
+
+    ART 445 Ceramics on the Wheel 3
+
+    ART 456 Studio X 3
+
+    ART 460 Intermediate Photography 3
+
+    ART 511 Digital Media and Emerging Technologies: Special Areas 3
+
+    ART 514 Experimental and Expanded Practices in Video Art 3
+
+    ART 525 Textiles Studio Process 3
+
+    ART 527 Repeat Pattern for Fine Art 3
+
+    ART 530 Advanced Painting 3
+
+    ART 534 Mixed Media Painting 3
+
+    ART 535 Artist''s Books 3
+
+    ART 536 Advanced Topics in Printmaking 3
+
+    ART 541 Installation Art 3
+
+    ART 543 Hydrarchy: Nautical Art, Watercraft, and the Art of Resistance 3
+
+    ART 545 Ceramic Sculpture 3
+
+    ART 546 Glaze Surfaces 3
+
+    ART 548 Glaze Calculation 3
+
+    ART 549 Special Topics in Ceramics 3
+
+    ART 555 The Multiple and Distributed Art 3
+
+    ART 556 Art and Social Function 3
+
+    ART 563 Advanced Topics in Photography 3'
+  source: p.927
+- id: art_professional_service
+  title: Art Professional Service Practicum
+  all_of:
+  - ART 509
+  quote: 'Art Professional Service Practicum (1 Unit)
+
+    Code Title Units
+
+    ART 509 Art Professional Service Practicum 1'
+  source: p.927
+- id: major_gwar
+  title: Graduate Writing Assessment Requirement
+  all_of:
+  - ARTH 400GW
+  quote: 'Graduate Writing Assessment Requirement (3 Units)
+
+    Code Title Units
+
+    ARTH 400GW Writing About Art - GWAR 3'
+  source: p.927
+- id: capstone
+  title: Capstone Course
+  one_of:
+  - - ART 600
+  - - ART 619
+  quote: 'Interdisciplinary studio capstone course which combines research, writing, art making, seminar, and critique to
+    reflect upon work made in previous studio courses and contextualize it within professional and institutional practices
+    of the field.
+
+    Code Title Units
+
+    Select One: 3
+
+    ART 600 Studio Process and Professional Practices
+
+    ART 619 Exhibition Design'
+  source: p.927
+- id: lower_division_before_upper
+  unparsed: true
+  quote: Before advancing to the 300-level or higher courses or declaring a concentration, all majors must have completed
+    the University's lower-division requirements and the lower-division courses for the major, or equivalent. Change of major
+    students must also have proof of an art advisor consultation.
+  source: p.926
+- id: transfer_residence
+  unparsed: true
+  quote: For students transferring from other institutions, a minimum of 12 units in residence is required.
+  source: p.926
+- id: major_change_advising
+  unparsed: true
+  quote: Juniors or seniors who have declared another major, but wish to change their major to Studio Art must attend a major
+    group advising session. Email sch_art@sfsu.edu for information and advising session dates.
+  source: p.926
+transfer_notes:
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.928
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.928
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.929
+drafted_by: codex, 2026-10-28

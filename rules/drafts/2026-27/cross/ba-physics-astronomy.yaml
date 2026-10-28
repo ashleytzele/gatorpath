@@ -1,0 +1,199 @@
+program: ba-physics-astronomy
+title: 'Bachelor of Arts in Physics: Concentration in Astronomy'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 54
+source: p.2174
+groups:
+- id: lower_division_prerequisites
+  title: Lower-Division Prerequisites
+  all_of:
+  - ASTR 115
+  - ASTR 116
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 245
+  - PHYS 200
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  - PHYS 240
+  - PHYS 242
+  min_grade:
+    ASTR 115: C
+    ASTR 116: C
+    MATH 226: C
+    MATH 227: C
+    MATH 228: C
+    MATH 245: C
+    PHYS 220: C
+    PHYS 222: C
+    PHYS 230: C
+    PHYS 232: C
+    PHYS 240: C
+    PHYS 242: C
+  source: p.2174
+  quote: 'Lower-Division Prerequisites (35 units)
+
+    Code Title Units
+
+    ASTR 115
+
+    & ASTR 116
+
+    Introduction to Astronomy
+
+    and Astronomy Laboratory
+
+    4
+
+    MATH 226 Calculus I 4
+
+    MATH 227 Calculus II 4
+
+    MATH 228 Calculus III 4
+
+    MATH 245 Elementary Differential Equations and Linear
+
+    Algebra
+
+    3
+
+    PHYS 200 Planning for Success as a Physics & Astronomy
+
+    Major
+
+    1
+
+    PHYS 220
+
+    & PHYS 222
+
+    General Physics with Calculus I
+
+    and General Physics with Calculus I Laboratory
+
+    4
+
+    PHYS 230
+
+    & PHYS 232
+
+    General Physics with Calculus II
+
+    and General Physics with Calculus II Laboratory
+
+    4
+
+    PHYS 240
+
+    & PHYS 242
+
+    General Physics with Calculus III
+
+    and General Physics with Calculus III Laboratory
+
+    4'
+- id: programming
+  title: 'Select One: MATH 209 or CSC 309'
+  one_of:
+  - - MATH 209
+  - - CSC 309
+  source: p.2174
+  quote: 'Select One: 3
+
+    MATH 209 Mathematical Computing
+
+    CSC 309 Computer Programming'
+- id: lower_prerequisite_grading
+  title: Lower-Division Prerequisite Grading
+  across:
+  - lower_division_prerequisites
+  - programming
+  letter_grade: true
+  except:
+  - PHYS 200
+  source: p.2174
+  quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
+    except for PHYS 200 which must be passed with a grade of CR.
+- id: phys_200_cr
+  unparsed: true
+  source: p.2174
+  quote: PHYS 200 which must be passed with a grade of CR.
+- id: upper_division_core
+  title: Upper-Division Requirements
+  all_of:
+  - ASTR 300
+  - ASTR 301
+  - ASTR 340GW
+  - PHYS 320
+  min_grade:
+    ASTR 300: C-
+    ASTR 301: C-
+    ASTR 340GW: C-
+    PHYS 320: C-
+  source: p.2174
+  quote: 'Upper-Division Requirements (11 units)
+
+    Code Title Units
+
+    ASTR 300 Stars, Planets, and the Milky Way 3
+
+    ASTR 301 Observational Astronomy Laboratory 2
+
+    ASTR 340GW The Big Bang - GWAR 3
+
+    PHYS 320 Modern Physics I 3'
+- id: upper_core_letter_grading
+  title: Upper-Division Core Grading
+  across:
+  - upper_division_core
+  letter_grade: true
+  source: p.2174
+  quote: All Major Upper-Division Core courses must be taken for letter grades; core courses numbered 300-399 must be passed
+    with grades of C-minus or better.
+- id: major_electives
+  unparsed: true
+  source: p.2175
+  quote: 'Electives (6 units)
+
+    Choose 6 units in PHYS and/or ASTR courses numbered 300–499. With prior permission of a faculty major advisor, up to 3
+    of these units may be taken in a related field outside PHYS or ASTR.'
+- id: upper_division_elective_cr_nc
+  title: Upper-Division Elective CR/NC Limit
+  across: major
+  max_cr:
+    units: 6
+  source: p.2174
+  quote: Up to a maximum of 6 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
+    is allowed.
+- id: culminating_experience
+  title: Culminating Experience
+  choose_units: 2
+  from:
+  - list:
+    - ASTR 685
+    - ASTR 697
+    - PHYS 686
+  source: p.2175
+  quote: 'Culminating Experience (2 units)
+
+    Select any combination of 2 units:
+
+    Code Title Units
+
+    ASTR 685 Projects in the Teaching of Astronomy
+
+    1
+
+    ASTR 697 Senior Project 1-2
+
+    PHYS 686 Experiences in Teaching Physics
+
+    1
+
+    Repeatable.'
+drafted_by: codex, 2026-10-28

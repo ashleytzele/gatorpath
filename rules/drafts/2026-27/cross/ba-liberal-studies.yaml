@@ -1,0 +1,166 @@
+program: ba-liberal-studies
+title: Bachelor of Arts in Liberal Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 42
+source: p.1402
+groups:
+- id: required_core
+  title: Required Core Course
+  all_of:
+  - LS 300GW
+  source: p.1402
+  quote: LS 300GW Perspectives on Liberal Studies - GWAR 3
+- id: literature_and_culture
+  title: Literature and Culture
+  one_of:
+  - - AA S 322
+  - - AA S 332
+  - - AA S 352
+  - - AA S 372
+  - - AA S 512
+  - - AFRS 645
+  - - CWL 440
+  - - CWL 450
+  - - E ED 681
+  - - ENG 451
+  - - JS 451
+  - - CWL 451
+  - - ENG 526
+  - - ENG 533
+  - - ENG 535
+  - - ENG 546
+  - - ENG 601
+  - - ENG 602
+  - - ENG 655
+  - - LS 450
+  - - LTNS 560
+  - - WGS 541
+  - - WGS 551
+  - - SXS 551
+  source: p.1402
+  quote: 'Literature and Culture (3 units)
+
+    Select one:'
+- id: communication_studies
+  title: Communication Studies
+  one_of:
+  - - COMM 551
+  - - COMM 552
+  - - COMM 553
+  - - COMM 554
+  - - COMM 559
+  - - LS 403
+  - - COMM 557
+  source: p.1402
+  quote: 'Communication Studies (3-4 units)
+
+    Select one:'
+- id: life_sciences
+  title: Life Sciences
+  one_of:
+  - - BIOL 300
+  - - BIOL 310
+  - - BIOL 313
+  - - BIOL 326
+  - - LS 430
+  - - LS 440
+  - - HUM 440
+  source: p.1402
+  quote: 'Life Sciences (3 units)
+
+    Select one:'
+- id: physical_sciences
+  title: Physical Sciences
+  one_of:
+  - - ERTH 325
+  - - ERTH 335
+  - - ERTH 365
+  - - LS 209
+  - - LS 310
+  source: p.1402
+  quote: 'Physical Sciences (3 units)
+
+    Select one:'
+- id: integrated_social_sciences
+  title: Integrated Social Sciences
+  choose_units: 6
+  from:
+  - list:
+    - LS 200
+    - LS 401
+    - LS 402
+    - LS 404
+  source: p.1403
+  quote: 'Integrated Social Sciences (6 units)
+
+    Select two:'
+- id: interdisciplinary_humanities
+  title: Interdisciplinary Humanities
+  one_of:
+  - - HUM 425
+  - - LS 317
+  - - HUM 317
+  - - LS 410
+  source: p.1403
+  quote: 'Interdisciplinary Humanities (3 units)
+
+    Select one:'
+- id: visual_studies
+  title: Visual Studies
+  one_of:
+  - - HUM 235
+  - - CMX 235
+  - - LS 426
+  - - LS 427
+  source: p.1403
+  quote: 'Visual Studies (3 units)
+
+    Select one:'
+- id: culminating_experience
+  title: Culminating Experience
+  all_of:
+  - LS 690
+  source: p.1403
+  quote: LS 690 Liberal Studies Senior Seminar 3
+- id: electives
+  title: Electives
+  unparsed: true
+  source: p.1403
+  quote: 'Electives (12 units) Choose one of the following options, in consultation with an advisor: A. Complete at least
+    12 units that are part of a minor, certificate, or another major on campus. Suggested minors include Education, Special
+    Education, any minor in Ethnic Studies, American Studies, California Studies, Comics Studies, Counseling, Holistic Health,
+    Health Education, Earth Sciences, Communication Studies, Modern Languages (Chinese, French, German, Italian, Japanese,
+    Persian, Russian), Humanities, Math, History, Global Peace Studies, Criminal Justice Studies, and Women and Gender Studies.
+    For double majoring, please consult a Liberal Studies adviser. B. Complete 12 units of additional courses (not already
+    counted for the core) outlined in the Teacher Preparation Emphasis. See program website or adviser for a list of courses
+    to choose from. C. In consultation with a Liberal Studies faculty advisor, design and complete a 12-unit elective pattern.
+
+    '
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  source: p.1403
+  quote: 'Required of all candidates for the Bachelor of Arts degree in Liberal Studies are 12 units of Complementary Studies,
+    which must come from courses bearing a prefix other than LS, and not cross-listed with LS. Complementary Studies for the
+    Liberal Studies major can be satisfied via four possible routes: • 12 units of a language • 12 units towards completion
+    of a minor or 2nd major or certificate. • Any 12 units outside of LS prefix and not cross-listed with LS • Study Abroad
+    Students who have earned AA-T or AS-T degrees and are pursuing a similar B.A. degree at SF State are required to fulfill
+    the Complementary Studies requirement as defined by the major department.
+
+    '
+transfer_notes:
+- text: This degree program is an approved pathway (“similar” major) for students earning the ADT in Elementary Teacher Education
+  source: p.1404
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1404
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1404
+- text: 'Use ASSIST to determine:'
+  source: p.1404
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.1405
+- text: Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+  source: p.1405
+drafted_by: codex, 2026-10-28

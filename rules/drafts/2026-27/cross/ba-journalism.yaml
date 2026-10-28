@@ -1,0 +1,324 @@
+program: ba-journalism
+title: Bachelor of Arts in Journalism
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.1378
+groups:
+- id: core_equity
+  title: 'Core: Equity (12 Units)'
+  all_of:
+  - JOUR 205
+  - JOUR 304
+  - JOUR 307
+  - I R 507
+  - PLSI 507
+  - JOUR 310
+  min_grade: C
+  source: p.1378
+  quote: 'All JOUR courses must be completed with grades of C or better for
+
+    the major.
+
+    Core: Equity (12 Units)
+
+    JOUR 205 Social Impact of Journalism 3
+
+    JOUR 304 Cultural Diversity and News Media 3
+
+    JOUR 307/
+
+    I R 507/PLSI 507
+
+    News Media Law 3
+
+    JOUR 310 Journalism Ethics 3
+
+    '
+- id: core_skills
+  title: 'Core: Skills (12 Units)'
+  all_of:
+  - JOUR 221
+  - JOUR 226
+  - JOUR 300GW
+  - JOUR 400
+  min_grade: C
+  source: p.1378
+  quote: 'All JOUR courses must be completed with grades of C or better for
+
+    the major.
+
+    Core: Skills (12 Units)
+
+    JOUR 221 Newswriting 3
+
+    JOUR 226 Content Creation and Journalistic Storytelling 3
+
+    JOUR 300GW Reporting - GWAR 3
+
+    JOUR 400 Video Journalism 3
+
+    '
+- id: advanced_writing
+  title: 'Advanced Courses: Writing'
+  one_of:
+  - - JOUR 320
+  - - JOUR 330
+  - - JOUR 595
+  - - JOUR 667
+  min_grade: C
+  source: p.1378
+  quote: 'All JOUR courses must be completed with grades of C or better for
+
+    the major.
+
+    Advanced Courses (6 units)
+
+    Writing 3
+
+    Select one:
+
+    JOUR 320 Investigative Reporting
+
+    JOUR 330 Editing
+
+    JOUR 595 Magazine and Feature Writing
+
+    JOUR 667 Seminar: Topics in Journalism
+
+    '
+- id: advanced_multimedia
+  title: 'Advanced Courses: Multimedia'
+  one_of:
+  - - JOUR 426
+  - - JOUR 450
+  - - JOUR 480
+  - - BECA 480
+  - - JOUR 582
+  min_grade: C
+  source: p.1378
+  quote: 'All JOUR courses must be completed with grades of C or better for
+
+    the major.
+
+    Multimedia 3
+
+    Select one:
+
+    JOUR 426 Interactive Storytelling with Data
+
+    JOUR 450 Publication Design and Graphics
+
+    '
+- id: major_electives
+  title: Electives (3 units)
+  choose_units: 3
+  min_grade: C
+  from:
+  - list:
+    - JOUR 320
+    - JOUR 321
+    - JOUR 575
+    - JOUR 580
+    - JOUR 595
+    - JOUR 667
+    - JOUR 699
+    - JOUR 235
+    - JOUR 335
+    - JOUR 450
+    - JOUR 395
+    - JOUR 400
+    - JOUR 480
+    - BECA 480
+    - JOUR 495
+    - JOUR 582
+    - JOUR 223
+    - SPAN 223
+    - JOUR 426
+    - JOUR 427
+    - BECA 427
+    - JOUR 500
+    - JOUR 617
+    - JOUR 680
+    - JOUR 410
+    - CHIN 410
+    - JOUR 411
+    - CHIN 411
+    - I R 413
+    - JOUR 452
+    - BECA 451
+    - I R 452
+    - JOUR 536
+    - LTNS 536
+  source: p.1379
+  quote: 'All JOUR courses must be completed with grades of C or better for
+
+    the major.
+
+    Electives (3 units)
+
+    Select One. Any course not used to satisfy a major requirement above
+
+    may be used to fulfill the elective requirement:
+
+    Advanced Writing
+
+    JOUR 320 Investigative Reporting
+
+    JOUR 321 Feature Writing
+
+    JOUR 575 Community Media
+
+    JOUR 580 Environmental Journalism
+
+    JOUR 595 Magazine and Feature Writing
+
+    Seminar
+
+    JOUR 667 Seminar: Topics in Journalism
+
+    JOUR 699 Independent Study
+
+    Photojournalism/Visual
+
+    JOUR 235 Photojournalism I: Foundations of
+
+    Photojournalism
+
+    JOUR 335 Photojournalism II: Staff Photojournalism
+
+    JOUR 450 Publication Design and Graphics
+
+    Multimedia/Digital
+
+    JOUR 395 Online Journalism
+
+    JOUR 400 Video Journalism
+
+    JOUR/BECA
+
+    480
+
+    Audio Journalism
+
+    JOUR 495 Profiles
+
+    JOUR 582 Social Media Journalism
+
+    Project-Based
+
+    JOUR/SPAN
+
+    223
+
+    Bilingual English and Spanish Newswriting
+
+    JOUR 426 Interactive Storytelling with Data
+
+    JOUR/BECA
+
+    427
+
+    Media Entrepreneurship
+
+    JOUR 500 Contemporary Magazines
+
+    JOUR 617 Advanced Journalism Internship
+
+    JOUR 680 Advanced Multimedia Journalism
+
+    Cross-Disciplinary
+
+    JOUR/CHIN
+
+    410
+
+    Building Chinese Media Literacy
+
+    JOUR/CHIN
+
+    411/I R 413
+
+    Media Chinese
+
+    JOUR 452/
+
+    BECA 451/
+
+    I R 452
+
+    International Media Politics
+
+    JOUR/LTNS
+
+    536
+
+    Latina/o Journalism
+
+    '
+- id: practicum
+  title: Practicum (3 units)
+  one_of:
+  - - JOUR 605
+  - - JOUR 609
+  min_grade: C
+  source: p.1379
+  quote: 'All JOUR courses must be completed with grades of C or better for
+
+    the major.
+
+    Practicum (3 units)
+
+    Select One:
+
+    JOUR 605 Magazine Publication Laboratory 3
+
+    JOUR 609 Newspaper Publication Laboratory 3
+
+    '
+- id: capstone
+  title: Capstone (3 units)
+  one_of:
+  - - JOUR 575
+  - - JOUR 605
+  - - JOUR 609
+  - - JOUR 695
+  min_grade: C
+  source: p.1379
+  quote: 'All JOUR courses must be completed with grades of C or better for
+
+    the major.
+
+    Capstone (3 units)
+
+    Select One:
+
+    JOUR 575 Community Media 3
+
+    JOUR 605 Magazine Publication Laboratory 3
+
+    JOUR 609 Newspaper Publication Laboratory 3
+
+    JOUR 695 Senior Seminar 3
+
+    '
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  source: p.1379
+  quote: 'Twelve units of Complementary Studies are required of all candidates for
+
+    the Bachelor of Arts degree in Journalism, in the form of a minor offered
+
+    by any other school, department, or program. The completed minor fulfills
+
+    the Complementary Studies Requirement.
+
+    '
+transfer_notes:
+- text: Up to 12 units of lower-division coursework may be completed via equivalent courses at California community colleges.
+    The equivalents of JOUR 205, JOUR 221, JOUR 226, and JOUR 235 may be completed at institutions with eligible transferable
+    courses.
+  source: p.1378
+drafted_by: codex, 2026-10-28

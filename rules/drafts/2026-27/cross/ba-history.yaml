@@ -1,0 +1,74 @@
+program: ba-history
+title: Bachelor of Arts in History
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.1228
+groups:
+- id: lower_division_three
+  title: 'Lower-Division Requirements: Select Three'
+  choose_units: 9
+  from:
+  - list:
+    - HIST 114
+    - HIST 115
+    - HIST 120
+    - HIST 121
+  quote: 'Select three:'
+  source: p.1228
+- id: lower_division_additional
+  title: 'Lower-Division Requirements: Select One Course Not Already Taken'
+  choose_units: 3
+  from:
+  - list:
+    - HIST 101
+    - HIST 103
+    - HIST 110
+    - HIST 112
+    - I R 112
+    - LCA 112
+    - MATH 112
+    - PHIL 112
+    - PLSI 112
+    - HIST 114
+    - HIST 115
+    - HIST 120
+    - HIST 121
+  quote: 'Select one course not already taken to satisfy the requirement above:'
+  source: p.1228
+- id: hist_300gw
+  title: 'Upper-Division Core: HIST 300GW'
+  all_of:
+  - HIST 300GW
+  quote: HIST 300GW Seminar in Historical Analysis - GWAR 3
+  source: p.1228
+- id: hist_696
+  title: 'Upper-Division Core: HIST 696'
+  all_of:
+  - HIST 696
+  after:
+  - hist_300gw
+  quote: HIST 696 Proseminar in History 3
+  source: p.1228
+- id: breadth_requirements
+  title: 'Upper-Division Electives: Breadth Requirements'
+  unparsed: true
+  quote: Students must complete the following four Breadth requirements within their upper-division course of study. Courses
+    used to satisfy one geographic requirement (B, C, or D) may not be used to satisfy another geographic requirement. The
+    course used to satisfy the Early Period of History - Before 1750 requirement (A) may also satisfy one of the geographic
+    requirements (B, C, and D).
+  source: p.1228
+- id: upper_division_electives
+  title: Upper-Division Electives
+  unparsed: true
+  quote: Select enough courses from the list below to reach a total of 21 upper-division elective units in the major. Three
+    upper-division units (normally one course) outside the major (with a non-HIST prefix) may be counted upon advisement.
+  source: p.1230
+- id: history_cr_nc_limit
+  title: CR/NC Grading Limit for History Courses
+  unparsed: true
+  quote: History majors cannot choose CR/NC grading in more than two history courses for their major, nor elect CR/NC grading
+    in HIST 300GW or HIST 696.
+  source: p.1228
+drafted_by: codex, 2026-10-28

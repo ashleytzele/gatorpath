@@ -1,0 +1,150 @@
+program: bs-public-health
+title: Bachelor of Science in Public Health
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 58
+global:
+  no_cr_nc: true
+  source: p.788
+groups:
+- id: foundation_courses
+  title: Foundation Courses
+  all_of:
+  - BIOL 100
+  - BIOL 101
+  - PH 205
+  source: p.788
+  quote: 'Foundation (13 units)
+
+    BIOL 100 Human Biology 3
+
+    BIOL 101 Human Biology Laboratory 1
+
+    PH 205 Introduction to Public Health 3'
+- id: statistics
+  title: 'Foundation: Select One (Statistics)'
+  one_of:
+  - - ETHS 116
+  - - ETHS 117
+  - - ISED 160
+  - - MATH 124
+  - - PSY 171
+  source: p.788
+  quote: 'Select One: 3
+
+    ETHS 116 Algebra and Statistics for Social Justice
+
+    ETHS 117 Statistics for Social Justice
+
+    ISED 160 Data Analysis in Education
+
+    MATH 124 Elementary Statistics
+
+    PSY 171 Quantitative Reasoning in Psychology'
+- id: biology
+  title: 'Foundation: Select One (Biology)'
+  one_of:
+  - - BIOL 210
+  - - PH 100
+  source: p.788
+  quote: 'Select One: 3
+
+    BIOL 210 General Microbiology and Public Health
+
+    PH 100 Public Health Biology'
+- id: core_courses
+  title: Core
+  all_of:
+  - PH 410
+  - PH 420
+  - PH 450
+  - PH 455
+  - PH 520
+  - PH 600
+  source: p.788
+  quote: Core (36 units)
+- id: ph_400gw
+  title: PH 400GW
+  all_of:
+  - PH 400GW
+  source: p.788
+  quote: PH 400GW Determinants of Health - GWAR 3
+- id: ph_425
+  title: PH 425
+  all_of:
+  - PH 425
+  source: p.788
+  quote: PH 425 Public Health Research 3
+- id: ph_431
+  title: PH 431
+  all_of:
+  - PH 431
+  after:
+  - ph_400gw
+  source: p.788
+  quote: PH 431 Program Planning, Implementation, and Evaluation 3
+- id: ph_480
+  title: PH 480
+  all_of:
+  - PH 480
+  after:
+  - ph_431
+  source: p.788
+  quote: PH 480 Fieldwork and Reflective Seminar 9
+- id: core_concurrent_requirement
+  unparsed: true
+  source: p.788
+  quote: PH 400GW and PH 425 must be taken concurrently.
+- id: electives
+  title: Electives
+  choose_units: 9
+  from:
+  - list:
+    - AA S 587
+    - AA S 591
+    - AFRS 370
+    - AFRS 466
+    - ANTH 630
+    - A U 220
+    - BIOL 326
+    - BIOL 327
+    - HH 205
+    - HH 380
+    - HH 381
+    - HH 382
+    - HH 540
+    - I R 305
+    - BIOL 305
+    - LTNS 210
+    - LTNS 500
+    - NUTR 253
+    - PH 200
+    - PH 210
+    - PH 221
+    - ETHS 221
+    - PH 241
+    - ETHS 241
+    - PH 290
+    - PH 305
+    - PH 315
+    - PH 320
+    - PH 370
+    - PH 414
+    - PH 434
+    - GEOG 434
+    - PH 650
+    - PH 655
+    - PH 685
+    - PH 688
+    - PH 699
+    - PHIL 383
+    - RRS 303
+    - WGS 593
+  source: p.788
+  quote: 'Select 9 units from the following courses:'
+transfer_notes:
+- text: Students entering from the community college system, or other four-year universities, should have their transcripts
+    evaluated by a Department of Public Health advisor to receive credit for equivalent foundation courses taken elsewhere.
+  source: p.788
+drafted_by: codex, 2026-10-28

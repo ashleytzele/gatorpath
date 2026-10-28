@@ -1,0 +1,119 @@
+program: bs-physics
+title: Bachelor of Science in Physics
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 72
+source: p.2183
+groups:
+- id: lower_division_prerequisites
+  title: Lower-Division Prerequisites (31 units)
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 245
+  - PHYS 200
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  - PHYS 240
+  - PHYS 242
+  min_grade:
+    MATH 226: C
+    MATH 227: C
+    MATH 228: C
+    MATH 245: C
+    PHYS 220: C
+    PHYS 222: C
+    PHYS 230: C
+    PHYS 232: C
+    PHYS 240: C
+    PHYS 242: C
+  source: p.2183
+  quote: Lower-Division Prerequisites (31 units)
+- id: programming
+  title: 'Lower-Division Prerequisites: Select one'
+  one_of:
+  - - MATH 209
+  - - CSC 309
+  source: p.2183
+  quote: 'Select one: 3 MATH 209 Mathematical Computing CSC 309 Computer Programming'
+- id: phys_200_grade
+  title: PHYS 200 grading requirement
+  unparsed: true
+  source: p.2183
+  quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
+    except for PHYS 200 which must be passed with a grade of CR.
+- id: upper_division_core
+  title: Upper-Division Requirements (27 units)
+  all_of:
+  - PHYS 320
+  - PHYS 321
+  - PHYS 330
+  - PHYS 360
+  - PHYS 370
+  - PHYS 385
+  - PHYS 430
+  - PHYS 457
+  - PHYS 460
+  min_grade:
+    PHYS 320: C-
+    PHYS 321: C-
+    PHYS 330: C-
+    PHYS 360: C-
+    PHYS 370: C-
+    PHYS 385: C-
+  source: p.2183
+  quote: Upper-Division Requirements (27 units)
+- id: upper_core_grading
+  title: Upper-division core grading requirement
+  letter_grade: true
+  across:
+  - upper_division_core
+  source: p.2183
+  quote: All Major Upper-Division Core courses must be taken for letter grades; core courses numbered 300-399 must be passed
+    with grades of C- minus or better.
+- id: electives
+  title: Electives (11 units)
+  choose_units: 11
+  from:
+  - subject: PHYS
+  - subject: ASTR
+  - approved: true
+  source: p.2184
+  quote: Electives (11 units)
+- id: elective_limits
+  title: Elective limits
+  unparsed: true
+  source: p.2184
+  quote: Maximum of 5 units of 600-level PHYS and/or ASTR can be used as electives. Maximum of 3 units outside of ASTR or
+    PHYS, with prior permission of a faculty advisor.
+- id: elective_cr_nc_limit
+  title: Upper-division elective CR/NC limit
+  max_cr:
+    units: 6
+  across:
+  - electives
+  source: p.2183
+  quote: Up to a maximum of 6 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
+    is allowed.
+- id: major_gwar
+  title: Culminating Experience
+  all_of:
+  - PHYS 491GW
+  source: p.2184
+  quote: Culminating Experience (3 units) Code Title Units PHYS 491GW Advanced Laboratory Techniques I - GWAR 3
+transfer_notes:
+- text: For students with an AS-T in Physics.
+  source: p.2184
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.2185
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2185
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.2185
+drafted_by: codex, 2026-10-28

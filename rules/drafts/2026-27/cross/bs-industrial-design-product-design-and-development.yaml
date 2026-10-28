@@ -1,0 +1,189 @@
+program: bs-industrial-design-product-design-and-development
+title: 'Bachelor of Science in Industrial Design: Concentration in Product Design and Development'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 59
+source: p.1083
+groups:
+- id: admission_gate
+  title: Admission requirements before advancing to upper-division courses
+  unparsed: true
+  quote: 'Before advancing to courses at the 300 level or higher, however, all majors must: • Complete the foundation (or
+    equivalent transfer) courses DES 200 and DES 222 with a grade of C or better. • Have upper-division standing. • Complete
+    the lower-division General Education requirements at SF State or the equivalent at another institution.'
+  source: p.1083
+- id: foundation
+  title: Foundation Requirements
+  all_of:
+  - DES 200
+  - DES 222
+  min_grade: C
+  quote: Foundation Requirements (6 units) Code Title Units DES 200 Visual Design Literacy 3 DES 222 Digital Design Foundations
+    I 3
+  source: p.1083
+- id: core
+  title: Core Courses
+  all_of:
+  - DES 300
+  - DES 322
+  - DES 324GW
+  - DES 356
+  - DES 370
+  min_grade:
+    DES 300: C
+    DES 322: C
+    DES 324GW: C
+    DES 356: C
+  quote: Core Courses (13 Units) Code Title Units DES 300 Design Process 3 DES 322 Digital Design Foundations II 3 DES 324GW
+    Research and Writing for Design - GWAR 3 DES 356 A History of Design and Technology 3 DES 370 Introduction to The School
+    of Design 1
+  source: p.1083
+- id: major_requirements
+  title: Major Requirements
+  all_of:
+  - DES 305
+  - DES 310
+  - DES 320
+  - DES 321
+  - DES 340
+  - DES 360
+  - DES 410
+  - DES 420
+  - DES 421
+  - DES 460
+  min_grade:
+    DES 310: C
+    DES 320: C
+    DES 321: C
+    DES 340: C
+    DES 360: C
+    DES 410: C
+    DES 420: C
+    DES 421: C
+    DES 460: C
+  quote: 'Major Requirements (28 units) Code Title Units DES 305 Lab Safety Basics 1 DES 310 Product Design I 3 DES 320 Drafting
+    and Sketching for Design 3 DES 321 Technical Drawing I: Introduction to CAD 3 DES 340 Design and Materials 3 DES 360 Model
+    Development Laboratory 3 DES 410 Product Design II 3 DES 420 Rapid Visualization 3 DES 421 Technical Drawing II: 3-D Solid
+    Modeling 3 DES 460 Rapid Prototyping and Manufacturing Systems 3'
+  source: p.1083
+- id: major_electives
+  title: Major Electives
+  choose_units: 6
+  course_units: 3
+  from:
+  - list:
+    - DES 221
+    - DES 325
+    - DES 327
+    - DES 332
+    - DES 405
+    - DES 475
+    - DES 521
+    - DES 523
+    - DES 560
+    - DES 576
+    - DES 628
+    - DES 685
+    - DES 699
+  - approved: true
+  approval: Elective Approved by Advisement
+  min_grade:
+    DES 221: C
+    DES 325: C
+    DES 327: C
+    DES 332: C
+    DES 405: C
+    DES 475: C
+    DES 521: C
+    DES 523: C
+    DES 560: C
+    DES 628: C
+    DES 685: C
+    DES 699: C
+  quote: 'Major Electives (6 units) Note: Students may choose DES 576 or DES 699 but may not choose DES 576 and DES 699. Select
+    two: Code Title Units DES 221 Introduction to 3D Digital Design 3 DES 325 Graphic Design I 3 DES 327 Interactive Design
+    I 3 DES 332 Electricity and Electronics 3 DES 405 How to Develop, Patent, and Market an Idea 3 DES 475 Topics in Design
+    3 DES 521 Technical Drawing III: Advanced Modeling and Rendering 3 DES 523 Information Design I: Data Visualization 3
+    DES 560 Prototyping Smart Devices 3 DES 576 Practical Experience: Internship 3 DES 628 Design Gallery: Exhibitions and
+    Communications 3 DES 685 Projects in the Teaching of Design 1-4 DES 699 Independent Study in Design 3 or Elective Approved
+    by Advisement 3'
+  source: p.1083
+- id: elective_restriction
+  title: Major elective restriction
+  unparsed: true
+  quote: 'Note: Students may choose DES 576 or DES 699 but may not choose DES 576 and DES 699.'
+  source: p.1083
+- id: culminating
+  title: Culminating Requirements
+  all_of:
+  - DES 505
+  - DES 570
+  min_grade: C
+  when:
+    DES 505: last
+  quote: Culminating Requirements (6 units) Code Title Units DES 505 Senior Design Project (to be taken in the last semester)
+    3 DES 570 Professional Practices for Designers 3
+  source: p.1084
+- id: grading_exception
+  title: Grade requirements for the major
+  unparsed: true
+  quote: All courses for the major must be completed with a grade of C or better, except for DES 305, DES 370, and DES 576,
+    which must be completed with a CR grade.
+  source: p.1083
+ge_met:
+- area: 3UD
+  one_of:
+  - - DES 356
+  quote: Area 3UD (Upper-Division Arts or Humanities) is satisfied upon completion of DES 356.
+  source: p.1083
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1084
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1084
+- text: a course in U.S. History
+  source: p.1084
+- text: a course in U.S. & California Government
+  source: p.1084
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.1084
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.1084
+- text: Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+  source: p.1084
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.1084
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.1084
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.1084
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken.'
+  source: p.1084
+- text: Refer to the University Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the
+    award of credit for AP/IB/CLEP.
+  source: p.1085
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.1085
+- text: Review SF State's lower-division General Education requirements.
+  source: p.1085
+- text: Of the four required basic skills courses, a course in critical thinking (1B/A3) may not be widely offered outside
+    the CCC and CSU systems. Students should attempt to identify and take an appropriate course no later than the term of
+    application to the CSU.
+  source: p.1085
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.1085
+drafted_by: codex, 2026-10-28

@@ -1,0 +1,84 @@
+program: ba-social-work
+title: Bachelor of Arts in Social Work
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 42
+source: p.831
+groups:
+- id: required_courses
+  title: Required Courses
+  all_of:
+  - S W 300
+  - S W 302
+  - S W 350
+  - S W 352
+  - S W 400
+  - S W 401
+  - S W 402
+  - S W 410
+  - S W 450
+  - S W 456
+  - S W 470
+  - S W 502
+  - S W 503
+  - S W 504
+  - S W 505
+  needs:
+    ge_area: 1A
+  quote: Required Courses (42 units)
+  source: p.831
+- id: major_gwar
+  title: Written English Proficiency Requirement
+  all_of:
+  - S W 301GW
+  needs:
+    ge_area: 1A
+  quote: Social Work majors who successfully complete S W 301GW will have satisfied the University Graduation Writing Assessment
+    Requirement (GWAR).
+  source: p.830
+- id: eligibility_requirements
+  unparsed: true
+  quote: Admission to the Bachelor of Arts in Social Work (BASW) major is limited to students at the upper-division (60 units
+    or more). Applicants must be either a current SF State student or eligible for admission to undergraduate studies at San
+    Francisco State University.
+  source: p.830
+- id: complementary_studies
+  unparsed: true
+  quote: 'Students completing a Bachelor of Arts in Social Work (B.A.S.W.) degree must complete 12 units in Complementary
+    Studies in one of the following ways:
+
+    1. 3 units of biology or sexuality studies, 3 units of psychology, 3 units of economics, and 3 units of sociology.
+
+    2. 12 units of courses taken towards a certificate, a minor, or a second major in a related discipline.
+
+    Students who have earned AA-T or AS-T degrees and are pursuing a BASW degree at SF State are required to fulfill the Complementary
+    Studies requirement as defined by the School of Social Work. Students should consult with their social work advisor about
+    how transfer units and/or SF State units can best be applied to this requirement to ensure degree completion within 60
+    units.
+
+    With the approval of an advisor in the major, courses that fulfill the Complementary Studies requirement may be lower
+    or upper-division units, resident or transfer units.'
+  source: p.831
+- id: practicum_requirements
+  unparsed: true
+  quote: 'Practicum Internships: BASW students are required to complete 450 hours in an approved practicum internship site
+    during their senior year. The Practicum Education Director and BASW Practicum Coordinator work closely with students to
+    find internship placements. Before entering practicum internships, students must have completed 24 units of their junior
+    year courses with a grade of C or better.'
+  source: p.830
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.832
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.832
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.831
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.832
+drafted_by: codex, 2026-10-28

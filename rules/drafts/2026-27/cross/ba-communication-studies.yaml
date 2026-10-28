@@ -1,0 +1,181 @@
+program: ba-communication-studies
+title: Bachelor of Arts in Communication Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 38
+source: p.1038
+groups:
+- id: introductory
+  title: Introductory Courses
+  choose_units: 6
+  from:
+  - list:
+    - COMM 120
+    - COMM 150
+    - COMM 220
+    - COMM 230
+    - COMM 240
+    - COMM 250
+  source: p.1038
+  quote: Select two lower-division COMM courses.
+- id: introductory_comm_150_condition
+  unparsed: true
+  source: p.1038
+  quote: COMM 150 may only count if another course is taken to satisfy GE Area A1.
+- id: foundation
+  title: Foundation Requirements
+  all_of:
+  - COMM 300
+  - COMM 304GW
+  source: p.1038
+  quote: Foundation Requirements (4 units)
+- id: social_contexts
+  title: Social Contexts and Interaction in Communication
+  choose_units: 8
+  from:
+  - list:
+    - COMM 400
+    - COMM 401
+    - COMM 403
+    - COMM 425
+    - COMM 427
+    - COMM 428
+    - COMM 442
+    - COMM 502
+    - COMM 503
+    - COMM 504
+    - COMM 515
+    - COMM 522
+    - COMM 525
+    - COMM 527
+    - COMM 531
+    - COMM 533
+    - COMM 534
+    - COMM 537
+    - COMM 538
+    - COMM 539
+    - COMM 541
+    - COMM 543
+    - COMM 544
+  source: p.1038
+  quote: Select 8 units from courses between COMM 400-449 and COMM 500-549.
+- id: rhetoric_performance
+  title: Rhetoric and Performance in Communication
+  choose_units: 8
+  from:
+  - list:
+    - COMM 450
+    - COMM 451
+    - COMM 551
+    - COMM 552
+    - COMM 553
+    - COMM 554
+    - COMM 555
+    - COMM 556
+    - COMM 557
+    - LS 403
+    - COMM 559
+    - COMM 560
+    - COMM 561
+    - COMM 564
+    - COMM 565
+    - COMM 566
+    - COMM 572
+    - COMM 573
+    - COMM 574
+    - COMM 575
+    - COMM 595
+  source: p.1038
+  quote: Select 8 units from courses between COMM 450-499 and COMM 550-599.
+- id: communication_inquiry
+  title: Communication Inquiry
+  unparsed: true
+  source: p.1038
+  quote: 'Select 4 units from courses between COMM 600-609 and COMM 660-669. Select one: COMM 601 Workshop in Communication
+    Inquiry 1 COMM 661 Quantitative Methods in Communication 4 COMM 662 Critical and Rhetorical Methods in Communication 4
+    COMM 663 Performative Methods in Communication 4 COMM 664 LSI Methods in Communication 4 COMM 665 Qualitative Interviewing
+    in Communication: Methods, Practices, and Ethics 4'
+- id: electives
+  title: Electives
+  choose_units: 6
+  from:
+  - list:
+    - COMM 368
+    - COMM 400
+    - COMM 401
+    - COMM 403
+    - COMM 425
+    - COMM 427
+    - COMM 428
+    - COMM 442
+    - COMM 450
+    - COMM 451
+    - COMM 502
+    - COMM 503
+    - COMM 504
+    - COMM 515
+    - COMM 522
+    - COMM 525
+    - COMM 527
+    - COMM 531
+    - COMM 533
+    - COMM 534
+    - COMM 537
+    - COMM 538
+    - COMM 539
+    - COMM 541
+    - COMM 543
+    - COMM 544
+    - COMM 551
+    - COMM 552
+    - COMM 553
+    - COMM 554
+    - COMM 555
+    - COMM 556
+    - COMM 557
+    - LS 403
+    - COMM 559
+    - COMM 560
+    - COMM 561
+    - COMM 564
+    - COMM 565
+    - COMM 566
+    - COMM 572
+    - COMM 573
+    - COMM 574
+    - COMM 575
+    - COMM 595
+    - COMM 685
+    - COMM 695
+  source: p.1038
+  quote: Electives (6 units)
+- id: elective_course_limits
+  unparsed: true
+  source: p.1038
+  quote: Students may only apply up to 4 units for each course in the major, though some courses are repeatable for credit
+    toward electives.
+- id: elective_eligibility
+  unparsed: true
+  source: p.1039
+  quote: All upper-division COMM courses between COMM 400-599 may be used as electives only if their corresponding area above
+    is already met with other courses. For example, if a student has completed 8 units of Rhetoric and Performance, they may
+    take additional units in Rhetoric and Performance to apply towards the electives requirement. Only 2 units from a lower-division
+    COMM class may count towards the electives requirement. The following courses can also be used to fulfill electives requirements.
+- id: senior_seminar
+  title: Senior Seminar
+  all_of:
+  - COMM 670
+  source: p.1039
+  quote: Senior Seminar (2 units)
+transfer_notes:
+- text: This degree program is an approved pathway (“similar” major) for students earning the ADT in Communication Studies
+  source: p.1039
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1040
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1040
+- text: 'Use ASSIST to determine: Which courses at a CCC satisfy any lower-division major requirements for this major; Which
+    courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1040
+drafted_by: codex, 2026-10-27

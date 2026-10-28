@@ -1,0 +1,324 @@
+program: bs-environmental-science-natural-resource-management-and-conservation
+title: 'Bachelor of Science in Environmental Science: Concentration in Natural Resource Management and Conservation'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 66
+source: p.2065
+groups:
+- id: biology_environment_foundation
+  title: Biology and Environment Foundation
+  all_of:
+  - BIOL 230
+  - BIOL 240
+  - ENV 205
+  - GEOG 160
+  source: p.2065
+  quote: 'Biology and Environment Foundation (17 units)
+
+    Code Title Units
+
+    BIOL 230 Introductory Biology I 5
+
+    BIOL 240 Introductory Biology II 5
+
+    ENV 205 Our Environment Through Data 3
+
+    GEOG 160 Introduction to Environmental Science 4'
+- id: chemistry
+  title: Chemistry
+  one_of:
+  - - CHEM 115
+  - - CHEM 180
+  source: p.2065
+  quote: 'Chemistry (3-4 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHEM 115 General Chemistry I 4
+
+    CHEM 180 Chemistry for Energy and the Environment 3'
+- id: physical_environment
+  title: Physical Environment
+  one_of:
+  - - ERTH 112
+  - - ERTH 230
+  - - GEOG 101
+  source: p.2065
+  quote: 'Physical Environment (3-4 units)
+
+    Select One:
+
+    Code Title Units
+
+    ERTH 112 Our Dynamic Earth Lecture and Lab 4
+
+    ERTH 230 Environmental Geology 4
+
+    GEOG 101 Our Physical Environment 3'
+- id: human_environment_relations
+  title: Human-Environment Relations
+  one_of:
+  - - ENVS 130
+  - - GEOG 102
+  source: p.2065
+  quote: 'Human-Environment Relations (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    ENVS 130 Environmental Studies 3
+
+    GEOG 102 The Human Environment 3'
+- id: upper_division_environmental_science
+  title: Upper-Division Environmental Science
+  all_of:
+  - ENVS 450
+  - ENV 500GW
+  - ENVS 680
+  - GEOG 603
+  source: p.2065
+  quote: 'Upper-Division Environmental Science (10-12 units)
+
+    Code Title Units
+
+    ENVS 450 Environmental Law and Policy 3
+
+    ENV 500GW Physical and Human Dimensions of Climate Change - GWAR 3
+
+    ENVS 680 Environmental Studies Internship 1-3
+
+    GEOG 603 Introduction to Geographic Information Systems 3'
+- id: statistics_data_science
+  title: Statistics and Data Science
+  one_of:
+  - - BIOL 458
+  - - GEOG 604
+  source: p.2065
+  quote: 'Statistics and Data Science (3-4 units)
+
+    Select One:
+
+    Code Title Units
+
+    BIOL 458 Biostatistics 4
+
+    GEOG 604 Environmental Data Science 3'
+- id: capstone
+  title: Capstone
+  all_of:
+  - ENV 690
+  source: p.2065
+  quote: 'Capstone (3 units)
+
+    Code Title Units
+
+    ENV 690 Capstone Seminar 3'
+- id: ecology_biodiversity
+  title: Ecology and Biodiversity
+  choose_units: 6
+  from:
+  - list:
+    - BIOL 460
+    - BIOL 470
+    - BIOL 482
+    - BIOL 514
+    - BIOL 530
+    - BIOL 532
+    - BIOL 534
+    - GEOG 316
+    - LS 430
+    - ENVS 430
+  source: p.2065
+  quote: 'Ecology and Biodiversity (6-9 units)
+
+    Select Two:
+
+    Code Title Units
+
+    BIOL 460 General Entomology 4
+
+    BIOL 470 Natural History of Vertebrates 4
+
+    BIOL 482 Ecology 3
+
+    BIOL 514 Plant Biodiversity and California Field Botany 5
+
+    BIOL 530 Conservation Biology 3
+
+    BIOL 532 Restoration Ecology 3
+
+    BIOL 534 Wetland Ecology 4'
+- id: ecosystem_interactions
+  title: Ecosystem Interactions
+  choose_units: 3
+  from:
+  - list:
+    - CHEM 380
+    - ERTH 335
+    - ERTH 577
+    - BIOL 577
+    - GEOG 314
+    - GEOG 317
+    - GEOG 644
+  source: p.2066
+  quote: 'Ecosystem Interactions (3-4 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHEM 380 Chemistry Behind Environmental Pollution 3
+
+    ERTH 335 Global Warming 3
+
+    ERTH/BIOL 577 Climate and Ecological Interactions 4
+
+    GEOG 314 Bioclimatology 4
+
+    GEOG 317 Soils 4
+
+    GEOG 644 Water Quality 3'
+- id: environmental_management
+  title: Environmental Management
+  choose_units: 9
+  from:
+  - list:
+    - ENVS 470
+    - ENVS 480
+    - GEOG 427
+    - GEOG 642
+    - ERTH 642
+    - GEOG 647
+    - GEOG 648
+    - GEOG 652
+    - USP 652
+    - GEOG 657
+    - ENVS 657
+    - GEOG 658
+    - USP 658
+    - GEOG 666
+  source: p.2066
+  quote: 'Environmental Management (9-12 units)
+
+    Select Three:
+
+    Code Title Units
+
+    ENVS 470 Climate Politics and Policy 3
+
+    ENVS 480 Climate Change Adaptation and Justice 3
+
+    GEOG 427 Agriculture and Food Supply 4
+
+    GEOG/ERTH 642 Watershed Assessment and Restoration 4
+
+    GEOG 647 Geography of Water Resources 4
+
+    GEOG 648 Management of National Parks and Protected Areas 4
+
+    GEOG/USP 652 Environmental Impact Analysis 4
+
+    GEOG/ENVS 657 Natural Resource Management: Biotic Resources 4
+
+    GEOG/USP 658 Land-Use Planning 4
+
+    GEOG 666 Geography of Garbage: Recycling and Waste Reduction 3'
+- id: sustainability_social_justice
+  title: Sustainability and Social Justice
+  choose_units: 3
+  from:
+  - list:
+    - ENVS 331
+    - I R 331
+    - ENVS 460
+    - ENVS 470
+    - ENVS 480
+    - ENVS 570
+    - I R 428
+    - GEOG 428
+    - PHIL 470
+    - SOC 410
+    - RRS 410
+    - USP 514
+    - USP 515
+    - GEOG 667
+  source: p.2066
+  quote: 'Sustainability and Social Justice (3-4 units)
+
+    Select One:
+
+    Code Title Units
+
+    ENVS/I R 331 Global Environmental Crisis 4
+
+    ENVS 460 Energy, Justice, and Sustainability 3
+
+    ENVS 470 Climate Politics and Policy 3
+
+    ENVS 480 Climate Change Adaptation and Justice 3
+
+    ENVS 570 Applied Local Sustainability 3
+
+    I R/GEOG 428 International Political Economy of Food and Hunger 4
+
+    PHIL 470 Environmental Ethics 3
+
+    SOC/RRS 410 Grassroots Organizing for Change in Communities of Color 3
+
+    USP 514 Sustainable Development in Cities 4
+
+    USP 515/GEOG 667 Environmental Justice: Race, Poverty, and the Environment 4'
+- id: tools_techniques
+  title: Tools and Techniques
+  choose_units: 3
+  from:
+  - list:
+    - BIOL 458
+    - GEOG 602
+    - GEOG 604
+    - GEOG 610
+    - GEOG 620
+    - GEOG 621
+    - GEOG 652
+    - USP 652
+  source: p.2066
+  quote: 'Tools and Techniques (3-4 units)
+
+    Select One:
+
+    Code Title Units
+
+    BIOL 458 Biostatistics 4
+
+    GEOG 602 Field Methods in Environmental Science & Physical Geography 4
+
+    GEOG 604 Environmental Data Science 3
+
+    GEOG 610 Remote Sensing of the Environment I 4
+
+    GEOG 620 Geographical Information Systems 4
+
+    GEOG 621 Geographic Information Systems for Environmental Analysis 4
+
+    GEOG/USP 652 Environmental Impact Analysis 4'
+- id: topical_core_overlap
+  unparsed: true
+  source: p.2065
+  quote: No course can be used to fulfill more than one core or topical area requirement.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2067
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.2067
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.2067
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.2067
+drafted_by: codex, 2026-10-28

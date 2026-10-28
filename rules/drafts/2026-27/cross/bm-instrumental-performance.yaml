@@ -1,0 +1,183 @@
+program: bm-instrumental-performance
+title: 'Bachelor of Music: Concentration in Instrumental Performance'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 65
+source: p.1554
+groups:
+- id: lower_foundational
+  title: Foundational
+  one_of:
+  - - MUS 130
+  - - TH A 131
+  source: p.1554
+  quote: 'Foundational (3 units)
+
+    Code Title Units
+
+    MUS 130/TH A 131 The Foundations of Music Theory 3'
+- id: modern_musicianship
+  title: Fundamentals of Modern Musicianship
+  one_of:
+  - - MUS 200
+  - - TH A 234
+  source: p.1554
+  quote: MUS 200/TH A 234 Fundamentals of Modern Musicianship 3
+- id: ear_training_one
+  title: Ear Training I
+  one_of:
+  - - MUS 221
+  - - TH A 221
+  source: p.1554
+  quote: MUS/TH A 221 Ear Training I 2
+- id: ear_training_two
+  title: Ear Training II
+  all_of:
+  - MUS 222
+  source: p.1554
+  quote: MUS 222 Ear Training II 2
+- id: diatonic_harmony
+  title: Diatonic Harmony
+  all_of:
+  - MUS 232
+  source: p.1554
+  quote: MUS 232 Diatonic Harmony 3
+- id: class_piano_one
+  title: Class Piano I
+  all_of:
+  - MUS 201
+  source: p.1554
+  quote: MUS 201 Class Piano I 1
+- id: class_piano_select
+  title: 'Piano: Select One'
+  one_of:
+  - - MUS 202
+  - - MUS 206
+  - - TH A 206
+  source: p.1554
+  quote: 'Select One: 1
+
+    MUS 202 Class Piano II
+
+    MUS/TH A 206 Beginning Jazz/Pop Piano'
+- id: music_technology
+  title: Introduction to Music Technology
+  all_of:
+  - MUS 237
+  source: p.1554
+  quote: MUS 237 Introduction to Music Technology 2
+- id: american_musical_experience
+  title: The American Musical Experience
+  all_of:
+  - MUS 281
+  source: p.1554
+  quote: MUS 281 The American Musical Experience 3
+- id: music_culture_and_context
+  title: Music in Culture and Context
+  all_of:
+  - MUS 542GW
+  source: p.1554
+  quote: MUS 542GW Music in Culture and Context - GWAR 3
+- id: capstone
+  title: 'Core: Select One'
+  one_of:
+  - - MUS 361
+  - - MUS 598
+  source: p.1554
+  quote: 'Select One: 1
+
+    MUS 361 Capstone Composition or Performance Project
+
+    MUS 598 Senior Thesis'
+- id: upper_theory
+  title: 'Theory: Select One'
+  one_of:
+  - - MUS 403
+  - - MUS 440
+  source: p.1555
+  quote: 'MUS 403 Chromatic Harmony 3
+
+    MUS 440 Jazz Harmony 3'
+- id: music_history
+  title: Music History
+  choose_units: 6
+  from:
+  - list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+  source: p.1555
+  quote: 'Music History (6 units)
+
+    Select Two:
+
+    Code Title Units
+
+    AFRS 514 African Musical Diaspora 3
+
+    AIS 320 American Indian Music 3
+
+    MUS 505 Music of the World''s Peoples 3
+
+    MUS 506 Survey of Jazz 3
+
+    MUS 513 Asian Musical Diaspora 3
+
+    MUS 515 Latin American Musical Diaspora 3
+
+    MUS 550 Western European Music History from the Middle Ages to 1750 3
+
+    MUS 551 European and American Classical Music History of the 18th and 19th Century 3
+
+    MUS 552 Classical Music History of Europe and the Americas in the 20th Century 3
+
+    MUS 558 Music of John Coltrane 3
+
+    MUS 559 Women in Jazz 3'
+- id: applied_music_lessons
+  title: Applied Music Lessons
+  choose_units: 6
+  course_units: 2
+  from:
+  - list:
+    - MUS 260
+  source: p.1555
+  quote: MUS 260 Applied Music Lessons (Take 2 units per semester for 3 semesters) 6
+- id: advanced_applied_music_lessons
+  title: Advanced Applied Music Lessons
+  choose_units: 6
+  course_units: 2
+  from:
+  - list:
+    - MUS 360
+  source: p.1555
+  quote: MUS 360 Advanced Applied Music Lessons (Take 2 units per semester for 3 semesters) 6
+- id: instrumental_performance_and_research_seminar
+  title: Instrumental Performance and Research Seminar
+  choose_units: 8
+  course_units: 2
+  from:
+  - list:
+    - MUS 365
+  source: p.1555
+  quote: MUS 365 Instrumental Performance and Research Seminar (2 unit course taken 4 times) 8
+- id: ensemble_conducting
+  title: Ensemble Conducting
+  all_of:
+  - MUS 640
+  source: p.1555
+  quote: MUS 640 Ensemble Conducting 2
+- id: instrumental_performance_electives
+  unparsed: true
+  source: p.1555
+  quote: 10 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390
+drafted_by: codex, 2026-10-28

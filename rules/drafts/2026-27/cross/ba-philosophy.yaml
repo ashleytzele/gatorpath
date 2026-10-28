@@ -1,0 +1,60 @@
+program: ba-philosophy
+title: Bachelor of Arts in Philosophy
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 32
+source: p.1595
+groups:
+- id: required_courses
+  title: Required Courses
+  all_of:
+  - PHIL 205
+  - PHIL 300
+  - PHIL 303
+  - PHIL 321
+  - PHIL 425
+  - PHIL 450
+  - PHIL 696
+  when:
+    PHIL 696: senior_spring
+  quote: Required Courses (20 units)
+  source: p.1595
+- id: major_gwar
+  title: Philosophy GWAR
+  all_of:
+  - PHIL 320GW
+  quote: Students who have satisfied GWAR in a discipline other than philosophy will still be required to complete PHIL 320GW
+    as a requirement of the major.
+  source: p.1595
+- id: electives
+  title: Electives
+  choose_units: 12
+  from:
+    subject: PHIL
+    except:
+    - PHIL 205
+    - PHIL 300
+    - PHIL 303
+    - PHIL 320GW
+    - PHIL 321
+    - PHIL 425
+    - PHIL 450
+    - PHIL 696
+  quote: Any PHIL course not used in the core can be used as an elective.
+  source: p.1595
+transfer_notes:
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1596
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1596
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1596
+- text: 'Use ASSIST to determine:'
+  source: p.1596
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.1596
+- text: Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+  source: p.1596
+drafted_by: codex, 2026-10-28

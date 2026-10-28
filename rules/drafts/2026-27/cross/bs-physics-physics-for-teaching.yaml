@@ -1,0 +1,132 @@
+program: bs-physics-physics-for-teaching
+title: 'Bachelor of Science in Physics: Concentration in Physics for Teaching'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 66
+source: p.2207
+groups:
+- id: lower_division_fixed
+  title: Lower-Division Prerequisites (28-31 units)
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  - PHYS 240
+  - PHYS 242
+  min_grade: C
+  source: p.2207
+  quote: Lower-division courses must be taken for letter grades and be passed with grades of C or better, except for PHYS
+    200 which must be passed with a grade of CR.
+- id: lower_division_math_choice
+  title: 'Lower-Division Prerequisites: Select One'
+  one_of:
+  - - MATH 245
+  - - MATH 225
+    - MATH 376
+  min_grade: C
+  source: p.2207
+  quote: 'Select One: 3-6
+
+    MATH 245 Elementary Differential Equations and Linear Algebra
+
+    MATH 225
+
+    & MATH 376
+
+    Introduction to Linear Algebra
+
+    and Ordinary Differential Equations I'
+- unparsed: true
+  source: p.2207
+  quote: 'PHYS 200 Planning for Success as a Physics & Astronomy Major
+
+    1
+
+    Lower-division courses must be taken for letter grades and be passed with grades of C or better, except for PHYS 200 which
+    must be passed with a grade of CR.'
+- id: upper_division_programming
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - CSC 309
+  - - MATH 209
+  source: p.2207
+  quote: 'Select One: 3
+
+    CSC 309 Computer Programming
+
+    MATH 209 Mathematical Computing'
+- id: upper_division_teaching
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - E ED 655
+  - - MATH 375
+  source: p.2207
+  quote: 'Select One: 3
+
+    E ED 655 Hands-on Undergraduate Science Education Experience
+
+    MATH 375 Field Study for Secondary Teachers'
+- id: upper_division_core
+  title: Upper-Division Requirements
+  all_of:
+  - PHYS 320
+  - PHYS 321
+  - PHYS 330
+  - PHYS 360
+  - PHYS 370
+  - PHYS 385
+  source: p.2207
+  quote: 'PHYS 320 Modern Physics I 3
+
+    PHYS 321 Modern Physics Laboratory 2
+
+    PHYS 330 Analytical Mechanics I 3
+
+    PHYS 360 Electricity and Magnetism I 3
+
+    PHYS 370 Thermodynamics and Statistical Mechanics 3
+
+    PHYS 385 Introduction to Theoretical Physics I 3'
+- id: culminating_experience
+  title: Culminating Experience
+  all_of:
+  - PHYS 491GW
+  source: p.2208
+  quote: 'Culminating Experience (3 units)
+
+    Code Title Units
+
+    PHYS 491GW Advanced Laboratory Techniques I - GWAR 3'
+- unparsed: true
+  source: p.2208
+  quote: For students who choose MATH 245, 12 units of electives are required, whereas for students who choose MATH 225 &
+    MATH 376, 9 units of electives are required. Selected in consultation with a faculty advisor to prepare to teach a second
+    subject in addition to physics or general science at a 9th-grade level. Electives may be lower-division or upper-division
+    courses.
+- unparsed: true
+  source: p.2207
+  quote: Up to a maximum of 6 units of major electives may be taken on a CR/NC basis in courses where CR/NC is allowed.
+- id: major_letter_grades
+  title: Major Letter-Grade Requirements
+  across:
+  - lower_division_fixed
+  - lower_division_math_choice
+  - upper_division_programming
+  - upper_division_teaching
+  - upper_division_core
+  letter_grade: true
+  except:
+  - PHYS 200
+  source: p.2207
+  quote: All Major Lower-Division Prerequisites and Major Upper-Division Core courses must be taken for letter grades.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2209
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.2209
+drafted_by: codex, 2026-10-28

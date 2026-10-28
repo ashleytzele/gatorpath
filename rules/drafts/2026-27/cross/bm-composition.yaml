@@ -1,0 +1,129 @@
+program: bm-composition
+title: 'Bachelor of Music: Concentration in Composition'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 65
+source: p.1549
+groups:
+- id: foundational
+  title: Foundational
+  one_of:
+  - - MUS 130
+  - - TH A 131
+  quote: MUS 130/ TH A 131 The Foundations of Music Theory 3
+  source: p.1549
+- id: theory_musicianship
+  title: Theory/Musicianship
+  all_of:
+  - MUS 222
+  - MUS 232
+  quote: MUS 222 Ear Training II 2 MUS 232 Diatonic Harmony 3
+  source: p.1549
+- id: modern_musicianship
+  title: 'Theory/Musicianship: Fundamentals of Modern Musicianship'
+  one_of:
+  - - MUS 200
+  - - TH A 234
+  quote: MUS 200/ TH A 234 Fundamentals of Modern Musicianship 3
+  source: p.1549
+- id: ear_training
+  title: 'Theory/Musicianship: Ear Training I'
+  one_of:
+  - - MUS 221
+  - - TH A 221
+  quote: MUS/TH A 221 Ear Training I 2
+  source: p.1549
+- id: piano
+  title: Piano
+  all_of:
+  - MUS 201
+  quote: MUS 201 Class Piano I 1
+  source: p.1549
+- id: piano_select_one
+  title: 'Piano: Select One'
+  one_of:
+  - - MUS 202
+  - - MUS 206
+  quote: 'Select One: 1 MUS 202 Class Piano II MUS/TH A 206 Beginning Jazz/Pop Piano'
+  source: p.1549
+- id: technology
+  title: Technology
+  all_of:
+  - MUS 237
+  quote: MUS 237 Introduction to Music Technology 2
+  source: p.1549
+- id: history
+  title: History
+  all_of:
+  - MUS 281
+  quote: MUS 281 The American Musical Experience 3
+  source: p.1549
+- id: upper_division_core
+  title: 'Upper-Division Core: Core'
+  all_of:
+  - MUS 542GW
+  quote: MUS 542GW Music in Culture and Context - GWAR 3
+  source: p.1549
+- id: capstone
+  title: 'Upper-Division Core: Capstone Composition or Performance Project'
+  one_of:
+  - - MUS 361
+  - - MUS 598
+  quote: 'Select One: 1 MUS 361 Capstone Composition or Performance Project MUS 598 Senior Thesis'
+  source: p.1549
+- id: upper_division_theory
+  title: 'Upper-Division Core: Theory'
+  one_of:
+  - - MUS 403
+  - - MUS 440
+  quote: 'Select One: Code Title Units MUS 403 Chromatic Harmony 3 MUS 440 Jazz Harmony 3'
+  source: p.1549
+- id: music_history
+  title: 'Upper-Division Core: Music History'
+  choose_units: 6
+  from:
+  - list:
+    - AFRS 514
+    - AIS 320
+    - MUS 505
+    - MUS 506
+    - MUS 513
+    - MUS 515
+    - MUS 550
+    - MUS 551
+    - MUS 552
+    - MUS 558
+    - MUS 559
+    - TH A 559
+  quote: 'Select Two: Code Title Units AFRS 514 African Musical Diaspora 3 AIS 320 American Indian Music 3 MUS 505 Music of
+    the World''s Peoples 3 MUS 506 Survey of Jazz 3 MUS 513 Asian Musical Diaspora 3 MUS 515 Latin American Musical Diaspora
+    3 MUS 550 Western European Music History from the Middle Ages to 1750 3 MUS 551 European and American Classical Music
+    History of the 18th and 19th Century 3 MUS 552 Classical Music History of Europe and the Americas in the 20th Century
+    3 MUS 558 Music of John Coltrane 3 MUS/TH A 559 Women in Jazz 3'
+  source: p.1549
+- id: concentration_requirements
+  title: Concentration Requirements
+  all_of:
+  - MUS 405
+  - MUS 420
+  - MUS 455
+  - MUS 640
+  quote: MUS 405 Tonal Counterpoint 3 MUS 420 20th Century Techniques 3 MUS 455 Scoring for Film I 3 MUS 640 Ensemble Conducting
+    2
+  source: p.1549
+- id: sound_for_games
+  title: 'Concentration Requirements: Introduction to Sound for Games'
+  one_of:
+  - - MUS 434
+  - - BECA 434
+  quote: MUS/BECA 434 Introduction to Sound for Games 3
+  source: p.1549
+- id: concentration_unparsed
+  title: Concentration Requirements
+  unparsed: true
+  quote: MUS 260 Applied Music Lessons (1 unit course taken 4 times) 4 MUS 360 Advanced Applied Music Lessons (1 unit course
+    taken 4 times) 4 6 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390 6 MUS 443 Composition Studio Seminar (1 unit
+    course taken 4 times) 4
+  source: p.1549
+drafted_by: codex, 2026-10-28

@@ -109,7 +109,6 @@ groups:
     - DES 627
     - DES 628
     - DES 699
-    - JOUR 235
     - JOUR 450
   - list:
     - CSC 101
@@ -118,6 +117,7 @@ groups:
     - DES 252
     - DES 256
     - DES 278
+    - JOUR 235
     max_courses: 2
   - approved: true
   quote: Select five classes from the list below.

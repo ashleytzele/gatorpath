@@ -1,0 +1,261 @@
+program: ba-video-game-studies
+title: Bachelor of Arts in Video Game Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 24
+source: p.1296
+groups:
+- id: core_intro
+  title: 'Core: Introduction to Videogames'
+  one_of:
+  - - VGS 100
+  - - CWL 180
+  source: p.1296
+  quote: 'VGS 100/
+
+    CWL 180
+
+    Introduction to Videogames: A Comparative
+
+    Perspective
+
+    3'
+- id: core
+  title: Core
+  all_of:
+  - VGS 300
+  - HUM 300GW
+  - VGS 600
+  source: p.1296
+  quote: 'Core (12 units)
+
+    Code Title Units
+
+    VGS 300 Comparative Analysis of Video Games 3
+
+    HUM 300GW Reading and Writing Across Creative Forms -
+
+    GWAR 3
+
+    VGS 600 Senior Seminar: Research Projects in Video Game
+
+    Studies 3'
+- id: field_i
+  title: 'Electives: Field I: Design and Development'
+  choose_units: 3
+  from:
+    list:
+    - BECA 340
+    - BECA 352
+    - BECA 374
+    - BECA 434
+    - MUS 434
+    - BECA 454
+    - BECA 536
+    - CINE 414
+    - CINE 440
+    - CINE 658
+    - CINE 660
+    - CSC 631
+    - DES 252
+    - DES 367
+  source: p.1296
+  quote: 'Field I: Design and Development
+
+    BECA 340 Media Aesthetics I 3
+
+    BECA 352 Esports Studio Tournament and Event Production 3
+
+    BECA 374 Writing for Video Games 3
+
+    BECA/MUS 434 Introduction to Sound for Games 3
+
+    BECA 454 Live Streaming and Content Creation for Esports 3
+
+    BECA 536 Creativity and Design Thinking in Electronic Media 3
+
+    CINE 414 Exploring Sound Design for Cinema 3
+
+    CINE 440 Animation and Video Game Pre-Production 3
+
+    CINE 658 Creating Story Worlds 3
+
+    CINE 660 3D Computer Animation 3
+
+    CSC 631 Multiplayer Game Development 3
+
+    DES 252 Rethinking Digital Visual Media: History,
+
+    Technology, and Content
+
+    3
+
+    DES 367 Introduction to Game Design 3'
+- id: field_ii
+  title: 'Electives: Field II: Interpretation and Theory'
+  choose_units: 3
+  from:
+    list:
+    - BECA 321
+    - BECA 340
+    - BECA 374
+    - CINE 336
+    - CINE 560
+    - VGS 270
+    - VGS 275
+    - ENG 275
+    - CWL 275
+    - VGS 380
+    - CWL 380
+    - WGS 582
+  source: p.1296
+  quote: 'Field II: Interpretation and Theory
+
+    BECA 321 Critical Study of Popular Culture 3
+
+    BECA 340 Media Aesthetics I 3
+
+    BECA 374 Writing for Video Games 3
+
+    CINE 336 Video Game Culture 3
+
+    CINE 560 Digital Domains: History and Aesthetics of
+
+    Computer Animation
+
+    3
+
+    VGS 270 Fantasy and Fiction: Exploring Parallel Worlds 3
+
+    VGS/ENG/CWL
+
+    275
+
+    Reading Video Games 3
+
+    VGS/CWL 380 Thinking with Video Games 3
+
+    WGS 582 Gaming from the Margins 3'
+- id: field_iii
+  title: 'Electives: Field III: Games and Society'
+  choose_units: 3
+  from:
+    list:
+    - BECA 321
+    - BECA 422
+    - CINE 336
+    - CINE 560
+    - COMM 595
+    - COMM 665
+    - HUM 320
+    - HUM 423
+    - CWL 423
+    - HUM 426
+    - CWL 426
+    - ENG 616
+    - VGS 380
+    - CWL 380
+    - WGS 304
+    - WGS 582
+  source: p.1296
+  quote: 'Field III: Games and Society
+
+    BECA 321 Critical Study of Popular Culture 3
+
+    BECA 422 Media and Society 3
+
+    CINE 336 Video Game Culture 3
+
+    CINE 560 Digital Domains: History and Aesthetics of
+
+    Computer Animation
+
+    3
+
+    COMM 595 Games, Communication, and Culture 4
+
+    COMM 665 Qualitative Interviewing in Communication:
+
+    Methods, Practices, and Ethics
+
+    4
+
+    HUM 320 Music, Ideas, and Culture 3
+
+    HUM/CWL 423 Going Medieval: Medieval Literature and
+
+    Contemporary Adaptations
+
+    3
+
+    HUM/CWL 426/
+
+    ENG 616
+
+    Orientalism in Literature and Society 3
+
+    VGS/CWL 380 Thinking with Video Games 3
+
+    WGS 304 Gender and Popular Culture 3
+
+    WGS 582 Gaming from the Margins 3'
+- id: additional_electives
+  title: 'Electives: additional courses'
+  choose_units: 3
+  from:
+    list:
+    - BECA 340
+    - BECA 352
+    - BECA 374
+    - BECA 434
+    - MUS 434
+    - BECA 454
+    - BECA 536
+    - CINE 414
+    - CINE 440
+    - CINE 658
+    - CINE 660
+    - CSC 631
+    - DES 252
+    - DES 367
+    - BECA 321
+    - CINE 336
+    - CINE 560
+    - VGS 270
+    - VGS 275
+    - ENG 275
+    - CWL 275
+    - VGS 380
+    - CWL 380
+    - WGS 582
+    - BECA 422
+    - COMM 595
+    - COMM 665
+    - HUM 320
+    - HUM 423
+    - CWL 423
+    - HUM 426
+    - CWL 426
+    - ENG 616
+    - WGS 304
+  source: p.1296
+  quote: 'Electives (12 units minimum)
+
+    Select at least one course per area below:'
+- id: upper_division
+  title: Upper-division units
+  across: major
+  min_units_from:
+    level: upper
+    units: 15
+  source: p.1296
+  quote: 15 Units must be completed at the upper-division level.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1297
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;'
+  source: p.1297
+drafted_by: codex, 2026-10-28

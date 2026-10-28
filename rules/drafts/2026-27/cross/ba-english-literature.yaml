@@ -1,0 +1,178 @@
+program: ba-english-literature
+title: 'Bachelor of Arts in English: Concentration in Literature'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.1153
+groups:
+- id: core_requirements
+  title: Core Requirements
+  all_of:
+  - ENG 218
+  - ENG 250
+  - ENG 402
+  - ENG 420
+  - ENG 461
+  - ENG 480GW
+  - ENG 583
+  - ENG 640
+  min_grade:
+    ENG 480GW: C
+  source: p.1153
+  quote: 'Core Requirements (24 Units) Lower-Division (6 units) ENG 218 Literature Is Not A Luxury: Writing For Self and Community;
+    ENG 250 Topics in Literature and Culture. Upper-Division (18 units) ENG 402 Introduction to Professional Writing and Rhetoric;
+    ENG 420 Introduction to the Study of Language; ENG 461 Literature in English Since 1800; ENG 480GW Writing in English:
+    GWAR Seminar; ENG 583 Shakespeare: Representative Plays; ENG 640 Global Texts and Practices. Completion of ENG 480GW with
+    a grade of C or higher fulfills the Graduation Writing Assessment Requirement (GWAR) for all English majors.'
+- id: survey
+  title: Survey
+  all_of:
+  - ENG 460
+  source: p.1153
+  quote: Survey (3 units) ENG 460 Literature in English to 1800
+- id: theory_or_criticism
+  title: Theory or Criticism
+  one_of:
+  - - ENG 600
+  - - ENG 601
+  - - ENG 602
+  - - ENG 611
+  - - ENG 612
+  - - ENG 614
+  - - ENG 615
+  source: p.1153
+  quote: 'Theory or Criticism (3 units) Select One: ENG 600 Theory of Literature; ENG 601 Literature and Psychology'
+- id: pre_1800_literature
+  title: Pre-1800 Literature
+  one_of:
+  - - ENG 501
+  - - ENG 503
+  - - ENG 510
+  - - ENG 512
+  - - ENG 550
+  - - ENG 571
+  - - ENG 584
+  - - ENG 589
+  source: p.1154
+  quote: 'Pre-1800 Literature (3 units) Select One: ENG 501 Age of Chaucer; ENG 503 Studies in Medieval Literature; ENG 510
+    The Age of Wit; ENG 512 18th-Century British Women Writers; ENG 550 The Rise of the Novel; ENG 571 Shakespeare''s Rivals;
+    ENG 584 Shakespeare: Selected Plays; ENG 589 Milton'
+- id: literature_electives
+  title: Electives
+  choose_units: 9
+  from:
+  - list:
+    - ENG 300
+    - C W 501
+    - ENG 429
+    - ENG 451
+    - JS 451
+    - CWL 451
+    - ENG 465
+    - ENG 495
+    - ENG 510
+    - ENG 512
+    - ENG 514
+    - ENG 524
+    - ENG 525
+    - ENG 526
+    - ENG 527
+    - ENG 528
+    - ENG 533
+    - JS 437
+    - CWL 437
+    - ENG 535
+    - ENG 546
+    - JS 546
+    - WGS 546
+    - ENG 554
+    - ENG 555
+    - ENG 580
+    - ENG 581
+    - ENG 630
+    - ENG 633
+    - SXS 633
+    - ENG 636
+    - ENG 655
+  source: p.1154
+  quote: 'Electives (9 units) Select Three: ENG 300/C W 501 Graphic Memoir and Biography; ENG 429 Stylistics; ENG/JS/CWL 451
+    Jewish Literature of the Americas; ENG 465 Post-Apocalyptic Science Fiction; ENG 495 Digital Humanities and Literacies;
+    ENG 510 The Age of Wit; ENG 512 18th-Century British Women Writers; ENG 514 Age of the Romantics; ENG 524 Contemporary
+    American Short Story; ENG 525 Studies in American Literature; ENG 526 Age of the American Renaissance: 1830-1860; ENG
+    527 American Literature: 1860-1914; ENG 528 American Literature: 1914-1960; ENG 533/JS 437/CWL 437 Holocaust and Literature;
+    ENG 535 Literature and Ecology; ENG/JS/WGS 546 20th Century American Jewish Women Writers; ENG 554 Modern American Novel;
+    ENG 555 The Short Story; ENG 580 Individual Authors; ENG 581 Jane Austen; ENG 630 Selected Studies; ENG/SXS 633 Queer(ing)
+    Narrative Literature; ENG 636 Myth, Literature, and Adaptation; ENG 655 Literature and the Adolescent Reader'
+- id: capstone
+  title: Capstone Experience
+  all_of:
+  - ENG 690
+  source: p.1154
+  quote: Capstone Experience (3 units) ENG 690 Senior Seminar
+- id: capstone_timing
+  title: Capstone completion timing
+  unparsed: true
+  source: p.1154
+  quote: ENG 690 must be completed during one of the semesters of the final (senior) year.
+- id: major_gpa
+  title: Major GPA
+  across: major
+  min_gpa: 2.0
+  source: p.1154
+  quote: Students must have a GPA of 2.0 or higher in the major
+- id: major_grade_floor
+  title: Minimum grade in major courses
+  across: major
+  max_below:
+    grade: C-
+    courses: 0
+  source: p.1154
+  quote: no grade in the major lower than a C-
+- id: lower_division_credit_limit
+  title: Lower-division credit limit
+  across: major
+  max_units_from:
+    level: lower
+    units: 6
+  source: p.1153
+  quote: A maximum of six units of lower-division coursework may be accepted for credit in the English major upon permission
+    of an advisor.
+- id: lower_division_credit_conditions
+  title: Lower-division credit conditions
+  unparsed: true
+  source: p.1153
+  quote: A maximum of six units of lower-division coursework may be accepted for credit in the English major upon permission
+    of an advisor. Advanced Placement (A.P.) credit in composition cannot be used to fulfill the six-unit lower-division requirement
+    in the major.
+- id: other_department_literature_credit
+  title: Literature courses from other departments
+  unparsed: true
+  source: p.1154
+  quote: A maximum of 9 units of literature classes from other departments (such as Comparative and World Literature) may
+    be accepted for credit in the major upon the permission of an advisor.
+- id: complementary_studies
+  title: Complementary Studies Requirement
+  unparsed: true
+  source: p.1154
+  quote: 'Twelve units of Complementary Studies are required of all candidates in any of the four concentrations (Literature,
+    Linguistics, English Education, and Professional Writing and Rhetoric) in the Bachelor of Arts degree in English. These
+    units must come from courses bearing a prefix other than ENG and must not be cross-listed with ENG. English majors will
+    be offered four pathways for satisfying this requirement; each pathway is designed to facilitate graduation in a timely
+    manner. 1. Foreign Language: 12 units in a single foreign language; 2. Second Major, Minor, or Certificate: 12 units of
+    coursework taken as part of a second major, a minor, or a certificate; 3. Study Abroad: 12 units of coursework taken in
+    an approved study abroad program (such as CSU Study Abroad); 4. Related Subjects: 12 units of coursework in related disciplines
+    with the approval of an English Department advisor. Related subjects typically include (but are not limited to) Comparative
+    and World Literature, Classics, Creative Writing, Ethnic Studies, Foreign Languages, History, Journalism, and Women and
+    Gender Studies, Communication Studies, Instructional Technology, or Marketing. For these related subjects, 6 units must
+    be from classes in a non-literary-related field. Depending on the concentration within the major, Complementary Studies
+    pathway, and approval of a departmental advisor, up to 12 units from courses with non-ENG prefixes that count towards
+    the Complementary Studies requirement may also count as English electives in fulfillment of Major requirements.'
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1156
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1156
+- text: Use ASSIST to determine which courses at a CCC satisfy any lower-division major requirements for this major.
+  source: p.1156
+drafted_by: codex, 2026-10-28

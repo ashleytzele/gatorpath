@@ -1,0 +1,136 @@
+program: ba-broadcast-and-electronic-communication-arts
+title: Bachelor of Arts in Broadcast and Electronic Communication Arts
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.954
+groups:
+- id: core
+  title: Core
+  all_of:
+  - BECA 200
+  - BECA 300GW
+  - BECA 324
+  - BECA 340
+  min_grade: C
+  source: p.954
+  quote: 'All Core courses must be completed with a grade of C or better.
+
+    Core (12 Units)
+
+    Code Title Units
+
+    BECA 200 Introduction to Media 3
+
+    BECA 300GW Writing About the Media - GWAR 3
+
+    BECA 324 Media Law 3
+
+    BECA 340 Media Aesthetics I 3'
+- id: media_production
+  title: Media Production
+  choose_units: 3
+  from:
+  - list:
+    - BECA 231
+    - BECA 241
+    - BECA 246
+  source: p.954
+  quote: 'One course in each area is required.
+
+    Media Production
+
+    BECA 231 Audio Production Basics 3
+
+    BECA 241 TV Studio Basics 3
+
+    BECA 246 Electronic Field Production I 3'
+- id: media_writing
+  title: Media Writing
+  choose_units: 3
+  from:
+  - list:
+    - BECA 370
+    - BECA 371
+    - BECA 372
+    - BECA 374
+    - BECA 375
+  source: p.954
+  quote: 'One course in each area is required.
+
+    Media Writing
+
+    BECA 370 Writing for Electronic Media 3
+
+    BECA 371 Scriptwriting for A/V Media Production 3
+
+    BECA 372 Scriptwriting for Audio Media Production 3
+
+    BECA 374 Writing for Video Games 3
+
+    BECA 375 Non-Fiction Scriptwriting 3'
+- id: media_culture_society
+  title: Media, Culture, and Society
+  choose_units: 3
+  from:
+  - list:
+    - BECA 301
+    - BECA 321
+    - BECA 422
+  source: p.954
+  quote: 'One course in each area is required.
+
+    Media, Culture, and Society
+
+    BECA 301 Media Literacy 3
+
+    BECA 321 Critical Study of Popular Culture 3
+
+    BECA 422 Media and Society 3'
+- id: focus_area_electives
+  title: Electives in a Focus Area
+  choose_units: 15
+  from:
+  - subject: BECA
+    level: upper
+  - approved: true
+    max_units: 3
+  approval: Upper-division BECA courses selected in consultation with a BECA faculty advisor.
+  source: p.954
+  quote: 'Electives in a Focus Area (15 units)
+
+    Upper-division BECA courses selected in consultation with a BECA faculty advisor. Electives must be upper-division, may
+    include Foundation Area courses in the Media Writing and Media, Culture, and Society areas not used to fulfill those requirements,
+    and may include up to 3 units from other departments/programs.'
+- id: supervised_independent_work_cap
+  title: Supervised and Independent Work Experience units counted toward major
+  max_units_from:
+    list:
+    - BECA 576
+    - BECA 685
+    - BECA 695
+    - BECA 699
+    units: 3
+  across: major
+  source: p.954
+  quote: Students may count a total of 3 units combined from the courses BECA 576, BECA 685 , BECA 695 , and BECA 699 toward
+    satisfying major requirements.
+- id: california_community_college_transfer_cap
+  title: California community college courses applied to major
+  unparsed: true
+  source: p.954
+  quote: Up to 12 units of courses from California community colleges may be directly applied to fulfilling BECA major requirements.
+transfer_notes:
+- text: Students transferring to the BECA program from a California community college or other institution should strive to
+    complete the SF State Lower Division Transfer Pattern.
+  source: p.954
+- text: Transfer students are encouraged to complete the equivalent of BECA 200 and one lower-division production course (BECA
+    230, 240, or 246) before matriculation at SF State.
+  source: p.954
+- text: Many of the transfer equivalents to these courses are offered at California community colleges and can be verified
+    via the Assist website (http://www.assist.org/) (www.assist.org (http://www.assist.org/)).
+  source: p.954
+- text: Please contact a faculty advisor if your course is not listed.
+  source: p.954
+drafted_by: codex, 2026-10-27

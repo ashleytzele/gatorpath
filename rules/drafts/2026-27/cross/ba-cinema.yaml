@@ -1,0 +1,128 @@
+program: ba-cinema
+title: Bachelor of Arts in Cinema
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.987
+groups:
+- id: core
+  title: Core Courses
+  all_of:
+  - CINE 200
+  - CINE 202
+  - CINE 204
+  - CINE 211
+  - CINE 212
+  min_grade: C
+  source: p.987
+  quote: Core courses must be completed with a grade of C or better.
+- id: foundation
+  title: Foundation Courses
+  all_of:
+  - CINE 340
+  - CINE 341
+  min_grade: C
+  source: p.987
+  quote: Foundation courses must be completed with a grade of C or better.
+- id: major_gwar
+  title: GWAR Course
+  one_of:
+  - - CINE 303GW
+  - - CINE 343GW
+  - - CINE 350GW
+  min_grade: C
+  source: p.987
+  quote: 'Before advancing to courses at the 300 level or higher, however, all majors must:
+
+    • Complete the core, foundation, and GWAR courses with a grade of C or better.'
+- id: cinema_studies
+  title: Upper-Division Cinema Studies Courses
+  unparsed: true
+  source: p.987
+  quote: Select 9 units from 300 or 500-level CINE courses, not including the courses used to fulfill the Foundation and GWAR
+    requirements listed above. Additional GWAR courses may be applied to the Upper-Division Cinema Studies Courses requirement.
+    A 500-level CINE course satisfies the Capstone Experience.
+- id: capstone
+  title: Capstone Experience
+  unparsed: true
+  source: p.988
+  quote: Any three units at the 500 or 600-level apply, with the exception of CINE 685, CINE 690, CINE 692, CINE 695, and
+    CINE 699. This course may contribute to the Upper-Division Cinema Studies Requirement or the Electives Requirement.
+- id: electives
+  title: Electives
+  choose_units: 16
+  from:
+    subject: CINE
+    level: upper
+  source: p.988
+  quote: Select additional upper-division Cinema courses to complete a total of 45 units required for the major.
+- id: core_community_college_limit
+  title: Community College Core Credit
+  unparsed: true
+  source: p.987
+  quote: With a faculty advisor’s approval, up to 13 units from a community college may be applied to the core courses in
+    the Cinema major. Up to 6 of those units may be in screenwriting and/or filmmaking/video production.
+- id: advancement_requirements
+  title: Requirements Before Advancing to 300-Level or Higher Courses
+  unparsed: true
+  source: p.987
+  quote: 'Before advancing to courses at the 300 level or higher, however, all majors must:
+
+    • Complete the core, foundation, and GWAR courses with a grade of C or better.
+
+    • Have upper-division standing.
+
+    • Complete the lower-division General Education requirements at SF State or the equivalent at another institution.'
+- id: core_course_order
+  title: Core Course Completion Before Other Courses
+  unparsed: true
+  source: p.987
+  quote: The School of Cinema enforces the completion of the core courses before enrollment in all other courses.
+- id: outside_cinema_electives
+  title: Cinema-Related Courses Outside the School of Cinema
+  unparsed: true
+  source: p.988
+  quote: With prior approval of an advisor, up to 12 units of Cinema-related upper-division courses outside the School of
+    Cinema may count toward the major.
+- id: production_term_limit
+  title: Advanced Production Courses Per Term
+  unparsed: true
+  source: p.988
+  quote: No more than seven units of advanced production courses may be taken in any one term unless special permission is
+    granted by the instructor.
+- id: online_course_limit
+  title: Online Coursework Limit
+  unparsed: true
+  source: p.988
+  quote: A maximum of 18 units of online coursework may be counted toward the major.
+- id: independent_study_internship_limit
+  title: Independent Study and Internship Limit
+  unparsed: true
+  source: p.988
+  quote: A maximum of 12 units of independent study and internship courses may be counted toward the major.
+- id: cr_nc_limit
+  title: CR/NC Unit Limit
+  across: major
+  max_cr:
+    units: 9
+  source: p.988
+  quote: A maximum of nine CR/NC units may be counted toward the major
+- id: cr_nc_course_limit
+  title: CR/NC Limit for CINE 325, CINE 326, and CINE 650
+  unparsed: true
+  source: p.988
+  quote: which may include up to a maximum of four units of different CINE 325, CINE 326, or CINE 650 courses.
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  source: p.988
+  quote: 'Bachelor of Arts students must complete at least 12 units of Complementary Studies outside of the primary prefix
+    for the major. (Note: Students may not use an alternate prefix that is cross-listed with the primary prefix for the major.)'
+transfer_notes:
+- text: Students who have earned AA-T or AS-T degrees and are pursuing a similar B.A. degree at SF State are required to fulfill
+    the Complementary Studies requirement as defined by the major department. Students should consult with a major advisor
+    about how transfer units and SF State units can best be applied to this requirement to ensure degree completion within
+    60 units.
+  source: p.988
+drafted_by: codex, 2026-10-27

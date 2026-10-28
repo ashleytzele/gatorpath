@@ -1,0 +1,194 @@
+program: ba-chinese-chinese-language
+title: 'Bachelor of Arts in Chinese: Concentration in Chinese Language'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.1443
+groups:
+- id: foundational_language
+  title: Foundational Language
+  unparsed: true
+  quote: 'Foundational Language (3-12 units)
+
+    Code Title Units
+
+    CHIN 101 First Semester Chinese 3
+
+    CHIN 102 Second Semester Chinese 3
+
+    CHIN 103 Third Semester Chinese 3
+
+    CHIN 303 Intermediate Chinese 3
+
+    Up to 9 units from the lower-division core can be replaced with high school Advanced Placement (AP) examination credit
+    (see University guidelines). With the consent of a Chinese Program advisor, students able to demonstrate a higher level
+    of Chinese language proficiency may replace lower-division core units with upper-division Chinese language units.'
+  source: p.1443
+- id: language_core
+  title: Language Core
+  all_of:
+  - CHIN 311
+  - CHIN 312
+  - CHIN 401
+  quote: 'Language Core (15 units)
+
+    Code Title Units
+
+    CHIN 311 Conversation and Reading 3
+
+    CHIN 312 Speech and Writing 3
+
+    CHIN 401 Advanced Chinese 3'
+  source: p.1443
+- id: language_core_select_one
+  title: 'Language Core: Select One'
+  one_of:
+  - - CHIN 501
+  - - CHIN 502
+  - - MLL 325
+  quote: 'Select One: 3
+
+    CHIN 501 Introduction to Classical Chinese
+
+    CHIN 502 Readings in Literary Chinese
+
+    MLL 325 Linguistics for Foreign Languages 3'
+  source: p.1443
+- id: civilization_culture
+  title: Civilization & Culture
+  one_of:
+  - - CHIN 228
+  - - CHIN 270
+  - - CHIN 271
+  quote: 'Civilization & Culture (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHIN 228 Chinese Language and Society 3
+
+    CHIN 270 Writing China & the West: Written Communication and Cross-Cultural Encounters in Word and Image 3
+
+    CHIN 271 The Classic Chinese Novel in Contemporary Pop Culture 3'
+  source: p.1443
+- id: media_literacy
+  title: Media Literacy
+  one_of:
+  - - CHIN 410
+  - - CHIN 411
+  quote: 'Media Literacy (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHIN 410 Building Chinese Media Literacy 3
+
+    CHIN 411 Media Chinese 3'
+  source: p.1443
+- id: content_course
+  title: Content Course
+  one_of:
+  - - CHIN 521
+  - - CHIN 537
+  - - CHIN 580
+  quote: 'Content Course (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHIN 521 Chinese Modern Fiction 3
+
+    CHIN 537 Chinese Language and Modern China 3
+
+    CHIN 580 Topics in Modern Chinese Language and Literature 3'
+  source: p.1443
+- id: literature_translation
+  title: Literature in Translation
+  one_of:
+  - - CHIN 600
+  - - CHIN 601GW
+  - - CHIN 602
+  - - CHIN 611GW
+  - - CHIN 612GW
+  - - HUM 530
+  quote: 'Literature in Translation (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    CHIN 600 Topics in Chinese Language, Literature, and Culture in English 3
+
+    CHIN 601GW The Poetic Tradition - GWAR 3
+
+    CHIN 602 The Narrative Tradition 3
+
+    CHIN 611GW The Revolutionary Tradition in Modern Chinese Literature - GWAR 3
+
+    CHIN 612GW Negotiating Chineseness in the Late 20th and 21st Centuries - GWAR 3
+
+    HUM 530 Chinese Civilization 3'
+  source: p.1443
+- id: major_gwar
+  title: Graduation Writing Requirement
+  unparsed: true
+  quote: 'Graduation Writing Requirement (GWAR) (0-3 units)
+
+    Select a CHIN GWAR course if one is not selected from the Literature in Translation area above.'
+  source: p.1443
+- id: major_electives
+  title: Electives
+  choose_units: 0
+  from:
+  - subject: CHIN
+    level: upper
+  fill_to_total: true
+  quote: 'Electives (0-9 units)
+
+    Additional upper-division CHIN courses as needed to reach a total of 39 units in the major.'
+  source: p.1443
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  quote: 'Required of all candidates for the Bachelor of Arts degree in Chinese are 12 units of Complementary Studies, which
+    must come from courses bearing a prefix other than CHIN, and not cross-listed with CHIN. Complementary Studies for the
+    Chinese major can be satisfied via four possible routes:
+
+    1. 12 units in any foreign language other than Chinese (may include up to 3 units of MLL prefix courses);
+
+    2. 12 units of coursework taken in an approved study abroad program (including CSU Study Abroad, SF State Bilateral, Chinese
+    Flagship, and SLI Translation-Interpretation programs);
+
+    3. 12 units of coursework taken as part of a second major, a minor, or a certificate;
+
+    4. 12 units of coursework in related disciplines with the approval of a Chinese Program advisor.
+
+    Related disciplines typically include linguistics, literature, philosophy, history, education, and any aspect of greater
+    China, East Asia, or Asian Americans.
+
+    Where a course with a non-CHIN prefix is taken as a core requirement or elective for the Chinese major, the said course
+    may also (double) count towards Complementary Studies only via the Study Abroad option or the second major/minor/certificate
+    option listed above. Students satisfying Complementary Studies through the Foreign Language option are allowed a maximum
+    of 3 units of overlap of MLL-prefix courses between the Chinese major and Complementary Studies units. Students satisfying
+    Complementary Studies through the Related Subjects option are not allowed to double-count major and Complementary Studies
+    units.'
+  source: p.1444
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1444
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1444
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1444-1445
+drafted_by: codex, 2026-10-27

@@ -1,0 +1,112 @@
+program: bs-physics-astrophysics
+title: 'Bachelor of Science in Physics: Concentration in Astrophysics'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 72
+source: p.2195
+groups:
+- id: lower_division_prerequisites
+  title: Lower-Division Prerequisites
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 245
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  - PHYS 240
+  - PHYS 242
+  min_grade: C
+  source: p.2195
+  quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
+    except for PHYS 200 which must be passed with a grade of CR.
+- id: physics_planning
+  title: Physics and Astronomy Major Planning
+  all_of:
+  - PHYS 200
+  source: p.2195
+  quote: PHYS 200 Planning for Success as a Physics & Astronomy Major 1
+- id: programming
+  title: 'Lower-Division Prerequisites: Select One'
+  one_of:
+  - - MATH 209
+  - - CSC 309
+  source: p.2195
+  quote: 'Select One: 3
+
+    MATH 209 Mathematical Computing
+
+    CSC 309 Computer Programming'
+- id: major_lower_division_letter_grade
+  title: Lower-Division Prerequisite Letter Grades
+  across:
+  - lower_division_prerequisites
+  - programming
+  letter_grade: true
+  source: p.2195
+  quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
+    except for PHYS 200 which must be passed with a grade of CR.
+- id: physics_200_cr
+  title: PHYS 200 CR Requirement
+  unparsed: true
+  source: p.2195
+  quote: PHYS 200 which must be passed with a grade of CR.
+- id: upper_division_core_300
+  title: Upper-Division Core Courses Numbered 300-399
+  all_of:
+  - ASTR 300
+  - ASTR 301
+  - ASTR 340GW
+  - PHYS 320
+  - PHYS 330
+  - PHYS 360
+  - PHYS 370
+  - PHYS 385
+  min_grade: C-
+  source: p.2195
+  quote: All Major Upper-Division Core courses must be taken for letter grades; core courses numbered 300-399 must be passed
+    with grades of C- minus or better.
+- id: upper_division_core_400
+  title: Upper-Division Core Courses Numbered 400-499
+  all_of:
+  - ASTR 400
+  - ASTR 470
+  - PHYS 430
+  source: p.2195
+  quote: All Major Upper-Division Core courses must be taken for letter grades
+- id: major_upper_division_letter_grade
+  title: Upper-Division Core Letter Grades
+  across:
+  - upper_division_core_300
+  - upper_division_core_400
+  letter_grade: true
+  source: p.2195
+  quote: All Major Upper-Division Core courses must be taken for letter grades
+- id: electives
+  title: Electives
+  unparsed: true
+  source: p.2196
+  quote: 'Electives (6 units)
+
+    Minimum 3 units numbered 400-499, maximum 3 units outside PHYS or ASTR with prior permission of a faculty major advisor.'
+- id: major_upper_division_electives_cr_nc
+  title: Upper-Division Electives CR/NC Limit
+  across:
+  - electives
+  max_cr:
+    units: 6
+  source: p.2195
+  quote: Up to a maximum of 6 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
+    is allowed.
+- id: culminating_experience
+  title: Culminating Experience
+  all_of:
+  - ASTR 697
+  source: p.2196
+  quote: 'Culminating Experience (3 units)
+
+    ASTR 697 Senior Project 3'
+drafted_by: codex, 2026-10-28

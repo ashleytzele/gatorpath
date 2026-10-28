@@ -1,0 +1,233 @@
+program: ba-art-art-history-and-studio-art
+title: 'Bachelor of Arts in Art: Concentration in Art History and Studio Art'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 43
+source: p.918
+groups:
+- id: lower_division_art_history
+  title: 'Lower-Division Courses: Art History'
+  choose_units: 6
+  from:
+  - list:
+    - ARTH 201
+    - ARTH 202
+    - ARTH 205
+    - HUM 205
+  source: p.918
+  quote: 'Art History 6
+
+    Select Two:
+
+    ARTH 201 Global Art History I 3
+
+    ARTH 202 Global Art History II 3
+
+    ARTH/HUM 205 Asian Art History 3'
+- id: lower_division_studio_art
+  title: 'Lower-Division Courses: Studio Art'
+  choose_units: 6
+  from:
+  - list:
+    - ART 210
+    - ART 222
+    - ART 231
+    - ART 235
+    - ART 240
+    - ART 245
+    - ART 260
+  source: p.918
+  quote: 'Studio Art 6
+
+    Select Two:
+
+    ART 210 Introduction to Digital Media Arts 3
+
+    ART 222 Introduction to Textile Art 3
+
+    ART 231 Introduction to Drawing 3
+
+    ART 235 Introduction to Printmaking 3
+
+    ART 240 Introduction to Contemporary Sculpture 3
+
+    ART 245 Introduction to Ceramics 3
+
+    ART 260 Introduction to the Darkroom 3'
+- id: upper_division_art_history
+  title: Upper-Division Art History
+  choose_units: 12
+  from:
+  - list:
+    - ARTH 301
+    - LTNS 301
+    - ARTH 306
+    - ARTH 401
+    - ANTH 424
+    - CLAR 420
+    - M S 420
+    - ARTH 402
+    - ANTH 425
+    - CLAR 425
+    - M S 425
+    - ARTH 404
+    - CLAR 550
+    - ARTH 406
+    - ARTH 407
+    - CLAR 500
+    - M S 500
+    - ARTH 409
+    - CLAR 530
+    - ARTH 410
+    - CLAR 531
+    - ARTH 411
+    - ARTH 412
+    - ARTH 421
+    - ARTH 496
+    - HUM 496
+    - ARTH 516
+  source: p.918
+  quote: 'Upper-Division Art History (12 units)
+
+    Selected from the following:'
+- id: upper_division_studio_art
+  title: Upper-Division Studio Art
+  choose_units: 12
+  from:
+  - list:
+    - ART 310
+    - ART 322
+    - ART 330
+    - ART 335
+    - ART 340
+    - ART 345
+    - ART 360
+    - ART 361
+    - ART 410
+    - ART 411
+    - ART 413
+    - ART 422
+    - ART 423
+    - ART 424
+    - ART 431
+    - ART 432
+    - ART 433
+    - ART 434
+    - ART 435
+    - ART 439
+    - ART 440
+    - ART 445
+    - ART 456
+    - ART 460
+    - ART 511
+    - ART 514
+    - ART 525
+    - ART 527
+    - ART 530
+    - ART 534
+    - ART 535
+    - ART 536
+    - ART 541
+    - ART 543
+    - ART 545
+    - ART 546
+    - ART 548
+    - ART 549
+    - ART 555
+    - ART 556
+    - ART 563
+  source: p.919
+  quote: 'Upper-Division Studio Art (12 units)
+
+    Selected from the following:'
+- id: major_gwar
+  title: Graduate Writing Assessment Requirement
+  all_of:
+  - ARTH 400GW
+  source: p.919
+  quote: 'Graduate Writing Assessment Requirement (3 units)
+
+    Code Title Units
+
+    ARTH 400GW Writing About Art - GWAR 3'
+- id: art_productions
+  title: Art Productions
+  all_of:
+  - ART 509
+  source: p.919
+  quote: 'Art Productions (1 unit)
+
+    Code Title Units
+
+    ART 509 Art Professional Service Practicum 1'
+- id: capstone
+  title: Capstone
+  one_of:
+  - - ART 600
+  - - ART 619
+  - - ARTH 602
+  source: p.919
+  quote: 'Capstone (3 units)
+
+    Code Title Units
+
+    Select One: 3
+
+    ART 600 Studio Process and Professional Practices
+
+    ART 619 Exhibition Design
+
+    ARTH 602 Art History Seminar'
+- id: transfer_residence
+  unparsed: true
+  source: p.918
+  quote: For students transferring from other institutions, a minimum of 12 units in residence is required.
+transfer_notes:
+- text: For students with an AA-T in Studio Arts or Art History.
+  source: p.920
+- text: This degree program is an approved pathway (“similar” major) for students earning the ADT in Art History or Studio
+    Arts
+  source: p.920
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.920
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.920
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.920
+- text: a course in U.S. History
+  source: p.920
+- text: a course in U.S. & California Government
+  source: p.920
+- text: For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college.
+  source: p.920
+- text: 'Use ASSIST to determine:'
+  source: p.920
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.920
+- text: Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+  source: p.920
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.920
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.920
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.920
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State.'
+  source: p.920
+- text: Credit is based on the academic year during which exams were taken.
+  source: p.921
+- text: Refer to the University Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the
+    award of credit for AP/IB/CLEP.
+  source: p.921
+drafted_by: codex, 2026-10-27

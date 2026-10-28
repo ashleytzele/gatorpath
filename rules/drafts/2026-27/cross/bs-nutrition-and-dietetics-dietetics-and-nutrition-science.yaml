@@ -1,0 +1,241 @@
+program: bs-nutrition-and-dietetics-dietetics-and-nutrition-science
+title: 'Bachelor of Science in Nutrition and Dietetics: Concentration in Dietetics and Nutrition Science'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 70
+source: p.677
+groups:
+- id: core_requirements
+  title: Core Requirements (37 units)
+  all_of:
+  - CHEM 115
+  - HTM 560
+  - MATH 124
+  - NUTR 253
+  - NUTR 353GW
+  - NUTR 357
+  - NUTR 453
+  - NUTR 457
+  - NUTR 551
+  - NUTR 557
+  - NUTR 651
+  - PSY 200
+  quote: 'Core Requirements (37 units)
+
+    Code Title Units
+
+    CHEM 115 General Chemistry I 4
+
+    HTM 560 Hospitality Human Resource Management 3
+
+    MATH 124 Elementary Statistics 3
+
+    NUTR 253 Introduction to Nutrition and Dietetics 3
+
+    NUTR 353GW Foodservice Systems Management - GWAR 3
+
+    NUTR 357 Principles of Food Preparation 3
+
+    NUTR 453 Nutrition in the Life Cycle 3
+
+    NUTR 457 Management of Quantity Food Purchasing and Production 3
+
+    NUTR 551 Nutrition Education and Communication 3
+
+    NUTR 557 Experimental Food Study 3
+
+    NUTR 651 Community Nutrition and Assessment 3
+
+    PSY 200 General Psychology 3'
+  source: p.677
+- id: professional_requirements_part_1
+  title: Professional Requirements (30 units)
+  all_of:
+  - BIOL 210
+  - BIOL 211
+  - BIOL 212
+  - BIOL 213
+  - BIOL 220
+  - CHEM 130
+  - CHEM 349
+  - NUTR 450
+  - NUTR 550
+  quote: 'Professional Requirements (30 units)
+
+    Code Title Units
+
+    BIOL 210
+
+    & BIOL 211
+
+    General Microbiology and Public Health
+
+    and General Microbiology and Public Health Laboratory
+
+    4
+
+    BIOL 212
+
+    & BIOL 213
+
+    Principles of Human Physiology
+
+    and Principles of Human Physiology Laboratory
+
+    4
+
+    BIOL 220 Principles of Human Anatomy 4
+
+    CHEM 130 General Organic Chemistry 3
+
+    CHEM 349 General Biochemistry 3
+
+    NUTR 450 Advanced Nutrition I 3
+
+    NUTR 550 Advanced Nutrition II 3'
+  source: p.677
+- id: professional_requirements_part_2
+  title: Professional Requirements (continued)
+  all_of:
+  - NUTR 484
+  - NUTR 584
+  quote: 'Nutrition Science
+
+    NUTR 484 Medical Nutrition Therapy I 3
+
+    NUTR 584 Medical Nutrition Therapy II 3'
+  source: p.678
+- id: recommended_electives
+  title: Recommended Electives (3-4 units)
+  one_of:
+  - - A U 220
+  - - BIOL 326
+  - - FCS 426
+  - - FCS 543
+  - - GEOG 427
+  - - HH 380
+  - - HH 381
+  - - HH 382
+  - - HH 383
+  - - HTM 557
+  - - KIN 331
+  - - KIN 355
+  - - NUTR 356
+  - - PH 200
+  - - PH 210
+  - - PH 221
+  - - PH 241
+  - - PH 290
+  - - PH 410
+  - - PH 455
+  quote: 'Recommended Electives (3-4 units)
+
+    Select one:
+
+    Code Title Units
+
+    A U 220 SF State and Braven Career Accelerator 3
+
+    BIOL 326 Disease! 3
+
+    FCS 426
+
+    FCS 543 Sustainability in the Textile, Housing, and Food Industries
+
+    3
+
+    GEOG 427 Agriculture and Food Supply 4
+
+    HH 380 Holistic Health: Western Perspectives 3
+
+    HH 381 Holistic Health: Eastern Perspectives 3
+
+    HH 382 Holistic Health: Human Nature and Global Perspectives 3
+
+    HH 383 Chinese Perspectives in Holistic Health 3
+
+    HTM 557 Restaurant and Catering Management 3
+
+    KIN 331 Peak Performance 3
+
+    KIN 355 Science, Sport, and Fitness 3
+
+    NUTR 356 Foods and World Culture 3
+
+    PH 200 Global Health 3
+
+    PH 210 Personal and Social Determinants of Health 3
+
+    PH 221 Health and Social Justice - Burning Issues, Taking Action 3
+
+    PH 241 Health and Social Movements in the United States in the 20th Century 3
+
+    PH 290 Promoting Positive Health 3
+
+    PH 410 Public Health Systems 3
+
+    PH 455 Community Organizing and Community Building for Health 3'
+  source: p.678
+ge_met:
+- area: 5A
+  one_of:
+  - - CHEM 130
+  quote: Area 5A (Physical Science) is satisfied upon completion of CHEM 130.
+  source: p.677
+- area: 5B
+  one_of:
+  - - BIOL 210
+    - BIOL 220
+  quote: Area 5B (Biological Science) is satisfied upon completion of BIOL 210 and BIOL 220.
+  source: p.677
+- area: 5C
+  one_of:
+  - - CHEM 115
+    - BIOL 211
+  quote: Area 5C (Laboratory) is satisfied upon completion of CHEM 115 and BIOL 211.
+  source: p.677
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.678
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.678
+- text: For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college.
+  source: p.678
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;'
+  source: p.678
+- text: • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+  source: p.679
+- text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+    for admission.
+  source: p.679
+- text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division transfer
+    (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+  source: p.679
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.679
+- text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+    credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+    report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+    Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+  source: p.679
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.679
+- text: Of the four required basic skills courses, a course in critical thinking (1B/A3) may not be widely offered outside
+    the CCC and CSU systems. Students should attempt to identify and take an appropriate course no later than the term of
+    application to the CSU.
+  source: p.679
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.679
+drafted_by: codex, 2026-10-28

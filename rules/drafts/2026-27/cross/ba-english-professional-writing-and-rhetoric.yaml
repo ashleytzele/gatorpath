@@ -1,0 +1,115 @@
+program: ba-english-professional-writing-and-rhetoric
+title: 'Bachelor of Arts in English: Concentration in Professional Writing and Rhetoric'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.1173
+groups:
+- id: core_requirements
+  title: Core Requirements
+  all_of:
+  - ENG 218
+  - ENG 250
+  - ENG 480GW
+  - ENG 420
+  - ENG 402
+  - ENG 640
+  - ENG 583
+  - ENG 461
+  min_grade:
+    ENG 480GW: C
+  source: p.1173
+  quote: 'Core Requirements (24 Units) Lower-Division 6 ENG 218 Literature Is Not A Luxury: Writing For Self and Community
+    3 ENG 250 Topics in Literature and Culture 3 Upper-Division 18 ENG 480GW Writing in English: GWAR Seminar 3 ENG 420 Introduction
+    to the Study of Language 3 ENG 402 Introduction to Professional Writing and Rhetoric 3 ENG 640 Global Texts and Practices
+    3 ENG 583 Shakespeare: Representative Plays 3 ENG 461 Literature in English Since 1800 3'
+- id: concentration_required
+  title: 'Concentration Requirements: Required Courses'
+  all_of:
+  - ENG 540
+  - ENG 545
+  - ENG 618
+  source: p.1173
+  quote: Concentration Requirements (21 Units) Required Courses (9 units) Code Title Units ENG 540 Professional Editing 3
+    ENG 545 Visual Rhetoric and Document Design 3 ENG 618 Collaborative Writing 3
+- id: concentration_electives
+  title: 'Concentration Requirements: Electives'
+  choose_units: 9
+  from:
+  - list:
+    - ENG 200
+    - ENG 471
+    - ENG 490
+    - ENG 585
+  - approved: true
+  approval: Other courses with the approval of an advisor.
+  source: p.1173
+  quote: 'Electives (9 units) Code Title Units Select 3: ENG 200 Writing Practices in Professional Contexts 3 ENG 471 Writing
+    Technical Documentation 3 ENG 490 Grant Writing 3 ENG 585 Professional Writing for Digital Audiences 3 Other courses with
+    the approval of an advisor.'
+- id: capstone
+  title: Capstone Experience
+  all_of:
+  - ENG 660
+  source: p.1174
+  quote: Rhetoric Code Title Units ENG 660 Career Pathways & Applied Projects 3
+- id: capstone_timing
+  title: Capstone completion timing
+  unparsed: true
+  source: p.1173
+  quote: This course must be completed during the spring semester of the student’s final (senior) year.
+- id: complementary_studies
+  title: Complementary Studies Requirement for English Majors
+  unparsed: true
+  source: p.1174
+  quote: 'Twelve units of Complementary Studies are required of all candidates in any of the four concentrations (Literature,
+    Linguistics, English Education, and Professional Writing and Rhetoric) in the Bachelor of Arts degree in English. These
+    units must come from courses bearing a prefix other than ENG, and must not be cross-listed with ENG. English majors will
+    be offered four pathways for satisfying this requirement; each pathway is designed to facilitate graduation in a timely
+    manner. 1. Foreign Language: 12 units in a single foreign language; 2. Second major, minor, or certificate: 12 units of
+    coursework taken as part of a second major, a minor or a certificate; 3. Study Abroad: 12 units of coursework taken in
+    an approved study abroad program (such as CSU Study Abroad); 4. Related Subjects: 12 units of coursework in related disciplines
+    with the approval of an English Department advisor. Related subjects typically include (but are not limited to) Comparative
+    and World Literature, Classics, Creative Writing, Ethnic Studies, Foreign Languages, History, Journalism, Women and Gender
+    Studies, Communication Studies, Instructional Technology, or Marketing. For these related subjects, six units must be
+    from classes in a non-literary related field. Depending on the concentration within the major, Complementary Studies pathway,
+    and approval of a departmental advisor, up to 12 units from courses with non-ENG prefixes that count towards the Complementary
+    Studies requirement may also count as English electives in fulfillment of the degree requirements. Students who have earned
+    AA-T or AS-T degrees and are pursuing a similar B.A. degree at SF State are required to fulfill the Complementary Studies
+    requirement as defined by the major department. Students should consult with a major advisor about how transfer units
+    and/or SF State units can best be applied to this requirement in order to ensure degree completion within 60 units.'
+- id: lower_division_credit_limit
+  title: Lower-division coursework credit
+  unparsed: true
+  source: p.1173
+  quote: A maximum of 6 units of lower-division coursework may be accepted for credit in the English major upon the consent
+    of an advisor. Advanced Placement (A.P.) credit in composition cannot be used to fulfill the 6-unit lower-division requirement
+    in the major.
+- id: major_gpa
+  title: Major GPA
+  across: major
+  min_gpa: 2.0
+  source: p.1174
+  quote: Students must have a GPA of 2.0 or higher in the major, and no grade in the major lower than C- (except for ENG 480GW,
+    which requires a grade of C or higher).
+- id: major_minimum_grade
+  title: Minimum grade in major courses
+  across: major
+  max_below:
+    grade: C-
+    courses: 0
+  source: p.1174
+  quote: Students must have a GPA of 2.0 or higher in the major, and no grade in the major lower than C- (except for ENG 480GW,
+    which requires a grade of C or higher).
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1175
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1175
+- text: For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college.
+  source: p.1175
+drafted_by: codex, 2026-10-28

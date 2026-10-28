@@ -1,0 +1,191 @@
+program: bs-biochemistry
+title: Bachelor of Science in Biochemistry
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 67
+source: p.1868
+global:
+  no_cr_nc: true
+  source: p.1868
+groups:
+- id: major_gpa
+  title: Minimum SF State Major GPA
+  min_gpa: 2.0
+  across: major
+  quote: All courses used in the major must be completed with letter grades (CR/NC not allowed) and a minimum GPA of 2.0 (SF
+    State Major GPA).
+  source: p.1868
+- id: chemistry_prerequisite_grades
+  title: Chemistry prerequisite grades
+  unparsed: true
+  quote: Grades of C or better are required in chemistry prerequisite courses.
+  source: p.1868
+- id: lower_division
+  title: Lower-Division Requirements
+  all_of:
+  - BIOL 230
+  - CHEM 115
+  - CHEM 215
+  - CHEM 233
+  - CHEM 234
+  - CHEM 235
+  - MATH 226
+  - MATH 227
+  quote: Lower-Division Requirements (37 units)
+  source: p.1868
+- id: lower_division_physics
+  title: 'Lower-Division Requirements: Select one of the following'
+  one_of:
+  - - PHYS 111
+    - PHYS 112
+    - PHYS 121
+    - PHYS 122
+  - - PHYS 220
+    - PHYS 222
+    - PHYS 230
+    - PHYS 232
+  - - PHYS 220
+    - PHYS 222
+    - PHYS 240
+    - PHYS 242
+  quote: 'Select one of the following: 8'
+  source: p.1868
+- id: upper_division_physical_chemistry
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - CHEM 300
+    - CHEM 301
+  - - CHEM 351
+    - CHEM 353
+  quote: 'Select One: 6'
+  source: p.1868
+- id: upper_division_core
+  title: Upper-Division Requirements
+  all_of:
+  - CHEM 321
+  - CHEM 340
+  - CHEM 341
+  - CHEM 343
+  quote: Upper-Division Requirements (18 units)
+  source: p.1868
+- id: upper_division_electives
+  title: Upper-Division Electives
+  choose_units: 9
+  from:
+  - list:
+    - CHEM 322
+    - CHEM 325
+    - CHEM 370
+    - CHEM 390GW
+    - CHEM 420
+    - CHEM 422
+    - CHEM 426
+    - CHEM 433
+    - CHEM 443
+    - CHEM 451
+    - CHEM 645GW
+    - CHEM 667
+    - CHEM 680
+    - CHEM 685
+    - CHEM 686
+    - CHEM 699
+    - BIOL 350
+    - BIOL 351GW
+    - BIOL 351
+    - BIOL 355
+    - BIOL 357
+    - BIOL 358
+    - BIOL 401
+    - BIOL 402GW
+    - BIOL 420
+    - BIOL 435
+    - BIOL 436
+    - BIOL 612
+    - BIOL 613GW
+    - BIOL 638
+    - BIOL 640
+  - list:
+    - CHEM 686
+    - BIOL 358
+    max_units: 2
+  quote: Students must complete at least 12 units of upper-division chemistry and biology electives selected from the lists
+    below.
+  source: p.1868
+- id: computer_science_elective
+  title: 'Upper-Division Electives: Select One'
+  one_of:
+  - - CSC 306
+  - - CSC 408
+  - - CSC 509
+  quote: Select One 3
+  source: p.1869
+- id: elective_chemistry_course
+  title: 'Upper-Division Electives: at least one course with a CHEM prefix'
+  min_units_from:
+    subject: CHEM
+    courses: 1
+  across:
+  - upper_division_electives
+  - computer_science_elective
+  quote: a. one course with a CHEM prefix,
+  source: p.1868
+- id: elective_gwar_course
+  title: 'Upper-Division Electives: at least one GWAR course'
+  min_units_from:
+    list:
+    - CHEM 390GW
+    - CHEM 645GW
+    - BIOL 351GW
+    - BIOL 402GW
+    - BIOL 613GW
+    courses: 1
+  across:
+  - upper_division_electives
+  - computer_science_elective
+  quote: b. one GWAR (GW) course, and
+  source: p.1868
+- id: elective_laboratory_courses
+  title: 'Upper-Division Electives: two laboratory courses'
+  min_units_from:
+    list:
+    - CHEM 322
+    - CHEM 370
+    - CHEM 420
+    - CHEM 422
+    - CHEM 426
+    - CHEM 443
+    - CHEM 451
+    - BIOL 351GW
+    - BIOL 351
+    - BIOL 358
+    - BIOL 402GW
+    - BIOL 436
+    - BIOL 613GW
+    - BIOL 638
+    courses: 2
+  across:
+  - upper_division_electives
+  - computer_science_elective
+  quote: c. two laboratory courses.
+  source: p.1868
+- id: biochemistry_double_major_elective_restriction
+  title: Biochemistry double-major elective restriction
+  unparsed: true
+  quote: For students who pursue a double major in the BA Chemistry and BS Biochemistry programs, CHEM 322 and CHEM 325 cannot
+    be used as electives for the BS Biochemistry program. Students must choose other approved courses to satisfy the elective
+    requirements.
+  source: p.1869
+- id: chem_699_elective_restriction
+  title: CHEM 699 elective restriction
+  unparsed: true
+  quote: By petition only. Units must be taken in the same semester to be used as an upper-division elective.
+  source: p.1869
+ge_met:
+- area: 5B
+  one_of:
+  - - BIOL 240
+  - - CHEM 341
+  quote: Area 5B (Biological Science) is satisfied upon completion of either BIOL 240 or CHEM 341.
+  source: p.1868
+drafted_by: codex, 2026-10-28

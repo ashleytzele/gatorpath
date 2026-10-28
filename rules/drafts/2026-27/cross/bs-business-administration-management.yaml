@@ -1,0 +1,244 @@
+program: bs-business-administration-management
+title: 'Bachelor of Science in Business Administration: Concentration in Management'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 69
+source: p.266
+groups:
+- id: prerequisite_math
+  title: 'Prerequisite Courses: Select One'
+  one_of:
+  - - DS 110
+  - - MATH 107
+    - MATH 108
+  - - MATH 110
+  source: p.266
+  quote: 'Select One: 3-6
+
+    DS 110 Calculus with Business Applications
+
+    MATH 107
+
+    & MATH 108 Mathematics for Business Calculus I
+
+    and Mathematics for Business Calculus II
+
+    MATH 110 Business Calculus
+
+    '
+- id: prerequisite_econ
+  title: 'Prerequisite Course: ECON 101'
+  all_of:
+  - ECON 101
+  source: p.266
+  quote: ECON 101 Introduction to Microeconomic Analysis 3
+- id: prerequisite_isys
+  title: 'Prerequisite Course: ISYS 263 or CLEP'
+  unparsed: true
+  source: p.266
+  quote: 'ISYS 263 Introduction to Information Systems 3
+
+    or a passing score on the ISYS 263 CLEP Exam
+
+    '
+- id: prerequisite_timing
+  title: Prerequisite course timing
+  unparsed: true
+  source: p.266
+  quote: These courses must be completed before enrollment in certain core courses. Most core courses have specific prerequisites
+    that are listed in the course descriptions.
+- id: core_required
+  title: Core Requirements
+  all_of:
+  - ACCT 100
+  - ACCT 101
+  - BUS 682
+  - BUS 690
+  - DS 412
+  - ECON 102
+  - FIN 350
+  - IBUS 330
+  - ISYS 363
+  - MGMT 405
+  - MKTG 431
+  source: p.266
+  quote: 'Core Requirements (39 units)
+
+    ACCT 100 Introduction to Financial Accounting 3
+
+    ACCT 101 Introduction to Managerial Accounting 3
+
+    BUS 682 Seminar on Business and Society
+
+    BUS 690 Seminar in Business Policy and Strategic
+
+    Management
+
+    '
+- id: core_gwar
+  title: 'Core Requirements: Select One GWAR course'
+  one_of:
+  - - BUS 300GW
+  - - DS 660GW
+  source: p.266
+  quote: 'Select One: 3
+
+    BUS 300GW Business Communication for Professionals -
+
+    GWAR
+
+    DS 660GW Business Analytics: Communication and
+
+    Professional Practice - GWAR
+
+    '
+- id: core_statistics
+  title: 'Core Requirements: Select One statistics course'
+  one_of:
+  - - DS 212
+  - - ECON 212
+  - - MATH 124
+  source: p.266
+  quote: 'Select One: 3
+
+    DS/ECON 212 Business Statistics
+
+    MATH 124 Elementary Statistics
+
+    '
+- id: core_exam_grade
+  title: Core course letter-grade footnote
+  unparsed: true
+  source: p.266
+  quote: Must be taken for a letter grade.
+- id: core_cr_nc_limit
+  title: Core CR/NC limit
+  across:
+  - core_required
+  - core_gwar
+  - core_statistics
+  max_cr:
+    units: 6
+  except_exam: true
+  source: p.266
+  quote: Except in cases of credit by examination, no more than 6 units of the core may be completed on a CR/NC basis.
+- id: core_gpa
+  title: Core GPA
+  across:
+  - core_required
+  - core_gwar
+  - core_statistics
+  min_gpa: 2.0
+  source: p.266
+  quote: Students must have a minimum grade point average of 2.0 in all Core Requirement Business courses.
+- id: mgmt_405_grade
+  title: MGMT 405 minimum grade
+  all_of:
+  - MGMT 405
+  min_grade: C
+  source: p.266
+  quote: MGMT 405 must be completed with a C or better for management students.
+- id: concentration
+  title: Concentration Requirements
+  all_of:
+  - MGMT 605
+  - MGMT 610
+  - MGMT 648
+  source: p.266
+  quote: 'Concentration Requirements (9 units)
+
+    MGMT 605 Seminar in Developing Management Skills 3
+
+    MGMT 610 Human Resource Management 3
+
+    MGMT 648 Seminar in Leadership and Influence Skills 3
+
+    '
+- id: concentration_letter_grade
+  title: Concentration letter-grade requirement
+  across:
+  - concentration
+  letter_grade: true
+  source: p.266
+  quote: All concentration courses must be taken on a letter-grade basis.
+- id: concentration_gpa
+  title: Concentration GPA
+  across:
+  - concentration
+  min_gpa: 2.0
+  source: p.266
+  quote: Students must have a minimum grade point average of 2.0 in all concentration courses.
+- id: management_elective_select_one
+  title: 'Electives: Select One'
+  one_of:
+  - - DS 314
+  - - MGMT 653
+  source: p.267
+  quote: 'Select One: 3
+
+    DS 314 Project Management Tools
+
+    MGMT 653 Seminar in Project Management Skills
+
+    '
+- id: management_electives
+  title: 'Electives: three courses from the list'
+  choose_units: 9
+  from:
+  - list:
+    - BUS 440
+    - BUS 450
+    - MGMT 567
+    - MGMT 614
+    - MGMT 616
+    - MGMT 640
+    - MGMT 650
+    - MGMT 655
+    - MGMT 656
+    - MGMT 659
+    - IBUS 659
+    - MGMT 670
+  source: p.266
+  quote: 'Electives (12 units)
+
+    Select four courses from the following:
+
+    '
+- id: transfer_prerequisites
+  title: 'Transfer advice: lower-division preparation'
+  source: p.267
+  quote: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  transfer_notes:
+  - text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+    source: p.267
+  - text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+      to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+    source: p.267
+  - text: For information about satisfying the requirements described in (1) and (2) above at a California Community College
+      (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes,
+      options include more than one college.
+    source: p.267
+  - text: 'Use ASSIST to determine:'
+    source: p.267
+  - text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+    source: p.267
+  - text: Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.
+    source: p.267
+  - text: Remedial courses are not transferable and do not apply to the minimum 60 semester units/90 quarter units required
+      for admission.
+    source: p.267
+  - text: Additional units for courses that are repeated do not apply to the minimum 60 units required for upper-division
+      transfer (for example, if a course was not passed on the first attempt or was taken to earn a better grade).
+    source: p.267
+  - text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+      General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+      does not require delivery of this certification to Admissions, but students should retain this document for verifying
+      degree progress after transfer.
+    source: p.268
+  - text: 'Credit for Advanced Placement, International Baccalaureate, or College-Level Examination Program courses: AP/IB/CLEP
+      credit is not automatically transferred from the previous institution. Units are transferred only when an official score
+      report is delivered to SF State. Credit is based on the academic year during which exams were taken. Refer to the University
+      Bulletin in effect during the year of AP/IB/CLEP examination(s) for details regarding the award of credit for AP/IB/CLEP.'
+    source: p.268
+drafted_by: codex, 2026-10-28

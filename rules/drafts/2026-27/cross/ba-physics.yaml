@@ -1,0 +1,113 @@
+program: ba-physics
+title: Bachelor of Arts in Physics
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 54
+source: p.2165
+groups:
+- id: lower_division_prerequisites
+  title: Lower-Division Prerequisites
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 245
+  - PHYS 200
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  - PHYS 240
+  - PHYS 242
+  min_grade:
+    MATH 226: C
+    MATH 227: C
+    MATH 228: C
+    MATH 245: C
+    PHYS 220: C
+    PHYS 222: C
+    PHYS 230: C
+    PHYS 232: C
+    PHYS 240: C
+    PHYS 242: C
+    MATH 209: C
+    CSC 309: C
+  source: p.2165
+  quote: Lower-Division Prerequisites (31 units)
+- id: programming
+  title: Select One
+  one_of:
+  - - MATH 209
+  - - CSC 309
+  min_grade:
+    MATH 209: C
+    CSC 309: C
+  source: p.2165
+  quote: 'Select One: 3'
+- id: upper_division_core
+  title: Upper-Division Requirements
+  all_of:
+  - PHYS 320
+  - PHYS 321
+  - PHYS 330
+  - PHYS 360
+  - PHYS 370
+  - PHYS 385
+  min_grade: C-
+  source: p.2165
+  quote: Upper-Division Requirements (17 units)
+- id: upper_division_electives
+  title: Electives
+  choose_units: 3
+  from:
+  - subject: PHYS
+    level: upper
+  - subject: ASTR
+    level: upper
+  source: p.2165
+  quote: Choose 3 upper-division units in PHYS or ASTR.
+- id: culminating_experience
+  title: Culminating Experience
+  all_of:
+  - PHYS 491GW
+  source: p.2166
+  quote: Culminating Experience (3 units)
+- id: lower_prerequisites_letter_grades
+  across:
+  - lower_division_prerequisites
+  - programming
+  letter_grade: true
+  except:
+  - PHYS 200
+  source: p.2165
+  quote: All Major Lower-Division Prerequisites must be taken for letter grades and be passed with grades of C or better,
+    except for PHYS 200 which must be passed with a grade of CR.
+- id: phys_200_cr
+  unparsed: true
+  source: p.2165
+  quote: except for PHYS 200 which must be passed with a grade of CR.
+- id: upper_core_letter_grades
+  across:
+  - upper_division_core
+  letter_grade: true
+  source: p.2165
+  quote: All Major Upper-Division Core courses must be taken for letter grades;
+- id: upper_elective_cr_nc_limit
+  across:
+  - upper_division_electives
+  max_cr:
+    units: 3
+  source: p.2165
+  quote: Up to a maximum of 3 units of Major Upper-Division Electives may be taken on a CR/NC basis in courses where CR/NC
+    is allowed.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2167
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.2167
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.2167
+drafted_by: codex, 2026-10-28

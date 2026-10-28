@@ -1,0 +1,149 @@
+program: bs-kinesiology-integrated-teacher-education-program-in-physical-education
+title: 'Bachelor of Science in Kinesiology: Concentration in Integrated Teacher Education Program in Physical Education'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 97
+source: p.724
+global:
+  itep: true
+groups:
+- id: pre_major_biology
+  title: 'Pre-Major Prerequisites: Select One'
+  one_of:
+  - - BIOL 100
+    - BIOL 101
+  - - BIOL 230
+  quote: 'Select One: 4-5 BIOL 100 & BIOL 101 Human Biology and Human Biology Laboratory BIOL 230 Introductory Biology I'
+  source: p.724
+- id: pre_major_anatomy
+  title: 'Pre-Major Prerequisites: Select One'
+  one_of:
+  - - BIOL 220
+  - - BIOL 328
+  quote: 'Select One: 4 BIOL 220 Principles of Human Anatomy BIOL 328 Human Anatomy'
+  source: p.724
+- id: pre_major_chemistry_physiology
+  title: Pre-Major Prerequisites
+  all_of:
+  - CHEM 101
+  - BIOL 212
+  quote: CHEM 101 Survey of Chemistry 3 BIOL 212 Principles of Human Physiology 3
+  source: p.724
+- id: pre_major_statistics
+  title: 'Pre-Major Prerequisites: Select One'
+  one_of:
+  - - ETHS 116
+  - - ETHS 117
+  - - ISED 160
+  - - MATH 124
+  - - PSY 171
+  quote: 'Select One: 3-4 ETHS 116 Algebra and Statistics for Social Justice ETHS 117 Statistics for Social Justice ISED 160
+    Data Analysis in Education MATH 124 Elementary Statistics PSY 171 Quantitative Reasoning in Psychology'
+  source: p.725
+- id: core
+  title: Core Requirements
+  all_of:
+  - KIN 384GW
+  - KIN 457
+  - KIN 480
+  - KIN 482
+  - KIN 486
+  quote: Core Requirements (16 Units) Code Title Units KIN 384GW Research Methods in Kinesiology - GWAR 3 KIN 457 Culture,
+    Gender, and Movement 3 KIN 480 Anatomical Kinesiology 4 KIN 482 Exercise Physiology 3 KIN 486 Motor Learning 3
+  source: p.725
+- id: concentration
+  title: Concentration Requirements
+  all_of:
+  - KIN 240
+  - KIN 310
+  - KIN 312
+  - KIN 314
+  - KIN 331
+  - KIN 401
+  - KIN 487
+  - KIN 489
+  - KIN 536
+  - KIN 580
+  - KIN 581
+  quote: 'Concentration Requirements (31 Units) Code Title Units KIN 240 Introduction to Teaching Physical Education 3 KIN
+    310 Youth Development Instructional Analysis I 3 KIN 312 Youth Development Instructional Analysis II 3 KIN 314 Principles
+    of Strength and Conditioning 3 KIN 331 Peak Performance 3 KIN 401 Elementary School Physical Education: K-5 3 KIN 487
+    Motor Development 3 KIN 489 History and Philosophy of Sport and Physical Activity 3 KIN 536 Introduction to Adapted Physical
+    Education 3 KIN 580 Middle and High School Physical Education: Grades 6-12 3 KIN 581 Practicum in Middle and High School
+    Physical Education 1'
+  source: p.725
+- id: credential
+  title: Credential Courses
+  all_of:
+  - KIN 750
+  - KIN 751
+  - S ED 640
+  - S ED 660
+  - S ED 701
+  - S ED 720
+  - S ED 751
+  - S ED 752
+  - S ED 790
+  after:
+  - pre_major_biology
+  - pre_major_anatomy
+  - pre_major_chemistry_physiology
+  - pre_major_statistics
+  - core
+  - concentration
+  quote: 'Credential Courses (33 units) Code Title Units KIN 750 Curriculum and Instruction I: Physical Education 3 KIN 751
+    Curriculum and Instruction II: Physical Education 3 S ED 640 Supervised Observation and Participation in Public Schools
+    3 S ED 660 Student Teaching - Single Subject 9 S ED 701 Teaching for Equity in Secondary Schools 3 S ED 720 Critical and
+    Digital Literacy Across Content Areas 3 S ED 751 Classroom Environment and Management 3 S ED 752 Professional Perspectives
+    and Practices 3 S ED 790 Teaching Multilingual Learners in Secondary Schools 3'
+  source: p.725
+- id: major_letter_grade
+  title: Letter Grades
+  across: major
+  letter_grade: true
+  except:
+  - S ED 640
+  - S ED 660
+  quote: All courses, including physical activity courses used to satisfy completion of major requirements, must be taken
+    for a letter grade. No CR/NC grades may be used on the major petition for graduation with the exception of S ED 640 and
+    S ED 660.
+  source: p.724
+- id: kinesiology_course_grades
+  title: Grades in Kinesiology Courses
+  unparsed: true
+  quote: Students majoring in Integrated Teacher Education Program in Physical Education must earn a grade of C or higher
+    in all required Kinesiology theory courses and a grade of B or higher in all movement-based courses.
+  source: p.724
+- id: credential_content_area_grade
+  title: Physical Education Content Area Grades
+  unparsed: true
+  quote: Earn at least a C- in every Physical Education content areas course to meet the subject matter competency requirements
+    for credentialing purposes.
+  source: p.725
+- id: activity_areas
+  title: Activity Area Competence
+  unparsed: true
+  quote: Demonstrate an understanding of and possess demonstration-level skill competence in 12 activity areas. Students must
+    pre-plan their routes to meet this requirement upon consultation with faculty and in conjunction with KIN 240.
+  source: p.725
+- id: required_experiences
+  title: Additional Required Experiences
+  unparsed: true
+  quote: The following experiences are required for satisfactory completion of the Physical Education Subject Matter Preparation
+    Program. Students may complete these experiences in courses available at a college, university, or off-campus. However,
+    these experiences do not bear credit toward completion of the major. • Life Guard Training and Water Safety Instruction.
+    • First Aid-CPR Certification. • Active participation in student CAHPERD, AAHPERD, and/or the Kinesiology Student Association,
+    or other related professional organizations. • Gain experience in coaching, teaching physical education, recreation, or
+    intramurals through working as a volunteer or paid assistant.
+  source: p.725
+ge_met:
+- area: 5B
+  one_of:
+  - - BIOL 212
+    - BIOL 220
+  - - BIOL 212
+    - BIOL 328
+  quote: Area 5B (Biological Science) is satisfied upon completion of BIOL 212 and either BIOL 220 or BIOL 328.
+  source: p.724
+drafted_by: codex, 2026-10-28

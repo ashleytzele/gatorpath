@@ -1,0 +1,148 @@
+program: bs-biology-microbiology
+title: 'Bachelor of Science in Biology: Concentration in Microbiology'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 58
+source: p.1825
+global:
+  no_cr_nc: true
+  source: p.1825
+groups:
+- id: lower_required
+  title: Lower-Division Requirements
+  all_of:
+  - BIOL 230
+  - BIOL 231
+  - BIOL 240
+  - CHEM 115
+  - CHEM 215
+  - MATH 226
+  min_grade:
+    BIOL 230: C-
+    BIOL 240: C-
+    CHEM 115: C
+    CHEM 215: C
+    MATH 226: C-
+  quote: 'Lower-Division Requirements (30 units)
+
+    BIOL 230 Introductory Biology I 5
+
+    BIOL 231 Advising for Success as a Biology Major 1
+
+    BIOL 240 Introductory Biology II 5
+
+    CHEM 115 General Chemistry I 4
+
+    CHEM 215 General Chemistry II 4
+
+    MATH 226 Calculus I 4'
+  source: p.1825
+- id: lower_chemistry
+  title: 'Lower-Division Requirements: Select One'
+  one_of:
+  - - CHEM 130
+  - - CHEM 233
+  min_grade:
+    CHEM 130: C
+    CHEM 233: C
+  quote: 'Select One: 3
+
+    CHEM 130 General Organic Chemistry
+
+    CHEM 233 Organic Chemistry I'
+  source: p.1825
+- id: lower_physics
+  title: 'Lower-Division Requirements: Select One'
+  one_of:
+  - - PHYS 111
+    - PHYS 112
+  - - PHYS 220
+    - PHYS 222
+  quote: 'Select One: 4
+
+    PHYS 111
+
+    & PHYS 112
+
+    General Physics I
+
+    and General Physics I Laboratory
+
+    PHYS 220
+
+    & PHYS 222
+
+    General Physics with Calculus I
+
+    and General Physics with Calculus I Laboratory'
+  source: p.1825
+- id: upper_required
+  title: Upper-Division Requirements
+  all_of:
+  - BIOL 337
+  - BIOL 355
+  - BIOL 401
+  - BIOL 402GW
+  - BIOL 458
+  quote: 'Upper-Division Requirements (19 units)
+
+    BIOL 337 Evolution 3
+
+    BIOL 355 Genetics 3
+
+    BIOL 401
+
+    & BIOL 402GW
+
+    General Microbiology
+
+    and General Microbiology Laboratory - GWAR
+
+    6'
+  source: p.1825
+- id: upper_biochemistry
+  title: 'Upper-Division Requirements: Select One'
+  one_of:
+  - - CHEM 349
+  - - CHEM 340
+  quote: 'Select One: 3
+
+    CHEM 349 General Biochemistry
+
+    CHEM 340 Biochemistry I'
+  source: p.1826
+- id: upper_electives
+  title: Upper-Division Electives
+  unparsed: true
+  quote: 'Upper-Division Electives (9 units minimum)
+
+    Laboratory Elective
+
+    Select Two:
+
+    Lecture Electives
+
+    Select enough to reach a minimum of 9 units of electives.'
+  source: p.1826
+- id: biology_residence
+  title: Biology Units Completed at SF State
+  across: major
+  min_units_from:
+    subject: BIOL
+    units: 12
+    sf_state: true
+  quote: At least 12 units in biology must be completed at SF State.
+  source: p.1825
+ge_met:
+- area: 5B
+  one_of:
+  - - BIOL 240
+  quote: Area 5B (Biological Science) is satisfied upon completion of BIOL 240.
+  source: p.1825
+- area: 5UD
+  one_of:
+  - - BIOL 355
+  quote: Area 5UD (Upper-Division Science) is satisfied upon completion of BIOL 355.
+  source: p.1825
+drafted_by: codex, 2026-10-28

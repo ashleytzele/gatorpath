@@ -1,0 +1,87 @@
+program: ba-english-linguistics
+title: 'Bachelor of Arts in English: Concentration in Linguistics'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.1137
+groups:
+- id: lower_division
+  title: Lower-Division Requirements (6 units)
+  all_of:
+  - ENG 218
+  - ENG 250
+  quote: Lower-Division Requirements (6 units)
+  source: p.1137
+- id: upper_division
+  title: Upper-Division Requirements (18 units)
+  all_of:
+  - ENG 402
+  - ENG 420
+  - ENG 461
+  - ENG 480GW
+  - ENG 583
+  - ENG 640
+  min_grade:
+    ENG 480GW: C
+  quote: Upper-Division Requirements (18 units)
+  source: p.1137
+- id: concentration
+  title: Concentration Requirements (21 units)
+  all_of:
+  - ENG 421
+  - ENG 424
+  - ENG 425
+  quote: Concentration Requirements (21 Units)
+  source: p.1137
+- id: electives
+  title: Electives (9 units)
+  choose_units: 9
+  approval: Three courses selected with approval of advisor.
+  from:
+    approved: true
+  quote: Three courses selected with approval of advisor.
+  source: p.1137
+- id: capstone
+  title: Capstone Experience (3 units)
+  all_of:
+  - ENG 422
+  quote: Capstone Experience (3 units)
+  source: p.1137
+- id: capstone_timing
+  unparsed: true
+  quote: This course must be completed during the spring semester of the student’s final (senior) year.
+  source: p.1137
+- id: complementary_studies
+  unparsed: true
+  quote: Twelve units of Complementary Studies are required of all candidates in any of the four concentrations (Literature,
+    Linguistics, English Education, and Professional Writing and Rhetoric) in the Bachelor of Arts degree in English. These
+    units must come from courses bearing a prefix other than ENG, and must not be cross-listed with ENG. English majors will
+    be offered four pathways for satisfying this requirement; each pathway is designed to facilitate graduation in a timely
+    manner.
+  source: p.1137
+- id: complementary_studies_pathways
+  unparsed: true
+  quote: '1. Foreign Language: 12 units in a single foreign language;
+
+    2. Second major, minor, or certificate: 12 units of coursework taken as part of a second major, a minor, or a certificate;
+
+    3. Study Abroad: 12 units of coursework taken in an approved study abroad program (such as CSU Study Abroad);
+
+    4. Related Subjects: 12 units of coursework in related disciplines with the approval of an English Department advisor.
+
+    For these related subjects, six units must be from classes in a non-literary related field.'
+  source: p.1138
+- id: major_gpa
+  min_gpa: 2.0
+  across: major
+  quote: Students must have a GPA of 2.0 or higher in the major
+  source: p.1137
+- id: major_grade_floor
+  max_below:
+    grade: C-
+    courses: 0
+  across: major
+  quote: no grade in the major lower than a C-
+  source: p.1137
+drafted_by: codex, 2026-10-28

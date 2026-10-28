@@ -1,0 +1,121 @@
+program: bs-visual-communication-design
+title: Bachelor of Science in Visual Communication Design
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 58
+source: p.1091
+groups:
+- id: admission_gate
+  unparsed: true
+  quote: 'Before advancing to courses at the 300 level or higher, however, all majors must: • Complete the foundation courses
+    DES 200 and DES 222 with a grade of C or better. • Have upper-division standing. • Complete the lower-division General
+    Education requirements at SF State or the equivalent at another institution.'
+  source: p.1091
+- id: foundation
+  title: Foundation Requirements
+  all_of:
+  - DES 200
+  - DES 222
+  - DES 228
+  source: p.1091
+- id: core_part_one
+  title: Core Requirements
+  all_of:
+  - DES 300
+  - DES 322
+  - DES 324GW
+  source: p.1091
+- id: core_part_two
+  title: Core Requirements
+  all_of:
+  - DES 356
+  - DES 370
+  source: p.1092
+- id: major_requirements_fixed
+  title: Major Requirements
+  all_of:
+  - DES 325
+  - DES 327
+  - DES 425
+  - DES 427
+  source: p.1092
+- id: major_requirements_select_one
+  title: 'Major Requirements: Select one'
+  one_of:
+  - - DES 525
+  - - DES 527
+  source: p.1092
+- id: major_electives
+  title: Major Electives
+  choose_units: 15
+  course_units: 3
+  from:
+  - list:
+    - CSC 101
+    - DES 220
+    - DES 226
+    - DES 252
+    - DES 256
+    - DES 278
+    - JOUR 235
+    level: lower
+    max_units: 6
+  - list:
+    - DES 305
+    - DES 310
+    - DES 311
+    - DES 320
+    - DES 321
+    - DES 367
+    - DES 405
+    - DES 411
+    - DES 448
+    - DES 456
+    - DES 475
+    - DES 485
+    - DES 523
+    - DES 525
+    - DES 527
+    - DES 575
+    - DES 576
+    - DES 625
+    - DES 627
+    - DES 628
+    - DES 699
+    - JOUR 450
+    level: upper
+  - approved: true
+  source: p.1092
+- id: culminating_requirements
+  title: Culminating Requirements
+  all_of:
+  - DES 505
+  - DES 570
+  when:
+    DES 505: last
+  source: p.1092
+- id: major_grading
+  unparsed: true
+  quote: All courses for the major must be completed with a grade of C or better, except for DES 305, DES 370, and DES 576,
+    which must be completed with a CR grade.
+  source: p.1091
+ge_met:
+- area: 3UD
+  one_of:
+  - - DES 356
+  quote: Upper-Division General Education, Arts or Humanities (GE 3UD) is satisfied upon completion of DES 356 .
+  source: p.1091
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1093
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1093
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:'
+  source: p.1093
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.1093
+drafted_by: codex, 2026-10-28

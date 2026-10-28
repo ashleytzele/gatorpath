@@ -1,0 +1,92 @@
+program: ba-theatre-arts
+title: Bachelor of Arts in Theatre Arts
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.1681
+groups:
+- id: core_courses
+  title: Core Courses
+  all_of:
+  - TH A 132
+  - TH A 202
+  - TH A 340
+  - TH A 347
+  - TH A 349
+  - TH A 401
+  - TH A 402
+  - TH A 405GW
+  - TH A 690
+  quote: Core Courses (27 units)
+  source: p.1681
+- id: advanced_topics
+  title: Advanced Topics in Theatre Studies
+  one_of:
+  - - DANC 350
+  - - DANC 430
+  - - DANC 657
+  - - ANTH 657
+  - - TH A 340
+  - - TH A 341
+  - - TH A 404
+  - - TH A 406
+  - - TH A 408
+  - - DANC 408
+  - - TH A 409
+  - - TH A 504
+  - - TH A 531
+  - - TH A 559
+  - - MUS 559
+  - - TH A 605
+  - - C W 605
+  quote: 'Advanced Topics in Theatre Studies (3 units)
+
+    Select One:
+
+    Code Title Units
+
+    DANC 350 Dance Aesthetics: Cultural/Historical Perspectives 3
+
+    DANC 430 Survey of Ballet and Modern Dance History 3
+
+    DANC/ANTH 657 Ethnography of Dance 3
+
+    TH A 340 Principles of Directing 3
+
+    TH A 341 History of Directing 3
+
+    TH A 404 Musical Theatre History and Literature 3
+
+    TH A 406 The Art of Comedy 3
+
+    TH A/DANC 408 Performance in Asia and the Asian Diaspora 3
+
+    TH A 409 Queer Theatre and Performance 3
+
+    TH A 504 Historical Styles of Decor and/or Clothing 3
+
+    TH A 531 Advanced Topics in Theatre Performance 3
+
+    TH A/MUS 559 Women in Jazz 3
+
+    TH A/C W 605 Writing and Performing Monologues 3'
+  source: p.1681
+- id: major_electives
+  title: Major Electives
+  choose_units: 15
+  from:
+    subject: TH A
+  min_units_from:
+    subject: TH A
+    level: upper
+    units: 9
+  quote: The Bachelor of Arts in Theatre Arts requires 15 elective units with the TH A prefix. At least 9 units must be upper-division
+    units.
+  source: p.1681
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1682
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1682
+drafted_by: codex, 2026-10-28

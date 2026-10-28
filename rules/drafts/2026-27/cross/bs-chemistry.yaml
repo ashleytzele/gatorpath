@@ -1,0 +1,111 @@
+program: bs-chemistry
+title: Bachelor of Science in Chemistry
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 71
+source: p.1881
+global:
+  no_cr_nc: true
+  source: p.1881
+groups:
+- id: lower_division
+  title: Lower-Division Requirements (37 units)
+  all_of:
+  - CHEM 115
+  - CHEM 215
+  - CHEM 233
+  - CHEM 234
+  - CHEM 235
+  - CHEM 236
+  - CHEM 251
+  - MATH 226
+  - MATH 227
+  source: p.1881
+  quote: Lower-Division Requirements (37 units)
+- id: physics
+  title: 'Lower-Division Requirements: Select One'
+  one_of:
+  - - PHYS 111
+    - PHYS 112
+    - PHYS 121
+    - PHYS 122
+  - - PHYS 220
+    - PHYS 222
+    - PHYS 230
+    - PHYS 232
+  source: p.1881
+  quote: 'Select One: 8'
+- id: upper_division
+  title: Upper-Division Requirements (25 units)
+  all_of:
+  - CHEM 321
+  - CHEM 322
+  - CHEM 325
+  - CHEM 340
+  - CHEM 351
+  - CHEM 353
+  - CHEM 390GW
+  - CHEM 426
+  - CHEM 451
+  source: p.1881
+  quote: Upper-Division Requirements (25 units)
+- id: upper_division_electives
+  title: Upper-Division Electives
+  choose_units: 6
+  from:
+  - list:
+    - CHEM 341
+    - CHEM 343
+    - CHEM 370
+    - CHEM 420
+    - CHEM 422
+    - CHEM 433
+    - CHEM 443
+    - CHEM 645GW
+    - CHEM 667
+    - CHEM 680
+    - CHEM 685
+    - CHEM 699
+  - list:
+    - CHEM 686
+    max_units: 2
+  source: p.1881
+  quote: A minimum of 9 units of electives must be selected from the following list of courses.
+- id: programming_elective
+  title: 'Upper-Division Electives: Select One'
+  one_of:
+  - - CSC 306
+  - - CSC 408
+  - - CSC 509
+  source: p.1881
+  quote: 'Select One: 3'
+- id: chemistry_prerequisite_grades
+  title: Chemistry prerequisite course grades
+  unparsed: true
+  source: p.1881
+  quote: Grades of C or better are required in chemistry prerequisite courses.
+- id: chem_343_substitution
+  title: CHEM 343 substitution conditions
+  unparsed: true
+  source: p.1882
+  quote: Students may substitute CHEM 343 for CHEM 426 or CHEM 451 upon prior approval of advisor. If CHEM 343 is used as
+    a substitute, it cannot also be used as an elective.
+- id: chem_699_conditions
+  title: CHEM 699 elective conditions
+  unparsed: true
+  source: p.1882
+  quote: By petition only. Units must be taken in the same semester to be used as an upper division elective.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1882
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1882
+- text: 'Use ASSIST to determine:'
+  source: p.1882
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.1883
+drafted_by: codex, 2026-10-28

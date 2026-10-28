@@ -1,0 +1,102 @@
+program: ba-environmental-studies
+title: Bachelor of Arts in Environmental Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 42
+source: p.2019
+groups:
+- id: core
+  title: Core
+  all_of:
+  - ENV 500GW
+  - ENVS 130
+  - ENV 205
+  - ENVS 450
+  - ENVS 680
+  - ENV 690
+  quote: ENV 500GW Physical and Human Dimensions of Climate Change - GWAR 3 ENVS 130 Environmental Studies 3 ENV 205 Our Environment
+    Through Data 3 ENVS 450 Environmental Law and Policy 3 ENVS 680 Environmental Studies Internship 1-3 ENV 690 Capstone
+    Seminar 3
+  source: p.2019
+- id: ecology_or_pollution
+  title: 'Core: Select One (BIOL 313 or CHEM 380)'
+  one_of:
+  - - BIOL 313
+  - - CHEM 380
+  quote: 'Select One: 3 BIOL 313 Principles of Ecology CHEM 380 Chemistry Behind Environmental Pollution'
+  source: p.2019
+- id: chemistry
+  title: 'Core: Select One (CHEM 115 or CHEM 180)'
+  one_of:
+  - - CHEM 115
+  - - CHEM 180
+  quote: 'Select One: 3-4 CHEM 115 General Chemistry I CHEM 180 Chemistry for Energy and the Environment'
+  source: p.2019
+- id: physical_environment
+  title: 'Core Electives: Physical Environment'
+  choose_units: 3
+  from:
+  - list:
+    - ERTH 230
+    - GEOG 101
+  quote: Physical Environment 3-4 ERTH 230 Environmental Geology GEOG 101 Our Physical Environment
+  source: p.2019
+- id: sustainability_social_justice
+  title: 'Core Electives: Sustainability and Social Justice'
+  choose_units: 3
+  from:
+  - list:
+    - ENVS 460
+    - ENVS 480
+    - ENVS 570
+    - PHIL 470
+    - USP 514
+    - USP 515
+    - GEOG 667
+  quote: 'Sustainability and Social Justice 3-4 ENVS 460 Energy, Justice, and Sustainability ENVS 480 Climate Change Adaptation
+    and Justice ENVS 570 Applied Local Sustainability PHIL 470 Environmental Ethics USP 514 Sustainable Development in Cities
+    USP 515/GEOG 667 Environmental Justice: Race, Poverty, and the Environment'
+  source: p.2019
+- id: global_international
+  title: 'Core Electives: Global/International'
+  choose_units: 3
+  from:
+  - list:
+    - ENVS 470
+    - ENVS 480
+    - IR 331
+    - ENVS 331
+    - IR 428
+    - GEOG 428
+  quote: Global/International 3-4 ENVS 470 Climate Politics and Policy ENVS 480 Climate Change Adaptation and Justice I R/ENVS
+    331 Global Environmental Crisis I R/GEOG 428 International Political Economy of Food and Hunger
+  source: p.2019
+- id: guided_electives
+  title: Guided Electives
+  choose_units: 11
+  quote: Guided Electives (11-12 units) Select 11-12 units not used to satisfy the elective categories above.
+  source: p.2019
+- id: guided_elective_coherence
+  title: Guided Elective Coherence
+  unparsed: true
+  quote: Electives should be organized into a coherent area of study; three suggested pathways are shown below. Environmental
+    Sustainability and Social Justice, The Urban Environment, and Humanities and the Environment. These pathways are not mandatory;
+    students interested in alternative routes through the elective portion of the major should consult with an advisor.
+  source: p.2019
+- id: cr_nc_limit
+  title: CR grade limit
+  across: major
+  max_cr:
+    courses: 2
+  quote: Students are advised that the CR grade is acceptable in any two courses to be counted for the major.
+  source: p.2019
+- id: below_c_minus_limit
+  title: Limit on courses below C–
+  across: major
+  max_below:
+    grade: C-
+    courses: 1
+  quote: No more than one course counted toward major requirements may be completed with a grade less than a C–.
+  source: p.2019
+drafted_by: codex, 2026-10-28

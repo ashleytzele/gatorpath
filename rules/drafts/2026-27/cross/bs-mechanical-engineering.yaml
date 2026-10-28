@@ -1,0 +1,176 @@
+program: bs-mechanical-engineering
+title: Bachelor of Science in Mechanical Engineering
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 95
+source: p.1978
+global:
+  no_cr_nc: true
+  source: p.1978
+groups:
+- id: chemistry
+  title: 'Lower-Division Math and Science Courses: Select One'
+  one_of:
+  - - CHEM 115
+  - - CHEM 180
+  quote: 'Select One: 3-4'
+  source: p.1978
+- id: math_physics
+  title: Lower-Division Math and Science Courses
+  all_of:
+  - MATH 226
+  - MATH 227
+  - MATH 228
+  - MATH 245
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  - PHYS 240
+  - PHYS 242
+  min_grade:
+    MATH 226: C
+    MATH 227: C
+    PHYS 220: C
+    PHYS 230: C-
+    PHYS 240: C-
+  quote: Lower-Division Math and Science Courses (30-31 units)
+  source: p.1978
+- id: lower_division_engineering
+  title: Lower-Division Engineering Courses
+  all_of:
+  - ENGR 100
+  - ENGR 102
+  - ENGR 104
+  - ENGR 200
+  - ENGR 201
+  - ENGR 205
+  - ENGR 206
+  - ENGR 213
+  - ENGR 214
+  - ENGR 282
+  min_grade:
+    ENGR 102: C-
+    ENGR 104: C-
+    ENGR 200: C-
+    ENGR 201: C-
+    ENGR 205: C-
+    ENGR 213: C-
+    ENGR 282: C-
+  quote: Lower-Division Engineering Courses (26 units)
+  source: p.1978
+- id: upper_division_engineering
+  title: Upper-Division Engineering Courses
+  all_of:
+  - ENGR 300
+  - ENGR 302
+  - ENGR 303
+  - ENGR 304
+  - ENGR 307
+  - ENGR 309
+  - ENGR 363
+  - ENGR 446
+  - ENGR 447
+  - ENGR 467
+  - ENGR 696
+  - ENGR 697GW
+  min_grade:
+    ENGR 300: C-
+    ENGR 303: C-
+    ENGR 304: C-
+    ENGR 307: C-
+    ENGR 309: C-
+  quote: Upper-Division Engineering Courses (27 units)
+  source: p.1979
+- id: focus_area_elective
+  title: 'Focus Area Elective: Select one'
+  one_of:
+  - - ENGR 364
+  - - ENGR 414
+  - - ENGR 463
+  quote: 'Focus Area Elective (3 units)
+
+    Select one:'
+  source: p.1979
+- id: upper_division_engineering_electives
+  title: Upper-Division Engineering Electives
+  choose_units: 9
+  from:
+  - list:
+    - ENGR 306
+    - ENGR 410
+    - ENGR 415
+    - ENGR 441
+    - ENGR 462
+    - ENGR 465
+    - ENGR 469
+    - ENGR 470
+    - ENGR 610
+    - ENGR 820
+    - ENGR 860
+    - ENGR 863
+    - ENGR 864
+    - ENGR 865
+    - ENGR 866
+    - ENGR 867
+    - ENGR 868
+    - ENGR 869
+    - ENGR 870
+  quote: A total of 9 units from the following list of courses is required, subject to the minimum number of units specified
+    for each group. Courses selected for the controls (emphasis) elective may not be double-counted as upper-division electives.
+  source: p.1979
+- id: upper_division_elective_group_minimums
+  unparsed: true
+  quote: subject to the minimum number of units specified for each group.
+  source: p.1979
+- id: elective_study_plan_approval
+  unparsed: true
+  quote: A study plan of intended upper-division electives must be approved by the student’s advisor and the program coordinator
+    prior to the seventh semester of the engineering program.
+  source: p.1979
+ge_met:
+- area: 1B
+  one_of:
+  - - ENGR 205
+    - ENGR 201
+  - - ENGR 205
+    - ENGR 213
+  - - ENGR 282
+    - ENGR 201
+  - - ENGR 282
+    - ENGR 213
+  quote: Area 1B (Critical Thinking) is satisfied upon completion of either ENGR 205 or ENGR 282 and either ENGR 201 or ENGR
+    213.
+  source: p.1978
+- area: 5UD
+  one_of:
+  - - ENGR 300
+    - ENGR 302
+    - ENGR 304
+  quote: Area 5UD (Upper-Division Science) is satisfied upon completion of ENGR 300, ENGR 302, and ENGR 304.
+  source: p.1978
+transfer_notes:
+- text: Community college transfers should complete the sequence of mathematics, chemistry, physics, and engineering courses
+    listed in freshman and sophomore years under the “sample sequence of courses” at the community college.
+  source: p.1978
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1980
+- text: 'The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+
+    • a course in U.S. History
+
+    • a course in U.S. & California Government'
+  source: p.1980
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1980
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.1980
+drafted_by: codex, 2026-10-28

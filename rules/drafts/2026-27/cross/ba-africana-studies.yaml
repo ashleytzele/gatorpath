@@ -1,0 +1,132 @@
+program: ba-africana-studies
+title: Bachelor of Arts in Africana Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.402
+groups:
+- id: core_requirements
+  title: Core Requirements (27 units)
+  all_of:
+  - AFRS 101
+  - AFRS 120
+  - AFRS 200
+  - AFRS 210
+  - AFRS 303
+  - AFRS 355
+  - AFRS 370
+  - AFRS 466
+  - AFRS 516
+  quote: Core Requirements (27 units)
+  source: p.402
+- id: emphasis_courses
+  title: Areas of Emphasis (9 units)
+  choose_units: 9
+  from:
+  - list:
+    - AFRS 204
+    - AFRS 208
+    - AFRS 213
+    - AFRS 221
+    - AFRS 230
+    - AFRS 266
+    - AFRS 305
+    - AFRS 326
+    - AFRS 400
+    - AFRS 551
+    - AFRS 525
+    - AFRS 665
+  - list:
+    - AFRS 100
+    - AFRS 111
+    - AFRS 125
+    - AFRS 202
+    - AFRS 215
+    - AFRS 256
+    - AFRS 290
+    - AFRS 320
+    - AFRS 335
+    - AFRS 350
+    - AIS 350
+    - LTNS 355
+    - AFRS 376
+    - AFRS 500
+    - AFRS 678
+    - AFRS 705
+  - list:
+    - AFRS 205
+    - AFRS 233
+    - AFRS 525
+    - AFRS 678
+  - list:
+    - AFRS 290
+    - AFRS 326
+    - AFRS 500
+  - list:
+    - AFRS 202
+    - AFRS 335
+    - AFRS 675
+  quote: Select 9 units on advisement from one area below to gain a deeper intellectual grasp of the field.
+  source: p.402
+- id: emphasis_one_area
+  across:
+  - emphasis_courses
+  categories:
+  - - AFRS 204
+    - AFRS 208
+    - AFRS 213
+    - AFRS 221
+    - AFRS 230
+    - AFRS 266
+    - AFRS 305
+    - AFRS 326
+    - AFRS 400
+    - AFRS 551
+    - AFRS 525
+    - AFRS 665
+  - - AFRS 100
+    - AFRS 111
+    - AFRS 125
+    - AFRS 202
+    - AFRS 215
+    - AFRS 256
+    - AFRS 290
+    - AFRS 320
+    - AFRS 335
+    - AFRS 350
+    - AIS 350
+    - LTNS 355
+    - AFRS 376
+    - AFRS 500
+    - AFRS 678
+    - AFRS 705
+  - - AFRS 205
+    - AFRS 233
+    - AFRS 525
+    - AFRS 678
+  - - AFRS 290
+    - AFRS 326
+    - AFRS 500
+  - - AFRS 202
+    - AFRS 335
+    - AFRS 675
+  one_category: true
+  quote: Select 9 units on advisement from one area below to gain a deeper intellectual grasp of the field.
+  source: p.402
+- id: major_gwar
+  title: Graduation Writing Assessment Requirement (3 units)
+  all_of:
+  - ETHS 300GW
+  quote: Graduation Writing Assessment Requirement (3 units)
+  source: p.403
+- id: complementary_studies
+  unparsed: true
+  quote: 'Students completing a Bachelor of Arts in Africana Studies must complete twelve units in complementary studies in
+    courses bearing a prefix other than AFRS or courses cross-listed with AFRS. These units may be in 1. a language other
+    than English; 2. one course from each AA S, AIS, LTNS, and RRS; 3. four courses from one prefix: AA S or AIS or LTNS or
+    RRS; 4. a minor or certificate; 5. units earned in a study abroad program; or 6. a coherent group of courses complementary
+    to the major. With the approval of an advisor in the major, courses that fulfill the complementary studies requirement
+    may be lower or upper-division units, resident or transfer units.'
+  source: p.403
+drafted_by: codex, 2026-10-27

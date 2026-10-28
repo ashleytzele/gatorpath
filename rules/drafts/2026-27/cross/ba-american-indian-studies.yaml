@@ -1,0 +1,102 @@
+program: ba-american-indian-studies
+title: Bachelor of Arts in American Indian Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.421
+groups:
+- id: core
+  title: Core Requirements
+  all_of:
+  - AIS 100
+  - AIS 150
+  - AIS 205
+  - AIS 300
+  - AIS 694
+  - AIS 680
+  - ETHS 300GW
+  min_grade: C
+  quote: Students in the major must earn a grade of C or better for each course in the core.
+  source: p.421
+- id: lower_electives
+  title: Lower-Division Electives
+  choose_units: 6
+  from:
+  - list:
+    - AIS 103
+    - RRS 103
+    - AIS 160
+    - AIS 162
+    - AIS 235
+  quote: Upon advisement, students select two courses (6 units) at the lower division level and four courses (12 units) at
+    the upper-division level.
+  source: p.421
+- id: upper_electives
+  title: Upper-Division Electives
+  choose_units: 12
+  from:
+  - list:
+    - AIS 310
+    - AIS 320
+    - AIS 325
+    - AIS 330
+    - AIS 350
+    - AFRS 350
+    - LTNS 355
+    - AIS 400
+    - AIS 410
+    - AIS 440
+    - SXS 440
+    - WGS 440
+    - AIS 450
+    - AIS 460
+    - AIS 470
+    - AIS 520
+    - AIS 560
+    - AIS 420
+    - WGS 420
+    - AIS 433
+    - RRS 433
+    - AIS 550
+  quote: Upon advisement, students select two courses (6 units) at the lower division level and four courses (12 units) at
+    the upper-division level.
+  source: p.421
+- id: elective_areas
+  title: Electives in Both Areas
+  across:
+  - lower_electives
+  - upper_electives
+  categories:
+  - - AIS 103
+    - RRS 103
+    - AIS 160
+    - AIS 162
+    - AIS 310
+    - AIS 320
+    - AIS 325
+    - AIS 400
+    - AIS 410
+    - AIS 440
+    - SXS 440
+    - WGS 440
+    - AIS 450
+    - AIS 470
+    - AIS 520
+    - AIS 560
+  - - AIS 235
+    - AIS 330
+    - AIS 350
+    - AFRS 350
+    - LTNS 355
+    - AIS 420
+    - WGS 420
+    - AIS 433
+    - RRS 433
+    - AIS 460
+    - AIS 550
+  min_categories: 2
+  quote: 'Both lower and upper division courses are focused in two areas: 1. Cultural Self-Determination; 2. Social Justice
+    and Equity.'
+  source: p.421
+drafted_by: codex, 2026-10-27

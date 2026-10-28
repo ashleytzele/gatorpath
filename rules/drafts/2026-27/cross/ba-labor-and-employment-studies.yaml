@@ -1,0 +1,128 @@
+program: ba-labor-and-employment-studies
+title: Bachelor of Arts in Labor and Employment Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.254
+groups:
+- id: core_courses
+  title: Required Courses
+  all_of:
+  - LABR 250
+  - LABR 251
+  quote: 'Required Courses (18 Units)
+
+    Code Title Units
+
+    LABR 250 Introduction to the Study of Labor 3
+
+    LABR 251 Know Your Work Rights 3'
+  source: p.254
+- id: labor_history
+  title: History of Labor in the United States
+  one_of:
+  - - HIST 474
+  - - ECON 474
+  - - LABR 474
+  quote: 'HIST/ECON/
+
+    LABR 474
+
+    History of Labor in the United States 3'
+  source: p.254
+- id: comparative_employment_relations
+  title: Comparative Employment Relations
+  one_of:
+  - - LABR 552
+  - - SOC 552
+  quote: LABR/SOC 552 Comparative Employment Relations 3
+  source: p.254
+- id: labor_standards
+  title: Labor Standards and Corporate Social Responsibility
+  one_of:
+  - - LABR 553
+  - - SOC 553
+  quote: 'LABR/SOC 553 Labor Standards and Corporate Social
+
+    Responsibility
+
+    3'
+  source: p.254
+- id: global_labor_rights
+  title: Labor Rights in the Global Economy
+  one_of:
+  - - LABR 555
+  - - SOC 555
+  quote: LABR/SOC 555 Labor Rights in the Global Economy 3
+  source: p.254
+- id: major_gwar
+  title: Graduation Writing Assessment Requirement
+  all_of:
+  - HIST 300GW
+  quote: 'Graduation Writing Assessment Requirement (3 Units)
+
+    Code Title Units
+
+    HIST 300GW Seminar in Historical Analysis - GWAR 3'
+  source: p.254
+- id: related_electives
+  title: Related Electives
+  unparsed: true
+  quote: 'Related Electives (15 Units)
+
+    Upper-division LABR courses or cross-listed with LABR not used to
+
+    satisfy core requirements can be used as electives.'
+  source: p.254
+- id: final_experience
+  title: Final Experience
+  unparsed: true
+  quote: 'Final Experience (3–4 Units)
+
+    Internship or Final Research Project'
+  source: p.254
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  quote: 'Complementary Studies (12 Units)
+
+    Bachelor of Arts students must complete at least 12 units of
+
+    Complementary Studies outside of the primary prefix for the
+
+    major. (Note:
+
+    Students may not use an alternate prefix that is cross-listed with the
+
+    primary prefix for the major.) Students who complete two majors or a
+
+    major and a minor automatically complete the Complementary Studies
+
+    requirement. An additional way to complete Complementary Studies for
+
+    students in the Labor and Employment Studies major is to count the 12
+
+    Complementary Studies units toward elective units in the major. Consult
+
+    with your major advisor for assistance.'
+  source: p.254
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.255
+- text: 'The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+
+    • a course in U.S. History
+
+    • a course in U.S. & California Government'
+  source: p.255
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.255
+drafted_by: codex, 2026-10-28

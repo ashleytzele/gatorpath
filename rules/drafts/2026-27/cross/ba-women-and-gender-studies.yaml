@@ -1,0 +1,239 @@
+program: ba-women-and-gender-studies
+title: Bachelor of Arts in Women and Gender Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 30
+source: p.1704
+groups:
+- id: core_electives
+  title: Core Courses
+  choose_units: 6
+  from:
+  - list:
+    - WGS 200
+    - WGS 210
+    - WGS 220
+    - WGS 280
+  quote: 'Core Courses (12 units)
+
+    Select Two: 6
+
+    WGS 200 Introduction to Women and Gender Studies
+
+    WGS 210 Introduction to Feminism and the State
+
+    WGS 220 Introduction to Feminist Disability Studies
+
+    WGS 280 Introduction to Feminist Science Studies'
+  source: p.1704
+- id: core_required
+  title: Core Courses
+  all_of:
+  - WGS 300GW
+  - WGS 690
+  quote: 'WGS 300GW Gender, Race, and Nation - GWAR 3
+
+    WGS 690 Senior Seminar 3'
+  source: p.1704
+- id: praxis
+  title: Praxis
+  one_of:
+  - - WGS 105
+  - - WGS 303
+  - - WGS 305
+  - - WGS 400
+  - - WGS 698
+  quote: 'Praxis (3 units)
+
+    Select one:
+
+    WGS 105 Feminism and Self-Care: Perspectives and Practices
+
+    1
+
+    WGS 303 Feminist Artivism & Praxis 3
+
+    WGS 305 Women and Gender Studies Lecture Series 3
+
+    WGS 400 That''s Not What I Said: Feminism, Oral History, and Research Methods in Women and Gender Studies
+
+    3
+
+    WGS 698 Feminist Praxis and the Non-Profit Industrial Complex
+
+    3'
+  source: p.1704
+- id: body_politics
+  title: Body Politics
+  one_of:
+  - - WGS 554
+  - - WGS 563
+  - - WGS 591
+  - - WGS 593
+  - - WGS 612
+  quote: 'Body Politics (3 units)
+
+    Select One:
+
+    WGS 554 Gender and Global Migration 3
+
+    WGS 563 Gender, Sexuality, and the Politics of Disability 3
+
+    WGS 591 Critical Approaches to Transgender Health, Science, and Medicine 3
+
+    WGS 593 Gender, Health, and the Environment 3
+
+    WGS 612 Queer Theory 3'
+  source: p.1704
+- id: power_and_violence
+  title: Power and Violence
+  one_of:
+  - - WGS 160
+  - - WGS 511
+  - - WGS 513
+  - - WGS 514
+  - - WGS 536
+  quote: 'Power and Violence (3 units)
+
+    Select One:
+
+    WGS 160 Gender, Politics, and Citizenship 3
+
+    WGS 511 Women and Violence 3
+
+    WGS 513 Gender, War, and Militarism 3
+
+    WGS 514 Women and the Prison Industrial Complex 3
+
+    WGS 536 Gender, Globalization, and Women''s Human Rights 3'
+  source: p.1704
+- id: culture_media_and_art
+  title: Culture, Media, and Art
+  one_of:
+  - - WGS 485
+  - - BECA 485
+  - - WGS 542
+  - - WGS 551
+  - - SXS 551
+  - - WGS 580
+  - - WGS 582
+  quote: 'Culture, Media, and Art (3 units)
+
+    Select One:
+
+    WGS/BECA 485 Women and Media 3
+
+    WGS 542 Gender and Popular Music 3
+
+    WGS/SXS 551 Queer Literatures and Media 3
+
+    WGS 580 Feminism and the Speculative: Another World is Possible 3
+
+    WGS 582 Gaming from the Margins 3'
+  source: p.1704
+- id: social_movements
+  title: Social Movements
+  one_of:
+  - - WGS 150
+  - - WGS 515
+  - - WGS 541
+  - - WGS 561
+  - - WGS 562
+  - - WGS 565
+  - - WGS 578
+  - - WGS 621
+  quote: 'Social Movements (3 units)
+
+    Select One:
+
+    WGS 150 Women and Gender in U.S. History and Society 3
+
+    WGS 515 Gender, Race, and Reproductive Justice 3
+
+    WGS 541 Women Writers and Social Change 3
+
+    WGS 561 Women, Ethnicity, and Social Movements 3
+
+    WGS 562 History of African American Women 3
+
+    WGS 565 Muslim Feminisms 3
+
+    WGS 578 Feminist Environmental and Climate Justice 3
+
+    WGS 621 Feminist Theories 3'
+  source: p.1704
+- id: major_elective
+  title: Elective
+  one_of:
+  - - WGS 355
+  - - HIST 355
+  - - LTNS 533
+  - - WGS 420
+  - - AIS 420
+  - - WGS 423
+  - - GEOG 423
+  - - WGS 440
+  - - AIS 440
+  - - SXS 440
+  - - WGS 445
+  - - LTNS 445
+  - - WGS 470
+  - - PLSI 470
+  - - SXS 470
+  - - WGS 505
+  - - LTNS 505
+  - - WGS 546
+  - - ENG 546
+  - - JS 546
+  - - WGS 566
+  - - RRS 566
+  - - WGS 595
+  - - ANTH 590
+  - - CST 590
+  - - WGS 640
+  - - RRS 640
+  - - SXS 640
+  - - WGS 645
+  - - RRS 645
+  - - SXS 645
+  quote: 'Elective (3 units)
+
+    Select One:
+
+    WGS/HIST 355/LTNS 533 History of Women in Latin America 3
+
+    WGS/AIS 420 Native Genders and Feminism 3
+
+    WGS/GEOG 423 Geographies of Gender and Sexuality: Exploring Experiences, Identities, and Liberatory Possibilities 3
+
+    WGS/AIS/SXS 440 Native Sexualities and Queer Discourse 3
+
+    WGS/LTNS 445 Gendered Borders: Latinas and Globalization 3
+
+    WGS/PLSI/SXS 470 The Politics of Sex and Reproduction 4
+
+    WGS/LTNS 505 Latina/o/x Sexualities and Genders 3
+
+    WGS/ENG/JS 546 20th Century American Jewish Women Writers 3
+
+    WGS/RRS 566 Gender and Modernity in the Muslim and Arab Worlds 3
+
+    WGS 595/ANTH 590/CST 590 Feminist Anthropology 3
+
+    WGS/RRS/SXS 640 Race and Sexual Migration 3
+
+    WGS/RRS/SXS 645 Sex, Race, Lies, and Love in San Francisco 3'
+  source: p.1704
+- id: cr_nc_limit
+  title: Credit/no credit limit
+  across: major
+  max_cr:
+    units: 9
+  quote: A maximum of 9 units within the major can be taken credit/no credit
+  source: p.1704
+- id: ge_double_count_limit
+  unparsed: true
+  quote: Students may double-count a maximum of 12 units for both General Education and the Women and Gender Studies major.
+  source: p.1704
+drafted_by: codex, 2026-10-28

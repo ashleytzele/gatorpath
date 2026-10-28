@@ -1,0 +1,297 @@
+program: bs-environmental-science
+title: Bachelor of Science in Environmental Science
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 70
+source: p.2047
+groups:
+- id: foundation_biology
+  title: 'Foundation Requirements: Biology'
+  one_of:
+  - - BIOL 150
+  - - BIOL 170
+  - - BIOL 313
+  source: p.2047
+  quote: 'Foundation Requirements (27-31 units)
+
+    Select One: 3
+
+    BIOL 150 The World of Plants
+
+    BIOL 170 Animal Diversity
+
+    BIOL 313 Principles of Ecology'
+- id: foundation_chemistry
+  title: 'Foundation Requirements: Chemistry'
+  one_of:
+  - - CHEM 115
+  - - CHEM 180
+  source: p.2047
+  quote: 'Select One: 3-4
+
+    CHEM 115 General Chemistry I
+
+    CHEM 180 Chemistry for Energy and the Environment'
+- id: foundation_earth
+  title: 'Foundation Requirements: Earth Science'
+  one_of:
+  - - ERTH 112
+  - - ERTH 230
+  - - GEOG 101
+  source: p.2047
+  quote: 'Select One: 3-4
+
+    ERTH 112 Our Dynamic Earth Lecture and Lab
+
+    ERTH 230 Environmental Geology
+
+    GEOG 101 Our Physical Environment'
+- id: foundation_environment
+  title: 'Foundation Requirements: Environmental Studies'
+  one_of:
+  - - ENVS 130
+  - - GEOG 102
+  source: p.2047
+  quote: 'Select One: 3
+
+    ENVS 130 Environmental Studies
+
+    GEOG 102 The Human Environment'
+- id: foundation_data
+  title: 'Foundation Requirements: Data and Environmental Science'
+  all_of:
+  - ENV 205
+  - GEOG 160
+  source: p.2047
+  quote: 'ENV 205 Our Environment Through Data 3
+
+    GEOG 160 Introduction to Environmental Science 4'
+- id: foundation_mathematics
+  title: 'Foundation Requirements: Mathematics'
+  one_of:
+  - - MATH 197
+    - MATH 198
+  - - MATH 199
+  source: p.2047
+  quote: 'Select One: 4-6
+
+    MATH 197
+
+    & MATH 198
+
+    Prelude to Calculus I
+
+    and Prelude to Calculus II
+
+    MATH 199 Pre-Calculus'
+- id: foundation_physics
+  title: 'Foundation Requirements: Physics'
+  one_of:
+  - - PHYS 111
+    - PHYS 112
+  - - PHYS 220
+    - PHYS 222
+  source: p.2047
+  quote: 'Select One: 4
+
+    PHYS 111
+
+    & PHYS 112
+
+    General Physics I
+
+    and General Physics I Laboratory
+
+    PHYS 220
+
+    & PHYS 222
+
+    General Physics with Calculus I
+
+    and General Physics with Calculus I Laboratory'
+- id: core_required
+  title: Core Requirements
+  all_of:
+  - ENVS 450
+  - ENV 500GW
+  - GEOG 603
+  source: p.2047
+  quote: 'Core Requirements (12-13 units)
+
+    ENVS 450 Environmental Law and Policy 3
+
+    ENV 500GW Physical and Human Dimensions of Climate Change - GWAR
+
+    3
+
+    GEOG 603 Introduction to Geographic Information Systems 3'
+- id: core_statistics
+  title: 'Core Requirements: Select One'
+  one_of:
+  - - BIOL 458
+  - - GEOG 604
+  - - MATH 226
+  source: p.2047
+  quote: 'Select One: 3-4
+
+    BIOL 458 Biostatistics
+
+    GEOG 604 Environmental Data Science
+
+    MATH 226 Calculus I'
+- id: capstone
+  title: Capstone
+  all_of:
+  - ENV 690
+  source: p.2047
+  quote: 'Capstone (3 units)
+
+    Code Title Units
+
+    ENV 690 Capstone Seminar 3'
+- id: environmental_systems
+  title: Environmental Systems
+  choose_units: 11
+  from:
+  - list:
+    - CHEM 380
+    - ERTH 400
+    - GEOG 313
+    - ERTH 410
+    - ERTH 425
+    - GEOG 312
+    - ERTH 500
+    - ERTH 515
+    - ERTH 535
+    - GEOG 314
+    - GEOG 316
+    - GEOG 317
+    - GEOG 342
+    - ERTH 442
+    - GEOG 644
+  source: p.2047
+  quote: 'Environmental Systems (11-12 units)
+
+    Code Title Units
+
+    CHEM 380 Chemistry Behind Environmental Pollution 3
+
+    ERTH 400 Atmosphere and Oceans in the Earth System 3
+
+    or GEOG 313 Earth''s Climate System'
+- id: environmental_management
+  title: Environmental Management
+  choose_units: 10
+  from:
+  - list:
+    - ENVS 470
+    - ENVS 480
+    - GEOG 427
+    - GEOG 642
+    - ERTH 642
+    - GEOG 647
+    - GEOG 648
+    - GEOG 652
+    - USP 652
+    - GEOG 657
+    - ENVS 657
+    - GEOG 658
+    - GEOG 666
+  source: p.2048
+  quote: 'Environmental Management (10-12 units)
+
+    Code Title Units
+
+    ENVS 470 Climate Politics and Policy 3
+
+    ENVS 480 Climate Change Adaptation and Justice 3
+
+    GEOG 427 Agriculture and Food Supply 4
+
+    GEOG/ERTH 642 Watershed Assessment and Restoration 4
+
+    GEOG 647 Geography of Water Resources 4
+
+    GEOG 648 Management of National Parks and Protected Areas
+
+    4
+
+    GEOG/USP 652 Environmental Impact Analysis 4
+
+    GEOG/ENVS 657 Natural Resource Management: Biotic Resources 4
+
+    GEOG/USP 658 Land-Use Planning 4
+
+    GEOG 666 Geography of Garbage: Recycling and Waste Reduction
+
+    3'
+- id: analytical_methods
+  title: Analytical Methods
+  choose_units: 7
+  from:
+  - list:
+    - BIOL 458
+    - GEOG 602
+    - GEOG 604
+    - GEOG 610
+    - GEOG 611
+    - GEOG 620
+    - GEOG 621
+    - GEOG 625
+  source: p.2048
+  quote: 'Analytical Methods (7-8 units)
+
+    Code Title Units
+
+    BIOL 458 Biostatistics 4
+
+    GEOG 602 Field Methods in Environmental Science & Physical Geography
+
+    4
+
+    GEOG 604 Environmental Data Science 3
+
+    GEOG 610 Remote Sensing of the Environment I 4
+
+    GEOG 611 Remote Sensing of the Environment II 4
+
+    GEOG 620 Geographical Information Systems 4
+
+    GEOG 621 Geographic Information Systems for Environmental Analysis
+
+    4
+
+    GEOG 625 Programming for Geographic Information Science 3'
+- id: major_cr_limit
+  title: CR grade limit
+  across: major
+  max_cr:
+    courses: 2
+  source: p.2047
+  quote: Students are advised that the CR grade is acceptable in any two courses to be counted for the major.
+- id: major_grade_floor
+  title: Minimum grade limit
+  across: major
+  max_below:
+    grade: C-
+    courses: 1
+  source: p.2047
+  quote: No more than one course counted toward major requirements may be completed with a grade less than a C-.
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.2049
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.2049
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.2049
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.2049
+drafted_by: codex, 2026-10-28

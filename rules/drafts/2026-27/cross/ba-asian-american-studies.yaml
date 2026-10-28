@@ -1,0 +1,154 @@
+program: ba-asian-american-studies
+title: Bachelor of Arts in Asian American Studies
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.437
+groups:
+- id: introduction_category_a
+  title: 'Introduction to Asian American Studies: Category A'
+  choose_units: 3
+  course_units: 3
+  from:
+  - list:
+    - AA S 210
+    - AA S 211
+    - AA S 213
+  quote: 'Select one course in Category A and one course in Category B:'
+  source: p.437
+- id: introduction_category_b
+  title: 'Introduction to Asian American Studies: Category B'
+  choose_units: 3
+  course_units: 3
+  from:
+  - list:
+    - AA S 212
+    - AA S 216
+    - AA S 218
+  quote: 'Select one course in Category A and one course in Category B:'
+  source: p.437
+- id: ethnic_courses
+  title: Ethnic Courses
+  choose_units: 9
+  course_units: 3
+  from:
+  - list:
+    - AA S 301
+    - AA S 380
+    - AA S 320
+    - AA S 322
+    - AA S 323
+    - AA S 350
+    - AA S 352
+    - AA S 353
+    - AA S 330
+    - AA S 332
+    - AA S 333
+    - AA S 338
+    - AA S 360
+    - AA S 370
+    - AA S 372
+    - AA S 373
+  quote: Select three courses representing at least two different ethnic groups.
+  source: p.437
+- id: ethnic_courses_advisement
+  title: 'Ethnic Courses: additional options'
+  unparsed: true
+  quote: Other AA S 300 level courses are acceptable upon advisement. AA S 685, AA S 688, or AA S 699 may count if the course
+    content is ethnic-specific.
+  source: p.437
+- id: ethnic_group_categories
+  title: 'Ethnic Courses: at least two ethnic groups'
+  categories:
+  - - AA S 301
+  - - AA S 380
+  - - AA S 320
+    - AA S 322
+    - AA S 323
+  - - AA S 350
+    - AA S 352
+    - AA S 353
+  - - AA S 330
+    - AA S 332
+    - AA S 333
+    - AA S 338
+  - - AA S 360
+  - - AA S 370
+    - AA S 372
+    - AA S 373
+  min_categories: 2
+  across:
+  - ethnic_courses
+  quote: Select three courses representing at least two different ethnic groups.
+  source: p.437
+- id: panethnic_courses
+  title: Panethnic Courses
+  choose_units: 9
+  course_units: 3
+  from:
+  - list:
+    - AA S 510
+    - AA S 512
+    - AA S 516
+    - AA S 540
+    - AA S 541
+    - RRS 657
+    - AA S 570
+    - AA S 582
+    - AA S 584
+    - AA S 585
+    - AA S 587
+    - AA S 588
+    - AA S 591
+    - AA S 595
+  quote: Select 3 courses from the following.
+  source: p.437
+- id: panethnic_courses_advisement
+  title: 'Panethnic Courses: additional options'
+  unparsed: true
+  quote: Other AA S 500–600 level courses are acceptable upon advisement. AA S 685, AA S 688, or AA S 699 may count for this
+    area if the course content is panethnic. A lower-division course may also substitute for 3 units with approval from an
+    advisor.
+  source: p.437
+- id: required_major_courses
+  title: Required Major Courses
+  all_of:
+  - AA S 681
+  - AA S 696
+  - AA S 697
+  quote: Required Major Courses (9 Units)
+  source: p.437
+- id: major_gwar
+  title: Graduation Writing Assessment Requirement
+  all_of:
+  - ETHS 300GW
+  quote: Graduation Writing Assessment Requirement (3 units)
+  source: p.438
+- id: major_cr_nc_limit
+  title: CR/NC grading limit
+  across: major
+  max_cr:
+    units: 9
+  quote: No more than 9 units can be taken with CR/NC grading.
+  source: p.437
+- id: major_independent_study_limit
+  title: AA S 685, AA S 688, and AA S 699 unit limit
+  across: major
+  max_units_from:
+    list:
+    - AA S 685
+    - AA S 688
+    - AA S 699
+    units: 3
+  quote: A maximum of 3 units from AA S 685, AA S 688, or AA S 699 can count towards the Asian American Studies major’s total
+    unit requirement of 36 units.
+  source: p.437
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.439
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.439
+- text: 'Use ASSIST to determine: Which courses at a CCC satisfy any lower-division major requirements for this major;'
+  source: p.439
+drafted_by: codex, 2026-10-27

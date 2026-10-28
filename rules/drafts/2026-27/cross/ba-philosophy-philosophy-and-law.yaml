@@ -1,0 +1,104 @@
+program: ba-philosophy-philosophy-and-law
+title: 'Bachelor of Arts in Philosophy: Concentration in Philosophy and Law'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 32
+source: p.1610
+groups:
+- id: required_courses
+  title: Required Courses
+  all_of:
+  - PHIL 205
+  - PHIL 300
+  - PHIL 320GW
+  - PHIL 321
+  - PHIL 696
+  source: p.1610
+  quote: 'Required Courses (11 units) Code Title Units PHIL 205 Formal Logic I 3 PHIL 300 Academic and Professional Pathways
+    in Philosophy 1 PHIL 320GW Philosophical Analysis - GWAR 3 PHIL 321 Being and Knowing 3 PHIL 696 Directed Reading: Learning
+    Outcomes 1'
+- id: distribution_requirements
+  title: Distribution Requirements
+  all_of:
+  - PHIL 303
+  - PHIL 330
+  - PHIL 335
+  - PHIL 380
+  - PHIL 450
+  source: p.1610
+  quote: Distribution Requirements (15 units) Code Title Units PHIL 303 Modern Philosophy 3 PHIL 330 Political Philosophy
+    3 PHIL 335 Law and Society 3 PHIL 380 Philosophy of Law 3 PHIL 450 Ethics 3
+- id: electives
+  title: 'Electives: 6 units'
+  choose_units: 6
+  approval: courses are substantially concerned with law and approved by an advisor
+  from:
+  - subject: PHIL
+  - list:
+    - AFRS 375
+    - AIS 205
+    - AIS 330
+    - ANTH 343
+    - LABR 343
+    - BECA 324
+    - CJ 435
+    - LTNS 430
+    - CJ 501
+    - EDAD 763
+    - GPS 375
+    - PHIL 375
+    - HIST 470
+    - HIST 471
+    - HIST 472
+    - IR 330
+    - IBUS 332
+    - JOUR 307
+    - JS 318
+    - HIST 318
+    - PLSI 308
+    - PLSI 422
+    - IR 422
+    - PLSI 470
+    - SXS 470
+    - WGS 470
+    - PLSI 478
+    - PLSI 552
+    - PLSI 553
+    - PLSI 561
+    - RRS 250
+    - USP 513
+    - PLSI 513
+    - GEOG 668
+    - SXS 455
+    - WGS 536
+    - WGS 563
+  source: p.1610
+  quote: Electives (6 units) 6 additional units of other Philosophy courses, or courses from the list below in other departments
+    connected to the study of law.
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.1611
+- text: Students pursuing an ADT are guaranteed admission to the CSU if minimum eligibility requirements are met, though not
+    necessarily to the CSU campus of primary choice.
+  source: p.1611
+- text: Upon verification that the ADT has been awarded prior to matriculation at SF State, students are guaranteed B.A. or
+    B.S. completion in 60 units if pursuing a “similar” major after transfer. Determinations about “similar” majors at SF
+    State are made by faculty in the discipline.
+  source: p.1611
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1612
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1612
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine: Which courses at a CCC satisfy any lower-division major requirements
+    for this major; Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1612
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer. •
+    a course in U.S. History • a course in U.S. & California Government
+  source: p.1612
+drafted_by: codex, 2026-10-28

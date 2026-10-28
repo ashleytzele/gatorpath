@@ -1,0 +1,185 @@
+program: ba-urban-studies-and-planning
+title: Bachelor of Arts in Urban Studies and Planning
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 39
+source: p.867
+global:
+  no_cr_nc: true
+  source: p.867
+groups:
+- id: cities
+  title: 'Core: Select One — Cities in a Global Society or Dynamics of the American City'
+  one_of:
+  - - USP 370
+  - - SOC 380
+  - - USP 400
+  - - HIST 489
+  min_grade: C
+  quote: 'Select One: 3
+
+    USP 370/
+
+    SOC 380
+
+    Cities in a Global Society
+
+    USP 400/
+
+    HIST 489
+
+    Dynamics of the American City'
+  source: p.867
+- id: seminar_gwar
+  title: Seminar in Urban Studies and Planning
+  all_of:
+  - USP 401GW
+  min_grade: C
+  quote: USP 401GW Seminar in Urban Studies and Planning - GWAR 3
+  source: p.867
+- id: urban_policy
+  title: 'Core: Select One — Introduction to Urban Policy and Analysis or Land-Use Planning'
+  one_of:
+  - - USP 480
+  - - PLSI 480
+  - - USP 658
+  - - GEOG 658
+  min_grade: C
+  quote: 'Select One: 3-4
+
+    USP/PLSI 480 Introduction to Urban Policy and Analysis
+
+    USP/GEOG
+
+    658
+
+    Land-Use Planning'
+  source: p.867
+- id: research_methods
+  title: Research Methods
+  one_of:
+  - - USP 492
+  - - PLSI 492
+  min_grade: C
+  quote: USP/PLSI 492 Research Methods 3
+  source: p.867
+- id: data_analysis
+  title: Data Analysis
+  one_of:
+  - - USP 493
+  - - PLSI 493
+  min_grade: C
+  quote: USP/PLSI 493 Data Analysis 3
+  source: p.867
+- id: internship
+  title: Public Service Internship
+  all_of:
+  - USP 603
+  min_grade: C
+  quote: USP 603 Public Service Internship 3
+  source: p.867
+- id: senior_seminar
+  title: 'Core: Select One — Senior Seminar or Senior Thesis'
+  one_of:
+  - - USP 680
+  - - USP 681
+  min_grade: C
+  quote: 'Select One: 3
+
+    USP 680 Senior Seminar
+
+    USP 681 Senior Thesis'
+  source: p.867
+- id: electives
+  title: Electives
+  choose_units: 18
+  min_grade: C
+  from:
+  - list:
+    - AFRS 345
+    - AFRS 678
+    - C J 530
+    - GEOG 301
+    - GEOG 435
+    - GEOG 666
+    - GRN 500
+    - HUM 340
+    - HUM 370
+    - HUM 371
+    - HUM 373
+    - HUM 374
+    - HUM 375
+    - HUM 376
+    - USP 200
+    - SOC 200
+    - USP 370
+    - SOC 380
+    - USP 400
+    - HIST 489
+    - USP 402
+    - USP 432
+    - GEOG 432
+    - USP 433
+    - GEOG 433
+    - USP 456
+    - S W 456
+    - USP 475
+    - USP 480
+    - PLSI 480
+    - USP 485
+    - PLSI 475
+    - USP 511
+    - C J 511
+    - SOC 511
+    - USP 512
+    - PLSI 512
+    - USP 513
+    - PLSI 513
+    - GEOG 668
+    - USP 514
+    - USP 515
+    - GEOG 667
+    - USP 530
+    - USP 555
+    - ANTH 555
+    - USP 557
+    - ANTH 557
+    - USP 560
+    - PLSI 560
+    - USP 570
+    - LABR 570
+    - PLSI 570
+    - USP 580
+    - PLSI 580
+    - USP 651
+    - GEOG 651
+    - USP 652
+    - GEOG 652
+    - USP 658
+    - GEOG 658
+    - USP 685
+    - USP 686
+    - USP 699
+  quote: 'Electives (18 units minimum)
+
+    In addition to the courses below, students may use any of the "Select One" courses above that were not taken to fulfill
+    core requirements.'
+  source: p.867
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.869
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.869
+- text: 'The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+
+    • a course in U.S. History
+
+    • a course in U.S. & California Government'
+  source: p.869
+drafted_by: codex, 2026-10-28

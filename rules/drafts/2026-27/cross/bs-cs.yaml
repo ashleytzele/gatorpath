@@ -1,0 +1,147 @@
+program: bs-cs
+title: Bachelor of Science in Computer Science
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 74
+global:
+  no_cr_nc: true
+  source: p.1905
+groups:
+- id: math_physics
+  title: Mathematics and Physics
+  all_of:
+  - MATH 225
+  - MATH 226
+  - MATH 227
+  - MATH 324
+  - PHYS 220
+  - PHYS 222
+  - PHYS 230
+  - PHYS 232
+  min_grade: C
+  source: p.1905
+  quote: Mathematics and Physics (22 units)
+- id: core_cs
+  title: Core Computer Science Requirements
+  all_of:
+  - CSC 101
+  - CSC 215
+  - CSC 220
+  - CSC 230
+  - CSC 256
+  - CSC 300GW
+  - CSC 317
+  - CSC 340
+  - CSC 413
+  min_grade: C
+  source: p.1905
+  quote: Core Computer Science Requirements (28 units)
+- id: advanced_cs
+  title: Advanced Computer Science Requirements
+  all_of:
+  - CSC 415
+  - CSC 510
+  - CSC 648
+  min_grade: C
+  source: p.1905
+  quote: Advanced Computer Science Requirements (9 units)
+- id: senior_electives
+  title: Electives
+  choose_units: 15
+  course_units: 3
+  from:
+  - list:
+    - CSC 520
+    - CSC 600
+    - CSC 603
+    - CSC 615
+    - CSC 620
+    - CSC 621
+    - CSC 630
+    - CSC 631
+    - CSC 641
+    - CSC 642
+    - CSC 645
+    - CSC 647
+    - CSC 651
+    - CSC 652
+    - CSC 653
+    - CSC 656
+    - CSC 659
+    - CSC 664
+    - CSC 665
+    - CSC 667
+    - CSC 668
+    - CSC 671
+    - CSC 675
+    - CSC 676
+    - CSC 680
+    - CSC 685
+    - CSC 686
+    - CSC 698
+    - CSC 699
+    - MATH 400
+    - MATH 425
+    - MATH 448
+  - subject: CSC
+    level: 600
+    except:
+    - CSC 601
+    - CSC 602
+    - CSC 648
+    - CSC 694
+  - subject: CSC
+    level: 700+
+    paired: false
+    except:
+    - CSC 895
+    - CSC 898
+    - CSC 897
+    - CSC 899
+    max_courses: 1
+  min_units_from:
+    subject: CSC
+    units: 12
+  approval: Exceptions must be approved in advance by a senior advisor.
+  source: p.1905
+  quote: 'Electives (15 units)
+
+    All students must complete five 3-unit senior electives. At least 12 units must be CSC courses. In addition to the courses
+    listed below, any 600-level CSC course, with the exception of CSC 601, CSC 602, CSC 648, and CSC 694 can be used as an
+    elective. The department also allows one CSC graduate course to be used as a senior elective (700-level or higher, and
+    non-paired excluding CSC 895, CSC 898, CSC 897, CSC 899). Exceptions must be approved in advance by a senior advisor.'
+transfer_notes:
+- text: Students intending to enter the program upon transferring to San Francisco State University from a community college
+    are encouraged to try to fulfill as many lower-division requirements prior to transfer as possible.
+  source: p.1905
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1907
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1907
+- text: 'The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+
+    • a course in U.S. History
+
+    • a course in U.S. & California Government'
+  source: p.1907
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1907
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.1907
+- text: Students pursuing majors in science, technology, engineering, and mathematics (STEM) disciplines often defer 6-9 units
+    of lower-division General Education in Areas C and D until after transfer to focus on preparation courses for the major.
+    This advice does not apply to students pursuing associate degree completion before transfer.
+  source: p.1907
+- text: Waiting until after transfer to take a single course at SF State that meets both US and CA/local government requirements
+    may be an appropriate option, particularly if transferring from outside of California.
+  source: p.1907
+drafted_by: codex, 2026-10-28

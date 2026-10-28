@@ -1,0 +1,238 @@
+program: ba-early-childhood-studies-pre-k-to-3rd-grade
+title: 'Bachelor of Arts in Early Childhood Studies: Concentration in Pre-K to 3rd Grade'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 45
+source: p.599
+groups:
+- id: core_required
+  title: Core
+  all_of:
+  - CAD 210
+  - CAD 260
+  - CAD 280
+  - CAD 300
+  - CAD 330
+  - CAD 410GW
+  - CAD 660
+  min_grade: C
+  quote: 'Core (24 units)
+
+    CAD 210 Introduction to Applied Child and Adolescent Development
+
+    CAD 260 Children, Families, and Community: An Ecological Perspective
+
+    CAD 280 Practicum in Early Childhood Education
+
+    CAD 300 Professional Roles and Careers in Child and Adolescent Development
+
+    CAD 330 Curriculum and Development in Early Childhood
+
+    CAD 410GW Applied Developmental Science: Prenatal Through Early Childhood - GWAR
+
+    CAD 660 Applied Advanced Developmental Science in Child and Adolescent Development'
+  source: p.599
+- id: core_select_one
+  title: 'Core: Select One'
+  one_of:
+  - - CAD 215
+  - - CAD 230
+  min_grade: C
+  quote: 'Select One: 3
+
+    CAD 215 Foundations in Early Childhood
+
+    CAD 230 Principles and Practices in Early Childhood Programs'
+  source: p.599
+- id: language_literacy
+  title: Language and Literacy
+  all_of:
+  - CAD 326
+  min_grade: C
+  quote: 'Language and Literacy (3 units)
+
+    CAD 326 Developing Language and Literacy Skills in Young Children'
+  source: p.599
+- id: mathematics
+  title: Mathematics
+  all_of:
+  - MATH 165
+  min_grade: C
+  quote: 'Mathematics (3 units)
+
+    MATH 165 Concepts of the Number System'
+  source: p.599
+- id: assessment
+  title: 'Assessment: Select One'
+  one_of:
+  - - CAD 420
+  - - E ED 610
+  min_grade: C
+  quote: 'Assessment (3 units)
+
+    Select One:
+
+    CAD 420 Assessment and Observation with Children
+
+    E ED 610 Authentic Assessment for Children and Families'
+  source: p.599
+- id: inclusive_education
+  title: 'Inclusive Education: Select One'
+  one_of:
+  - - SPED 671
+  - - SPED 672
+  - - SPED 675
+  min_grade: C
+  quote: 'Inclusive Education (3 units)
+
+    Select One:
+
+    SPED 671 Inclusive Social-Emotional Development & Equitable Practices for Children & Families in Early Educ
+
+    SPED 672 Inclusive Learning Environments for Young Children
+
+    SPED 675 Working with Families of Young Children with Disabilities'
+  source: p.599
+- id: science
+  title: 'Science: Select One'
+  one_of:
+  - - BIOL 300
+  - - BIOL 310
+  - - BIOL 318
+  - - ERTH 310
+  - - ERTH 335
+  - - ERTH 365
+  - - E ED 655
+  - - GEOG 301
+  - - LS 310
+  - - LS 430
+  - - ENVS 430
+  min_grade: C
+  quote: 'Science (3 units)
+
+    Select One:
+
+    BIOL 300 Nature Study
+
+    BIOL 310 Biology for Today''s World
+
+    BIOL 318 Our Endangered Planet
+
+    ERTH 310 The Violent Earth
+
+    ERTH 335 Global Warming
+
+    ERTH 365 Extreme Weather in a Warming World
+
+    E ED 655 Hands-on Undergraduate Science Education Experience
+
+    GEOG 301 Bay Area Environments
+
+    LS 310 Science and Culture for Future Elementary School Teachers
+
+    LS/ENVS 430 Future of the Forests'
+  source: p.599
+- id: physical_education
+  title: 'Physical Education: Select One'
+  one_of:
+  - - KIN 240
+  - - KIN 401
+  - - KIN 487
+  - - SPED 370
+  min_grade: C
+  quote: 'Physical Education (3 units)
+
+    Select One:
+
+    KIN 240 Introduction to Teaching Physical Education
+
+    KIN 401 Elementary School Physical Education: K-5
+
+    KIN 487 Motor Development
+
+    SPED 370 Early Development and Neurodiversity'
+  source: p.599
+- id: arts
+  title: 'Arts: Select One'
+  one_of:
+  - - AFRS 400
+  - - AIS 325
+  - - AIS 560
+  - - AMST 310
+  - - HUM 485
+  - - AA S 520
+  - - DANC 350
+  - - DANC 430
+  - - DANC 657
+  - - ANTH 657
+  - - E ED 450
+  - - HUM 361
+  - - I R 363
+  - - LTNS 425
+  - - LS 403
+  - - COMM 557
+  - - LS 427
+  - - MUS 505
+  - - MUS 601
+  - - TH A 408
+  - - DANC 408
+  - - TH A 451
+  - - WGS 303
+  min_grade: C
+  quote: 'Arts (3 units)
+
+    Select One:
+
+    AFRS 400 Black Arts and Humanities
+
+    AIS 325 American Indian Art
+
+    AIS 560 Modern Creative and Performing Arts
+
+    AMST 310/HUM 485 The Arts and American Culture
+
+    AA S 520 Asian American Musical Communities
+
+    DANC 350 Dance Aesthetics: Cultural/Historical Perspectives
+
+    DANC 430 Survey of Ballet and Modern Dance History
+
+    DANC/ANTH 657 Ethnography of Dance
+
+    E ED 450 Art and Learning
+
+    HUM 361/I R 363 Cultural Expression in Islam
+
+    LTNS 425 Popular and Traditional Music of the Latinx U.S.
+
+    LS 403/COMM 557 Performance and Pedagogy of the Oppressed for Educators
+
+    LS 427 Social Movements & the Arts for Future Teachers
+
+    MUS 505 Music of the World''s Peoples
+
+    MUS 601 Music for Children
+
+    TH A/DANC 408 Performance in Asia and the Asian Diaspora
+
+    TH A 451 Storytelling and Folk Literature
+
+    WGS 303 Feminist Artivism & Praxis'
+  source: p.600
+transfer_notes:
+- text: No specific degree is required for admission as an upper-division student. However, the ADT includes specific guarantees
+    related to admission and graduation and is designed to clarify the transfer process and strengthen lower-division preparation
+    for the major.
+  source: p.600
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.601
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.601
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.601
+drafted_by: codex, 2026-10-27

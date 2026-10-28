@@ -1,0 +1,235 @@
+program: bs-business-administration-accounting
+title: 'Bachelor of Science in Business Administration: Concentration in Accounting'
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 69
+source: p.53
+groups:
+- id: prerequisite_math
+  title: Prerequisite Courses
+  one_of:
+  - - DS 110
+  - - MATH 107
+    - MATH 108
+  - - MATH 110
+  source: p.53
+  quote: 'Select One: 3-6
+
+    DS 110 Calculus with Business Applications
+
+    MATH 107 & MATH 108 Mathematics for Business Calculus I and Mathematics for Business Calculus II
+
+    MATH 110 Business Calculus'
+- id: prerequisite_economics
+  all_of:
+  - ECON 101
+  source: p.53
+  quote: ECON 101 Introduction to Microeconomic Analysis 3
+- id: prerequisite_isys
+  unparsed: true
+  source: p.53
+  quote: 'ISYS 263 Introduction to Information Systems 3
+
+    or a passing score on the ISYS 263 CLEP Exam'
+- id: prerequisite_timing
+  unparsed: true
+  source: p.53
+  quote: These courses must be completed before enrollment in certain core courses. Most core courses have specific prerequisites
+    that are listed within the course descriptions.
+- id: core_requirements
+  title: Core Requirements
+  all_of:
+  - ACCT 100
+  - ACCT 101
+  - ACCT 307
+  - BUS 682
+  - BUS 690
+  - DS 412
+  - ECON 102
+  - FIN 350
+  - IBUS 330
+  - MGMT 405
+  - MKTG 431
+  min_grade:
+    ACCT 100: C
+    ACCT 101: C
+  source: p.53
+  quote: 'Core Requirements (39 units)
+
+    ACCT 100 Introduction to Financial Accounting 3
+
+    ACCT 101 Introduction to Managerial Accounting 3
+
+    ACCT 307 Accounting Information Systems 3
+
+    BUS 682 Seminar on Business and Society 3
+
+    BUS 690 Seminar in Business Policy and Strategic Management 3
+
+    DS 412 Operations Management 3
+
+    ECON 102 Introduction to Macroeconomic Analysis 3
+
+    FIN 350 Business Finance 3
+
+    IBUS 330 International Business and Multicultural Relations 3
+
+    MGMT 405 Introduction to Management and Organizational Behavior 3
+
+    MKTG 431 Principles of Marketing 3
+
+    ACCT 100 and ACCT 101 must be completed with a grade of C or better for accounting students.'
+- id: core_gwar
+  title: 'Core Requirements: Select One'
+  one_of:
+  - - BUS 300GW
+  - - DS 660GW
+  source: p.53
+  quote: 'Select One: 3
+
+    BUS 300GW Business Communication for Professionals - GWAR
+
+    DS 660GW Business Analytics: Communication and Professional Practice - GWAR'
+- id: core_statistics
+  title: 'Core Requirements: Select One'
+  one_of:
+  - - DS 212
+  - - ECON 212
+  - - MATH 124
+  source: p.53
+  quote: 'Select One: 3
+
+    DS/ECON 212 Business Statistics
+
+    MATH 124 Elementary Statistics'
+- id: core_cr_limit
+  across:
+  - core_requirements
+  - core_gwar
+  - core_statistics
+  max_cr:
+    units: 6
+  except_exam: true
+  source: p.53
+  quote: Except in cases of credit by examination, no more than 6 units of the core may be completed on a CR/NC basis.
+- id: core_gpa
+  across:
+  - core_requirements
+  - core_gwar
+  - core_statistics
+  min_gpa: 2.0
+  source: p.53
+  quote: Students must have a minimum grade point average of 2.0 in all Core Requirement Business courses.
+- id: core_seminar_letter_grade
+  across:
+  - core_requirements
+  letter_grade: true
+  source: p.54
+  quote: Course must be taken for a letter grade.
+- id: concentration_required
+  title: Concentration Requirements
+  all_of:
+  - ACCT 301
+  - ACCT 302
+  - ACCT 305
+  min_grade:
+    ACCT 301: C
+  source: p.54
+  quote: 'Concentration Requirements (15 units)
+
+    ACCT 301 Intermediate Financial Accounting I 3
+
+    ACCT 302 Intermediate Financial Accounting II 3
+
+    ACCT 305 Cost Accounting 3
+
+    ACCT 301 must be completed with a grade of C or better.'
+- id: concentration_courses
+  title: 'Concentration Requirements: Select Two'
+  choose_units: 6
+  from:
+    list:
+    - ACCT 501
+    - ACCT 504
+    - ACCT 506
+    - ACCT 508
+    - ACCT 514
+  source: p.54
+  quote: 'Select Two: 6
+
+    ACCT 501 Advanced Accounting
+
+    ACCT 504 Government and Non-Profit Accounting
+
+    ACCT 506 Auditing
+
+    ACCT 508 Federal Tax Accounting I
+
+    ACCT 514 Fundamentals of Data Analytics in Accounting'
+- id: concentration_letter_grade
+  across:
+  - concentration_required
+  - concentration_courses
+  letter_grade: true
+  source: p.53
+  quote: All concentration courses must be taken on a letter-grade basis.
+- id: concentration_gpa
+  across:
+  - concentration_required
+  - concentration_courses
+  min_gpa: 2.0
+  source: p.53
+  quote: Students must have a minimum grade point average of 2.0 in all concentration courses.
+- id: electives
+  title: Electives
+  choose_units: 6
+  from:
+    list:
+    - ACCT 320
+    - ACCT 501
+    - ACCT 504
+    - ACCT 506
+    - ACCT 507
+    - ACCT 508
+    - ACCT 509
+    - ACCT 513
+    - ACCT 514
+    - ACCT 517
+    - ACCT 518
+    - ACCT 527
+    - ACCT 531
+    - ACCT 551
+  source: p.54
+  quote: 'Electives (6 units)
+
+    Select two courses not already used to satisfy the concentration requirements above:
+
+    ACCT 320 Legal Aspects of Business Transactions 3
+
+    ACCT 501 Advanced Accounting 3
+
+    ACCT 504 Government and Non-Profit Accounting 3
+
+    ACCT 506 Auditing 3
+
+    ACCT 507 Information Systems Auditing 3
+
+    ACCT 508 Federal Tax Accounting I 3
+
+    ACCT 509 Federal Tax Accounting II 3
+
+    ACCT 513 International Accounting 3
+
+    ACCT 514 Fundamentals of Data Analytics in Accounting 3
+
+    ACCT 517 Accounting Ethics and Professional Responsibilities 3
+
+    ACCT 518 Accounting Fraud Examination 3
+
+    ACCT 527 Artificial Intelligence Powered Accounting: Natural Language Processing & Robotic Process Automation 3
+
+    ACCT 531 Fundamentals of Financial Statement Analysis and Valuation 3
+
+    ACCT 551 Principles of Internal Auditing 3'
+drafted_by: codex, 2026-10-28

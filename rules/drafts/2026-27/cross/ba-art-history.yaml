@@ -1,0 +1,173 @@
+program: ba-art-history
+title: Bachelor of Arts in Art History
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.910
+groups:
+- id: lower_division_art_history
+  title: Lower-Division Art History
+  choose_units: 6
+  from:
+  - list:
+    - ARTH 201
+    - ARTH 202
+    - ARTH 205
+    - HUM 205
+  quote: 'Select two:'
+  source: p.910
+- id: lower_division_studio_art
+  title: Lower-Division Studio Art
+  choose_units: 3
+  from:
+  - list:
+    - ART 210
+    - ART 222
+    - ART 231
+    - ART 235
+    - ART 240
+    - ART 245
+    - ART 260
+  quote: 'Select one:'
+  source: p.910
+- id: upper_division_lectures
+  title: Upper-Division 300-400 Level Art History Lectures
+  choose_units: 9
+  from:
+  - list:
+    - ARTH 301
+    - LTNS 301
+    - ARTH 306
+    - ARTH 401
+    - ANTH 424
+    - CLAR 420
+    - MS 420
+    - ARTH 402
+    - ANTH 425
+    - CLAR 425
+    - MS 425
+    - ARTH 404
+    - CLAR 550
+    - ARTH 406
+    - ARTH 407
+    - CLAR 500
+    - MS 500
+    - ARTH 409
+    - CLAR 530
+    - ARTH 410
+    - CLAR 531
+    - ARTH 411
+    - ARTH 412
+    - ARTH 421
+    - ARTH 496
+    - HUM 496
+  quote: 'Select three:'
+  source: p.910
+- id: major_gwar
+  title: Graduate Writing Assessment Requirement
+  all_of:
+  - ARTH 400GW
+  quote: ARTH 400GW Writing About Art - GWAR 3
+  source: p.911
+- id: advanced_topics
+  title: 500-Level Art History course
+  all_of:
+  - ARTH 516
+  quote: ARTH 516 Advanced Topics in Art History 3
+  source: p.911
+- id: senior_capstone
+  title: Senior Capstone Seminar
+  all_of:
+  - ARTH 602
+  quote: ARTH 602 Art History Seminar 3
+  source: p.911
+- id: art_history_electives
+  title: Art History Electives
+  choose_units: 6
+  from:
+  - list:
+    - ARTH 301
+    - LTNS 301
+    - ARTH 306
+    - ARTH 401
+    - ANTH 424
+    - CLAR 420
+    - MS 420
+    - ARTH 402
+    - ANTH 425
+    - CLAR 425
+    - MS 425
+    - ARTH 404
+    - CLAR 550
+    - ARTH 406
+    - ARTH 407
+    - CLAR 500
+    - MS 500
+    - ARTH 409
+    - CLAR 530
+    - ARTH 410
+    - CLAR 531
+    - ARTH 411
+    - ARTH 412
+    - ARTH 421
+    - ARTH 496
+    - HUM 496
+    - ARTH 516
+    - ARTH 602
+    - ART 619
+    - ART 671
+  quote: Two additional 300–600 level Art History courses that were not used to fulfill one of the above requirements.
+  source: p.911
+- id: internship_visual_studies_elective
+  title: Internship/Visual Studies Elective
+  choose_units: 3
+  from:
+  - list:
+    - AA S 516
+    - AA S 588
+    - AIS 325
+    - ANTH 326
+    - ART 619
+    - ART 671
+    - HUM 390
+    - HUM 490
+    - HUM 496
+    - ARTH 496
+    - HUM 531
+    - LS 426
+    - PHIL 460
+    - WGS 303
+  quote: 'Select one:'
+  source: p.911
+- id: lower_division_and_declaration_prerequisites
+  unparsed: true
+  quote: Before advancing to the 300-level or higher courses or declaring a concentration, all majors must have completed
+    the University’s lower-division requirements and the lower-division courses for the major, or equivalent. Change of major
+    students must also have proof of an art advisor consultation.
+  source: p.910
+- id: major_residence
+  title: Major Units in Residence
+  across: major
+  min_units_from:
+    units: 12
+    sf_state: true
+  quote: For students transferring from other institutions, a minimum of 12 units in residence is required.
+  source: p.910
+transfer_notes:
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.912
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.912
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.912
+- text: 'Use ASSIST to determine: Which courses at a CCC satisfy any lower-division major requirements for this major; Which
+    courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.912
+- text: Before leaving the last California Community College of attendance, obtain a summary of completion of lower-division
+    General Education units (IGETC or CSU GE Breadth). This is often referred to as a GE certification worksheet. SF State
+    does not require delivery of this certification to Admissions, but students should retain this document for verifying
+    degree progress after transfer.
+  source: p.912
+drafted_by: codex, 2026-10-27

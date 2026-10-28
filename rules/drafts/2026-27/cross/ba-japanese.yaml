@@ -1,0 +1,98 @@
+program: ba-japanese
+title: Bachelor of Arts in Japanese
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.1492
+groups:
+- id: required_courses
+  title: Required Courses
+  all_of:
+  - JAPN 101
+  - JAPN 102
+  - JAPN 103
+  - JAPN 250
+  - JAPN 401
+  - JAPN 510
+  - MLL 325
+  source: p.1492
+  quote: 'Required Courses (33 units)
+
+    Code Title Units
+
+    JAPN 101 First Semester Japanese 4
+
+    JAPN 102 Second Semester Japanese 4
+
+    JAPN 103 Third Semester Japanese 4
+
+    JAPN 250 Intensive Study of Kanji: Level I 3
+
+    JAPN 401 Topics in Japanese Culture 3
+
+    JAPN 510 Modern Japanese Literature 3
+
+    MLL 325 Linguistics for Foreign Languages 3'
+- id: conversation_or_grammar
+  title: 'Required Courses: Select One'
+  one_of:
+  - - JAPN 301
+  - - JAPN 302
+  source: p.1492
+  quote: 'Select One: 3
+
+    JAPN 301 Japanese Conversation
+
+    JAPN 302 Japanese Reading and Grammar'
+- id: advanced_japanese
+  title: 'Required Courses: Select Two'
+  choose_units: 6
+  from:
+  - list:
+    - JAPN 305
+    - JAPN 306
+    - JAPN 309
+    - JAPN 310
+  source: p.1492
+  quote: 'Select Two: 6
+
+    JAPN 305 Advanced Conversation and Composition - Language and Culture
+
+    JAPN 306 Advanced Conversation and Composition - Language and Humanities
+
+    JAPN 309 Advanced Readings in Japanese I
+
+    JAPN 310 Advanced Readings in Japanese II'
+- id: major_gwar
+  title: Graduation Writing Requirement (GWAR)
+  one_of:
+  - - MLL 400GW
+  - - CWL 400GW
+  source: p.1492
+  quote: 'Graduation Writing Requirement (GWAR) (3 units)
+
+    Select one:
+
+    Code Title Units
+
+    MLL 400GW Reading and Analysis of Cultural Texts - GWAR 3
+
+    CWL 400GW Approaches to Comparative and World Literature - GWAR
+
+    3'
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1493
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1493
+- text: 'For information about satisfying the requirements described in (1) and (2) above at a California Community College
+    (CCC), please visit http://www.assist.org (http://assist.org). Check any geographically accessible CCCs; sometimes, options
+    include more than one college. Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1493
+drafted_by: codex, 2026-10-28

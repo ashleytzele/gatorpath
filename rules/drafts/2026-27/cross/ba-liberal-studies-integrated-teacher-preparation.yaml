@@ -1,0 +1,137 @@
+program: ba-liberal-studies-integrated-teacher-preparation
+title: Bachelor of Arts in Liberal Studies Integrated Teacher Preparation
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 72
+source: p.1418
+global:
+  itep: true
+  source: p.1418
+groups:
+- id: interdisciplinary_studies
+  title: Interdisciplinary Studies (6 units)
+  all_of:
+  - LS 300GW
+  - LS 690
+  quote: Interdisciplinary Studies (6 units) LS 300GW Perspectives on Liberal Studies - GWAR 3 LS 690 Liberal Studies Senior
+    Seminar 3
+  source: p.1418
+- id: education_experience
+  title: Education Experience (3 units)
+  all_of:
+  - E ED 250
+  quote: Education Experience (3 units) E ED 250 Teaching and Learning Beyond the Classroom 3
+  source: p.1418
+- id: communications_reading_language_literature
+  title: Communications, Reading, Language, and Literature
+  choose_units: 6
+  from:
+  - list:
+    - E ED 681
+    - LS 403
+    - COMM 557
+    - LS 450
+  quote: 'Communications, Reading, Language, and Literature (6 units) Select Two: E ED 681 Teaching Language and Literature
+    with Elementary and Middle School Students 3 LS 403/COMM 557 Performance and Pedagogy of the Oppressed for Educators 3
+    LS 450 Banned! Contested Protest Literature in Schools 3'
+  source: p.1418
+- id: integrated_social_science
+  title: Integrated Social Science
+  choose_units: 6
+  from:
+  - list:
+    - HIST 450
+    - LS 200
+    - AMST 200
+    - LS 401
+    - LS 402
+  quote: 'Integrated Social Science (6 units) Select Two: HIST 450 History of California 3 LS/AMST 200 Self, Place, and Knowing:
+    Introduction to Interdisciplinary Inquiry 3 LS 401 International Development and Resource Justice 3 LS 402 Introduction
+    to Human Rights Education for Teachers and Local Communities 3'
+  source: p.1418
+- id: mathematics
+  title: Mathematics (6 units)
+  all_of:
+  - MATH 165
+  - MATH 565
+  quote: Mathematics (6 units) MATH 165 Concepts of the Number System 3 MATH 565 Concepts of Geometry, Measurement, and Probability
+    3
+  source: p.1418
+- id: interdisciplinary_science_biology
+  title: 'Interdisciplinary Science: Select one'
+  one_of:
+  - - BIOL 310
+  - - LS 430
+  quote: 'Interdisciplinary Science (6 units) Select one: 3 BIOL 310 Biology for Today''s World LS 430 Future of the Forests'
+  source: p.1418
+- id: interdisciplinary_science_physical_sciences
+  title: 'Interdisciplinary Science: Select one'
+  one_of:
+  - - LS 209
+  - - LS 310
+  - - E ED 655
+  quote: 'Select one: 3 LS 209 Physical Sciences for Elementary School Teachers LS 310 Science and Culture for Future Elementary
+    School Teachers E ED 655 Hands-on Undergraduate Science Education Experience'
+  source: p.1418
+- id: visual_performing_arts
+  title: Visual and Performing Arts
+  one_of:
+  - - CMX 326
+  - - E ED 450
+  - - LS 427
+  quote: 'Visual and Performing Arts (3 units) Select One: CMX 326 Comics in Education 3 E ED 450 Art and Learning 3 LS 427
+    Social Movements & the Arts for Future Teachers 3'
+  source: p.1418
+- id: physical_education_human_development
+  title: Physical Education and Human Development
+  one_of:
+  - - CAD 210
+  - - KIN 401
+  - - RPT 280
+  quote: 'Physical Education and Human Development (3 units) Select One: CAD 210 Introduction to Applied Child and Adolescent
+    Development 3 KIN 401 Elementary School Physical Education: K-5 3 RPT 280 Developmental Play Processes 3'
+  source: p.1418
+- id: elementary_education_foundations
+  title: 'Elementary Education and Credential: Select One'
+  one_of:
+  - - E ED 639
+  - - E ED 701
+  quote: 'Elementary Education and Credential (33-40 units) Select One: 3 E ED 639 Bilingual Education in the U.S.: A History
+    of Struggle, Resistance, and Achievement E ED 701 Social, Cultural, and Historical Foundations of Education'
+  source: p.1418
+- id: bilingual_authorization_language
+  title: Bilingual Authorization language course
+  unparsed: true
+  quote: 'Select One (Required only of candidates in the bilingual authorization) 0-3 E ED 711 Chinese Heritage Language for
+    the Bilingual Teacher Candidates E ED 713 Spanish Heritage Language for the Bilingual Teacher: I'
+  source: p.1419
+- id: teaching_reading_language_arts
+  title: 'Elementary Education and Credential: Select One'
+  one_of:
+  - - E ED 712
+  - - E ED 782
+  quote: 'Select One: 3 E ED 712 Teaching Reading and Language Arts - Chinese Bilingual E ED 782 Teaching Reading and Language
+    Arts: K-5'
+  source: p.1419
+- id: elementary_education_credential_courses
+  title: Elementary Education and Credential
+  all_of:
+  - E ED 737
+  - E ED 747
+  - E ED 748
+  - E ED 756
+  - E ED 758
+  - E ED 777
+  - E ED 784
+  - E ED 786
+  - ITEC 711
+  quote: 'E ED 737 Teaching Social Studies, Social Justice, and Literacy: Grades 3-6 3 E ED 747 Teaching Practicum Phase II
+    3 E ED 748 Teaching Practicum Phase III 3-7 E ED 756 Teaching Practicum Seminar Phase I 3 E ED 758 Teaching Practicum
+    Seminar Phase III 3 E ED 777 Curriculum and Instruction in Science 3 E ED 784 Curriculum and Instruction in Mathematics
+    3 E ED 786 Seminar in Developmental Teaching and Learning 3 ITEC 711 Instructional Computing in Elementary Schools 3'
+  source: p.1419
+transfer_notes:
+- text: Transfer students from community colleges may enter the program upon advising.
+  source: p.1418
+drafted_by: codex, 2026-10-28

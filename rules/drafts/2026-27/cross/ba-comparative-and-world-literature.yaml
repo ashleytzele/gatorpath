@@ -1,0 +1,54 @@
+program: ba-comparative-and-world-literature
+title: Bachelor of Arts in Comparative and World Literature
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 36
+source: p.1278
+groups:
+- id: core_cwl
+  title: Core Courses
+  all_of:
+  - CWL 400GW
+  source: p.1278
+  quote: CWL 400GW Approaches to Comparative and World Literature - GWAR
+- id: senior_seminar
+  title: Senior Seminar
+  one_of:
+  - - HUM 690
+  - - CWL 680
+  source: p.1278
+  quote: 'HUM 690/
+
+    CWL 680
+
+    Senior Seminar'
+- id: core_cwl_courses
+  title: 'Core Courses: Select five CWL courses'
+  choose_units: 15
+  from:
+  - subject: CWL
+    level: upper
+  - subject: CWL
+    level: lower
+    max_courses: 1
+  source: p.1278
+  quote: 'Select five CWL courses. Only one lower-division CWL course may be used in the core.
+
+    15'
+- id: program_electives
+  unparsed: true
+  quote: In consultation with departmental advisors, students select literature courses that reflect their chosen advising
+    pathway. These courses may be CWL courses not used to fulfill the core, HUM courses, or courses from departments other
+    than CWL. No more than two lower-division courses may be used for electives.
+  source: p.1278
+transfer_notes:
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1279
+- text: 'Use ASSIST to determine:
+
+    • Which courses at a CCC satisfy any lower-division major requirements for this major;
+
+    • Which courses at a CCC satisfy CSU GE, US History, and US & CA Government requirements.'
+  source: p.1279
+drafted_by: codex, 2026-10-27

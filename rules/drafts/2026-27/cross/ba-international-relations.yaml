@@ -1,0 +1,66 @@
+program: ba-international-relations
+title: Bachelor of Arts in International Relations
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 43
+source: p.1322
+global:
+  no_cr_nc: true
+  source: p.1322
+groups:
+- id: core
+  title: Core (19 units)
+  all_of:
+  - I R 104
+  - I R 208
+  - I R 309
+  - I R 309GW
+  - I R 310
+  - I R 312
+  source: p.1322
+  quote: 'Core (19 units). I R 104 Introduction to International Relations: Politics, Economics, Environment, and People 3.
+    I R 208 Fundamentals of International Relations Theories, Issues, and Perspectives 4. I R 309 International Relations
+    Writing Workshop 1. I R 309GW International Relations Analysis and Application - GWAR 3. I R 310 U.S. Foreign Policy 4.
+    I R 312 Introduction to International Political Economy 4.'
+- id: electives
+  title: Electives (18 Units)
+  unparsed: true
+  source: p.1322
+  quote: Students are required to complete 18 elective units related to international relations. At least twelve units of
+    coursework must be upper-division I R courses (300-level or above) or be cross-listed with I R. Six additional units may
+    be taken outside of the department upon the approval of a major advisor. Lower-division language courses taken in the
+    Department of Modern Languages and Literatures and 200-level IR courses can be used for these six units; otherwise, upper-division
+    courses are required. Up to 6 units of a single language or 6 upper-division units of Complementary Studies may, with
+    the approval of a departmental advisor, also be counted as International Relations electives in fulfillment of major requirements.
+- id: culminating_requirements
+  title: Culminating Requirements (6 Units)
+  all_of:
+  - I R 550
+  source: p.1322
+  quote: Culminating Requirements (6 Units). I R 550 Senior Thesis in International Relations 6.
+- id: complementary_studies
+  title: Complementary Studies
+  unparsed: true
+  source: p.1322
+  quote: Twelve units of Complementary Studies are required of all candidates for the Bachelor of Arts degree in International
+    Relations. These units must come from courses bearing a prefix other than I R, and not cross-listed with I R. International
+    Relations majors are offered several pathways toward completing this requirement, each of which is designed to facilitate
+    graduation in a timely manner. International Relations majors may, with the approval of an International Relations advisor,
+    elect to apply 12 units in a single foreign language of their choosing, courses taken in an approved study abroad program
+    (e.g., CSU Study Abroad), courses taken as part of a second major, a minor or a certificate, and courses in a related
+    discipline. Related disciplines typically include political science, sociology, anthropology, environmental studies, geography,
+    global health, or journalism.
+transfer_notes:
+- text: Students who have earned an ADT should seek advising in the major department during the first semester of attendance.
+  source: p.1323
+- text: Before transfer, complete as many lower-division requirements or electives for this major as possible.
+  source: p.1324
+- text: The following courses are not required for admission but are required for graduation. Students are strongly encouraged
+    to complete these units before transfer; doing so will provide more flexibility in course selection after transfer.
+  source: p.1324
+- text: 'Use ASSIST to determine:'
+  source: p.1324
+- text: Which courses at a CCC satisfy any lower-division major requirements for this major;
+  source: p.1324
+drafted_by: codex, 2026-10-28

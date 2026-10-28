@@ -1,0 +1,276 @@
+program: ba-creative-writing
+title: Bachelor of Arts in Creative Writing
+catalog_year: 2026-27
+verified: false
+verified_by: null
+total_units: 42
+source: p.1061
+groups:
+- id: fundamentals
+  title: Fundamentals
+  all_of:
+  - CW 301
+  - CW 302
+  source: p.1061
+  quote: A. Fundamentals (6 units)
+- id: craft
+  title: Craft
+  one_of:
+  - - CW 511GW
+  - - CW 512GW
+  - - CW 513GW
+  source: p.1061
+  quote: 'B. Craft (3 units)
+
+    One course in the Craft Area selected from the following must be taken after C W 301 and C W 302 and before the workshop
+    course.'
+- id: creative_process_workshop
+  title: Creative Process/Workshop
+  choose_units: 12
+  course_units: 3
+  from:
+  - list:
+    - CW 506
+    - CW 507
+    - CW 514
+    - CW 520
+    - CW 550
+    - CW 602
+    - CW 603
+    - CW 604
+    - CW 605
+    - TH A 605
+    - CW 609
+    - CW 640
+    - CW 675
+    - CW 685
+    - CW 699
+  source: p.1061
+  quote: 'C. Creative Process/Workshop (12 units)
+
+    Select four courses from the following:'
+- id: variable_topics
+  title: Variable Topics Course
+  one_of:
+  - - CW 510
+  - - CW 600
+  source: p.1062
+  quote: 'D. Variable Topics Course (3 units)
+
+    Select one:'
+- id: revision
+  title: Revision Course
+  all_of:
+  - CW 606
+  source: p.1062
+  quote: E. Revision Course (3 units)
+- id: capstone
+  title: Capstone Course
+  all_of:
+  - CW 601
+  source: p.1062
+  quote: F. Capstone Course (3 units)
+- id: literature_areas
+  title: Courses in the Literature Areas
+  choose_units: 12
+  course_units: 3
+  from:
+  - list:
+    - AA S 322
+    - AA S 332
+    - AA S 352
+    - AA S 372
+    - AA S 512
+    - AA S 582
+    - AFRS 400
+    - AFRS 645
+    - CHIN 600
+    - CHIN 601GW
+    - CHIN 602
+    - CHIN 611GW
+    - CLAS 410
+    - HUM 401
+    - CLAS 415
+    - HUM 402
+    - CW 497
+    - MGS 497
+    - CWL 420
+    - CWL 421
+    - CWL 423
+    - HUM 423
+    - CWL 424
+    - HUM 424
+    - CWL 432
+    - CINE 348
+    - HUM 532
+    - CWL 440
+    - CWL 450
+    - CWL 520
+    - ENG 418
+    - ENG 420
+    - ENG 422
+    - ENG 429
+    - ENG 460
+    - ENG 461
+    - ENG 465
+    - ENG 495
+    - ENG 501
+    - ENG 510
+    - ENG 514
+    - ENG 524
+    - ENG 525
+    - ENG 526
+    - ENG 527
+    - ENG 528
+    - ENG 535
+    - ENG 546
+    - JS 546
+    - WGS 546
+    - ENG 550
+    - ENG 554
+    - ENG 555
+    - ENG 571
+    - ENG 580
+    - ENG 581
+    - ENG 583
+    - ENG 584
+    - ENG 589
+    - ENG 600
+    - ENG 601
+    - ENG 602
+    - ENG 611
+    - ENG 612
+    - ENG 614
+    - ENG 615
+    - ENG 630
+    - ENG 633
+    - SXS 633
+    - FR 310
+    - GER 613
+    - GER 616
+    - HUM 390
+    - HUM 415
+    - HUM 425
+    - HUM 432
+    - PHIL 432
+    - JS 437
+    - CWL 437
+    - ENG 533
+    - JS 451
+    - CWL 451
+    - ENG 451
+    - JS 480
+    - CWL 480
+    - JS 485
+    - LTNS 305
+    - LTNS 455
+    - LTNS 560
+    - LTNS 679
+    - RRS 360
+    - RRS 450
+    - ARAB 450
+    - SPAN 531
+    - LTNS 531
+    - WGS 541
+    - WGS 551
+    - SXS 551
+  source: p.1062
+  quote: 'G. Courses in the Literature Areas (12 units)
+
+    Select four courses from the following:'
+- id: complementary_studies
+  title: Complementary Studies
+  across:
+  - literature_areas
+  min_units_from:
+    list:
+    - AA S 322
+    - AA S 332
+    - AA S 352
+    - AA S 372
+    - AA S 512
+    - AA S 582
+    - AFRS 400
+    - AFRS 645
+    - CW 497
+    - MGS 497
+    - CWL 420
+    - CWL 421
+    - CWL 423
+    - HUM 423
+    - CWL 424
+    - HUM 424
+    - CWL 432
+    - HUM 532
+    - CWL 440
+    - CWL 450
+    - CWL 520
+    - ENG 418
+    - ENG 420
+    - ENG 422
+    - ENG 429
+    - ENG 460
+    - ENG 461
+    - ENG 465
+    - ENG 495
+    - ENG 501
+    - ENG 510
+    - ENG 514
+    - ENG 524
+    - ENG 525
+    - ENG 526
+    - ENG 527
+    - ENG 528
+    - ENG 535
+    - ENG 546
+    - WGS 546
+    - ENG 550
+    - ENG 554
+    - ENG 555
+    - ENG 571
+    - ENG 580
+    - ENG 581
+    - ENG 583
+    - ENG 584
+    - ENG 589
+    - ENG 600
+    - ENG 601
+    - ENG 602
+    - ENG 611
+    - ENG 612
+    - ENG 614
+    - ENG 615
+    - ENG 630
+    - CWL 437
+    - ENG 533
+    - CWL 451
+    - ENG 451
+    - CWL 480
+    - LTNS 305
+    - LTNS 455
+    - LTNS 560
+    - LTNS 679
+    - HUM 390
+    - HUM 415
+    - HUM 425
+    - HUM 432
+    - WGS 541
+    - WGS 551
+    units: 12
+  source: p.1064
+  quote: 'Creative Writing majors will satisfy this requirement from within the major by taking 12 units of literature classes
+    required in the major, which are recognized in the major list of any or all of the following prefixes: ENG, AFRS, CWL,
+    LTNS, WGS, HUM, AAS, MGS, or AIS.'
+- id: course_prerequisites_and_order
+  unparsed: true
+  source: p.1061
+  quote: Fundamentals of Creative Writing and Fundamentals of Creative Reading are prerequisites to all other Creative Writing
+    courses. C W 302 is also a prerequisite to all upper-division English literature courses. C W 302 must be taken at SF
+    State. Upon completion of C W 302, courses from Section G may be taken at any time. C W 301 and C W 302 may be taken concurrently.
+- id: repeat_credit_limits
+  unparsed: true
+  source: p.1064
+  quote: 'May be taken for two semesters of credit.
+
+    May be taken for three semesters of credit.'
+drafted_by: codex, 2026-10-27
