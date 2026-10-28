@@ -48,8 +48,7 @@ catalog with the `ingest` commands in [`AGENTS.md`](AGENTS.md).
 
 ## Use
 
-Start with the **Plan my degree** prompt (Claude Code: `/mcp__gatorpath__plan_my_degree`, or
-`/mcp__gatorpath__plan_my_degree 2030-spring` with a target term). It asks once for what it
+Start with the **Plan my degree** prompt (Claude Code: `/mcp__gatorpath__plan_my_degree`). It asks once for what it
 needs. The fastest way in is your DPR: in Student Center, print the Degree Progress Report to a PDF and give the
 assistant the file's path (don't attach it). GatorPath reads it on your machine and drops your name and ID.
 

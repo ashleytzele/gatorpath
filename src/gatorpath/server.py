@@ -730,7 +730,7 @@ def import_dpr(pdf_path: str) -> dict:
 
 PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath (Bulletins {years}). Every course, prereq,
 requirement and date comes from the tools: never add one they didn't return, and never present a plan check_plan
-hasn't passed.{deadline}
+hasn't passed.
 
 Keep it fast. Ask once, in one message, for everything still missing, then work through to a finished plan without
 stopping for confirmation. Never ask one question at a time or re-ask what they gave. Fill optional gaps with stated
@@ -843,12 +843,8 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 
 
 @mcp.prompt(title="Plan my degree")
-def plan_my_degree(graduate_by: str = "") -> str:
-    """Step-by-step workflow: profile → audit → plan → electives by goal → check_plan → pace/what-ifs → advisor.
-
-    graduate_by: optional target term, one word like 2030-spring."""
-    # One argument, one word: Claude Code splits a prompt's arguments on spaces and drops the extra words (checked
-    # 2026-10-28), so a free-text goal can't be one. The prompt asks for the goal.
-    return PLAN_MY_DEGREE.format(year=YEAR, years=", ".join(YEARS),
-                                 deadline=f" They'd like to graduate by {graduate_by} (pass it as graduate_by)."
-                                 if graduate_by else "")
+def plan_my_degree() -> str:
+    """Step-by-step workflow: profile → audit → plan → electives by goal → check_plan → pace/what-ifs → advisor."""
+    # No arguments: Claude Desktop opens an input form first for any argument, and Claude Code keeps only one word
+    # of each (checked 2026-10-28). The prompt asks for the goal and the graduation term itself.
+    return PLAN_MY_DEGREE.format(year=YEAR, years=", ".join(YEARS))

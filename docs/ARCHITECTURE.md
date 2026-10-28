@@ -759,8 +759,9 @@ wins on disagreements). Transfer rows the DPR lists under a
 requirement become that course with `transfer: true`; substitutions go in `dpr_met`; GE areas in the DPR's own
 codes. Then run through to a checked plan without confirmation stops. Revised 2026-10-28: a client with a
 multiple-choice question tool (Claude Code's AskUserQuestion) asks the fixed-answer questions (F-1, QR placement)
-with it, in the same ask; the prompt's only argument is `graduate_by`, because Claude Code splits prompt arguments on
-spaces and drops the extra words, so a free-text goal argument came through as its first word. A test fails if the prompt names a tool that
+with it, in the same ask. The prompt takes no arguments: Claude Desktop opens an input form before the prompt starts
+for any argument, even an optional one, and Claude Code keeps only one word of each, so a free-text goal came through
+as its first word. The prompt asks for the goal and the graduation term. A test fails if the prompt names a tool that
 doesn't exist.
 
 What-ifs map to tools, not to new server logic:
