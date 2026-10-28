@@ -569,7 +569,12 @@ def main() -> None:
         second.write_text(yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=120))
         problems = check_program(data, catalog, set(p["pages"]), source, university)
         name = data.get("drafted_by", "second").split(",")[0]
-        diff = cross_check(yaml.safe_load((served / f"{pid}.yaml").read_text()), data, university, catalog, ("ours", name))
+        try:
+            diff = cross_check(yaml.safe_load((served / f"{pid}.yaml").read_text()), data, university, catalog, ("ours", name))
+        except (KeyError, TypeError, ValueError, AttributeError) as e:  # a draft the audit can't read: a group with no id
+            print(f"{pid}: {name}'s draft can't be compared ({type(e).__name__}: {e}); fix {second} by hand and rerun"
+                  + "".join(f"\n  {x}" for x in problems))
+            continue
         print(f"{pid}: " + ("agree on every made-up student" if not diff else f"{len(diff)} disagreement(s)")
               + "".join(f"\n  {x}" for x in diff)
               + (f"\n  ({name}'s draft has {len(problems)} check_program problem(s))" if problems else "")
