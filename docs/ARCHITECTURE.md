@@ -541,9 +541,11 @@ also has 60 transfer units and lower-division GE certified); a real student's DP
 
 Leaf types: `course` (+ `min_grade`, `max_grade` for "C- or lower" retakes, `concurrent_ok`: "concurrent enrollment
 in X", "(may be taken concurrently)", "must/may be taken concurrently with X"; never "May not be taken concurrently"),
-`ge_area` (+ `min_grade`; e.g. "GE Area 1A/A2" → `1A`), `qr_category` (list, e.g. `[1, 2]`;
+`ge_area` (+ `min_grade`; e.g. "GE Area 1A/A2" → `1A`; an older code alone, "GE Area A2" or "GE Areas A1*, A2*,
+A3*, and B4*", is read through the year's `legacy_ge_areas`, A2 → `1A`; one with no current area, E, stays `unknown`), `qr_category` (list, e.g. `[1, 2]`;
 **Category = roadmap QR pathway**: p.1906 "QR Pathway 1/2" links to p.1908 "Quantitative Reasoning
-Category 1/2"; checked against `profile.qr_pathway`), `standing` (`lower|upper|senior|graduate`),
+Category 1/2"; checked against `profile.qr_pathway`), `standing` (`lower|sophomore|upper|senior|graduate`, by `class_level`: "Junior standing" is upper, p.2390;
+"Restricted to senior standing and LS 300GW" is the standing and the course),
 `gpa`, `high_school` (+ `min_grade`; self-reported), `restricted_to` (majors/programs, including bare
 "Graduate Mathematics students"), `permission` (instructor|department|advisor|committee_chair),
 `equivalent` ("or equivalent"), `requirement` (a named non-course requirement from a fixed list:

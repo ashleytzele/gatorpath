@@ -249,7 +249,33 @@ GOLDEN = [
     # no space before "or better": was read as "C" plus an unknown "-or better"
     ("ENGR 309", "ENGR 102* and ENGR 200* or equivalents with grades of C-or better.",
      any_(all_(c("ENGR 102", "C-"), c("ENGR 200", "C-")), EQ)),
+    # a standing, not a program; "Junior standing" is upper division (60-89 units, p.2390)
+    ("LS 690", "Restricted to senior standing and LS 300GW.", all_(SENIOR, c("LS 300GW"))),
+    ("TH A 308", "Sophomore standing or above or TH A 202 (may be taken concurrently).",
+     any_({"standing": "sophomore"}, c("TH A 202", conc=True))),
+    ("CINE 422", "Restricted to sophomore standing or above or permission of the instructor.",
+     any_({"standing": "sophomore"}, PERM)),
+    ("MUS 460", "Restricted to Music majors; Junior standing; MUS 420; must be taken concurrently with MUS 425 and MUS 450; "
+                "or permission of the instructor.",
+     any_(all_(r("Music majors"), UP, c("MUS 420"), c("MUS 425", conc=True), c("MUS 450", conc=True)), PERM)),
 ]
+
+
+def test_an_older_ge_code_is_read_through_the_years_legacy_map():
+    # "Area 1A: English Composition ... [Formerly A2]" (p.2314): rules/university/2026-27.yaml legacy_ge_areas
+    import yaml
+    from pathlib import Path
+    legacy = yaml.safe_load((Path(__file__).parents[1] / "rules/university/2026-27.yaml").read_text())["legacy_ge_areas"]
+    m = {str(k).upper(): v for k, v in legacy["map"].items()}
+    got = parse_prereq("GE Area A2; ENGR 696* or equivalent.", m)  # ENGR 697GW
+    assert got == {"expr": all_(ge("1A"), any_(c("ENGR 696"), EQ)), "status": "ok", "needs_permission": False}
+    hist = parse_prereq("Upper-division standing; GE Areas A1*, A2*, A3*, and B4* all with grades of C- or better; or "
+                        "permission of the instructor.", m)  # HIST 342
+    assert hist["expr"] == any_(all_(UP, ge("1C", "C-"), ge("1A", "C-"), ge("1B", "C-"), ge("2", "C-")), PERM)
+    # E has no current area: unknown, never a GE area no course carries; without a map an older code is unknown too
+    assert parse_prereq("GE Area E.", m)["expr"] == {"unknown": "GE Area E"}  # CHIN 600
+    assert parse_prereq("GE Area A2*.")["expr"] == {"unknown": "GE Area A2"}  # HSS 210
+    assert parse_prereq("GE Area 2/B4; GEOG 101.", m)["expr"] == all_(ge("2"), c("GEOG 101"))  # this Bulletin's codes: as before
 
 
 @pytest.mark.parametrize("code,text,expected", GOLDEN, ids=[g[0] for g in GOLDEN])

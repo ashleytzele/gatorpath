@@ -20,7 +20,8 @@ GRADE = re.compile(  # "C-or better" too, with no space (ENGR 304); it was read 
     r"(?:(?![A-Za-z])|(?<=[+-])(?=or\b))(?:\s*or\s+(better|higher|lower))?",
     I,
 )
-UP, SENIOR, GRAD = {"standing": "upper"}, {"standing": "senior"}, {"standing": "graduate"}
+OLD_GE = r"(?-i:[A-F][1-5]?)\*?(?![\w/])"  # an older GE code: A2, B4, E (this Bulletin's start with a digit)
+SOPH, UP, SENIOR, GRAD = {"standing": "sophomore"}, {"standing": "upper"}, {"standing": "senior"}, {"standing": "graduate"}
 ROMAN = {"i": 1, "ii": 2, "iii": 3, "iv": 4}
 # QR/Math placement as the Bulletin words it: "Category I or II placement for QR/Math", "Category III or IV for QR/Math
 # placement", "CAT I or II placement for QR/MATH*", "Category I or II QR/Math placement", "Placement Category III or IV"
@@ -36,9 +37,9 @@ TWO_PLACEMENTS = re.compile(rf"^((?>{QR})[^.;]*?)\s+or\s+((?>{QR})[^;]*)$", re.I
 def placement(text: str) -> dict | None:
     """A placement and what it needs: "CAT III or IV placement … with a grade of C or better in MATH 124* or …"."""
     if not (m := PLACED.match(text)):
-        return parse_prereq(text)["expr"]
+        return parse_prereq(text, False)["expr"]
     rest = re.sub(r"^(?:with )?a grade of (\S+ or better) in (.+)$", r"\2 with a grade of \1", re.sub(r"^have completed ", "", m[4]))
-    return combine("all", [{"qr_category": [ROMAN[g.lower()] for g in m.groups()[1:3] if g]}, parse_prereq(rest)["expr"]])
+    return combine("all", [{"qr_category": [ROMAN[g.lower()] for g in m.groups()[1:3] if g]}, parse_prereq(rest, False)["expr"]])
 ADVISORY = re.compile(r"\b(recommended|should)\b", I)
 MAY_ENROLL = re.compile(r"(.+?) may enroll with (?:the )?permission of the instructor\.?$", I)
 MAJORS_WITH = re.compile(r"(?:Restricted to )?([A-Za-z][A-Za-z&,\- ]*? majors(?: and minors)?) with (.+)$", I)
@@ -87,6 +88,9 @@ RULES = [
     (re.compile(r"upper[- ]division or graduate standing", I), lambda m: (LEAF, {"any": [dict(UP), dict(GRAD)]})),
     (re.compile(r"(?:restricted to )?upper[- ]division (?:standing|students)", I), lambda m: (LEAF, dict(UP))),
     (re.compile(r"senior standing", I), lambda m: (LEAF, dict(SENIOR))),
+    (re.compile(r"sophomore standing(?: (?:or|and) (?:above|higher))?", I), lambda m: (LEAF, dict(SOPH))),
+    # Junior is 60-89 units, upper division (p.2390)
+    (re.compile(r"junior standing(?: or above)?", I), lambda m: (LEAF, dict(UP))),
     (re.compile(r"graduate(?:[- ]level)? standing\*?", I), lambda m: (LEAF, dict(GRAD))),
     (re.compile(r"(?:a |overall )?gpa of (?:at least )?(\d\.\d+)(?: or (?:higher|better))?", I),
      lambda m: (LEAF, {"gpa": float(m.group(1))})),
@@ -95,9 +99,16 @@ RULES = [
                 r"graduate (?:major )?advis[eo]r)(?: (and|or) (instructor|graduate advis[eo]r|committee chair))?", I),
      lambda m: (LEAF, permissions(m))),
     (re.compile(r"(?:the candidate's )?committee chair", I), lambda m: (LEAF, {"permission": "committee_chair"})),
+    # a standing, not a program: "Restricted to senior standing and LS 300GW" (LS 690)
+    (re.compile(r"restricted to (?=(?:sophomore|junior|senior) standing\b)", I), lambda m: None),
     (re.compile(r"restricted to (.+?),?(?= or (?:permission|approval)\b|$)", I),
      lambda m: (LEAF, {"restricted_to": m.group(1).strip()})),
     (re.compile(r"(\d[a-c]?)/[a-d]\d\*?(?: course\b| requirement\b)?", I), lambda m: (LEAF, {"ge_area": m.group(1).upper()})),
+    # older GE codes, "GE Area A2" (ENGR 697GW), "GE Areas A1*, A2*, A3*, and B4*" (HIST 342): as printed, then
+    # parse_prereq reads them as this Bulletin's areas (current_ge)
+    (re.compile(rf"ge areas? ({OLD_GE}(?:(?:,? (?:and|or) |, ){OLD_GE})*)", I),
+     lambda m: (LEAF, combine("any" if " or " in m[1] and " and " not in m[1] else "all",
+                              [{"ge_area": c} for c in re.findall(r"(?-i:[A-F][1-5]?)(?=\*|\b)", m[1])]))),
     (COURSE, lambda m: (LEAF, {"course": m.group(1)})),
     (re.compile(r"equivalents?\b", I), lambda m: (LEAF, {"equivalent": True})),  # "… or equivalents with grades of …"
     (re.compile(r"and/or\b|or\b|/", I), lambda m: (OR, None)),
@@ -291,7 +302,26 @@ def parse_clause(clause: str) -> tuple[dict | None, tuple[str, str] | None]:
     return parse_seq(toks), group_grade
 
 
-def parse_prereq(text: str) -> dict:
+def current_ge(expr: dict | None, legacy: dict) -> dict | None:
+    """An older GE code ("GE Area A2", ENGR 697GW) -> the area the university rules' legacy_ge_areas give it ("Area 1A:
+    English Composition ... [Formerly A2]", p.2314); one with two (2024-25's D2) needs both. One with no equivalent (E)
+    stays unknown, as without a map."""
+    if not expr:
+        return expr
+    if "all" in expr or "any" in expr:
+        op = "all" if "all" in expr else "any"
+        return combine(op, [current_ge(e, legacy) for e in expr[op]])
+    code = str(expr.get("ge_area", "1"))
+    if not code[0].isalpha():  # this Bulletin's codes start with a digit: 1A, 2, 3UD
+        return expr
+    if (new := legacy.get(code.upper())) is None:
+        return {"unknown": f"GE Area {code}"}
+    return combine("all", [expr | {"ge_area": str(a)} for a in (new if isinstance(new, list) else [new])])
+
+
+def parse_prereq(text: str, legacy: dict | None | bool = None) -> dict:
+    """`legacy`: the catalog year's legacy_ge_areas map (older GE code -> this Bulletin's areas). False leaves older codes
+    as printed, for a caller that translates the whole tree."""
     text = text.strip()
     if not text:
         return {"expr": None, "status": "none", "needs_permission": False}
@@ -349,6 +379,8 @@ def parse_prereq(text: str) -> dict:
         else:
             sentences.append(expr)
     expr = combine("all", sentences)
+    if legacy is not False:
+        expr = current_ge(expr, legacy or {})
     found = list(leaves(expr))
     unknown = sum("unknown" in leaf for leaf in found)
     if expr is None:

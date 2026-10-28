@@ -70,8 +70,7 @@ def known_grades(completed: list[dict], in_progress: list[str]) -> dict[str, str
 
 
 def standing_ok(level: str, units: float, class_level: dict) -> bool:
-    return {"lower": True, "upper": units >= class_level["upper"], "senior": units >= class_level["senior"],
-            "graduate": False}.get(level, False)
+    return level == "lower" or level in ("sophomore", "upper", "senior") and units >= class_level[level]
 
 
 def major_name(program: dict) -> str:

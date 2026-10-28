@@ -550,8 +550,15 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     unverifiable course is 3+ semesters early (the 24 left are courses whose prereqs GatorPath checks and the plan
     meets). Every plan the same length but BS CS 2024-25's for a student who gives no GPA: CSC 648 ("GPA of 3.0 or
     higher") waits for semester 7 and a 3-unit GE course spills into a 9th term, which fold_last_term offers to move
-  - [ ] Prereq wordings still read as unknown: "GE Area A2" alone (ENGR 697GW; the 1A/A2 pair parses), "Restricted
-    to senior standing and LS 300GW" (LS 690: the course is swallowed into the restriction), "sophomore standing"
+  - [x] Prereq wordings still read as unknown: "GE Area A2" alone (ENGR 697GW; the 1A/A2 pair parses), "Restricted
+    to senior standing and LS 300GW" (LS 690: the course is swallowed into the restriction), "sophomore standing".
+    Done 2026-10-27 (ARCHITECTURE §6.3): a `sophomore` standing (30 units, p.2390), "Junior standing" as upper,
+    "Restricted to" before a standing is the standing (LS 690: senior and LS 300GW; C J 680's "senior standing" is
+    checked now); older GE codes, alone or listed ("GE Areas A1*, A2*, A3*, and B4*", 11 courses), go through the
+    year's `legacy_ge_areas` at ingest, and E (no current area) stays unknown. 2026-27: 44 prereqs changed, 28 more
+    fully parsed; 2024-25 658 (its prereqs aren't planned with: the server plans with the newest year's). Rebuild
+    catalog.db (all three years). Of 217 test plans one changed: Environmental Studies NRM&C first-time, 9 -> 8 terms
+    (its printed 8), as ENV 205's "sophomore standing and above" is checked instead of held as a restriction (D28)
   Last drafts reviewed 2026-10-27 (review log): 8 loaded (Music Production, Instrumental and Vocal Performance, ENV
   NRM&C, both Nutrition concentrations, Women and Gender Studies, and the ECS Special Education ITEP once ITEP
   permission counted, D27); 108 of 110 served. Engine fixes on the way: two Select Ones sharing a course plan different options; a group id "elective"

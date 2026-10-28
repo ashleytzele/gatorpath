@@ -11,6 +11,8 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
+import yaml
+
 from gatorpath.engine.prereq import leaves, parse_prereq
 
 RUNNING_HEAD = "San Francisco State University Bulletin"
@@ -297,8 +299,9 @@ create virtual table if not exists course_fts using fts5(catalog_year unindexed,
 """
 
 
-def write_catalog(db_path: str | Path, catalog_year: str, courses: list[dict]) -> None:
-    """Rebuilds one catalog year in place (ARCHITECTURE §6.1). Raw prereq text is always stored, parsed or not."""
+def write_catalog(db_path: str | Path, catalog_year: str, courses: list[dict], legacy: dict | None = None) -> None:
+    """Rebuilds one catalog year in place (ARCHITECTURE §6.1). Raw prereq text is always stored, parsed or not; an older
+    GE code in it is stored as the area `legacy` (the year's legacy_ge_areas map) gives it."""
     con = sqlite3.connect(db_path)
     with con:
         con.executescript(SCHEMA)
@@ -310,7 +313,7 @@ def write_catalog(db_path: str | Path, catalog_year: str, courses: list[dict]) -
                 (catalog_year, c["code"], c["title"], c["units_min"], c["units_max"], c["description"], c["grading"],
                  json.dumps(c["ge_areas"]), c["source_page"]),
             )
-            p = parse_prereq(c["prereq_text"])
+            p = parse_prereq(c["prereq_text"], legacy or {})
             con.execute(
                 "insert into prereq values (?,?,?,?,?,?)",
                 (catalog_year, c["code"], c["prereq_text"], None if p["expr"] is None else json.dumps(p["expr"]),
@@ -394,7 +397,9 @@ def main() -> None:
         print(legacy_ge_report(pages))
         return
     courses, warnings = parse_courses(pages)
-    write_catalog(args.db, year, courses)
+    rules = Path(__file__).parents[3] / f"rules/university/{year}.yaml"
+    legacy = yaml.safe_load(rules.read_text()).get("legacy_ge_areas", {}).get("map", {}) if rules.exists() else {}
+    write_catalog(args.db, year, courses, {str(k).upper(): v for k, v in legacy.items()})
     print(f"{len(courses)} courses -> {args.db} ({year}); {len(warnings)} dedupe warnings")
     print("\n".join(f"  {w}" for w in warnings))
     print(coverage_report(args.db, year, args.subjects.split(",")))
