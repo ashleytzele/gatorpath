@@ -781,9 +781,9 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
 
     # A "Select One" (one_of) plans the audit's option, by its order (the most done, no attempt that didn't count, no
     # course another group plans) but with the prereqs each option adds in its units (CHEM 349 needs CHEM 130, already
-    # planned; CHEM 340 needs CHEM 233 and CHEM 235, p.1796), among the options that leave every planned course ready:
-    # not a prereq nothing in the plan or roadmap meets (MATH 400 needs CSC 215 or MATH 209, not CSC 309), nor one the
-    # student can't meet (another placement, graduate standing).
+    # planned; CHEM 340 needs CHEM 233 and CHEM 235, p.1796; CSC 309 brings MATH 209 for MATH 400), among the options
+    # that leave every planned course ready: none with a prereq the student can't meet (another placement, graduate
+    # standing), the added prereqs' own included.
     later = {"same_term": set(), "grades": {}, "profile": profile, "gpa": profile.get("gpa"),
              "ge_done": ge_done_areas(profile, university), "slot_areas": {a for g in university["groups"] for a in ge_areas(g)},
              "catalog": catalog, "program": program, "class_level": levels, "units": university["totals"]["min_units"]}
