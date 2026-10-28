@@ -632,8 +632,8 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   my cross-listing prompt line made Composition require MUS 130 and TH A 131 both (now: a required cross-listed
   course is a one_of of its codes, and check_program flags both codes in an all_of from the catalog's 509 pairs).
   Not redrafted with the new prompt yet (usage): the pilot's 5 come first in the load-all run.
-- [x] 90/10: GatorPath checks 90% of the rules itself, a person the other 10%. 2026-10-28: 93.0% of 970 groups in
-  108 programs, 68 for a person (60 unparsed, 8 an advisor approves), 64 programs with nothing left. Done 2026-10-24 (`--coverage`):
+- [x] 90/10: GatorPath checks 90% of the rules itself, a person the other 10%. 2026-10-28: 94.0% of 970 groups in
+  108 programs, 58 for a person (50 unparsed, 8 an advisor approves), 67 programs with nothing left. Done 2026-10-24 (`--coverage`):
   91.6% of the 892 requirement groups in the 100 served programs (was 76.5% of 918 in 97); 75 left for a person (67
   unparsed, 8 an advisor approves); 53 programs have nothing left for a person (was 14). Unparsed groups were mostly
   rules over other groups' courses, now check groups (ARCHITECTURE §6.2): letter grades only, CR/NC caps, a GPA
@@ -674,10 +674,17 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     length (the printed roadmaps already order them). Approximation: a `ge_area` leaf takes one course, so Area 4's
     second isn't checked by `before_upper`. Left for a person: Social Work's "24 units of their junior year courses
     with a grade of C or better" before practicum (which courses are the junior year's isn't printed)
-  - [ ] Repeated courses in a plan (6 with BM Instrumental/Vocal Performance, loaded 2026-10-27 with their lessons as
+  - [x] Repeated courses in a plan (6 with BM Instrumental/Vocal Performance, loaded 2026-10-27 with their lessons as
     slots naming the unparsed groups): "MUS 260 Applied Music
     Lessons (1 unit course taken 4 times)". The audit adds up a repeatable course's units; the planner places a
     course once. MUS 443 "taken 4 times" isn't repeatable in its catalog entry: a question for the department.
+    Done 2026-10-28 (ARCHITECTURE §6.2 `course_units`): 10 groups in the four BM programs (MUS 260, 360, 365, 394) are
+    a choice of N units from that one course in 1- or 2-unit slots, and the roadmaps' course items for them are slots
+    of the group. Found on the way: the audit counted a claimed course at the catalog's minimum (four lessons were 1
+    unit; a variable-unit course given as 3 counted 1), fixed; and every choice slot waited for upper-division
+    standing, lower-division ones too (now only when an option is upper division). Each lesson plan follows its
+    roadmap (one a term in semesters 1-4, Instrumental's 2 units a term in 2-4), 8 terms. MUS 443 stays unparsed for
+    the department
   - Advisor approvals (genuinely a person's, 16): 8 approval-only elective groups, 4 engineering study plans,
     Classics' culminating demonstration, Kinesiology ITEP's 12 activity areas and certifications, Art History's
     change-of-major consultation.

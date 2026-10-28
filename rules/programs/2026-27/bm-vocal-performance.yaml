@@ -108,11 +108,19 @@ groups:
   quote: Music History (6 units)
   source: p.1573
 - id: conc_applied_lessons
-  unparsed: true
+  choose_units: 6
+  course_units: 1
+  from:
+    list:
+    - MUS 260
   quote: MUS 260 Applied Music Lessons (2 units per semester for 3
   source: p.1573
 - id: conc_advanced_lessons
-  unparsed: true
+  choose_units: 6
+  course_units: 1
+  from:
+    list:
+    - MUS 360
   quote: MUS 360 Advanced Applied Music Lessons (2 units per
   source: p.1573
 - id: conc_ensembles
@@ -138,7 +146,11 @@ groups:
   quote: 10 units chosen from MUS 370 - MUS 380; MUS 386 - MUS 390 10
   source: p.1573
 - id: conc_vocal_seminar
-  unparsed: true
+  choose_units: 8
+  course_units: 2
+  from:
+    list:
+    - MUS 394
   quote: MUS 394 Vocal Performance and Research Seminar (2 unit
   source: p.1573
 - id: conc_conducting

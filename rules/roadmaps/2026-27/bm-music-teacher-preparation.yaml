@@ -37,7 +37,9 @@ variants:
       - MUS 130
       - MUS 201
       - MUS 221
-      - MUS 260
+      - slot: major
+        group: conc_applied_lessons
+        units: 1
       - slot: GE
         area: 1A
         units: 3
@@ -57,7 +59,9 @@ variants:
         units: 1
         note: 'Select One (Lower-Division Core): MUS 202 or MUS 206'
       - MUS 222
-      - MUS 260
+      - slot: major
+        group: conc_applied_lessons
+        units: 1
       - slot: GE
         area: '1'
         units: 3
@@ -73,7 +77,9 @@ variants:
       source: p.1566
       items:
       - MUS 232
-      - MUS 260
+      - slot: major
+        group: conc_applied_lessons
+        units: 1
       - MUS 281
       - slot: GE
         area: '4'
@@ -89,7 +95,9 @@ variants:
       source: p.1566
       items:
       - MUS 237
-      - MUS 260
+      - slot: major
+        group: conc_applied_lessons
+        units: 1
       - slot: GE
         area: '5'
         units: 3
@@ -106,7 +114,9 @@ variants:
     - units: 14
       source: p.1566-1567
       items:
-      - MUS 360
+      - slot: major
+        group: conc_advanced_lessons
+        units: 1
       - slot: major
         group: ud_theory
         units: 3
@@ -126,7 +136,9 @@ variants:
     - units: 14
       source: p.1567
       items:
-      - MUS 360
+      - slot: major
+        group: conc_advanced_lessons
+        units: 1
       - slot: major
         group: conc_ensembles
         units: 2
@@ -148,7 +160,9 @@ variants:
     - units: 14
       source: p.1567
       items:
-      - MUS 360
+      - slot: major
+        group: conc_advanced_lessons
+        units: 1
       - MUS 601
       - MUS 640
       - slot: major
@@ -164,7 +178,9 @@ variants:
     - units: 15
       source: p.1567
       items:
-      - MUS 360
+      - slot: major
+        group: conc_advanced_lessons
+        units: 1
       - slot: major
         group: ud_core_capstone
         units: 1

@@ -109,12 +109,20 @@ groups:
   source: p.1564
 - id: conc_applied_lessons
   title: MUS 260 Applied Music Lessons (1 unit course taken 4 times)
-  unparsed: true
+  choose_units: 4
+  course_units: 1
+  from:
+    list:
+    - MUS 260
   quote: MUS 260 Applied Music Lessons (1 unit course taken 4
   source: p.1564
 - id: conc_advanced_lessons
   title: MUS 360 Advanced Applied Music Lessons (1 unit course taken 4 times)
-  unparsed: true
+  choose_units: 4
+  course_units: 1
+  from:
+    list:
+    - MUS 360
   quote: MUS 360 Advanced Applied Music Lessons (1 unit course
   source: p.1564
 - id: conc_ensembles

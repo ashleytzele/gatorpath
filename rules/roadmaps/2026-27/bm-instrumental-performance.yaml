@@ -112,7 +112,9 @@ variants:
         group: conc_advanced_lessons
         units: 2
         note: MUS 360 Advanced Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
-      - MUS 365
+      - slot: major
+        group: conc_research_seminar
+        units: 2
       - slot: major
         group: ud_theory
         units: 3
@@ -132,7 +134,9 @@ variants:
         group: conc_advanced_lessons
         units: 2
         note: MUS 360 Advanced Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
-      - MUS 365
+      - slot: major
+        group: conc_research_seminar
+        units: 2
       - slot: major
         group: conc_ensembles
         units: 3
@@ -153,7 +157,9 @@ variants:
         group: conc_advanced_lessons
         units: 2
         note: MUS 360 Advanced Applied Music Lessons (Concentration), 2 units as printed; a 1-unit course
-      - MUS 365
+      - slot: major
+        group: conc_research_seminar
+        units: 2
       - slot: major
         group: conc_ensembles
         units: 3
@@ -174,7 +180,9 @@ variants:
         group: ud_core_capstone
         units: 1
         note: 'Select One (Upper-Division Core): MUS 361 or MUS 598'
-      - MUS 365
+      - slot: major
+        group: conc_research_seminar
+        units: 2
       - MUS 640
       - slot: major
         group: conc_ensembles

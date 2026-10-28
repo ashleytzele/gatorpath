@@ -715,6 +715,17 @@ def test_a_programs_own_order_rules_are_checked():
     assert errors("ba-studio-art", ("2027-fall", ["ART 600"]), transfer_units=60, ge_certified=True, completed=lower) == []
 
 
+def test_a_course_taken_four_times_goes_in_four_terms():
+    # BM Composition (p.1549): "MUS 260 Applied Music Lessons (1 unit course taken 4 times)", one a semester on the
+    # roadmap (semesters 1-4, p.1551); BM Instrumental Performance (p.1555): "Take 2 units per semester for 3 semesters".
+    # The planner placed a course once; as a choice in 1-unit slots, all four lessons went into one term
+    for name, group, per_term, terms in (("bm-composition", "conc_applied_lessons", 1, 4),
+                                         ("bm-instrumental-performance", "conc_applied_lessons", 2, 3)):
+        got = plan_for({"catalog_year": "2026-27", "program": name, "start_term": "2027-fall", "completed": []})
+        counts = [sum(1 for c in s["courses"] if isinstance(c, dict) and c["slot"] == group) for s in got["semesters"]]
+        assert got["check"]["valid"] and sorted(n for n in counts if n) == [per_term] * terms, (name, counts)
+
+
 def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():
     # Trial 7: MATH 325 met MATH 225 on the DPR; electives needing MATH 225 showed as blocked
     from gatorpath.engine.planner import UNVERIFIED, evaluate

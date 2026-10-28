@@ -973,7 +973,8 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
             continue
         if "units_needed" in g:
             kind = "major" if g["kind"] == "major" else "ud_ge" if upper_only(groups[g["id"]]) else "ge"
-            slots += [{"slot": g["id"], "units": u, "_kind": kind} for u in chunks(g["units_needed"] - g["units_done"])]
+            slots += [{"slot": g["id"], "units": u, "_kind": kind}  # in the course size the Bulletin names: 1-unit lessons
+                      for u in chunks(g["units_needed"] - g["units_done"], groups[g["id"]].get("course_units", 3))]
         elif "courses_needed" in g:
             slots += [{"slot": g["id"], "units": 0, "_kind": "tag",
                        "note": "usually met by a GE or elective course that also carries this designation"}
@@ -1013,6 +1014,12 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
         if isinstance(i, dict) and i.get("slot") == "major" and "one_of" in groups.get(i.get("group"), {}) else i
     road = [sem | {"items": [x for x in (pick_one(as_one_of(i)) for i in sem["items"]) if x is not None]}
             for sem in roadmap["variants"][ref]["semesters"]]
+    # a course taken N times (MUS 260 lessons, a one-course choice in `course_units` slots): in a term, at most the
+    # slots one roadmap semester prints for it (BM Instrumental Performance: 2 units of 1-unit lessons), else one
+    one_course = {g["id"]: g["course_units"] for g in program["groups"] if "course_units" in g and isinstance(g.get("from"), dict)
+                  and len(g["from"].get("list", [])) == 1}
+    per_term = {gid: max([math.ceil(i.get("units", size) / size) for sem in road for i in sem["items"]
+                          if isinstance(i, dict) and i.get("group") == gid] or [1]) for gid, size in one_course.items()}
     named = {str(i.get("area")) for sem in road for i in sem["items"] if isinstance(i, dict)}
     printed_in: dict[str, int] = {}  # each roadmap course's semester (a Select One's: the option planned)
     for k, sem in enumerate(road):
@@ -1033,7 +1040,11 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 out += [x for x in pool if x["_kind"] == "tag" and x["slot"] in groups_for("USH")][:1]
             return out
         if item["slot"] in ("senior_elective", "major"):  # `major` names its choose-group; CS's senior_elective takes any
-            return [x for x in pool if x["_kind"] == "major" and x["slot"] == item.get("group", x["slot"])][:item.get("count", 1)]
+            mine = [x for x in pool if x["_kind"] == "major" and x["slot"] == item.get("group", x["slot"])]
+            n = item.get("count", 1)
+            if "group" in item and mine and item.get("units", 0) > n * mine[0]["units"] > 0:  # 2 units of 1-unit lessons
+                n = math.ceil(item["units"] / mine[0]["units"])
+            return mine[:n]
         if item["slot"] == "ai":
             tags = [x for x in pool if x["_kind"] == "tag" and x["slot"] in groups_for(str(item["area"]))]
             return tags + free(item["units"]) if tags else []
@@ -1111,7 +1122,12 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                     if x["slot"] not in ready_count:
                         ready_count[x["slot"]] = ready_options(x["slot"])
                     taken_now = sum(1 for y in term_slots if y["slot"] == x["slot"])
-                    return units >= levels["upper"] and ready_count[x["slot"]] > taken_now
+                    if x["slot"] in per_term:  # a course taken N times: its own prereq and season, like a named course's
+                        c = groups[x["slot"]]["from"]["list"][0]
+                        return (taken_now < per_term[x["slot"]] and season_ok(c, term, catalog, seasons)[0]
+                                and evaluate(prereqs.get(c, {}).get("expr"), ctx | {"same_term": set(placed)})[0] != NO)
+                    # upper-division standing first, unless every option is lower division (ART 210-260)
+                    return (units >= levels["upper"] or not kinds[x["slot"]][1]) and ready_count[x["slot"]] > taken_now
                 return not ((x["_kind"] == "ud_ge" and not ud_ok)
                             or (x["_kind"] == "elective" and x.get("upper_division") and units < levels["upper"]))
 

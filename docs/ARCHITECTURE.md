@@ -339,6 +339,12 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   (`totals.residence.no_residence_credit`, p.2391).
 - `course_units` (choose-group): the unit size the Bulletin names ("five 3-unit senior electives", p.1905). A
   counted course with fewer units gets a ⚠️ (the same list names 1-unit CSC 685/686), never a silent pass or fail.
+  The plan's slots for the group come in that size. A course taken N times is a choice of N times its units from a
+  list of that one course (added 2026-10-28): "MUS 260 Applied Music Lessons (1 unit course taken 4 times)", p.1549 =
+  `{choose_units: 4, course_units: 1, from: {list: [MUS 260]}}`; the audit adds up a repeatable course's passes, and
+  build_plan puts in a term at most the slots one roadmap semester prints for it ("Take 2 units per semester", p.1555),
+  by the course's own prereq. A course the catalog doesn't call repeatable (MUS 443, "taken 4 times") can't be met
+  this way: it stays unparsed, for the department.
 - `fill_to_total: true` (choose-group, added 2026-10-23): electives "as many units as needed to reach a total of 58 units
   in the program" (BA General Biology, p.1785). `choose_units` is the printed minimum (7); the audit raises it to
   `total_units` minus what the other major groups contribute (a choice group its units, a required course or Select
@@ -814,7 +820,8 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
    - fill up to the term's cap (step 5), then slots; free-elective units split to fill a term
    - **senior electives wait for real readiness (D19):** a senior-elective slot goes in once the student has
      upper-division standing and an option of that group is ready that term (prereqs met, offered that season),
-     one ready option per slot in the term. Not at the roadmap's position for it
+     one ready option per slot in the term. Not at the roadmap's position for it. A choice whose options are all
+     lower division (ART 210-260) doesn't wait for the standing
    - F-1 (`f1: true`): a spring/fall term with more terms to come is filled toward 12 units with elective slots
    - standing (`upper`/`senior`) is computed from cumulative units
    - a prereq nothing in the plan, the requirements or the roadmap meets is added as a course (one per "one of",
