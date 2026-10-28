@@ -659,7 +659,13 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
   - [ ] (?) Complementary Studies (23 BA groups): one question for an advisor first. Can GE courses count toward the
     12 units "outside of the primary prefix" (p.2353)? If yes, it's a check over every course; if no, 12 units of
     electives outside the prefix (the roadmaps' "Complementary Studies or SF State Studies or University Elective"
-    slots suggest no). Either answer converts them all.
+    slots suggest no). Either answer converts them all. Checked 2026-10-28, still open: no Bulletin page says GE
+    courses count or don't (p.2353 and every BA's own text; Chinese, German, Italian and Spanish allow a double count
+    only through study abroad or a second major/minor/certificate). An answer that GE courses do count arrived without
+    a source; it ends with "check with your major advisor", so it isn't used. The LCA advising syllabus
+    (lca.sfsu.edu/undergraduate-advising-syllabus) and Anthropology's advising page (anthropology.sfsu.edu/advising,
+    "always approved" subjects and courses) don't say either. An advisor's or the Advising Center's written answer,
+    cited "<page>, checked <date>", would settle it.
   - [x] A `units` prereq leaf (2026-10-28, ARCHITECTURE §6.3): "24 upper-division units in AA S courses" (AA S 696),
     "15* upper-division ENGR units" (ENGR 696, per major), "6 units of upper-division KIN courses", "Nine units of SXS
     coursework". 7 prereqs in 2026-27 parse further (5 now `ok`). BS Civil's unparsed "15 upper-division ENGR units and
