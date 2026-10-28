@@ -111,6 +111,29 @@ def test_a_group_after_others_waits_for_their_courses():
     [e] = [e for e in bad["errors"] if e["error"] == "order"]
     assert e["course"] == "KIN 750" and "KIN 240" in e["message"] and "p.725" in e["message"]
 
+def test_a_select_one_counts_the_prereqs_each_option_adds():
+    # BS Cell and Molecular Biology (p.1796): "Select One (CHEM 340 or CHEM 349)", 3 units each. CHEM 340 needs CHEM 233
+    # and CHEM 235; CHEM 349 needs CHEM 130, which the lower-division Select One (CHEM 130 or CHEM 233) already plans
+    from gatorpath.engine.planner import build_plan
+    name = "bs-biology-cell-and-molecular-biology"
+    program, university, roadmap = rules_for({"program": name})
+    chem = {"CHEM 130": "CHEM 115* with a grade of C or better.",
+            "CHEM 233": "Priority enrollment for Chemistry and Biochemistry majors; CHEM 115 and CHEM 215* with grades of C "
+                        "or better; other majors permitted on a space-available basis.",
+            "CHEM 235": "CHEM 233* with a grade of C or better.",
+            "CHEM 340": "CHEM 215, CHEM 233, and CHEM 235* with grades of C or better. Intended for Chemistry, "
+                        "Biochemistry, and Biology majors.",
+            "CHEM 349": "CHEM 215* with a grade of C or better, and CHEM 130* with a grade of C or better or CHEM 235* with "
+                        "a grade of C- or better."}
+    prereqs = PREREQS | {c: {"raw_text": t, **parse_prereq(t)} for c, t in chem.items()}
+    got = build_plan({"catalog_year": "2026-27", "program": name, "start_term": "2027-fall", "qr_pathway": "1/2",
+                      "completed": []}, program, university, roadmap, CATALOG, prereqs)
+    codes = {c for s in got["semesters"] for c in s["courses"] if isinstance(c, str)}
+    assert got["check"]["valid"] and {"CHEM 130", "CHEM 349"} <= codes and not codes & {"CHEM 233", "CHEM 235", "CHEM 340"}
+    assert any("planned CHEM 349, not CHEM 340, fewer units with the prereqs each adds (3, not 9)" in w
+               for w in got["warnings"])
+
+
 def test_restricted_to_major_and_standing():
     # CSC 300GW: "Restricted to upper-division Computer Science majors and minors; GE Area 1A; CSC 210 or CSC 215"
     p = FRESHMAN | {"ge_done": ["1A"]}

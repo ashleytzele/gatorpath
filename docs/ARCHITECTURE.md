@@ -406,10 +406,11 @@ Added 2026-10-22 (BS Applied Mathematics, the second program, pp.2129-2137):
   CSC 309" = `one_of: [[MATH 209], [CSC 101, CSC 215], [CSC 309]]`. Met when every course of one option counts.
   The audit's `remaining` is one option: the one with the most done or in progress, then one with no attempt that
   didn't count (a CR can't be retaken), then the fewest units left, then the first printed (so build_plan plans it);
-  `options` lists each with what's left, for the student to switch. build_plan keeps that option only while every
-  planned course stays reachable with it (each prereq met by something done, planned or on the roadmap, and none the
-  student can't meet, like another QR placement); otherwise it plans the first option, by units left, that does, and
-  says so in a warning.
+  `options` lists each with what's left, for the student to switch. build_plan plans, among the options that leave
+  every planned course reachable (each prereq met by something done, planned, on the roadmap or added as a prereq,
+  and none the student can't meet, like another QR placement), the first in the audit's order with the units of the
+  prereqs it adds counted in (CHEM 349 needs CHEM 130, already planned, where CHEM 340 needs CHEM 233 and CHEM 235:
+  BS Cell and Molecular Biology, p.1796), and says so in a warning when that isn't the audit's option.
 - `approval` (group text) + `from: {approved: true}`: courses no list names, chosen with someone's consent ("A coherent
   collection of three courses emphasizing applications of mathematics, chosen with the consent of the applied
   mathematics advisor", p.2129). Only the courses in `profile.approved[<group id>]` count: one student's approved

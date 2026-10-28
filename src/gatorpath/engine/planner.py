@@ -752,25 +752,62 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
     required = [c for c in required if c not in stuck]
     met = have | set(profile.get("dpr_met", ()))
 
-    # A "Select One" (one_of) plans the audit's option (fewest units) unless, with it, some planned course can never be
-    # ready: a prereq nothing in the plan or roadmap meets (only those get scheduled; MATH 400 needs CSC 215 or MATH 209,
-    # not CSC 309), or one the student can't meet (another placement, graduate standing). Then the first option, by
-    # units left, that leaves every course reachable.
+    # A prereq nothing in the plan or roadmap meets is a course to add: PHYS 330 needs MATH 376, WGS 300GW one of WGS
+    # 200/210/220/280. One per "one of" (the fewest units, then first printed), all of an "all", and their own prereqs.
+    def missing(e: dict | None, planned: set) -> list[str]:
+        if not e:
+            return []
+        if "all" in e:
+            return [c for x in e["all"] for c in missing(x, planned)]
+        if "any" in e:
+            if any(not missing(x, planned) for x in e["any"]):  # a branch already met (or not a course: checked later)
+                return []
+            options = sorted((x for x in e["any"] if x.get("course") in catalog),
+                             key=lambda x: (catalog[x["course"]]["units_min"], e["any"].index(x)))
+            return missing(options[0], planned) if options else []
+        c = e.get("course")
+        return [c] if c and c not in planned and c in catalog and "max_grade" not in e else []
+
+    def added(courses: list[str], planned: set) -> list[str]:
+        """What `courses` bring into a plan of `planned`: their prereqs nothing in it meets, and those prereqs' own."""
+        planned, queue, out = planned | set(courses), list(courses), []
+        while queue:
+            for d in missing(prereqs.get(queue.pop(), {}).get("expr"), planned):
+                if d not in planned:
+                    planned.add(d)
+                    out.append(d)
+                    queue.append(d)
+        return out
+
+    # A "Select One" (one_of) plans the audit's option, by its order (the most done, no attempt that didn't count, no
+    # course another group plans) but with the prereqs each option adds in its units (CHEM 349 needs CHEM 130, already
+    # planned; CHEM 340 needs CHEM 233 and CHEM 235, p.1796), among the options that leave every planned course ready:
+    # not a prereq nothing in the plan or roadmap meets (MATH 400 needs CSC 215 or MATH 209, not CSC 309), nor one the
+    # student can't meet (another placement, graduate standing).
     later = {"same_term": set(), "grades": {}, "profile": profile, "gpa": profile.get("gpa"),
              "ge_done": ge_done_areas(profile, university), "slot_areas": {a for g in university["groups"] for a in ge_areas(g)},
              "catalog": catalog, "program": program, "class_level": levels, "units": university["totals"]["min_units"]}
 
     def reachable(left: list[str], instead: list[str]) -> bool:
         plan = set(required) - set(instead) | set(left)
+        plan |= set(added(list(plan), met | plan | set(order)))  # with the prereqs the plan will add, which must be ready too
         return all(evaluate(prereqs.get(c, {}).get("expr"), later | {"done": met | plan | set(order)})[0] != NO for c in plan)
 
     for g in status["groups"]:
-        if "options" in g and g["remaining"] and not reachable(g["remaining"], g["remaining"]):
-            by_units = sorted(g["options"], key=lambda o: sum(catalog[c]["units_min"] for c in o["left"] if c in catalog))
-            if pick := next((o["left"] for o in by_units if o["left"] and reachable(o["left"], g["remaining"])), None):
-                required = [c for c in required if c not in g["remaining"]] + [c for c in pick if c in catalog]
-                warnings.append(f"{g['title']}: planned {', '.join(pick)}, not {', '.join(g['remaining'])}, which leaves a "
-                                f"prereq in this plan unmet ({g['source']})")
+        if "options" in g and g["remaining"]:
+            rest = [c for c in required if c not in g["remaining"]]
+            others = met | set(rest) | set(added(rest, met))
+            cost = lambda o: sum(catalog[c]["units_min"] for c in o["left"] + added(o["left"], others) if c in catalog)
+            ok = [o for o in g["options"] if o["left"] and reachable(o["left"], g["remaining"])]
+            order_of = lambda o: (len(o["left"]) - len(o["courses"]), any(c in best for c in o["left"]),
+                                  any(c in rest for c in o["left"]), cost(o), o["left"] != g["remaining"])
+            pick = min(ok, key=order_of)["left"] if ok else g["remaining"]
+            if pick != g["remaining"]:
+                why = "which leaves a prereq in this plan unmet" if not reachable(g["remaining"], g["remaining"]) else \
+                    f"fewer units with the prereqs each adds ({cost({'left': pick}):g}, not {cost({'left': g['remaining']}):g})"
+                required = rest + [c for c in pick if c in catalog]
+                warnings.append(f"{g['title']}: planned {', '.join(pick)}, not {', '.join(g['remaining'])}, {why} "
+                                f"({g['source']})")
 
     def still_needed(e: dict | None) -> list[str]:
         """Courses a prereq tree still needs: a chain stops at what's done or met, and "one of" stops at a done one."""
@@ -792,30 +829,7 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                 stack.append(d)
     todo = required + ([c for c in order if c in closure and c not in have and c not in required and c in catalog]
                        if variant else [])
-
-    # A prereq nothing in the plan or roadmap meets is a course to add: PHYS 330 needs MATH 376, WGS 300GW one of WGS
-    # 200/210/220/280. One per "one of" (the fewest units, then first printed), all of an "all", and their own prereqs.
-    def missing(e: dict | None, planned: set) -> list[str]:
-        if not e:
-            return []
-        if "all" in e:
-            return [c for x in e["all"] for c in missing(x, planned)]
-        if "any" in e:
-            if any(not missing(x, planned) for x in e["any"]):  # a branch already met (or not a course: checked later)
-                return []
-            options = sorted((x for x in e["any"] if x.get("course") in catalog),
-                             key=lambda x: (catalog[x["course"]]["units_min"], e["any"].index(x)))
-            return missing(options[0], planned) if options else []
-        c = e.get("course")
-        return [c] if c and c not in planned and c in catalog and "max_grade" not in e else []
-
-    planned_set, queue = met | set(todo), list(todo)
-    while queue:
-        for d in missing(prereqs.get(queue.pop(), {}).get("expr"), planned_set):
-            if d not in planned_set:
-                planned_set.add(d)
-                todo.append(d)
-                queue.append(d)
+    todo += added(todo, met)
 
     # Priority: longest chain of plan courses that depend on it (critical path), then roadmap order.
     needs = {c: {l["course"] for l in leaves(prereqs.get(c, {}).get("expr")) if "course" in l and l["course"] in todo and l["course"] != c}

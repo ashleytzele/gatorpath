@@ -512,9 +512,15 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
     ITEP 5 as printed; Physics and Astrophysics (PHYS 330 needs MATH 376, which the roadmap never schedules), Earth
     Sciences (its AS-T meets "the Introduction to Earth Sciences requirement, and 3 units of Focus Electives", groups
     a course list can't name) and Cell and Molecular Biology (below) take 5
-  - [ ] BS Cell and Molecular Biology plans CHEM 130 and CHEM 233 both: CHEM 233 comes in as CHEM 340's prereq (the
+  - [x] BS Cell and Molecular Biology plans CHEM 130 and CHEM 233 both: CHEM 233 comes in as CHEM 340's prereq (the
     biochemistry Select One), but "Select One (CHEM 130 or CHEM 233)" still takes CHEM 130; the 3 units push BIOL 350
-    a term late and its ADT plan to 5 terms. The Select One should prefer an option the plan already takes as a prereq
+    a term late and its ADT plan to 5 terms. Done 2026-10-27: the biochemistry Select One was the cause (CHEM 340 and
+    CHEM 349 tie at 3 units; CHEM 340 brings CHEM 233 and CHEM 235). build_plan now counts the prereqs an option adds
+    (ARCHITECTURE §6.2 `one_of`), below the audit's progress / no-failed-attempt / counts-once order: CHEM 130 and
+    CHEM 349, 4 terms. On the way: no option was "reachable" in programs whose plans add a prereq outside the roadmap
+    (it ignored those), so the step never ran there; now it counts them. Of 217 test plans only that one changed
+    length; Select One picks changed in Cell and Molecular Biology, General Biology (BIOL 350 kept, and BIOL 526, not
+    BIOL 454 with BIOL 453), Physics for Teaching (MATH 245 kept) and Creative Writing (C W 511GW kept)
   - [x] Read the other 2026-10-22 pilots against the Bulletin, as BS Public Health (2026-10-27): BA Asian American
     Studies, BM Composition, BS Civil Engineering (review log). Rules and roadmaps as printed; what they turned up:
   - [x] "General Education Requirements Met in the Major" (18 programs in 2026-27: Civil, Computer, Electrical and
