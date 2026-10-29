@@ -592,10 +592,17 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         remaining.append(g["id"])
         err("requirement_not_covered", f"{g['title']} isn't covered by the plan", group=g["id"], source=g["source"])
     if slots:
+        # Only the open groups' minimums: free-elective slots read as senior electives to a client when they came along
+        free = [s for s in slots if s.get("slot") == "elective"]
         mins = [f"{g['title']}: at least {g['min_units_from']['units']} units must be {described(g['min_units_from'])}"
-                for g in program["groups"] if "min_units_from" in g and "across" not in g]  # a choice's, not a check's
-        warnings.append(f"{len(slots)} slot(s) still to fill; pick each from list_eligible_electives for its group"
-                        + (f" ({'; '.join(mins)})" if mins else ""))
+                for g in program["groups"] if "min_units_from" in g and "across" not in g  # a choice's, not a check's
+                and any(s.get("slot") == g["id"] for s in slots)]
+        parts = ([f"{len(slots) - len(free)} for requirement groups, each picked from list_eligible_electives for its "
+                  "group" + (f" ({'; '.join(mins)})" if mins else "")] if len(free) < len(slots) else []) + (
+            [f"{len(free)} free elective{'s' if len(free) > 1 else ''}: any course"
+             + (", upper-division where the slot says so" if any(s.get("upper_division") for s in free) else "")]
+            if free else [])
+        warnings.append(f"{len(slots)} slot(s) still to fill: {'; '.join(parts)}")
 
     t = result["totals"]
     extra = sum(s.get("units", 0) for s in slots)

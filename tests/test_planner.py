@@ -165,7 +165,11 @@ def test_complete_plan_for_adt_transfer_is_valid():
                 ("2028-fall", [{"slot": "elective", "units": 3}]))
     assert got["valid"], got["errors"]
     assert got["terms"][0] == {"term": "2027-fall", "units": 15, "units_before": 87}
-    assert any("6 slot(s) still to fill" in w for w in got["warnings"])
+    assert ("6 slot(s) still to fill: 3 for requirement groups, each picked from list_eligible_electives for its group "
+            "(Electives (15 units): at least 12 units must be CSC); 3 free electives: any course") in got["warnings"]
+    # Free electives alone don't carry the senior electives' rule (Codex read them as unconfirmed senior electives)
+    free = check(profile, ("2027-fall", ["CSC 648", "CSC 653", "CSC 665", "CSC 671", "CSC 620", {"slot": "elective", "units": 3}]))
+    assert [w for w in free["warnings"] if "still to fill" in w] == ["1 slot(s) still to fill: 1 free elective: any course"]
     short = check(profile, ("2027-fall", ["CSC 648", "CSC 653"]))
     assert {e["group"] for e in short["errors"] if e["error"] == "requirement_not_covered"} == {"senior_electives", "ge_ud_sci", "ge_4ud"}
     assert {e["total"] for e in short["errors"] if e["error"] == "units_short"} == {"units"}
