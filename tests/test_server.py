@@ -272,6 +272,7 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     prompts = asyncio.run(server.mcp.list_prompts())
     assert [p.name for p in prompts] == ["plan_my_degree"]
     assert not prompts[0].arguments  # an argument opens an input form before the prompt starts
+    assert server.get_planning_steps()["steps"] == text  # the same steps for a client without prompts (Codex CLI)
 
 
 def test_not_on_dpr_leaves_a_requirement_out_and_sends_to_an_advisor():
@@ -325,6 +326,7 @@ def test_only_save_profile_writes_a_file(tmp_path, tmp_path_factory, monkeypatch
         "ge_combinations": lambda: server.ge_combinations(profile, plan),
         "compare_programs": lambda: server.compare_programs(profile, "bs-applied-math"),
         "get_sections": lambda: server.get_sections("2027-spring", ["CSC 653"]),
+        "get_planning_steps": server.get_planning_steps,
     }
     assert set(calls) == {t.name for t in asyncio.run(server.mcp.list_tools())} - {"save_profile"}
     for call in calls.values():

@@ -27,7 +27,9 @@ unzip gatorpath.zip -d ~ && uv --directory ~/gatorpath sync
 claude mcp add --scope user gatorpath -- uv --directory ~/gatorpath run gatorpath
 ```
 
-The last line is for Claude Code. For Codex CLI it's `codex mcp add gatorpath -- uv --directory ~/gatorpath run gatorpath`.
+The last line is for Claude Code. It asks before each GatorPath tool runs; to approve them all once, type
+`/permissions` in Claude Code and add the allow rule `mcp__gatorpath__*`. For Codex CLI it's
+`codex mcp add gatorpath -- uv --directory ~/gatorpath run gatorpath`.
 For Claude Desktop, open Settings → Developer → Edit Config, add this, and restart the app:
 
 ```json
@@ -52,8 +54,9 @@ Start with the **Plan my degree** prompt (Claude Code: `/mcp__gatorpath__plan_my
 needs. The fastest way in is your DPR: in Student Center, print the Degree Progress Report to a PDF and give the
 assistant the file's path (don't attach it). GatorPath reads it on your machine and drops your name and ID.
 
-In a client without MCP prompts, say "use the gatorpath tools" and mention SF State: a client that isn't pointed at
-them may answer from web search, and nothing checks that plan.
+In a client without MCP prompts (Codex CLI), just ask, and mention SF State, e.g. "I'm an SF State CS major, plan
+the rest of my degree": the tools hand it the same steps. Without "SF State" a client may answer from web search,
+and nothing checks that plan.
 
 ## Evals
 
@@ -75,24 +78,26 @@ prompt now plans from that, and a rerun of that question passes on both.
 
 ## Limitations
 
-- Two programs: BS Computer Science for three catalog years, 2024-25 (the old GE Areas A-F), 2025-26 and 2026-27,
-  and BS Applied Mathematics for 2026-27 only. Requirements follow the student's catalog year; courses and prereqs
+- Hand-written rules: BS Computer Science and BS Applied Mathematics for three catalog years, 2024-25 (the old GE
+  Areas A-F), 2025-26 and 2026-27. Requirements follow the student's catalog year; courses and prereqs
   are the newest Bulletin's. A DPR on a catalog year without rules is planned with 2026-27 rules plus a warning,
-  and the DPR wins where they disagree. `import_dpr` doesn't recognize an Applied Mathematics DPR yet (no sample
-  to read its program line from); type the courses or use the transcript instead.
-- 95 other bachelor's programs (2026-27 only; `list_programs` marks them `drafted: true`) are AI-drafted from the
+  and the DPR wins where they disagree. `import_dpr` recognizes a Computer Science or Psychology DPR; for other
+  majors (no sample to read the program line from yet), type the courses or use the transcript instead.
+- 106 other bachelor's programs for 2026-27, plus BA Psychology for 2025-26 (`list_programs` marks them
+  `drafted: true`), are AI-drafted from the
   Bulletin's text, then checked by program: every course code, page and word-for-word quote, the unit totals, and a
   test plan that passes check_plan. Each had a first-pass review against its Bulletin text (Claude, 2026-10-23;
   docs/review-2026-27-drafts.md); a person hasn't signed them off yet, so they stay `verified: false`. Rules the format can't express
   (a CR/NC unit cap, a course taken four times, a GPA floor) show as `unparsed` with the Bulletin's words: GatorPath
-  doesn't check them, and a degree with one is never marked complete. 13 of the Bulletin's 110 aren't served yet
-  (`rules/drafts/`, see TASKS.md).
+  doesn't check them, and a degree with one is never marked complete. 2 of the Bulletin's 110 aren't served: BA
+  Philosophy and Religion (suspended, nothing printed) and BA Family and Community Sciences (no roadmap).
 - BS Applied Mathematics: the three application electives are "chosen with the consent of the applied mathematics
   advisor" (p.2129), so GatorPath can't list them; it counts only the ones you say were approved.
 - Only the 2025-26 BS CS rules are signed off by a person (`verified: true`). The others are
   `verified: false`: for BS CS 2026-27, eight rounds of independent AI review against the PDF brought the error rate
   from 19.6% to 10.6%, each finding fixed. BS Applied Mathematics hasn't had a review yet.
-- Offering history covers CSC, MATH and PHYS only (2023-spring to 2026-fall); other subjects show `offered: unknown`.
+- Offering history (2023-spring to 2027-spring) covers CSC, MATH, PHYS, PSY and SXS; 89 other subjects have only the
+  Spring 2027 schedule, so "not offered" there means one term; the rest show `offered: unknown`.
 - The transcript importer hasn't seen a real CR / W / I / repeat row yet, and the DPR's transfer-row Notes codes have
   no legend. Both get flagged rather than guessed.
 - Tested on macOS only.

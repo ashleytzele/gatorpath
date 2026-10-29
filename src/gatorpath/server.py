@@ -45,9 +45,11 @@ mcp = MCPServer(
         "the student that the DPR and an advisor are the final word. A course meets a GE, SF State Studies or American "
         "Institutions area only where a tool shows it (`ge_areas`, `counted`, `major_courses`): never infer one from "
         "a course's subject or title. "
-        "Never guess what transfer credit covers or when a student will graduate: ask for the DPR, and use the planner "
-        "tools when they exist. After a plan passes check_plan, show its first term's sections (class number, days, "
-        "times, room, instructor, seats) with get_sections when that term's schedule is out. "
+        "Never guess what transfer credit covers (the DPR shows it) or when a student will graduate (build_plan says). "
+        "To plan a degree without the plan_my_degree prompt, call get_planning_steps first and follow it: a typed "
+        "course list is enough to plan from, so don't hold the plan back for a DPR. After a plan passes check_plan, "
+        "show its first term's sections (class number, days, times, room, instructor, seats) with get_sections when "
+        "that term's schedule is out. "
         "Student profiles are passed in per call and never stored, except by save_profile: one file on the student's "
         "machine, only when they ask."
     ),
@@ -122,10 +124,15 @@ def offering_note(path: Path, year: str) -> str:
     rows = [(c.rsplit(" ", 1)[0], r["offered"]) for c, r in catalog(path, year).items() if "offered" in r]
     if not rows:
         return NO_OFFERINGS
-    spans = sorted({f"{o['since']} to {o['until']}" for _, o in rows})
-    return (f"Offering history (Class Search, {', '.join(spans)}) covers {', '.join(sorted({s for s, _ in rows}))}; "
-            "`offered` gives [terms it ran, terms checked] per season. Other subjects are unknown, and past terms don't "
-            "promise future ones: check Class Search")
+    spans: dict[str, set[str]] = {}
+    for s, o in rows:
+        spans.setdefault(f"{o['since']} to {o['until']}" if o["since"] != o["until"] else f"only the {o['until']} schedule",
+                         set()).add(s)
+    # ponytail: a count past 10 subjects; each course's own `offered` already says 'unknown' when it has none
+    parts = [f"{span}: {', '.join(sorted(subs)) if len(subs) <= 10 else f'{len(subs)} subjects'}"
+             for span, subs in sorted(spans.items())]
+    return (f"Offering history from Class Search ({'; '.join(parts)}): `offered` gives [terms it ran, terms checked] per "
+            "season. Other subjects are unknown, and past terms don't promise future ones: check Class Search")
 
 
 def offered(code: str) -> dict | str:
@@ -734,7 +741,7 @@ hasn't passed.
 
 Keep it fast. Ask once, in one message, for everything still missing, then work through to a finished plan without
 stopping for confirmation. Never ask one question at a time or re-ask what they gave. Fill optional gaps with stated
-defaults (15 units per term, no summer or Winter Session) instead of asking. What the student doesn't mention is none: no prior degree,
+defaults (the Bulletin roadmap's unit loads, no summer or Winter Session) instead of asking. What the student doesn't mention is none: no prior degree,
 no AP / IB or transfer credit, nothing in progress. Say so in one line and plan; don't ask them to confirm it.
 
 1. Start with `load_profile` (no path: the default file). If it returns a profile, start from it and ask only what's
@@ -836,7 +843,7 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      subjects, and past terms don't promise future ones), compare with the DPR, see the advisor
    Then offer what-ifs: graduating earlier (step 6; "a year early" means a year before the plan's
    est_graduation_term: say the term you used, and give why_not when it can't be reached), a new direction
-   (steps 4-5 with the new goal; required courses don't change). Switching majors isn't supported yet.
+   (steps 4-5 with the new goal; required courses don't change), another major (step 6).
 8. Offer once to save their profile so the next session starts here: `save_profile` with the goal, chosen_electives
    and the plan that passed check_plan. Only if they say yes; it writes one file on their machine (default
    ~/.gatorpath/profile.yaml, or a path they choose)."""
@@ -848,3 +855,11 @@ def plan_my_degree() -> str:
     # No arguments: Claude Desktop opens an input form first for any argument, and Claude Code keeps only one word
     # of each (checked 2026-10-28). The prompt asks for the goal and the graduation term itself.
     return PLAN_MY_DEGREE.format(year=YEAR, years=", ".join(YEARS))
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_planning_steps() -> dict:
+    """The Plan my degree workflow, for a client that didn't start from the plan_my_degree prompt: call it first
+    when a student asks to plan their degree (or what's left, or when they'll graduate), then follow its steps."""
+    # Codex CLI has no MCP prompts (checked 2026-10-29): without these steps it stopped at a draft with 25 open slots
+    return {"catalog_year": YEAR, "steps": plan_my_degree(), "warnings": []}

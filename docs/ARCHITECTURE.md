@@ -753,7 +753,7 @@ deterministic (D6). The prompt gives the client its workflow:
 As built (2026-10-17, revised after Desktop trial 3): ask **once**, in one message, for everything missing; the
 fastest path is the student's DPR. Say once that an attached PDF carries their name and ID to the AI provider
 (black them out, or paste the requirement sections), then accept what they share; `import_dpr` will make this
-local. Defaults instead of questions (15 units, no summer). A catalog year GatorPath has rules for (2024-25 to 2026-27) is
+local. Defaults instead of questions (the roadmap's loads since D24, no summer). A catalog year GatorPath has rules for (2024-25 to 2026-27) is
 audited with that year's rules (D23); another year is planned with the newest rules and a warning, not refused (the DPR
 wins on disagreements). Transfer rows the DPR lists under a
 requirement become that course with `transfer: true`; substitutions go in `dpr_met`; GE areas in the DPR's own
@@ -762,7 +762,9 @@ multiple-choice question tool (Claude Code's AskUserQuestion) asks the fixed-ans
 with it, in the same ask. The prompt takes no arguments: Claude Desktop opens an input form before the prompt starts
 for any argument, even an optional one, and Claude Code keeps only one word of each, so a free-text goal came through
 as its first word. The prompt asks for the goal and the graduation term. A test fails if the prompt names a tool that
-doesn't exist.
+doesn't exist. Added 2026-10-29: the tool `get_planning_steps` returns the same text, and the server instructions say
+to call it first. Codex CLI has no MCP prompts; without the steps it planned a draft with 25 open slots and kept asking
+for a DPR the student had already answered with a typed course list (the evals paste the prompt in, so they missed it).
 
 What-ifs map to tools, not to new server logic:
 - "Graduate a year early" → step 5 with a heavier load, and say what has to give.
