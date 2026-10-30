@@ -32,7 +32,7 @@ questions:
   - {id: prereq-510, ask: "What do I need before CSC 510 at SF State?", expect: {mention: {prereqs_of: CSC 510}}}
   - {id: unlocks-340, ask: "Which required SF State BS CS courses does CSC 340 unlock?", expect: {mention: {unlocks_of: CSC 340}}}
   - {id: offered-652, ask: "Is CSC 652 usually offered in the fall at SF State?",
-     expect: {mention_any: ["0 of 4", "0 of the last 4", "none of the last", "not offered in", "hasn't been offered in",
+     expect: {mention_any: ["0 of 4", "0 of the 4", "0 of the last 4", "none of the last", "not offered in", "hasn't been offered in",
                           "hasn't run in", "not run in", "no fall", "never in"]}}
   - {id: offered-653, ask: "When is CSC 653 usually offered at SF State?", expect: {mention: {seasons_of: CSC 653}}}
   - {id: renumbered-210, ask: "I took CSC 210 at SF State a few years ago. Does it count for the 2026-27 BS CS?",

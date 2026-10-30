@@ -40,6 +40,8 @@ def test_shift_puts_the_student_in_fall_2026(ev):
 def test_unknown_codes_count_unless_a_tool_or_the_question_named_them(ev):
     assert ev.hallucinated("Take CSC 653 and CSC 777 next, then CSC 210.", "CSC 210 is not in the 2026-27 Bulletin") == ["CSC 777"]
     assert ev.hallucinated("PHYS 220 meets in HSS 154.", '{"where": "HSS Building 154"}') == []  # a room, not a course
+    assert ev.hallucinated("PHIL 110 meets in HUM 384.", '{"where":"Humanities Building 384"}') == []
+    assert ev.hallucinated("Take HUM 384.", '{"where":"Humanities Building 118"}') == ["HUM 384"]  # not that room
 
 
 def test_profile_must_match_what_the_student_said(ev):

@@ -336,8 +336,10 @@ def codes_in(text: str) -> set[str]:
 
 
 def hallucinated(answer: str, allowed: str) -> list[str]:
-    # A room get_sections returned ("HSS Building 154") written short ("HSS 154") reads like a course code: allowed
-    rooms = " ".join(f"{m[1]} {m[2]}" for m in re.finditer(r"\b([A-Z][A-Z ]*?) Building (\d+)", allowed))
+    # A room get_sections returned, written short, reads like a course code: "HSS Building 154" as "HSS 154",
+    # "Humanities Building 384" as "HUM 384". Allowed: the name, or its first three letters, with the room number
+    rooms = " ".join(f"{m[1]} {m[2]} {m[1][:3].upper()} {m[2]}"
+                     for m in re.finditer(r"\b([A-Z][A-Za-z]*) (?:Building|Hall) (\d+)", allowed))
     seen, ok = codes_in(answer), codes_in(f"{allowed} {rooms}")
     return sorted(c for c in seen if c not in CATALOG and c not in ok)
 

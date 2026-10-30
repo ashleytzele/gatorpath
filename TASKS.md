@@ -53,10 +53,18 @@ MCP, which checks section clashes in code). Every finding was checked in the cod
   had been cut that way. Not changed on purpose: course descriptions (a 300-character cap lost 13 goal matches among
   senior electives, CSC 698's security topic among them)
 
-Left: why Codex looks courses up one by one (53 get_course calls in one run: what list_eligible_electives or
-check_plan didn't give it); a profile field for permissions the student already has (instructor consent, an approved overload: AUB tracks
-these; check_plan keeps warning); a full eval run to refresh `evals/REPORT.md` and the README table (both from
-2026-10-21); trimming the longest tool descriptions (build_plan, audit_progress), with an eval run to show nothing gets
+- [x] Why Codex looked courses up one by one: its own code asked get_course for every planned course's title, units
+  and source_page (the plan table, and the pages it's told to cite), twice; build_plan and check_plan now return
+  `courses` {code: {title, units, source_page}}
+- [x] profile.permissions (an instructor's or department's permission the student says they have: those prereq
+  branches count, flagged per course) and profile.overload_approved (no advisor handoff for that term's load)
+- [x] Full eval run 2026-10-29 (`data/evals/20261029-225724`, 14 Claude sessions rerun after a usage limit): Claude
+  45/47, Codex 45/47, plans 15/15 and 14/15, 0 hallucinated codes; plan questions' median tool calls 10 and 22 (Codex
+  68 on 2026-10-21). Misses: goal fit for the game-development student on both; Codex presented plan-retake's plan
+  without check_plan; Claude left left-p02's qr_pathway out. Scorer fixes: a room written short ("HSS 154",
+  "HUM 384" for Humanities Building 384) isn't a course code; "0 of the 4" fall terms is honest wording
+
+Left: trimming the longest tool descriptions (build_plan, audit_progress), with an eval run to show nothing gets
 worse; before the public push: rebuild `dist/gatorpath.zip`, the pyproject email, LICENSE (MIT), `.DS_Store` in
 .gitignore.
 

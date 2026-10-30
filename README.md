@@ -60,21 +60,26 @@ and nothing checks that plan.
 
 ## Evals
 
-44 questions (`evals/questions.yaml`) on synthetic students across the three catalog years, Winter Session included,
-run through Claude Code and Codex CLI with only the gatorpath server attached (run 2026-10-21, full report in
-[`evals/REPORT.md`](evals/REPORT.md)):
+47 questions (`evals/questions.yaml`) on synthetic students across the three catalog years, Winter Session included,
+run through Claude Code and Codex CLI with only the gatorpath server attached (run 2026-10-29, full report in
+[`evals/REPORT.md`](evals/REPORT.md)). Each client starts the way its students do: Claude Code from the Plan my degree
+prompt, Codex CLI (no MCP prompts) from the student's words alone.
 
 | Metric | Claude Code | Codex CLI |
 |---|---|---|
-| Questions fully passed | 43/44 | 43/44 |
+| Questions fully passed | 45/47 | 45/47 |
 | Plans passing check_plan | 15/15 | 14/15 |
-| Electives fit the goal | 13/14 | 13/14 |
+| Electives fit the goal | 13/14 | 12/14 |
 | Hallucinated course codes | 0 | 0 |
-| Used only the gatorpath tools | 44/44 | 44/44 |
+| Used only the gatorpath tools | 47/47 | 47/47 |
+| Plan in the first reply (nothing asked back) | 15/15 | 14/15 |
+| Median time to a plan | 147 s | 403 s |
+| Median tool calls per plan | 10 | 22 |
 
-Claude's miss is goal fit (it passed over web electives that need a 3.0 GPA and named them as backups). Codex's
-miss: it stopped to ask a transfer student for their DPR though they had said what their transfer credit meets; the
-prompt now plans from that, and a rerun of that question passes on both.
+Both missed goal fit for the same game-development student: of the electives each picked, only CSC 665 matches the
+goal. Codex presented a plan with open slots for a student retaking CSC 215 without running check_plan, and Claude
+left one student's math placement out of the profile. Codex's plans took a median 22 tool calls, down from 68 on
+2026-10-21 (TASKS.md, "Done 2026-10-29": efficiency and token usage).
 
 ## Limitations
 
