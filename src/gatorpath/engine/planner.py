@@ -1572,6 +1572,9 @@ def cover_combinations(profile: dict, program: dict, university: dict, catalog: 
     if missing:
         warnings.append(f"No eligible course found for: {', '.join(missing)}")
     return {"catalog_year": program["catalog_year"], "open": [results[i]["title"] for i in sorted(open_ids)],
+            # per requirement, every course the student can take for it (a part's `options` counts only its own cover)
+            "courses_that_fit": {results[i]["title"]: sum(o["readiness"] != "blocked" for o in results[i]["options"])
+                                 for i in sorted(open_ids)},
             "fewest_courses": len(found[0]) if found else None,
             "ways": [{"courses": len(w), "parts": [part(c) for c in w]} for w in found],
             "overlaps": [part(c) for c in overlaps[:10]], "warnings": warnings}

@@ -495,7 +495,7 @@ def build_plan(profile: Profile) -> dict:
 
 @mcp.tool(annotations=READ_ONLY)
 def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None = None, by_term: str | None = None,
-                            limit: int = 25, on_schedule: bool = False) -> dict:
+                            limit: int = 25, full: bool = False) -> dict:
     """Courses that can fill one requirement group's slot (e.g. 'senior_electives', 'ge_4ud', 'sfss_esca'), with the
     Bulletin description, so you can pick by the student's goal.
 
@@ -507,26 +507,25 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     Environmental Sustainability + Global Perspectives). Re-run check_plan after filling slots. A group with
     `approval` (courses an advisor consents to, no Bulletin list) returns that text, no options, and see_advisor.
 
-    on_schedule: true for the full list to show under a pick: every option the student can take (ready or check) with
-    a section on by_term's Class Search schedule, no limit, without descriptions; crosslisted: the same class under
-    other codes (one option, not two). When that term's schedule isn't out,
-    schedule_out is false and options is empty: give total_options and offer the whole list instead. not_scraped:
-    options whose subject's schedule GatorPath doesn't have (check Class Search).
+    full: true for the rest of the list, when the student asks for it: every option they can take (ready or check), no
+    limit, without descriptions. When by_term's Class Search schedule is out (schedule_out), each has on_schedule: true
+    (a section that term; these come first), false, or "unknown" (its subject wasn't scraped). crosslisted: the same
+    class under other codes (one option, not two).
     """
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
     out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs(DB, YEAR),
-                           normalized_plan(plan), by_term, 10**6 if on_schedule else max(1, min(limit, 100)))
-    if "options" in out and on_schedule:
-        has = lambda c: (catalog(DB, YEAR).get(c, {}).get("offered") or {}).get("schedule", {})
-        out["schedule_out"] = any(out["by_term"] in has(c) for c in catalog(DB, YEAR))
-        takeable = [o for o in out["options"] if o["readiness"] != "blocked"]
-        if out["schedule_out"] and (unknown := [o["code"] for o in takeable if out["by_term"] not in has(o["code"])]):
-            out["not_scraped"] = unknown  # its subject's schedule wasn't scraped: unknown, never left out silently
-        same = lambda c: {"crosslisted": x} if (x := catalog(DB, YEAR).get(c, {}).get("crosslisted")) else {}
-        out["options"] = [{k: o[k] for k in ("code", "title", "units", "readiness", "also_covers", "cannot_check", "note")
-                           if k in o} | same(o["code"]) for o in takeable if has(o["code"]).get(out["by_term"])]
+                           normalized_plan(plan), by_term, 10**6 if full else max(1, min(limit, 100)))
+    if "options" in out and full:
+        term, cat = out["by_term"], catalog(DB, YEAR)
+        has = lambda c: (cat.get(c, {}).get("offered") or {}).get("schedule", {})
+        out["schedule_out"] = any(term in has(c) for c in cat)
+        rows = [{k: o[k] for k in ("code", "title", "units", "readiness", "also_covers", "cannot_check", "note") if k in o}
+                | ({"crosslisted": cat[o["code"]]["crosslisted"]} if cat.get(o["code"], {}).get("crosslisted") else {})
+                | ({"on_schedule": has(o["code"]).get(term, "unknown")} if out["schedule_out"] else {})
+                for o in out["options"] if o["readiness"] != "blocked"]
+        out["options"] = sorted(rows, key=lambda r: r.get("on_schedule") is not True)  # stable: the ranking stays
     elif "options" in out:
         desc = db.descriptions(DB, YEAR, [o["code"] for o in out["options"]])
         out["options"] = [o | {"description": desc.get(o["code"]), "offered": offered(o["code"])} for o in out["options"]]
@@ -540,9 +539,10 @@ def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | N
     """Up to 8 ways (3 when more than 5 are open) to finish the open GE, SF State Studies and American Institutions
     requirements that one course can fill, fewest courses first; the first is the fewest a bounded search found, not
     a proven minimum: one course covering several (4UD + Environmental Sustainability + Global
-    Perspectives), two that split them, or one each. Each part says what one course covers, how many courses fit, and
-    examples (ready first, then recently offered). Show the student the ways; the parts can go in different terms.
-    Pass the build_plan output as plan so planned courses count."""
+    Perspectives), two that split them, or one each. Each part says what one course covers, how many courses cover
+    exactly that (options), and examples (ready first, then recently offered); the parts can go in different terms.
+    courses_that_fit: per open requirement, every course the student can take for it. Pass the build_plan output as
+    plan so planned courses count."""
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
@@ -811,16 +811,18 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
    For an F-1 student, prefer options without that season in `offered.online_only` (its last run was fully online,
    and only 3 online units count toward their 12).
-   GE and SF State Studies slots are the student's choice: call `ge_combinations` (with the plan) and show its ways
-   as a short table, fewest courses first, with 2-3 example courses per part (one course can cover several, or they
-   can split them, e.g. 4UD + Environmental Sustainability this term and Global Perspectives the next). Put the
-   first way (the fewest courses found) in the plan by default and say any other way works.
-   The student sees every option, not just the pick: for each GE or American Institutions course in the plan's
-   first term, call `list_eligible_electives` with on_schedule: true (group_id = the slot it fills, by_term = that
-   term) and list all of them under the pick, each with its code, title and what else it covers; when the pick
-   also covered another requirement, say which options keep that; a crosslisted code is the same class. For picks in
-   later terms, whose schedules aren't out, say how many courses fit (list_eligible_electives' total_options, not
-   ge_combinations' per-part counts) and offer to list them all. Skip 0-unit tag slots.
+   GE, SF State Studies and American Institutions are the student's choice: call `ge_combinations` (with the plan)
+   and put its first way (the fewest courses found; one course can cover several) in the plan by default. Then
+   show them as "GE still needed", in three steps:
+   a. what's missing: one row per open requirement (audit_progress; requirements one course covers together can
+      share a row), with the course the plan uses for it and its term, or the major course that covers it
+   b. suggestions: 2-3 other courses per row (ge_combinations' examples, or `list_eligible_electives` with limit 5
+      and by_term = that row's term: ready first, offered that term, covering the most also_covers), each with what
+      else it covers, and how many courses fit in all (ge_combinations' courses_that_fit, not a part's options)
+   c. the rest, only when the student asks for an area: `list_eligible_electives` with full: true and show every
+      option, the on_schedule ones first (a section that term); a crosslisted code is the same class, and say which
+      options keep what the plan's course also covered
+   End the table with one line: ask for the rest of any area.
    Major electives: meet any min_units_from (BS CS senior electives: at least 12 of the 15 units in CSC); name a
    backup for each. A group with `approval` has no options to list: keep its slots, say the advisor approves those
    courses before they're taken (see_advisor), and fill them only with courses the student says were approved. A
@@ -848,7 +850,9 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 7. Present, briefly:
    - done / left, with Bulletin pages, and every point where the DPR and the tools disagree
    - one table per term, in the order to enter it in Student Center → Degree Planner: course, units, what it counts
-     for, why. Under each first-term GE pick, all its options offered that term; later terms: how many (step 4)
+     for, why
+   - GE still needed (step 4 a-b): each open requirement, the plan's course, 2-3 suggestions, how many fit; the rest
+     on request
    - warnings, and every `see_advisor` item: who, why, link, how to book. For F-1 students, GatorPath knows only the
      Bulletin's 12-unit minimum and continuous enrollment, and the international office's final-semester Reduced
      Course Load (check_plan's warning): send every other visa question (I-20 dates, OPT) to the international

@@ -752,6 +752,10 @@ def test_ge_combinations_list_every_minimal_way():
          "ge_done": ["1A", "1B", "1C", "2", "3A", "3B", "4", "5A", "5B", "5C", "6", "3UD", "5UD", "USH", "USG", "CSLG", "AERM", "SJ"]}
     got = cover_combinations(p, PROGRAM, UNIVERSITY, cat, PREREQS, by_term="2027-spring")
     assert [t.split(":")[-1].strip()[:6] for t in got["open"]] == ["GE 4UD", "Enviro", "Global"]  # not GWAR: CSC 300GW
+    # courses_that_fit counts every course for a requirement; a part's options only those covering just that part
+    ud = got["open"][0]
+    only_ud = next(part["options"] for w in got["ways"] for part in w["parts"] if part["covers"] == [ud])
+    assert list(got["courses_that_fit"]) == got["open"] and got["courses_that_fit"][ud] > only_ud  # + ENVS 401, …
     first = got["ways"][0]
     assert first["courses"] == 1 and "ENVS 401" in [e["code"] for e in first["parts"][0]["examples"]]
     two = [w for w in got["ways"] if w["courses"] == 2]

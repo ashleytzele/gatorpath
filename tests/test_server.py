@@ -223,8 +223,8 @@ def test_eligible_electives_rank_triple_duty_courses_first():
     assert server.list_eligible_electives(TRANSFER_SENIOR, "core_cs")["error"] == "not_a_choice"
 
 
-def test_on_schedule_lists_every_option_with_a_section(tmp_path, monkeypatch):
-    # The full list under a GE pick: every takeable option on that term's schedule; an unscraped subject's are named
+def test_full_list_puts_the_terms_sections_first(tmp_path, monkeypatch):
+    # "Show me the rest" for a GE area: every takeable option, those with a section that term first, compact
     from gatorpath.ingest.offerings import write_offerings
     path = tmp_path / "catalog.db"
     write_catalog(path, "2026-27", ROWS)
@@ -233,11 +233,14 @@ def test_on_schedule_lists_every_option_with_a_section(tmp_path, monkeypatch):
            "seats_open": 30, "waitlist_open": 0, "attributes": []}
     write_offerings(path, "2027-spring", "ENVS", [sec], "2026-10-26T21:00:00+00:00")
     monkeypatch.setattr(server, "DB", path)
-    got = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-spring", on_schedule=True)
-    assert got["schedule_out"] and [o["code"] for o in got["options"]] == ["ENVS 401"]
-    assert "description" not in got["options"][0] and "LS 401" in got["not_scraped"]
-    later = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-fall", on_schedule=True)
-    assert not later["schedule_out"] and later["options"] == [] and later["total_options"] > 1
+    got = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-spring", full=True)
+    first, *rest = got["options"]
+    assert got["schedule_out"] and first["code"] == "ENVS 401" and first["on_schedule"] is True
+    assert len(rest) == got["total_options"] - 1 and "description" not in first
+    assert next(o for o in rest if o["code"] == "LS 401")["on_schedule"] == "unknown"  # LS wasn't scraped
+    later = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-fall", full=True)
+    assert not later["schedule_out"] and len(later["options"]) == len(got["options"])
+    assert all("on_schedule" not in o for o in later["options"])
 
 
 def test_cybersecurity_electives_come_after_csc_415():
