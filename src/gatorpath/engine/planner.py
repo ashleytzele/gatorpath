@@ -268,6 +268,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
             if re.search(level, text, re.I) and not standing_ok(level, ctx["units"], ctx["class_level"]):
                 return NO, [f"restricted to {text} ({ctx['units']:g} units earned by then)"]
         return OK, []
+    if "granted" in e:  # a permission the student says they have (profile.permissions): counted; the server warns
+        return OK, []
     kind = next(iter(UNVERIFIABLE & e.keys()), next(iter(e)))
     return UNVERIFIED, [f"{kind}: {e[kind]}"]
 
@@ -567,6 +569,9 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         if regular and road and normal < term_units <= road["units"]:  # D24: the roadmap's own load, not an overload
             warnings.append(f"{term}: {term_units:g} units, above the normal {normal:g}, as on the Bulletin roadmap "
                             f"({road['source']})")
+        elif not winter and term_units > normal and term in profile.get("overload_approved", ()):
+            warnings.append(f"{term}: {term_units:g} units is above the normal load of {normal:g} ({load['source']}); "
+                            "the student says their advisor approved this overload: keep that approval")
         elif not winter and term_units > normal:
             warnings.append(f"{term}: {term_units:g} units is above the normal load of {normal:g} ({load['source']}); "
                             "see an advisor before planning an overload")

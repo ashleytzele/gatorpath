@@ -619,3 +619,13 @@ def test_a_plan_carries_its_courses_titles_units_and_pages():
     codes = {c for s in plan["semesters"] for c in s["courses"] if isinstance(c, str)}
     assert set(plan["courses"]) == codes and plan["courses"]["CSC 215"].keys() == {"title", "units", "source_page"}
     assert server.check_plan(profile, plan)["courses"] == plan["courses"]
+
+
+def test_a_permission_the_student_has_counts_and_is_flagged():
+    # "…; or permission of the instructor" (CSC 653): on the student's word it counts, and the answer says to bring it
+    plan = {"semesters": [{"term": "2027-spring", "courses": ["CSC 653"]}]}
+    blocked = server.check_plan(TRANSFER_SENIOR, plan)
+    assert any(e["error"] == "prereq_not_met" and e.get("course") == "CSC 653" for e in blocked["errors"])
+    got = server.check_plan(TRANSFER_SENIOR | {"permissions": ["csc 653"]}, plan)
+    assert not any(e["error"] == "prereq_not_met" for e in got["errors"])
+    assert any(w.startswith("CSC 653: counted the permission the student says") for w in got["warnings"])

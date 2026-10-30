@@ -145,6 +145,17 @@ def leaves(expr):
         yield expr
 
 
+def granted(expr):
+    """The tree with each permission leaf ({"permission": "instructor"}) as {"granted": "instructor"}: the student says
+    they have it (profile.permissions), so it counts as met instead of only being reported."""
+    if expr is None:
+        return None
+    if "all" in expr or "any" in expr:
+        op = "all" if "all" in expr else "any"
+        return expr | {op: [granted(e) for e in expr[op]]}
+    return {"granted": expr["permission"]} if "permission" in expr else expr
+
+
 def combine(op: str, parts: list) -> dict | None:
     flat = []
     for p in parts:

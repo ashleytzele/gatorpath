@@ -21,7 +21,7 @@ from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import compare_programs as engine_compare_programs
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import TERM, cover_combinations, eligible_options, pick_sections, see_advisor
-from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
+from gatorpath.engine.prereq import granted, prereq_chain, prereq_warnings, reverse_index
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, min_grade_of, number, translate_ge
 
 # Requirements follow the student's catalog year (rules/<kind>/<year>/); course facts are the newest Bulletin's (D23).
@@ -90,6 +90,8 @@ class Profile(TypedDict):
     graduate_by: NotRequired[str]
     goal: NotRequired[str]
     chosen_electives: NotRequired[list[str]]
+    permissions: NotRequired[list[str]]
+    overload_approved: NotRequired[list[str]]
     plan: NotRequired["Plan"]
     dpr_imported: NotRequired[str]
 
@@ -394,6 +396,7 @@ def prepare(profile: dict, university: dict, year: str = YEAR) -> tuple[dict, li
                        "completed": [r | {"code": norm_code(r["code"])} for r in profile.get("completed", [])],
                        "in_progress": [norm_code(c) for c in profile.get("in_progress", [])],
                        "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])],
+                       "permissions": [norm_code(c) for c in profile.get("permissions", [])],
                        "approved": {g: [norm_code(c) for c in cs] for g, cs in (profile.get("approved") or {}).items()}}
     return clean, year_warning(profile, year) + ge_warnings
 
@@ -426,6 +429,20 @@ def plan_courses(plan: dict | None, cat: dict[str, dict]) -> dict[str, dict]:
     codes = dict.fromkeys(c for s in (plan or {}).get("semesters", []) for c in s.get("courses", [])
                           if isinstance(c, str) and c in cat)
     return {c: {"title": cat[c]["title"], "units": units(cat[c]), "source_page": cat[c]["source_page"]} for c in codes}
+
+
+def prereqs_for(profile: dict) -> dict[str, dict]:
+    """The newest Bulletin's prereqs, with each permission the student says they have (profile.permissions) counted."""
+    rows = prereqs(DB, YEAR)
+    mine = [c for c in profile.get("permissions", []) if c in rows]
+    return rows | {c: rows[c] | {"expr": granted(rows[c]["expr"])} for c in mine} if mine else rows
+
+
+def permission_notes(profile: dict, plan: dict | None) -> list[str]:
+    """Flag, don't guess: a permission counted on the student's word is said, per planned course."""
+    planned = {c for s in (plan or {}).get("semesters", []) for c in s.get("courses", []) if isinstance(c, str)}
+    return [f"{c}: counted the permission the student says they have (GatorPath can't check it); bring the permission "
+            "number or consent to registration" for c in profile.get("permissions", []) if c in planned]
 
 
 def profile_error(profile: dict) -> dict | None:
@@ -479,6 +496,9 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     prints that load), unfilled slots.
     profile.f1: true for an F-1 visa student: a spring/fall term under 12 units is an error (the plan's last term: a
     warning and the international office), and so is a skipped spring/fall term (pp.2390, 2393).
+    profile.permissions: courses the student says an instructor or department already gave them permission for: those
+    prereq branches count, with a warning to bring it to registration. profile.overload_approved: terms whose overload
+    the student says their advisor approved: no advisor handoff for that load (the term's cap still applies).
 
     plan: {semesters: [{term: '2027-fall', courses: ['CSC 413', {slot: 'senior_electives', units: 3}]}]}. Pass
     build_plan's semesters back as returned: their max_units and roadmap {units, source} keep the roadmap's loads. A slot is an
@@ -490,9 +510,9 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
         return err
     year, program, university, clean, notes = load_for(profile)
     cat = catalog_for(clean)
-    out = engine_check_plan(clean, normalized_plan(plan), program, university, cat, prereqs(DB, YEAR))
+    out = engine_check_plan(clean, normalized_plan(plan), program, university, cat, prereqs_for(clean))
     out["courses"] = plan_courses(normalized_plan(plan), cat)
-    out["warnings"] = notes + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
+    out["warnings"] = notes + permission_notes(clean, normalized_plan(plan)) + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
     return out
 
 
@@ -525,10 +545,10 @@ def build_plan(profile: Profile) -> dict:
     year, program, university, clean, notes = load_for(profile)
     path = RULES_DIR / "roadmaps" / year / f"{profile['program']}.yaml"
     cat = catalog_for(clean)
-    out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), cat, prereqs(DB, YEAR))
+    out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), cat, prereqs_for(clean))
     if "semesters" in out:
         out["courses"] = plan_courses(out, cat)
-    out["warnings"] = notes + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
+    out["warnings"] = notes + permission_notes(clean, out) + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
     return out
 
 
@@ -555,7 +575,7 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
-    out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs(DB, YEAR),
+    out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs_for(clean),
                            normalized_plan(plan), by_term, 10**6 if full else max(1, min(limit, 100)))
     if "options" in out and full:
         term, cat = out["by_term"], catalog(DB, YEAR)
@@ -586,7 +606,7 @@ def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | N
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
-    out = cover_combinations(clean, program, university, catalog_for(clean), prereqs(DB, YEAR), normalized_plan(plan), by_term)
+    out = cover_combinations(clean, program, university, catalog_for(clean), prereqs_for(clean), normalized_plan(plan), by_term)
     for way in out.get("ways", []):
         for part in way["parts"]:
             part["examples"] = [e | {"offered": offered(e["code"])} for e in part["examples"]]
@@ -617,7 +637,7 @@ def compare_programs(profile: Profile, target: str) -> dict:
     t_program, t_university = load_rules(t_year, target)
     road = lambda y, name: yaml.safe_load((RULES_DIR / "roadmaps" / y / f"{name}.yaml").read_text())
     out = engine_compare_programs(clean, (program, road(year, profile["program"])), (t_program, road(t_year, target)),
-                                  university, catalog_for(clean), prereqs(DB, YEAR))
+                                  university, catalog_for(clean), prereqs_for(clean))
     if "error" in out or "needs_input" in out:
         return out | {"warnings": notes + out.get("warnings", [])}
     rule = t_university.get("change_of_major")
@@ -840,6 +860,9 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      regionally accredited institution; f1: true for an F-1 visa student.
    - approved: for a group with `approval` (no Bulletin list, an advisor's consent), the courses the DPR lists under
      it or the student says their advisor approved: {{group id: [codes]}}.
+   - permissions: courses the student says an instructor or department already gave permission for (a permission
+     number, consent); overload_approved: terms whose overload the student says their advisor approved. Only what
+     they say; never ask for them.
    - exam credit (AP / CLEP): put US History and US Government in ge_done as USH / USG only when the DPR shows them;
      no AP or CLEP exam meets California government (CSLG), p.2350.
 3. Pass the graduation term they gave (step 1) as graduate_by: the plan's loads fit that goal, starting from the

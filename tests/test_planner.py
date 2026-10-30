@@ -994,3 +994,13 @@ def test_pick_sections_finds_a_set_with_no_time_clash():
     assert got["clashes_with"]["7"] == got["clashes_with"]["8"] == ["CSC 340 03"]
     stuck = pick_sections({"HIST 121": found["HIST 121"], "AIS 103": [sec("10", "01", "Th", "12:30 PM - 3:15 PM")]})
     assert stuck["schedule"] is None and stuck["always_clash"] == [["AIS 103", "HIST 121"]]
+
+
+def test_an_approved_overload_keeps_its_warning_without_the_advisor_handoff():
+    heavy = ["CSC 215", "MATH 227", "PHYS 220", "PHYS 222", "ENG 114", "COMM 150"]  # 4+4+3+1+3+3 = 18
+    asked = check(FRESHMAN | {"max_units_per_term": 18}, ("2027-spring", heavy))
+    approved = check(FRESHMAN | {"max_units_per_term": 18, "overload_approved": ["2027-spring"]}, ("2027-spring", heavy))
+    load = lambda r: [w for a in r["see_advisor"] for w in a["why"] if "above the normal load" in w]
+    assert load(asked) and not load(approved)
+    assert any("advisor approved this overload" in w for w in approved["warnings"])
+    assert errors(approved) == []  # the cap is still max_units_per_term's
