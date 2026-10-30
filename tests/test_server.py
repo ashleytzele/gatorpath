@@ -246,6 +246,14 @@ def test_full_list_puts_the_terms_sections_first(tmp_path, monkeypatch):
     assert all("on_schedule" not in o for o in later["options"])
 
 
+def test_options_past_the_limit_are_named_so_a_goal_course_isnt_missed():
+    full = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-fall", full=True)["options"]
+    got = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-fall", limit=3)
+    assert len(got["options"]) == 3 and "description" in got["options"][0]
+    shown = {o["code"] for o in got["options"]}
+    assert got["more"] == {o["code"]: o["title"] for o in full if o["code"] not in shown}
+
+
 def test_cybersecurity_electives_come_after_csc_415():
     profile = yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"]
     plan = {"semesters": server.build_plan(profile)["semesters"]}
@@ -288,7 +296,7 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     assert "AskUserQuestion" in text
     tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
     fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last", "profile",
-              "approval", "options", "overlaps", "courses"}  # data
+              "approval", "options", "overlaps", "courses", "more"}  # data
     named = set(regex.findall(r"`([a-z_]+)`", text)) - fields
     assert named <= tools, named - tools
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named

@@ -570,13 +570,14 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     full: true for the rest of the list, when the student asks for it: every option they can take (ready or check), no
     limit, without descriptions. When by_term's Class Search schedule is out (schedule_out), each has on_schedule: true
     (a section that term; these come first), false, or "unknown" (its subject wasn't scraped). crosslisted: the same
-    class under other codes (one option, not two).
+    class under other codes (one option, not two). Without full, `more` names (code: title) the ones past `limit`
+    that full would add, so a course that fits the goal isn't missed for ranking low.
     """
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
     out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs_for(clean),
-                           normalized_plan(plan), by_term, 10**6 if full else max(1, min(limit, 100)))
+                           normalized_plan(plan), by_term, 10**6)
     if "options" in out and full:
         term, cat = out["by_term"], catalog(DB, YEAR)
         has = lambda c: (cat.get(c, {}).get("offered") or {}).get("schedule", {})
@@ -587,8 +588,11 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
                 for o in out["options"] if o["readiness"] != "blocked"]
         out["options"] = sorted(rows, key=lambda r: r.get("on_schedule") is not True)  # stable: the ranking stays
     elif "options" in out:
-        desc = db.descriptions(DB, YEAR, [o["code"] for o in out["options"]])
-        out["options"] = [o | {"description": desc.get(o["code"]), "offered": offered(o["code"])} for o in out["options"]]
+        n = max(1, min(limit, 100))
+        if more := {o["code"]: o["title"] for o in out["options"][n:] if o["readiness"] != "blocked"}:
+            out["more"] = more
+        desc = db.descriptions(DB, YEAR, [o["code"] for o in out["options"][:n]])
+        out["options"] = [o | {"description": desc.get(o["code"]), "offered": offered(o["code"])} for o in out["options"][:n]]
     out["catalog_year"] = year
     out["warnings"] = notes + out.get("warnings", []) + [offering_note(DB, YEAR)]
     return out
@@ -870,7 +874,9 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    build_plan returns needs_input, ask for just that.
 4. Fill every major and free elective slot: one `list_eligible_electives` call per group (not per slot), with plan =
    the current plan and by_term = the group's first slot term; for its later slots use each option's ready_by and its
-   `offered` seasons (check_plan catches a wrong season). GE slots come from ge_combinations, below. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
+   `offered` seasons (check_plan catches a wrong season). GE slots come from ge_combinations, below. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked; `more` names the
+   options past the first ones: one that fits the goal better is a pick too (get_course it first), or, when it rarely
+   runs, a swap to name with when it last ran. Prefer options whose
    also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and
    options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
    For an F-1 student, prefer options without that season in `offered.online_only` (its last run was fully online,
