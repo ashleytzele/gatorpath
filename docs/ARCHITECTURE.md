@@ -764,7 +764,12 @@ for any argument, even an optional one, and Claude Code keeps only one word of e
 as its first word. The prompt asks for the goal and the graduation term. A test fails if the prompt names a tool that
 doesn't exist. Added 2026-10-29: the tool `get_planning_steps` returns the same text, and the server instructions say
 to call it first. Codex CLI has no MCP prompts; without the steps it planned a draft with 25 open slots and kept asking
-for a DPR the student had already answered with a typed course list (the evals paste the prompt in, so they missed it).
+for a DPR the student had already answered with a typed course list (the evals paste the prompt in, so they missed it). Revised
+2026-10-29 after a read-only Codex review of the whole flow (findings checked in the code first): the graduation term
+is asked once (step 1, not again in step 3); with graduate_by the plan already fits it, so the pace table runs only
+when the student asks; the first term's sections are one set with no clashes plus a line per other section; free
+elective slots get a named course or "any course, N units"; GE is "GE still needed" (missing requirement, the plan's
+course, 2-3 suggestions, how many fit), the full list on request.
 
 What-ifs map to tools, not to new server logic:
 - "Graduate a year early" → step 5 with a heavier load, and say what has to give.

@@ -802,11 +802,11 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      it or the student says their advisor approved: {{group id: [codes]}}.
    - exam credit (AP / CLEP): put US History and US Government in ge_done as USH / USG only when the DPR shows them;
      no AP or CLEP exam meets California government (CSLG), p.2350.
-3. Ask when they want to graduate (a term, e.g. 2030-spring) unless they said, and pass it as graduate_by: the
-   plan's loads fit that goal, starting from the roadmap's own (the normal range). Then `audit_progress`, then
-   `build_plan`. If build_plan returns needs_input, ask for just that.
-4. Fill every slot: `list_eligible_electives` with group_id = the slot, plan = the current plan, by_term = the slot's
-   term. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
+3. Pass the graduation term they gave (step 1) as graduate_by: the plan's loads fit that goal, starting from the
+   roadmap's own (the normal range); without one, the roadmap's loads. Then `audit_progress`, then `build_plan`. If
+   build_plan returns needs_input, ask for just that.
+4. Fill every major and free elective slot: `list_eligible_electives` with group_id = the slot, plan = the current
+   plan, by_term = the slot's term (GE slots come from ge_combinations, below). Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
    also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and
    options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
    For an F-1 student, prefer options without that season in `offered.online_only` (its last run was fully online,
@@ -821,7 +821,7 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
       else it covers, and how many courses fit in all (ge_combinations' courses_that_fit, not a part's options)
    c. the rest, only when the student asks for an area: `list_eligible_electives` with full: true and show every
       option, the on_schedule ones first (a section that term); a crosslisted code is the same class, and say which
-      options keep what the plan's course also covered
+      options keep what the plan's course also covered. 'ready' means its prereqs are met by then, not that it runs
    End the table with one line: ask for the rest of any area.
    Major electives: meet any min_units_from (BS CS senior electives: at least 12 of the 15 units in CSC); name a
    backup for each. A group with `approval` has no options to list: keep its slots, say the advisor approves those
@@ -829,7 +829,8 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    "Select One" group (audit `options`) is the student's pick: build_plan plans the first, so name the others.
    A 0-unit tag slot is met by a
    chosen course whose also_covers includes it (then drop the tag); otherwise fill it from its own group and add the
-   units. Free `elective` slots: suggest courses that fit the goal.
+   units. Free `elective` slots: name a course of that many units that fits the goal and check_plan it; one left
+   open is shown as "any course, N units", never as a bare slot.
 5. `check_plan` the filled plan; fix every error and re-check until valid. Before calling a course optional, take
    it out and re-check: it's optional only if the plan stays valid (units_short means it's needed). For an F-1
    student, don't add courses only to keep the last term at 12: the final-semester Reduced Course Load covers it
@@ -837,12 +838,13 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    course passed with CR that can't be repeated; a limit the student set, like F-1 with a 12-unit cap), stop
    re-checking: present no plan as final, say what causes it and what would lift it (a petition, a higher
    max_units_per_term, a summer or Winter Session), and show its see_advisor.
-6. A graduation target or "3, 4 or 5 years?": `build_plan` as is (the roadmap's own loads, the default), then at 12 and
-   18 units per term + include_summer (+ include_winter), then a table: load, est_graduation_term, on_time, why_not.
-   A term over 15 that matches its roadmap semester is "as on the Bulletin roadmap": no advisor; above the roadmap's
-   load (or 15 off it) is an overload (p.2393): advisor. When pace.normal_load is there, the normal 15 is the lighter
-   row: offer it from its note. When pace.fold_last_term is there, moving the light last term
-   into one earlier term finishes a term sooner with only that term heavier: offer it as a row, from its note.
+6. Pace. With graduate_by, the plan already fits the goal: say the load it took (pace.fit) and whether it's on_time,
+   and give why_not when it isn't. When pace.normal_load is there, offer the normal 15 in one line from its note; when
+   pace.fold_last_term is there, offer moving the light last term into one earlier term (a term sooner, that term
+   heavier) in one line. A term over 15 that matches its roadmap semester is "as on the Bulletin roadmap": no
+   advisor; above the roadmap's load (or 15 off it) is an overload: advisor (the warning cites the page). Only when
+   they ask ("3, 4 or 5 years?", "can I finish sooner?"): `build_plan` at the roadmap's loads, at 12 and at 18 units
+   per term + include_summer (+ include_winter), then a table: load, est_graduation_term, on_time, why_not.
    "What if I switch to <major>?": `compare_programs` with target = its id from list_programs. Show what counts in
    both, what only the current major used (still toward the 120), what the new one still needs, and extra_terms;
    quote its change-of-major warning (the new major is the Bulletin in effect when they change) and its see_advisor;
@@ -857,11 +859,12 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      Bulletin's 12-unit minimum and continuous enrollment, and the international office's final-semester Reduced
      Course Load (check_plan's warning): send every other visa question (I-20 dates, OPT) to the international
      office without stating visa rules yourself
-   - the first term's schedule, after the plan: `get_sections` with that term and its courses (slots filled). Per
-     course, a table of its sections: class number, days, time, where, mode, instructor (each name linked to
+   - the first term's schedule, after the plan: `get_sections` with that term and its courses (slots filled). For each
+     section: class number, days, time, where, mode, instructor (each name linked to
      its rate_my_professors search, labeled student opinion), seats open (0: full, give
      waitlist_open), and attributes (a permission number, GE tags); a lecture with labs shows both. The student
-     picks the sections: list them all, and point out times that clash. A course in not_offered has no section that
+     picks the sections: show one set with no time clashes as the table, then each other section in one line (class
+     number, days, time, instructor), and the times that clash. A course in not_offered has no section that
      term: move it and re-run check_plan. For courses in unknown, and for later terms (their schedules aren't out
      yet), say to check Class Search. Say the seats are as of scraped_at and change
    - a checklist: confirm each course is offered that term in Class Search (GatorPath's history covers only some
