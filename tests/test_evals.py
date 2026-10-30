@@ -115,3 +115,18 @@ def test_on_a_tie_the_presented_plan_is_the_one_the_client_saw_pass(ev):
     calls = [("check_plan", {"profile": profile, "plan": plan}, '{"valid": true}'),
              ("check_plan", {"profile": profile, "plan": lean}, '{"valid": false}')]
     assert ev.score(q, [turn("Plan: " + ", ".join(ev.plan_codes(plan)), *calls)], {})["scores"]["plan_valid"]
+
+
+def test_a_client_without_prompts_gets_the_students_words_and_must_fetch_the_steps(ev):
+    # Codex CLI has no MCP prompts: its student just asks, and a good run fetches get_planning_steps, then plans
+    q = {"id": "t", "profile": "p03", "prompt": True, "goal": "cybersecurity", "ask": "Plan it.", "expect": {}}
+    plain = ev.first_message(q, ev.shift(ev.load_profile("p03")), paste=False)
+    assert plain.endswith("Plan it.") and ev.server.plan_my_degree()[:60] not in plain
+    asked_back = ev.score(q, [turn("What's your goal?", ("load_profile", {}, ""))], {}, plain, pasted=False)
+    planned = ev.score(q, [turn("Your plan.", ("get_planning_steps", {}, ""), ("check_plan", {}, ""))], {}, plain, False)
+    assert not asked_back["scores"]["planning_steps"] and planned["scores"]["planning_steps"]
+    assert (asked_back["ux"]["planned_first"], planned["ux"]["planned_first"]) == (False, True)
+    assert "planning_steps" not in ev.score(q, [turn("Your plan.")], {})["scores"]  # pasted: nothing to fetch
+    table = ev.ux_table({("codex", "a"): asked_back, ("codex", "b"): planned}, ["codex"])
+    assert "| Plan in the first reply (nothing asked back) | 1/2 |" in table
+    assert "| Median tool calls, plan questions | 1.5 |" in table

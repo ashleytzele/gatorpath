@@ -981,7 +981,10 @@ gatorpath/
 As built (2026-10-18): `evals/questions.yaml` (39 questions, 5 with a follow-up) run through Claude Code and Codex CLI by
 `evals/run_evals.py`, each client with only the gatorpath server (no plugins, web search or shell). Facts are computed
 from the tools at scoring time; the presented plan is re-checked for the student in the question. `evals/REPORT.md`
-has the numbers and a Claude vs Codex alignment table.
+has the numbers and a Claude vs Codex alignment table. Since 2026-10-29 each client starts the way its students do: Claude Code with the
+prompt (its text pasted, standing in for /mcp__gatorpath__plan_my_degree), Codex CLI from the student's words alone (it
+has no MCP prompts; scored on fetching get_planning_steps; `--paste` restores the old way). The report's User
+experience table covers the first reply: a plan in it (nothing asked back), median seconds, tool calls and length.
 
 The end-to-end number is the resume line: *"…produced valid 4-year plans for 47/50 test
 students; 0 hallucinated courses."*

@@ -13,6 +13,7 @@ import argparse
 import json
 import os
 import re
+import statistics
 import subprocess
 import sys
 import tempfile
@@ -144,9 +145,10 @@ def render(profile: dict | None, goal: str | None, plan: bool) -> str:
     return " ".join(say)
 
 
-def first_message(q: dict, profile: dict | None) -> str:
+def first_message(q: dict, profile: dict | None, paste: bool = True) -> str:
+    """The student's words; with paste, after the plan_my_degree text (what picking the prompt sends)."""
     text = " ".join(x for x in (render(profile, q.get("goal"), bool(q.get("prompt"))), q["ask"]) if x)
-    if q.get("prompt"):
+    if q.get("prompt") and paste:
         lead = server.plan_my_degree()
         return f"{lead}\n\n---\n\nStudent: {text}"
     return text
@@ -217,6 +219,9 @@ def run_codex(text: str, resume: str | None) -> dict:
 
 
 CLIENTS = {"claude": run_claude, "codex": run_codex}
+# Whether the client has MCP prompts. Claude Code does (/mcp__gatorpath__plan_my_degree, stood in for by pasting its
+# text); Codex CLI doesn't (checked 2026-10-29), so its students just ask and it fetches get_planning_steps.
+PROMPTS = {"claude": True, "codex": False}
 
 
 def setup() -> None:
@@ -425,10 +430,16 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
     return s, why
 
 
-def score(q: dict, turns: list[dict], goals: dict) -> dict:
+def score(q: dict, turns: list[dict], goals: dict, asked: str | None = None, pasted: bool = True) -> dict:
     profile = shift(load_profile(q.get("profile"))) if q.get("profile") else None
-    text = first_message(q, profile)
+    text = asked or first_message(q, profile)
     scores, why = score_turn(q.get("expect", {}), turns[0], [], profile, q.get("goal"), goals, text)
+    first = turns[0]
+    if q.get("prompt") and not pasted:  # runs before 2026-10-29 pasted the prompt for every client (no "pasted")
+        scores["planning_steps"] = any(c["tool"] == "get_planning_steps" for c in first["calls"])
+    # What the student lives through, not pass/fail: a plan in the first reply (nothing asked back), how long, how much
+    ux = {"seconds": first.get("seconds"), "calls": len(first["calls"]), "chars": len(first["answer"]),
+          "planned_first": any(c["tool"] == "check_plan" for c in first["calls"]) if q.get("prompt") else None}
     if q.get("followup") and len(turns) > 1:
         f = q["followup"]
         s2, w2 = score_turn(f.get("expect", {}), turns[1], turns[:1], profile, f.get("goal", q.get("goal")), goals,
@@ -437,25 +448,53 @@ def score(q: dict, turns: list[dict], goals: dict) -> dict:
         why |= {f"followup.{k}": v for k, v in w2.items()}
     elif q.get("followup"):
         scores["followup.answered"] = False
-    return {"scores": scores, "why": why, "passed": all(v is not False for v in scores.values())}
+    return {"scores": scores, "why": why, "ux": ux, "passed": all(v is not False for v in scores.values())}
 
 
 # ---- run + report ----
 
-def run_one(client: str, q: dict, out_dir: Path) -> dict:
+def run_one(client: str, q: dict, out_dir: Path, paste_all: bool = False) -> dict:
     profile = shift(load_profile(q.get("profile"))) if q.get("profile") else None
     start, turns = time.time(), []
-    asked = first_message(q, profile)
+    pasted = bool(q.get("prompt")) and (PROMPTS[client] or paste_all)
+    asked = first_message(q, profile, pasted)
+
+    def turn(text: str, session: str | None) -> dict:
+        t = time.time()
+        return CLIENTS[client](text, session) | {"seconds": round(time.time() - t)}
+
     try:
-        turns.append(CLIENTS[client](asked, None))
+        turns.append(turn(asked, None))
         if q.get("followup") and turns[0]["session"]:
-            turns.append(CLIENTS[client](q["followup"]["ask"], turns[0]["session"]))
+            turns.append(turn(q["followup"]["ask"], turns[0]["session"]))
     except subprocess.TimeoutExpired:
         turns.append({"calls": [], "answer": "", "session": None, "other_tools": [], "error": "timeout"})
-    record = {"id": q["id"], "client": client, "seconds": round(time.time() - start), "asked": asked, "turns": turns}
+    record = {"id": q["id"], "client": client, "seconds": round(time.time() - start), "asked": asked, "pasted": pasted,
+              "turns": turns}
     (out_dir / client).mkdir(parents=True, exist_ok=True)
     (out_dir / client / f"{q['id']}.json").write_text(json.dumps(record, indent=1))
     return record
+
+
+def ux_table(results: dict, clients: list[str]) -> list[str]:
+    """The first reply as the student lives it: medians over the plan questions (prompt: true) and over all."""
+    def med(client, key, plans):
+        vals = [r["ux"][key] for (c, _), r in results.items() if c == client and r.get("ux", {}).get(key) is not None
+                and (not plans or r["ux"].get("planned_first") is not None)]
+        return f"{statistics.median(vals):g}" if vals else "-"
+
+    def planned(client):
+        vals = [r["ux"]["planned_first"] for (c, _), r in results.items() if c == client
+                and r.get("ux", {}).get("planned_first") is not None]
+        return f"{sum(vals)}/{len(vals)}" if vals else "-"
+
+    rows = [("Plan in the first reply (nothing asked back)", planned)]
+    for key, label in (("seconds", "seconds"), ("calls", "tool calls"), ("chars", "answer length (characters)")):
+        rows.append((f"Median {label}, plan questions", lambda c, k=key: med(c, k, True)))
+        rows.append((f"Median {label}, all questions", lambda c, k=key: med(c, k, False)))
+    return (["", "## User experience", "", "First reply only. A plan question's student gives everything up front, so a "
+             "good client plans without asking back.", "", "| | " + " | ".join(clients) + " |", "|---|" + "---|" * len(clients)]
+            + [f"| {label} | " + " | ".join(f(c) for c in clients) + " |" for label, f in rows])
 
 
 def report(results: dict, questions: list[dict], run: str) -> str:
@@ -478,11 +517,13 @@ def report(results: dict, questions: list[dict], run: str) -> str:
                        ("no_hallucinated_codes", "Answers with no unknown course codes"), ("mention", "States the facts"),
                        ("tools", "Called the tools it needed"), ("mention_any", "Honesty wording"),
                        ("followup.pace_compared", "What-if: compared paces"), ("no_save_profile", "No unasked save_profile"),
+                       ("planning_steps", "Fetched get_planning_steps (no prompt pasted)"),
                        ("only_gatorpath_tools", "Used only the gatorpath tools")):
         lines.append(f"| {label} | " + " | ".join(rate(x, key) for x in clients) + " |")
     wild = {x: sum(len(r["why"].get("hallucinated", [])) + len(r["why"].get("followup.hallucinated", []))
                    for (c, _), r in results.items() if c == x) for x in clients}
     lines.append("| Hallucinated course codes (total) | " + " | ".join(str(wild[x]) for x in clients) + " |")
+    lines += ux_table(results, clients)
     if len(clients) > 1:
         lines += ["", "## Alignment", "", "| Question | " + " | ".join(clients) + " | Same graduation term |", "|---|"
                   + "---|" * (len(clients) + 1)]
@@ -508,6 +549,8 @@ def main() -> None:
     ap.add_argument("--rescore", type=Path)
     ap.add_argument("--into", type=Path, help="run into this existing run directory, then score all of it")
     ap.add_argument("--retry", action="store_true", help="with --into: rerun only the sessions that errored")
+    ap.add_argument("--paste", action="store_true",
+                    help="paste the plan_my_degree text for every client, Codex too (how runs before 2026-10-29 worked)")
     args = ap.parse_args()
     spec = yaml.safe_load((ROOT / "evals/questions.yaml").read_text())
     questions = [q for q in spec["questions"] if not args.only or q["id"] in args.only.split(",")]
@@ -528,7 +571,7 @@ def main() -> None:
             jobs = [(c, q) for c, q in jobs if bad(c, q)]
             print(f"retrying {len(jobs)}:", ", ".join(c + "/" + q["id"] for c, q in jobs))
         with ThreadPoolExecutor(args.workers * len(clients)) as pool:
-            done = list(pool.map(lambda job: run_one(*job, out_dir), jobs))
+            done = list(pool.map(lambda job: run_one(*job, out_dir, args.paste), jobs))
         records = {(r["client"], r["id"]): r for r in done}
         if args.into:
             records = {(p.parent.name, p.stem): json.loads(p.read_text()) for p in out_dir.glob("*/*.json")}
@@ -536,7 +579,8 @@ def main() -> None:
         if saved.exists():
             saved.unlink()  # written by an eval session (it didn't exist before): synthetic
             print("note: an eval session called save_profile; its file was removed")
-    results = {k: score(next(q for q in questions if q["id"] == k[1]), r["turns"], spec["goals"])
+    results = {k: score(next(q for q in questions if q["id"] == k[1]), r["turns"], spec["goals"], r.get("asked"),
+                        r.get("pasted", True))
                for k, r in records.items() if any(q["id"] == k[1] for q in questions)}
     (out_dir / "scores.json").write_text(json.dumps({f"{c}/{i}": r for (c, i), r in results.items()}, indent=1))
     text = report(results, questions, out_dir.name)
