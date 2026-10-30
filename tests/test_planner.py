@@ -762,6 +762,15 @@ def test_ge_combinations_list_every_minimal_way():
     assert any(len(part["covers"]) == 2 and part["examples"] for w in two for part in w["parts"])  # one course for two of them
     for w in got["ways"]:  # every way covers all three, and every part is needed
         assert set().union(*(set(part["covers"]) for part in w["parts"])) == set(got["open"])
+    # None of the courses for all three on the last schedule (PLSI 472 in eval plan-ap, 2026-10-30, the only course for
+    # its part): ways with courses that ran lately come first, and overlaps still has them
+    gone = {"fall": [0, 0], "spring": [0, 1], "summer": [0, 0], "since": "2027-spring", "until": "2027-spring", "last": None}
+    triple = {c for c, r in cat.items() if {"4UD", "ESCA", "GP"} <= set(r.get("ge_areas") or [])}
+    later = cover_combinations(p, PROGRAM, UNIVERSITY, cat | {c: cat[c] | {"offered": gone} for c in triple}, PREREQS,
+                               by_term="2027-spring")
+    assert len(triple) > 1 and later["ways"][0]["courses"] == 2
+    assert not triple & {e["code"] for w in later["ways"] for part in w["parts"] for e in part["examples"]}
+    assert "ENVS 401" in [e["code"] for part in later["overlaps"] for e in part["examples"]]
 
 
 def test_ge_combinations_check_each_requirement_at_its_slots_term():

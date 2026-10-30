@@ -86,11 +86,15 @@ MCP, which checks section clashes in code). Every finding was checked in the cod
   already says when a course last ran and its prereqs, so the prompt leans on that. The four questions where it jumped
   (`data/evals/20261030-145815`; Codex rerun after connection resets): get_course 140 -> 32 and calls 239 -> 139 on
   Codex, 15 -> 4 and 62 -> 46 on Claude, all 8 passed with goal fit
+- [x] ge_combinations' first way rested a part on a course that didn't run lately: PLSI 472 (the only course for
+  American Institutions + GE 4UD + Social Justice, not on the Spring 2027 schedule), HIST 130, HIST 308, in 3 of 4
+  eval plans' ge_combinations calls, so the client looked for alternatives. Ways now come from parts with a course
+  that's ready and ran in the last year of its Class Search history (all parts only when nothing else covers one),
+  ties to the way whose weakest part has the most; `overlaps` still lists PLSI 472. Same 4 plans: none, and the same
+  fewest-course counts (10, 11, 4, 3)
 
 Left: trimming the longest tool descriptions (build_plan, audit_progress), with an eval run to show nothing gets
-worse. ge_combinations' fewest-courses way can rest a part on one course with no recent offering (PLSI 472 for
-American Institutions + GE 4UD + Social Justice), and the client then looks for alternatives: rank ways by how many
-offered options each part has, not only by course count.
+worse.
 
 ---
 

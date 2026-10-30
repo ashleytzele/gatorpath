@@ -1635,14 +1635,27 @@ def cover_combinations(profile: dict, program: dict, university: dict, catalog: 
         return {"covers": sorted(results[i]["title"] for i in cover), "options": len(by_cover[cover]),
                 "examples": [{k: o[k] for k in ("code", "title", "units", "readiness")} for o in best[:examples]]}
 
+    def ran_lately(c: str) -> bool:  # in the last year of its Class Search history (no history: can't say, so yes)
+        o = catalog[c].get("offered")
+        if not o:
+            return True
+        y, s = term_key(o["until"])
+        return bool(o["last"]) and term_key(o["last"]) > (y - 1, s)
+
+    # ponytail: a subject with only one term scraped (Spring 2027) makes a fall-only course read as not run lately;
+    # scraping more terms fixes it. A part with none ready and run lately is used only when nothing else covers one
+    live = {c: sum(o["readiness"] != "blocked" and ran_lately(o["code"]) for o in by_cover[c].values()) for c in by_cover}
     many = len(open_ids) > 5
     examples = 3 if many else examples
-    found = minimal_covers(open_ids, list(by_cover), 3 if many else ways)
+    fresh = minimal_covers(open_ids, [c for c in by_cover if live[c]], 3 if many else ways)
+    found = sorted(fresh or minimal_covers(open_ids, list(by_cover), 3 if many else ways),
+                   key=lambda w: (len(w), -min(live[c] for c in w)))  # then the way whose weakest part has the most
     overlaps = sorted((c for c in by_cover if len(c) > 1), key=lambda c: (-len(c), -len(by_cover[c]), sorted(c)))
     missing = [results[i]["title"] for i in open_ids if not any(i in c for c in by_cover)]
     warnings = []
     if found:
-        warnings.append(f"{len(found[0])} courses can cover these {len(open_ids)} requirements (the fewest found). Any "
+        warnings.append(f"{len(found[0])} courses can cover these {len(open_ids)} requirements (the fewest found"
+                        f"{' with courses that ran in the last year' if fresh else ''}). Any "
                         "way works, and the parts can go in different terms: pick one, put its courses in the plan, "
                         "and check_plan it. `overlaps` lists the courses that count for two or more")
     if missing:

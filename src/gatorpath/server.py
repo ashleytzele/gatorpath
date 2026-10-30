@@ -601,8 +601,9 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
 @mcp.tool(annotations=READ_ONLY)
 def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | None = None) -> dict:
     """Up to 8 ways (3 when more than 5 are open) to finish the open GE, SF State Studies and American Institutions
-    requirements that one course can fill, fewest courses first; the first is the fewest a bounded search found, not
-    a proven minimum: one course covering several (4UD + Environmental Sustainability + Global
+    requirements that one course can fill, fewest courses first, from courses that ran in the last year where that
+    covers them (overlaps lists every course that counts for two or more); the first is the fewest a bounded search
+    found, not a proven minimum: one course covering several (4UD + Environmental Sustainability + Global
     Perspectives), two that split them, or one each. Each part says what one course covers, how many courses cover
     exactly that (options), and examples (ready first, then recently offered); the parts can go in different terms.
     courses_that_fit: per open requirement, every course the student can take for it. Pass the build_plan output as
