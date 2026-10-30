@@ -136,9 +136,11 @@ def offering_note(path: Path, year: str) -> str:
 
 
 def offered(code: str) -> dict | str:
-    """History per season, and whether it's on the latest scraped term's schedule (a published next term)."""
+    """History per season, and whether it's on the latest scraped term's schedule (a published next term). The span
+    (since / until) is said once, in the offering note, not in every course row."""
     o = catalog(DB, YEAR).get(code, {}).get("offered")
-    return {k: v for k, v in o.items() if k != "schedule"} | {"schedule": {o["until"]: o["schedule"][o["until"]]}} if o else "unknown"
+    return ({k: v for k, v in o.items() if k not in ("schedule", "since", "until")}
+            | {"schedule": {o["until"]: o["schedule"][o["until"]]}}) if o else "unknown"
 
 
 @cache
@@ -524,8 +526,9 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     'check' (met except what GatorPath can't verify: GPA, permission, unparsed text: see cannot_check), or 'blocked'
     (blocked_by, plus ready_by: the first plan term it opens up, when a plan is given). Pass the build_plan output as
     `plan` and the slot's term as by_term, so planned courses count. Options are ranked ready-first, then by
-    also_covers: other open requirements the same course would satisfy (one course can do triple duty, e.g. 4UD +
-    Environmental Sustainability + Global Perspectives). Re-run check_plan after filling slots. A group with
+    also_covers: other open requirements the same course would satisfy (GE, SF State Studies and American Institutions
+    may overlap with each other and the major, p.2352; one course can do triple duty, e.g. 4UD + Environmental
+    Sustainability + Global Perspectives). Re-run check_plan after filling slots. A group with
     `approval` (courses an advisor consents to, no Bulletin list) returns that text, no options, and see_advisor.
 
     full: true for the rest of the list, when the student asks for it: every option they can take (ready or check), no
@@ -826,8 +829,9 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 3. Pass the graduation term they gave (step 1) as graduate_by: the plan's loads fit that goal, starting from the
    roadmap's own (the normal range); without one, the roadmap's loads. Then `audit_progress`, then `build_plan`. If
    build_plan returns needs_input, ask for just that.
-4. Fill every major and free elective slot: `list_eligible_electives` with group_id = the slot, plan = the current
-   plan, by_term = the slot's term (GE slots come from ge_combinations, below). Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
+4. Fill every major and free elective slot: one `list_eligible_electives` call per group (not per slot), with plan =
+   the current plan and by_term = the group's first slot term; for its later slots use each option's ready_by and its
+   `offered` seasons (check_plan catches a wrong season). GE slots come from ge_combinations, below. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked. Prefer options whose
    also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and
    options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
    For an F-1 student, prefer options without that season in `offered.online_only` (its last run was fully online,
@@ -837,9 +841,9 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    show them as "GE still needed", in three steps:
    a. what's missing: one row per open requirement (audit_progress; requirements one course covers together can
       share a row), with the course the plan uses for it and its term, or the major course that covers it
-   b. suggestions: 2-3 other courses per row (ge_combinations' examples, or `list_eligible_electives` with limit 5
-      and by_term = that row's term: ready first, offered that term, covering the most also_covers), each with what
-      else it covers, and how many courses fit in all (ge_combinations' courses_that_fit, not a part's options)
+   b. suggestions: 2-3 other courses per row from ge_combinations' examples (no other call: they're ranked ready
+      first, then recently offered; other ways' parts and `overlaps` have more), each with what else it covers, and
+      how many courses fit in all (ge_combinations' courses_that_fit, not a part's options)
    c. the rest, only when the student asks for an area: `list_eligible_electives` with full: true and show every
       option, the on_schedule ones first (a section that term); a crosslisted code is the same class, and say which
       options keep what the plan's course also covered. 'ready' means its prereqs are met by then, not that it runs
@@ -914,3 +918,19 @@ def get_planning_steps() -> dict:
     when a student asks to plan their degree (or what's left, or when they'll graduate), then follow its steps."""
     # Codex CLI has no MCP prompts (checked 2026-10-29): without these steps it stopped at a draft with 25 open slots
     return {"catalog_year": YEAR, "steps": plan_my_degree(), "warnings": []}
+
+
+def untitled(schema):
+    """The input schema without pydantic's generated titles ("title": "Ge Done" repeats the field name), which every
+    client reads with the tool list each turn. A property named "title" stays."""
+    if isinstance(schema, list):
+        return [untitled(x) for x in schema]
+    if not isinstance(schema, dict):
+        return schema
+    return {k: {name: untitled(x) for name, x in v.items()} if k in ("properties", "$defs") else untitled(v)
+            for k, v in schema.items() if k != "title"}
+
+
+# ponytail: MCPServer keeps its tools on a private attribute; if a new mcp version moves it, the titles just stay
+for _tool in getattr(getattr(mcp, "_tool_manager", None), "_tools", {}).values():
+    _tool.parameters = untitled(_tool.parameters)

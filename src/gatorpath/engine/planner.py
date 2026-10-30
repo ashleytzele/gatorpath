@@ -1757,8 +1757,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
     return {"catalog_year": program["catalog_year"], "group": group_id, "title": g.get("title", group_id),
             "source": g["source"], "by_term": first, "status": target["status"], **need,
             "options": options[:max(1, limit)], "total_options": len(options),
-            "warnings": [f"also_covers lists other open requirements a course would count for (GE, SF State Studies and "
-                         f"American Institutions may overlap with each other and the major, p.2352)"]
-                        + ([f"{g.get('title', group_id)}: also \"{g['approval']}\" ({g['source']}): pass courses an advisor "
-                            f"approves as profile.approved['{group_id}'] so they count"] if g.get("approval") else [])}
+            # the also_covers overlap rule (p.2352) is in list_eligible_electives' docstring, not repeated per call
+            "warnings": [f"{g.get('title', group_id)}: also \"{g['approval']}\" ({g['source']}): pass courses an advisor "
+                         f"approves as profile.approved['{group_id}'] so they count"] if g.get("approval") else []}
 

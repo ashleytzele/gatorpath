@@ -288,7 +288,7 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     assert "AskUserQuestion" in text
     tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
     fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last", "profile",
-              "approval", "options"}  # data
+              "approval", "options", "overlaps"}  # data
     named = set(regex.findall(r"`([a-z_]+)`", text)) - fields
     assert named <= tools, named - tools
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named
