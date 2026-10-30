@@ -336,7 +336,9 @@ def codes_in(text: str) -> set[str]:
 
 
 def hallucinated(answer: str, allowed: str) -> list[str]:
-    seen, ok = codes_in(answer), codes_in(allowed)
+    # A room get_sections returned ("HSS Building 154") written short ("HSS 154") reads like a course code: allowed
+    rooms = " ".join(f"{m[1]} {m[2]}" for m in re.finditer(r"\b([A-Z][A-Z ]*?) Building (\d+)", allowed))
+    seen, ok = codes_in(answer), codes_in(f"{allowed} {rooms}")
     return sorted(c for c in seen if c not in CATALOG and c not in ok)
 
 
@@ -389,7 +391,7 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
     checked = lambda cs: [c for c in cs if c["tool"] == "check_plan" and isinstance(c.get("args"), dict) and "plan" in c["args"]]
     checks = checked(calls) or checked(every)  # a follow-up presents a plan it checked itself, if it checked one
     said = codes_in(answer)
-    passed = lambda c: '"valid": true' in (c.get("result") or "")
+    passed = lambda c: bool(re.search(r'"valid":\s*true', c.get("result") or ""))  # compact or indented JSON
 
     def fit(i):
         codes = set(plan_codes(checks[i]["args"]["plan"]))
@@ -439,6 +441,7 @@ def score(q: dict, turns: list[dict], goals: dict, asked: str | None = None, pas
         scores["planning_steps"] = any(c["tool"] == "get_planning_steps" for c in first["calls"])
     # What the student lives through, not pass/fail: a plan in the first reply (nothing asked back), how long, how much
     ux = {"seconds": first.get("seconds"), "calls": len(first["calls"]), "chars": len(first["answer"]),
+          "result_chars": sum(len(c.get("result") or "") for c in first["calls"]),  # what the client reads: ~4 per token
           "planned_first": any(c["tool"] == "check_plan" for c in first["calls"]) if q.get("prompt") else None}
     if q.get("followup") and len(turns) > 1:
         f = q["followup"]
@@ -489,7 +492,8 @@ def ux_table(results: dict, clients: list[str]) -> list[str]:
         return f"{sum(vals)}/{len(vals)}" if vals else "-"
 
     rows = [("Plan in the first reply (nothing asked back)", planned)]
-    for key, label in (("seconds", "seconds"), ("calls", "tool calls"), ("chars", "answer length (characters)")):
+    for key, label in (("seconds", "seconds"), ("calls", "tool calls"), ("result_chars", "tool-result characters"),
+                       ("chars", "answer length (characters)")):
         rows.append((f"Median {label}, plan questions", lambda c, k=key: med(c, k, True)))
         rows.append((f"Median {label}, all questions", lambda c, k=key: med(c, k, False)))
     return (["", "## User experience", "", "First reply only. A plan question's student gives everything up front, so a "

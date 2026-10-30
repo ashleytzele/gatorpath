@@ -1,6 +1,7 @@
 """MCP tools (ARCHITECTURE §7). Thin: check input, read catalog.db and rules/, call engine/, add catalog_year + warnings."""
 
 import difflib
+import functools
 import json
 import os
 import re
@@ -931,6 +932,17 @@ def untitled(schema):
             for k, v in schema.items() if k != "title"}
 
 
-# ponytail: MCPServer keeps its tools on a private attribute; if a new mcp version moves it, the titles just stay
+def compact(fn):
+    """The tool's dict as compact JSON for the client. The library's default is indent=2, which spent 24-55% of each
+    result on whitespace (ge_combinations: 46.6K characters, 20.9K compact; same content)."""
+    @functools.wraps(fn)
+    def run(*args, **kwargs):
+        return json.dumps(fn(*args, **kwargs), separators=(",", ":"), ensure_ascii=False, default=str)
+    return run
+
+
+# ponytail: MCPServer keeps its tools on a private attribute; if a new mcp version moves it, titles and indentation
+# just stay. The module's functions still return dicts (tests, evals); only what goes over MCP changes.
 for _tool in getattr(getattr(mcp, "_tool_manager", None), "_tools", {}).values():
     _tool.parameters = untitled(_tool.parameters)
+    _tool.fn = compact(_tool.fn)
