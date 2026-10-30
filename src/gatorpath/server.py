@@ -252,10 +252,13 @@ def get_sections(term: str, codes: list[str]) -> dict:
                 sec["clashes_with"] = picked["clashes_with"][sec["class_nbr"]]
     subject = lambda c: c.rsplit(" ", 1)[0]
     stamp = min((scraped[subject(c)] for c in found), default=None)
-    nothing_fits = ([f"No set of sections fits {', '.join(found)} without a time clash"
+    nothing_fits = ([] if not found or picked["schedule"] is not None else
+                    ["Too many sections to search for a set without a time clash; check them in Class Search"]
+                    if not picked["all_counted"] else
+                    [f"No set of sections fits {', '.join(found)} without a time clash"
                      + (f": {'; '.join(' and '.join(p) for p in picked['always_clash'])} never fit together"
                         if picked["always_clash"] else "")
-                     + ". Move one to another term and re-run check_plan"] if found and picked["schedule"] is None else [])
+                     + ". Move one to another term and re-run check_plan"])
     return {"catalog_year": YEAR, "term": term, "sections": found, "schedule": picked["schedule"],
             "sets": picked["sets"], "always_clash": picked["always_clash"],
             "not_offered": [c for c in known if c not in found and subject(c) in scraped],
