@@ -223,6 +223,23 @@ def test_eligible_electives_rank_triple_duty_courses_first():
     assert server.list_eligible_electives(TRANSFER_SENIOR, "core_cs")["error"] == "not_a_choice"
 
 
+def test_on_schedule_lists_every_option_with_a_section(tmp_path, monkeypatch):
+    # The full list under a GE pick: every takeable option on that term's schedule; an unscraped subject's are named
+    from gatorpath.ingest.offerings import write_offerings
+    path = tmp_path / "catalog.db"
+    write_catalog(path, "2026-27", ROWS)
+    sec = {"term": "2027-spring", "code": "ENVS 401", "section": "01", "component": "LEC", "mode": "In-Person",
+           "enrolled": 0, "class_nbr": "5001", "meetings": [], "dates": None, "instructor": "To be announced",
+           "seats_open": 30, "waitlist_open": 0, "attributes": []}
+    write_offerings(path, "2027-spring", "ENVS", [sec], "2026-10-26T21:00:00+00:00")
+    monkeypatch.setattr(server, "DB", path)
+    got = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-spring", on_schedule=True)
+    assert got["schedule_out"] and [o["code"] for o in got["options"]] == ["ENVS 401"]
+    assert "description" not in got["options"][0] and "LS 401" in got["not_scraped"]
+    later = server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-fall", on_schedule=True)
+    assert not later["schedule_out"] and later["options"] == [] and later["total_options"] > 1
+
+
 def test_cybersecurity_electives_come_after_csc_415():
     profile = yaml.safe_load((ROOT / "evals/profiles/p03-sophomore-qr34.yaml").read_text())["profile"]
     plan = {"semesters": server.build_plan(profile)["semesters"]}
