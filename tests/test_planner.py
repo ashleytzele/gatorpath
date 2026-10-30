@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from gatorpath.engine.planner import check_plan
+from gatorpath.engine.planner import check_plan, pick_sections
 from gatorpath.engine.prereq import parse_prereq
 from gatorpath.engine.rules import load_rules
 
@@ -971,3 +971,26 @@ def test_check_groups_in_a_plan():
     from gatorpath.engine.planner import eligible_options
     assert eligible_options(FRESH, "ud", PROGRAM | {"groups": PROGRAM["groups"] + [ud]}, UNIVERSITY, CATALOG,
                             PREREQS)["error"] == "not_a_choice"
+
+
+def test_pick_sections_finds_a_set_with_no_time_clash():
+    # Rows shaped like db.sections (Class Search, Spring 2027 layout); class numbers invented
+    sec = lambda nbr, section, days, time, comp="LEC", seats=30: {
+        "section": section, "component": comp, "class_nbr": nbr, "seats_open": seats,
+        "meetings": [{"days": days, "time": time}] if days else [{"where": "Online"}]}
+    found = {
+        "CSC 340": [sec("1", "01", "Tu Th", "12:30 PM - 1:45 PM"), sec("2", "02", "Tu", "3:30 PM - 6:15 PM", seats=0),
+                    sec("3", "03", "Mo We", "11:00 AM - 12:15 PM")],
+        "HIST 121": [sec("4", "01", "Tu Th", "12:30 PM - 1:45 PM")],  # one section: CSC 340 01 can't go with it
+        "BIOL 230": [sec("5", "01", "Mo We Fr", "10:00 AM - 10:50 AM"), sec("6", "02", "Mo", "12:30 PM - 3:15 PM", "LAB"),
+                     sec("7", "03", "Mo We Fr", "10:00 AM - 10:50 AM"), sec("8", "04", "Mo", "11:30 AM - 2:15 PM", "LAB")],
+        "CSC 685": [sec("9", "01", None, None)],  # online: never a clash
+    }
+    got = pick_sections(found)
+    # BIOL 230's lecture comes with the lab listed after it; 04's lab overlaps CSC 340 03 (Mo 11:30 vs 11:00-12:15)
+    assert got["schedule"] == {"CSC 685": ["9"], "HIST 121": ["4"], "BIOL 230": ["5", "6"], "CSC 340": ["3"]}
+    assert got["sets"] == 3 and got["all_counted"]  # CSC 340 02 fits too (with either BIOL 230), but it's full
+    assert got["clashes_with"]["1"] == ["HIST 121 01"] and got["clashes_with"]["2"] == []
+    assert got["clashes_with"]["7"] == got["clashes_with"]["8"] == ["CSC 340 03"]
+    stuck = pick_sections({"HIST 121": found["HIST 121"], "AIS 103": [sec("10", "01", "Th", "12:30 PM - 3:15 PM")]})
+    assert stuck["schedule"] is None and stuck["always_clash"] == [["AIS 103", "HIST 121"]]

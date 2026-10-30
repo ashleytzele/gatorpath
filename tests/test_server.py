@@ -205,7 +205,10 @@ def test_sections_for_a_terms_courses(tmp_path, monkeypatch):
     shown = lambda s: {k: v for k, v in s.items() if k not in ("term", "code", "dates")}
     # Each named instructor gets a Rate My Professors search link (SF State, school 880); "To be announced" doesn't
     rmp = {"rate_my_professors": {"Pat Example": "https://www.ratemyprofessors.com/search/professors/880?q=Pat%20Example"}}
-    assert got["sections"] == {"CSC 653": [shown(lec) | rmp, shown(tba), shown(both) | rmp]}
+    # One section is the schedule; the other two fit instead (no other course to clash with)
+    assert got["sections"] == {"CSC 653": [shown(lec) | rmp | {"in_schedule": True}, shown(tba) | {"clashes_with": []},
+                                           shown(both) | rmp | {"clashes_with": []}]}
+    assert got["schedule"] == {"CSC 653": ["4321"]} and got["sets"] == 3 and got["always_clash"] == []
     assert got["not_offered"] == ["CSC 648"] and got["unknown"] == ["MATH 226"]  # MATH wasn't scraped that term
     assert got["scraped_at"] == "2026-10-26T21:00:00+00:00" and any("Class Search" in w for w in got["warnings"])
     assert server.get_sections("2027-fall", ["CSC 653"])["unknown"] == ["CSC 653"]  # schedule not out

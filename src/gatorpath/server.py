@@ -19,7 +19,7 @@ from gatorpath import db, dpr, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import compare_programs as engine_compare_programs
 from gatorpath.engine.planner import check_plan as engine_check_plan
-from gatorpath.engine.planner import TERM, cover_combinations, eligible_options, see_advisor
+from gatorpath.engine.planner import TERM, cover_combinations, eligible_options, pick_sections, see_advisor
 from gatorpath.engine.prereq import prereq_chain, prereq_warnings, reverse_index
 from gatorpath.engine.rules import RULES_DIR, audit, load_rules, min_grade_of, number, translate_ge
 
@@ -227,7 +227,13 @@ def get_sections(term: str, codes: list[str]) -> dict:
     the student to open (anonymous student opinion, not SF State's). `not_offered`:
     no section that term (move it in the plan, then check_plan). `unknown`: GatorPath has no schedule for that
     subject and term (not out yet, or a subject it didn't scrape): check Class Search. A snapshot from scraped_at:
-    seats, rooms and instructors change, so the student confirms in Class Search before registering."""
+    seats, rooms and instructors change, so the student confirms in Class Search before registering.
+
+    Time clashes are checked here, not by you: `schedule` {code: [class_nbr, …]} is one set of sections with no time
+    clashes, the fewest full sections first (a lecture with its lab or activity is one pick), and each section says
+    in_schedule, or clashes_with: the scheduled sections of other courses it overlaps ([]: it fits instead). `sets`:
+    how many clash-free sets there are. When none fits, schedule is null and always_clash names the course pairs that
+    never fit together: one moves to another term (then check_plan)."""
     if not TERM.fullmatch(term):
         return {"catalog_year": YEAR, "error": "bad_term", "warnings": ["term looks like 2027-spring"]}
     want = list(dict.fromkeys(norm_code(c) for c in codes))
@@ -237,13 +243,25 @@ def get_sections(term: str, codes: list[str]) -> dict:
         names = sec.get("instructor", "").split(", ")  # ingest.offerings joins a co-taught section's names
         if links := {n: RMP + quote(n) for n in names if n and n != "To be announced"}:
             sec["rate_my_professors"] = links
+    picked = pick_sections(found)
+    for code, secs in found.items():
+        for sec in secs:
+            if sec.get("class_nbr") in (picked["schedule"] or {}).get(code, []):
+                sec["in_schedule"] = True
+            elif sec.get("class_nbr") in picked["clashes_with"]:
+                sec["clashes_with"] = picked["clashes_with"][sec["class_nbr"]]
     subject = lambda c: c.rsplit(" ", 1)[0]
     stamp = min((scraped[subject(c)] for c in found), default=None)
-    return {"catalog_year": YEAR, "term": term, "sections": found,
+    nothing_fits = ([f"No set of sections fits {', '.join(found)} without a time clash"
+                     + (f": {'; '.join(' and '.join(p) for p in picked['always_clash'])} never fit together"
+                        if picked["always_clash"] else "")
+                     + ". Move one to another term and re-run check_plan"] if found and picked["schedule"] is None else [])
+    return {"catalog_year": YEAR, "term": term, "sections": found, "schedule": picked["schedule"],
+            "sets": picked["sets"], "always_clash": picked["always_clash"],
             "not_offered": [c for c in known if c not in found and subject(c) in scraped],
             "unknown": [c for c in known if c not in found and subject(c) not in scraped], "scraped_at": stamp,
             "warnings": ([f"Not in the {YEAR} Bulletin: {', '.join(c for c in want if c not in known)}"]
-                         if len(known) < len(want) else [])
+                         if len(known) < len(want) else []) + nothing_fits
                         + [f"Class Search as of {stamp or 'never'}: seats, rooms and instructors change; confirm in "
                            "Class Search (webapps.sfsu.edu/public/classservices/classsearch) before registering"]}
 
@@ -863,8 +881,10 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      section: class number, days, time, where, mode, instructor (each name linked to
      its rate_my_professors search, labeled student opinion), seats open (0: full, give
      waitlist_open), and attributes (a permission number, GE tags); a lecture with labs shows both. The student
-     picks the sections: show one set with no time clashes as the table, then each other section in one line (class
-     number, days, time, instructor), and the times that clash. A course in not_offered has no section that
+     picks the sections: the in_schedule ones are a set with no time clashes that GatorPath checked, so show them as
+     the table, then each other section in one line (class number, days, time, instructor) with its clashes_with
+     ([]: it fits instead). Never work out clashes yourself. When schedule is null, say which courses always_clash
+     names and offer to move one (re-run check_plan). A course in not_offered has no section that
      term: move it and re-run check_plan. For courses in unknown, and for later terms (their schedules aren't out
      yet), say to check Class Search. Say the seats are as of scraped_at and change
    - a checklist: confirm each course is offered that term in Class Search (GatorPath's history covers only some

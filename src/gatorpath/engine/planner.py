@@ -55,6 +55,69 @@ def season_ok(c: str, term: str, catalog: dict, seasons=tuple(SEASONS)) -> tuple
     return True, None
 
 
+CLOCK = re.compile(r"(\d{1,2}):(\d{2}) ([AP]M) - (\d{1,2}):(\d{2}) ([AP]M)")
+
+
+def meeting_times(rows: list[dict]) -> list[tuple[str, int, int]]:
+    """(day, start, end) in minutes per timed meeting. Online and "To be arranged" meetings have no time: never a clash.
+    ponytail: summer sessions' `dates` aren't compared, so two sessions' sections can read as clashing."""
+    at = lambda h, m, ap: int(h) % 12 * 60 + int(m) + (720 if ap == "PM" else 0)
+    return [(d, at(*t.groups()[:3]), at(*t.groups()[3:])) for r in rows for m in r.get("meetings", [])
+            if m.get("days") and (t := CLOCK.fullmatch(m.get("time", ""))) for d in m["days"].split()]
+
+
+def pick_sections(found: dict[str, list[dict]], limit: int = 20000) -> dict:
+    """A set of sections with no time clashes for one term's courses ({code: Class Search rows}, db.sections), the
+    fewest full sections first. A course with a lab or activity is one bundle: a section of its first component and
+    the sections listed after it. Returns schedule {code: [class_nbr, …]} (None when nothing fits), sets: how many
+    clash-free sets (all_counted false past `limit` search steps), clashes_with {class_nbr: [scheduled sections of
+    other courses it overlaps]} for every other section ([]: it fits instead), and always_clash: course pairs no two
+    sections of which fit together."""
+    def bundles(rows: list[dict]) -> list[list[dict]]:
+        # ponytail: Class Search lists a lecture's lab right after it (all 111 multi-part courses, Spring 2027) and
+        # shows no link; read the detail page's linked sections if a course breaks that
+        out: list[list[dict]] = []
+        for r in rows:
+            if not out or r["component"] == rows[0]["component"]:
+                out.append([r])
+            else:
+                out[-1].append(r)
+        return out
+
+    clash = lambda a, b: any(d == e and s < y and x < f for d, s, f in a for e, x, y in b)
+    full = lambda b: any(r.get("seats_open", 0) <= 0 for r in b)
+    opts = {c: sorted(((b, meeting_times(b)) for b in bundles(rows)), key=lambda o: (full(o[0]), o[0][0]["class_nbr"]))
+            for c, rows in found.items() if rows}
+    order = sorted(opts, key=lambda c: (len(opts[c]), c))  # fewest choices first: dead ends show up sooner
+    best: list = []
+    sets = steps = 0
+
+    def search(i: int, chosen: dict, busy: list) -> None:
+        nonlocal sets, steps
+        steps += 1
+        if steps > limit:
+            return
+        if i == len(order):
+            sets += 1
+            if not best or sum(map(full, chosen.values())) < sum(map(full, best[0].values())):
+                best[:] = [dict(chosen)]
+            return
+        for b, t in opts[order[i]]:
+            if not any(clash(t, x) for x in busy):
+                search(i + 1, chosen | {order[i]: b}, busy + [t])
+
+    search(0, {}, [])
+    if not best:
+        pairs = [[a, b] for i, a in enumerate(order) for b in order[i + 1:]
+                 if all(clash(ta, tb) for _, ta in opts[a] for _, tb in opts[b])]
+        return {"schedule": None, "sets": 0, "all_counted": steps <= limit, "clashes_with": {}, "always_clash": pairs}
+    pick = best[0]
+    others = {r["class_nbr"]: [f"{c} {p[0]['section']}" for c, p in pick.items() if c != code and clash(t, meeting_times(p))]
+              for code, os in opts.items() for b, t in os if b is not pick[code] for r in b}
+    return {"schedule": {c: [r["class_nbr"] for r in b] for c, b in pick.items()}, "sets": sets,
+            "all_counted": steps <= limit, "clashes_with": others, "always_clash": []}
+
+
 def passed(grade: str | None) -> bool:
     return rank(grade) is not None
 
