@@ -288,7 +288,7 @@ def test_plan_my_degree_prompt_names_only_real_tools():
     assert "AskUserQuestion" in text
     tools = {t.name for t in asyncio.run(server.mcp.list_tools())}
     fields = {"transfer", "ge_done", "transfer_units", "adt", "elective", "why", "see_advisor", "dpr_met", "offered", "last", "profile",
-              "approval", "options", "overlaps"}  # data
+              "approval", "options", "overlaps", "courses"}  # data
     named = set(regex.findall(r"`([a-z_]+)`", text)) - fields
     assert named <= tools, named - tools
     assert {"audit_progress", "build_plan", "list_eligible_electives", "check_plan"} <= named
@@ -609,3 +609,13 @@ def test_compare_programs_quotes_the_change_of_major_rule():
     freshman = server.compare_programs(SCENARIOS["new freshman, QR 1/2"], "bs-applied-math")
     assert freshman["courses"] == {"count_in_both": [], "only_current": [], "only_target": []}
     assert freshman["extra_terms"] == freshman["target"]["terms"] - freshman["current"]["terms"]
+
+
+def test_a_plan_carries_its_courses_titles_units_and_pages():
+    # What the plan's table shows: without it Codex called get_course for every planned course (26 calls, twice)
+    profile = {"program": "bs-cs", "catalog_year": "2026-27", "qr_pathway": "1/2", "start_term": "2027-spring",
+               "completed": [{"code": "CSC 101", "grade": "A", "term": "2026-fall"}]}
+    plan = server.build_plan(profile)
+    codes = {c for s in plan["semesters"] for c in s["courses"] if isinstance(c, str)}
+    assert set(plan["courses"]) == codes and plan["courses"]["CSC 215"].keys() == {"title", "units", "source_page"}
+    assert server.check_plan(profile, plan)["courses"] == plan["courses"]

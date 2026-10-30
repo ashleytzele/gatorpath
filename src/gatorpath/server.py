@@ -419,6 +419,15 @@ def normalized_plan(plan: dict | None) -> dict | None:
                                    for s in plan.get("semesters", [])]}
 
 
+def plan_courses(plan: dict | None, cat: dict[str, dict]) -> dict[str, dict]:
+    """{code: {title, units, source_page}} for every course in a plan: what its table shows, so the client doesn't
+    call get_course per course (Codex did, 26 calls twice, for the pages the instructions ask it to cite)."""
+    units = lambda r: r["units_min"] if r["units_min"] == r["units_max"] else f"{r['units_min']:g}-{r['units_max']:g}"
+    codes = dict.fromkeys(c for s in (plan or {}).get("semesters", []) for c in s.get("courses", [])
+                          if isinstance(c, str) and c in cat)
+    return {c: {"title": cat[c]["title"], "units": units(cat[c]), "source_page": cat[c]["source_page"]} for c in codes}
+
+
 def profile_error(profile: dict) -> dict | None:
     if profile["program"] not in programs():
         return unknown_program(profile["program"])
@@ -462,7 +471,8 @@ def audit_progress(profile: Profile) -> dict:
 @mcp.tool(annotations=READ_ONLY)
 def check_plan(profile: Profile, plan: Plan) -> dict:
     """Validate a term-by-term plan. **Call this before presenting any plan, fix every error, and re-check until
-    valid.** Errors (with Bulletin text/pages): prereq not met by that term, course already passed or planned twice,
+    valid.** `courses` gives each planned course's title, units and source_page for the plan's table: no get_course
+    per course. Errors (with Bulletin text/pages): prereq not met by that term, course already passed or planned twice,
     unknown course, units over the term's cap (profile.max_units_per_term, else the term's max_units, else 15),
     requirement or 120/upper-division units not covered. Warnings: unverifiable prereqs (GPA not given, permission),
     loads above the normal 15 (p.2393; "as on the Bulletin roadmap" with no advisor when the term's roadmap semester
@@ -479,7 +489,9 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
-    out = engine_check_plan(clean, normalized_plan(plan), program, university, catalog_for(clean), prereqs(DB, YEAR))
+    cat = catalog_for(clean)
+    out = engine_check_plan(clean, normalized_plan(plan), program, university, cat, prereqs(DB, YEAR))
+    out["courses"] = plan_courses(normalized_plan(plan), cat)
     out["warnings"] = notes + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
     return out
 
@@ -512,7 +524,10 @@ def build_plan(profile: Profile) -> dict:
         return err
     year, program, university, clean, notes = load_for(profile)
     path = RULES_DIR / "roadmaps" / year / f"{profile['program']}.yaml"
-    out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), catalog_for(clean), prereqs(DB, YEAR))
+    cat = catalog_for(clean)
+    out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), cat, prereqs(DB, YEAR))
+    if "semesters" in out:
+        out["courses"] = plan_courses(out, cat)
     out["warnings"] = notes + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
     return out
 
@@ -878,7 +893,7 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 7. Present, briefly:
    - done / left, with Bulletin pages, and every point where the DPR and the tools disagree
    - one table per term, in the order to enter it in Student Center → Degree Planner: course, units, what it counts
-     for, why
+     for, why (titles, units and Bulletin pages from check_plan's `courses`, not a get_course per course)
    - GE still needed (step 4 a-b): each open requirement, the plan's course, 2-3 suggestions, how many fit; the rest
      on request
    - warnings, and every `see_advisor` item: who, why, link, how to book. For F-1 students, GatorPath knows only the
