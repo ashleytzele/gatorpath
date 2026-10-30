@@ -117,3 +117,5 @@ left one student's math placement out of the profile. Codex's plans took a media
 
 *Not affiliated with San Francisco State University. Always confirm with your advisor and your
 official Degree Progress Report.*
+
+MIT License: see [`LICENSE`](LICENSE).
