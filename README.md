@@ -76,8 +76,9 @@ prompt, Codex CLI (no MCP prompts) from the student's words alone.
 | Median time to a plan | 147 s | 403 s |
 | Median tool calls per plan | 10 | 22 |
 
-Both missed goal fit for the same game-development student: of the electives each picked, only CSC 665 matches the
-goal. Codex presented a plan with open slots for a student retaking CSC 215 without running check_plan, and Claude
+Both missed goal fit for the same game-development student: SF State's two game courses rarely run and ranked past
+the first 25 electives, so neither plan had them. Fixed after the run (the electives list names the rest); that
+question passes on both now, with when each course last ran. Codex presented a plan with open slots for a student retaking CSC 215 without running check_plan, and Claude
 left one student's math placement out of the profile. Codex's plans took a median 22 tool calls, down from 68 on
 2026-10-21 (TASKS.md, "Done 2026-10-29": efficiency and token usage).
 

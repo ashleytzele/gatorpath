@@ -64,9 +64,19 @@ MCP, which checks section clashes in code). Every finding was checked in the cod
   without check_plan; Claude left left-p02's qr_pathway out. Scorer fixes: a room written short ("HSS 154",
   "HUM 384" for Humanities Building 384) isn't a course code; "0 of the 4" fall terms is honest wording
 
+- [x] The game-development miss (plan-ap, both clients): SF State's game courses, CSC 631 Multiplayer Game Development
+  and CSC 630 Computer Graphics Systems Design, run only in spring (once in the last five springs: 2023, 2024) and need
+  a 3.0 GPA or permission, so for a freshman with a fall first slot they ranked past list_eligible_electives' first 25:
+  Claude never saw them, and Codex (full: true) passed them over without a word. `more` now names the options past the
+  limit, and the prompt says a better goal fit there is a pick (get_course it first) or a swap named with when it last
+  ran. Rerun 2026-10-30: goal fit on both, each naming when the two last ran. Cost on Claude, two runs: 14 and 17 calls
+  (10 before), 118K and 140K tool-result characters (91K): about 14K is the fix (`more`, a get_course per game course)
+- [x] Before the public push: MIT LICENSE (and in pyproject), `.DS_Store` ignored, pyproject and git author email
+  typo fixed (`.mailmap` maps the earlier commits' address), unpushed commits scanned for tester details (none)
+
 Left: trimming the longest tool descriptions (build_plan, audit_progress), with an eval run to show nothing gets
-worse; before the public push: rebuild `dist/gatorpath.zip`, the pyproject email, LICENSE (MIT), `.DS_Store` in
-.gitignore.
+worse. Claude's plan-ap runs made list_eligible_electives calls for ge_4ud and ge_ud_sci both times, which
+ge_combinations should have covered: find out why.
 
 ---
 
