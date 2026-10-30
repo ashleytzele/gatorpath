@@ -764,6 +764,21 @@ def test_ge_combinations_list_every_minimal_way():
         assert set().union(*(set(part["covers"]) for part in w["parts"])) == set(got["open"])
 
 
+def test_ge_combinations_check_each_requirement_at_its_slots_term():
+    # Eval plan-ap (2026-10-30): at the plan's first term a freshman can't take upper-division GE, so GE 4UD showed 0
+    # courses that fit and only blocked examples, and the client asked list_eligible_electives again for each group
+    from gatorpath.engine.planner import cover_combinations
+    p = FRESHMAN | {"start_term": "2027-fall"}
+    plan = plan_for(p)
+    term = next(s["term"] for s in plan["semesters"] for x in s["courses"] if isinstance(x, dict) and x.get("slot") == "ge_4ud")
+    got = cover_combinations(p, PROGRAM, UNIVERSITY, CATALOG, PREREQS, plan)
+    ud = next(t for t in got["open"] if t.startswith("GE 4UD"))
+    at_slot = cover_combinations(p, PROGRAM, UNIVERSITY, CATALOG, PREREQS, plan, by_term=term)["courses_that_fit"][ud]
+    assert got["courses_that_fit"][ud] == at_slot > 0
+    assert all(e["readiness"] != "blocked" for w in got["ways"] for part in w["parts"] if ud in part["covers"]
+               for e in part["examples"])
+
+
 def test_us_history_options_follow_the_first_time_rule():
     # Test user 1 (2026-10-20): ge_combinations offered AFRS 375 (USH, upper division) for US History to a first-time
     # student, then check_plan rejected it. p.2313: first-time students meet it with a lower-division Area 4 USH course

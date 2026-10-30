@@ -1598,13 +1598,19 @@ def cover_combinations(profile: dict, program: dict, university: dict, catalog: 
 
     required = [c for g in program["groups"] for c in g.get("all_of", []) if c in catalog]
     in_major = {str(m["area"]) for m in program.get("ge_met", [])}  # "met in the major" (§6.2 ge_met)
+    slot_term = {}  # without by_term, each requirement at its own slot's term (a freshman's GE 4UD is in year four)
+    for s in (plan or {}).get("semesters", []):
+        for x in s.get("courses", []):
+            if isinstance(x, dict) and x.get("slot"):
+                slot_term.setdefault(x["slot"], s["term"])
     results = {}
     for g in university["groups"]:
         filters = g.get("from", [])
         filters = filters if isinstance(filters, list) else [filters]
         if not filters or any(matches(f, c, catalog[c]) for f in filters for c in required) or in_major & set(ge_areas(g)):
             continue  # the major's own courses cover it (GWAR via CSC 300GW; Civil's GE 1B, p.1939): not the student's pick
-        r = eligible_options(profile, g["id"], program, university, catalog, prereqs, plan, by_term, limit=10**6)
+        r = eligible_options(profile, g["id"], program, university, catalog, prereqs, plan,
+                             by_term or slot_term.get(g["id"]), limit=10**6)
         if r.get("error"):
             return r
         left = r.get("units_needed", 0) - r.get("units_done", 0) if "units_needed" in r else r.get("courses_needed", 0)
@@ -1614,11 +1620,13 @@ def cover_combinations(profile: dict, program: dict, university: dict, catalog: 
             results[g["id"]] = r
     open_ids = frozenset(results)
     by_cover: dict[frozenset, dict[str, dict]] = {}
+    rank = {"ready": 0, "check": 1, "blocked": 2}
     for gid, r in results.items():
         for o in r["options"]:
             cover = frozenset({gid} | (set(o["also_covers"]) & open_ids))
-            by_cover.setdefault(cover, {}).setdefault(o["code"], o)
-    rank = {"ready": 0, "check": 1, "blocked": 2}
+            seen = by_cover.setdefault(cover, {}).get(o["code"])  # each requirement's term: the readiest one counts
+            if seen is None or rank[o["readiness"]] < rank[seen["readiness"]]:
+                by_cover[cover][o["code"]] = o
     recent = lambda c: term_key(catalog[c]["offered"]["last"]) if (catalog[c].get("offered") or {}).get("last") else (0, 0)
 
     def part(cover: frozenset) -> dict:

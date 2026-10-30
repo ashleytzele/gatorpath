@@ -606,7 +606,7 @@ def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | N
     Perspectives), two that split them, or one each. Each part says what one course covers, how many courses cover
     exactly that (options), and examples (ready first, then recently offered); the parts can go in different terms.
     courses_that_fit: per open requirement, every course the student can take for it. Pass the build_plan output as
-    plan so planned courses count."""
+    plan so planned courses count; readiness is at each requirement's slot term in it (by_term: one term for all)."""
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
