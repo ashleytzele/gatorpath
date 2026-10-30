@@ -74,9 +74,23 @@ MCP, which checks section clashes in code). Every finding was checked in the cod
 - [x] Before the public push: MIT LICENSE (and in pyproject), `.DS_Store` ignored, pyproject and git author email
   typo fixed (`.mailmap` maps the earlier commits' address), unpushed commits scanned for tester details (none)
 
+- [x] The extra GE electives calls: ge_combinations checked every requirement at the plan's first term, when a
+  freshman can't take upper-division GE (GE 4UD 0 courses that fit, GE 5UD/2UD 0, only blocked examples), so the
+  client asked list_eligible_electives again per group. Now each at its slot's term in the plan (226 and 58, ready
+  examples). The 15 plan questions (`data/evals/20261030-102014`, 6 Claude sessions rerun after a usage limit): both
+  15/15 passed, goal fit 14/14; GE-group electives calls (not ge_4, which ge_combinations leaves out by design) 10 ->
+  5 on Claude, 81 -> 23 on Codex. Medians against 2026-10-29: Claude 147 -> 132 s, 10 -> 11 calls, 89.8K -> 78.8K
+  characters; Codex 403 -> 569 s, 22 -> 33 calls, 165.8K -> 299.5K
+- [x] What raised Codex's calls: get_course 54 -> 210 over the 15, from the prompt's "get_course it first" for a
+  `more` pick (only 33 of the 210 were `more` courses; it looked up the electives and GE picks it had already). check_plan
+  already says when a course last ran and its prereqs, so the prompt leans on that. The four questions where it jumped
+  (`data/evals/20261030-145815`; Codex rerun after connection resets): get_course 140 -> 32 and calls 239 -> 139 on
+  Codex, 15 -> 4 and 62 -> 46 on Claude, all 8 passed with goal fit
+
 Left: trimming the longest tool descriptions (build_plan, audit_progress), with an eval run to show nothing gets
-worse. Claude's plan-ap runs made list_eligible_electives calls for ge_4ud and ge_ud_sci both times, which
-ge_combinations should have covered: find out why.
+worse. ge_combinations' fewest-courses way can rest a part on one course with no recent offering (PLSI 472 for
+American Institutions + GE 4UD + Social Justice), and the client then looks for alternatives: rank ways by how many
+offered options each part has, not only by course count.
 
 ---
 

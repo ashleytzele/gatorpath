@@ -875,8 +875,8 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
 4. Fill every major and free elective slot: one `list_eligible_electives` call per group (not per slot), with plan =
    the current plan and by_term = the group's first slot term; for its later slots use each option's ready_by and its
    `offered` seasons (check_plan catches a wrong season). GE slots come from ge_combinations, below. Pick by the goal: 'ready' first, 'check' only after saying what can't be checked; `more` names the
-   options past the first ones: one that fits the goal better is a pick too (get_course it first), or, when it rarely
-   runs, a swap to name with when it last ran. Prefer options whose
+   options past the first ones: one that fits the goal better is a pick too (check_plan flags its prereqs and, when it
+   rarely runs, when it last ran: say so and name a backup). Prefer options whose
    also_covers clears other open requirements (one course can cover upper-division GE and SF State Studies), and
    options that ran recently in that term's season (`offered`: [terms it ran, terms checked] per season, and `last`).
    For an F-1 student, prefer options without that season in `offered.online_only` (its last run was fully online,
