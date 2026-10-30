@@ -9,6 +9,59 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ---
 
+## Done 2026-10-29 — UX review in Claude Code and Codex CLI; efficiency and token usage
+
+How it was reviewed: a two-turn session per client with a synthetic sophomore (the plan request, then the typed
+record), read as the student sees it; a read-only Codex review of the whole flow with the gatorpath tools attached
+(it replayed both sessions' plans); research on MCP audit tools and similar servers (closest: the AUB Course Planner
+MCP, which checks section clashes in code). Every finding was checked in the code before it was fixed.
+
+- [x] Codex CLI has no MCP prompts: without the steps it stopped at a draft with 25 open slots and kept asking for a
+  DPR after a typed course list. `get_planning_steps` returns the prompt's text and the server instructions say to
+  call it first (D29); Claude calls it too when the student just asks. The evals had pasted the prompt in for Codex
+- [x] The prompt: graduation term asked once; "15 units" default → the roadmap's loads (D24); switching majors is
+  supported (compare_programs); pace table only when asked; free electives named; GE as "GE still needed" (missing
+  requirement, the plan's course, 2-3 suggestions, how many fit: `courses_that_fit`), the full list on request
+  (`list_eligible_electives` full: true, a section that term first); crosslisted codes are one class
+- [x] check_plan's slots warning named the senior electives' rule for free-elective slots; the offering note listed
+  94 subjects and hid that 89 have only the 2027-spring schedule
+- [x] Time clashes checked in code (D30): `get_sections` returns a clash-free `schedule`, `clashes_with` per section,
+  `always_clash` when nothing fits
+- [x] Evals: each client starts as its students do (Codex from the student's words, scored on fetching
+  get_planning_steps; `--paste` for the old way); a User experience table (plan in the first reply, median seconds,
+  tool calls, tool-result characters, answer length); a room ("HSS 154") no longer reads as an unknown course code
+- [x] Efficiency and token usage (D31), measured on the same synthetic sophomore, first reply:
+
+  | | Claude Code before | after | Codex CLI before | after (two runs) |
+  |---|---|---|---|---|
+  | Seconds | 221 | 121 | 841 | 521 / 813 |
+  | Tool calls | 20 | 10 | 56 | 22 / 76 |
+  | Tool-result characters (~4 per token) | 153,585 | 72,124 (−53%) | 525,497 | 317,798 / 224,242 (−40% / −57%) |
+
+  Plans valid in every run. Codex varies a lot between runs of the same question: the second after-run looked up 53
+  courses one by one with get_course (the first, 0), so its calls and seconds aren't a reliable before/after from one
+  run each; its result characters fell both times. Compare Codex on medians over a few runs
+
+  How: count each tool's calls and result characters in a session (the evals' User experience table does it per
+  question), fix the biggest first, re-run the same question. What it found and changed: list_eligible_electives was
+  59% of Claude's result characters, 9 of its 10 calls fetching GE suggestions ge_combinations had already returned
+  (now from ge_combinations' examples), and Codex called it once per slot term (now once per group, with ready_by and
+  `offered` seasons for later slots); the MCP library pretty-prints every result (indent=2), 24-55% whitespace, now
+  compact JSON over MCP; course rows repeated the offering span the note states once; a static note came back in every
+  call (moved to the docstring); pydantic's schema titles were in the tool list each turn (39.5K → 33.9K characters).
+  Claude Code saves a result over about 50KB to a file and shows the model a 2KB preview: ge_combinations' 53.8KB
+  had been cut that way. Not changed on purpose: course descriptions (a 300-character cap lost 13 goal matches among
+  senior electives, CSC 698's security topic among them)
+
+Left: why Codex looks courses up one by one (53 get_course calls in one run: what list_eligible_electives or
+check_plan didn't give it); a profile field for permissions the student already has (instructor consent, an approved overload: AUB tracks
+these; check_plan keeps warning); a full eval run to refresh `evals/REPORT.md` and the README table (both from
+2026-10-21); trimming the longest tool descriptions (build_plan, audit_progress), with an eval run to show nothing gets
+worse; before the public push: rebuild `dist/gatorpath.zip`, the pyproject email, LICENSE (MIT), `.DS_Store` in
+.gitignore.
+
+---
+
 ## Done 2026-10-18 — Design-consistency audit (Codex, read-only)
 
 Next: Phase 7 (eval questions). Still open in earlier phases, each waiting on a person or a document: Phase 2's

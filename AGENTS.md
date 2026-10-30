@@ -48,6 +48,7 @@ uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cross
 uv run gatorpath                   # start MCP server (stdio)
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
+uv run python evals/run_evals.py --clients claude,codex --only plan-p03   # one plan question: seconds, tool calls, tool-result characters (User experience table)
 uv run python evals/plan_review.py # build_plan for every test scenario at 12/15/18/18+summer units
 mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --add-file=data/catalog.db --prefix=gatorpath/ HEAD   # shareable zip (committed code + catalog.db)
 ```
@@ -89,6 +90,8 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 - Engine functions take plain data (dicts/dataclasses) and return plain data. No DB or
   network inside `engine/`.
 - Tool responses always include `catalog_year`, plus `warnings: []` where rules apply.
+- Tool results cost the student time and tokens (D31): say a fact once, not in every row or call; send only what a
+  step uses; measure a change on the same question before and after (the command above).
 - Course codes are normalized as `SUBJ NNN[SUFFIX]`, e.g. `CSC 300GW`, `MATH 226`.
 - Terms are written as `YYYY-fall` / `YYYY-spring` / `YYYY-summer` / `YYYY-winter` (Winter Session, January:
   `2027-winter` comes after `2026-fall`).
