@@ -6,8 +6,8 @@ in what order?" Every answer is checked against the official Bulletin.
 
 **The AI suggests, the code verifies.**
 
-> Status: phase 7 (evals, first users). Design: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Work:
-> [`TASKS.md`](TASKS.md).
+> Status: v0.1.0 (2026-10-30), phase 7 (evals, first users). Design: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+> Work: [`TASKS.md`](TASKS.md). Changes: [releases](https://github.com/ashleytzele/gatorpath/releases).
 
 ## Why
 
@@ -19,7 +19,9 @@ its source: a Bulletin page, or the SF State office page it came from.
 
 ## Setup (macOS)
 
-You need `gatorpath.zip`, which includes the course catalog (ask the maintainer for it). Then:
+You need `gatorpath.zip`, which includes the course catalog: download it from the
+[latest release](https://github.com/ashleytzele/gatorpath/releases/latest) (the repo is private: ask the maintainer
+for access). Then:
 
 ```bash
 brew install uv poppler
@@ -76,11 +78,17 @@ prompt, Codex CLI (no MCP prompts) from the student's words alone.
 | Median time to a plan | 147 s | 403 s |
 | Median tool calls per plan | 10 | 22 |
 
-Both missed goal fit for the same game-development student: SF State's two game courses rarely run and ranked past
-the first 25 electives, so neither plan had them. Fixed after the run (the electives list names the rest); that
-question passes on both now, with when each course last ran. Codex presented a plan with open slots for a student retaking CSC 215 without running check_plan, and Claude
-left one student's math placement out of the profile. Codex's plans took a median 22 tool calls, down from 68 on
-2026-10-21 (TASKS.md, "Done 2026-10-29": efficiency and token usage).
+Misses in that run: goal fit for the same game-development student on both clients (SF State's two game courses
+rarely run and ranked past the first 25 electives, so neither plan had them); Codex presented a plan with open slots
+for a student retaking CSC 215 without running check_plan; Claude left one student's math placement out of the
+profile. Codex's plans took a median 22 tool calls, down from 68 on 2026-10-21 (TASKS.md, "Done 2026-10-29":
+efficiency and token usage).
+
+Fixed on 2026-10-30: the electives list names the options past its first 25, and GE suggestions are checked at each
+requirement's own term in the plan, not the plan's first. A rerun of the 15 plan questions: both clients 15/15 passed,
+plans 15/15, goal fit 14/14, a plan in the first reply 15/15. After that, GE suggestions come from courses that ran in
+the last year, each with when it ran; on the four plan questions this touches, every plan passed check_plan with goal
+fit, and none picked a course that hadn't run lately.
 
 ## Limitations
 
@@ -103,7 +111,8 @@ left one student's math placement out of the profile. Codex's plans took a media
   `verified: false`: for BS CS 2026-27, eight rounds of independent AI review against the PDF brought the error rate
   from 19.6% to 10.6%, each finding fixed. BS Applied Mathematics hasn't had a review yet.
 - Offering history (2023-spring to 2027-spring) covers CSC, MATH, PHYS, PSY and SXS; 89 other subjects have only the
-  Spring 2027 schedule, so "not offered" there means one term; the rest show `offered: unknown`.
+  Spring 2027 schedule, so "not offered" there means one term, and GE suggestions favor courses on it (a fall-only
+  course there reads as not run lately); the rest show `offered: unknown`.
 - The transcript importer hasn't seen a real CR / W / I / repeat row yet, and the DPR's transfer-row Notes codes have
   no legend. Both get flagged rather than guessed.
 - Tested on macOS only.
