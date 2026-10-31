@@ -496,7 +496,7 @@ importing the synthetic DPR gives an audit with no unexplained disagreements wit
 - [x] Shareable zip for classmates (2026-10-19): `dist/gatorpath.zip` = the committed code + `data/catalog.db`
   (command in AGENTS.md), so they don't need the Bulletin PDF or a scrape. Not the raw PDF, cache or eval runs.
   The PDF importers now say to install poppler when pdftotext is missing
-- [ ] Make the repo public (MIT); credit GatorWay/Plan-Ed as prior art
+- [ ] Make the repo public (MIT); credit GatorWay/Plan-Ed as prior art (README "Prior art", 2026-10-30; author email and tester details out of the history, ready to switch)
 - [ ] 5–10 SFSU classmates try it; collect feedback; fix the top 3 issues
   - Test user 1 (2026-10-20: DPR import, plan, "can I take a GE class in winter"). Fixed: US History options for a
     first-time student (ge_combinations, list_eligible_electives) follow `first_time_from` like the audit (an

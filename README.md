@@ -119,6 +119,12 @@ fit, and none picked a course that hadn't run lately.
 - Course codes, grades and units go to your AI provider as tool results; your name and ID don't. GatorPath stores
   nothing unless you ask the assistant to `save_profile`.
 
+## Prior art
+
+Earlier projects for SF State students: [GatorWay](https://github.com/dixisouls/gatorway) (MIT; transcript to
+interest-based electives over MCP) and Plan-Ed (SF Hacks × GDG 2026, 2nd place; a four-year plan from Gemini and a
+rules engine, as a web app). How GatorPath differs: [ARCHITECTURE §3](docs/ARCHITECTURE.md#3-prior-art--how-were-different).
+
 ## Scope
 
 - v1: SF State, BS Computer Science (2026-27 Bulletin), then BS Applied Mathematics (2026-27, rules unverified), then
