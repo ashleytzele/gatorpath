@@ -72,7 +72,7 @@ MCP, which checks section clashes in code). Every finding was checked in the cod
   ran. Rerun 2026-10-30: goal fit on both, each naming when the two last ran. Cost on Claude, two runs: 14 and 17 calls
   (10 before), 118K and 140K tool-result characters (91K): about 14K is the fix (`more`, a get_course per game course)
 - [x] Before the public push: MIT LICENSE (and in pyproject), `.DS_Store` ignored, pyproject and git author email
-  typo fixed (`.mailmap` maps the earlier commits' address), unpushed commits scanned for tester details (none)
+  typo fixed, unpushed commits scanned for tester details (none). Before going public: every commit's author and committer is the GitHub no-reply address and pyproject has no email (history rewritten 2026-10-30, with `.mailmap` dropped), and a retake test and D23 no longer carry a tester's course or remaining courses
 
 - [x] The extra GE electives calls: ge_combinations checked every requirement at the plan's first term, when a
   freshman can't take upper-division GE (GE 4UD 0 courses that fit, GE 5UD/2UD 0, only blocked examples), so the
