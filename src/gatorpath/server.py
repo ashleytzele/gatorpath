@@ -612,9 +612,8 @@ def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | N
         return err
     year, program, university, clean, notes = load_for(profile)
     out = cover_combinations(clean, program, university, catalog_for(clean), prereqs_for(clean), normalized_plan(plan), by_term)
-    for way in out.get("ways", []):
-        for part in way["parts"]:
-            part["examples"] = [e | {"offered": offered(e["code"])} for e in part["examples"]]
+    for part in [part for way in out.get("ways", []) for part in way["parts"]] + out.get("overlaps", []):
+        part["examples"] = [e | {"offered": offered(e["code"])} for e in part["examples"]]
     out["warnings"] = notes + out.get("warnings", []) + [offering_note(DB, YEAR)]
     return out
 

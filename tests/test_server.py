@@ -541,6 +541,9 @@ def test_every_kind_of_student_gets_a_checked_plan_and_ge_ways(name):
     ways = server.ge_combinations(p, {"semesters": plan["semesters"]})
     assert time.time() - start < 5 and "error" not in ways
     assert ways["ways"] or not ways["open"] or any("No eligible course" in w for w in ways["warnings"])
+    # every suggested course says when it ran: overlaps' didn't, and HIST 308 read as a pick (eval plan-ap, 2026-10-30)
+    parts = [part for w in ways["ways"] for part in w["parts"]] + ways["overlaps"]
+    assert all("offered" in e for part in parts for e in part["examples"])
     for s in plan["semesters"]:
         for slot in {c["slot"] for c in s["courses"] if isinstance(c, dict) and c["slot"] != "elective"}:
             got = server.list_eligible_electives(p, slot, {"semesters": plan["semesters"]}, by_term=s["term"])
