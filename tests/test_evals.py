@@ -147,20 +147,22 @@ def test_api_client_runs_the_real_server_and_keeps_the_conversation(ev, monkeypa
                block(stop_reason="max_tokens", usage=usage, content=[block(type="text", text="Cut o")])]
     seen = []
 
+    async def create(**k):
+        seen.append(k | {"messages": list(k["messages"])})
+        reply = replies.pop(0)
+        if isinstance(reply, Exception):
+            raise reply
+        return reply
+
     class Api:
+        messages = block(create=create)
+
         async def __aenter__(self):
             return self
 
         async def __aexit__(self, *_):
             pass
 
-        messages = block(create=None)
-
-    async def create(**k):
-        seen.append(k | {"messages": list(k["messages"])})
-        return replies.pop(0)
-
-    Api.messages = block(create=create)
     monkeypatch.setitem(sys.modules, "anthropic", block(AsyncAnthropic=lambda **_: Api(), APIError=RuntimeError))
 
     first = ev.CLIENTS["haiku"]("What does CSC 340 require?", None)
@@ -174,6 +176,9 @@ def test_api_client_runs_the_real_server_and_keeps_the_conversation(ev, monkeypa
     second = ev.CLIENTS["haiku"]("And after that?", first["session"])
     assert second["error"] == "stop_reason: max_tokens" and second["session"] == first["session"]
     assert seen[2]["messages"][0]["content"] == "What does CSC 340 require?"  # the first turn is still there
+
+    replies.append(RuntimeError("overloaded"))  # through MCP's task groups: recorded for --retry, the run goes on
+    assert "overloaded" in ev.CLIENTS["haiku"]("Hello?", None)["error"]
 
 
 def test_approvals_compare_as_sets(ev):

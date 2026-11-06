@@ -63,7 +63,7 @@ GRADE_WORDS = {"I": "I (incomplete)", "W": "W (withdrew)", "WU": "WU (unauthoriz
 WORK = Path(tempfile.gettempdir()) / "gatorpath-evals"  # client cwd + Codex home, outside the repo
 SERVER = {"command": "uv", "args": ["--directory", str(ROOT), "run", "gatorpath"]}
 HAIKU = "claude-haiku-5-5"
-API_ROUNDS = 100  # model calls in one turn; the most any client has needed is under 80 tool calls
+API_ROUNDS = 200  # model calls in one turn; the most any client has needed is 156 tool calls (Codex, 2026-10-21)
 
 
 # ---- profiles and question text ----
@@ -269,10 +269,8 @@ def run_api(model: str, text: str, resume: str | None) -> dict:
 
     try:
         asyncio.run(asyncio.wait_for(loop(), 1800))
-    except (anthropic.APIError, TimeoutError) as e:
-        turn["error"] = f"{type(e).__name__}: {e}"[:500]
-    except TypeError as e:  # the SDK's "Could not resolve authentication method": every session would fail the same way
-        sys.exit(f"no Anthropic credentials for the API client: {e}")
+    except* (anthropic.APIError, TimeoutError) as group:  # * : MCP's task groups wrap what's raised inside the client
+        turn["error"] = repr(group)[:500]
     return turn
 
 
@@ -630,6 +628,12 @@ def main() -> None:
     else:
         if saved.exists():  # load_profile would hand a real student's profile to the eval (golden rule 5)
             sys.exit(f"{saved} exists; move it away before running evals")
+        if "haiku" in clients:  # once here, not 47 failed sessions
+            import anthropic
+            try:
+                anthropic.Anthropic().models.list(limit=1)
+            except (TypeError, anthropic.AuthenticationError) as e:  # TypeError: no credentials at all
+                sys.exit(f"the API client needs ANTHROPIC_API_KEY: {e}")
         setup()
         out_dir = args.into or ROOT / "data/evals" / datetime.now().strftime("%Y%m%d-%H%M%S")
         jobs = [(c, q) for q in questions for c in clients]
