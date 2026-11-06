@@ -1,15 +1,19 @@
 """End-to-end evals (ARCHITECTURE §12, TASKS Phase 7): evals/questions.yaml through real AI clients (Claude Code and
-Codex CLI), each with only the gatorpath MCP server, scored from the transcripts. Facts are computed from the tools at
-scoring time, so nothing expected is written from memory.
+Codex CLI, or a model straight on the API), each with only the gatorpath MCP server, scored from the transcripts. Facts
+are computed from the tools at scoring time, so nothing expected is written from memory.
 
-  uv run python evals/run_evals.py                                  # both clients, every question
+  uv run python evals/run_evals.py                                  # Claude Code + Codex, every question
   uv run python evals/run_evals.py --clients codex --only plan-p03  # a subset
+  uv run --with anthropic python evals/run_evals.py --clients haiku # Haiku on the API (needs ANTHROPIC_API_KEY)
+  uv run python evals/run_evals.py --clients claude-haiku           # Haiku inside Claude Code (its login, no key)
   uv run python evals/run_evals.py --rescore data/evals/<run>       # score saved transcripts again, no client calls
 
 Transcripts go to data/evals/<run>/ (git-ignored; synthetic profiles only), the summary to evals/REPORT.md.
 """
 
 import argparse
+import asyncio
+import functools
 import json
 import os
 import re
@@ -18,11 +22,14 @@ import subprocess
 import sys
 import tempfile
 import time
+import uuid
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 import yaml
+from mcp import Client, StdioServerParameters
 
 ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT / "tests"))
@@ -54,6 +61,9 @@ PREFS = ("include_summer", "include_winter", "max_units_per_term", "graduate_by"
 GRADE_WORDS = {"I": "I (incomplete)", "W": "W (withdrew)", "WU": "WU (unauthorized withdrawal)", "IC": "IC (incomplete charged)",
                "RD": "RD (report delayed)", "RP": "RP (report in progress)", "AU": "AU (audit)"}
 WORK = Path(tempfile.gettempdir()) / "gatorpath-evals"  # client cwd + Codex home, outside the repo
+SERVER = {"command": "uv", "args": ["--directory", str(ROOT), "run", "gatorpath"]}
+HAIKU = "claude-haiku-5-5"
+API_ROUNDS = 100  # model calls in one turn; the most any client has needed is under 80 tool calls
 
 
 # ---- profiles and question text ----
@@ -101,7 +111,9 @@ def render(profile: dict | None, goal: str | None, plan: bool) -> str:
     if profile.get("adt"):
         say.append("I have a verified AS-T (Associate Degree for Transfer) in Computer Science from a California "
                    "community college.")
-    if profile.get("transfer_units"):
+    if profile.get("transfer_units") and profile.get("first_time"):
+        say.append(f"I have {profile['transfer_units']:g} units of AP credit.")
+    elif profile.get("transfer_units"):
         say.append(f"I transferred in with {profile['transfer_units']:g} units.")
     elif profile.get("first_time") is False:
         say.append("I'm a transfer student.")
@@ -156,13 +168,13 @@ def first_message(q: dict, profile: dict | None, paste: bool = True) -> str:
 
 # ---- clients ----
 
-def run_claude(text: str, resume: str | None) -> dict:
+def run_claude(text: str, resume: str | None, model: str | None = None) -> dict:
     cfg = WORK / "claude-mcp.json"
     cmd = ["claude", "-p", text, "--mcp-config", str(cfg), "--strict-mcp-config", "--setting-sources", "project",
            "--tools", "", "--allowedTools", "mcp__gatorpath__*", "--output-format", "stream-json", "--verbose"]
-    out = subprocess.run(cmd + (["--resume", resume] if resume else []), cwd=WORK / "cwd", capture_output=True,
-                         text=True, stdin=subprocess.DEVNULL, timeout=1800)
-    calls, answer, session, by_id, other = [], "", resume, {}, []
+    cmd += (["--resume", resume] if resume else []) + (["--model", model] if model else [])
+    out = subprocess.run(cmd, cwd=WORK / "cwd", capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=1800)
+    calls, answer, session, by_id, other, cost = [], "", resume, {}, [], None
     for line in out.stdout.splitlines():
         e = json.loads(line)
         if e.get("type") == "assistant":
@@ -179,10 +191,10 @@ def run_claude(text: str, resume: str | None) -> dict:
                     c = b["content"]
                     by_id[b["tool_use_id"]]["result"] = "".join(x.get("text", "") for x in c) if isinstance(c, list) else str(c)
         elif e.get("type") == "result":
-            answer, session = e.get("result") or "", e.get("session_id")
+            answer, session, cost = e.get("result") or "", e.get("session_id"), e.get("total_cost_usd")
             if e.get("is_error"):
                 out.returncode = out.returncode or 1  # e.g. "You've hit your session limit"
-    return {"calls": calls, "answer": answer, "session": session, "other_tools": other,
+    return {"calls": calls, "answer": answer, "session": session, "other_tools": other, "cost": cost,
             "error": None if out.returncode == 0 else (out.stderr[-500:] or answer[:500])}
 
 
@@ -218,17 +230,64 @@ def run_codex(text: str, resume: str | None) -> dict:
             "error": failed or (None if out.returncode == 0 else out.stderr[-500:])}
 
 
-CLIENTS = {"claude": run_claude, "codex": run_codex}
+SESSIONS: dict[str, list] = {}  # the API keeps no state: each conversation's messages, for its follow-up
+
+
+def run_api(model: str, text: str, resume: str | None) -> dict:
+    """A bare MCP client on the API: the real server over stdio, its instructions and the date as the whole system
+    prompt, the model's tool calls until it stops. No harness prompt, so the model alone has to follow the tools."""
+    import anthropic  # an eval client, not a project dependency: uv run --with anthropic
+
+    session = resume or uuid.uuid4().hex
+    messages = SESSIONS.setdefault(session, [])
+    messages.append({"role": "user", "content": text})
+    turn = {"calls": [], "answer": "", "session": session, "other_tools": [], "error": None, "usage": Counter()}
+
+    async def loop():
+        async with anthropic.AsyncAnthropic(max_retries=6) as api, Client(StdioServerParameters(**SERVER)) as mcp:
+            tools = [{"name": t.name, "description": t.description, "input_schema": t.input_schema}
+                     for t in (await mcp.list_tools()).tools]
+            system = f"{mcp.instructions}\n\nToday's date is {date.today()}."
+            for _ in range(API_ROUNDS):
+                r = await api.messages.create(model=model, max_tokens=16000, system=system, tools=tools, messages=messages,
+                                              cache_control={"type": "ephemeral"})  # each round re-sends the whole history
+                messages.append({"role": "assistant", "content": r.content})
+                for key in ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"):
+                    turn["usage"][key] += getattr(r.usage, key) or 0
+                if r.stop_reason != "tool_use":
+                    turn["answer"] = "".join(b.text for b in r.content if b.type == "text")
+                    turn["error"] = None if r.stop_reason == "end_turn" else f"stop_reason: {r.stop_reason}"
+                    return
+                results = []
+                for b in (b for b in r.content if b.type == "tool_use"):
+                    res = await mcp.call_tool(b.name, b.input)
+                    out = "".join(x.text for x in res.content if x.type == "text")
+                    turn["calls"].append({"tool": b.name, "args": b.input, "result": out})
+                    results.append({"type": "tool_result", "tool_use_id": b.id, "content": out, "is_error": res.is_error})
+                messages.append({"role": "user", "content": results})
+            turn["error"] = f"no answer after {API_ROUNDS} model calls"
+
+    try:
+        asyncio.run(asyncio.wait_for(loop(), 1800))
+    except (anthropic.APIError, TimeoutError) as e:
+        turn["error"] = f"{type(e).__name__}: {e}"[:500]
+    except TypeError as e:  # the SDK's "Could not resolve authentication method": every session would fail the same way
+        sys.exit(f"no Anthropic credentials for the API client: {e}")
+    return turn
+
+
+CLIENTS = {"claude": run_claude, "codex": run_codex, "haiku": functools.partial(run_api, HAIKU),
+           "claude-haiku": functools.partial(run_claude, model=HAIKU)}
 # Whether the client has MCP prompts. Claude Code does (/mcp__gatorpath__plan_my_degree, stood in for by pasting its
-# text); Codex CLI doesn't (checked 2026-10-29), so its students just ask and it fetches get_planning_steps.
-PROMPTS = {"claude": True, "codex": False}
+# text); Codex CLI doesn't (checked 2026-10-29), so its students just ask and it fetches get_planning_steps. On the API
+# the client decides, and comparing a model with Claude Code means starting the same way.
+PROMPTS = {"claude": True, "codex": False, "haiku": True, "claude-haiku": True}
 
 
 def setup() -> None:
     """A clean client environment: no user plugins, hooks or memory; web search off; only the gatorpath server."""
     (WORK / "cwd").mkdir(parents=True, exist_ok=True)
-    server_cfg = {"command": "uv", "args": ["--directory", str(ROOT), "run", "gatorpath"]}
-    (WORK / "claude-mcp.json").write_text(json.dumps({"mcpServers": {"gatorpath": server_cfg}}))
+    (WORK / "claude-mcp.json").write_text(json.dumps({"mcpServers": {"gatorpath": SERVER}}))
     home = WORK / "codex_home"
     home.mkdir(exist_ok=True)
     if not (home / "auth.json").exists():
@@ -243,7 +302,7 @@ def setup() -> None:
     off = "".join(f"{f} = false\n" for f in ("apps", "browser_use", "browser_use_external", "in_app_browser", "shell_tool",
                                              "skill_search"))
     (home / "config.toml").write_text(f'{model}web_search = "disabled"\n[features]\n{off}[mcp_servers.gatorpath]\n'
-                                      f'command = "uv"\nargs = {json.dumps(server_cfg["args"])}\ntool_timeout_sec = 300\n')
+                                      f'command = "uv"\nargs = {json.dumps(SERVER["args"])}\ntool_timeout_sec = 300\n')
 
 
 # ---- scoring ----
@@ -316,8 +375,10 @@ def profile_diff(expected: dict, got: dict, keys: tuple = RECORD) -> list[str]:
         diffs.append(f"in_progress: {sorted(got.get('in_progress', []))} vs {sorted(expected.get('in_progress', []))}")
     if {str(a).upper() for a in expected.get("ge_done", [])} != {str(a).upper() for a in got.get("ge_done", [])}:
         diffs.append(f"ge_done: {got.get('ge_done', [])} vs {expected.get('ge_done', [])}")
+    unordered = lambda v: {g: sorted(cs) for g, cs in v.items()} if isinstance(v, dict) else v  # approved: a set per group
     for k in keys:
-        if k in expected and got.get(k) != expected[k] and not (k == "transfer_units" and float(got.get(k) or 0) == expected[k]):
+        if k in expected and unordered(got.get(k)) != unordered(expected[k]) \
+                and not (k == "transfer_units" and float(got.get(k) or 0) == expected[k]):
             diffs.append(f"{k}: {got.get(k)!r} vs {expected[k]!r}")
     if first_time(expected) != first_time(got):  # a missing first_time follows the transfer work (§6.2)
         diffs.append(f"first_time: {first_time(got)} vs {first_time(expected)}")
@@ -388,8 +449,9 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
         s["mention_any"] = any(w.lower() in answer.lower() for w in expect["mention_any"])
     # The plan presented: the checked plan the answer lists best (the prompt has clients re-check variants, e.g. with
     # a course taken out to see whether it's optional), the later one on a tie
-    # On a tie in courses (a variant with fewer free-elective units), the one the client's own check_plan passed: the
-    # prompt lets it present only a passing plan. ponytail: courses only; compare per-term units if a tie still misleads
+    # Fewest courses missing from the answer first: a course it only mentions ("MATH 448 needs three prereqs, so I
+    # didn't add it") mustn't make the rejected variant look listed. Then the one the client's own check_plan passed:
+    # the prompt lets it present only a passing plan. ponytail: courses only; compare per-term units if a tie still misleads
     checked = lambda cs: [c for c in cs if c["tool"] == "check_plan" and isinstance(c.get("args"), dict) and "plan" in c["args"]]
     checks = checked(calls) or checked(every)  # a follow-up presents a plan it checked itself, if it checked one
     said = codes_in(answer)
@@ -397,7 +459,7 @@ def score_turn(expect: dict, turn: dict, earlier: list[dict], profile: dict | No
 
     def fit(i):
         codes = set(plan_codes(checks[i]["args"]["plan"]))
-        return len(codes & said) - len(codes - said), passed(checks[i]), i
+        return -len(codes - said), passed(checks[i]), len(codes & said), i
 
     last = checks[max(range(len(checks)), key=fit)]["args"] if checks else None
     if expect.get("plan_valid"):

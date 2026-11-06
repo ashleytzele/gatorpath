@@ -640,3 +640,23 @@ def test_a_permission_the_student_has_counts_and_is_flagged():
     got = server.check_plan(TRANSFER_SENIOR | {"permissions": ["csc 653"]}, plan)
     assert not any(e["error"] == "prereq_not_met" for e in got["errors"])
     assert any(w.startswith("CSC 653: counted the permission the student says") for w in got["warnings"])
+
+
+def test_a_plan_passed_inside_the_profile_counts():
+    """Haiku nests `plan` in profile (a saved profile has one): electives and GE must not silently plan without it."""
+    student = SCENARIOS["CCC transfer from another major"]
+    plan = {"semesters": server.build_plan(student)["semesters"]}
+    term = plan["semesters"][-1]["term"]
+    for tool, args in ((server.list_eligible_electives, {"group_id": "senior_electives", "by_term": term}),
+                       (server.ge_combinations, {})):
+        assert tool(student | {"plan": plan}, **args) == tool(student, plan=plan, **args)
+    assert server.list_eligible_electives(student | {"plan": plan}, "senior_electives", by_term=term) \
+        != server.list_eligible_electives(student, "senior_electives", by_term=term)
+
+
+def test_more_names_what_opens_up_later_in_the_plan():
+    """Asked at a term too early for most electives, the goal's courses must still show up: named, not cut for ranking."""
+    student = SCENARIOS["CCC transfer from another major"]
+    plan = {"semesters": server.build_plan(student)["semesters"]}
+    got = server.list_eligible_electives(student, "senior_electives", plan=plan, by_term=plan["semesters"][1]["term"])
+    assert "CSC 675" in got["more"] and got["options"][-1]["code"] not in got["more"]

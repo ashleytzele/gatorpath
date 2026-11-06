@@ -9,12 +9,13 @@ import subprocess
 from datetime import date
 from functools import cache
 from pathlib import Path
-from typing import NotRequired, TypedDict
+from typing import Annotated, NotRequired, TypedDict
 from urllib.parse import quote
 
 import yaml
 from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
+from pydantic import Field
 
 from gatorpath import db, dpr, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
@@ -51,6 +52,10 @@ mcp = MCPServer(
         "course list is enough to plan from, so don't hold the plan back for a DPR. After a plan passes check_plan, "
         "show its first term's sections (class number, days, times, room, instructor, seats) with get_sections when "
         "that term's schedule is out. "
+        "Build the profile from the student's words, in full from the first call: every course with its grade exactly "
+        "as given (W, I, D and F rows too), the math placement, everything in progress, advisor approvals. Don't fill "
+        "in what they didn't say. first_time means they began college at SF State, not that this is their first term: "
+        "set it only when they say so (false for a transfer student). "
         "Student profiles are passed in per call and never stored, except by save_profile: one file on the student's "
         "machine, only when they ask."
     ),
@@ -78,7 +83,8 @@ class Profile(TypedDict):
     dpr_met: NotRequired[list[str]]
     not_on_dpr: NotRequired[list[str]]
     approved: NotRequired[dict[str, list[str]]]
-    first_time: NotRequired[bool]
+    # In the schema, where the model fills it in: Haiku read the name as "this is their first term" (2026-11-06)
+    first_time: NotRequired[Annotated[bool, Field(description="Began college at SF State, not: this is their first term. Only if they say so.")]]
     ge_certified: NotRequired[bool]
     prior_bachelors: NotRequired[bool]
     transfer_units: NotRequired[float]
@@ -571,13 +577,13 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     limit, without descriptions. When by_term's Class Search schedule is out (schedule_out), each has on_schedule: true
     (a section that term; these come first), false, or "unknown" (its subject wasn't scraped). crosslisted: the same
     class under other codes (one option, not two). Without full, `more` names (code: title) the ones past `limit`
-    that full would add, so a course that fits the goal isn't missed for ranking low.
+    that are ready or open up later in the plan, so a course that fits the goal isn't missed for ranking low.
     """
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
     out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs_for(clean),
-                           normalized_plan(plan), by_term, 10**6)
+                           normalized_plan(plan or profile.get("plan")), by_term, 10**6)
     if "options" in out and full:
         term, cat = out["by_term"], catalog(DB, YEAR)
         has = lambda c: (cat.get(c, {}).get("offered") or {}).get("schedule", {})
@@ -589,7 +595,7 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
         out["options"] = sorted(rows, key=lambda r: r.get("on_schedule") is not True)  # stable: the ranking stays
     elif "options" in out:
         n = max(1, min(limit, 100))
-        if more := {o["code"]: o["title"] for o in out["options"][n:] if o["readiness"] != "blocked"}:
+        if more := {o["code"]: o["title"] for o in out["options"][n:] if o["readiness"] != "blocked" or o.get("ready_by")}:
             out["more"] = more
         desc = db.descriptions(DB, YEAR, [o["code"] for o in out["options"][:n]])
         out["options"] = [o | {"description": desc.get(o["code"]), "offered": offered(o["code"])} for o in out["options"][:n]]
@@ -611,7 +617,8 @@ def ge_combinations(profile: Profile, plan: Plan | None = None, by_term: str | N
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
-    out = cover_combinations(clean, program, university, catalog_for(clean), prereqs_for(clean), normalized_plan(plan), by_term)
+    out = cover_combinations(clean, program, university, catalog_for(clean), prereqs_for(clean),
+                             normalized_plan(plan or profile.get("plan")), by_term)
     for part in [part for way in out.get("ways", []) for part in way["parts"]] + out.get("overlaps", []):
         part["examples"] = [e | {"offered": offered(e["code"])} for e in part["examples"]]
     out["warnings"] = notes + out.get("warnings", []) + [offering_note(DB, YEAR)]
@@ -860,7 +867,7 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
      confirms their DPR lacks, re-run, and tell them to confirm with an advisor.
    - gpa from the DPR; transfer_units; adt: true only for a verified AA-T/AS-T from a California Community College
      in a similar approved major; ge_certified: true for Cal-GETC certification of lower-division GE; first_time:
-     false for transfer students; prior_bachelors: true if they already hold a bachelor's or higher degree from a
+     false for a student who says they transferred, true for a freshman with AP or IB units; prior_bachelors: true if they already hold a bachelor's or higher degree from a
      regionally accredited institution; f1: true for an F-1 visa student.
    - approved: for a group with `approval` (no Bulletin list, an advisor's consent), the courses the DPR lists under
      it or the student says their advisor approved: {{group id: [codes]}}.

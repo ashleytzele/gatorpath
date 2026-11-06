@@ -48,6 +48,8 @@ uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cross
 uv run gatorpath                   # start MCP server (stdio)
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
+uv run --with anthropic python evals/run_evals.py --clients haiku   # Haiku on the API: the bare client, needs ANTHROPIC_API_KEY
+uv run python evals/run_evals.py --clients claude-haiku   # Haiku inside Claude Code: no key, uses its login
 uv run python evals/run_evals.py --clients claude,codex --only plan-p03   # one plan question: seconds, tool calls, tool-result characters (User experience table)
 uv run python evals/plan_review.py # build_plan for every test scenario at 12/15/18/18+summer units
 mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --add-file=data/catalog.db --prefix=gatorpath/ HEAD   # shareable zip (committed code + catalog.db)

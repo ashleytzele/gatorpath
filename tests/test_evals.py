@@ -1,6 +1,7 @@
 """evals/run_evals.py scoring, on canned transcripts (no AI client). Needs the real catalog.db, like the scenario tests."""
 
 import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -133,3 +134,50 @@ def test_a_client_without_prompts_gets_the_students_words_and_must_fetch_the_ste
     table = ev.ux_table({("codex", "a"): asked_back, ("codex", "b"): planned}, ["codex"])
     assert "| Plan in the first reply (nothing asked back) | 1/2 |" in table
     assert "| Median tool calls, plan questions | 1.5 |" in table
+
+
+def test_api_client_runs_the_real_server_and_keeps_the_conversation(ev, monkeypatch):
+    """The model is scripted; the server over stdio, the tool loop and the follow-up are real."""
+    block = lambda **k: types.SimpleNamespace(**k)
+    usage = block(input_tokens=10, cache_creation_input_tokens=0, cache_read_input_tokens=5, output_tokens=2)
+    replies = [block(stop_reason="tool_use", usage=usage, content=[block(type="thinking"), block(type="text", text="Looking."),
+                     block(type="tool_use", id="t1", name="get_course", input={"code": "CSC 340"}),
+                     block(type="tool_use", id="t2", name="get_course", input={"nope": 1})]),
+               block(stop_reason="end_turn", usage=usage, content=[block(type="text", text="Done.")]),
+               block(stop_reason="max_tokens", usage=usage, content=[block(type="text", text="Cut o")])]
+    seen = []
+
+    class Api:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *_):
+            pass
+
+        messages = block(create=None)
+
+    async def create(**k):
+        seen.append(k | {"messages": list(k["messages"])})
+        return replies.pop(0)
+
+    Api.messages = block(create=create)
+    monkeypatch.setitem(sys.modules, "anthropic", block(AsyncAnthropic=lambda **_: Api(), APIError=RuntimeError))
+
+    first = ev.CLIENTS["haiku"]("What does CSC 340 require?", None)
+    assert first["error"] is None and first["answer"] == "Done." and first["usage"]["input_tokens"] == 20
+    assert [c["tool"] for c in first["calls"]] == ["get_course", "get_course"]
+    assert '"code":"CSC 340"' in first["calls"][0]["result"] and "Field required" in first["calls"][1]["result"]
+    assert "check_plan" in {t["name"] for t in seen[0]["tools"]} and "SF State degree-planning tools" in seen[0]["system"]
+    sent = seen[1]["messages"][-1]["content"]  # both results in one user message, the bad call flagged
+    assert [r["is_error"] for r in sent] == [False, True]
+
+    second = ev.CLIENTS["haiku"]("And after that?", first["session"])
+    assert second["error"] == "stop_reason: max_tokens" and second["session"] == first["session"]
+    assert seen[2]["messages"][0]["content"] == "What does CSC 340 require?"  # the first turn is still there
+
+
+def test_approvals_compare_as_sets(ev):
+    student = {"program": "bs-applied-math", "catalog_year": "2026-27", "approved": {"application_electives": ["PHYS 320", "ECON 312"]}}
+    flipped = student | {"approved": {"application_electives": ["ECON 312", "PHYS 320"]}}
+    assert ev.profile_diff(student, flipped) == []
+    assert ev.profile_diff(student, student | {"approved": {"application_electives": ["PHYS 320"]}})
