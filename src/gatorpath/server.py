@@ -23,7 +23,7 @@ from gatorpath.engine.planner import compare_programs as engine_compare_programs
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import TERM, cover_combinations, eligible_options, pick_sections, see_advisor
 from gatorpath.engine.prereq import granted, prereq_chain, prereq_warnings, reverse_index
-from gatorpath.engine.rules import RULES_DIR, audit, first_time, load_rules, min_grade_of, number, translate_ge
+from gatorpath.engine.rules import RULES_DIR, area_groups, audit, first_time, load_rules, min_grade_of, number, translate_ge
 
 # Requirements follow the student's catalog year (rules/<kind>/<year>/); course facts are the newest Bulletin's (D23).
 YEARS = sorted(p.stem for p in (RULES_DIR / "university").glob("*.yaml"))
@@ -384,8 +384,7 @@ def prepare(profile: dict, university: dict, year: str = YEAR) -> tuple[dict, li
     ge_done, ge_warnings = translate_ge(profile.get("ge_done", []), university)
     # not_on_dpr: group ids, or GE areas in the DPR's or this Bulletin's codes ("6", "F", "Area 6")
     groups = {g["id"]: g for g in university["groups"]}
-    by_area = {str(a): gid for gid, g in groups.items() if isinstance(g.get("from"), dict) and "ge_area" in g["from"]
-               for a in ([g["from"]["ge_area"]] if not isinstance(g["from"]["ge_area"], list) else g["from"]["ge_area"])}
+    by_area = area_groups(university)
     left_out = []
     for x in profile.get("not_on_dpr", []):
         if str(x) in groups or str(x) in {g["id"] for g in load_rules(year, profile["program"])[0]["groups"]}:

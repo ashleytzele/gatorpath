@@ -8,9 +8,10 @@ grade means in progress, "Fall, Spring" in the When column means a course that m
 
 import re
 import subprocess
+from collections import Counter
 from pathlib import Path
 
-from gatorpath.engine.rules import GRADE_SYMBOLS, translate_ge
+from gatorpath.engine.rules import GRADE_SYMBOLS, area_groups, translate_ge
 
 CODE = r"[A-Z]{1,5}(?: [A-Z]{1,3})? \d{2,3}[A-Z]{0,4}"  # 'MATH 226', 'CSC 300GW', 'COMM 100TR', 'TRFX 50NTR'
 COURSE_TITLE = re.compile(rf"[A-Z]{{1,5}}(?: [A-Z]{{1,3}})? \d{{3}}[A-Z]{{0,3}}(?: (?:and|or|,) [A-Z]{{1,5}}(?: [A-Z]{{1,3}})? \d{{3}}[A-Z]{{0,3}})*")
@@ -112,15 +113,15 @@ def to_profile(dpr: dict, min_grade: dict[str, str], units: dict[str, float]) ->
     requirement is a substitution (dpr_met)."""
     completed: dict[tuple, dict] = {}
     in_progress: list[str] = []
-    ge_done, dpr_met, warnings, transfer = [], [], [], {}
+    ge_done, dpr_met, warnings = [], [], []
     assumed, notes = [], set()
     for b in dpr["requirements"]:
         for r in b["rows"]:
             if r["notes"]:
                 notes.add(r["notes"])
             if r["transfer"]:
-                transfer[(r["code"], r["term"])] = r["units"]
-            elif r["grade"]:
+                continue
+            if r["grade"]:
                 completed.setdefault((r["code"], r["term"]), {"code": r["code"], "grade": r["grade"]}
                                      | ({"term": r["term"]} if r["term"] else {}))
             elif r["term"] and r["code"] not in in_progress:
@@ -152,7 +153,7 @@ def to_profile(dpr: dict, min_grade: dict[str, str], units: dict[str, float]) ->
     if notes:
         warnings.append(f"DPR Notes codes {', '.join(sorted(notes))} have no legend in the print; ask the Registrar or "
                         "an advisor what they mean")
-    transfer_units = sum(transfer.values())
+    transfer_units = count_transfer_units(dpr["requirements"])
     if transfer_units:
         warnings.append(f"{transfer_units:g} transfer units counted from the transfer rows this DPR lists under requirements; if "
                         "you have more (your transcript's Transfer Totals), use that total for transfer_units")
@@ -161,6 +162,15 @@ def to_profile(dpr: dict, min_grade: dict[str, str], units: dict[str, float]) ->
     return {"catalog_year": dpr["catalog_term"], "completed": list(completed.values()), "in_progress": in_progress,
             "ge_done": ge_done, "dpr_met": dpr_met, "transfer_units": transfer_units,
             **({"gpa": dpr["gpa"]} if dpr["gpa"] is not None else {}), "remaining": remaining, "warnings": warnings}
+
+
+def count_transfer_units(requirements: list[dict]) -> float:
+    """Each transfer course once. A row repeats across lists, but codes are generic (MATH 100TR), so two rows in one
+    list, or under two course requirements, are two courses. ponytail: a truncated list can still hide one."""
+    rows = lambda b: Counter((r["code"], r["term"], r["units"]) for r in b["rows"] if r["transfer"])
+    lists = [rows(b) for b in requirements]
+    under_courses = sum((rows(b) for b in requirements if b["kind"] == "course"), Counter())
+    return sum(key[2] * max(under_courses[key], *(c[key] for c in lists)) for key in set().union(*lists))
 
 
 def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
@@ -173,8 +183,7 @@ def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
     for g in audit["groups"]:
         code_status |= {c: "in_progress" for c in g.get("in_progress", []) if c not in code_status}
         code_status |= {c: "done" for c in g.get("counted", [])}
-    by_area = {str(a): g["id"] for g in university["groups"] if isinstance(g.get("from"), dict) and "ge_area" in g["from"]
-               for a in (g["from"]["ge_area"] if isinstance(g["from"]["ge_area"], list) else [g["from"]["ge_area"]])}
+    by_area = area_groups(university)
     out, seen = [], set()
     for b in dpr["requirements"]:
         if b["status"] in ("info", "waived", "collapsed"):

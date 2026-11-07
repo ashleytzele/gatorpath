@@ -89,6 +89,14 @@ def first_time(profile: dict) -> bool:
     return bool(profile.get("first_time")) or not transfer
 
 
+def area_groups(university: dict) -> dict[str, str]:
+    """{GE area: the group that is that area}. A group over several areas (Area C's 9 units over C1 and C2) only answers
+    for an area nothing has to itself: its status says nothing about one area."""
+    groups = [g for g in university["groups"] if isinstance(g.get("from"), dict) and "ge_area" in g["from"]]
+    return {str(a): g["id"] for g in sorted(groups, key=lambda g: not isinstance(g["from"]["ge_area"], list))
+            for a in (g["from"]["ge_area"] if isinstance(g["from"]["ge_area"], list) else [g["from"]["ge_area"]])}
+
+
 def amended(g: dict) -> dict:
     """The group with its `amendments` applied: changes after the Bulletin was published, each citing its memo (§6.2)."""
     for a in g.get("amendments", []):

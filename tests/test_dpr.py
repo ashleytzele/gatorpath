@@ -7,6 +7,7 @@ import pytest
 
 from gatorpath import dpr
 from gatorpath.dpr import cross_check, parse, to_profile
+from gatorpath.engine.rules import load_rules
 
 DPR = parse((Path(__file__).parent / "fixtures/dpr_synthetic.txt").read_text())
 by_title = {r["title"]: r for r in DPR["requirements"] if r["kind"] != "group"}
@@ -177,3 +178,37 @@ def pdf_of(text: str) -> bytes:
 @pytest.mark.skipif(not shutil.which("pdftotext"), reason="poppler not installed")
 def test_read_pdf_bytes_reads_over_stdin():
     assert "Degree Progress Report" in dpr.read_pdf_bytes(pdf_of("Degree Progress Report"))
+
+
+def block(title, kind, status="done", rows=()):
+    return {"id": title, "title": title, "kind": kind, "status": status, "rows": list(rows), "needed": None, "waived": None}
+
+
+def transfer_row(code, units, term=None):
+    return {"code": code, "units": units, "term": term, "grade": "T", "notes": None, "designation": None,
+            "transfer": True, "option": term is None}
+
+
+def test_a_dpr_area_is_compared_with_its_own_requirement_not_the_combined_one():
+    """Area C has C1, C2 and a 9-unit group over both: a done C1 is measured against C1, or it can never match."""
+    _, university = load_rules("2024-25", "bs-cs")
+    print_ = {"requirements": [block("Area C1 - Arts", "ge"), block("Area C2 - Humanities", "ge")]}
+    audit = {"groups": [{"id": "ge_c1", "status": "satisfied"}, {"id": "ge_c2", "status": "satisfied"},
+                        {"id": "ge_c", "status": "in_progress"}], "totals": {}}
+    assert not any("Area C" in w for w in cross_check(print_, audit, university))
+    audit["groups"][0]["status"] = "remaining"  # a real disagreement still shows
+    assert any(w.startswith("Area C1") for w in cross_check(print_, audit, university))
+
+
+def test_transfer_units_count_each_course_once_but_never_merge_two_courses():
+    """Every transfer course has a generic code, so MATH 100TR can be two courses, and one row repeats across lists."""
+    calc1, calc2, cs = [block(t, "course", rows=[transfer_row(c, u)])
+                        for t, c, u in (("MATH 226", "MATH 100TR", 4.0), ("MATH 227", "MATH 100TR", 4.0), ("CSC 101", "CSC 100TR", 3.0))]
+    wanted = {"MATH 226": "C-", "MATH 227": "C-", "CSC 101": "C-"}
+    units = {"MATH 226": 4.0, "MATH 227": 4.0, "CSC 101": 3.0}
+    profile = lambda *blocks: to_profile({"requirements": list(blocks), "catalog_term": "Spring 2025", "gpa": None}, wanted, units)
+    assert profile(calc1, calc2, cs)["transfer_units"] == 11
+    summary = block("Courses Completed / In-Progress", "other", "info", [transfer_row("MATH 100TR", 4.0), transfer_row("CSC 100TR", 3.0)])
+    assert profile(calc1, cs, summary)["transfer_units"] == 7  # the same rows again, in a summary list
+    both = block("Courses Completed / In-Progress", "other", "info", [transfer_row("ENG 100TR", 3.0), transfer_row("ENG 100TR", 3.0)])
+    assert profile(both)["transfer_units"] == 6  # two rows in one list are two courses

@@ -663,7 +663,8 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
             Choose <b>Degree Progress Report</b>
           </li>
           <li>
-            Click <b>Expand All</b>, then Print → Save as PDF
+            Click <b>Expand All</b>, then <b>View All</b> on every list that has it, then Print → Save
+            as PDF
           </li>
         </ol>
         <div className="shot-row">
@@ -671,7 +672,7 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
             <div className="shot" key={n}>
               <span>{n}</span>
               <div />
-              <small>{n === 1 ? "Open DPR" : n === 2 ? "Expand All" : "Save PDF"}</small>
+              <small>{n === 1 ? "Open DPR" : n === 2 ? "Expand All, View All" : "Save PDF"}</small>
             </div>
           ))}
         </div>
