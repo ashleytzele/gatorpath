@@ -848,7 +848,10 @@ chooses from the same options.
   and GPA don't go: results lose every GPA key (`hide`), a quoted grade or GPA is scrubbed (`scrub`), and a grade reaches
   the model only if the student types one.
 - A failed call changes nothing. History and message length are capped, and one request stops at 40 model calls.
-  ponytail: no per-student rate limit or spend cap, needed before this is on a public host.
+  Limits until there are accounts: one address gets `GATORPATH_AI_PER_HOUR` requests an hour (30), everyone together
+  `GATORPATH_AI_PER_DAY` a day (2000); past either the route says when to come back, and planning goes on without AI.
+  The Anthropic console's spend limit is the last word. ponytail: counted in memory in one process; accounts (an
+  @sfsu.edu one-time code, a daily quota each) before a public host.
 
 ## 8. Planner algorithm (`engine/planner.py`)
 

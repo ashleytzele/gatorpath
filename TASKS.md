@@ -77,7 +77,11 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   your DPR** and a bullet for each that changes something, in plain words. Replies are structured: an opening line,
   bold labels, bullets; the page renders that light markdown (`Rich`, no HTML injected). Without an API key they
   aren't said anywhere
-- [ ] Before a public host: a per-student rate limit and a spend cap on `/api/assist`
+- [x] Limits on `/api/assist` (2026-11-07): 30 requests an hour per address, 2000 a day for everyone
+  (`GATORPATH_AI_PER_HOUR`, `GATORPATH_AI_PER_DAY`); a refusal says when to come back, planning goes on without AI
+- [ ] A spend limit on the Anthropic API key's workspace (the console, not code): the owner sets it
+- [ ] Before a public host: accounts for the AI helper (an @sfsu.edu one-time code), a daily quota each, and the
+  privacy note updated (emails and counters only). Needs a host and an email provider first
 - [x] DPR import finds any major by its Bulletin title ("Public Health-BS" → "Bachelor of Science in Public Health"),
   `dpr_plan` still first (2026-11-07, a real Public Health print). Found with it: "Courses Required = 2 Courses" read as a
   title (a met area called collapsed), "X or Y" checked as both, and one View All line per cut list

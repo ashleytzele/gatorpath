@@ -2,6 +2,13 @@
 lives here. Nothing is stored or logged: an upload stays in memory, and no student data goes in a URL. /api/assist is
 the one route with an LLM behind it (assistant.py); everything else is deterministic."""
 
+import math
+import os
+import threading
+import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Literal, TypedDict
 
@@ -21,6 +28,52 @@ MultiPartParser.spool_max_size = MAX_PDF + 1  # Starlette writes past 1 MB to a 
 DIST = Path(__file__).parents[2] / "web/dist"
 
 app = FastAPI(title="GatorPath")
+
+# The AI helper costs money per request; nothing else here does. Until there are accounts, one address gets PER_HOUR
+# requests in any hour, and everyone together PER_DAY, set where it runs. The Anthropic console's spend limit stays the
+# last word.
+PER_HOUR = int(os.environ.get("GATORPATH_AI_PER_HOUR", 30))
+PER_DAY = int(os.environ.get("GATORPATH_AI_PER_DAY", 2000))
+
+
+@dataclass
+class Usage:
+    """ponytail: in memory and per process, lost on restart; a shared store, or accounts, once the site runs on more
+    than one process or host."""
+    day: date | None = None
+    today: int = 0
+    recent: dict[str, deque] = field(default_factory=lambda: defaultdict(deque))
+    lock: threading.Lock = field(default_factory=threading.Lock)
+
+
+used = Usage()
+
+
+def address(request: Request) -> str:
+    """Who's asking. ponytail: behind a proxy this is the proxy, unless uvicorn runs with --proxy-headers and
+    --forwarded-allow-ips set to it"""
+    return request.client.host if request.client else "unknown"
+
+
+def admit(who: str) -> None:
+    """Counts one AI request, or refuses it with 429 and when to come back. Planning never comes through here."""
+    now, today = time.time(), date.today()
+    with used.lock:
+        if used.day != today:
+            used.day, used.today = today, 0
+            used.recent.clear()  # a new day: yesterday's addresses go, so the table can't grow without end
+        times = used.recent[who]
+        while times and now - times[0] > 3600:
+            times.popleft()
+        if used.today >= PER_DAY:
+            raise HTTPException(429, "The AI helper has reached today's limit for everyone. It's back tomorrow; "
+                                     "planning, your schedule and the course lists work without it.")
+        if len(times) >= PER_HOUR:
+            wait = math.ceil((3600 - (now - times[0])) / 60)
+            raise HTTPException(429, f"You've asked the AI helper {PER_HOUR} times this hour. Try again in {wait} "
+                                     f"minute{'s' if wait != 1 else ''}; planning works without it.")
+        times.append(now)
+        used.today += 1
 
 
 class Options(TypedDict, total=False):
@@ -87,12 +140,13 @@ def electives(profile: Profile = Body(), requirement: str = Body(), plan: Plan |
 
 
 @app.post("/api/assist")
-def assist(profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = Body(default=[]),
+def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = Body(default=[]),
            messages: list[Message] = Body(default=[]), sections: dict[str, list[str]] = Body(default={}),
            notes: list[str] = Body(default=[])) -> dict:
     """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py).
     sections: {term: [class_nbr]} the student chose on the Schedule, which the chat can change too. notes: what the DPR
     import found, said in the first reply."""
+    admit(address(request))
     try:
         return assistant.ask(profile, plan, picks, messages, sections, [n[:LONGEST_NOTE] for n in notes[:12]])
     except assistant.NotConnected as e:

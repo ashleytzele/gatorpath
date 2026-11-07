@@ -142,3 +142,23 @@ def test_the_preview_bars_stay_behind_demo():
     bars = [m.start() for m in re.finditer(r'variant-switcher|demo-error|Preview goal options', APP)]
     assert len(bars) == 4
     assert all("{DEMO && (" in APP[max(0, at - 250):at] for at in bars)
+
+
+# ---- /api/assist: how much one address, and everyone, can ask of the AI ----
+
+def test_the_ai_helper_has_an_hourly_limit_per_address_and_a_daily_one_for_everyone(monkeypatch):
+    monkeypatch.setattr(api.assistant, "ask", lambda *a: {"reply": "ok"})
+    monkeypatch.setattr(api, "PER_HOUR", 3)
+    monkeypatch.setattr(api, "PER_DAY", 5)
+    monkeypatch.setattr(api, "used", api.Usage())
+    ask = lambda who="1.1.1.1": client.post("/api/assist", json={"profile": STUDENT, "plan": {"semesters": []}},
+                                         headers={"X-Test-Client": who})
+    monkeypatch.setattr(api, "address", lambda request: request.headers.get("X-Test-Client", "?"))
+    assert [ask().status_code for _ in range(3)] == [200, 200, 200]
+    over = ask()
+    assert over.status_code == 429 and "this hour" in over.json()["detail"] and "minute" in over.json()["detail"]
+    assert ask("2.2.2.2").status_code == 200 and ask("3.3.3.3").status_code == 200  # someone else: their own hour
+    full = ask("4.4.4.4")  # 5 today, from everyone
+    assert full.status_code == 429 and "today" in full.json()["detail"] and "planning" in full.json()["detail"]
+    assert client.post("/api/plan", json={"profile": STUDENT}).status_code == 200  # planning isn't limited
+

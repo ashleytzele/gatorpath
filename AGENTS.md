@@ -49,6 +49,7 @@ uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cross
 uv run gatorpath                   # start MCP server (stdio)
 (cd web && npm install && npm run build) && uv run gatorpath-web   # the website + /api on http://127.0.0.1:8000
 ANTHROPIC_API_KEY=... uv run gatorpath-web   # the same, with the AI helper (auto-fill and chat); without a key the site still plans
+GATORPATH_AI_PER_HOUR=30 GATORPATH_AI_PER_DAY=2000 ANTHROPIC_API_KEY=... uv run gatorpath-web   # the AI helper's limits (these are the defaults)
 uv run gatorpath-web & (cd web && npm run dev)   # frontend work: Vite on :5173 proxies /api to :8000
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
