@@ -232,6 +232,11 @@ def test_collapsed_requirements_are_flagged_not_missing():
     collapsed = [r["title"] for r in got["requirements"] if r["status"] == "collapsed"]
     assert collapsed == ["Area 1A: English Composition", "Area 1B: Critical Thinking", "PSY 200"]
     assert any("Expand All" in w and "Area 1A" in w for w in got["warnings"])
+    # A requirement prints collapsed once it's complete (the same student's print with and without Expand All, 26 of 26),
+    # so it counts as done: what's left is what the DPR shows open
+    profile = to_profile(got, {}, {})
+    assert profile["ge_done"][:2] == ["Area 1A: English Composition", "Area 1B: Critical Thinking"]
+    assert profile["dpr_met"] == ["PSY 200"] and "Area 3UD: Arts or Humanities" not in profile["ge_done"]
     from gatorpath.engine.rules import load_rules
     _, university = load_rules("2026-27", "bs-cs")
     audit = {"groups": [{"id": "ge_3ud", "status": "in_progress"}], "totals": {"units": {"value": 0.0}}}

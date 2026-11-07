@@ -187,8 +187,8 @@ def evaluate(e: dict | None, ctx: dict) -> tuple[str, list[str]]:
                 return NO, [f"{c} with {e['min_grade']} or better (have {g})"]
             return OK, []
         if c in ctx["profile"].get("dpr_met", ()):
-            return UNVERIFIED, [f"{c}, which your DPR shows met by a substitution; ask the instructor whether that "
-                                "counts for this prerequisite"]
+            return UNVERIFIED, [f"{c}, which your DPR shows met without its grade (a substitution, or a section printed "
+                                "collapsed); check that it counts for this prerequisite"]
         when = " (or the same term)" if e.get("concurrent_ok") else ""
         return NO, [f"{c}{' with ' + e['min_grade'] + ' or better' if 'min_grade' in e else ''} before this term{when}"]
     if "ge_area" in e:

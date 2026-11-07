@@ -740,7 +740,7 @@ def test_a_dpr_substitution_is_unverified_for_prereqs_not_blocked():
     from gatorpath.engine.planner import UNVERIFIED, evaluate
     ctx = {"done": set(), "grades": {}, "same_term": set(), "profile": {"dpr_met": ["MATH 225"]}}
     state, why = evaluate({"course": "MATH 225", "min_grade": "C"}, ctx)
-    assert state == UNVERIFIED and why[0].startswith("MATH 225, which your DPR shows met by a substitution")
+    assert state == UNVERIFIED and why[0].startswith("MATH 225, which your DPR shows met without its grade")
 
 
 def test_ge_combinations_list_every_minimal_way():

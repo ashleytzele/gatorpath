@@ -25,6 +25,10 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   three false disagreements fixed. An area was compared with the combined Area C group, UD areas weren't read as GE
   ("UD-B: …" has no "Area"), and transfer courses sharing a generic code merged. A GE area truly absent from a DPR still
   shows, as it should. Keep real DPRs out of iCloud folders (Desktop, Documents)
+- [x] A requirement printed collapsed (no Expand All) counts as complete (2026-11-07): the same student's print with and
+  without Expand All, 26 collapsed and all 26 done. GE areas go in ge_done, course requirements in dpr_met unless the
+  course shows elsewhere. The unexpanded print now gives the same audit and plan as the expanded one (it planned
+  MATH 225-227, CSC 101 and nine GE areas again). ponytail: a collapsed "X or Y" isn't counted yet
 - [x] A print with lists cut at 10 rows (View All off): its unit totals now come from the DPR's own lines
   (`dpr_unit_offsets`), and a requirement's courses show under the requirement anyway. Not yet tried: a print with View
   All on every list, to confirm nothing else hides

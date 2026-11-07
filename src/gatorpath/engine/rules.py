@@ -273,8 +273,8 @@ def eval_group(g: dict, kind: str, taken: dict, profile: dict, catalog: dict, cl
         # MATH 225, or an exception). One student's record, never a rule; prereqs still need the real course.
         met = [c for c in g["all_of"] if c in profile.get("dpr_met", ()) and not ok(c)]
         for c in met:
-            warnings.append(f"{c}: counted for {out['title']} because the DPR shows it met (substitution or "
-                            f"exception); GatorPath can't verify that ({g['source']})")
+            warnings.append(f"{c}: counted for {out['title']} because the DPR shows it met (a substitution, an "
+                            f"exception, or a section printed collapsed); GatorPath can't see the grade ({g['source']})")
         done = [c for c in g["all_of"] if ok(c) or c in met]
         prog = [c for c in g["all_of"] if c not in done and c in in_progress and free(c)]
         left = [c for c in g["all_of"] if c not in done and c not in prog]

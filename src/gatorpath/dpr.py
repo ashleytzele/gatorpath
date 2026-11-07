@@ -111,9 +111,8 @@ def parse(text: str) -> dict:
                                "check that the counters show every course, and print again. Until then a course that is only "
                                "on those lists is missing")
     if folded := [b["title"] for b in out["requirements"] if b["status"] == "collapsed"]:
-        out["warnings"].append(f"Collapsed in this print, so their courses don't show: {', '.join(folded)}. Click Expand "
-                               "All above the Degree Progress Report (and View All on long lists), print to PDF again and "
-                               "import that one; until then GatorPath can't count them as met")
+        out["warnings"].append(f"Collapsed in this print: {', '.join(folded)}. A requirement prints collapsed once it's "
+                               "complete, so these count as done; Expand All before printing shows their courses and grades")
     return out
 
 
@@ -138,7 +137,7 @@ def to_profile(dpr: dict, min_grade: dict[str, str], units: dict[str, float]) ->
                                      | ({"term": r["term"]} if r["term"] else {}))
             elif r["term"] and r["code"] not in in_progress:
                 in_progress.append(r["code"])
-        if b["kind"] == "ge" and b["status"] == "done":
+        if b["kind"] == "ge" and b["status"] in ("done", "collapsed"):  # collapsed: complete, rows not printed
             ge_done.append(b["title"])
         for r in b["rows"]:
             for part in (r["designation"] or "").removeprefix("GE ").split("/"):
@@ -159,6 +158,13 @@ def to_profile(dpr: dict, min_grade: dict[str, str], units: dict[str, float]) ->
         subs = [r for r in b["rows"] if r["grade"] and not r["transfer"] and r["code"] not in wanted]
         if subs and open_codes:
             dpr_met += [c for c in open_codes if c not in dpr_met]
+    # A course requirement printed collapsed is complete, but its row (grade, term) isn't on the print: unless the course
+    # shows in another list, it counts as met the way a substitution does. ponytail: "X or Y" can't say which, so not yet
+    have = {code for code, _ in completed} | set(in_progress)
+    for b in dpr["requirements"]:
+        if b["kind"] == "course" and b["status"] == "collapsed" and " or " not in b["title"]:
+            dpr_met += [c for c in re.findall(r"[A-Z]{1,5}(?: [A-Z]{1,3})? \d{3}[A-Z]{0,3}", b["title"])
+                        if c not in have and c not in dpr_met]
     if assumed:
         warnings.append("Met by transfer credit on the DPR (it prints only T, not the other school's grade), recorded at "
                         f"each requirement's minimum: {', '.join(assumed)}. Give the real grades if you know them")
