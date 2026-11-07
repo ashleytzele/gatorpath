@@ -20,3 +20,7 @@ web/dist/
 
 # macOS
 .DS_Store
+
+# design tool (impeccable): its cache; critiques in .impeccable/critique are kept
+.impeccable/hook.cache.json
+.impeccable/live/
