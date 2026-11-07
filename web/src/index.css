@@ -3962,3 +3962,14 @@ p, li, small { text-wrap: pretty; }
   font-size: 13px;
   color: var(--muted);
 }
+
+/* The day labels sit over their own columns: the body is a 54px time column and five days */
+.calendar-card .calendar-head {
+  margin-left: 0;
+  padding: 12px 0;
+  grid-template-columns: 54px repeat(5, 1fr);
+  text-align: center;
+}
+.warning-card.collapsible {
+  align-self: start;
+}

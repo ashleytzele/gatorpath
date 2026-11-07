@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   buildPlan,
   checkPlan,
+  EngineError,
   getAudit,
   getCourse,
   getElectives,
@@ -364,7 +365,6 @@ function Footer() {
       <a href={NAVIGATOR} target="_blank" rel="noreferrer">
         Talk to an advisor in Navigator
       </a>
-      .
     </footer>
   );
 }
@@ -593,7 +593,8 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
     try {
       onSuccess(await importDpr(file));
     } catch (e) {
-      fail(message(e));
+      const unreadable = e instanceof EngineError && e.code === "unreadable_pdf";
+      fail(unreadable ? "We couldn’t read that file. Is it your DPR, saved as a PDF?" : message(e));
     }
   };
   return (
@@ -952,8 +953,8 @@ function ReviewScreen({
     const uni = universityGroups(a);
     const met = uni.filter(isDone).length;
     const todo = uni.filter((g) => !isDone(g));
-    const attention = [...(imported?.cross_check ?? []), ...(imported?.warnings ?? [])];
-    const gpa = a.totals.gpa_sf_state?.value;
+    const attention = [...new Set([...(imported?.cross_check ?? []), ...(imported?.warnings ?? [])])];
+    const gpa = profile.gpa ?? a.totals.gpa_sf_state?.value; // the DPR's, when there is one
     return (
       <>
         <div className="summary-card">
@@ -978,7 +979,7 @@ function ReviewScreen({
           {!!gpa && (
             <div>
               <small>GPA</small>
-              <b>{gpa.toFixed(2)}</b>
+              <b>{gpa}</b>
             </div>
           )}
         </div>
@@ -1488,6 +1489,7 @@ const unitsOf = (c: string | Slot, info: Record<string, CourseInfo>) =>
   isSlot(c) ? c.units : parseFloat(String(info[c]?.units)) || 0;
 const termUnits = (s: Semester, info: Record<string, CourseInfo>) =>
   s.courses.reduce((total, c) => total + unitsOf(c, info), 0);
+const unitText = (units?: number | string) => `${units} ${Number(units) === 1 ? "unit" : "units"}`;
 const slotLabel = (slot: Slot, audit: Audit) =>
   slot.slot === "elective"
     ? "Free elective: any course"
@@ -1886,7 +1888,7 @@ function PlanView({
                         <h3>{termLabel(s.term)}</h3>
                       </div>
                       <p>
-                        {termUnits(s, info)} units <i>·</i> {count} {count === 1 ? "course" : "courses"}
+                        {unitText(termUnits(s, info))} <i>·</i> {count} {count === 1 ? "course" : "courses"}
                         {ti >= 2 && (
                           <small>
                             {" "}
@@ -1912,7 +1914,7 @@ function PlanView({
                               <Icon name="book" size={12} /> Bulletin p.{info[code]?.source_page}
                             </em>
                           </span>
-                          <i>{info[code]?.units} units</i>
+                          <i>{unitText(info[code]?.units)}</i>
                           <Icon name="chevron" size={15} />
                         </button>
                       ))}
@@ -1928,7 +1930,11 @@ function PlanView({
                           </span>
                           <div>
                             <b>{slotLabel(slot, audit)}</b>
-                            <small>Open choice · {slot.units} units</small>
+                            <small>
+                              {slot.units
+                                ? `Open choice · ${unitText(slot.units)}`
+                                : "A course you pick for another requirement can cover this"}
+                            </small>
                           </div>
                           <strong>
                             Choose <Icon name="arrow" size={14} />
@@ -2172,8 +2178,8 @@ function ChoiceRequirementRows({
 }) {
   return (
     <div className="choice-requirements">
-      {rows.map((r) => (
-        <div className="choice-requirement-row" key={`${r.id}-${r.term}-${r.pick?.code ?? r.units}`}>
+      {rows.map((r, i) => (
+        <div className="choice-requirement-row" key={`${r.id}-${r.term}-${i}`}>
           <div>
             <span>{r.id === "elective" ? "Any course" : "Requirement"}</span>
             <b>{r.title}</b>
@@ -2185,8 +2191,8 @@ function ChoiceRequirementRows({
             {!!r.pick?.covers.length && <em>Counts twice</em>}
           </div>
           <div className="alternative-choices">
-            <small>Bulletin</small>
-            <span>{audit.groups.find((g) => g.id === r.id)?.source ?? `${r.units} units`}</span>
+            <small>{r.id === "elective" ? "Units" : "Bulletin"}</small>
+            <span>{audit.groups.find((g) => g.id === r.id)?.source ?? r.units}</span>
           </div>
           <button
             onClick={() =>
@@ -2288,7 +2294,7 @@ function ElectivesView({
         </SectionCard>
       )}
       {!rows.length && <p className="still-to-do">Nothing left to choose in this plan.</p>}
-      <details className="already-done">
+      {!!done.length && <details className="already-done">
         <summary>
           <span>
             <Icon name="check" /> Already done
@@ -2303,7 +2309,7 @@ function ElectivesView({
             See completed requirements in Progress <Icon name="arrow" size={14} />
           </button>
         </div>
-      </details>
+      </details>}
     </div>
   );
 }
@@ -2606,11 +2612,23 @@ function ScheduleView({
               );
             })}
           </div>
-          {r.warnings.map((w) => (
-            <div className="schedule-note" key={w}>
-              <Icon name="clock" /> {w}
+          {r.scraped_at && (
+            <div className="schedule-note">
+              <Icon name="clock" /> Seats and rooms as of {new Date(r.scraped_at).toLocaleDateString()}.
+              Confirm in{" "}
+              <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
+                Class Search
+              </a>{" "}
+              before registering.
             </div>
-          ))}
+          )}
+          {r.warnings
+            .filter((w) => !w.startsWith("Class Search as of"))
+            .map((w) => (
+              <div className="schedule-note" key={w}>
+                <Icon name="warning" /> {w}
+              </div>
+            ))}
         </>
       )}
     </div>
@@ -2714,7 +2732,7 @@ function OptionCard({
             {o.code} · {o.title}
           </b>
           <small>
-            {o.units} units · Bulletin p.{o.source_page}
+            {unitText(o.units)} · Bulletin p.{o.source_page}
           </small>
         </div>
         <StatusBadge type={o.readiness === "ready" ? "ready" : "warning"}>

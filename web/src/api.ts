@@ -172,7 +172,14 @@ export type Sections = {
   warnings: string[];
 };
 
-class EngineError extends Error {}
+export class EngineError extends Error {
+  constructor(
+    text: string,
+    readonly code: string,
+  ) {
+    super(text);
+  }
+}
 
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
@@ -187,7 +194,7 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
       typeof body?.detail === "string" ? body.detail : "Something went wrong on our side. Try again.",
     );
   }
-  if (body?.error) throw new EngineError(body.warnings?.join(" ") || String(body.error));
+  if (body?.error) throw new EngineError(body.warnings?.join(" ") || String(body.error), String(body.error));
   return body;
 }
 
