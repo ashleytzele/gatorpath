@@ -653,8 +653,6 @@ def test_a_plan_passed_inside_the_profile_counts():
     for tool, args in ((server.list_eligible_electives, {"group_id": "senior_electives", "by_term": term}),
                        (server.ge_combinations, {})):
         assert tool(student | {"plan": plan}, **args) == tool(student, plan=plan, **args)
-    assert server.list_eligible_electives(student | {"plan": plan}, "senior_electives", by_term=term) \
-        != server.list_eligible_electives(student, "senior_electives", by_term=term)
 
 
 def test_more_names_what_opens_up_later_in_the_plan():
@@ -687,3 +685,18 @@ def test_first_time_false_without_transfer_work_is_flagged_not_believed():
     assert any("first_time: false" in w for w in told["warnings"])
     assert told["groups"] == server.audit_progress(student)["groups"]
     assert not any("first_time" in w for w in server.audit_progress(student)["warnings"])
+
+
+def test_electives_at_a_later_term_without_a_plan_use_the_baseline():
+    """Haiku leaves plan out: at a later term nothing planned would count, and most electives would read blocked."""
+    student = SCENARIOS["CCC transfer from another major"]
+    plan = {"semesters": server.build_plan(student)["semesters"]}
+    later, soon = plan["semesters"][3]["term"], plan["semesters"][0]["term"]
+    got = server.list_eligible_electives(student, "senior_electives", by_term=later)
+    assert got["options"] == server.list_eligible_electives(student, "senior_electives", plan=plan, by_term=later)["options"]
+    assert any("build_plan's baseline" in w for w in got["warnings"])
+    assert not any("baseline" in w for w in server.list_eligible_electives(student, "senior_electives", by_term=soon)["warnings"])
+    # No baseline to use (build_plan needs input), or a term it doesn't have: as before, with no plan
+    assert "needs_input" in server.build_plan({"program": "bs-cs"})
+    for profile, term in (({"program": "bs-cs"}, "2029-spring"), (student, "2099-fall")):
+        assert not any("baseline" in w for w in server.list_eligible_electives(profile, "senior_electives", by_term=term)["warnings"])

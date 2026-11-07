@@ -524,6 +524,16 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     return out
 
 
+def roadmap_path(year: str, program: str) -> Path:
+    return RULES_DIR / "roadmaps" / year / f"{program}.yaml"
+
+
+def roadmap_plan(clean: dict, program: dict, university: dict, year: str) -> dict:
+    """The baseline plan on the program's Bulletin roadmap: build_plan's result before its notes."""
+    road = yaml.safe_load(roadmap_path(year, clean["program"]).read_text())
+    return engine_build_plan(clean, program, university, road, catalog_for(clean), prereqs_for(clean))
+
+
 @mcp.tool(annotations=READ_ONLY)
 def build_plan(profile: Profile) -> dict:
     """Deterministic baseline plan to graduation, laid out on the Bulletin roadmap: each term starts from its roadmap
@@ -551,9 +561,8 @@ def build_plan(profile: Profile) -> dict:
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
-    path = RULES_DIR / "roadmaps" / year / f"{profile['program']}.yaml"
     cat = catalog_for(clean)
-    out = engine_build_plan(clean, program, university, yaml.safe_load(path.read_text()), cat, prereqs_for(clean))
+    out = roadmap_plan(clean, program, university, year)
     if "semesters" in out:
         out["courses"] = plan_courses(out, cat)
     out["warnings"] = notes + permission_notes(clean, out) + out["warnings"] + [offering_note(DB, YEAR)] + unverified(university, "University (GE and graduation)")
@@ -569,7 +578,8 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     Each option has readiness at by_term (default: the plan's first term, or the next term): 'ready' (prereqs met),
     'check' (met except what GatorPath can't verify: GPA, permission, unparsed text: see cannot_check), or 'blocked'
     (blocked_by, plus ready_by: the first plan term it opens up, when a plan is given). Pass the build_plan output as
-    `plan` and the slot's term as by_term, so planned courses count. Options are ranked ready-first, then by
+    `plan` and the slot's term as by_term, so planned courses count (a later by_term with no plan uses build_plan's
+    baseline and says so). Options are ranked ready-first, then by
     also_covers: other open requirements the same course would satisfy (GE, SF State Studies and American Institutions
     may overlap with each other and the major, p.2352; one course can do triple duty, e.g. 4UD + Environmental
     Sustainability + Global Perspectives). Re-run check_plan after filling slots. A group with
@@ -584,8 +594,15 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     if err := profile_error(profile):
         return err
     year, program, university, clean, notes = load_for(profile)
-    out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs_for(clean),
-                           normalized_plan(plan or profile.get("plan")), by_term, 10**6)
+    plan = normalized_plan(plan or profile.get("plan"))
+    if by_term and not plan and roadmap_path(year, profile["program"]).exists():
+        # Readiness at a later term needs what's planned before it: without it, most electives read blocked (Haiku
+        # leaves plan out, and picked from those). ponytail: the baseline, not the student's filled plan; check_plan decides
+        semesters = roadmap_plan(clean, program, university, year).get("semesters", [])
+        if by_term in [s["term"] for s in semesters[1:]]:
+            plan = {"semesters": semesters}
+            notes = notes + [f"No plan given: readiness at {by_term} counts build_plan's baseline. Pass the plan if it has changed"]
+    out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs_for(clean), plan, by_term, 10**6)
     if "options" in out and full:
         term, cat = out["by_term"], catalog(DB, YEAR)
         has = lambda c: (cat.get(c, {}).get("offered") or {}).get("schedule", {})
