@@ -21,8 +21,12 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   `tests/fixtures/dpr_synthetic.txt`. It found the calendar's day labels a column off (TUE over Monday's classes), the
   audit's GPA shown over the DPR's, and a bad PDF telling students to install poppler. All fixed
 
-- [ ] Run a real DPR through it: `data/` has none yet, so a real print's layout hasn't been tried here. Keep it out of
-  iCloud folders (Desktop, Documents)
+- [x] A real print through it (2026-11-06, checked with requirement titles and counts only, the PDF never copied):
+  three false disagreements fixed. An area was compared with the combined Area C group, UD areas weren't read as GE
+  ("UD-B: …" has no "Area"), and transfer courses sharing a generic code merged. A GE area truly absent from a DPR still
+  shows, as it should. Keep real DPRs out of iCloud folders (Desktop, Documents)
+- [ ] A print with View All on every list: Expand All leaves long lists at 10 rows, so a cut list can still hide courses
+- [ ] The site has no way to give a transfer total (transfer_units), mark a requirement as not on the DPR (not_on_dpr)
 - [ ] Engine warnings on Review were written for AI clients ("set transfer_units", "add it to not_on_dpr"): the site has
   no field for either, so word them for students, or give the site those fields
 - [ ] The goal ranks nothing: a student reads the options. Rank by goal in the engine if it should

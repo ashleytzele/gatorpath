@@ -25,7 +25,7 @@ NOT_TITLE = ("Units Required", "Total Units Required", "(", "Complete ", "One co
              "View All")
 PRINT_CHROME = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}, \d{1,2}:\d{2} [AP]M\s.*|https?://\S+.*")  # browser header/footer
 TRANSFER = re.compile(r"\d+N?TR$")
-AREA_TITLE = re.compile(r"Area \w+(?::| -) [^.]+")  # 'Area 1A: English Composition', not a sentence about an area
+AREA_TITLE = re.compile(r"(?:Area \w+|UD-\w)(?::| -) [^.]+")  # 'Area 1A: English Composition', 'UD-B: Physical/Life Science'
 
 
 def term_of(when: str) -> str:
@@ -62,7 +62,7 @@ def parse(text: str) -> dict:
             if m[1].startswith("G"):  # a section: GE, University Requirements, the major
                 in_ge = "General Education" in title
             block = {"id": m[1] + (f"/{m[2]}" if m[2] else ""), "title": title, "kind": "group" if not m[2] else
-                     "course" if COURSE_TITLE.fullmatch(title) else "ge" if in_ge and title.startswith("Area ") else "other",
+                     "course" if COURSE_TITLE.fullmatch(title) else "ge" if in_ge and title.startswith(("Area ", "UD-")) else "other",
                      "rows": [], "needed": None, "waived": None}
             out["requirements"].append(block)
             recent = []

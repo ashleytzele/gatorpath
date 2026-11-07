@@ -212,3 +212,27 @@ def test_transfer_units_count_each_course_once_but_never_merge_two_courses():
     assert profile(calc1, cs, summary)["transfer_units"] == 7  # the same rows again, in a summary list
     both = block("Courses Completed / In-Progress", "other", "info", [transfer_row("ENG 100TR", 3.0), transfer_row("ENG 100TR", 3.0)])
     assert profile(both)["transfer_units"] == 6  # two rows in one list are two courses
+
+
+def test_upper_division_ge_is_read_when_the_dpr_titles_it_ud():
+    """A DPR writes "UD-B: Physical/Life Science", with no "Area": it's still a GE area (invented rows)."""
+    got = parse("""
+    General Education
+    [G100]
+    Upper Division General Education
+    [G200]
+    UD-B: Physical/Life Science
+    [R1 / L1]
+      BIOL 313   Principles of Ecology   3.00  Fall 2025  A  GE UD-B
+    UD-C: Arts/Humanities
+    [R2 / L2]
+      Units: 3.00 required, 0.00 taken, 3.00 needed
+    """)
+    by_title = {r["title"]: r for r in got["requirements"]}
+    assert by_title["UD-B: Physical/Life Science"]["kind"] == by_title["UD-C: Arts/Humanities"]["kind"] == "ge"
+    profile = to_profile(got | {"catalog_term": "Spring 2025"}, {}, {})
+    assert profile["ge_done"] == ["UD-B: Physical/Life Science"]
+    _, university = load_rules("2024-25", "bs-cs")
+    audit = {"groups": [{"id": "ge_ud_b", "status": "satisfied"}, {"id": "ge_ud_c", "status": "remaining"}], "totals": {}}
+    found = " ".join(cross_check(got, audit, university))
+    assert "GE UD-B" not in found and "GE UD-C" not in found  # on the DPR, so not "Not found"
