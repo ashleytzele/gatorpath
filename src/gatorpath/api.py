@@ -1,4 +1,4 @@
-"""The web app (ARCHITECTURE §7.1): thin routes over the functions the MCP tools run, plus web/dist. No planning logic
+"""The web app (ARCHITECTURE §7.6): thin routes over the functions the MCP tools run, plus web/dist. No planning logic
 lives here. Nothing is stored or logged: an upload stays in memory, and no student data goes in a URL."""
 
 from pathlib import Path

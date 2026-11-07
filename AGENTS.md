@@ -46,6 +46,8 @@ uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --load 
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --coverage   # share of rules GatorPath checks vs a person (goal: 90/10)
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cross <ids>   # Codex CLI drafts them again; disagreements on made-up students
 uv run gatorpath                   # start MCP server (stdio)
+(cd web && npm install && npm run build) && uv run gatorpath-web   # the website + /api on http://127.0.0.1:8000
+uv run gatorpath-web & (cd web && npm run dev)   # frontend work: Vite on :5173 proxies /api to :8000
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
 uv run --with anthropic python evals/run_evals.py --clients haiku   # Haiku on the API: the bare client, needs ANTHROPIC_API_KEY
@@ -75,6 +77,8 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 | Path | What lives there |
 |---|---|
 | `src/gatorpath/server.py` | MCP tool/prompt definitions only. Keep it thin and call the engine |
+| `src/gatorpath/api.py` | Web API: thin routes over the same functions (ARCHITECTURE §7.6). No planning logic, nothing stored |
+| `web/` | React + Vite site. `src/api.ts` holds the calls; `?demo` shows the preview bars |
 | `src/gatorpath/engine/` | `prereq.py`, `rules.py`, `planner.py`: all logic, pure functions |
 | `src/gatorpath/ingest/` | Offline builders: Bulletin PDF and class search → `data/catalog.db`; program pages → source text and AI drafts |
 | `src/gatorpath/dpr.py` | Local DPR PDF → profile + what's left (PII dropped); the main import |

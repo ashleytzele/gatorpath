@@ -9,6 +9,28 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ---
 
+## Done 2026-11-06 — The website (branch `web-app`)
+
+- [x] `src/gatorpath/api.py` and `gatorpath-web`: thin routes over the tools' functions (ARCHITECTURE §7.6, D32).
+  `/api/electives` is a POST, not the GET first asked for, so the profile stays out of URLs. `/api/audit`, `/api/programs`
+  and `/api/course` were added for Progress, the major list and the course drawer
+- [x] The PDF stays in memory: a test fails if Starlette spools it to disk, and `pdftotext` reads stdin
+- [x] `web/` runs on the API, screen by screen. The chat panel (made-up answers), "Show another", the time preferences,
+  Filters and "Set as backup" are gone: nothing behind them. Preview bars only with `?demo`
+- [x] End to end in headless Chrome, every screen, no console errors, using a PDF built from
+  `tests/fixtures/dpr_synthetic.txt`. It found the calendar's day labels a column off (TUE over Monday's classes), the
+  audit's GPA shown over the DPR's, and a bad PDF telling students to install poppler. All fixed
+
+- [ ] Run a real DPR through it: `data/` has none yet, so a real print's layout hasn't been tried here. Keep it out of
+  iCloud folders (Desktop, Documents)
+- [ ] Engine warnings on Review were written for AI clients ("set transfer_units", "add it to not_on_dpr"): the site has
+  no field for either, so word them for students, or give the site those fields
+- [ ] The goal ranks nothing: a student reads the options. Rank by goal in the engine if it should
+- [ ] DPR import reads CS and Psychology only (`dpr_plan`): other majors get `unknown_program` and type their courses
+- [ ] A what-if rebuilds the plan and clears course picks (the screen says so, and Undo restores them)
+
+---
+
 ## Done 2026-11-06 — Haiku on the 47 questions
 
 - [x] `run_evals.py` clients: `haiku` (a bare client on the API: the real server over stdio, its instructions and the

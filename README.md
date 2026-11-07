@@ -60,6 +60,20 @@ In a client without MCP prompts (Codex CLI), just ask, and mention SF State, e.g
 the rest of my degree": the tools hand it the same steps. Without "SF State" a client may answer from web search,
 and nothing checks that plan.
 
+## Website
+
+The same planner without an AI client: upload your DPR (or type your courses), check what it read, and get a plan,
+electives and a clash-free schedule. Needs Node as well as the Setup above:
+
+```bash
+(cd web && npm install && npm run build)
+uv run gatorpath-web     # http://127.0.0.1:8000
+```
+
+Nothing is stored: the PDF is read in memory, your name and ID are dropped as it's read, and your record stays in the
+browser tab until you start over. You choose your own electives from the Bulletin's options; the site checks the plan,
+and every question goes to an advisor through [Navigator](https://sfsu.campus.eab.com/).
+
 ## Evals
 
 47 questions (`evals/questions.yaml`) on synthetic students across the three catalog years, Winter Session included,

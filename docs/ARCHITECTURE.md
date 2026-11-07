@@ -803,6 +803,31 @@ which routes students to their department, so adding a major never needs advisor
 
 ---
 
+### 7.6 The web app (`api.py`, `web/`)
+
+For students without an MCP client (D32). `uv run gatorpath-web` serves `web/dist` and `/api` on 127.0.0.1:8000.
+`src/gatorpath/api.py` is thin routes over the functions the tools run, so there's no second planner and the engine's
+fields come back as they are:
+
+| Route | Calls |
+|---|---|
+| `POST /api/import-dpr` | `dpr_profile`, from the upload's bytes |
+| `POST /api/audit` | `audit_progress`, plus each course's title for the Review table |
+| `POST /api/plan` | `build_plan`, with the Goals answers merged into the profile |
+| `POST /api/check` | `check_plan` |
+| `POST /api/electives` | `list_eligible_electives` |
+| `GET /api/sections` | `get_sections` |
+| `GET /api/programs`, `GET /api/course` | `list_programs`, `get_course` |
+
+What keeps golden rule 5: the site has no database and sets no cookies, and a student's record lives in the tab's memory
+until they start over. The PDF never reaches the disk: Starlette writes an upload past its 1 MB spool to a temp file, so
+the spool limit sits above a size checked before parsing, and `pdftotext` reads it over stdin. No student data goes in
+a URL (`/api/electives` is a POST for this reason) and the access log is off.
+
+Web pages have no AI client, so nothing picks electives: the student does, from the engine's options, and `check_plan`
+judges the result. The goal is shown beside the options but ranks nothing. Every question goes to Navigator. `?demo`
+adds the prototype's preview bars, which force a state on top of real data.
+
 ## 8. Planner algorithm (`engine/planner.py`)
 
 The input is the profile, the program rules, the prereq graph and `offered_terms`.
@@ -1029,6 +1054,7 @@ students; 0 hallucinated courses."*
 | D29 | A client without MCP prompts gets the workflow from a tool: `get_planning_steps` returns the plan_my_degree text, and the server instructions say to call it first; the evals start Codex from the student's words | Codex CLI has no MCP prompts (checked 2026-10-29). Without the steps it stopped at a draft with 25 open slots and kept asking for a DPR the student had answered with a typed course list; the evals had pasted the prompt in, so they never saw it | 2026-10-29 |
 | D30 | Time clashes are checked in code, never by the AI: `get_sections` returns a clash-free `schedule` (fewest full sections; a lecture and the lab or activity listed after it are one pick), `clashes_with` per section, `always_clash` when nothing fits | "The AI suggests, the code verifies" (README): the prompt had the AI find a clash-free set itself. The AUB Course Planner MCP checks clashes and seats in code | 2026-10-29 |
 | D31 | Tokens are a UX cost and are measured: results go over MCP as compact JSON; a fact is said once (the offering span in the note, the also_covers rule in the docstring); one electives call per group; GE suggestions from ge_combinations' examples; no generated schema titles. Course descriptions stay whole. The evals' User experience table reports tool-result characters per first reply | Measured 2026-10-29 (TASKS.md): the library pretty-printed every result (24-55% whitespace); 9 of Claude's 10 electives calls re-fetched GE suggestions; Claude Code cuts a result over about 50KB to a 2KB preview (ge_combinations had been 53.8KB). A 300-character description cap lost 13 goal matches among senior electives | 2026-10-29 |
+| D32 | A web app beside the MCP server, on the same functions: thin routes in `api.py`, no database, nothing kept past the tab, every question sent to Navigator | Most students have no MCP client. D1 put the UI later, and this stays within golden rule 5 because the site stores nothing; saving reports or plans would need the written exception the brainstorm notes describe | 2026-11-06 |
 
 ---
 
