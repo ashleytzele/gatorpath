@@ -9,6 +9,39 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ---
 
+## Done 2026-11-06 — Haiku on the 47 questions
+
+- [x] `run_evals.py` clients: `haiku` (a bare client on the API: the real server over stdio, its instructions and the
+  date as the whole system prompt, `uv run --with anthropic`, not a project dependency) and `claude-haiku` (Haiku inside
+  Claude Code, on its login). No API key on this machine, so `haiku` has only run against a scripted model
+- [x] Results, `claude-haiku`, all 47 (`data/evals/20261106-haiku`, `-2`), against the earlier Claude Code and Codex
+  transcripts (not rerun): 38, 43, 44, 44, 41 while fixing, then 45 and 45 on the final commit. Claude Code and Codex
+  were 45/47 each in their last full run, 46 and 47 with each question's newest rerun. Final two: plans 14/15 and 15/15,
+  goal fit 13/14, profile 34/34 and 32/33, facts 23/23, tools 16/16, 0 hallucinated codes; about $1.30 a run at API
+  prices. Haiku varies more than the single runs show, so compare it on several
+- [x] check_plan over MCP dropped each term's `max_units`, because the input schema's Semester didn't have it: every
+  term capped at 15, so build_plan's own plan for a plain QR 1/2 freshman failed for any client, and a term over its
+  cap passed. Tests and the eval re-check call the function directly, so only a client disagreeing showed it. Now tested
+  over MCP (this was live for Claude Code and Codex too: their numbers above predate the fix)
+- [x] list_eligible_electives and ge_combinations ignored a plan nested in profile (Haiku, 11 calls over 6 questions),
+  and `more` left out courses that open up later in the plan, so a too-early by_term hid a goal's courses
+- [x] `first_time: false` with no transfer work is flagged and not believed: Haiku sent it for students who simply
+  weren't in their first term, and it changes the US History rule. It still sends it (9 calls in the final two runs);
+  the check catches each one, where an instruction and a schema note didn't
+- [x] Server instructions: build the profile as given, in full, from the first call (Haiku rewrote grades, dropped W
+  and I rows); what's left comes from audit_progress. AP and IB units are named under transfer_units
+- [x] Scorer: a course an answer only mentions doesn't make a rejected plan look presented; approvals compare as sets;
+  honest wordings it missed ("never run in", "0 times out of 4", "did not find", "4 Winter units"); a freshman with AP
+  units no longer says "I transferred in"
+
+- [ ] Run `--clients haiku` on the API (needs ANTHROPIC_API_KEY): no harness prompt there, so expect it to differ
+- [ ] list_eligible_electives without `plan` at a later by_term: nothing planned counts, so most electives read blocked
+  and aren't named in `more`. Haiku does this on plan-ccc, the one miss in both final runs. Default to build_plan's
+  plan there, or at least warn, then run Haiku on several runs to see it hold
+- [ ] Rerun Claude Code and Codex after the max_units fix, when a full run is worth the usage
+
+---
+
 ## Done 2026-10-29 — UX review in Claude Code and Codex CLI; efficiency and token usage
 
 How it was reviewed: a two-turn session per client with a synthetic sophomore (the plan request, then the typed
