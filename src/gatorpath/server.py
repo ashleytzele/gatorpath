@@ -6,6 +6,7 @@ import json
 import os
 import re
 import subprocess
+from collections.abc import Callable
 from datetime import date
 from functools import cache
 from pathlib import Path
@@ -807,11 +808,14 @@ def import_dpr(pdf_path: str) -> dict:
     so the student doesn't need to attach the PDF to the chat; ask for the file's path. Add qr_pathway, goal and
     start_term, then use the profile with the other tools."""
     path = local_pdf(pdf_path, "~/Downloads/Degree Progress Report.pdf")
-    if isinstance(path, dict):
-        return path
+    return path if isinstance(path, dict) else dpr_profile(lambda: dpr.read_pdf(path))
+
+
+def dpr_profile(read_text: Callable[[], str]) -> dict:
+    """import_dpr's result, however the PDF's text is read: from a path here, from an upload's bytes in the web API."""
     try:
-        parsed = dpr.parse(dpr.read_pdf(path))
-    except (OSError, subprocess.CalledProcessError):
+        parsed = dpr.parse(read_text())
+    except (OSError, subprocess.SubprocessError):
         return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF (or isn't installed: brew install poppler)"]}
     if not parsed["requirements"]:
         return {"catalog_year": YEAR, "error": "unrecognized_dpr_format",

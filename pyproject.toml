@@ -11,13 +11,17 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "beautifulsoup4>=4.15.0",
+    "fastapi>=0.120",
     "httpx>=0.28.1",
     "mcp>=2.3.0",
+    "python-multipart>=0.0.20",
     "pyyaml>=6.0.3",
+    "uvicorn>=0.34",
 ]
 
 [project.scripts]
 gatorpath = "gatorpath:main"
+gatorpath-web = "gatorpath.api:main"
 
 [build-system]
 requires = ["uv_build>=0.13.1,<0.14.0"]

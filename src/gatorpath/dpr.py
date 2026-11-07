@@ -220,3 +220,9 @@ def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
 def read_pdf(path: Path) -> str:
     """pdftotext -layout to memory; nothing written to disk."""
     return subprocess.run(["pdftotext", "-layout", str(path), "-"], capture_output=True, text=True, check=True).stdout
+
+
+def read_pdf_bytes(data: bytes) -> str:
+    """The same from bytes, over stdin: a web upload never touches the disk."""
+    done = subprocess.run(["pdftotext", "-layout", "-", "-"], input=data, capture_output=True, check=True, timeout=60)
+    return done.stdout.decode("utf-8", "replace")

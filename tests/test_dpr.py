@@ -1,7 +1,11 @@
 """DPR print -> requirements and profile fields, from the synthetic fixture (real layout, fake name/ID, invented courses)."""
 
+import shutil
 from pathlib import Path
 
+import pytest
+
+from gatorpath import dpr
 from gatorpath.dpr import cross_check, parse, to_profile
 
 DPR = parse((Path(__file__).parent / "fixtures/dpr_synthetic.txt").read_text())
@@ -152,3 +156,24 @@ def test_collapsed_requirements_are_flagged_not_missing():
     _, university = load_rules("2026-27", "bs-cs")
     audit = {"groups": [{"id": "ge_3ud", "status": "in_progress"}], "totals": {"units": {"value": 0.0}}}
     assert not any("GE 1A" in w for w in cross_check(got, audit, university))  # on the DPR, just collapsed
+
+
+def pdf_of(text: str) -> bytes:
+    """A one-line PDF, offsets and all, so the real pdftotext has something to read."""
+    stream = f"BT /F1 12 Tf 72 720 Td ({text}) Tj ET".encode()
+    objects = [b"<< /Type /Catalog /Pages 2 0 R >>", b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+               b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R "
+               b"/Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> >> >>",
+               b"<< /Length %d >>\nstream\n%s\nendstream" % (len(stream), stream)]
+    out, offsets = b"%PDF-1.4\n", []
+    for i, body in enumerate(objects, 1):
+        offsets.append(len(out))
+        out += b"%d 0 obj\n%s\nendobj\n" % (i, body)
+    table = len(out)
+    out += b"xref\n0 5\n0000000000 65535 f \n" + b"".join(b"%010d 00000 n \n" % o for o in offsets)
+    return out + b"trailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % table
+
+
+@pytest.mark.skipif(not shutil.which("pdftotext"), reason="poppler not installed")
+def test_read_pdf_bytes_reads_over_stdin():
+    assert "Degree Progress Report" in dpr.read_pdf_bytes(pdf_of("Degree Progress Report"))

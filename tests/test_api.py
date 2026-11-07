@@ -1,0 +1,105 @@
+"""The web API over the fixture catalog: real routes, the same functions as the MCP tools, no AI client."""
+
+import shutil
+import tempfile
+
+import pytest
+from fastapi.testclient import TestClient
+from test_server import DPR, SCENARIOS, fixture_db, use_fixture_db  # noqa: F401  (the fixtures apply here too)
+
+from gatorpath import api, dpr, server
+
+client = TestClient(api.app)
+STUDENT = SCENARIOS["new freshman, QR 1/2"]
+SOPHOMORE = SCENARIOS["sophomore"]
+
+
+def post(route: str, **body) -> dict:
+    response = client.post(route, json=body)
+    assert response.status_code == 200, response.text
+    return response.json()
+
+
+def upload(data: bytes = b"%PDF-1.4"):
+    return client.post("/api/import-dpr", files={"file": ("dpr.pdf", data, "application/pdf")})
+
+
+# ---- /api/import-dpr ----
+
+def test_import_dpr_reads_the_upload_in_memory_and_drops_pii(monkeypatch):
+    seen = []
+    monkeypatch.setattr(dpr, "read_pdf_bytes", lambda data: seen.append(data) or DPR)
+
+    def on_disk(*_):
+        raise AssertionError("the PDF was written to disk")
+
+    monkeypatch.setattr(tempfile.SpooledTemporaryFile, "rollover", on_disk)  # what Starlette does past its 1 MB default
+    big = b"%PDF-1.4" + b"x" * (3 * 1024 * 1024)
+    response = upload(big)
+    assert response.status_code == 200 and seen == [big]
+    got = response.json()
+    assert got["profile"]["program"] == "bs-cs" and {"remaining", "cross_check", "see_advisor"} <= set(got)
+    assert not {"name", "student_id", "emplid"} & set(got["profile"])
+    for pii in ("Zzfake", "Testperson", "900000001"):  # the fixture's name and ID
+        assert pii not in response.text
+
+
+def test_import_dpr_refuses_what_it_wont_read(monkeypatch):
+    monkeypatch.setattr(dpr, "read_pdf_bytes", lambda data: pytest.fail("read past the limit"))
+    too_big = client.post("/api/import-dpr", files={"file": ("dpr.pdf", b"x" * (api.MAX_PDF + 1))})
+    assert too_big.status_code == 413
+    assert client.post("/api/import-dpr", data={"note": "no file"}).status_code == 400
+    assert client.post("/api/import-dpr", json={"file": "not multipart"}).status_code == 400
+
+
+@pytest.mark.skipif(not shutil.which("pdftotext"), reason="poppler not installed")
+def test_a_file_that_isnt_a_pdf_says_so():
+    got = upload(b"not a pdf at all").json()
+    assert got["error"] == "unreadable_pdf" and got["warnings"]
+
+
+# ---- the planning routes return the engine's own fields ----
+
+def test_plan_returns_the_engine_fields_and_applies_the_options():
+    got = post("/api/plan", profile=STUDENT)
+    assert {"semesters", "est_graduation_term", "pace", "see_advisor", "check", "courses", "warnings"} <= set(got)
+    assert got["check"]["valid"] and got["semesters"][0]["why"] and "longest_chain" in got["pace"]
+    summers = post("/api/plan", profile=STUDENT, options={"include_summer": True})
+    assert summers["pace"]["include_summer"] is True and got["pace"]["include_summer"] is False
+    assert got == server.build_plan(STUDENT) | {"check": got["check"]}
+
+
+def test_plan_asks_for_what_it_needs_rather_than_guessing():
+    assert post("/api/plan", profile={"program": "bs-cs"})["needs_input"]
+    assert post("/api/plan", profile={"program": "no-such-major"})["error"]
+    assert client.post("/api/plan", json={"profile": {}}).status_code == 422
+
+
+def test_check_returns_errors_and_honors_each_terms_cap():
+    plan = {"semesters": post("/api/plan", profile=STUDENT)["semesters"]}
+    assert post("/api/check", profile=STUDENT, plan=plan)["valid"] is True
+    capped = {"semesters": plan["semesters"][:-1] + [plan["semesters"][-1] | {"max_units": 1}]}
+    got = post("/api/check", profile=STUDENT, plan=capped)
+    assert got["valid"] is False and got["errors"] and "see_advisor" in got
+
+
+def test_electives_take_the_profile_in_the_body_never_the_url():
+    plan = {"semesters": post("/api/plan", profile=STUDENT)["semesters"]}
+    term = next(s["term"] for s in plan["semesters"] if any(isinstance(c, dict) and c["slot"] == "senior_electives" for c in s["courses"]))
+    got = post("/api/electives", profile=STUDENT, requirement="senior_electives", plan=plan, by_term=term)
+    assert got["group"] == "senior_electives" and {"readiness", "description", "offered"} <= set(got["options"][0])
+    assert post("/api/electives", profile=STUDENT, requirement="no_such_group")["error"]
+    assert client.get("/api/electives", params={"requirement": "senior_electives"}).status_code in (404, 405)
+
+
+def test_sections_return_the_schedule_fields():
+    got = client.get("/api/sections", params={"term": "2027-spring", "courses": ["CSC 340", "MATH 225"]}).json()
+    assert {"sections", "schedule", "sets", "always_clash", "not_offered", "unknown", "scraped_at", "warnings"} <= set(got)
+    assert client.get("/api/sections", params={"term": "spring", "courses": ["CSC 340"]}).json()["error"] == "bad_term"
+
+
+def test_the_screens_other_reads():
+    audit = post("/api/audit", profile=SOPHOMORE)
+    assert audit["groups"] and audit["totals"]["units"]["needed"] and "see_advisor" in audit
+    assert any(p["id"] == "bs-cs" for p in client.get("/api/programs").json()["programs"])
+    assert client.get("/api/course", params={"code": "CSC 340"}).json()["title"] == "Programming Methodology"
