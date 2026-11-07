@@ -435,7 +435,10 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
     assert got["catalog_year"] == "2024-25" and any("Requirements are the 2024-25 Bulletin's" in w for w in got["warnings"])
     audit = {g["id"]: g for g in server.audit_progress(p)["groups"]}
     assert audit["ge_a1"]["status"] == "satisfied"  # "Area A1 - Oral Communication" done on the DPR
-    assert [w.split(":")[0] for w in got["cross_check"]] == ["Units toward the 120", "Not found on this DPR"]
+    # the DPR counts 74 units, more than its rows show: the rest is recorded, so the totals agree with it
+    assert p["unlisted_units"]["units"] > 0 and [w.split(":")[0] for w in got["cross_check"]] == ["Not found on this DPR"]
+    t = server.audit_progress(p)["totals"]
+    assert t["units"]["value"] + t["units_in_progress"] == 74
     assert [a["role"] for a in got["see_advisor"]] == ["dpr"]
     assert "ge_f" in p["not_on_dpr"]  # the DPR doesn't list it, so it's left out, and the audit flags it for an advisor
     assert audit["ge_f"]["waived_by"] and any("left out" in w for w in server.audit_progress(p)["warnings"])

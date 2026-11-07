@@ -169,6 +169,18 @@ def to_profile(dpr: dict, min_grade: dict[str, str], units: dict[str, float]) ->
             **({"gpa": dpr["gpa"]} if dpr["gpa"] is not None else {}), "remaining": remaining, "warnings": warnings}
 
 
+# The DPR's own unit lines, by audit totals key: "Units: 120.00 required, 112.00 taken, 8.00 needed" (taken counts
+# courses in progress). Titles as the 2024-25 and 2025-26 prints have them
+UNIT_TOTALS = {"120 Minimum Units": "units", "Upper-Division Units": "upper_division_units",
+               "Residence Units - Upper Division": "residence_upper_division_units", "Residence Units =": "residence_units"}
+
+
+def unit_totals(dpr: dict) -> dict[str, float]:
+    """What the DPR counts toward each unit total, in-progress courses included."""
+    return {key: b["needed"]["taken"] for b in dpr["requirements"] if b["needed"] and b["needed"]["what"] == "units"
+            for prefix, key in UNIT_TOTALS.items() if b["title"].startswith(prefix)}
+
+
 def count_transfer_units(requirements: list[dict]) -> float:
     """Each transfer course once. A row repeats across lists, but codes are generic (MATH 100TR), so two rows in one
     list, or under two course requirements, are two courses. ponytail: a truncated list can still hide one."""

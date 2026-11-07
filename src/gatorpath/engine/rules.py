@@ -559,13 +559,23 @@ def totals(profile: dict, taken: dict, groups: list[dict], university: dict, cat
     if over_685:
         warnings.append(f"{', '.join(teaching)}: only {caps['projects_in_teaching_685']} units of \"Projects in Teaching\" "
                         f"685 courses apply to the degree ({caps['source']})")
+    # import_dpr: what the DPR counts beyond the rows its print lists (lists cut at 10 rows, unlisted transfer work)
+    unlisted = profile.get("unlisted_units") or {}
+    more = lambda key: unlisted.get(key, 0)
+    if more("units"):
+        warnings.append(f"{more('units'):g} units your DPR counts aren't listed course by course on its print (a list cut "
+                        "at 10 rows, or transfer work it lists nowhere): they count toward the totals as the DPR has them")
     return {
-        "units": check(sfsu_units - over_685 + transfer_units - sum(r["transfer_dup_units"] for r in taken.values()),
-                       t["min_units"]),
+        "units": check(sfsu_units - over_685 + transfer_units - sum(r["transfer_dup_units"] for r in taken.values())
+                       + more("units"), t["min_units"]),
         "units_in_progress": sum(catalog[c]["units_min"] for c in profile.get("in_progress", []) if c in catalog),
-        "upper_division_units": check(sum(r["units"] for c, r in taken.items() if upper(c)), t["min_upper_division_units"]),
-        "residence_units": check(sum(r["units"] for r in resident.values()), t["residence"]["units"]),
-        "residence_upper_division_units": check(sfsu_ud_units, t["residence"]["upper_division"]),
+        "upper_division_units": check(sum(r["units"] for c, r in taken.items() if upper(c)) + more("upper_division_units"),
+                                      t["min_upper_division_units"]),
+        "upper_division_units_in_progress": sum(catalog[c]["units_min"] for c in profile.get("in_progress", [])
+                                                if c in catalog and upper(c)),
+        "residence_units": check(sum(r["units"] for r in resident.values()) + more("residence_units"), t["residence"]["units"]),
+        "residence_upper_division_units": check(sfsu_ud_units + more("residence_upper_division_units"),
+                                                t["residence"]["upper_division"]),
         "residence_major_units": check(sum(resident[c]["units"] for c in major if c in resident), t["residence"]["major"]),
         **({"residence_upper_division_ge_units": check(sfsu_ud_ge, t["residence"]["upper_division_ge"])}
            if "upper_division_ge" in t["residence"] else {}),

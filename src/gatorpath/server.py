@@ -88,6 +88,7 @@ class Profile(TypedDict):
     ge_certified: NotRequired[bool]
     prior_bachelors: NotRequired[bool]
     transfer_units: NotRequired[float]
+    unlisted_units: NotRequired[dict[str, float]]  # import_dpr: units the DPR counts beyond the rows its print lists
     adt: NotRequired[bool]
     f1: NotRequired[bool]
     max_units_per_term: NotRequired[float]
@@ -471,7 +472,9 @@ def profile_error(profile: dict) -> dict | None:
 def audit_progress(profile: Profile) -> dict:
     """Degree audit: per requirement group satisfied / in_progress / remaining / waived (or unparsed: a rule GatorPath
     can't check, with the Bulletin's `quote`) and which courses counted, plus university totals (120 units,
-    upper-division, residence, CR cap, GPAs). Nothing is stored.
+    upper-division, residence, CR cap, GPAs). A total's value is what's done: add units_in_progress (and
+    upper_division_units_in_progress) for where the student stands once this term ends, as the DPR counts it.
+    Nothing is stored.
 
     profile: program (e.g. 'bs-cs'); catalog_year (the DPR's "Requirement (Catalog) Term", e.g. 'Fall 2025': that
     year's rules when GatorPath has them, else the newest with a warning); completed: [{code, grade, term?, units? (variable-unit
@@ -908,6 +911,12 @@ def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dic
     profile["dpr_met"] = [norm_code(c) for c in profile["dpr_met"]]
     if left_out := dpr.not_listed(parsed, university):
         profile["not_on_dpr"] = [g["id"] for g in left_out]
+    # The DPR's totals beat the rows its print lists: a list cut at 10 rows hides courses, transfer work may be listed
+    # nowhere. Counted with the courses in progress, as the DPR counts them
+    seen = audit_progress(profile | {"completed": profile["completed"] + [{"code": c, "grade": "A"} for c in profile["in_progress"]],
+                                     "in_progress": []})["totals"]
+    if gap := {k: round(v - seen[k]["value"], 2) for k, v in dpr.unit_totals(parsed).items() if v - seen[k]["value"] > 0.5}:
+        profile["unlisted_units"] = gap
     ours = audit_progress(profile)
     disagree = dpr.cross_check(parsed, ours, university)
     return {"catalog_year": year, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,

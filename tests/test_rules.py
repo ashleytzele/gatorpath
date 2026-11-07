@@ -203,6 +203,23 @@ def test_transfer_unit_caps():
     assert cc["totals"]["units"]["value"] == 75 and any("no more than 70 from community colleges" in w for w in cc["warnings"])
 
 
+def test_units_the_dpr_counts_but_doesnt_list_count_toward_the_totals():
+    # A print with lists cut at 10 rows (2026-11-07): the DPR said 112 of 120 and 36 upper-division units, GatorPath
+    # counted the courses it could see. import_dpr records the difference, and it counts like transfer_units
+    rows = [{"code": "CSC 317", "grade": "B", "term": "2025-fall"}]
+    plain = audit(BASE | {"completed": rows}, PROGRAM, UNIVERSITY, CATALOG)["totals"]
+    got = audit(BASE | {"completed": rows, "unlisted_units": {"units": 16.5, "upper_division_units": 12}},
+                PROGRAM, UNIVERSITY, CATALOG)
+    t = got["totals"]
+    assert t["units"]["value"] == plain["units"]["value"] + 16.5
+    assert t["upper_division_units"]["value"] == plain["upper_division_units"]["value"] + 12
+    assert t["residence_units"]["value"] == plain["residence_units"]["value"]  # not given: unchanged
+    assert any("16.5 units your DPR counts" in w for w in got["warnings"])
+    # in progress is said apart, upper division too: "24 of 30" read as short when 12 more were under way
+    going = audit(BASE | {"completed": rows, "in_progress": ["CSC 340", "MATH 226"]}, PROGRAM, UNIVERSITY, CATALOG)["totals"]
+    assert going["units_in_progress"] == 7 and going["upper_division_units_in_progress"] == 3
+
+
 def test_repeat_policy_comes_from_the_rules():
     # p.2392: "Exceptions to repeat a course for 3 or more times require the consent of the instructor and department chair"
     rows = [{"code": "CSC 220", "grade": g, "term": t} for g, t in (("F", "2025-fall"), ("D", "2026-spring"), ("C", "2026-fall"))]
