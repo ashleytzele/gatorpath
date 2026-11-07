@@ -4,7 +4,9 @@ import {
   checkPlan,
   getAudit,
   getCourse,
+  getElectives,
   getPrograms,
+  getSections,
   importDpr,
   message,
   type Advisor,
@@ -13,9 +15,14 @@ import {
   type CourseInfo,
   type Group,
   type ImportResult,
+  type Meeting,
+  type Offered,
+  type Option,
   type Options,
+  type PlanError,
   type PlanResult,
   type Profile,
+  type Section,
   type Semester,
   type Slot,
   type Taken,
@@ -289,12 +296,9 @@ function Header({
               </button>
             )}
             {screen === "app" && (
-              <button
-                className="header-link ask-header"
-                onClick={() => document.dispatchEvent(new Event("gator-ask"))}
-              >
-                Ask about your plan
-              </button>
+              <a className="header-link ask-header" href={NAVIGATOR} target="_blank" rel="noreferrer">
+                Ask an advisor
+              </a>
             )}
             <button className="header-link" onClick={onHome}>
               Start over
@@ -418,12 +422,8 @@ function ErrorCard({ text, retry }: { text: string; retry?: () => void }) {
   );
 }
 
-const SEASON = { spring: 0, summer: 1, fall: 2, winter: -1 } as const;
 const termLabel = (term?: string | null) =>
   term ? `${term[5].toUpperCase()}${term.slice(6)} ${term.slice(0, 4)}` : "";
-const byTerm = (a: string, b: string) =>
-  a.slice(0, 4).localeCompare(b.slice(0, 4)) ||
-  SEASON[a.slice(5) as keyof typeof SEASON] - SEASON[b.slice(5) as keyof typeof SEASON];
 /** Fall and spring terms around today, a calendar for the dropdowns: `back` past ones, `ahead` to come. */
 function nearbyTerms(back: number, ahead: number) {
   const now = new Date();
@@ -1493,6 +1493,10 @@ const slotLabel = (slot: Slot, audit: Audit) =>
     ? "Free elective: any course"
     : (audit.groups.find((g) => g.id === slot.slot)?.title ?? slot.slot);
 
+/** A slot of the plan to fill, or a pick to change. */
+type Target = { group: string; term: string; title: string; replacing?: string };
+type Pick = { group: string; term: string; code: string; readiness?: string; covers: string[] };
+
 /** One plan and what's known about it, shared by the tabs. It lives in memory only. */
 type Work = {
   student: Profile;
@@ -1502,6 +1506,7 @@ type Work = {
   semesters: Semester[];
   check: Checked;
   info: Record<string, CourseInfo>;
+  picks: Pick[];
   busy: string;
   failed: string;
   whatIf: (change: Options, label: string) => void;
@@ -1526,6 +1531,25 @@ function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
         </button>
       ))}
     </nav>
+  );
+}
+
+function ProblemPanel({ errors }: { errors: PlanError[] }) {
+  return (
+    <div className="plan-problem-panel" role="alert">
+      <div>
+        <Icon name="warning" />
+        <span>
+          <b>This plan has a problem</b>
+          <small>Change your choices, or ask an advisor what to do.</small>
+        </span>
+      </div>
+      {errors.map((e) => (
+        <p key={e.message}>
+          <span>{e.message}</span>
+        </p>
+      ))}
+    </div>
   );
 }
 
@@ -1568,12 +1592,17 @@ function PlanView({
   const unitsLeft = semesters.reduce((total, s) => total + termUnits(s, info), 0);
   const years = [...new Set(semesters.map((s) => yearOf(s.term)))];
   const lastTerm = semesters[semesters.length - 1]?.term;
-  const graduation = semesters.length === plan.semesters.length ? plan.est_graduation_term : lastTerm;
+  const graduation = (semesters.length === plan.semesters.length && plan.est_graduation_term) || lastTerm;
   const unreachable = pace?.on_time === false && !!pace.why_not?.length;
   const planState =
     preview || (!check.valid ? "problem" : unreachable ? "unreachable" : choicesLeft ? "open" : "complete");
-  const errors = check.errors.length ? check.errors : [{ message: "Sample problem, from the preview bar." }];
-  const warnings = [...new Set([...plan.warnings, ...(check.warnings ?? [])])];
+  // "Stopped at …" says why the plan can't finish: the errors are only what that left uncovered
+  const stopped = plan.warnings.filter((w) => w.startsWith("Stopped at")).map((w) => ({ message: w }));
+  const found = [...stopped, ...check.errors];
+  const errors = found.length ? found : [{ message: "Sample problem, from the preview bar." }];
+  const warnings = [...new Set([...plan.warnings, ...(check.warnings ?? [])])].filter(
+    (w) => !w.startsWith("Stopped at"),
+  );
   const advisors = [...(check.see_advisor ?? []), ...(plan.see_advisor ?? [])].filter(
     (a, i, all) => all.findIndex((x) => x.role === a.role) === i,
   );
@@ -1634,22 +1663,7 @@ function PlanView({
           </a>
         </div>
       )}
-      {planState === "problem" && (
-        <div className="plan-problem-panel">
-          <div>
-            <Icon name="warning" />
-            <span>
-              <b>This plan has a problem</b>
-              <small>Change your choices below, or ask an advisor what to do.</small>
-            </span>
-          </div>
-          {errors.map((e) => (
-            <p key={e.message}>
-              <span>{e.message}</span>
-            </p>
-          ))}
-        </div>
-      )}
+      {planState === "problem" && <ProblemPanel errors={errors} />}
       {planState === "unreachable" && (
         <div className="plan-problem-panel unreachable">
           <div>
@@ -2145,64 +2159,41 @@ function CourseStatus({
   );
 }
 
-const choiceRequirements = {
-  ge: [
-    ["GE Area 3", "Arts & Humanities", "HUM 200", "Fall 2027", "ENG 218,MUS 110,CWL 250"],
-    ["GE Area 6", "Ethnic Studies", "LTNS 280", "Spring 2028", "ETHS 100,AA S 210,RRS 276"],
-    ["Upper-division GE", "Area 4UD · Social Sciences", "", "Fall 2028", "PSY 431,SOC 300,ECON 300"],
-  ],
-  studies: [
-    [
-      "SF State Studies",
-      "Global Perspectives",
-      "CSC 665",
-      "Fall 2028",
-      "LTNS 280,HIST 450",
-      "Counts twice",
-    ],
-    [
-      "American Institutions",
-      "US & CA Government",
-      "PLSI 200",
-      "Spring 2029",
-      "PLSI 275,HIST 471",
-      "",
-    ],
-  ],
-};
+type ChoiceRow = { id: string; title: string; term: string; units?: number; pick?: Pick };
 
 function ChoiceRequirementRows({
   rows,
+  audit,
   openPicker,
 }: {
-  rows: string[][];
-  openPicker: (requirement: string) => void;
+  rows: ChoiceRow[];
+  audit: Audit;
+  openPicker: (target: Target) => void;
 }) {
   return (
     <div className="choice-requirements">
       {rows.map((r) => (
-        <div className="choice-requirement-row" key={r[1]}>
+        <div className="choice-requirement-row" key={`${r.id}-${r.term}-${r.pick?.code ?? r.units}`}>
           <div>
-            <span>{r[0]}</span>
-            <b>{r[1]}</b>
+            <span>{r.id === "elective" ? "Any course" : "Requirement"}</span>
+            <b>{r.title}</b>
           </div>
           <div className="planned-choice">
             <small>In your plan</small>
-            {r[2] ? <b>{r[2]}</b> : <b className="not-chosen">Not chosen yet</b>}
-            <span>{r[3]}</span>
-            {r[5] && <em>{r[5]}</em>}
+            {r.pick ? <b>{r.pick.code}</b> : <b className="not-chosen">Not chosen yet</b>}
+            <span>{termLabel(r.term)}</span>
+            {!!r.pick?.covers.length && <em>Counts twice</em>}
           </div>
           <div className="alternative-choices">
-            <small>Other options</small>
-            <div className="chips">
-              {r[4].split(",").map((option) => (
-                <span key={option}>{option}</span>
-              ))}
-            </div>
+            <small>Bulletin</small>
+            <span>{audit.groups.find((g) => g.id === r.id)?.source ?? `${r.units} units`}</span>
           </div>
-          <button onClick={() => openPicker(`${r[0]} · ${r[1]}`)}>
-            {r[2] ? "See all courses for this area" : "Choose a course"}{" "}
-            <Icon name="arrow" size={14} />
+          <button
+            onClick={() =>
+              openPicker({ group: r.id, term: r.term, title: r.title, replacing: r.pick?.code })
+            }
+          >
+            {r.pick ? "Change" : "Choose a course"} <Icon name="arrow" size={14} />
           </button>
         </div>
       ))}
@@ -2211,71 +2202,103 @@ function ChoiceRequirementRows({
 }
 
 function ElectivesView({
+  work,
   openPicker,
   goToProgress,
 }: {
-  openPicker: (requirement: string) => void;
+  work: Work;
+  openPicker: (target: Target) => void;
   goToProgress: () => void;
 }) {
+  const { audit, check, info, picks, semesters, student } = work;
+  const rows: ChoiceRow[] = [
+    ...semesters.flatMap((s) =>
+      s.courses.filter(isSlot).map((slot) => ({
+        id: slot.slot,
+        title: slotLabel(slot, audit),
+        term: s.term,
+        units: slot.units,
+      })),
+    ),
+    ...picks.map((pick) => ({
+      id: pick.group,
+      title: pick.group === "elective" ? "Free elective: any course" : (audit.groups.find((g) => g.id === pick.group)?.title ?? pick.group),
+      term: pick.term,
+      pick,
+    })),
+  ];
+  const major = rows.filter((r) => audit.groups.find((g) => g.id === r.id)?.kind === "major");
+  const ge = rows.filter((r) => r.id.startsWith("ge_"));
+  const free = rows.filter((r) => r.id === "elective");
+  const studies = rows.filter((r) => !major.includes(r) && !ge.includes(r) && !free.includes(r));
+  const count = (list: ChoiceRow[]) => `${list.filter((r) => r.pick).length} chosen, ${list.filter((r) => !r.pick).length} to go`;
+  const done = audit.groups.filter(isDone);
+  const short = audit.groups.find((g) => g.min_units_from && !isDone(g));
+  const inSubject = short?.min_units_from
+    ? picks
+        .filter((p) => p.group === short.id && p.code.startsWith(short.min_units_from!.subject))
+        .reduce((total, p) => total + unitsOf(p.code, info), short.min_units_from.done)
+    : 0;
   return (
     <div className="app-content">
       <div className="page-title">
         <h1>Electives & GE</h1>
-        <p>These are the requirements where you get to choose.</p>
+        <p>
+          These are the requirements where you get to choose.
+          {student.goal && student.goal !== "Undecided" ? ` Your focus: ${student.goal}.` : ""}
+        </p>
       </div>
       <AdvisingNote />
-      <SectionCard title="Major electives" count="Pick 5 · 2 chosen, 3 to go">
-        <div className="major-electives-summary">
-          <div className="csc-unit-progress">
-            <div>
-              <b>6 of 12 required CSC units</b>
-              <span>50%</span>
+      {!check.valid && <ProblemPanel errors={check.errors} />}
+      {work.busy && <Loading label={work.busy} />}
+      {work.failed && <ErrorCard text={work.failed} />}
+      {!!major.length && (
+        <SectionCard title="Major electives" count={count(major)}>
+          {short?.min_units_from && (
+            <div className="major-electives-summary">
+              <div className="csc-unit-progress">
+                <div>
+                  <b>
+                    {inSubject} of {short.min_units_from.units} required {short.min_units_from.subject} units
+                  </b>
+                  <span>{Math.min(100, Math.round((inSubject / short.min_units_from.units) * 100))}%</span>
+                </div>
+                <div>
+                  <i style={{ width: `${Math.min(100, (inSubject / short.min_units_from.units) * 100)}%` }} />
+                </div>
+              </div>
             </div>
-            <div>
-              <i />
-            </div>
-          </div>
-          <div className="chosen-elective">
-            <div>
-              <b>CSC 665 · Artificial Intelligence</b>
-              <small>3 units · Fall 2028</small>
-              <em>Backup: CSC 651</em>
-            </div>
-            <button onClick={() => openPicker("Senior electives")}>Change</button>
-            <span className="counts-twice">Counts twice</span>
-            <StatusBadge type="ready">Ready</StatusBadge>
-          </div>
-          <div className="chosen-elective">
-            <div>
-              <b>CSC 645 · Computer Networks</b>
-              <small>3 units · Spring 2028</small>
-              <em>Backup: CSC 664</em>
-            </div>
-            <button onClick={() => openPicker("Senior electives")}>Change</button>
-            <StatusBadge type="ready">Ready</StatusBadge>
-          </div>
-          <Button kind="secondary" onClick={() => openPicker("Senior electives")}>
-            <Icon name="plus" /> Choose more
-          </Button>
-        </div>
-      </SectionCard>
-      <SectionCard title="GE still needed" count="3 areas · 1 still to choose">
-        <ChoiceRequirementRows rows={choiceRequirements.ge} openPicker={openPicker} />
-      </SectionCard>
-      <SectionCard title="SF State Studies & American Institutions" count="2 areas · both in your plan">
-        <ChoiceRequirementRows rows={choiceRequirements.studies} openPicker={openPicker} />
-      </SectionCard>
+          )}
+          <ChoiceRequirementRows rows={major} audit={audit} openPicker={openPicker} />
+        </SectionCard>
+      )}
+      {!!ge.length && (
+        <SectionCard title="GE still needed" count={count(ge)}>
+          <ChoiceRequirementRows rows={ge} audit={audit} openPicker={openPicker} />
+        </SectionCard>
+      )}
+      {!!studies.length && (
+        <SectionCard title="SF State Studies & American Institutions" count={count(studies)}>
+          <ChoiceRequirementRows rows={studies} audit={audit} openPicker={openPicker} />
+        </SectionCard>
+      )}
+      {!!free.length && (
+        <SectionCard title="Free electives" count={count(free)}>
+          <ChoiceRequirementRows rows={free} audit={audit} openPicker={openPicker} />
+        </SectionCard>
+      )}
+      {!rows.length && <p className="still-to-do">Nothing left to choose in this plan.</p>}
       <details className="already-done">
         <summary>
           <span>
             <Icon name="check" /> Already done
           </span>
           <span>
-            6 requirements <Icon name="chevron" />
+            {done.length} requirements <Icon name="chevron" />
           </span>
         </summary>
         <div>
-          <p>Area 1A, Area 1B, Area 1C, Area 2, Area 4, and US History.</p>
+          <p>{done.map((g) => g.title).join(", ")}</p>
           <button onClick={goToProgress}>
             See completed requirements in Progress <Icon name="arrow" size={14} />
           </button>
@@ -2285,123 +2308,91 @@ function ElectivesView({
   );
 }
 
-function ScheduleView({ toast }: { toast: (x: string) => void }) {
-  const [scheduleState, setScheduleState] = useState<
-    "ready" | "not-offered" | "unpublished" | "no-fit" | "full"
-  >("ready");
-  const [preference, setPreference] = useState("afternoons");
-  type Meeting = { days: string; start: number; end: number; time: string; label?: string };
-  type ScheduleClass = {
-    code: string;
-    num: string;
-    section: string;
-    meetings: Meeting[];
-    room: string;
-    open: string;
-    instructor: string;
-    format: string;
-    lab?: { num: string; text: string };
-    others: { text: string; clash?: string }[];
-  };
-  // Spring 2027 = the first term of the plan: same five courses as the Plan tab.
-  const classes: ScheduleClass[] = [
-    {
-      code: "CSC 340",
-      num: "12345",
-      section: "01",
-      meetings: [
-        { days: "MW", start: 14, end: 15.25, time: "2:00–3:15 PM" },
-        { days: "F", start: 16, end: 17.83, time: "4:00–5:50 PM", label: "Lab" },
-      ],
-      room: "HSS 154",
-      open: "12 seats open",
-      instructor: "Dr. Maya Chen",
-      format: "In person",
-      lab: { num: "12346", text: "Lab 02 · Fri 4:00–5:50 PM · SCI 202" },
-      others: [
-        { text: "Section 03 · TR 4:00–5:15 PM" },
-        { text: "Section 02 · MWF 9:00–9:50 AM", clash: "MATH 324 Mon/Wed/Fri 9:00" },
-      ],
-    },
-    {
-      code: "CSC 256",
-      num: "21780",
-      section: "02",
-      meetings: [{ days: "TR", start: 10, end: 11.25, time: "10:00–11:15 AM" }],
-      room: "TH 326",
-      open: "4 seats open",
-      instructor: "Prof. Luis Alvarez",
-      format: "In person",
-      others: [
-        { text: "Section 01 · MW 11:00 AM–12:15 PM" },
-        { text: "Section 03 · TR 12:30–1:45 PM", clash: "MATH 225 Tue/Thu 12:30" },
-      ],
-    },
-    {
-      code: "MATH 324",
-      num: "30891",
-      section: "03",
-      meetings: [{ days: "MWF", start: 9, end: 9.83, time: "9:00–9:50 AM" }],
-      room: "TH 210",
-      open: "Waitlist: 2",
-      instructor: "Dr. Priya Raman",
-      format: "Hybrid",
-      others: [
-        { text: "Section 01 · TR 8:00–9:15 AM · 6 seats open" },
-        { text: "Section 02 · MW 2:00–3:15 PM", clash: "CSC 340 Mon/Wed 2:00" },
-      ],
-    },
-    {
-      code: "MATH 225",
-      num: "30412",
-      section: "01",
-      meetings: [{ days: "TR", start: 12.5, end: 13.75, time: "12:30–1:45 PM" }],
-      room: "HSS 306",
-      open: "9 seats open",
-      instructor: "Dr. Ana Morales",
-      format: "In person",
-      others: [{ text: "Section 02 · MW 12:30–1:45 PM" }],
-    },
-    {
-      code: "CSC 300GW",
-      num: "12510",
-      section: "04",
-      meetings: [],
-      room: "Online",
-      open: "18 seats open",
-      instructor: "Prof. Kim Nguyen",
-      format: "Online · no set meeting time",
-      others: [
-        { text: "Section 01 · TR 10:00–11:15 AM", clash: "CSC 256 Tue/Thu 10:00" },
-      ],
-    },
-  ];
-  const classNumbers = classes.flatMap((c) => [c.num, ...(c.lab ? [c.lab.num] : [])]);
-  const dayCodes = [
-    ["MONDAY", "M"],
-    ["TUESDAY", "T"],
-    ["WEDNESDAY", "W"],
-    ["THURSDAY", "R"],
-    ["FRIDAY", "F"],
-  ];
+const CALENDAR_DAYS = [
+  ["MONDAY", "Mo"],
+  ["TUESDAY", "Tu"],
+  ["WEDNESDAY", "We"],
+  ["THURSDAY", "Th"],
+  ["FRIDAY", "Fr"],
+];
+const CLASS_SEARCH = "https://webapps.sfsu.edu/public/classservices/classsearch";
+function hourOf(text?: string) {
+  const m = text?.match(/(\d+):(\d+)\s*(AM|PM)/);
+  return m ? (Number(m[1]) % 12) + (m[3] === "PM" ? 12 : 0) + Number(m[2]) / 60 : null;
+}
+function hours(meeting: Meeting) {
+  const [from, to] = (meeting.time ?? "").split(" - ");
+  const start = hourOf(from);
+  const end = hourOf(to);
+  return start === null || end === null ? null : { start, end };
+}
+const when = (s: Section) =>
+  s.meetings.map((m) => [m.days, m.time, m.where].filter(Boolean).join(" ")).join("; ") || s.mode;
+const seats = (s: Section) =>
+  s.seats_open ? `${s.seats_open} seats open` : s.waitlist_open ? "Full · waitlist open" : "Full";
+
+function ScheduleView({
+  work,
+  openPlan,
+  toast,
+}: {
+  work: Work;
+  openPlan: () => void;
+  toast: (x: string) => void;
+}) {
+  const first = work.semesters[0];
+  const codes = first.courses.filter((c): c is string => !isSlot(c));
+  const label = termLabel(first.term);
+  const result = useLoad(() => getSections(first.term, codes), [first.term, codes.join()]);
+  const [preview, setPreview] = useState<"" | "ready" | "not-offered" | "unpublished" | "no-fit" | "full">("");
+  if (!codes.length) return <div className="app-content"><p>Choose this term’s courses first.</p></div>;
+  if (result.error) return <div className="app-content"><ErrorCard text={result.error} retry={result.retry} /></div>;
+  if (!result.data) return <div className="app-content"><Loading label={`Finding ${label} sections…`} /></div>;
+  const r = result.data;
+  const classes = Object.entries(r.schedule ?? {}).map(([code, numbers]) => ({
+    code,
+    picked: r.sections[code].filter((s) => numbers.includes(s.class_nbr)),
+    others: r.sections[code].filter((s) => !numbers.includes(s.class_nbr)),
+  }));
+  const classNumbers = Object.values(r.schedule ?? {}).flat();
+  const derived =
+    r.schedule === null && r.always_clash.length
+      ? "no-fit"
+      : r.schedule === null && !Object.keys(r.sections).length
+        ? r.unknown.length
+          ? "unpublished"
+          : "not-offered"
+        : "ready";
+  const scheduleState = preview || derived;
   const problemContent = {
-    "not-offered": ["CSC 600 isn’t offered in Spring 2027", "Move it in your plan", "button"],
-    unpublished: ["Spring 2027 schedule not published for PHYS yet", "Check Class Search", "link"],
+    "not-offered": [`${r.not_offered[0] ?? "A course"} isn’t offered in ${label}`, "Move it in your plan", "button"],
+    unpublished: [`${label} schedule isn’t published yet`, "Check Class Search", "link"],
     "no-fit": [
-      "No combination fits: CSC 340 and CSC 256 always overlap",
+      `No combination fits: ${r.always_clash[0]?.join(" and ") ?? "two courses"} always overlap`,
       "Move one to another term",
       "button",
     ],
     full: ["All sections full", "Join a waitlist or pick another section", "button"],
   } as const;
+  const blocks = classes.flatMap((c, i) =>
+    c.picked.flatMap((s) =>
+      s.meetings.flatMap((m) => {
+        const time = hours(m);
+        return time && m.days
+          ? m.days.split(" ").map((day) => ({ c, i, s, m, time, day }))
+          : [];
+      }),
+    ),
+  );
   return (
     <div className="app-content">
       <div className="schedule-title">
         <div>
-          <h1>Your Spring 2027 schedule</h1>
+          <h1>Your {label} schedule</h1>
           <p>One clash-free combination based on your plan.</p>
         </div>
         <Button
+          disabled={!classNumbers.length}
           onClick={() => {
             navigator.clipboard?.writeText(classNumbers.join(", ")).catch(() => {});
             toast(`${classNumbers.length} class numbers copied: paste them into Student Center`);
@@ -2412,24 +2403,26 @@ function ScheduleView({ toast }: { toast: (x: string) => void }) {
         </Button>
       </div>
       <AdvisingNote />
-      <div className="variant-switcher schedule-variants">
-        <span>Preview schedule state</span>
-        {[
-          ["ready", "Published"],
-          ["not-offered", "Not offered"],
-          ["unpublished", "Not published"],
-          ["no-fit", "No fit"],
-          ["full", "Sections full"],
-        ].map(([value, label]) => (
-          <button
-            className={scheduleState === value ? "active" : ""}
-            onClick={() => setScheduleState(value as typeof scheduleState)}
-            key={value}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      {DEMO && (
+        <div className="variant-switcher schedule-variants">
+          <span>Preview schedule state</span>
+          {[
+            ["ready", "Published"],
+            ["not-offered", "Not offered"],
+            ["unpublished", "Not published"],
+            ["no-fit", "No fit"],
+            ["full", "Sections full"],
+          ].map(([value, text]) => (
+            <button
+              className={scheduleState === value ? "active" : ""}
+              onClick={() => setPreview(value as typeof preview)}
+              key={value}
+            >
+              {text}
+            </button>
+          ))}
+        </div>
+      )}
       {scheduleState !== "ready" ? (
         <div className={`schedule-problem-frame ${scheduleState}`}>
           <span>
@@ -2453,11 +2446,11 @@ function ScheduleView({ toast }: { toast: (x: string) => void }) {
                   : "Your degree plan is safe; this only affects next term’s schedule."}
             </p>
             {problemContent[scheduleState][2] === "link" ? (
-              <a>
+              <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
                 {problemContent[scheduleState][1]} <Icon name="arrow" size={13} />
               </a>
             ) : (
-              <Button kind="secondary" onClick={() => setScheduleState("ready")}>
+              <Button kind="secondary" onClick={openPlan}>
                 {problemContent[scheduleState][1]}
               </Button>
             )}
@@ -2465,24 +2458,19 @@ function ScheduleView({ toast }: { toast: (x: string) => void }) {
         </div>
       ) : (
         <>
+          {[...r.not_offered, ...r.unknown].map((code) => (
+            <p className="online-note" key={code}>
+              <Icon name="warning" size={15} /> <b>{code}</b>{" "}
+              {r.not_offered.includes(code)
+                ? `has no section in ${label}. Move it in your plan.`
+                : "isn’t in our schedule data. Check Class Search."}
+            </p>
+          ))}
           <div className="schedule-controls">
             <div>
-              <b>Schedule 1 of 12 without time clashes</b>
-              <button onClick={() => toast("Showing another clash-free schedule.")}>
-                Show another <Icon name="arrow" size={13} />
-              </button>
-            </div>
-            <div className="preference-chips">
-              <span>Prefer:</span>
-              {["mornings", "afternoons", "no Fridays"].map((item) => (
-                <button
-                  className={preference === item ? "active" : ""}
-                  onClick={() => setPreference(item)}
-                  key={item}
-                >
-                  {item}
-                </button>
-              ))}
+              <b>
+                One of {r.sets} {r.sets === 1 ? "schedule" : "schedules"} without time clashes
+              </b>
             </div>
           </div>
           <div className="calendar-card hourly">
@@ -2493,80 +2481,58 @@ function ScheduleView({ toast }: { toast: (x: string) => void }) {
             </div>
             <div className="calendar-body">
               <div className="times">
-                {[
-                  "8 AM",
-                  "9 AM",
-                  "10 AM",
-                  "11 AM",
-                  "12 PM",
-                  "1 PM",
-                  "2 PM",
-                  "3 PM",
-                  "4 PM",
-                  "5 PM",
-                  "6 PM",
-                  "7 PM",
-                  "8 PM",
-                ].map((x) => (
-                  <span key={x}>{x}</span>
-                ))}
+                {["8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM"].map(
+                  (x) => (
+                    <span key={x}>{x}</span>
+                  ),
+                )}
               </div>
               <div className="day-grid">
                 {[0, 1, 2, 3, 4].map((x) => (
                   <i key={x} />
                 ))}
-                {classes.flatMap((c, i) =>
-                  c.meetings.flatMap((m) =>
-                    m.days.split("").map((day) => (
-                      <div
-                        className={`cal-block c${i % 3}`}
-                        key={`${c.code}${m.label ?? ""}${day}`}
-                        style={{
-                          top: (m.start - 8) * 52 + 1,
-                          height: (m.end - m.start) * 52 - 3,
-                          left: `calc(${dayCodes.findIndex((item) => item[1] === day)} * 20% + 4px)`,
-                        }}
-                      >
-                        <b>
-                          {c.code}
-                          {m.label ? ` ${m.label}` : ""}
-                        </b>
-                        <span>{m.time}</span>
-                      </div>
-                    )),
-                  ),
-                )}
+                {blocks
+                  .filter((b) => CALENDAR_DAYS.some(([, code]) => code === b.day))
+                  .map((b) => (
+                    <div
+                      className={`cal-block c${b.i % 3}`}
+                      key={`${b.s.class_nbr}${b.m.time}${b.day}`}
+                      style={{
+                        top: (b.time.start - 8) * 52 + 1,
+                        height: (b.time.end - b.time.start) * 52 - 3,
+                        left: `calc(${CALENDAR_DAYS.findIndex(([, code]) => code === b.day)} * 20% + 4px)`,
+                      }}
+                    >
+                      <b>
+                        {b.c.code} {b.s.component !== "LEC" ? b.s.component : ""}
+                      </b>
+                      <span>{b.m.time}</span>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
           {classes
-            .filter((c) => !c.meetings.length)
+            .filter((c) => !c.picked.some((s) => s.meetings.some((m) => m.days)))
             .map((c) => (
               <p className="online-note" key={c.code}>
-                <Icon name="info" size={15} /> <b>{c.code}</b> is online with no set meeting time,
-                so it isn’t on the calendar.
+                <Icon name="info" size={15} /> <b>{c.code}</b> has no set meeting time, so it isn’t on
+                the calendar.
               </p>
             ))}
           <div className="mobile-day-list">
-            {dayCodes.map(([day, code]) => (
+            {CALENDAR_DAYS.map(([day, code]) => (
               <div key={day}>
                 <b>{day}</b>
                 <section>
-                  {classes
-                    .flatMap((c, ci) =>
-                      c.meetings
-                        .filter((m) => m.days.includes(code))
-                        .map((m) => ({ c, ci, m })),
-                    )
-                    .sort((a, b) => a.m.start - b.m.start)
-                    .map(({ c, ci, m }) => (
-                      <span key={`${c.code}${m.label ?? ""}`}>
-                        <i className={`class-dot c${ci % 3}`} />
-                        <strong>
-                          {c.code}
-                          {m.label ? ` ${m.label}` : ""}
-                        </strong>
-                        {m.time}
+                  {blocks
+                    .filter((b) => b.day === code)
+                    .sort((a, b) => a.time.start - b.time.start)
+                    .map((b) => (
+                      <span key={`${b.s.class_nbr}${b.m.time}`}>
+                        <i className={`class-dot c${b.i % 3}`} />
+                        <strong>{b.c.code}</strong>
+                        {b.m.time}
                       </span>
                     ))}
                 </section>
@@ -2574,213 +2540,83 @@ function ScheduleView({ toast }: { toast: (x: string) => void }) {
             ))}
           </div>
           <div className="section-list">
-            {classes.map((c, i) => (
-              <article className="section-detail" key={c.code}>
-                <div className="section-main">
-                  <span>
-                    <b>{c.code}</b>
-                    <StatusBadge type={c.open.includes("Wait") ? "warning" : "ready"}>
-                      {c.open}
-                    </StatusBadge>
-                  </span>
-                  <p>
-                    Section {c.section} ·{" "}
-                    {c.meetings.length
-                      ? `${c.meetings[0].days} ${c.meetings[0].time} · ${c.room}`
-                      : c.format}
-                  </p>
-                  {c.lab && (
-                    <p className="linked-lab">
-                      <Icon name="route" size={13} /> Includes {c.lab.text} · Class #{c.lab.num}
+            {classes.map((c) => {
+              const [main, ...linked] = c.picked;
+              return (
+                <article className="section-detail" key={c.code}>
+                  <div className="section-main">
+                    <span>
+                      <b>{c.code}</b>
+                      <StatusBadge type={main.seats_open ? "ready" : "warning"}>{seats(main)}</StatusBadge>
+                    </span>
+                    <p>
+                      Section {main.section} · {when(main)}
                     </p>
-                  )}
-                  <small>
-                    {c.meetings.length ? `${c.format} · ` : ""}
-                    {c.instructor} ·{" "}
-                    <a
-                      href={`https://www.ratemyprofessors.com/search/professors/880?q=${encodeURIComponent(c.instructor)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Rate My Professors (student opinions)
-                    </a>
-                  </small>
-                  <details className="other-sections">
-                    <summary>
-                      Other sections <Icon name="chevron" />
-                    </summary>
-                    {c.others.map((o) => (
-                      <div className={o.clash ? "disabled" : ""} key={o.text}>
-                        <span>{o.text}</span>
-                        {o.clash ? (
-                          <button disabled>Clashes with {o.clash}</button>
-                        ) : (
-                          <button onClick={() => toast(`${o.text.split(" ·")[0]} selected for ${c.code}.`)}>
-                            Use this section
-                          </button>
-                        )}
-                      </div>
+                    {linked.map((s) => (
+                      <p className="linked-lab" key={s.class_nbr}>
+                        <Icon name="route" size={13} /> Includes {s.component} {s.section} · {when(s)} · Class #
+                        {s.class_nbr}
+                      </p>
                     ))}
-                  </details>
-                </div>
-                <div className="class-num">
-                  <small>Class number</small>
-                  <b>#{c.num}</b>
-                  <button onClick={() => toast(`${c.num} copied.`)}>
-                    <Icon name="copy" /> Copy
-                  </button>
-                </div>
-              </article>
-            ))}
+                    <small>
+                      {main.mode}
+                      {main.instructor ? ` · ${main.instructor}` : ""}
+                      {Object.entries(main.rate_my_professors ?? {}).map(([name, link]) => (
+                        <span key={name}>
+                          {" · "}
+                          <a href={link} target="_blank" rel="noreferrer">
+                            Rate My Professors (student opinions)
+                          </a>
+                        </span>
+                      ))}
+                    </small>
+                    {!!c.others.length && (
+                      <details className="other-sections">
+                        <summary>
+                          Other sections <Icon name="chevron" />
+                        </summary>
+                        {c.others.map((o) => (
+                          <div className={o.clashes_with?.length ? "disabled" : ""} key={o.class_nbr}>
+                            <span>
+                              Section {o.section} · {when(o)} · #{o.class_nbr}
+                            </span>
+                            <small>
+                              {o.clashes_with?.length
+                                ? `Clashes with ${o.clashes_with.join(", ")}`
+                                : "Fits instead"}
+                            </small>
+                          </div>
+                        ))}
+                      </details>
+                    )}
+                  </div>
+                  <div className="class-num">
+                    <small>Class number</small>
+                    <b>#{main.class_nbr}</b>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard?.writeText(main.class_nbr).catch(() => {});
+                        toast(`${main.class_nbr} copied.`);
+                      }}
+                    >
+                      <Icon name="copy" /> Copy
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
-          <div className="schedule-note">
-            <Icon name="clock" /> Seats and rooms as of Nov 12, 9:00 PM. Confirm in Class Search
-            before registering.
-          </div>
+          {r.warnings.map((w) => (
+            <div className="schedule-note" key={w}>
+              <Icon name="clock" /> {w}
+            </div>
+          ))}
         </>
       )}
     </div>
   );
 }
 
-type PickerOption = {
-  code: string;
-  title: string;
-  page: number;
-  status: "Ready" | "Check";
-  reason?: string;
-  fit?: string;
-  covers?: string;
-  rare?: boolean;
-  offered?: string;
-  last?: string;
-};
-const pickerOptions: Record<string, PickerOption[]> = {
-  "Senior electives": [
-    {
-      code: "CSC 665",
-      title: "Artificial Intelligence",
-      page: 1948,
-      status: "Ready",
-      fit: "Matches your goal: AI / ML",
-      covers: "SF State Studies – GP",
-    },
-    {
-      code: "CSC 671",
-      title: "Deep Learning",
-      page: 1949,
-      status: "Ready",
-      fit: "Matches your goal: AI / ML",
-    },
-    {
-      code: "CSC 664",
-      title: "Multimedia Systems",
-      page: 1947,
-      status: "Check",
-      reason: "Needs a 3.0 GPA: ask your advisor if you qualify",
-      rare: true,
-    },
-    {
-      code: "CSC 645",
-      title: "Computer Networks",
-      page: 1941,
-      status: "Ready",
-      fit: "Strong foundation course",
-    },
-    {
-      code: "CSC 651",
-      title: "System Administration",
-      page: 1945,
-      status: "Check",
-      reason: "Needs instructor consent: ask the instructor or your advisor",
-    },
-  ],
-  "GE Area 3 · Arts & Humanities": [
-    {
-      code: "HUM 200",
-      title: "Introduction to Humanities",
-      page: 2176,
-      status: "Ready",
-      fit: "In your plan for Fall 2027",
-    },
-    { code: "ENG 218", title: "The Art of English", page: 2041, status: "Ready" },
-    { code: "MUS 110", title: "The Art of Listening", page: 2262, status: "Ready" },
-    {
-      code: "CWL 250",
-      title: "Fables and Tales",
-      page: 2003,
-      status: "Check",
-      reason: "Needs a writing prerequisite: ask your advisor which one counts",
-      rare: true,
-    },
-  ],
-  "GE Area 6 · Ethnic Studies": [
-    {
-      code: "LTNS 280",
-      title: "Race, Gender and Power",
-      page: 2211,
-      status: "Ready",
-      fit: "In your plan for Spring 2028",
-      covers: "SF State Studies – ES",
-    },
-    { code: "ETHS 100", title: "Introduction to Ethnic Studies", page: 2072, status: "Ready" },
-    { code: "AA S 210", title: "History of Asians in America", page: 1820, status: "Ready" },
-  ],
-  "SF State Studies · Global Perspectives": [
-    {
-      code: "CSC 665",
-      title: "Artificial Intelligence",
-      page: 1948,
-      status: "Ready",
-      covers: "Senior elective",
-    },
-    {
-      code: "LTNS 280",
-      title: "Race, Gender and Power",
-      page: 2211,
-      status: "Ready",
-      covers: "GE Area 6",
-    },
-    {
-      code: "HIST 450",
-      title: "Global History",
-      page: 2153,
-      status: "Check",
-      reason: "Needs upper-division standing (60+ units) by that term",
-    },
-  ],
-  "Upper-division GE · Area 4UD · Social Sciences": [
-    { code: "PSY 431", title: "Developmental Psychology", page: 2341, status: "Ready", offered: "Fall, Spring", last: "Fall 2026" },
-    { code: "SOC 300", title: "Sociological Analysis", page: 2402, status: "Ready", offered: "Fall, Spring", last: "Fall 2026" },
-    {
-      code: "ECON 300",
-      title: "Economics in Society",
-      page: 2012,
-      status: "Check",
-      reason: "Needs upper-division standing (60+ units) by that term",
-      offered: "Spring only",
-      last: "Spring 2026",
-    },
-  ],
-  "American Institutions · US & CA Government": [
-    {
-      code: "PLSI 200",
-      title: "American Politics",
-      page: 2328,
-      status: "Ready",
-      fit: "In your plan for Spring 2029",
-    },
-    { code: "PLSI 275", title: "California Politics", page: 2332, status: "Ready" },
-    {
-      code: "HIST 471",
-      title: "California History",
-      page: 2158,
-      status: "Check",
-      reason: "Needs HIST 300: not currently in your plan",
-      rare: true,
-    },
-  ],
-};
 function useDialog(close: () => void) {
   const ref = useRef<HTMLElement>(null);
   const closeRef = useRef(close);
@@ -2815,26 +2651,150 @@ function useDialog(close: () => void) {
   return ref;
 }
 
+function offeredText(o?: Offered | null) {
+  if (!o) return "No offering history here: check Class Search";
+  const ran = (["fall", "spring", "summer"] as const)
+    .filter((season) => o[season])
+    .map((season) => `${season} ${o[season]![0]} of ${o[season]![1]}`);
+  return `Ran: ${ran.join(", ")}${o.last ? ` · last ran ${termLabel(o.last)}` : ""}`;
+}
+
+function FreeCourse({ choose }: { choose: (code: string) => void }) {
+  const [code, setCode] = useState("");
+  const [state, setState] = useState<{ loading?: boolean; error?: string }>({});
+  const add = async () => {
+    setState({ loading: true });
+    try {
+      choose((await getCourse(code)).code);
+    } catch (e) {
+      setState({ error: message(e) });
+    }
+  };
+  return (
+    <div className="record-panel form-panel">
+      <label>
+        Course code
+        <div className="search-field">
+          <Icon name="search" />
+          <input
+            autoFocus
+            value={code}
+            placeholder="ART 101"
+            onChange={(e) => setCode(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && code && add()}
+          />
+        </div>
+      </label>
+      <Button onClick={add} disabled={!code || state.loading}>
+        {state.loading ? "Finding it in the Bulletin…" : "Add to my plan"}
+      </Button>
+      {state.error && <ErrorCard text={state.error} />}
+    </div>
+  );
+}
+
+function OptionCard({
+  option: o,
+  chosen,
+  audit,
+  choose,
+}: {
+  option: Option;
+  chosen: boolean;
+  audit: Audit;
+  choose: () => void;
+}) {
+  const blocked = o.readiness === "blocked";
+  const covers = o.also_covers.map((id) => audit.groups.find((g) => g.id === id)?.title ?? id);
+  return (
+    <article className={`elective-card ${chosen ? "chosen" : ""}`}>
+      <div className="elective-card-top">
+        <div>
+          <b>
+            {o.code} · {o.title}
+          </b>
+          <small>
+            {o.units} units · Bulletin p.{o.source_page}
+          </small>
+        </div>
+        <StatusBadge type={o.readiness === "ready" ? "ready" : "warning"}>
+          {o.readiness === "ready" ? "Ready" : blocked ? "Not yet" : "Check"}
+        </StatusBadge>
+      </div>
+      {o.description && <p>{o.description}</p>}
+      {[...(o.cannot_check ?? []), ...(o.blocked_by ?? [])].map((reason) => (
+        <p className="check-reason" key={reason}>
+          <Icon name="warning" size={13} />
+          {reason}
+        </p>
+      ))}
+      {o.ready_by && (
+        <p className="check-reason">
+          <Icon name="clock" size={13} />
+          Opens up in {termLabel(o.ready_by)}
+        </p>
+      )}
+      {o.note && <p className="check-reason">{o.note}</p>}
+      <p>{offeredText(o.offered)}</p>
+      {o.not_offered && (
+        <p className="rare-note">
+          <Icon name="warning" size={13} /> {o.not_offered}
+        </p>
+      )}
+      {o.readiness === "ready" && (
+        <p className="ready-reason">
+          <Icon name="check" size={13} /> Prerequisites met by this term
+        </p>
+      )}
+      {!!covers.length && <span className="counts-twice">Counts twice · Also covers: {covers.join(", ")}</span>}
+      <div className="elective-actions">
+        <Button kind={chosen ? "secondary" : "primary"} disabled={blocked || chosen} onClick={choose}>
+          {chosen ? (
+            <>
+              <Icon name="check" /> Chosen
+            </>
+          ) : (
+            "Choose"
+          )}
+        </Button>
+      </div>
+    </article>
+  );
+}
+
 function ElectiveDrawer({
-  requirement,
+  work,
+  target,
   close,
   choose,
 }: {
-  requirement: string;
+  work: Work;
+  target: Target;
   close: () => void;
-  choose: (x: string) => void;
+  choose: (code: string, option?: Option) => void;
 }) {
   const dialogRef = useDialog(close);
-  const options = pickerOptions[requirement] ?? pickerOptions["Senior electives"];
-  const isSenior = requirement === "Senior electives";
-  // Senior electives allow several picks; every other requirement takes one course,
-  // starting from the course already in the plan.
-  const [chosen, setChosen] = useState<string[]>(
-    isSenior
-      ? ["CSC 665", "CSC 645"]
-      : options.filter((o) => o.fit?.startsWith("In your plan")).map((o) => o.code),
+  const free = target.group === "elective";
+  const result = useLoad(
+    () =>
+      free
+        ? Promise.resolve(null)
+        : getElectives(work.student, target.group, { semesters: work.semesters }, target.term),
+    [target],
   );
-  const [inlineError, setInlineError] = useState("");
+  const options = result.data?.options ?? [];
+  const open = options.filter((o) => o.readiness !== "blocked");
+  const blocked = options.filter((o) => o.readiness === "blocked");
+  const min = result.data?.min_units_from;
+  const card = (o: Option) => (
+    <OptionCard
+      option={o}
+      chosen={o.code === target.replacing}
+      audit={work.audit}
+      choose={() => choose(o.code, o)}
+      key={o.code}
+    />
+  );
   return (
     <div className="overlay" onMouseDown={close}>
       <aside
@@ -2848,123 +2808,49 @@ function ElectiveDrawer({
       >
         <div className="drawer-head">
           <div>
-            <h2>{isSenior ? "Pick 5 electives" : requirement}</h2>
+            <h2>{target.title}</h2>
             <p>
-              {isSenior
-                ? "At least 12 units must be in CSC."
-                : "Choose a course that fits this requirement and term."}
+              For {termLabel(target.term)}.
+              {min ? ` At least ${min.units} units must be in ${min.subject}.` : ""}
+              {work.student.goal && work.student.goal !== "Undecided" ? ` Your focus: ${work.student.goal}.` : ""}
             </p>
           </div>
           <button onClick={close} aria-label="Close">
             <Icon name="x" />
           </button>
         </div>
-        {isSenior && (
-          <div className="picker-progress">
-            <div>
-              <b>{chosen.length} of 5 chosen</b>
-              <span>{chosen.length * 3} of 15 units</span>
-            </div>
-            <div>
-              <i style={{ width: `${(chosen.length / 5) * 100}%` }} />
-            </div>
-          </div>
+        {free && <FreeCourse choose={(code) => choose(code)} />}
+        {result.loading && <Loading label="Finding courses that fit…" />}
+        {result.error && <ErrorCard text={result.error} retry={result.retry} />}
+        {result.data?.approval && (
+          <p className="check-reason">
+            <Icon name="warning" size={13} />
+            {result.data.approval}. Ask your advisor in Navigator which courses count.
+          </p>
         )}
-        <div className="sort-row">
-          <span>
-            Sorted by{" "}
-            <b>{isSenior ? "fit with AI / Machine Learning" : "readiness and availability"}</b>
-          </span>
-          <button>
-            <Icon name="menu" /> Filters
-          </button>
-        </div>
-        <div className="elective-list">
-          {options.map((e, i) => {
-            const isChosen = chosen.includes(e.code);
-            return (
-              <article className={`elective-card ${isChosen ? "chosen" : ""}`} key={e.code}>
-                <div className="elective-card-top">
-                  <div>
-                    <b>
-                      {e.code} · {e.title}
-                    </b>
-                    <small>3 units · Bulletin p.{e.page}</small>
-                  </div>
-                  <StatusBadge type={e.status === "Ready" ? "ready" : "warning"}>
-                    {e.status}
-                  </StatusBadge>
-                </div>
-                {e.fit && (
-                  <span className="fit-tag">
-                    <Icon name="check" />
-                    {e.fit}
-                  </span>
-                )}
-                {e.reason && (
-                  <p className="check-reason">
-                    <Icon name="warning" size={13} />
-                    {e.reason}
-                  </p>
-                )}
-                <p>
-                  Usually offered: {e.offered ?? (e.rare ? "Rarely" : "Fall, Spring")} <span>·</span> Last
-                  offered: {e.last ?? (e.rare ? "Spring 2023" : "Fall 2026")}
-                </p>
-                {e.status === "Ready" && (
-                  <p className="ready-reason">
-                    <Icon name="check" size={13} /> Prerequisites met by this term
-                  </p>
-                )}
-                {e.rare && (
-                  <p className="rare-note">
-                    <Icon name="warning" size={13} /> Ran once in 4 years · pick a backup
-                  </p>
-                )}
-                {e.covers && (
-                  <span className="counts-twice">Counts twice · Also covers: {e.covers}</span>
-                )}
-                {inlineError && e.code === "CSC 664" && (
-                  <div className="picker-error">
-                    {inlineError}
-                    <button onClick={() => setInlineError("")}>Set CSC 651 as backup</button>
-                  </div>
-                )}
-                <div className="elective-actions">
-                  <button>Set as backup</button>
-                  <Button
-                    kind={isChosen ? "secondary" : "primary"}
-                    onClick={() => {
-                      if (e.code === "CSC 664" && !isChosen) {
-                        setInlineError(
-                          "Needs a 3.0 GPA. Ask your advisor before choosing it, or pick a backup.",
-                        );
-                        return;
-                      }
-                      const n = isChosen
-                        ? chosen.filter((x) => x !== e.code)
-                        : isSenior
-                          ? [...chosen, e.code]
-                          : [e.code];
-                      setChosen(n);
-                      if (!isChosen) choose(e.code);
-                    }}
-                  >
-                    {isChosen ? (
-                      <>
-                        <Icon name="check" /> Chosen
-                      </>
-                    ) : (
-                      "Choose"
-                    )}
-                  </Button>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+        {!!options.length && (
+          <>
+            <div className="sort-row">
+              <span>
+                Sorted by <b>readiness, then what else each course covers</b>
+              </span>
+            </div>
+            <div className="elective-list">{open.map(card)}</div>
+            {!!blocked.length && (
+              <details className="other-sections">
+                <summary>
+                  {blocked.length} more that aren’t ready by {termLabel(target.term)}{" "}
+                  <Icon name="chevron" />
+                </summary>
+                <div className="elective-list">{blocked.map(card)}</div>
+              </details>
+            )}
+          </>
+        )}
         <div className="drawer-footer">
-          <Button onClick={close}>Done choosing</Button>
+          <Button kind="secondary" onClick={close}>
+            Close
+          </Button>
         </div>
       </aside>
     </div>
@@ -3051,62 +2937,6 @@ function CourseDrawer({ code, why, close }: { code: string; why?: string; close:
   );
 }
 
-function ChatPanel({ close }: { close: () => void }) {
-  const dialogRef = useDialog(close);
-  const [asked, setAsked] = useState(false);
-  return (
-    <div className="overlay chat-overlay" onMouseDown={close}>
-      <aside
-        className="drawer chat-drawer"
-        onMouseDown={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Ask about your plan"
-        tabIndex={-1}
-        ref={dialogRef}
-      >
-        <div className="drawer-head">
-          <div>
-            <h2>Ask about your plan</h2>
-            <p>3 of 5 questions left today</p>
-          </div>
-          <button onClick={close} aria-label="Close">
-            <Icon name="x" />
-          </button>
-        </div>
-        <div className="chat-intro">
-          <h3>What would you like to know?</h3>
-          <p>I can explain your plan using the Bulletin. For decisions, talk to an advisor.</p>
-        </div>
-        <button className="suggested" onClick={() => setAsked(true)}>
-          Can I take a GE class in Winter Session? <Icon name="arrow" />
-        </button>
-        {asked && (
-          <>
-            <div className="chat-bubble user">Can I take a GE class in Winter Session?</div>
-            <div className="chat-bubble bot">
-              <b>Yes, if that course is offered.</b> Winter courses are compressed, so we recommend
-              taking only one. I can update your plan to show this option.
-            </div>
-          </>
-        )}
-        <div className="chat-rest">
-          <Icon name="clock" />
-          <span>
-            <b>Chat is resting for today.</b>Your plan and schedule still work.
-          </span>
-        </div>
-        <div className="chat-input">
-          <input placeholder="Ask a question about your plan…" />
-          <button aria-label="Send question">
-            <Icon name="arrow" />
-          </button>
-        </div>
-      </aside>
-    </div>
-  );
-}
-
 function StyleGuide({ close }: { close: () => void }) {
   const dialogRef = useDialog(close);
   return (
@@ -3169,9 +2999,8 @@ function StyleGuide({ close }: { close: () => void }) {
 
 function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
   const [tab, setTab] = useState<Tab>("plan");
-  const [picker, setPicker] = useState("");
+  const [picker, setPicker] = useState<Target | null>(null);
   const [course, setCourse] = useState("");
-  const [chat, setChat] = useState(false);
   const [toast, setToast] = useState("");
   const [state, setState] = useState({
     options: built.options,
@@ -3179,6 +3008,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     semesters: built.plan.semesters,
     check: built.plan.check ?? ({ valid: true, errors: [] } as Checked),
     info: built.plan.courses ?? {},
+    picks: [] as Pick[],
   });
   const [busy, setBusy] = useState("");
   const [failed, setFailed] = useState("");
@@ -3216,9 +3046,11 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
           semesters: plan.semesters,
           check: plan.check ?? { valid: true, errors: [] },
           info: plan.courses ?? {},
+          picks: [],
         };
       },
-      (next) => `${label}: graduate ${termLabel(next.plan.est_graduation_term)}`,
+      (next) =>
+        `${label}: graduate ${termLabel(next.plan.est_graduation_term)}${state.picks.length ? ". Your course choices were cleared" : ""}`,
     );
   const applyFold = () => {
     const fold = state.plan.pace?.fold_last_term;
@@ -3235,9 +3067,45 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
       "Checking the faster plan…",
       async () => {
         const check = await checkPlan(student, { semesters });
-        return { ...state, semesters, check, info: { ...state.info, ...check.courses } };
+        const picks = state.picks.map((p) => (p.term === last.term ? { ...p, term: fold.term } : p));
+        return { ...state, semesters, check, picks, info: { ...state.info, ...check.courses } };
       },
       () => `Faster: graduate ${termLabel(fold.est_graduation_term)}`,
+    );
+  };
+  const choose = (target: Target, code: string, option?: Option) => {
+    setPicker(null);
+    attempt(
+      "Checking your plan…",
+      async () => {
+        const semesters = state.semesters.map((s) => {
+          if (s.term !== target.term) return s;
+          let placed = false;
+          const courses = s.courses.map((c) => {
+            const fits = target.replacing ? c === target.replacing : isSlot(c) && c.slot === target.group;
+            if (placed || !fits) return c;
+            placed = true;
+            return code;
+          });
+          return { ...s, courses };
+        });
+        const check = await checkPlan(student, { semesters });
+        const pick = {
+          group: target.group,
+          term: target.term,
+          code,
+          readiness: option?.readiness,
+          covers: option?.also_covers ?? [],
+        };
+        return {
+          ...state,
+          semesters,
+          check,
+          info: { ...state.info, ...check.courses },
+          picks: [...state.picks.filter((p) => p.code !== target.replacing), pick],
+        };
+      },
+      (next) => (next.check.valid ? `${code} is in your plan` : `${code} is in your plan, but the plan has a problem`),
     );
   };
   const work: Work = {
@@ -3257,11 +3125,6 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
         }
       : undefined,
   };
-  useEffect(() => {
-    const openChat = () => setChat(true);
-    document.addEventListener("gator-ask", openChat);
-    return () => document.removeEventListener("gator-ask", openChat);
-  }, []);
   const why = state.semesters.find((s) => s.why?.[course])?.why?.[course];
   return (
     <>
@@ -3269,7 +3132,9 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
       {tab === "plan" && (
         <PlanView
           work={work}
-          openChoice={() => setPicker("Senior electives")}
+          openChoice={(slot, term) =>
+            setPicker({ group: slot.slot, term, title: slotLabel(slot, built.audit) })
+          }
           openCourse={setCourse}
           openSchedule={() => setTab("schedule")}
           toast={showToast}
@@ -3277,18 +3142,20 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
       )}
       {tab === "progress" && <ProgressView work={work} />}
       {tab === "electives" && (
-        <ElectivesView openPicker={setPicker} goToProgress={() => setTab("progress")} />
+        <ElectivesView work={work} openPicker={setPicker} goToProgress={() => setTab("progress")} />
       )}
-      {tab === "schedule" && <ScheduleView toast={showToast} />}
+      {tab === "schedule" && (
+        <ScheduleView work={work} openPlan={() => setTab("plan")} toast={showToast} />
+      )}
       {picker && (
         <ElectiveDrawer
-          requirement={picker}
-          close={() => setPicker("")}
-          choose={(x) => showToast(`${x} added to your plan`)}
+          work={work}
+          target={picker}
+          close={() => setPicker(null)}
+          choose={(code, option) => choose(picker, code, option)}
         />
       )}
       {course && <CourseDrawer code={course} why={why} close={() => setCourse("")} />}
-      {chat && <ChatPanel close={() => setChat(false)} />}
       {toast && (
         <div className="toast">
           <Icon name="check" />

@@ -1,7 +1,9 @@
 """The web API over the fixture catalog: real routes, the same functions as the MCP tools, no AI client."""
 
+import re
 import shutil
 import tempfile
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -10,6 +12,7 @@ from test_server import DPR, SCENARIOS, fixture_db, use_fixture_db  # noqa: F401
 from gatorpath import api, dpr, server
 
 client = TestClient(api.app)
+APP = (Path(__file__).parents[1] / "web/src/App.tsx").read_text()
 STUDENT = SCENARIOS["new freshman, QR 1/2"]
 SOPHOMORE = SCENARIOS["sophomore"]
 
@@ -104,3 +107,14 @@ def test_the_screens_other_reads():
     assert audit["courses"]["CSC 101"]["title"] == "Introduction to Computing"  # Review shows titles
     assert any(p["id"] == "bs-cs" for p in client.get("/api/programs").json()["programs"])
     assert client.get("/api/course", params={"code": "CSC 340"}).json()["title"] == "Programming Methodology"
+
+
+def test_the_site_never_calls_a_plan_verified_and_sends_questions_to_navigator():
+    assert "verified" not in APP.lower() and "https://sfsu.campus.eab.com/" in APP
+    assert "advising.sfsu.edu" not in APP and "/undergrads/advising" not in APP
+
+
+def test_the_preview_bars_stay_behind_demo():
+    bars = [m.start() for m in re.finditer(r'variant-switcher|demo-error|Preview goal options', APP)]
+    assert len(bars) == 4
+    assert all("{DEMO && (" in APP[max(0, at - 250):at] for at in bars)

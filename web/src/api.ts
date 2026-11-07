@@ -122,6 +122,56 @@ export type PlanResult = {
   courses?: Record<string, CourseInfo>;
 };
 
+export type Option = {
+  code: string;
+  title: string;
+  units: number;
+  source_page: number;
+  readiness: "ready" | "check" | "blocked";
+  also_covers: string[];
+  offered?: Offered | null;
+  description?: string | null;
+  note?: string;
+  cannot_check?: string[];
+  blocked_by?: string[];
+  ready_by?: string;
+  not_offered?: string;
+};
+export type Electives = {
+  title: string;
+  by_term: string;
+  source: string;
+  units_needed?: number;
+  min_units_from?: { subject: string; units: number; done: number };
+  approval?: string;
+  options: Option[];
+  warnings: string[];
+};
+export type Meeting = { days?: string; time?: string; where?: string };
+export type Section = {
+  section: string;
+  component: string;
+  mode: string;
+  class_nbr: string;
+  meetings: Meeting[];
+  instructor?: string;
+  seats_open?: number;
+  waitlist_open?: number;
+  rate_my_professors?: Record<string, string>;
+  clashes_with?: string[];
+};
+export type Sections = {
+  term: string;
+  sections: Record<string, Section[]>;
+  schedule: Record<string, string[]> | null;
+  sets: number;
+  always_clash: string[][];
+  not_offered: string[];
+  unknown: string[];
+  scraped_at: string | null;
+  warnings: string[];
+};
+
 class EngineError extends Error {}
 
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
@@ -168,3 +218,10 @@ export const buildPlan = (profile: Profile, options: Options) =>
   post<PlanResult>("/api/plan", { profile, options });
 export const checkPlan = (profile: Profile, plan: Plan) =>
   post<Checked>("/api/check", { profile, plan });
+export const getElectives = (profile: Profile, requirement: string, plan: Plan, by_term: string) =>
+  post<Electives>("/api/electives", { profile, requirement, plan, by_term, limit: 100 });
+export function getSections(term: string, courses: string[]) {
+  const query = new URLSearchParams({ term });
+  courses.forEach((c) => query.append("courses", c));
+  return call<Sections>(`/api/sections?${query}`);
+}
