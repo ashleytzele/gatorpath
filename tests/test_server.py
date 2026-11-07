@@ -679,3 +679,11 @@ def test_check_plan_over_mcp_agrees_with_the_engine():
     last = plan["semesters"][-1]
     heavy = {"semesters": plan["semesters"][:-1] + [last | {"max_units": 1}]}
     assert asyncio.run(over_mcp(heavy))["valid"] == server.check_plan(student, heavy)["valid"] is False
+
+
+def test_first_time_false_without_transfer_work_is_flagged_not_believed():
+    student = SCENARIOS["Fall 2024 junior (old GE)"]
+    told = server.audit_progress(student | {"first_time": False})
+    assert any("first_time: false" in w for w in told["warnings"])
+    assert told["groups"] == server.audit_progress(student)["groups"]
+    assert not any("first_time" in w for w in server.audit_progress(student)["warnings"])

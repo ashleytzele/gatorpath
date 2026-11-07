@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from gatorpath.engine.rules import RULES_DIR, audit, load_rules, matches, rank
+from gatorpath.engine.rules import RULES_DIR, audit, first_time, load_rules, matches, rank
 
 ROOT = Path(__file__).parents[1]
 CATALOG = json.loads((ROOT / "evals/catalog-2026-27.json").read_text())
@@ -608,3 +608,13 @@ def test_a_choice_counts_a_claimed_courses_own_units():
                                              CATALOG)["groups"] if g["id"] == "lessons")
     assert got([{"code": "MUS 260", "grade": "A", "term": t} for t in terms[:3]])["units_done"] == 3
     assert got([{"code": "MUS 260", "grade": "A", "term": t} for t in terms])["status"] == "satisfied"
+
+
+def test_first_time_false_needs_transfer_work():
+    """A returning student isn't a transfer student: Haiku sends first_time: false for "not their first term"."""
+    assert first_time({"first_time": False}) is True
+    assert first_time({"first_time": False, "completed": [{"code": "CSC 101", "grade": "A", "term": "2025-fall"}]}) is True
+    assert first_time({"first_time": False, "transfer_units": 30}) is False
+    assert first_time({"first_time": False, "adt": True}) is False
+    assert first_time({"first_time": True, "transfer_units": 8}) is True  # AP units as a freshman
+    assert first_time({"transfer_units": 30}) is False and first_time({}) is True

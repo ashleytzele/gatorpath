@@ -83,10 +83,10 @@ def number(code: str) -> int:
 
 
 def first_time(profile: dict) -> bool:
-    """Began at SF State as a first-time college student: profile.first_time, else no transfer work at all."""
-    if "first_time" in profile:
-        return bool(profile["first_time"])
-    return not (profile.get("transfer_units") or profile.get("adt") or any(r.get("transfer") for r in profile.get("completed", [])))
+    """Began at SF State as a first-time college student: profile.first_time, else no transfer work at all. first_time:
+    false needs transfer work to stand on: a model reads it as "not their first term" for any returning student."""
+    transfer = profile.get("transfer_units") or profile.get("adt") or any(r.get("transfer") for r in profile.get("completed", []))
+    return bool(profile.get("first_time")) or not transfer
 
 
 def amended(g: dict) -> dict:

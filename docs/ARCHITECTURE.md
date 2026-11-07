@@ -332,7 +332,8 @@ Added after the 2026-10-17 second review (Codex, against the PDF):
   "a Lower-Division Area 4 course with USH" (pp.2313, 2317, 2350) = `{ge_area_all: ["4", USH]}`.
 - `first_time_from` (group): the filter used instead of `from` for students who began at SF State as first-time
   college students. `profile.first_time` says so; when it's missing, a profile with transfer units, transfer rows
-  or `adt` counts as a transfer student.
+  or `adt` counts as a transfer student. `first_time: false` with none of those is flagged and not believed: Haiku
+  sent it for students who simply weren't in their first term (2026-11-06), and it changes the US History rule.
 - `level: lower | upper` on a GE filter: the course number must be below 300 / 300-699 (p.2391).
 - `waiver` (text) next to `waived_if`, and `exam_credit` / `exam_note` on American Institutions groups: the
   Bulletin's exact conditions, returned with the requirements.
@@ -985,6 +986,8 @@ has the numbers and a Claude vs Codex alignment table. Since 2026-10-29 each cli
 prompt (its text pasted, standing in for /mcp__gatorpath__plan_my_degree), Codex CLI from the student's words alone (it
 has no MCP prompts; scored on fetching get_planning_steps; `--paste` restores the old way). The report's User
 experience table covers the first reply: a plan in it (nothing asked back), median seconds, tool calls and length.
+Since 2026-11-06 a smaller model runs too: `--clients claude-haiku` (Haiku inside Claude Code) and `--clients haiku` (a
+bare client on the API: the real server over stdio, its instructions and the date as the whole system prompt).
 
 The end-to-end number is the resume line: *"…produced valid 4-year plans for 47/50 test
 students; 0 hallucinated courses."*

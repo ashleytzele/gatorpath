@@ -9,13 +9,12 @@ import subprocess
 from datetime import date
 from functools import cache
 from pathlib import Path
-from typing import Annotated, NotRequired, TypedDict
+from typing import NotRequired, TypedDict
 from urllib.parse import quote
 
 import yaml
 from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
-from pydantic import Field
 
 from gatorpath import db, dpr, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
@@ -23,7 +22,7 @@ from gatorpath.engine.planner import compare_programs as engine_compare_programs
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import TERM, cover_combinations, eligible_options, pick_sections, see_advisor
 from gatorpath.engine.prereq import granted, prereq_chain, prereq_warnings, reverse_index
-from gatorpath.engine.rules import RULES_DIR, audit, load_rules, min_grade_of, number, translate_ge
+from gatorpath.engine.rules import RULES_DIR, audit, first_time, load_rules, min_grade_of, number, translate_ge
 
 # Requirements follow the student's catalog year (rules/<kind>/<year>/); course facts are the newest Bulletin's (D23).
 YEARS = sorted(p.stem for p in (RULES_DIR / "university").glob("*.yaml"))
@@ -84,8 +83,7 @@ class Profile(TypedDict):
     dpr_met: NotRequired[list[str]]
     not_on_dpr: NotRequired[list[str]]
     approved: NotRequired[dict[str, list[str]]]
-    # In the schema, where the model fills it in: Haiku read the name as "this is their first term" (2026-11-06)
-    first_time: NotRequired[Annotated[bool, Field(description="Began college at SF State, not: this is their first term. Only if they say so.")]]
+    first_time: NotRequired[bool]
     ge_certified: NotRequired[bool]
     prior_bachelors: NotRequired[bool]
     transfer_units: NotRequired[float]
@@ -406,7 +404,9 @@ def prepare(profile: dict, university: dict, year: str = YEAR) -> tuple[dict, li
                        "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])],
                        "permissions": [norm_code(c) for c in profile.get("permissions", [])],
                        "approved": {g: [norm_code(c) for c in cs] for g, cs in (profile.get("approved") or {}).items()}}
-    return clean, year_warning(profile, year) + ge_warnings
+    unbacked = ["first_time: false needs transfer work (transfer_units or transfer rows): treated as a first-time "
+                "student until it's listed"] if profile.get("first_time") is False and first_time(clean) else []
+    return clean, year_warning(profile, year) + ge_warnings + unbacked
 
 
 def load_for(profile: dict) -> tuple[str, dict, dict, dict, list[str]]:
@@ -474,9 +474,9 @@ def audit_progress(profile: Profile) -> dict:
     DPR shows met by a substitution or exception (e.g. MATH 225 met by MATH 325); not_on_dpr: requirements the
     tools list but the student's DPR doesn't have at all (an older catalog, e.g. GE "6" Ethnic Studies): left out and
     flagged for an advisor to confirm; first_time (began at SF State as a first-time college student; leave it out
-    unless the student says: without it, transfer work decides); ge_certified (Cal-GETC certification of lower-division GE, p.2304); prior_bachelors (already holds
+    unless the student says: without it, transfer work decides, and false needs transfer work); ge_certified (Cal-GETC certification of lower-division GE, p.2304); prior_bachelors (already holds
     a bachelor's or higher degree from a regionally accredited institution: GE and graduation requirements waived,
-    p.2313); transfer_units: total transfer units; adt: true only for a verified AA-T/AS-T from a California Community
+    p.2313); transfer_units: total transfer units, AP and IB units too; adt: true only for a verified AA-T/AS-T from a California Community
     College in a similar approved major (waives SF State Studies, p.2313); approved: {group id: [codes]}, the courses
     the student's advisor approved for a group with `approval` (BS Applied Mathematics application electives: no
     Bulletin list), from the DPR or the student; gpa optional. A group with `options` is a "Select One": `remaining`
@@ -867,7 +867,7 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    - not_on_dpr: requirements audit_progress lists that the DPR doesn't have at all (older catalogs, e.g. GE "6"
      Ethnic Studies); import_dpr's cross_check names them ("Not found on this DPR"). Add only those the student
      confirms their DPR lacks, re-run, and tell them to confirm with an advisor.
-   - gpa from the DPR; transfer_units; adt: true only for a verified AA-T/AS-T from a California Community College
+   - gpa from the DPR; transfer_units (AP and IB units too); adt: true only for a verified AA-T/AS-T from a California Community College
      in a similar approved major; ge_certified: true for Cal-GETC certification of lower-division GE; first_time:
      false for a student who says they transferred, true for a freshman with AP or IB units; prior_bachelors: true if they already hold a bachelor's or higher degree from a
      regionally accredited institution; f1: true for an F-1 visa student.
