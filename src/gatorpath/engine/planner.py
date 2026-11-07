@@ -1683,6 +1683,9 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
 
     groups = {g["id"]: g for g in program["groups"] + university["groups"]}
     kind = {g["id"]: k for k, rules in (("major", program), ("university", university)) for g in rules["groups"]}
+    if group_id == "elective":  # a plan's free-elective slot: any course counts toward the 120
+        groups["elective"] = {"id": "elective", "title": "Free elective: any course", "from": [{}],
+                              "source": university["totals"]["source"]}
     g = groups.get(group_id)
     if g is None:
         return {"error": "unknown_group", "groups": list(groups)}
@@ -1743,7 +1746,10 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
 
     kinds = slot_kinds(program, catalog)
     ctxs = {t: ctx_at(t) for t in terms}
-    target = status[group_id]
+    target = status.get(group_id, {"status": "remaining", "counted": [], "in_progress": []})  # "elective": no group
+    # a free elective ranks the major's subjects first among equals
+    mine = {subject(c) for x in after["groups"] if kind.get(x["id"]) == "major"
+            for c in x["counted"] + x["in_progress"] + x.get("remaining", [])} if group_id == "elective" else set()
     pref = g.get("min_units_from", {})
     pref_short = bool(pref) and target.get("min_units_from", {}).get("done", 0) < pref.get("units", 0)
     used = {i: sum(1 for c in target["counted"] + target["in_progress"] if matches(f, c, catalog[c]))
@@ -1762,7 +1768,7 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
         state, why = evaluate(expr, ctxs[first])
         option = {"code": code, "title": course["title"], "units": course["units_min"], "source_page": course["source_page"],
                   "readiness": {OK: "ready", UNVERIFIED: "check", NO: "blocked"}[state],
-                  "also_covers": [i for i in open_groups if not (kind[i] == kind[group_id] == "major")
+                  "also_covers": [i for i in open_groups if not (kind[i] == kind.get(group_id) == "major")
                                   and any(matches(f, code, course) for f in filters_for(groups[i], profile))],
                   "offered": "unknown"}
         if state != OK:
@@ -1779,8 +1785,13 @@ def eligible_options(profile: dict, group_id: str, program: dict, university: di
             option["note"] = f"at most {min(filters[i]['max_units'] for i in hit):g} units from this part of the list"
         options.append(option)
     order = {"ready": 0, "check": 1, "blocked": 2}
+    season = str(first)[5:]
+    # a free elective: one that ran that season lately, of a full course's units, before a 1-unit lab nobody offers
+    usual = lambda c: group_id != "elective" or ((catalog[c].get("offered") or {}).get(season) or [0])[0] > 0 \
+        and catalog[c]["units_min"] >= 3
     options.sort(key=lambda o: ("not_offered" in o, order[o["readiness"]], -len(o["also_covers"]),
-                                not (pref_short and matches(pref, o["code"], catalog[o["code"]])), o["code"]))
+                                not (pref_short and matches(pref, o["code"], catalog[o["code"]])),
+                                not usual(o["code"]), subject(o["code"]) not in mine, o["code"]))
     need = {k: target[k] for k in ("units_needed", "units_done", "courses_needed", "min_units_from") if k in target}
     return {"catalog_year": program["catalog_year"], "group": group_id, "title": g.get("title", group_id),
             "source": g["source"], "by_term": first, "status": target["status"], **need,

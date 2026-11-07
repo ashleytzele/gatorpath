@@ -59,7 +59,7 @@ export type Audit = {
   program: string;
   complete: boolean;
   groups: Group[];
-  totals: Record<string, Total> & { units_in_progress: number };
+  totals: Record<string, Total> & { units_in_progress: number; upper_division_units_in_progress?: number };
   warnings: string[];
   see_advisor: Advisor[];
   courses: Record<string, CourseInfo>;

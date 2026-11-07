@@ -50,7 +50,10 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [x] The Electives & GE tab is gone: the chat chooses, and an open slot on the plan still opens the course list. Each
   class says what it counts for and whether the AI picked it
 - [x] Electives & GE is back (2026-11-07): with the AI choosing, a student still wants to see the other options. It lists
-  each class the plan chose for a requirement, and Change opens the same course list
+  each class the plan chose for a requirement, and Change opens the same course list. A free elective lists options too
+  (list_eligible_electives' "elective": any course, ranked by what else it covers, then ran lately, full units, the
+  major's subjects), not a box to type a code in. No "Already done" there: Progress has it
+- [x] Both progress pages show units in progress beside the done ones (totals' upper_division_units_in_progress too)
 - [x] Review reads like the DPR (2026-11-07): the Progress tab's requirement list, in the DPR's order (GE, university,
   major) and words (Completed, In progress, Incomplete). Then a dashboard: tiles (units, upper-division, requirements,
   GPA), the list, and beside it "Fix your record" (add a course the DPR doesn't show, change a grade, finish or remove

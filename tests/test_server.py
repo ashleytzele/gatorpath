@@ -229,6 +229,16 @@ def test_eligible_electives_rank_triple_duty_courses_first():
     assert server.list_eligible_electives(TRANSFER_SENIOR, "core_cs")["error"] == "not_a_choice"
 
 
+def test_a_free_elective_lists_options_too():
+    # "Free elective: any course" opened a box to type a code in: the site shows options for every slot. Any course
+    # counts; one that also fills an open requirement comes first
+    got = server.list_eligible_electives(TRANSFER_SENIOR, "elective", by_term="2027-spring")
+    assert got["title"] == "Free elective: any course" and len(got["options"]) == 25 and got["total_options"] > 100
+    top = got["options"][0]
+    assert top["readiness"] == "ready" and top["also_covers"]
+    assert "AA S 213" not in [o["code"] for o in got["options"]]  # done already
+
+
 def test_full_list_puts_the_terms_sections_first(tmp_path, monkeypatch):
     # "Show me the rest" for a GE area: every takeable option, those with a section that term first, compact
     from gatorpath.ingest.offerings import write_offerings

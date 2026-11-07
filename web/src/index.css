@@ -2149,8 +2149,7 @@ footer {
 .alternative-choices .chips {
   margin-top: 6px;
 }
-.choice-requirement-row > button,
-.already-done button {
+.choice-requirement-row > button {
   border: 0;
   background: none;
   color: var(--accent);
@@ -2159,43 +2158,6 @@ footer {
   gap: 4px;
   text-align: left;
   cursor: pointer;
-  font-size: 13px;
-}
-.already-done {
-  background: white;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.already-done summary {
-  list-style: none;
-  padding: 15px 18px;
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-}
-.already-done summary span {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 13px;
-}
-.already-done summary span:first-child {
-  color: var(--green);
-  font-weight: 700;
-}
-.already-done summary span:last-child {
-  color: var(--muted);
-}
-.already-done[open] summary .icon:last-child {
-  transform: rotate(90deg);
-}
-.already-done > div {
-  border-top: 1px solid var(--line);
-  padding: 14px 18px;
-}
-.already-done p {
-  color: var(--muted);
   font-size: 13px;
 }
 .empty-state {
@@ -3890,7 +3852,10 @@ footer a { color: var(--accent); }
 .unit-bar > div:first-child { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
 .unit-bar > div:first-child span { color: var(--muted); }
 .unit-bar-track { height: 8px; background: #e8eae9; border-radius: 4px; overflow: hidden; }
+.unit-bar-track { display: flex; }
 .unit-bar-track i { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
+.unit-bar-track i.going { background: #8fb9ad; border-radius: 0 4px 4px 0; }
+.going-note { color: var(--muted); font-size: 13px; font-style: normal; }
 @media (max-width: 760px) {
   .ring-grid { grid-template-columns: 1fr; }
   .plan-route small { font-size: 13px; }

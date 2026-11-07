@@ -1019,8 +1019,8 @@ function ReviewScreen({
         edit({ ...profile, not_on_dpr: left.includes(id) ? left.filter((x) => x !== id) : [...left, id] }),
     };
     const met = a.groups.filter(isDone).length;
+    const going = a.groups.filter((g) => !isDone(g) && g.in_progress.length).length;
     const gpa = profile.gpa ?? t.gpa_sf_state?.value; // the DPR's, when there is one
-    const share = (value: number, of?: number | null) => (of ? Math.min(100, (value / of) * 100) : 0);
     return (
       <>
         <div className="dash-tiles">
@@ -1034,19 +1034,21 @@ function ReviewScreen({
             </small>
             <b className="text">{profile.catalog_year ?? a.catalog_year}</b>
           </div>
-          {[
-            ["Units", t.units.value, t.units.needed],
-            ["Upper-division units", t.upper_division_units.value, t.upper_division_units.needed],
-            ["Requirements completed", met, a.groups.length],
-          ].map(([label, value, of]) => (
-            <div className="dash-tile" key={label as string}>
+          {(
+            [
+              ["Units", t.units.value, t.units_in_progress, t.units.needed ?? 120],
+              ["Upper-division units", t.upper_division_units.value, t.upper_division_units_in_progress ?? 0,
+               t.upper_division_units.needed ?? 0],
+              ["Requirements completed", met, going, a.groups.length],
+            ] as [string, number, number, number][]
+          ).map(([label, value, more, of]) => (
+            <div className="dash-tile" key={label}>
               <small>{label}</small>
               <b>
                 {value} <span>/ {of}</span>
               </b>
-              <div className="unit-bar-track" aria-hidden="true">
-                <i style={{ width: `${share(value as number, of as number)}%` }} />
-              </div>
+              <UnitTrack value={value} going={more} total={of} label={label} />
+              {!!more && <em className="going-note">+{more} in progress</em>}
             </div>
           ))}
           {!!gpa && (
@@ -2245,9 +2247,10 @@ function DegreeProgress({
   return (
     <>
       {bars && <div className="ring-grid">
-        <UnitBar value={t.units.value} total={t.units.needed ?? 120} label="Total units" />
+        <UnitBar value={t.units.value} going={t.units_in_progress} total={t.units.needed ?? 120} label="Total units" />
         <UnitBar
           value={t.upper_division_units.value}
+          going={t.upper_division_units_in_progress}
           total={t.upper_division_units.needed ?? 0}
           label="Upper-division units"
         />
@@ -2292,18 +2295,27 @@ function DegreeProgress({
     </>
   );
 }
-function UnitBar({ value, total, label }: { value: number; total: number; label: string }) {
+/** Done, then in progress after it in a lighter shade: the DPR counts both. */
+function UnitTrack({ value, going = 0, total, label }: { value: number; going?: number; total: number; label: string }) {
+  const share = (x: number) => (total ? Math.min(100, (x / total) * 100) : 0);
+  return (
+    <div className="unit-bar-track" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={total} aria-label={label}>
+      <i style={{ width: `${share(value)}%` }} />
+      {!!going && <i className="going" style={{ width: `${Math.min(share(going), 100 - share(value))}%` }} />}
+    </div>
+  );
+}
+function UnitBar({ value, going = 0, total, label }: { value: number; going?: number; total: number; label: string }) {
   return (
     <div className="unit-bar">
       <div>
         <b>{label}</b>
         <span>
           {value} of {total}
+          {!!going && ` · ${going} in progress`}
         </span>
       </div>
-      <div className="unit-bar-track" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={total} aria-label={label}>
-        <i style={{ width: `${(value / total) * 100}%` }} />
-      </div>
+      <UnitTrack value={value} going={going} total={total} label={label} />
     </div>
   );
 }
@@ -2366,15 +2378,7 @@ function ChoiceRequirementRows({
   );
 }
 
-function ElectivesView({
-  work,
-  openPicker,
-  goToProgress,
-}: {
-  work: Work;
-  openPicker: (target: Target) => void;
-  goToProgress: () => void;
-}) {
+function ElectivesView({ work, openPicker }: { work: Work; openPicker: (target: Target) => void }) {
   const { audit, check, info, picks, semesters, student } = work;
   const rows: ChoiceRow[] = [
     ...semesters.flatMap((s) =>
@@ -2397,7 +2401,6 @@ function ElectivesView({
   const free = rows.filter((r) => r.id === "elective");
   const studies = rows.filter((r) => !major.includes(r) && !ge.includes(r) && !free.includes(r));
   const count = (list: ChoiceRow[]) => `${list.filter((r) => r.pick).length} chosen, ${list.filter((r) => !r.pick).length} to go`;
-  const done = audit.groups.filter(isDone);
   const short = audit.groups.find((g) => g.min_units_from && !isDone(g));
   const inSubject = short?.min_units_from
     ? picks
@@ -2454,22 +2457,6 @@ function ElectivesView({
         </SectionCard>
       )}
       {!rows.length && <p className="still-to-do">Nothing left to choose in this plan.</p>}
-      {!!done.length && <details className="already-done">
-        <summary>
-          <span>
-            <Icon name="check" /> Already done
-          </span>
-          <span>
-            {done.length} requirements <Icon name="chevron" />
-          </span>
-        </summary>
-        <div>
-          <p>{done.map((g) => g.title).join(", ")}</p>
-          <button onClick={goToProgress}>
-            See completed requirements in Progress <Icon name="arrow" size={14} />
-          </button>
-        </div>
-      </details>}
     </div>
   );
 }
@@ -2928,40 +2915,6 @@ function offeredText(o?: Offered | null) {
   return `Ran: ${ran.join(", ")}${o.last ? ` · last ran ${termLabel(o.last)}` : ""}`;
 }
 
-function FreeCourse({ choose }: { choose: (code: string) => void }) {
-  const [code, setCode] = useState("");
-  const [state, setState] = useState<{ loading?: boolean; error?: string }>({});
-  const add = async () => {
-    setState({ loading: true });
-    try {
-      choose((await getCourse(code)).code);
-    } catch (e) {
-      setState({ error: message(e) });
-    }
-  };
-  return (
-    <div className="record-panel form-panel">
-      <label>
-        Course code
-        <div className="search-field">
-          <Icon name="search" />
-          <input
-            autoFocus
-            value={code}
-            placeholder="ART 101"
-            onChange={(e) => setCode(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && code && add()}
-          />
-        </div>
-      </label>
-      <Button onClick={add} disabled={!code || state.loading}>
-        {state.loading ? "Finding it in the Bulletin…" : "Add to my plan"}
-      </Button>
-      {state.error && <ErrorCard text={state.error} />}
-    </div>
-  );
-}
-
 function OptionCard({
   option: o,
   chosen,
@@ -3043,12 +2996,8 @@ function ElectiveDrawer({
   choose: (code: string, option?: Option) => void;
 }) {
   const dialogRef = useDialog(close);
-  const free = target.group === "elective";
   const result = useLoad(
-    () =>
-      free
-        ? Promise.resolve(null)
-        : getElectives(work.student, target.group, { semesters: work.semesters }, target.term),
+    () => getElectives(work.student, target.group, { semesters: work.semesters }, target.term),
     [target],
   );
   const options = result.data?.options ?? [];
@@ -3088,7 +3037,6 @@ function ElectiveDrawer({
             <Icon name="x" />
           </button>
         </div>
-        {free && <FreeCourse choose={(code) => choose(code)} />}
         {result.loading && <Loading label="Finding courses that fit…" />}
         {result.error && <ErrorCard text={result.error} retry={result.retry} />}
         {result.data?.approval && (
@@ -3579,7 +3527,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
         )}
         {tab === "progress" && <ProgressView work={work} />}
         {tab === "electives" && (
-          <ElectivesView work={work} openPicker={setPicker} goToProgress={() => setTab("progress")} />
+          <ElectivesView work={work} openPicker={setPicker} />
         )}
         {tab === "schedule" && (
           <ScheduleView work={work} openPlan={() => setTab("plan")} toast={showToast} />
