@@ -878,6 +878,11 @@ footer {
   display: grid;
   gap: 18px;
 }
+.choose-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+}
 .form-panel h3 {
   margin: 0;
 }

@@ -47,7 +47,9 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [x] DPR import finds any major by its Bulletin title ("Public Health-BS" → "Bachelor of Science in Public Health"),
   `dpr_plan` still first (2026-11-07, a real Public Health print). Found with it: "Courses Required = 2 Courses" read as a
   title (a met area called collapsed), "X or Y" checked as both, and one View All line per cut list
-- [ ] A major with concentrations isn't matched (`unknown_program`, type the courses): wait for a real print's sub-plan line
+- [x] Every major's DPR imports: a major with concentrations (or a plan name that matches no title) returns `choices`,
+  the site asks "Which major is this DPR for?" and reads the same file again with the pick (`program`)
+- [ ] Pick a concentration without asking, once a real print shows how its DPR names one
 - [ ] A what-if rebuilds the plan and clears course picks (the screen says so, and Undo restores them)
 
 ---

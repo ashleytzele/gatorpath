@@ -4,6 +4,7 @@ import {
   buildPlan,
   checkPlan,
   EngineError,
+  type Choice,
   getAudit,
   getCourse,
   getElectives,
@@ -593,20 +594,30 @@ function Landing({ start }: { start: () => void }) {
 }
 
 function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void }) {
-  const [state, setState] = useState<"idle" | "uploading" | "error">("idle");
+  const [state, setState] = useState<"idle" | "uploading" | "error" | "choose">("idle");
   const [problem, setProblem] = useState("");
+  const [choices, setChoices] = useState<Choice[]>([]);
+  const [pick, setPick] = useState("");
   const picker = useRef<HTMLInputElement>(null);
+  const file = useRef<File | null>(null); // kept in the tab, to read again as the major the student picks
   const fail = (text: string) => {
     setProblem(text);
     setState("error");
   };
-  const begin = async (file?: File | null) => {
-    if (!file) return;
-    if (file.size > 15 * 1024 * 1024) return fail("That file is over 15 MB. Print just your DPR to PDF.");
+  const begin = async (chosen?: File | null, program?: string) => {
+    if (!chosen) return;
+    if (chosen.size > 15 * 1024 * 1024) return fail("That file is over 15 MB. Print just your DPR to PDF.");
+    file.current = chosen;
     setState("uploading");
     try {
-      onSuccess(await importDpr(file));
+      onSuccess(await importDpr(chosen, program));
     } catch (e) {
+      if (e instanceof EngineError && e.code === "unknown_program" && e.choices.length) {
+        setProblem(e.message);
+        setChoices(e.choices);
+        setPick(e.choices[0].id);
+        return setState("choose");
+      }
       const unreadable = e instanceof EngineError && e.code === "unreadable_pdf";
       fail(unreadable ? "We couldn’t read that file. Is it your DPR, saved as a PDF?" : message(e));
     }
@@ -656,6 +667,28 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
         </div>
       )}
       {state === "error" && <ErrorCard text={problem} retry={() => setState("idle")} />}
+      {state === "choose" && (
+        <div className="form-panel choose-major">
+          <h3>Which major is this DPR for?</h3>
+          <p>{problem}</p>
+          <label>
+            Major
+            <select value={pick} onChange={(e) => setPick(e.target.value)}>
+              {choices.map((c) => (
+                <option value={c.id} key={c.id}>
+                  {c.title}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="choose-actions">
+            <Button onClick={() => begin(file.current, pick)}>Read my DPR as this major</Button>
+            <Button kind="ghost" onClick={() => setState("idle")}>
+              Choose another file
+            </Button>
+          </div>
+        </div>
+      )}
       <div className="privacy-note">
         <Icon name="lock" size={16} />
         <span>

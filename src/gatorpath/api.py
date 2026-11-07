@@ -57,7 +57,9 @@ async def import_dpr(request: Request) -> dict:
         if not isinstance(upload, UploadFile):
             raise HTTPException(400, "Send the PDF as the `file` part of a multipart form")
         data = await upload.read()
-    return await run_in_threadpool(server.dpr_profile, lambda: dpr.read_pdf_bytes(data))
+        program = form.get("program")  # the student's pick from unknown_program's choices
+    return await run_in_threadpool(server.dpr_profile, lambda: dpr.read_pdf_bytes(data),
+                                   program if isinstance(program, str) else None)
 
 
 @app.post("/api/audit")

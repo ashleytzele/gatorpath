@@ -441,17 +441,28 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
     assert audit["ge_f"]["waived_by"] and any("left out" in w for w in server.audit_progress(p)["warnings"])
 
 
-def test_a_dpr_plan_finds_its_program_by_the_bulletin_title():
+def test_every_major_s_dpr_finds_its_program():
     # A Public Health print (2026-11-07) failed as unknown_program: only bs-cs and ba-psychology had dpr_plan, and the
-    # error led with the print's View All warnings, so it read as a bad print
-    as_plan = lambda plan: server.dpr_profile(lambda: DPR.replace("Computer Science-BS", plan))
-    assert as_plan("Public Health-BS")["profile"]["program"] == "bs-public-health"
-    assert as_plan("Psychology-BA")["profile"]["program"] == "ba-psychology"
-    # concentrations: the Bulletin has only "Physics: Concentration in …" beside plain Physics, so no guess
-    for plan in ("Physics-BS", "Underwater Basketweaving-BA"):
-        got = as_plan(plan)
-        assert got["error"] == "unknown_program" and got["warnings"][0].startswith(f"Your DPR's plan, {plan},")
-        assert len(got["warnings"]) == 1
+    # error led with the print's View All warnings, so it read as a bad print. Any major's DPR has to import
+    def as_dpr(plan: str, section: str = "", program: str | None = None) -> dict:
+        text = DPR.replace("Computer Science-BS", plan).replace("B.S. in Computer Science", section or "Major Requirements")
+        return server.dpr_profile(lambda: text, program)
+
+    assert as_dpr("Public Health-BS")["profile"]["program"] == "bs-public-health"   # the Plan line, by Bulletin title
+    assert as_dpr("Public Health-BS", "B.S. in Public Health")["profile"]["program"] == "bs-public-health"
+    assert as_dpr("Psychology-BA")["profile"]["program"] == "ba-psychology"
+    # The Plan line can't tell a concentration from the plain major: the student picks, and the import runs again
+    physics = ["bs-physics", "bs-physics-astrophysics", "bs-physics-physics-for-teaching"]
+    for got in (as_dpr("Physics-BS"), as_dpr("Physics-BS", "B.S. in Physics")):
+        assert got["error"] == "unknown_program" and sorted(c["id"] for c in got["choices"]) == physics
+        assert len(got["warnings"]) == 1 and "Physics-BS" in got["warnings"][0]
+    assert as_dpr("Physics-BS", program="bs-physics-astrophysics")["profile"]["program"] == "bs-physics-astrophysics"
+    # a section that names the concentration settles it
+    assert as_dpr("Physics-BS", "B.S. in Physics: Concentration in Astrophysics")["profile"]["program"] == "bs-physics-astrophysics"
+    # a plan name that matches nothing (cut short, say) lists every program
+    got = as_dpr("Speech Lang & Hearing-BS")
+    assert got["error"] == "unknown_program" and len(got["choices"]) == len(server.programs())
+    assert as_dpr("Physics-BS", program="bs-art")["error"] == "unknown_program"
 
 
 FRESH = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall"}

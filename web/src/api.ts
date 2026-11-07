@@ -192,10 +192,12 @@ export type Sections = {
   warnings: string[];
 };
 
+export type Choice = { id: string; title: string };
 export class EngineError extends Error {
   constructor(
     text: string,
     readonly code: string,
+    readonly choices: Choice[] = [], // unknown_program on a DPR: the programs it could be
   ) {
     super(text);
   }
@@ -214,7 +216,8 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
       typeof body?.detail === "string" ? body.detail : "Something went wrong on our side. Try again.",
     );
   }
-  if (body?.error) throw new EngineError(body.warnings?.join(" ") || String(body.error), String(body.error));
+  if (body?.error)
+    throw new EngineError(body.warnings?.join(" ") || String(body.error), String(body.error), body.choices);
   return body;
 }
 
@@ -227,9 +230,10 @@ const post = <T,>(path: string, body: unknown) =>
 
 export const message = (e: unknown) => (e instanceof Error ? e.message : "Something went wrong. Try again.");
 
-export function importDpr(file: File) {
+export function importDpr(file: File, program?: string) {
   const form = new FormData();
   form.append("file", file);
+  if (program) form.append("program", program); // the student's pick when the DPR alone doesn't say
   return call<ImportResult>("/api/import-dpr", { method: "POST", body: form });
 }
 export const getAudit = (profile: Profile) => post<Audit>("/api/audit", { profile });

@@ -828,37 +828,48 @@ def local_pdf(pdf_path: str, example: str) -> Path | dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-def import_dpr(pdf_path: str) -> dict:
+def import_dpr(pdf_path: str, program: str | None = None) -> dict:
     """Read the student's Degree Progress Report on their own machine (Student Center → Degree Progress Report,
     printed to PDF; click Expand All and View All on long lists first) and return a ready `profile` (completed SF State and transfer
     courses, in_progress, ge_done, dpr_met substitutions, gpa, catalog_year from the DPR's "Requirement (Catalog)
     Term") plus `remaining`: what the DPR itself says is still needed, and `cross_check`: where GatorPath's audit
     disagrees with the DPR (the DPR wins). Name, ID and the PDF text never leave this tool,
     so the student doesn't need to attach the PDF to the chat; ask for the file's path. Add qr_pathway, goal and
-    start_term, then use the profile with the other tools."""
+    start_term, then use the profile with the other tools. If it returns unknown_program, ask which of `choices` is
+    their major (a concentration doesn't show on the DPR's Plan line) and call again with that id as `program`."""
     path = local_pdf(pdf_path, "~/Downloads/Degree Progress Report.pdf")
-    return path if isinstance(path, dict) else dpr_profile(lambda: dpr.read_pdf(path))
+    return path if isinstance(path, dict) else dpr_profile(lambda: dpr.read_pdf(path), program)
 
 
 DEGREES = {"BA": "Bachelor of Arts", "BS": "Bachelor of Science", "BM": "Bachelor of Music"}
+MAJOR_SECTION = re.compile(r"(B\.[A-Z]\.) in (.+)")  # the DPR's section for the major: 'B.S. in Computer Science'
 
 
-def program_of_plan(plan: str | None) -> str | None:
-    """The program a DPR's "Plan:" line names: `dpr_plan` where a rules file sets it, else "<Name>-BS" read as the
-    Bulletin title "Bachelor of Science in <Name>" (how the CS, Psychology and Public Health prints name theirs).
-    ponytail: a major with concentrations matches none, until a real print shows how it names the concentration."""
-    every = programs()
-    if hit := next((k for k, p in every.items() if p.get("dpr_plan") == plan), None):
-        return hit
-    name, _, degree = (plan or "").rpartition("-")
-    title = f"{DEGREES.get(degree)} in {name}"
-    if degree not in DEGREES or any(p["title"].startswith(f"{title}:") for p in every.values()):
-        return None
-    return next((k for k, p in every.items() if p["title"] == title), None)
+def program_of(parsed: dict, every: dict[str, dict]) -> tuple[str | None, list[str]]:
+    """The program a DPR is for, else the ones it could be. `dpr_plan` where a rules file sets it; else the major's
+    section title ("B.S. in Public Health") or the "Plan:" line ("Public Health-BS") read as the Bulletin title
+    "Bachelor of Science in Public Health". A plain title can't tell a concentration from the major, so it counts only
+    when the major has no concentrations; a title that names the concentration counts."""
+    if hit := next((k for k, p in every.items() if p.get("dpr_plan") == parsed["plan"]), None):
+        return hit, []
+    section = next((m for b in parsed["requirements"] if b["kind"] == "group"
+                    if (m := MAJOR_SECTION.fullmatch(b["title"]))), None)
+    if section:
+        degree, name = section[1].replace(".", ""), section[2]
+    else:
+        name, _, degree = (parsed["plan"] or "").rpartition("-")
+    if degree not in DEGREES:
+        return None, []
+    title = f"{DEGREES[degree]} in {name}"
+    base = title.split(":")[0]
+    near = [k for k, p in every.items() if p["title"] == base or p["title"].startswith(f"{base}:")]
+    exact = next((k for k in near if every[k]["title"] == title), None)
+    return (exact, []) if exact and (len(near) == 1 or title != base) else (None, near)
 
 
-def dpr_profile(read_text: Callable[[], str]) -> dict:
-    """import_dpr's result, however the PDF's text is read: from a path here, from an upload's bytes in the web API."""
+def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dict:
+    """import_dpr's result, however the PDF's text is read: from a path here, from an upload's bytes in the web API.
+    `program` is the student's pick when the DPR alone doesn't say (unknown_program's `choices`)."""
     try:
         parsed = dpr.parse(read_text())
     except (OSError, subprocess.SubprocessError):
@@ -866,13 +877,17 @@ def dpr_profile(read_text: Callable[[], str]) -> dict:
     if not parsed["requirements"]:
         return {"catalog_year": YEAR, "error": "unrecognized_dpr_format",
                 "warnings": ["No requirements found: is this the Degree Progress Report printed from Student Center?"]}
-    program = program_of_plan(parsed["plan"])
+    every = programs()
+    if program is not None and program not in every:
+        return unknown_program(program)
+    program, near = (program, []) if program else program_of(parsed, every)
     warnings = list(parsed["warnings"])
     if program is None:  # the reason alone: the print's own warnings read as the cause
-        return {"catalog_year": YEAR, "error": "unknown_program", "programs": list(programs()),
-                "warnings": [f"Your DPR's plan, {parsed['plan'] or 'not found on the print'}, isn't one GatorPath can match "
-                             "to a program it has rules for (a concentration can't be told apart yet). Type your courses "
-                             "instead and pick the major"]}
+        return {"catalog_year": YEAR, "error": "unknown_program",
+                "choices": sorted(({"id": k, "title": every[k]["title"]} for k in near or every), key=lambda c: c["title"]),
+                "warnings": [f"Your DPR's plan, {parsed['plan'] or 'not found on the print'}, " + (
+                    "is more than one program in the Bulletin (the Plan line doesn't name a concentration)" if near
+                    else "doesn't match a program's Bulletin title") + ". Choose which one is yours"]}
     year = rules_year({"program": program, "catalog_year": parsed["catalog_term"]})
     rules, university = load_rules(year, program)
     loose = "C-" if rules.get("global", {}).get("no_cr_nc") else "CR"

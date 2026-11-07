@@ -47,6 +47,17 @@ def test_import_dpr_reads_the_upload_in_memory_and_drops_pii(monkeypatch):
         assert pii not in response.text
 
 
+def test_import_dpr_takes_the_students_pick_of_major(monkeypatch):
+    # A Plan line that is more than one program: the page asks, then sends the same file with the pick
+    physics = DPR.replace("Computer Science-BS", "Physics-BS").replace("B.S. in Computer Science", "Major Requirements")
+    monkeypatch.setattr(dpr, "read_pdf_bytes", lambda data: physics)
+    asked = upload().json()
+    assert asked["error"] == "unknown_program" and len(asked["choices"]) == 3
+    picked = client.post("/api/import-dpr", files={"file": ("dpr.pdf", b"%PDF-1.4", "application/pdf")},
+                         data={"program": "bs-physics"})
+    assert picked.json()["profile"]["program"] == "bs-physics"
+
+
 def test_import_dpr_refuses_what_it_wont_read(monkeypatch):
     monkeypatch.setattr(dpr, "read_pdf_bytes", lambda data: pytest.fail("read past the limit"))
     too_big = client.post("/api/import-dpr", files={"file": ("dpr.pdf", b"x" * (api.MAX_PDF + 1))})
