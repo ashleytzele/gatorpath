@@ -65,6 +65,46 @@ https://cmsweb.sfsu.edu/psp/CSFPRDS/EMPLOYEE/SA/c/SA_LEARNER_SERVICES.SSS_STUDEN
     assert [r["title"] for r in parse(text)["requirements"]] == ["Area 5B: Biological Science", "U.S. History"]
 
 
+def test_a_courses_required_line_is_not_a_title():
+    # A Fall 2025 DPR (2026-11-07; layout copied, rows invented): an area met in the major counts courses, not units,
+    # and "Courses Required" read as the next title, so the area was called collapsed and the block got its name
+    text = """
+      General Education Requirements
+   [G11368]
+         Area 5B: Biological Science (Met in Major)
+
+          Courses Required = 2 Courses
+
+          [R12829 / L0050]
+
+        The following courses were used to satisfy this requirement:
+         Course            Description                               Units      When                Grade Status
+         BIOL 100          HUMAN BIOLOGY                      3.00              Fall 2025           B
+"""
+    got = parse(text)
+    assert [(r["title"], r["kind"], r["status"]) for r in got["requirements"] if r["kind"] != "group"] == [
+        ("Area 5B: Biological Science (Met in Major)", "ge", "done")]
+    assert got["warnings"] == []
+
+
+def test_an_or_requirement_is_done_by_either_course():
+    # The same print (rows invented): an "X or Y" requirement met by one course read as a disagreement, since every code
+    # had to be done
+    text = """
+         CHEM 115 or PHYS 111
+
+          [R12900 / L0010]
+
+         Course            Description                               Units      When                Grade Status
+         PHYS 111          GENERAL PHYSICS I                  3.00              Fall 2025           B
+"""
+    _, university = load_rules("2026-27", "bs-cs")
+    audit = {"groups": [{"id": "core", "status": "remaining", "counted": ["PHYS 111"]}], "totals": {}}
+    assert cross_check(parse(text), audit, university) == []
+    audit["groups"][0]["counted"] = []
+    assert cross_check(parse(text), audit, university)[0].startswith("CHEM 115 or PHYS 111: the DPR says done, GatorPath says needed")
+
+
 def test_cross_check_flags_only_real_disagreements():
     # Phase 6 done-when: the synthetic DPR's courses and GE areas agree with an audit of what it lists; what's left
     # is explained (unlisted transfer units; GE areas this partial DPR doesn't show)

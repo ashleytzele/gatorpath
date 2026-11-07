@@ -44,7 +44,10 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [x] The Electives & GE tab is gone: the chat chooses, and an open slot on the plan still opens the course list. Each
   class says what it counts for and whether the AI picked it
 - [ ] Before a public host: a per-student rate limit and a spend cap on `/api/assist`
-- [ ] DPR import reads CS and Psychology only (`dpr_plan`): other majors get `unknown_program` and type their courses
+- [x] DPR import finds any major by its Bulletin title ("Public Health-BS" → "Bachelor of Science in Public Health"),
+  `dpr_plan` still first (2026-11-07, a real Public Health print). Found with it: "Courses Required = 2 Courses" read as a
+  title (a met area called collapsed), "X or Y" checked as both, and one View All line per cut list
+- [ ] A major with concentrations isn't matched (`unknown_program`, type the courses): wait for a real print's sub-plan line
 - [ ] A what-if rebuilds the plan and clears course picks (the screen says so, and Undo restores them)
 
 ---

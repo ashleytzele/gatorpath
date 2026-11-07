@@ -840,6 +840,23 @@ def import_dpr(pdf_path: str) -> dict:
     return path if isinstance(path, dict) else dpr_profile(lambda: dpr.read_pdf(path))
 
 
+DEGREES = {"BA": "Bachelor of Arts", "BS": "Bachelor of Science", "BM": "Bachelor of Music"}
+
+
+def program_of_plan(plan: str | None) -> str | None:
+    """The program a DPR's "Plan:" line names: `dpr_plan` where a rules file sets it, else "<Name>-BS" read as the
+    Bulletin title "Bachelor of Science in <Name>" (how the CS, Psychology and Public Health prints name theirs).
+    ponytail: a major with concentrations matches none, until a real print shows how it names the concentration."""
+    every = programs()
+    if hit := next((k for k, p in every.items() if p.get("dpr_plan") == plan), None):
+        return hit
+    name, _, degree = (plan or "").rpartition("-")
+    title = f"{DEGREES.get(degree)} in {name}"
+    if degree not in DEGREES or any(p["title"].startswith(f"{title}:") for p in every.values()):
+        return None
+    return next((k for k, p in every.items() if p["title"] == title), None)
+
+
 def dpr_profile(read_text: Callable[[], str]) -> dict:
     """import_dpr's result, however the PDF's text is read: from a path here, from an upload's bytes in the web API."""
     try:
@@ -849,11 +866,13 @@ def dpr_profile(read_text: Callable[[], str]) -> dict:
     if not parsed["requirements"]:
         return {"catalog_year": YEAR, "error": "unrecognized_dpr_format",
                 "warnings": ["No requirements found: is this the Degree Progress Report printed from Student Center?"]}
-    program = next((k for k, p in programs().items() if p.get("dpr_plan") == parsed["plan"]), None)
+    program = program_of_plan(parsed["plan"])
     warnings = list(parsed["warnings"])
-    if program is None:
+    if program is None:  # the reason alone: the print's own warnings read as the cause
         return {"catalog_year": YEAR, "error": "unknown_program", "programs": list(programs()),
-                "warnings": warnings + [f"The DPR's plan isn't one GatorPath has rules for; it covers {', '.join(programs())}"]}
+                "warnings": [f"Your DPR's plan, {parsed['plan'] or 'not found on the print'}, isn't one GatorPath can match "
+                             "to a program it has rules for (a concentration can't be told apart yet). Type your courses "
+                             "instead and pick the major"]}
     year = rules_year({"program": program, "catalog_year": parsed["catalog_term"]})
     rules, university = load_rules(year, program)
     loose = "C-" if rules.get("global", {}).get("no_cr_nc") else "CR"

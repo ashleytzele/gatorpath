@@ -441,6 +441,19 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
     assert audit["ge_f"]["waived_by"] and any("left out" in w for w in server.audit_progress(p)["warnings"])
 
 
+def test_a_dpr_plan_finds_its_program_by_the_bulletin_title():
+    # A Public Health print (2026-11-07) failed as unknown_program: only bs-cs and ba-psychology had dpr_plan, and the
+    # error led with the print's View All warnings, so it read as a bad print
+    as_plan = lambda plan: server.dpr_profile(lambda: DPR.replace("Computer Science-BS", plan))
+    assert as_plan("Public Health-BS")["profile"]["program"] == "bs-public-health"
+    assert as_plan("Psychology-BA")["profile"]["program"] == "ba-psychology"
+    # concentrations: the Bulletin has only "Physics: Concentration in …" beside plain Physics, so no guess
+    for plan in ("Physics-BS", "Underwater Basketweaving-BA"):
+        got = as_plan(plan)
+        assert got["error"] == "unknown_program" and got["warnings"][0].startswith(f"Your DPR's plan, {plan},")
+        assert len(got["warnings"]) == 1
+
+
 FRESH = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall"}
 MATH_FRESH = FRESH | {"program": "bs-applied-math"}
 SCENARIOS = {

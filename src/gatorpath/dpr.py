@@ -21,8 +21,8 @@ ROW = re.compile(rf"\s*(?P<code>{CODE})\s+(?P<desc>.*?)\s*(?P<units>\d+\.\d\d)"
                  r"(?:\s+(?P<notes>\d\d))?(?:\s+(?P<desig>GE \S.*?))?\s*")
 NEEDED = re.compile(r"(Units|Courses): (\d+(?:\.\d+)?) required, (\d+(?:\.\d+)?) taken, (\d+(?:\.\d+)?) needed")
 PAGES = re.compile(r"First\s+(\d+)-(\d+) of (\d+)\s+Last")
-NOT_TITLE = ("Units Required", "Total Units Required", "(", "Complete ", "One course", "The following", "Course ",
-             "View All")
+NOT_TITLE = ("Units Required", "Total Units Required", "Courses Required", "(", "Complete ", "One course",
+             "The following", "Course ", "View All")
 PRINT_CHROME = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}, \d{1,2}:\d{2} [AP]M\s.*|https?://\S+.*")  # browser header/footer
 TRANSFER = re.compile(r"\d+N?TR$")
 AREA_TITLE = re.compile(r"(?:Area \w+|UD-\w)(?::| -) [^.]+")  # 'Area 1A: English Composition', 'UD-B: Physical/Life Science'
@@ -40,6 +40,7 @@ def parse(text: str) -> dict:
     block: dict | None = None
     in_ge = True  # "Area …" titles are GE areas only in the General Education section, not a major's "Area 1: …"
     title_only = None  # a requirement's title, until the next line shows whether the print collapsed it
+    cut = []  # lists printed without View All
     for line in text.splitlines():
         s = line.strip()
         if PRINT_CHROME.fullmatch(s):  # a page break can fall between a requirement's title and its tag
@@ -80,8 +81,7 @@ def parse(text: str) -> dict:
         elif "waived" in s.lower() and block["waived"] is None:
             block["waived"] = s
         elif (m := PAGES.search(line)) and int(m[2]) < int(m[3]):
-            out["warnings"].append(f"{block['title']}: the print shows {m[2]} of {m[3]} courses. If a course is missing "
-                                   "below, click View All on that list and print the DPR again")
+            cut.append(f"{block['title']} ({m[2]} of {m[3]} courses)")
         elif m := ROW.fullmatch(line):
             if m["grade"] and m["grade"] not in GRADE_SYMBOLS | {"T"}:
                 out["warnings"].append(f"{block['title']}: a course row has grade {m['grade']!r}, not an SF State grade "
@@ -98,6 +98,11 @@ def parse(text: str) -> dict:
         b["status"] = ("collapsed" if b["id"] == "collapsed" else
                        "needed" if b["needed"] and b["needed"]["needed"] > 0 else "waived" if b["waived"]
                        else "in_progress" if going else "done" if used else "needed" if b["kind"] == "course" else "info")
+    if cut:
+        out["warnings"].append(f"These lists print only their first rows: {'; '.join(cut)}. Each list's counter in the PDF "
+                               "reads \"1-10 of …\" when View All wasn't on; click View All on each (after Expand All), "
+                               "check that the counters show every course, and print again. Until then a course that is only "
+                               "on those lists is missing")
     if folded := [b["title"] for b in out["requirements"] if b["status"] == "collapsed"]:
         out["warnings"].append(f"Collapsed in this print, so their courses don't show: {', '.join(folded)}. Click Expand "
                                "All above the Degree Progress Report (and View All on long lists), print to PDF again and "
@@ -202,7 +207,9 @@ def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
         if b["kind"] == "course":
             codes = re.findall(r"[A-Z]{1,5}(?: [A-Z]{1,3})? \d{3}[A-Z]{0,3}", b["title"])
             states = [code_status.get(c, "needed") for c in codes]
-            ours = "done" if all(x == "done" for x in states) else "needed" if "needed" in states else "in_progress"
+            pick = any if " or " in b["title"] else all  # "CSC 101 or CSC 215" takes one
+            ours = ("done" if pick(x == "done" for x in states) else
+                    "in_progress" if pick(x != "needed" for x in states) else "needed")
         elif b["kind"] == "ge" or "GWAR" in b["title"]:
             ids = ["gwar"] if "GWAR" in b["title"] else [by_area[a] for a in translate_ge([b["title"]], university)[0]
                                                            if a in by_area]
