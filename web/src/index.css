@@ -4000,13 +4000,14 @@ p, li, small { text-wrap: pretty; }
 .chat-dock {
   position: sticky;
   top: 72px;
-  flex: 0 0 400px;
+  order: -1; /* half and half: the conversation first, what it did beside it */
+  flex: 0 0 50%;
   height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
-  padding: 18px 18px 14px;
+  padding: 18px 24px 14px;
   background: white;
-  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
 }
 .chat-dock-head {
   display: flex;
@@ -4055,6 +4056,39 @@ p, li, small { text-wrap: pretty; }
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
+}
+/* The plan was laid out for the full page: in half of it, these rows stack or wrap */
+.workspace-main .app-content {
+  padding: 28px 24px 70px;
+}
+.workspace-main .plan-hero {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+}
+.workspace-main .hero-badges {
+  flex-wrap: wrap;
+}
+.workspace-main .hero-badges span {
+  white-space: nowrap;
+}
+.workspace-main .what-if,
+.workspace-main .what-if > div,
+.workspace-main .advising-note,
+.workspace-main .plan-status,
+.workspace-main .pace-options {
+  flex-wrap: wrap;
+}
+.workspace-main .what-if label,
+.workspace-main .what-if button {
+  white-space: nowrap;
+}
+.workspace-main .plan-lower,
+.workspace-main .advisor-list > div {
+  grid-template-columns: minmax(0, 1fr);
+}
+.workspace-main .plan-actions {
+  flex-wrap: wrap;
 }
 .header-link.ask-header {
   display: none;
