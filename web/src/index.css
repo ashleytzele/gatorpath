@@ -1085,40 +1085,6 @@ footer {
   color: var(--muted);
   font-size: 13px;
 }
-.ge-review-summary {
-  overflow: hidden;
-}
-.ge-summary-head {
-  padding: 17px 20px 15px;
-  border-bottom: 1px solid #e8eae9;
-}
-.ge-summary-head > div:first-child {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-.ge-summary-head h3 {
-  margin: 0;
-  font-size: 15px;
-}
-.ge-summary-head span {
-  color: var(--muted);
-  font-size: 13px;
-}
-.ge-summary-progress {
-  height: 4px;
-  margin-top: 12px;
-  background: #e6e8e5;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.ge-summary-progress i {
-  display: block;
-  width: 60%;
-  height: 100%;
-  background: var(--green);
-  border-radius: inherit;
-}
 .attention-list {
   padding: 14px 20px;
   background: var(--amber-soft);
@@ -1150,23 +1116,6 @@ footer {
   margin-top: 6px;
   flex: 0 0 auto;
 }
-.all-ge-areas summary {
-  list-style: none;
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.all-ge-areas[open] summary {
-  border-bottom: 1px solid var(--line);
-}
-.all-ge-areas[open] summary .icon {
-  transform: rotate(90deg);
-}
 .shared-ge-row {
   display: grid;
   grid-template-columns: minmax(180px, 1.2fr) 115px minmax(220px, 1.7fr);
@@ -1193,25 +1142,6 @@ footer {
   color: var(--muted);
   font-size: 13px;
   margin: 0;
-}
-.binary-state {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 700;
-}
-.binary-state.met {
-  color: var(--green);
-}
-.binary-state.not-yet {
-  color: var(--muted);
-}
-.binary-state.not-yet i {
-  width: 12px;
-  height: 12px;
-  border: 1.5px solid #9ca3a0;
-  border-radius: 50%;
 }
 .status.planned {
   background: var(--lavender-soft);
@@ -3507,9 +3437,6 @@ footer {
   .in-progress-grid {
     grid-template-columns: 1fr;
   }
-  .ge-summary-head {
-    padding-inline: 16px;
-  }
   .attention-list {
     padding-inline: 16px;
   }
@@ -3522,8 +3449,7 @@ footer {
     align-items: start;
     padding: 13px 16px;
   }
-  .shared-ge-row > .status,
-  .shared-ge-row > .binary-state {
+  .shared-ge-row > .status {
     grid-row: 2;
   }
   .shared-ge-row > p {
@@ -3993,9 +3919,6 @@ p, li, small { text-wrap: pretty; }
 .cal-block b, .cal-block span { font-size: 13px; }
 .still-to-do { margin: 0; padding: 12px 20px 14px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
 .still-to-do b { color: var(--ink); font-weight: 600; }
-.all-ge-areas summary .icon { transition: transform 0.15s ease; transform: rotate(90deg); }
-.all-ge-areas[open] summary .icon { transform: rotate(-90deg); }
-.all-ge-areas summary:focus-visible { outline-offset: -2px; }
 
 .load-state {
   display: flex;

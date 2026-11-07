@@ -38,7 +38,7 @@ import {
 const DEMO = new URLSearchParams(window.location.search).has("demo");
 
 type Screen = "landing" | "record" | "review" | "goals" | "building" | "app";
-type Tab = "plan" | "progress" | "schedule";
+type Tab = "plan" | "progress" | "electives" | "schedule";
 type IconName =
   | "arrow"
   | "back"
@@ -942,17 +942,17 @@ const NOT_ON_DPR = "not on the student's DPR"; // the engine's waived_by for a r
 const isDone = (g: Group) => g.status === "satisfied" || g.status === "waived";
 const universityGroups = (audit: Audit) => audit.groups.filter((g) => g.kind === "university");
 
+/** GE and university rows. Without a plan (Review, from the DPR) they use the DPR's words: Completed, Incomplete. */
 function GeRequirementRows({
   groups,
-  mode,
   plannedIn,
 }: {
   groups: Group[];
-  mode: "review" | "progress";
   plannedIn?: (group: Group) => string | undefined;
 }) {
+  const record = !plannedIn;
   return (
-    <div className={`shared-ge-rows ${mode}`}>
+    <div className="shared-ge-rows progress">
       {groups.map((g) => {
         const planned = plannedIn?.(g);
         const done = isDone(g);
@@ -963,16 +963,17 @@ function GeRequirementRows({
               <b>{g.title}</b>
               <small>{g.source}</small>
             </div>
-            {mode === "review" ? (
-              <span className={`binary-state ${done ? "met" : "not-yet"}`}>
-                {done ? <Icon name="check" size={14} /> : <i />}
-                {leftOut ? "Left out" : done ? "Met" : "Not yet"}
-              </span>
-            ) : (
-              <StatusBadge type={done ? "done" : g.in_progress.length ? "progress" : planned ? "planned" : "remaining"}>
-                {leftOut ? "Left out" : done ? "Done" : g.in_progress.length ? "In progress" : planned ? "Planned" : "Remaining"}
-              </StatusBadge>
-            )}
+            <StatusBadge type={done ? "done" : g.in_progress.length ? "progress" : planned ? "planned" : "remaining"}>
+              {leftOut
+                ? "Left out"
+                : done
+                  ? record ? "Completed" : "Done"
+                  : g.in_progress.length
+                    ? "In progress"
+                    : planned
+                      ? "Planned"
+                      : record ? "Incomplete" : "Remaining"}
+            </StatusBadge>
             <p>{[...g.counted, ...g.in_progress].join(", ") || planned || "—"}</p>
           </div>
         );
@@ -992,7 +993,6 @@ function ReviewScreen({
   edit: (profile: Profile) => void;
   next: () => void;
 }) {
-  const [showAll, setShowAll] = useState(false);
   const [editing, setEditing] = useState("");
   const audit = useLoad(() => getAudit(profile), [profile]);
   const programs = useLoad(getPrograms, []);
@@ -1002,8 +1002,6 @@ function ReviewScreen({
     const a = audit.data;
     const rows = profile.completed ?? [];
     const uni = universityGroups(a);
-    const met = uni.filter(isDone).length;
-    const todo = uni.filter((g) => !isDone(g));
     const left = profile.not_on_dpr ?? [];
     const notFound = imported?.cross_check.find((line) => line.startsWith("Not found on this DPR")) ?? "";
     const missing = uni.filter((g) => notFound.includes(g.title));
@@ -1039,6 +1037,53 @@ function ReviewScreen({
             </div>
           )}
         </div>
+        {!!(attention.length || missing.length) && (
+          <section className="section-card review-attention">
+            <div className="attention-list">
+              <div className="attention-heading">
+                <Icon name="warning" size={16} />
+                <b>Check with an advisor</b>
+              </div>
+              {missing.map((g) => (
+                <div className="attention-row" key={g.id}>
+                  <span className="attention-dot" />
+                  {left.includes(g.id) ? (
+                    <p>
+                      <b>{g.title}</b> isn’t on your DPR, so it’s left out of your plan. Confirm with an
+                      advisor.{" "}
+                      <button
+                        onClick={() =>
+                          edit({ ...profile, not_on_dpr: left.filter((id) => id !== g.id) })
+                        }
+                      >
+                        Put it back
+                      </button>
+                    </p>
+                  ) : (
+                    <p>
+                      <b>{g.title}</b> isn’t on your DPR, but it’s back in your plan.{" "}
+                      <button onClick={() => edit({ ...profile, not_on_dpr: [...left, g.id] })}>
+                        Leave it out
+                      </button>
+                    </p>
+                  )}
+                </div>
+              ))}
+              {attention.map((line) => (
+                <div className="attention-row" key={line}>
+                  <span className="attention-dot" />
+                  <p>{line}</p>
+                </div>
+              ))}
+              <p>
+                <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+                  Ask an advisor in Navigator
+                </a>
+              </p>
+            </div>
+          </section>
+        )}
+        <DegreeProgress audit={a} />
         <SectionCard title="Completed courses" count={`${rows.length} courses`}>
           <div className="course-table">
             <div className="table-head">
@@ -1097,85 +1142,6 @@ function ReviewScreen({
             </div>
           </SectionCard>
         )}
-        <section className="section-card ge-review-summary">
-          <div className="ge-summary-head">
-            <div>
-              <h3>GE & university requirements</h3>
-              <span>
-                {met} of {uni.length} met
-              </span>
-            </div>
-            <div
-              className="ge-summary-progress"
-              role="progressbar"
-              aria-valuenow={met}
-              aria-valuemin={0}
-              aria-valuemax={uni.length}
-              aria-label={`${met} of ${uni.length} requirements met`}
-            >
-              <i style={{ width: `${(met / Math.max(uni.length, 1)) * 100}%` }} />
-            </div>
-          </div>
-          {!!(attention.length || missing.length) && (
-            <div className="attention-list">
-              <div className="attention-heading">
-                <Icon name="warning" size={16} />
-                <b>Check with an advisor</b>
-              </div>
-              {missing.map((g) => (
-                <div className="attention-row" key={g.id}>
-                  <span className="attention-dot" />
-                  {left.includes(g.id) ? (
-                    <p>
-                      <b>{g.title}</b> isn’t on your DPR, so it’s left out of your plan. Confirm with an
-                      advisor.{" "}
-                      <button
-                        onClick={() =>
-                          edit({ ...profile, not_on_dpr: left.filter((id) => id !== g.id) })
-                        }
-                      >
-                        Put it back
-                      </button>
-                    </p>
-                  ) : (
-                    <p>
-                      <b>{g.title}</b> isn’t on your DPR, but it’s back in your plan.{" "}
-                      <button onClick={() => edit({ ...profile, not_on_dpr: [...left, g.id] })}>
-                        Leave it out
-                      </button>
-                    </p>
-                  )}
-                </div>
-              ))}
-              {attention.map((line) => (
-                <div className="attention-row" key={line}>
-                  <span className="attention-dot" />
-                  <p>{line}</p>
-                </div>
-              ))}
-              <p>
-                <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-                  Ask an advisor in Navigator
-                </a>
-              </p>
-            </div>
-          )}
-          {!!todo.length && (
-            <p className="still-to-do">
-              <b>Still to do</b> · we’ll fit these into your plan:{" "}
-              {todo.map((g) => g.title).join(", ")}
-            </p>
-          )}
-          <details className="all-ge-areas" onToggle={(e) => setShowAll(e.currentTarget.open)}>
-            <summary>
-              <span>
-                {showAll ? "Hide" : "Show"} all {uni.length} requirements
-              </span>
-              <Icon name="chevron" />
-            </summary>
-            <GeRequirementRows groups={uni} mode="review" />
-          </details>
-        </section>
         <div className="flow-action">
           <Button onClick={next}>
             Looks right <Icon name="arrow" />
@@ -1612,6 +1578,7 @@ function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
   const items: [Tab, string, IconName][] = [
     ["plan", "Plan", "route"],
     ["progress", "Progress", "check"],
+    ["electives", "Electives & GE", "book"],
     ["schedule", "Schedule", "calendar"],
   ];
   return (
@@ -2120,12 +2087,29 @@ function groupProgress(g: Group) {
 }
 
 function ProgressView({ work }: { work: Work }) {
-  const { audit, semesters } = work;
-  const plannedTerm = (code: string) => semesters.find((s) => s.courses.includes(code))?.term;
-  const plannedSlot = (g: Group) => {
-    const term = semesters.find((s) => s.courses.some((c) => isSlot(c) && c.slot === g.id))?.term;
-    return term && `Planned · ${termLabel(term)}`;
-  };
+  return (
+    <div className="app-content">
+      <div className="page-title">
+        <h1>Your degree progress</h1>
+        <p>See what’s done, planned, and still remaining.</p>
+      </div>
+      <AdvisingNote />
+      <DegreeProgress audit={work.audit} semesters={work.semesters} />
+    </div>
+  );
+}
+
+/** Units and every requirement, done to left. With a plan it says what's planned; without one (Review, straight from
+ * the DPR) it reads like the DPR: Completed, In progress, Incomplete, GE and university requirements before the major. */
+function DegreeProgress({ audit, semesters }: { audit: Audit; semesters?: Semester[] }) {
+  const plannedTerm = (code: string) => semesters?.find((s) => s.courses.includes(code))?.term;
+  const plannedSlot = semesters
+    ? (g: Group) => {
+        const term = semesters.find((s) => s.courses.some((c) => isSlot(c) && c.slot === g.id))?.term;
+        return term && `Planned · ${termLabel(term)}`;
+      }
+    : undefined;
+  const [doneWord, leftWord] = semesters ? ["Done", "Remaining"] : ["Completed", "Incomplete"];
   const buckets: [string, Group[]][] = [
     ["General Education", audit.groups.filter((g) => g.id.startsWith("ge_"))],
     ["SF State Studies", audit.groups.filter((g) => g.id.startsWith("sfss_"))],
@@ -2135,14 +2119,50 @@ function ProgressView({ work }: { work: Work }) {
       audit.groups.filter((g) => g.kind === "university" && !/^(ge|sfss|ai)_/.test(g.id)),
     ],
   ];
+  const major = audit.groups
+    .filter((g) => g.kind === "major")
+    .map((g) => {
+      const p = groupProgress(g);
+      return {
+        key: g.id,
+        title: g.title,
+        percent: p.percent,
+        label: p.label,
+        body: (
+          <div className="req-courses">
+            {g.counted.map((c) => (
+              <CourseStatus name={c} type="done" label={doneWord} key={c} />
+            ))}
+            {g.in_progress.map((c) => (
+              <CourseStatus name={c} type="progress" label="In progress" key={c} />
+            ))}
+            {g.remaining?.map((c) => (
+              <CourseStatus
+                name={c}
+                type="remaining"
+                label={plannedTerm(c) ? `Planned · ${termLabel(plannedTerm(c))}` : leftWord}
+                key={c}
+              />
+            ))}
+          </div>
+        ),
+      };
+    });
+  const university = buckets
+    .filter(([, groups]) => groups.length)
+    .map(([title, groups]) => {
+      const met = groups.filter(isDone).length;
+      return {
+        key: title,
+        title,
+        percent: (met / groups.length) * 100,
+        label: `${met} / ${groups.length} done`,
+        body: <GeRequirementRows groups={groups} plannedIn={plannedSlot} />,
+      };
+    });
   const t = audit.totals;
   return (
-    <div className="app-content">
-      <div className="page-title">
-        <h1>Your degree progress</h1>
-        <p>See what’s done, planned, and still remaining.</p>
-      </div>
-      <AdvisingNote />
+    <>
       <div className="ring-grid">
         <UnitBar value={t.units.value} total={t.units.needed ?? 120} label="Total units" />
         <UnitBar
@@ -2153,87 +2173,42 @@ function ProgressView({ work }: { work: Work }) {
         <div className="legend">
           <b>Status key</b>
           <span>
-            <i className="dot done" /> <Icon name="check" /> Done
+            <i className="dot done" /> <Icon name="check" /> {doneWord}
           </span>
           <span>
             <i className="dot progress" /> <Icon name="clock" /> In progress
           </span>
+          {semesters && (
+            <span>
+              <i className="dot planned" /> <Icon name="calendar" /> Planned
+            </span>
+          )}
           <span>
-            <i className="dot planned" /> <Icon name="calendar" /> Planned
-          </span>
-          <span>
-            <i className="dot remaining" /> <Icon name="clock" /> Remaining
+            <i className="dot remaining" /> <Icon name="clock" /> {leftWord}
           </span>
         </div>
       </div>
-      <SectionCard
-        title="Degree requirements"
-        count={`${t.units.value} of ${t.units.needed} units earned`}
-      >
+      <SectionCard title="Degree requirements" count={`${t.units.value} of ${t.units.needed} units earned`}>
         <div className="requirement-list">
-          {audit.groups
-            .filter((g) => g.kind === "major")
-            .map((g, i) => {
-              const p = groupProgress(g);
-              return (
-                <details key={g.id} open={i === 0}>
-                  <summary>
-                    <span className="req-check" aria-hidden="true">
-                      {p.percent === 100 ? <Icon name="check" /> : null}
-                    </span>
-                    <b>{g.title}</b>
-                    <div className="mini-progress">
-                      <i style={{ width: `${p.percent}%` }} />
-                    </div>
-                    <small>{p.label}</small>
-                    <Icon name="chevron" />
-                  </summary>
-                  <div className="req-courses">
-                    {g.counted.map((c) => (
-                      <CourseStatus name={c} type="done" label="Done" key={c} />
-                    ))}
-                    {g.in_progress.map((c) => (
-                      <CourseStatus name={c} type="progress" label="In progress" key={c} />
-                    ))}
-                    {g.remaining?.map((c) => (
-                      <CourseStatus
-                        name={c}
-                        type="remaining"
-                        label={plannedTerm(c) ? `Planned · ${termLabel(plannedTerm(c))}` : "Remaining"}
-                        key={c}
-                      />
-                    ))}
-                  </div>
-                </details>
-              );
-            })}
-          {buckets
-            .filter(([, groups]) => groups.length)
-            .map(([title, groups]) => {
-              const met = groups.filter(isDone).length;
-              const percent = (met / groups.length) * 100;
-              return (
-                <details key={title}>
-                  <summary>
-                    <span className="req-check" aria-hidden="true">
-                      {percent === 100 ? <Icon name="check" /> : null}
-                    </span>
-                    <b>{title}</b>
-                    <div className="mini-progress">
-                      <i style={{ width: `${percent}%` }} />
-                    </div>
-                    <small>
-                      {met} / {groups.length} done
-                    </small>
-                    <Icon name="chevron" />
-                  </summary>
-                  <GeRequirementRows groups={groups} mode="progress" plannedIn={plannedSlot} />
-                </details>
-              );
-            })}
+          {(semesters ? [...major, ...university] : [...university, ...major]).map((r, i) => (
+            <details key={r.key} open={i === 0}>
+              <summary>
+                <span className="req-check" aria-hidden="true">
+                  {r.percent === 100 ? <Icon name="check" /> : null}
+                </span>
+                <b>{r.title}</b>
+                <div className="mini-progress">
+                  <i style={{ width: `${r.percent}%` }} />
+                </div>
+                <small>{r.label}</small>
+                <Icon name="chevron" />
+              </summary>
+              {r.body}
+            </details>
+          ))}
         </div>
       </SectionCard>
-    </div>
+    </>
   );
 }
 function UnitBar({ value, total, label }: { value: number; total: number; label: string }) {
@@ -2264,6 +2239,156 @@ function CourseStatus({
     <div>
       <span>{name}</span>
       <StatusBadge type={type}>{label}</StatusBadge>
+    </div>
+  );
+}
+
+type ChoiceRow = { id: string; title: string; term: string; units?: number; pick?: Pick };
+
+function ChoiceRequirementRows({
+  rows,
+  audit,
+  openPicker,
+}: {
+  rows: ChoiceRow[];
+  audit: Audit;
+  openPicker: (target: Target) => void;
+}) {
+  return (
+    <div className="choice-requirements">
+      {rows.map((r, i) => (
+        <div className="choice-requirement-row" key={`${r.id}-${r.term}-${i}`}>
+          <div>
+            <span>{r.id === "elective" ? "Any course" : "Requirement"}</span>
+            <b>{r.title}</b>
+          </div>
+          <div className="planned-choice">
+            <small>In your plan</small>
+            {r.pick ? <b>{r.pick.code}</b> : <b className="not-chosen">Not chosen yet</b>}
+            <span>{termLabel(r.term)}</span>
+            {!!r.pick?.covers.length && <em>Counts twice</em>}
+          </div>
+          <div className="alternative-choices">
+            <small>{r.id === "elective" ? "Units" : "Bulletin"}</small>
+            <span>{audit.groups.find((g) => g.id === r.id)?.source ?? r.units}</span>
+          </div>
+          <button
+            onClick={() =>
+              openPicker({ group: r.id, term: r.term, title: r.title, replacing: r.pick?.code })
+            }
+          >
+            {r.pick ? "Change" : "Choose a course"} <Icon name="arrow" size={14} />
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ElectivesView({
+  work,
+  openPicker,
+  goToProgress,
+}: {
+  work: Work;
+  openPicker: (target: Target) => void;
+  goToProgress: () => void;
+}) {
+  const { audit, check, info, picks, semesters, student } = work;
+  const rows: ChoiceRow[] = [
+    ...semesters.flatMap((s) =>
+      s.courses.filter(isSlot).map((slot) => ({
+        id: slot.slot,
+        title: slotLabel(slot, audit),
+        term: s.term,
+        units: slot.units,
+      })),
+    ),
+    ...picks.map((pick) => ({
+      id: pick.group,
+      title: pick.group === "elective" ? "Free elective: any course" : (audit.groups.find((g) => g.id === pick.group)?.title ?? pick.group),
+      term: pick.term,
+      pick,
+    })),
+  ];
+  const major = rows.filter((r) => audit.groups.find((g) => g.id === r.id)?.kind === "major");
+  const ge = rows.filter((r) => r.id.startsWith("ge_"));
+  const free = rows.filter((r) => r.id === "elective");
+  const studies = rows.filter((r) => !major.includes(r) && !ge.includes(r) && !free.includes(r));
+  const count = (list: ChoiceRow[]) => `${list.filter((r) => r.pick).length} chosen, ${list.filter((r) => !r.pick).length} to go`;
+  const done = audit.groups.filter(isDone);
+  const short = audit.groups.find((g) => g.min_units_from && !isDone(g));
+  const inSubject = short?.min_units_from
+    ? picks
+        .filter((p) => p.group === short.id && p.code.startsWith(short.min_units_from!.subject))
+        .reduce((total, p) => total + unitsOf(p.code, info), short.min_units_from.done)
+    : 0;
+  return (
+    <div className="app-content">
+      <div className="page-title">
+        <h1>Electives & GE</h1>
+        <p>
+          These are the requirements where you get to choose. Change a class here to see its options, or ask
+          the chat.
+          {student.goal && student.goal !== "Undecided" ? ` Your focus: ${student.goal}.` : ""}
+        </p>
+      </div>
+      <AdvisingNote />
+      {!check.valid && <ProblemPanel errors={check.errors} />}
+      {work.busy && <Loading label={work.busy} />}
+      {work.failed && <ErrorCard text={work.failed} />}
+      {!!major.length && (
+        <SectionCard title="Major electives" count={count(major)}>
+          {short?.min_units_from && (
+            <div className="major-electives-summary">
+              <div className="csc-unit-progress">
+                <div>
+                  <b>
+                    {inSubject} of {short.min_units_from.units} required {short.min_units_from.subject} units
+                  </b>
+                  <span>{Math.min(100, Math.round((inSubject / short.min_units_from.units) * 100))}%</span>
+                </div>
+                <div>
+                  <i style={{ width: `${Math.min(100, (inSubject / short.min_units_from.units) * 100)}%` }} />
+                </div>
+              </div>
+            </div>
+          )}
+          <ChoiceRequirementRows rows={major} audit={audit} openPicker={openPicker} />
+        </SectionCard>
+      )}
+      {!!ge.length && (
+        <SectionCard title="GE still needed" count={count(ge)}>
+          <ChoiceRequirementRows rows={ge} audit={audit} openPicker={openPicker} />
+        </SectionCard>
+      )}
+      {!!studies.length && (
+        <SectionCard title="SF State Studies & American Institutions" count={count(studies)}>
+          <ChoiceRequirementRows rows={studies} audit={audit} openPicker={openPicker} />
+        </SectionCard>
+      )}
+      {!!free.length && (
+        <SectionCard title="Free electives" count={count(free)}>
+          <ChoiceRequirementRows rows={free} audit={audit} openPicker={openPicker} />
+        </SectionCard>
+      )}
+      {!rows.length && <p className="still-to-do">Nothing left to choose in this plan.</p>}
+      {!!done.length && <details className="already-done">
+        <summary>
+          <span>
+            <Icon name="check" /> Already done
+          </span>
+          <span>
+            {done.length} requirements <Icon name="chevron" />
+          </span>
+        </summary>
+        <div>
+          <p>{done.map((g) => g.title).join(", ")}</p>
+          <button onClick={goToProgress}>
+            See completed requirements in Progress <Icon name="arrow" size={14} />
+          </button>
+        </div>
+      </details>}
     </div>
   );
 }
@@ -3372,6 +3497,9 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
           />
         )}
         {tab === "progress" && <ProgressView work={work} />}
+        {tab === "electives" && (
+          <ElectivesView work={work} openPicker={setPicker} goToProgress={() => setTab("progress")} />
+        )}
         {tab === "schedule" && (
           <ScheduleView work={work} openPlan={() => setTab("plan")} toast={showToast} />
         )}

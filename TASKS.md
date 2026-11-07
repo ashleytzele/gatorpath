@@ -49,6 +49,10 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   says it isn't published, where it used to list every course as missing
 - [x] The Electives & GE tab is gone: the chat chooses, and an open slot on the plan still opens the course list. Each
   class says what it counts for and whether the AI picked it
+- [x] Electives & GE is back (2026-11-07): with the AI choosing, a student still wants to see the other options. It lists
+  each class the plan chose for a requirement, and Change opens the same course list
+- [x] Review reads like the DPR (2026-11-07): the Progress tab's requirement list, in the DPR's order (GE, university,
+  major) and words (Completed, In progress, Incomplete), with the record to fix below it
 - [ ] Before a public host: a per-student rate limit and a spend cap on `/api/assist`
 - [x] DPR import finds any major by its Bulletin title ("Public Health-BS" → "Bachelor of Science in Public Health"),
   `dpr_plan` still first (2026-11-07, a real Public Health print). Found with it: "Courses Required = 2 Courses" read as a
