@@ -891,7 +891,8 @@ def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dic
         return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF (or isn't installed: brew install poppler)"]}
     if not parsed["requirements"]:
         return {"catalog_year": YEAR, "error": "unrecognized_dpr_format",
-                "warnings": ["No requirements found: is this the Degree Progress Report printed from Student Center?"]}
+                "warnings": ["No requirements found. This looks like another Student Center page, such as the Degree "
+                             "Planner: open the Degree Progress Report, click Expand All and View All, and print that"]}
     every = programs()
     if program is not None and program not in every:
         return unknown_program(program)

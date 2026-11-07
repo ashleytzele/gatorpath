@@ -22,7 +22,7 @@ ROW = re.compile(rf"\s*(?P<code>{CODE})\s+(?P<desc>.*?)\s*(?P<units>\d+\.\d\d)"
 NEEDED = re.compile(r"(Units|Courses): (\d+(?:\.\d+)?) required, (\d+(?:\.\d+)?) taken, (\d+(?:\.\d+)?) needed")
 PAGES = re.compile(r"First\s+(\d+)-(\d+) of (\d+)\s+Last")
 NOT_TITLE = ("Units Required", "Total Units Required", "Courses Required", "(", "Complete ", "One course",
-             "The following", "Course ", "View All")
+             "The following", "Course ", "View All", "Note:")
 PRINT_CHROME = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}, \d{1,2}:\d{2} [AP]M\s.*|https?://\S+.*")  # browser header/footer
 TRANSFER = re.compile(r"\d+N?TR$")
 AREA_TITLE = re.compile(r"(?:Area \w+|UD-\w)(?::| -) [^.]+")  # 'Area 1A: English Composition', 'UD-B: Physical/Life Science'
@@ -41,6 +41,7 @@ def parse(text: str) -> dict:
     in_ge = True  # "Area …" titles are GE areas only in the General Education section, not a major's "Area 1: …"
     title_only = None  # a requirement's title, until the next line shows whether the print collapsed it
     cut = []  # lists printed without View All
+    foreign: Counter = Counter()  # rows with a grade SF State doesn't give
     for line in text.splitlines():
         s = line.strip()
         if PRINT_CHROME.fullmatch(s):  # a page break can fall between a requirement's title and its tag
@@ -59,7 +60,9 @@ def parse(text: str) -> dict:
             if m := re.search(rf"{label}\s+(\d\.\d+)", line):
                 out[key] = float(m[1])
         if m := TAG.fullmatch(line):
-            title = next((r for r in reversed(recent) if not r.startswith(NOT_TITLE)), "")
+            # an area or course title wins; else the last line that isn't an instruction or a sentence (a note's end)
+            title = next((r for r in reversed(recent) if COURSE_TITLE.fullmatch(r) or AREA_TITLE.fullmatch(r)), None) or next(
+                (r for r in reversed(recent) if not r.startswith(NOT_TITLE) and not r.endswith(".")), "")
             if m[1].startswith("G"):  # a section: GE, University Requirements, the major
                 in_ge = "General Education" in title
             block = {"id": m[1] + (f"/{m[2]}" if m[2] else ""), "title": title, "kind": "group" if not m[2] else
@@ -83,13 +86,13 @@ def parse(text: str) -> dict:
         elif (m := PAGES.search(line)) and int(m[2]) < int(m[3]):
             cut.append(f"{block['title']} ({m[2]} of {m[3]} courses)")
         elif m := ROW.fullmatch(line):
-            if m["grade"] and m["grade"] not in GRADE_SYMBOLS | {"T"}:
-                out["warnings"].append(f"{block['title']}: a course row has grade {m['grade']!r}, not an SF State grade "
-                                       "symbol (p.2403) or T; check that row on your DPR")
+            elsewhere = bool(m["grade"]) and m["grade"] not in GRADE_SYMBOLS | {"T"}  # another school's grade: A+
+            if elsewhere:
+                foreign[m["grade"]] += 1
             block["rows"].append({
                 "code": m["code"], "units": float(m["units"]), "term": term_of(m["when"]) if m["when"] else None,
                 "grade": m["grade"], "notes": m["notes"], "designation": m["desig"],
-                "transfer": bool(TRANSFER.search(m["code"])), "option": m["when"] is None})
+                "transfer": bool(TRANSFER.search(m["code"])) or elsewhere, "option": m["when"] is None})
     for b in out["requirements"]:
         used = [r for r in b["rows"] if r["grade"]]
         going = [r for r in b["rows"] if r["term"] and not r["grade"]]
@@ -98,6 +101,10 @@ def parse(text: str) -> dict:
         b["status"] = ("collapsed" if b["id"] == "collapsed" else
                        "needed" if b["needed"] and b["needed"]["needed"] > 0 else "waived" if b["waived"]
                        else "in_progress" if going else "done" if used else "needed" if b["kind"] == "course" else "info")
+    if foreign:
+        out["warnings"].append(f"{sum(foreign.values())} course row(s) have a grade SF State doesn't give "
+                               f"({', '.join(sorted(foreign))}; p.2403), so they're read as credit from another school, "
+                               "not SF State work; check them on your DPR")
     if cut:
         out["warnings"].append(f"These lists print only their first rows: {'; '.join(cut)}. Each list's counter in the PDF "
                                "reads \"1-10 of …\" when View All wasn't on; click View All on each (after Expand All), "

@@ -87,6 +87,45 @@ def test_a_courses_required_line_is_not_a_title():
     assert got["warnings"] == []
 
 
+def test_a_note_under_a_title_isnt_the_title():
+    # Two Fall 2025 prints (2026-11-07; layout copied, rows invented): a two-line note under "Area 4UD" became the
+    # block's title, so 4UD read as not on the DPR and was left out of both plans
+    text = """
+      General Education Requirements
+   [G11368]
+          Area 4UD: Social and Behavioral Sciences
+
+           Units Required = 3 Units
+
+           Note: The three courses taken in Area 4 (one upper-division and two lower-division) must
+           be taken in at least two different disciplines.
+
+           [R12831 / L0090]
+
+         The following courses were used to satisfy this requirement:
+         Course            Description                               Units      When                Grade Status
+         PSY 432           SOCIAL PSYCHOLOGY                  3.00              Fall 2025           B
+"""
+    got = [(r["title"], r["kind"], r["status"]) for r in parse(text)["requirements"] if r["kind"] != "group"]
+    assert got == [("Area 4UD: Social and Behavioral Sciences", "ge", "done")]
+
+
+def test_a_grade_sf_state_doesnt_give_is_credit_from_elsewhere():
+    # A Fall 2025 print's Courses Not Used (layout copied, rows invented): an A+ under an SF State code is another
+    # school's grade, so it isn't SF State (residence) work. Said once, not once per row
+    text = """
+     Courses Not Used
+         Course            Description                               Units      When                Grade Status
+         PSY 105           INTRO TO PSYCHOLOGY                3.00              Fall 2023           A+
+         MUS 102           MUSIC FUNDAMENTALS                 1.00              Fall 2023           A+
+         MATH 100TR        COLLEGE ALGEBRA                    3.00              Fall 2023           B
+"""
+    got = parse(text)
+    assert [r["transfer"] for r in got["requirements"][0]["rows"]] == [True, True, True]
+    assert len([w for w in got["warnings"] if "A+" in w]) == 1
+    assert to_profile(got, {}, {})["completed"] == []  # transfer rows meet requirements only where they're filed
+
+
 def test_an_or_requirement_is_done_by_either_course():
     # The same print (rows invented): an "X or Y" requirement met by one course read as a disagreement, since every code
     # had to be done
