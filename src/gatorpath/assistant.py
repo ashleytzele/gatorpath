@@ -56,7 +56,15 @@ To fill a plan:
 3. A slot named "elective" takes any course of about those units that fits the goal: find one with search_courses.
 4. Send the changes to change_plan together, then fix what it reports. Stop when no slots are left, or when the rest can't be filled, and say which.
 
-Reply in two to four plain sentences: what you found or changed, and any problem or warning they should know. Never say a plan is verified, approved or official: GatorPath's checks aren't an advisor. For anything the tools can't settle (whether a requirement applies, overloads, visas, exceptions), send them to an advisor: https://sfsu.campus.eab.com/ (Navigator). Only help with this student's SF State degree."""
+Write each reply the way a good chat reply reads, easy to scan:
+- Open with one short sentence that answers or says what you did.
+- Then bullet points ("- "), one fact each: what changed (course, term), problems, warnings, what to check. Group them under a short **bold** label on its own line when there are two kinds (say **Changed** and **Check**).
+- Put a blank line between the opening sentence, each label and each list. No headings, no tables, no paragraph of more than two sentences.
+- Under about 120 words unless they ask for detail. Say each thing once.
+
+If the context has dpr_notes (what GatorPath found reading the student's DPR), start this reply with **From your DPR** and a bullet for each note that changes something for them: a requirement left out of the plan, grades recorded for transfer credit, rules from another catalog year. Say it in plain words, without tool or field names, and skip notes that change nothing.
+
+Never say a plan is verified, approved or official: GatorPath's checks aren't an advisor. For anything the tools can't settle (whether a requirement applies, overloads, visas, exceptions), send them to an advisor: https://sfsu.campus.eab.com/ (Navigator). Only help with this student's SF State degree."""
 
 OWN_TOOLS = [
     {"name": "change_plan", "description": "Change the plan, all changes together. Each removes a slot or course from a "
@@ -270,9 +278,10 @@ def context(state: dict) -> str:
                       | ({"sections_chosen": state["sections"]} if state["sections"] else {}))
 
 
-def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sections: dict | None = None) -> dict:
+def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sections: dict | None = None,
+        notes: list[str] | None = None) -> dict:
     """One student request, or filling the plan when `messages` is empty. A failed call changes nothing. `sections`:
-    {term: [class_nbr]} the student chose for the Schedule."""
+    {term: [class_nbr]} the student chose for the Schedule. `notes`: the DPR import's warnings, for the first reply."""
     start = server.check_plan(student, plan)
     state = {"student": student, "semesters": plan["semesters"], "picks": picks, "changed": False, "rebuilt": None, "options": {},
              "sections": dict(sections or {}),
@@ -281,7 +290,8 @@ def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sect
     recent = [m | {"content": m["content"][:LONGEST]} for m in messages[-HISTORY:]] or [{"role": "user", "content": FILL}]
     while recent[0]["role"] != "user":
         recent = recent[1:]
-    history = recent[:-1] + [{"role": "user", "content": f"{context(state)}\n\n{recent[-1]['content']}"}]
+    told = json.dumps(json.loads(context(state)) | {"dpr_notes": notes}) if notes else context(state)
+    history = recent[:-1] + [{"role": "user", "content": f"{told}\n\n{recent[-1]['content']}"}]
     reply = "I ran out of steps before finishing. Check your plan, or ask an advisor in Navigator: https://sfsu.campus.eab.com/"
     try:
         client = connect()

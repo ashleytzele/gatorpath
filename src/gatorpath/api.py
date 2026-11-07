@@ -16,6 +16,7 @@ from gatorpath import assistant, dpr, server
 from gatorpath.server import Plan, Profile
 
 MAX_PDF = 15 * 1024 * 1024  # what the upload screen promises
+LONGEST_NOTE = 600  # characters of one DPR note sent on to the chat
 MultiPartParser.spool_max_size = MAX_PDF + 1  # Starlette writes past 1 MB to a temp file; larger is refused before parsing
 DIST = Path(__file__).parents[2] / "web/dist"
 
@@ -87,11 +88,13 @@ def electives(profile: Profile = Body(), requirement: str = Body(), plan: Plan |
 
 @app.post("/api/assist")
 def assist(profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = Body(default=[]),
-           messages: list[Message] = Body(default=[]), sections: dict[str, list[str]] = Body(default={})) -> dict:
+           messages: list[Message] = Body(default=[]), sections: dict[str, list[str]] = Body(default={}),
+           notes: list[str] = Body(default=[])) -> dict:
     """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py).
-    sections: {term: [class_nbr]} the student chose on the Schedule, which the chat can change too."""
+    sections: {term: [class_nbr]} the student chose on the Schedule, which the chat can change too. notes: what the DPR
+    import found, said in the first reply."""
     try:
-        return assistant.ask(profile, plan, picks, messages, sections)
+        return assistant.ask(profile, plan, picks, messages, sections, [n[:LONGEST_NOTE] for n in notes[:12]])
     except assistant.NotConnected as e:
         raise HTTPException(503, str(e)) from e
 

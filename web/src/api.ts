@@ -266,4 +266,5 @@ export const assist = (
   picks: Pick[],
   messages: ChatMessage[],
   sections: Record<string, string[]>,
-) => post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages, sections });
+  notes: string[] = [], // what the DPR import found: the first reply says it
+) => post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages, sections, notes });

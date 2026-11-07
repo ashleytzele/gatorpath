@@ -40,8 +40,8 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   that student only, flagged for an advisor, with "Put it back" on Review. `rules/` doesn't change
 - [x] The site has no way to give a transfer total: with a DPR it doesn't need one, the 120 follows the DPR's count.
   A typed record still has none (the chat's update_record takes transfer_units)
-- [ ] Engine warnings were written for AI clients ("set transfer_units", "add it to not_on_dpr"). Review no longer shows
-  them; if the chat says them (below), word them for students
+- [x] Engine warnings were written for AI clients ("set transfer_units", "add it to not_on_dpr"): the chat words them for
+  students, and two no longer apply with the DPR's own totals (the transfer total; lists cut at 10 rows now say so)
 - [x] The chat (ARCHITECTURE §7.7, D34, D35): Haiku fills the plan after build_plan, with the MCP server's tools plus
   change_plan, replan and update_record, docked beside the plan. The record stays on the backend. Works without a key
 - [x] First use on the real API, with a real DPR: it filled the plan, but the chat couldn't add a term or change the pace
@@ -73,8 +73,10 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   major) and words (Completed, In progress, Incomplete). Then a dashboard: tiles (units, upper-division, requirements,
   GPA), the list, and beside it "Fix your record" (add a course the DPR doesn't show, change a grade, finish or remove
   one) over collapsed Completed and In progress lists. A GE area the DPR doesn't list is put back or left out in its row
-- [ ] The import's warnings and cross_check no longer show on Review ("Check with an advisor" was removed on request):
-  say them in the chat instead, if they should reach the student
+- [x] The import's warnings and cross_check go to the chat's first reply (`notes`, 2026-11-07), which opens with **From
+  your DPR** and a bullet for each that changes something, in plain words. Replies are structured: an opening line,
+  bold labels, bullets; the page renders that light markdown (`Rich`, no HTML injected). Without an API key they
+  aren't said anywhere
 - [ ] Before a public host: a per-student rate limit and a spend cap on `/api/assist`
 - [x] DPR import finds any major by its Bulletin title ("Public Health-BS" → "Bachelor of Science in Public Health"),
   `dpr_plan` still first (2026-11-07, a real Public Health print). Found with it: "Courses Required = 2 Courses" read as a

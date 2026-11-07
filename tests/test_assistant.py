@@ -266,6 +266,19 @@ def test_a_filled_plan_starts_from_the_fill_instruction_and_history_stays_short(
     assert seen[-1]["messages"][0]["role"] == "user"
 
 
+def test_the_dpr_notes_reach_the_chat_once(model):
+    """What the DPR import found (a GE area left out, transfer grades recorded at the minimum) is said in the chat's
+    first reply: Review no longer shows it. Later replies don't repeat it."""
+    notes = ["Not found on this DPR: GE F Ethnic Studies. Left out of the plan", "Met by transfer credit: MATH 226"]
+    seen = model(say("From your DPR: ..."))
+    assistant.ask(STUDENT, plan_of(), [], [], notes=notes)
+    sent = seen[0]["messages"][-1]["content"]
+    assert json.loads(sent.split("\n\n")[0])["dpr_notes"] == notes and "dpr_notes" in seen[0]["system"]
+    seen = model(say("Sure."))
+    assistant.ask(STUDENT, plan_of(), [], [{"role": "user", "content": "Hi"}])
+    assert "dpr_notes" not in seen[-1]["messages"][-1]["content"]
+
+
 def test_the_model_cant_run_forever_or_crash_on_bad_input(model):
     seen = model(*[use("get_course") for _ in range(assistant.ROUNDS)])
     got = assistant.ask(STUDENT, plan_of(), [], [{"role": "user", "content": "Go"}])

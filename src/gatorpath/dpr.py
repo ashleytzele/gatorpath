@@ -117,10 +117,9 @@ def parse(text: str, statuses: list[tuple[str, str]] | None = None) -> dict:
                                f"({', '.join(sorted(foreign))}; p.2403), so they're read as credit from another school, "
                                "not SF State work; check them on your DPR")
     if cut:
-        out["warnings"].append(f"These lists print only their first rows: {'; '.join(cut)}. Each list's counter in the PDF "
-                               "reads \"1-10 of …\" when View All wasn't on; click View All on each (after Expand All), "
-                               "check that the counters show every course, and print again. Until then a course that is only "
-                               "on those lists is missing")
+        out["warnings"].append(f"These lists print only their first rows: {'; '.join(cut)}. The DPR's own unit totals and "
+                               "requirement lines still count every course, so the plan isn't short; View All before "
+                               "printing lists them all")
     if folded := [b for b in out["requirements"] if b["id"] == "collapsed"]:
         out["warnings"].append(f"Collapsed in this print: {', '.join(b['title'] for b in folded)}. " + (
             "Their status is the DPR's own (its icons)" if all(b.get("icon") for b in folded) else
@@ -185,7 +184,7 @@ def to_profile(dpr: dict, min_grade: dict[str, str], units: dict[str, float]) ->
         warnings.append(f"DPR Notes codes {', '.join(sorted(notes))} have no legend in the print; ask the Registrar or "
                         "an advisor what they mean")
     transfer_units = count_transfer_units(dpr["requirements"])
-    if transfer_units:
+    if transfer_units and "units" not in unit_totals(dpr):  # with its own 120 line, the DPR's total counts them all
         warnings.append(f"{transfer_units:g} transfer units counted from the transfer rows this DPR lists under requirements; if "
                         "you have more (your transcript's Transfer Totals), use that total for transfer_units")
     remaining = [{"requirement": b["title"], **({k: b["needed"][k] for k in ("what", "needed")} if b["needed"] else {})}

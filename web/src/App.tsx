@@ -3165,6 +3165,49 @@ function CourseDrawer({ code, why, close }: { code: string; why?: string; close:
   );
 }
 
+/** A chat reply's light markdown as React elements (nothing is injected as HTML): paragraphs, "- " and "1. " lists,
+ * **bold** and links. */
+function Rich({ text }: { text: string }) {
+  const inline = (line: string) =>
+    line.split(/(\*\*[^*]+\*\*|https?:\/\/[^\s)]*[^\s).,;:])/g).map((part, i) =>
+      part.startsWith("**") && part.endsWith("**") && part.length > 4 ? (
+        <b key={i}>{part.slice(2, -2)}</b>
+      ) : /^https?:\/\//.test(part) ? (
+        <a key={i} href={part} target="_blank" rel="noreferrer">
+          {part}
+        </a>
+      ) : (
+        part
+      ),
+    );
+  const blocks: { list?: "ul" | "ol"; lines: string[] }[] = [];
+  for (const raw of text.split("\n")) {
+    const item = raw.match(/^\s*(?:([-*•])|\d+[.)])\s+(.*)$/);
+    const list = item ? (item[1] ? "ul" : "ol") : undefined;
+    const last = blocks[blocks.length - 1];
+    if (!raw.trim()) blocks.push({ lines: [] });
+    else if (list && last?.list === list) last.lines.push(item![2]);
+    else blocks.push({ list, lines: [item ? item[2] : raw.replace(/^#+\s*/, "")] });
+  }
+  return (
+    <>
+      {blocks
+        .filter((b) => b.lines.length)
+        .map((b, i) => {
+          if (!b.list) return <p key={i}>{inline(b.lines.join(" "))}</p>;
+          const List = b.list;
+          return (
+            <List key={i}>
+              {b.lines.map((line, j) => (
+                <li key={j}>{inline(line)}</li>
+              ))}
+            </List>
+          );
+        })}
+    </>
+  );
+}
+
 function ChatPanel({
   open,
   thread,
@@ -3206,7 +3249,7 @@ function ChatPanel({
       <div className="chat-thread" aria-live="polite">
         {thread.map((m, i) => (
           <div className={`chat-bubble ${m.role === "user" ? "user" : "bot"}`} key={i}>
-            {m.content}
+            {m.role === "user" ? m.content : <Rich text={m.content} />}
           </div>
         ))}
         {sending && (
@@ -3322,7 +3365,7 @@ function StyleGuide({ close }: { close: () => void }) {
   );
 }
 
-function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
+function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Built; notes: string[] }) {
   const [tab, setTab] = useState<Tab>("plan");
   const [picker, setPicker] = useState<Target | null>(null);
   const [course, setCourse] = useState("");
@@ -3455,7 +3498,8 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     setBusy("Choosing your courses with AI…");
     setFailed("");
     try {
-      const r = await assist(student, state.semesters, state.picks, [], state.sections);
+      const r = await assist(student, state.semesters, state.picks, [], state.sections, told.current ? [] : notes);
+      told.current = true;
       if (r.changed) {
         setPrevious(state);
         setState(withAnswer(r));
@@ -3487,8 +3531,10 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     }
   };
   const started = useRef(false);
+  const told = useRef(false); // the DPR notes go with the first request only
   useEffect(() => {
-    if (started.current || !state.semesters.some((s) => s.courses.some(isSlot))) return;
+    // the first reply fills the open slots and says what the DPR import found, so it runs for either
+    if (started.current || !(notes.length || state.semesters.some((s) => s.courses.some(isSlot)))) return;
     started.current = true;
     fill();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -3650,7 +3696,13 @@ export default function App() {
           }}
         />
       )}
-      {screen === "app" && profile && built && <AppWorkspace profile={profile} built={built} />}
+      {screen === "app" && profile && built && (
+        <AppWorkspace
+          profile={profile}
+          built={built}
+          notes={imported ? [...new Set([...imported.cross_check, ...imported.warnings])] : []}
+        />
+      )}
       {style && <StyleGuide close={() => setStyle(false)} />}
       <Footer />
     </div>
