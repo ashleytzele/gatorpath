@@ -824,9 +824,23 @@ until they start over. The PDF never reaches the disk: Starlette writes an uploa
 the spool limit sits above a size checked before parsing, and `pdftotext` reads it over stdin. No student data goes in
 a URL (`/api/electives` is a POST for this reason) and the access log is off.
 
-Web pages have no AI client, so nothing picks electives: the student does, from the engine's options, and `check_plan`
-judges the result. The goal is shown beside the options but ranks nothing. Every question goes to Navigator. `?demo`
-adds the prototype's preview bars, which force a state on top of real data.
+Every question a person should answer goes to Navigator. `?demo` adds the prototype's preview bars, which force a state
+on top of real data.
+
+### 7.7 The web's AI helper (`assistant.py`)
+
+`POST /api/assist` is the one route with an LLM behind it (D34). After `build_plan`, Claude Haiku fills the open slots
+for the student's goal; in the chat it changes classes on request. The site works without it: no key, and the student
+chooses from the same options.
+
+- **The AI suggests, the code decides.** The model's only way to change a plan is `change_plan`, small edits (`remove`,
+  `add`) that the backend applies to a copy and runs through `check_plan`. A result with more errors than before is
+  refused and nothing changes; `check_plan` over the final plan goes back to the page.
+- **The record stays on our side.** Tools run with the student's profile, so the model never holds it, and it can't
+  mistype a grade or drop a row, Haiku's commonest miss in the evals. It gets the major, catalog year, goal, load choices
+  and the plan. Name, ID, grades and GPA don't go; a tool result's quoted grade or GPA is scrubbed (`scrub`).
+- A failed call changes nothing. History and message length are capped, and one request stops at 40 model calls.
+  ponytail: no per-student rate limit or spend cap, needed before this is on a public host.
 
 ## 8. Planner algorithm (`engine/planner.py`)
 
@@ -1056,6 +1070,7 @@ students; 0 hallucinated courses."*
 | D31 | Tokens are a UX cost and are measured: results go over MCP as compact JSON; a fact is said once (the offering span in the note, the also_covers rule in the docstring); one electives call per group; GE suggestions from ge_combinations' examples; no generated schema titles. Course descriptions stay whole. The evals' User experience table reports tool-result characters per first reply | Measured 2026-10-29 (TASKS.md): the library pretty-printed every result (24-55% whitespace); 9 of Claude's 10 electives calls re-fetched GE suggestions; Claude Code cuts a result over about 50KB to a 2KB preview (ge_combinations had been 53.8KB). A 300-character description cap lost 13 goal matches among senior electives | 2026-10-29 |
 | D32 | A web app beside the MCP server, on the same functions: thin routes in `api.py`, no database, nothing kept past the tab, every question sent to Navigator | Most students have no MCP client. D1 put the UI later, and this stays within golden rule 5 because the site stores nothing; saving reports or plans would need the written exception the brainstorm notes describe | 2026-11-06 |
 | D33 | The DPR decides which GE areas apply: a GE requirement in the rules that a student's DPR doesn't list is left out for that student on import (`not_on_dpr`), said in cross_check and flagged for an advisor, and they can put it back on Review | The rules hold the Bulletin's catalog; catalog rights can change what one student owes, and the DPR already reflects that. `rules/` doesn't change. The cost: a heading GatorPath misreads reads as not listed, so the line stays visible and reversible rather than silent | 2026-11-06 |
+| D34 | The web backend may call an LLM (Claude Haiku), the MCP server still doesn't: `assistant.py` is a client of the same functions, the model edits a plan only through `check_plan`, and the student's record stays on the backend | Students on the web have no AI client of their own, and a plan with 20 open slots isn't a plan yet. Golden rule 4 protects deterministic tools, which this keeps (a test checks `server.py` never imports it). It changes what the site can promise: planned courses and the goal now reach Anthropic, and the site says so | 2026-11-07 |
 
 ---
 

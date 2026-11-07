@@ -31,7 +31,11 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [ ] The site has no way to give a transfer total (transfer_units)
 - [ ] Engine warnings on Review were written for AI clients ("set transfer_units", "add it to not_on_dpr"): the site has
   no field for either, so word them for students, or give the site those fields
-- [ ] The goal ranks nothing: a student reads the options. Rank by goal in the engine if it should
+- [x] The AI helper (ARCHITECTURE §7.7, D34): Haiku fills the plan after build_plan and changes classes from the chat,
+  through a tool that runs check_plan. The record stays on the backend. Works without a key: the site says so
+- [ ] Run the helper on the real API (needs ANTHROPIC_API_KEY): so far real Haiku drove the same tools and prompt through
+  Claude Code on synthetic students, and the SDK loop has only run against a scripted model
+- [ ] Before a public host: a per-student rate limit and a spend cap on `/api/assist`
 - [ ] DPR import reads CS and Psychology only (`dpr_plan`): other majors get `unknown_program` and type their courses
 - [ ] A what-if rebuilds the plan and clears course picks (the screen says so, and Undo restores them)
 

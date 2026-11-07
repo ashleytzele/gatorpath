@@ -124,6 +124,15 @@ export type PlanResult = {
   courses?: Record<string, CourseInfo>;
 };
 
+export type ChatMessage = { role: "user" | "assistant"; content: string };
+export type Pick = { group: string; term: string; code: string; readiness?: string; covers: string[] };
+export type Assisted = {
+  reply: string;
+  changed: boolean;
+  semesters: Semester[];
+  picks: Pick[];
+  check: Checked;
+};
 export type Option = {
   code: string;
   title: string;
@@ -234,3 +243,6 @@ export function getSections(term: string, courses: string[]) {
   courses.forEach((c) => query.append("courses", c));
   return call<Sections>(`/api/sections?${query}`);
 }
+/** The AI helper: a chat message, or with none, fills the plan. check_plan decides every change on the server. */
+export const assist = (profile: Profile, semesters: Semester[], picks: Pick[], messages: ChatMessage[]) =>
+  post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages });

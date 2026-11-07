@@ -20,7 +20,8 @@ Full design: `docs/ARCHITECTURE.md`. Current work: `TASKS.md` (work phase by pha
    publication) cites its memo and date. One student's exception never goes into `rules/`.
 3. **Flag, don't guess.** If prereq text can't be parsed, store it with `status: unparsed` and
    surface a warning. Never drop it and never approximate it silently.
-4. **No LLM calls in the server.** Tools are deterministic. The AI client does the talking.
+4. **No LLM calls in the server.** Tools are deterministic. The AI client does the talking. On the web that client is
+   `assistant.py`: it stays out of `server.py` and `engine/`, and `check_plan` decides every change it makes.
 5. **No student data at rest.** Don't store, log, cache, or print student profiles, transcript or
    DPR text. The only exception is `save_profile`: one file, at a path the student chose, on their
    machine, only when they ask, never inside the repo. Never commit a real transcript, DPR or any real
@@ -47,6 +48,7 @@ uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cover
 uv run python -m gatorpath.ingest.programs data/raw/bulletin-2026-27.pdf --cross <ids>   # Codex CLI drafts them again; disagreements on made-up students
 uv run gatorpath                   # start MCP server (stdio)
 (cd web && npm install && npm run build) && uv run gatorpath-web   # the website + /api on http://127.0.0.1:8000
+ANTHROPIC_API_KEY=... uv run gatorpath-web   # the same, with the AI helper (auto-fill and chat); without a key the site still plans
 uv run gatorpath-web & (cd web && npm run dev)   # frontend work: Vite on :5173 proxies /api to :8000
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
@@ -78,6 +80,7 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 |---|---|
 | `src/gatorpath/server.py` | MCP tool/prompt definitions only. Keep it thin and call the engine |
 | `src/gatorpath/api.py` | Web API: thin routes over the same functions (ARCHITECTURE §7.6). No planning logic, nothing stored |
+| `src/gatorpath/assistant.py` | The web's AI helper: Haiku's tool loop. Never imported by `server.py` (golden rule 4; ARCHITECTURE §7.7) |
 | `web/` | React + Vite site. `src/api.ts` holds the calls; `?demo` shows the preview bars |
 | `src/gatorpath/engine/` | `prereq.py`, `rules.py`, `planner.py`: all logic, pure functions |
 | `src/gatorpath/ingest/` | Offline builders: Bulletin PDF and class search → `data/catalog.db`; program pages → source text and AI drafts |

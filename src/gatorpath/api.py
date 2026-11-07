@@ -1,8 +1,9 @@
 """The web app (ARCHITECTURE §7.6): thin routes over the functions the MCP tools run, plus web/dist. No planning logic
-lives here. Nothing is stored or logged: an upload stays in memory, and no student data goes in a URL."""
+lives here. Nothing is stored or logged: an upload stays in memory, and no student data goes in a URL. /api/assist is
+the one route with an LLM behind it (assistant.py); everything else is deterministic."""
 
 from pathlib import Path
-from typing import TypedDict
+from typing import Literal, TypedDict
 
 import uvicorn
 from fastapi import Body, FastAPI, HTTPException, Query, Request
@@ -11,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.datastructures import UploadFile
 from starlette.formparsers import MultiPartParser
 
-from gatorpath import dpr, server
+from gatorpath import assistant, dpr, server
 from gatorpath.server import Plan, Profile
 
 MAX_PDF = 15 * 1024 * 1024  # what the upload screen promises
@@ -31,6 +32,19 @@ class Options(TypedDict, total=False):
     f1: bool
     qr_pathway: str
     start_term: str
+
+
+class Message(TypedDict):
+    role: Literal["user", "assistant"]
+    content: str
+
+
+class Pick(TypedDict, total=False):
+    group: str
+    term: str
+    code: str
+    readiness: str
+    covers: list[str]
 
 
 @app.post("/api/import-dpr")
@@ -67,6 +81,16 @@ def check(profile: Profile = Body(), plan: Plan = Body()) -> dict:
 def electives(profile: Profile = Body(), requirement: str = Body(), plan: Plan | None = Body(default=None),
               by_term: str | None = Body(default=None), limit: int = Body(default=25), full: bool = Body(default=False)) -> dict:
     return server.list_eligible_electives(profile, requirement, plan, by_term, limit, full)
+
+
+@app.post("/api/assist")
+def assist(profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = Body(default=[]),
+           messages: list[Message] = Body(default=[])) -> dict:
+    """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py)."""
+    try:
+        return assistant.ask(profile, plan, picks, messages)
+    except assistant.NotConnected as e:
+        raise HTTPException(503, str(e)) from e
 
 
 @app.get("/api/sections")

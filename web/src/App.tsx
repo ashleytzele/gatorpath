@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  assist,
   buildPlan,
   checkPlan,
   EngineError,
@@ -11,7 +12,9 @@ import {
   importDpr,
   message,
   type Advisor,
+  type Assisted,
   type Audit,
+  type ChatMessage,
   type Checked,
   type CourseInfo,
   type Group,
@@ -20,6 +23,7 @@ import {
   type Offered,
   type Option,
   type Options,
+  type Pick,
   type PlanError,
   type PlanResult,
   type Profile,
@@ -297,9 +301,17 @@ function Header({
               </button>
             )}
             {screen === "app" && (
-              <a className="header-link ask-header" href={NAVIGATOR} target="_blank" rel="noreferrer">
-                Ask an advisor
-              </a>
+              <>
+                <button
+                  className="header-link ask-header"
+                  onClick={() => document.dispatchEvent(new Event("gator-ask"))}
+                >
+                  Ask about your plan
+                </button>
+                <a className="header-link" href={NAVIGATOR} target="_blank" rel="noreferrer">
+                  Ask an advisor
+                </a>
+              </>
             )}
             <button className="header-link" onClick={onHome}>
               Start over
@@ -559,7 +571,9 @@ function Landing({ start }: { start: () => void }) {
             </summary>
             <p>
               Your PDF is read in memory to find your courses, then discarded. It’s never written
-              to disk, and your name and student ID are dropped as it’s read.
+              to disk, and your name and student ID are dropped as it’s read. To choose courses and
+              chat, Claude Haiku (Anthropic’s AI) gets your major, goal and planned courses, never
+              your name, ID, grades or GPA.
             </p>
           </details>
           <details>
@@ -645,7 +659,8 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
       <div className="privacy-note">
         <Icon name="lock" size={16} />
         <span>
-          <b>Your DPR is never stored.</b> It’s read in memory to find your courses, then discarded.
+          <b>Your DPR is never stored.</b> It’s read in memory, then discarded. Our AI helper sees your
+          major, goal and planned courses, never your name, ID, grades or GPA.
         </span>
       </div>
       <details className="help-box">
@@ -1230,7 +1245,7 @@ function GoalsScreen({
       <Stepper current={2} />
       <div className="flow-heading">
         <h1>What matters to you?</h1>
-        <p>Your dates and load set your pace. Your focus stays next to your elective choices.</p>
+        <p>Your dates and load set your pace. Your focus shapes the courses we choose for you.</p>
       </div>
       {needs && (
         <div className="error-card" role="alert">
@@ -1277,7 +1292,7 @@ function GoalsScreen({
               <h3>
                 {goals.length ? "What do you want to focus on?" : "What are you interested in?"}
               </h3>
-              <p>We’ll show it next to your elective choices, so you can pick with it in mind.</p>
+              <p>We’ll choose your electives around it. You can change any of them.</p>
             </div>
           </div>
           {goals.length > 0 ? (
@@ -1530,7 +1545,6 @@ const slotLabel = (slot: Slot, audit: Audit) =>
 
 /** A slot of the plan to fill, or a pick to change. */
 type Target = { group: string; term: string; title: string; replacing?: string };
-type Pick = { group: string; term: string; code: string; readiness?: string; covers: string[] };
 
 /** One plan and what's known about it, shared by the tabs. It lives in memory only. */
 type Work = {
@@ -1546,6 +1560,7 @@ type Work = {
   failed: string;
   whatIf: (change: Options, label: string) => void;
   applyFold: () => void;
+  fill: () => void;
   undo?: () => void;
   note: string;
 };
@@ -1673,18 +1688,31 @@ function PlanView({
           ))}
         </div>
       )}
-      {planState === "open" && (
+      {work.busy && (
+        <div className="plan-status open" role="status">
+          <span>
+            <Icon name="spark" /> <b>{work.busy}</b> Your plan below is already real, and this can take a
+            minute or two.
+          </span>
+        </div>
+      )}
+      {planState === "open" && !work.busy && (
         <div className="plan-status open">
           <span>
             <Icon name="clock" /> <b>{choicesLeft} choices left in your plan</b>
           </span>
-          <button
-            onClick={() =>
-              document.getElementById("first-open-slot")?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
-            Make choices <Icon name="arrow" size={14} />
-          </button>
+          <span className="plan-status-actions">
+            <button onClick={work.fill}>
+              Fill them with AI <Icon name="spark" size={14} />
+            </button>
+            <button
+              onClick={() =>
+                document.getElementById("first-open-slot")?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              Choose myself <Icon name="arrow" size={14} />
+            </button>
+          </span>
         </div>
       )}
       {planState === "complete" && (
@@ -1719,6 +1747,12 @@ function PlanView({
               Ask an advisor in Navigator
             </a>
           </div>
+        </div>
+      )}
+      {work.note && !work.busy && (
+        <div className="ai-note">
+          <p>{work.note}</p>
+          {work.undo && <button onClick={work.undo}>Undo</button>}
         </div>
       )}
       <AdvisingNote />
@@ -1869,12 +1903,6 @@ function PlanView({
         {work.busy && (
           <span className="what-if-result" role="status">
             {work.busy}
-          </span>
-        )}
-        {work.note && !work.busy && (
-          <span className="what-if-result">
-            {work.note}
-            {work.undo && <button onClick={work.undo}>Undo</button>}
           </span>
         )}
         {work.failed && <ErrorCard text={work.failed} />}
@@ -2988,6 +3016,106 @@ function CourseDrawer({ code, why, close }: { code: string; why?: string; close:
   );
 }
 
+function ChatPanel({
+  thread,
+  sending,
+  failed,
+  send,
+  close,
+}: {
+  thread: ChatMessage[];
+  sending: boolean;
+  failed: string;
+  send: (text: string) => void;
+  close: () => void;
+}) {
+  const dialogRef = useDialog(close);
+  const [text, setText] = useState("");
+  const end = useRef<HTMLDivElement>(null);
+  useEffect(() => end.current?.scrollIntoView({ behavior: "smooth" }), [thread, sending, failed]);
+  const submit = (ask: string) => {
+    if (!ask.trim() || sending) return;
+    setText("");
+    send(ask.trim());
+  };
+  return (
+    <div className="overlay chat-overlay" onMouseDown={close}>
+      <aside
+        className="drawer chat-drawer"
+        onMouseDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Ask about your plan"
+        tabIndex={-1}
+        ref={dialogRef}
+      >
+        <div className="drawer-head">
+          <div>
+            <h2>Ask about your plan</h2>
+            <p>Change a class and your plan updates. GatorPath checks every change.</p>
+          </div>
+          <button onClick={close} aria-label="Close">
+            <Icon name="x" />
+          </button>
+        </div>
+        {!thread.length && (
+          <>
+            <div className="chat-intro">
+              <h3>What would you like to change?</h3>
+              <p>This is an AI helper and it can be wrong. For decisions, talk to an advisor.</p>
+            </div>
+            {[
+              "Swap one of my electives for something closer to my goal",
+              "Move one of my classes to a later term",
+              "Why is my first class in this term?",
+            ].map((ask) => (
+              <button className="suggested" onClick={() => submit(ask)} key={ask}>
+                {ask} <Icon name="arrow" />
+              </button>
+            ))}
+          </>
+        )}
+        <div className="chat-thread" aria-live="polite">
+          {thread.map((m, i) => (
+            <div className={`chat-bubble ${m.role === "user" ? "user" : "bot"}`} key={i}>
+              {m.content}
+            </div>
+          ))}
+          {sending && (
+            <div className="chat-bubble bot" role="status">
+              Working on it…
+            </div>
+          )}
+          {failed && <ErrorCard text={failed} />}
+          <div ref={end} />
+        </div>
+        <p className="chat-privacy">
+          <Icon name="lock" size={13} /> Claude Haiku sees your major, goal and planned courses, never
+          your name, ID, grades or GPA.{" "}
+          <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+            Ask an advisor in Navigator
+          </a>
+        </p>
+        <div className="chat-input">
+          <input
+            autoFocus
+            value={text}
+            maxLength={2000}
+            disabled={sending}
+            aria-label="Your question"
+            placeholder="Try: swap CSC 651 for something in security"
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && submit(text)}
+          />
+          <button aria-label="Send question" disabled={sending} onClick={() => submit(text)}>
+            <Icon name="arrow" />
+          </button>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 function StyleGuide({ close }: { close: () => void }) {
   const dialogRef = useDialog(close);
   return (
@@ -3052,6 +3180,10 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
   const [tab, setTab] = useState<Tab>("plan");
   const [picker, setPicker] = useState<Target | null>(null);
   const [course, setCourse] = useState("");
+  const [chat, setChat] = useState(false);
+  const [thread, setThread] = useState<ChatMessage[]>([]);
+  const [sending, setSending] = useState(false);
+  const [chatFailed, setChatFailed] = useState("");
   const [toast, setToast] = useState("");
   const [state, setState] = useState({
     options: built.options,
@@ -3159,6 +3291,60 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
       (next) => (next.check.valid ? `${code} is in your plan` : `${code} is in your plan, but the plan has a problem`),
     );
   };
+  // The API returns what it was sent of each term, so keep what only build_plan has (why)
+  const withAnswer = (r: Assisted) => ({
+    ...state,
+    semesters: r.semesters.map((s) => ({ ...state.semesters.find((o) => o.term === s.term), ...s })),
+    check: r.check,
+    picks: r.picks,
+    info: { ...state.info, ...r.check.courses },
+  });
+  const fill = async () => {
+    setBusy("Choosing your courses with AI…");
+    setFailed("");
+    try {
+      const r = await assist(student, state.semesters, state.picks, []);
+      if (r.changed) {
+        setPrevious(state);
+        setState(withAnswer(r));
+      }
+      setNote(r.reply);
+    } catch (e) {
+      setNote(message(e)); // the plan works without AI: say so, without an error
+    } finally {
+      setBusy("");
+    }
+  };
+  const send = async (text: string) => {
+    const asked: ChatMessage[] = [...thread, { role: "user", content: text }];
+    setThread(asked);
+    setSending(true);
+    setChatFailed("");
+    try {
+      const r = await assist(student, state.semesters, state.picks, asked);
+      setThread([...asked, { role: "assistant", content: r.reply }]);
+      if (r.changed) {
+        setPrevious(state);
+        setState(withAnswer(r));
+        setNote("Your plan was updated from the chat.");
+      }
+    } catch (e) {
+      setChatFailed(message(e));
+    } finally {
+      setSending(false);
+    }
+  };
+  const started = useRef(false);
+  useEffect(() => {
+    if (started.current || !state.semesters.some((s) => s.courses.some(isSlot))) return;
+    started.current = true;
+    fill();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const open = () => setChat(true);
+    document.addEventListener("gator-ask", open);
+    return () => document.removeEventListener("gator-ask", open);
+  }, []);
   const work: Work = {
     ...state,
     student,
@@ -3167,6 +3353,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     failed,
     whatIf,
     applyFold,
+    fill,
     note,
     undo: previous
       ? () => {
@@ -3207,6 +3394,15 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
         />
       )}
       {course && <CourseDrawer code={course} why={why} close={() => setCourse("")} />}
+      {chat && (
+        <ChatPanel
+          thread={thread}
+          sending={sending}
+          failed={chatFailed}
+          send={send}
+          close={() => setChat(false)}
+        />
+      )}
       {toast && (
         <div className="toast">
           <Icon name="check" />
