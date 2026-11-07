@@ -1,4 +1,19 @@
 import { useEffect, useRef, useState } from "react";
+import {
+  getAudit,
+  getCourse,
+  getPrograms,
+  importDpr,
+  message,
+  type Audit,
+  type Group,
+  type ImportResult,
+  type Profile,
+  type Taken,
+} from "./api";
+
+// ?demo shows the prototype's preview bars. The data stays real: they only force a state on top of it.
+const DEMO = new URLSearchParams(window.location.search).has("demo");
 
 type Screen = "landing" | "record" | "review" | "goals" | "building" | "app";
 type Tab = "plan" | "progress" | "electives" | "schedule";
@@ -292,11 +307,7 @@ function Header({
   );
 }
 
-const ADVISING = {
-  center: "https://advising.sfsu.edu/",
-  navigator: "https://sfsu.campus.eab.com/",
-  csDept: "https://cs.sfsu.edu/undergrads/advising",
-};
+const NAVIGATOR = "https://sfsu.campus.eab.com/";
 function AdvisingNote() {
   return (
     <aside className="advising-note" aria-label="Advising">
@@ -305,8 +316,8 @@ function AdvisingNote() {
         <b>GatorPath is a planning guide.</b> For any question about your plan, talk to an advisor
         before you register.
       </p>
-      <a href={ADVISING.navigator} target="_blank" rel="noreferrer">
-        Book advising <Icon name="arrow" size={14} />
+      <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+        Book advising in Navigator <Icon name="arrow" size={14} />
       </a>
     </aside>
   );
@@ -337,12 +348,82 @@ function Footer() {
     <footer>
       <Icon name="info" size={15} /> Unofficial student-built tool, not affiliated with SF State.
       Questions about your plan?{" "}
-      <a href={ADVISING.center} target="_blank" rel="noreferrer">
-        Talk to an advisor
+      <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+        Talk to an advisor in Navigator
       </a>
       .
     </footer>
   );
+}
+
+function useLoad<T>(load: () => Promise<T>, deps: unknown[]) {
+  const [state, setState] = useState<{ data?: T; error?: string; loading: boolean }>({
+    loading: true,
+  });
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    let live = true;
+    setState((s) => ({ ...s, loading: true, error: undefined }));
+    load().then(
+      (data) => live && setState({ data, loading: false }),
+      (e) => live && setState({ error: message(e), loading: false }),
+    );
+    return () => {
+      live = false;
+    };
+  }, [...deps, attempt]); // eslint-disable-line react-hooks/exhaustive-deps
+  return { ...state, retry: () => setAttempt((a) => a + 1) };
+}
+
+function Loading({ label }: { label: string }) {
+  return (
+    <div className="load-state" role="status">
+      <span className="upload-orb spin">
+        <Icon name="route" size={22} />
+      </span>
+      <strong>{label}</strong>
+    </div>
+  );
+}
+
+function ErrorCard({ text, retry }: { text: string; retry?: () => void }) {
+  return (
+    <div className="error-card" role="alert">
+      <Icon name="warning" />
+      <div>
+        <b>That didn’t work.</b>
+        <p>{text}</p>
+        {retry && (
+          <Button kind="secondary" onClick={retry}>
+            Try again
+          </Button>
+        )}
+        <p>
+          Still stuck?{" "}
+          <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+            Ask an advisor in Navigator
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+const SEASON = { spring: 0, summer: 1, fall: 2, winter: -1 } as const;
+const termLabel = (term?: string | null) =>
+  term ? `${term[5].toUpperCase()}${term.slice(6)} ${term.slice(0, 4)}` : "";
+const byTerm = (a: string, b: string) =>
+  a.slice(0, 4).localeCompare(b.slice(0, 4)) ||
+  SEASON[a.slice(5) as keyof typeof SEASON] - SEASON[b.slice(5) as keyof typeof SEASON];
+/** Fall and spring terms around today, a calendar for the dropdowns: `back` past ones, `ahead` to come. */
+function nearbyTerms(back: number, ahead: number) {
+  const now = new Date();
+  const fallNow = now.getMonth() >= 6;
+  const index = now.getFullYear() * 2 + (fallNow ? 1 : 0);
+  return Array.from({ length: back + ahead }, (_, i) => {
+    const n = index - back + 1 + i;
+    return `${Math.floor(n / 2)}-${n % 2 ? "fall" : "spring"}`;
+  });
 }
 
 function Landing({ start }: { start: () => void }) {
@@ -397,8 +478,8 @@ function Landing({ start }: { start: () => void }) {
           </div>
           <div className="preview-course">
             <div>
-              <b>HUM 200</b>
-              <small>Culture & ideas</small>
+              <b>MATH 324</b>
+              <small>Probability and Statistics with Computing</small>
             </div>
             <span>3 units</span>
           </div>
@@ -414,7 +495,7 @@ function Landing({ start }: { start: () => void }) {
         <div>
           <Icon name="book" />
           <span>
-            <b>214 majors’</b> roadmaps
+            <b>100+ majors’</b> roadmaps
           </span>
         </div>
         <div>
@@ -455,11 +536,11 @@ function Landing({ start }: { start: () => void }) {
             </summary>
             <p>
               No. GatorPath is a student-built planning aid. For any question about your degree,
-              talk to an advisor at the{" "}
-              <a href={ADVISING.center} target="_blank" rel="noreferrer">
-                Undergraduate Advising Center
-              </a>{" "}
-              or your major department.
+              talk to an advisor:{" "}
+              <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+                book one in Navigator
+              </a>
+              .
             </p>
           </details>
           <details>
@@ -468,7 +549,8 @@ function Landing({ start }: { start: () => void }) {
               <Icon name="plus" />
             </summary>
             <p>
-              Yes. Your PDF is processed to create your plan and then discarded. We never store it.
+              Your PDF is read in memory to find your courses, then discarded. It’s never written
+              to disk, and your name and student ID are dropped as it’s read.
             </p>
           </details>
           <details>
@@ -487,16 +569,36 @@ function Landing({ start }: { start: () => void }) {
   );
 }
 
-function UploadPanel({ onSuccess }: { onSuccess: () => void }) {
+function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void }) {
   const [state, setState] = useState<"idle" | "uploading" | "error">("idle");
-  const begin = () => {
+  const [problem, setProblem] = useState("");
+  const picker = useRef<HTMLInputElement>(null);
+  const fail = (text: string) => {
+    setProblem(text);
+    setState("error");
+  };
+  const begin = async (file?: File | null) => {
+    if (!file) return;
+    if (file.size > 15 * 1024 * 1024) return fail("That file is over 15 MB. Print just your DPR to PDF.");
     setState("uploading");
-    setTimeout(onSuccess, 1500);
+    try {
+      onSuccess(await importDpr(file));
+    } catch (e) {
+      fail(message(e));
+    }
   };
   return (
     <div className="record-panel">
       {state === "idle" && (
-        <button className="drop-zone" onClick={begin}>
+        <button
+          className="drop-zone"
+          onClick={() => picker.current?.click()}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
+            begin(e.dataTransfer.files[0]);
+          }}
+        >
           <span className="upload-orb">
             <Icon name="upload" size={26} />
           </span>
@@ -505,6 +607,17 @@ function UploadPanel({ onSuccess }: { onSuccess: () => void }) {
           <small>PDF only · up to 15 MB</small>
         </button>
       )}
+      <input
+        ref={picker}
+        type="file"
+        accept="application/pdf,.pdf"
+        hidden
+        aria-label="Your DPR PDF"
+        onChange={(e) => {
+          begin(e.target.files?.[0]);
+          e.target.value = ""; // the same file can be picked again after an error
+        }}
+      />
       {state === "uploading" && (
         <div className="drop-zone loading-zone">
           <span className="upload-orb spin">
@@ -518,25 +631,11 @@ function UploadPanel({ onSuccess }: { onSuccess: () => void }) {
           <small>Usually takes less than 30 seconds</small>
         </div>
       )}
-      {state === "error" && (
-        <div className="error-card">
-          <Icon name="warning" />
-          <div>
-            <b>We couldn’t read every requirement.</b>
-            <p>
-              Some requirements were collapsed. Print your DPR again with “Expand All” turned on.
-            </p>
-            <Button kind="secondary" onClick={() => setState("idle")}>
-              Try again
-            </Button>
-          </div>
-        </div>
-      )}
+      {state === "error" && <ErrorCard text={problem} retry={() => setState("idle")} />}
       <div className="privacy-note">
         <Icon name="lock" size={16} />
         <span>
-          <b>Your DPR is never stored.</b> It’s processed securely, used to build your plan, then
-          discarded.
+          <b>Your DPR is never stored.</b> It’s read in memory to find your courses, then discarded.
         </span>
       </div>
       <details className="help-box">
@@ -567,16 +666,159 @@ function UploadPanel({ onSuccess }: { onSuccess: () => void }) {
           ))}
         </div>
       </details>
-      <button className="demo-error" onClick={() => setState("error")}>
-        Preview upload error
-      </button>
+      {DEMO && (
+        <button
+          className="demo-error"
+          onClick={() =>
+            fail("Some requirements were collapsed. Print your DPR again with “Expand All” turned on.")
+          }
+        >
+          Preview upload error
+        </button>
+      )}
     </div>
   );
 }
 
-function RecordScreen({ next }: { next: () => void }) {
+const GRADES = ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F", "CR", "NC", "W", "I"];
+const IN_PROGRESS = "In progress";
+
+function MajorSelect({ value, set }: { value: string; set: (id: string) => void }) {
+  const programs = useLoad(getPrograms, []);
+  if (programs.loading) return <Loading label="Loading majors…" />;
+  if (programs.error) return <ErrorCard text={programs.error} retry={programs.retry} />;
+  return (
+    <label>
+      Major
+      <select value={value} onChange={(e) => set(e.target.value)}>
+        {programs.data?.map((p) => (
+          <option value={p.id} key={p.id}>
+            {p.title}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function TypedPanel({ done }: { done: (profile: Profile) => void }) {
+  const [program, setProgram] = useState("bs-cs");
+  const [rows, setRows] = useState<(Taken & { title: string })[]>([]);
+  const [code, setCode] = useState("");
+  const [grade, setGrade] = useState("A");
+  const [term, setTerm] = useState(nearbyTerms(6, 0)[5]);
+  const [state, setState] = useState<{ loading?: boolean; error?: string }>({});
+  const add = async () => {
+    setState({ loading: true });
+    try {
+      const course = await getCourse(code);
+      setRows([...rows, { code: course.code, title: course.title, grade, term }]);
+      setCode("");
+      setState({});
+    } catch (e) {
+      setState({ error: message(e) });
+    }
+  };
+  return (
+    <div className="record-panel form-panel">
+      <h3>Add your courses</h3>
+      <MajorSelect value={program} set={setProgram} />
+      <label>
+        Course code
+        <div className="search-field">
+          <Icon name="search" />
+          <input
+            value={code}
+            placeholder="CSC 215"
+            onChange={(e) => setCode(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && code && add()}
+          />
+        </div>
+      </label>
+      <div className="form-row">
+        <label>
+          Grade
+          <select value={grade} onChange={(e) => setGrade(e.target.value)}>
+            {[...GRADES, IN_PROGRESS].map((g) => (
+              <option key={g}>{g}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Term
+          <select value={term} onChange={(e) => setTerm(e.target.value)}>
+            {nearbyTerms(12, 0)
+              .reverse()
+              .map((t) => (
+                <option value={t} key={t}>
+                  {termLabel(t)}
+                </option>
+              ))}
+          </select>
+        </label>
+      </div>
+      <Button kind="secondary" icon="plus" onClick={add} disabled={!code || state.loading}>
+        {state.loading ? "Finding it in the Bulletin…" : "Add course"}
+      </Button>
+      {state.error && <ErrorCard text={state.error} />}
+      <div className="chips">
+        {rows.map((r) => (
+          <span key={r.code}>
+            {r.code} · {r.grade}
+            <button
+              onClick={() => setRows(rows.filter((x) => x !== r))}
+              aria-label={`Remove ${r.code}`}
+            >
+              <Icon name="x" size={13} />
+            </button>
+          </span>
+        ))}
+      </div>
+      <Button
+        disabled={!rows.length}
+        onClick={() =>
+          done({
+            program,
+            completed: rows
+              .filter((r) => r.grade !== IN_PROGRESS)
+              .map(({ code, grade, term }) => ({ code, grade, term })),
+            in_progress: rows.filter((r) => r.grade === IN_PROGRESS).map((r) => r.code),
+          })
+        }
+      >
+        Review my record <Icon name="arrow" />
+      </Button>
+    </div>
+  );
+}
+
+function NewStudentPanel({ done }: { done: (profile: Profile) => void }) {
+  const terms = nearbyTerms(0, 4);
+  const [program, setProgram] = useState("bs-cs");
+  const [start, setStart] = useState(terms[0]);
+  return (
+    <div className="record-panel form-panel">
+      <h3>Let’s start with the basics</h3>
+      <MajorSelect value={program} set={setProgram} />
+      <label>
+        First term
+        <select value={start} onChange={(e) => setStart(e.target.value)}>
+          {terms.map((t) => (
+            <option value={t} key={t}>
+              {termLabel(t)}
+            </option>
+          ))}
+        </select>
+      </label>
+      <Button onClick={() => done({ program, start_term: start })}>
+        Continue <Icon name="arrow" />
+      </Button>
+    </div>
+  );
+}
+
+function RecordScreen({ done }: { done: (profile: Profile, imported?: ImportResult) => void }) {
   const [method, setMethod] = useState<"upload" | "type" | "new">("upload");
-  const [courses, setCourses] = useState(["CSC 215 · A-", "MATH 226 · B+"]);
   return (
     <main className="flow-page">
       <Stepper current={1} />
@@ -630,210 +872,47 @@ function RecordScreen({ next }: { next: () => void }) {
           <i>{method === "new" && <Icon name="check" size={14} />}</i>
         </button>
       </div>
-      {method === "upload" && <UploadPanel onSuccess={next} />}
-      {method === "type" && (
-        <div className="record-panel form-panel">
-          <h3>Add completed courses</h3>
-          <label>
-            Find a course
-            <div className="search-field">
-              <Icon name="search" />
-              <input defaultValue="CSC 2" />
-              <span>CSC 215 – Intermediate Computer Programming</span>
-            </div>
-          </label>
-          <div className="form-row">
-            <label>
-              Grade
-              <select>
-                <option>A-</option>
-                <option>B+</option>
-                <option>Credit</option>
-              </select>
-            </label>
-            <label>
-              Term
-              <select>
-                <option>Fall 2026</option>
-                <option>Spring 2026</option>
-              </select>
-            </label>
-          </div>
-          <div className="chips">
-            {courses.map((c) => (
-              <span key={c}>
-                {c}
-                <button
-                  onClick={() => setCourses(courses.filter((x) => x !== c))}
-                  aria-label={`Remove ${c}`}
-                >
-                  <Icon name="x" size={13} />
-                </button>
-              </span>
-            ))}
-          </div>
-          <Button onClick={next}>
-            Review my record <Icon name="arrow" />
-          </Button>
-        </div>
-      )}
-      {method === "new" && (
-        <div className="record-panel form-panel">
-          <h3>Let’s start with the basics</h3>
-          <label>
-            Major
-            <select>
-              <option>B.S. Computer Science</option>
-              <option>B.A. Biology</option>
-              <option>Major not listed</option>
-            </select>
-          </label>
-          <label>
-            First term
-            <select>
-              <option>Fall 2026</option>
-              <option>Spring 2027</option>
-            </select>
-          </label>
-          <Button onClick={next}>
-            Continue <Icon name="arrow" />
-          </Button>
-        </div>
-      )}
+      {method === "upload" && <UploadPanel onSuccess={(r) => done(r.profile, r)} />}
+      {method === "type" && <TypedPanel done={done} />}
+      {method === "new" && <NewStudentPanel done={done} />}
     </main>
   );
 }
 
-const completed = [
-  ["CSC 101", "Introduction to Computer Science", "A-", "Fall 2025", ""],
-  ["ENG 114", "First-Year Written Composition", "A-", "Fall 2025", ""],
-  ["COMM 150", "Fundamentals of Oral Communication", "B+", "Fall 2025", ""],
-  ["CSC 215", "Intermediate Computer Programming", "A", "Spring 2026", ""],
-  ["MATH 226", "Calculus I", "B+", "Spring 2026", "Transfer"],
-];
-type GeProgressState = "Done" | "Planned" | "Remaining";
-const geAreas: {
-  area: string;
-  name: string;
-  met: boolean;
-  evidence: string;
-  attention?: string;
-  askAdvisor?: boolean;
-  progressState: GeProgressState;
-  progressEvidence: string;
-}[] = [
-  {
-    area: "Area 1A",
-    name: "Written Communication",
-    met: true,
-    evidence: "ENG 114 · A- · Fall 2025",
-    progressState: "Done",
-    progressEvidence: "ENG 114 · A- · Fall 2025",
-  },
-  {
-    area: "Area 1B",
-    name: "Critical Thinking",
-    met: true,
-    evidence: "Cal-GETC certification",
-    progressState: "Done",
-    progressEvidence: "Cal-GETC certification",
-  },
-  {
-    area: "Area 1C",
-    name: "Oral Communication",
-    met: true,
-    evidence: "COMM 150 · B+ · Fall 2025",
-    progressState: "Done",
-    progressEvidence: "COMM 150 · B+ · Fall 2025",
-  },
-  {
-    area: "Area 2",
-    name: "Mathematical Concepts",
-    met: true,
-    evidence: "MATH 226 · B+ · Transfer",
-    progressState: "Done",
-    progressEvidence: "MATH 226 · B+ · Transfer",
-  },
-  {
-    area: "Area 3",
-    name: "Arts & Humanities",
-    met: false,
-    evidence: "No completed course found",
-    attention: "No completed course found yet",
-    progressState: "Planned",
-    progressEvidence: "HUM 200 · Fall 2027",
-  },
-  {
-    area: "Area 4",
-    name: "Social & Behavioral Sciences",
-    met: true,
-    evidence: "AP Psychology · score 4",
-    progressState: "Done",
-    progressEvidence: "AP Psychology · score 4",
-  },
-  {
-    area: "Area 5",
-    name: "Physical & Biological Sciences",
-    met: false,
-    evidence: "No completed course found",
-    attention: "No completed course found yet",
-    progressState: "Planned",
-    progressEvidence: "PHYS 230 · Spring 2028",
-  },
-  {
-    area: "Area 6",
-    name: "Ethnic Studies",
-    met: false,
-    evidence: "Not on your DPR",
-    attention: "Not on your DPR",
-    askAdvisor: true,
-    progressState: "Planned",
-    progressEvidence: "LTNS 280 · Spring 2028",
-  },
-  {
-    area: "US History",
-    name: "American Institutions",
-    met: true,
-    evidence: "Cal-GETC certification",
-    progressState: "Done",
-    progressEvidence: "Cal-GETC certification",
-  },
-  {
-    area: "US & CA Government",
-    name: "American Institutions",
-    met: false,
-    evidence: "No course found yet",
-    attention: "No course found yet",
-    progressState: "Planned",
-    progressEvidence: "PLSI 200 · Spring 2029",
-  },
-];
+const isDone = (g: Group) => g.status === "satisfied" || g.status === "waived";
+const universityGroups = (audit: Audit) => audit.groups.filter((g) => g.kind === "university");
 
-function GeRequirementRows({ mode }: { mode: "review" | "progress" }) {
+function GeRequirementRows({
+  groups,
+  mode,
+  plannedIn,
+}: {
+  groups: Group[];
+  mode: "review" | "progress";
+  plannedIn?: (group: Group) => string | undefined;
+}) {
   return (
     <div className={`shared-ge-rows ${mode}`}>
-      {geAreas.map((area) => {
-        const progressType =
-          area.progressState === "Done"
-            ? "done"
-            : area.progressState === "Planned"
-              ? "planned"
-              : "remaining";
+      {groups.map((g) => {
+        const planned = plannedIn?.(g);
+        const done = isDone(g);
         return (
-          <div className="shared-ge-row" key={area.area}>
+          <div className="shared-ge-row" key={g.id}>
             <div className="ge-area-name">
-              <b>{area.area}</b>
-              <small>{area.name}</small>
+              <b>{g.title}</b>
+              <small>{g.source}</small>
             </div>
             {mode === "review" ? (
-              <span className={`binary-state ${area.met ? "met" : "not-yet"}`}>
-                {area.met ? <Icon name="check" size={14} /> : <i />}
-                {area.met ? "Met" : "Not yet"}
+              <span className={`binary-state ${done ? "met" : "not-yet"}`}>
+                {done ? <Icon name="check" size={14} /> : <i />}
+                {done ? "Met" : "Not yet"}
               </span>
             ) : (
-              <StatusBadge type={progressType}>{area.progressState}</StatusBadge>
+              <StatusBadge type={done ? "done" : g.in_progress.length ? "progress" : planned ? "planned" : "remaining"}>
+                {done ? "Done" : g.in_progress.length ? "In progress" : planned ? "Planned" : "Remaining"}
+              </StatusBadge>
             )}
-            <p>{mode === "review" ? (area.met ? area.evidence : "—") : area.progressEvidence}</p>
+            <p>{[...g.counted, ...g.in_progress].join(", ") || planned || "—"}</p>
           </div>
         );
       })}
@@ -841,128 +920,190 @@ function GeRequirementRows({ mode }: { mode: "review" | "progress" }) {
   );
 }
 
-function ReviewScreen({ next }: { next: () => void }) {
+function ReviewScreen({
+  profile,
+  imported,
+  edit,
+  next,
+}: {
+  profile: Profile;
+  imported: ImportResult | null;
+  edit: (profile: Profile) => void;
+  next: () => void;
+}) {
   const [showAll, setShowAll] = useState(false);
+  const [editing, setEditing] = useState("");
+  const audit = useLoad(() => getAudit(profile), [profile]);
+  const programs = useLoad(getPrograms, []);
+  const body = () => {
+    if (audit.error) return <ErrorCard text={audit.error} retry={audit.retry} />;
+    if (!audit.data) return <Loading label="Checking your record against the Bulletin…" />;
+    const a = audit.data;
+    const rows = profile.completed ?? [];
+    const uni = universityGroups(a);
+    const met = uni.filter(isDone).length;
+    const todo = uni.filter((g) => !isDone(g));
+    const attention = [...(imported?.cross_check ?? []), ...(imported?.warnings ?? [])];
+    const gpa = a.totals.gpa_sf_state?.value;
+    return (
+      <>
+        <div className="summary-card">
+          <div>
+            <small>Major</small>
+            <b>{programs.data?.find((p) => p.id === profile.program)?.title ?? profile.program}</b>
+          </div>
+          <div>
+            <small>
+              Catalog year <Tooltip text="The Bulletin year whose degree rules apply to you." />
+            </small>
+            <b>{profile.catalog_year ?? a.catalog_year}</b>
+          </div>
+          <div>
+            <small>
+              Units <Tooltip text="A unit measures course credit; most classes are 3 units." />
+            </small>
+            <b>
+              {a.totals.units.value} <span>/ {a.totals.units.needed}</span>
+            </b>
+          </div>
+          {!!gpa && (
+            <div>
+              <small>GPA</small>
+              <b>{gpa.toFixed(2)}</b>
+            </div>
+          )}
+        </div>
+        <SectionCard title="Completed courses" count={`${rows.length} courses`}>
+          <div className="course-table">
+            <div className="table-head">
+              <span>Course</span>
+              <span>Title</span>
+              <span>Grade</span>
+              <span>Term</span>
+              <span />
+            </div>
+            {rows.map((r, i) => (
+              <div className="table-row" key={`${r.code}-${r.term ?? i}`}>
+                <b>{r.code}</b>
+                <span>
+                  {a.courses[r.code]?.title} {r.transfer && <em className="transfer">Transfer</em>}
+                </span>
+                {editing === r.code ? (
+                  <select
+                    autoFocus
+                    aria-label={`Grade for ${r.code}`}
+                    value={r.grade}
+                    onBlur={() => setEditing("")}
+                    onChange={(e) => {
+                      setEditing("");
+                      edit({
+                        ...profile,
+                        completed: rows.map((x) => (x === r ? { ...x, grade: e.target.value } : x)),
+                      });
+                    }}
+                  >
+                    {[...new Set([r.grade, ...GRADES])].map((g) => (
+                      <option key={g}>{g}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <span>{r.grade}</span>
+                )}
+                <span>{termLabel(r.term)}</span>
+                <button aria-label={`Edit ${r.code}`} onClick={() => setEditing(r.code)}>
+                  <Icon name="edit" size={15} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+        {!!profile.in_progress?.length && (
+          <SectionCard title="In progress" count={`${profile.in_progress.length} courses`}>
+            <div className="in-progress-grid">
+              {profile.in_progress.map((code) => (
+                <CourseMini
+                  code={code}
+                  title={a.courses[code]?.title ?? ""}
+                  status="In progress"
+                  key={code}
+                />
+              ))}
+            </div>
+          </SectionCard>
+        )}
+        <section className="section-card ge-review-summary">
+          <div className="ge-summary-head">
+            <div>
+              <h3>GE & university requirements</h3>
+              <span>
+                {met} of {uni.length} met
+              </span>
+            </div>
+            <div
+              className="ge-summary-progress"
+              role="progressbar"
+              aria-valuenow={met}
+              aria-valuemin={0}
+              aria-valuemax={uni.length}
+              aria-label={`${met} of ${uni.length} requirements met`}
+            >
+              <i style={{ width: `${(met / Math.max(uni.length, 1)) * 100}%` }} />
+            </div>
+          </div>
+          {!!attention.length && (
+            <div className="attention-list">
+              <div className="attention-heading">
+                <Icon name="warning" size={16} />
+                <b>Check with an advisor</b>
+              </div>
+              {attention.map((line) => (
+                <div className="attention-row" key={line}>
+                  <span className="attention-dot" />
+                  <p>{line}</p>
+                </div>
+              ))}
+              <p>
+                <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+                  Ask an advisor in Navigator
+                </a>
+              </p>
+            </div>
+          )}
+          {!!todo.length && (
+            <p className="still-to-do">
+              <b>Still to do</b> · we’ll fit these into your plan:{" "}
+              {todo.map((g) => g.title).join(", ")}
+            </p>
+          )}
+          <details className="all-ge-areas" onToggle={(e) => setShowAll(e.currentTarget.open)}>
+            <summary>
+              <span>
+                {showAll ? "Hide" : "Show"} all {uni.length} requirements
+              </span>
+              <Icon name="chevron" />
+            </summary>
+            <GeRequirementRows groups={uni} mode="review" />
+          </details>
+        </section>
+        <div className="flow-action">
+          <Button onClick={next}>
+            Looks right <Icon name="arrow" />
+          </Button>
+        </div>
+      </>
+    );
+  };
   return (
     <main className="flow-page wide">
       <Stepper current={1} />
       <div className="flow-heading">
         <h1>Does this look right?</h1>
-        <p>We found this in your DPR. Fix anything that looks off before continuing.</p>
-      </div>
-      <div className="summary-card">
-        <div>
-          <small>Major</small>
-          <b>B.S. Computer Science</b>
-        </div>
-        <div>
-          <small>
-            Catalog year <Tooltip text="The Bulletin year whose degree rules apply to you." />
-          </small>
-          <b>Fall 2025</b>
-        </div>
-        <div>
-          <small>
-            Units <Tooltip text="A unit measures course credit; most classes are 3 units." />
-          </small>
-          <b>
-            47 <span>/ 120</span>
-          </b>
-        </div>
-        <div>
-          <small>GPA</small>
-          <b>3.42</b>
-        </div>
-      </div>
-      <SectionCard title="Completed courses" count="5 courses">
-        <div className="course-table">
-          <div className="table-head">
-            <span>Course</span>
-            <span>Title</span>
-            <span>Grade</span>
-            <span>Term</span>
-            <span />
-          </div>
-          {completed.map((r) => (
-            <div className="table-row" key={r[0]}>
-              <b>{r[0]}</b>
-              <span>
-                {r[1]} {r[4] && <em className="transfer">{r[4]}</em>}
-              </span>
-              <span>{r[2]}</span>
-              <span>{r[3]}</span>
-              <button aria-label={`Edit ${r[0]}`}>
-                <Icon name="edit" size={15} />
-              </button>
-            </div>
-          ))}
-        </div>
-      </SectionCard>
-      <SectionCard title="In progress" count="2 courses">
-        <div className="in-progress-grid">
-          <CourseMini code="CSC 220" title="Data Structures" status="In progress" />
-          <CourseMini code="MATH 227" title="Calculus II" status="In progress" />
-        </div>
-      </SectionCard>
-      <section className="section-card ge-review-summary">
-        <div className="ge-summary-head">
-          <div>
-            <h3>GE & university requirements</h3>
-            <span>6 of 10 met</span>
-          </div>
-          <div
-            className="ge-summary-progress"
-            role="progressbar"
-            aria-valuenow={6}
-            aria-valuemin={0}
-            aria-valuemax={10}
-            aria-label="6 of 10 requirements met"
-          >
-            <i />
-          </div>
-        </div>
-        <div className="attention-list">
-          <div className="attention-heading">
-            <Icon name="warning" size={16} />
-            <b>Check with an advisor</b>
-          </div>
-          {geAreas
-            .filter((area) => area.askAdvisor)
-            .map((area) => (
-              <div className="attention-row" key={area.area}>
-                <span className="attention-dot" />
-                <p>
-                  <b>
-                    {area.area} · {area.name}:
-                  </b>{" "}
-                  {area.attention}.{" "}
-                  <a href={ADVISING.center} target="_blank" rel="noreferrer">
-                    Ask an advisor how it’s met
-                  </a>
-                </p>
-              </div>
-            ))}
-        </div>
-        <p className="still-to-do">
-          <b>Still to do</b> · we’ll fit these into your plan:{" "}
-          {geAreas
-            .filter((area) => !area.met && !area.askAdvisor)
-            .map((area) => `${area.area} · ${area.name}`)
-            .join(", ")}
+        <p>
+          {imported ? "We found this in your DPR." : "This is what you told us."} If it doesn’t match
+          your DPR, the DPR wins: fix a grade here, or ask an advisor.
         </p>
-        <details className="all-ge-areas" onToggle={(e) => setShowAll(e.currentTarget.open)}>
-          <summary>
-            <span>{showAll ? "Hide all 10 areas" : "Show all 10 areas"}</span>
-            <Icon name="chevron" />
-          </summary>
-          <GeRequirementRows mode="review" />
-        </details>
-      </section>
-      <div className="flow-action">
-        <Button onClick={next}>
-          Looks right <Icon name="arrow" />
-        </Button>
       </div>
+      {body()}
     </main>
   );
 }
@@ -1352,7 +1493,7 @@ function PlanView({
             <Icon name="check" /> <b>All choices made.</b> Take this plan to an advisor to confirm
             it before you register.
           </span>
-          <a href={ADVISING.navigator} target="_blank" rel="noreferrer">
+          <a href={NAVIGATOR} target="_blank" rel="noreferrer">
             Book advising <Icon name="arrow" size={14} />
           </a>
         </div>
@@ -1635,14 +1776,14 @@ function PlanView({
             <div>
               <span>CS department advisor</span>
               <p>Approve the 16-unit Spring 2028 term and check your senior-elective choices.</p>
-              <a href={ADVISING.csDept} target="_blank" rel="noreferrer">
+              <a href={NAVIGATOR} target="_blank" rel="noreferrer">
                 How to book <Icon name="arrow" size={12} />
               </a>
             </div>
             <div>
               <span>Undergraduate Advising Center</span>
               <p>GE Area 6 isn’t on your DPR. Ask how it’s met, plus any GE or graduation question.</p>
-              <a href={ADVISING.center} target="_blank" rel="noreferrer">
+              <a href={NAVIGATOR} target="_blank" rel="noreferrer">
                 How to book <Icon name="arrow" size={12} />
               </a>
             </div>
@@ -1658,7 +1799,7 @@ function PlanView({
         </Button>
         <a
           className="button primary"
-          href={ADVISING.navigator}
+          href={NAVIGATOR}
           target="_blank"
           rel="noreferrer"
           style={{ textDecoration: "none" }}
@@ -1732,7 +1873,6 @@ function ProgressView() {
                   />
                 </div>
               )}
-              {i === 4 && <GeRequirementRows mode="progress" />}
             </details>
           ))}
         </div>
@@ -2831,6 +2971,8 @@ function AppWorkspace({ initialTab = "plan" }: { initialTab?: Tab }) {
 export default function App() {
   const [screen, setScreen] = useState<Screen>("landing");
   const [style, setStyle] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [imported, setImported] = useState<ImportResult | null>(null);
   const back = () =>
     setScreen(
       screen === "review"
@@ -2842,6 +2984,8 @@ export default function App() {
             : screen,
     );
   const home = () => {
+    setProfile(null); // start over means forget it
+    setImported(null);
     setScreen("landing");
     window.scrollTo(0, 0);
   };
@@ -2858,8 +3002,18 @@ export default function App() {
         onStyle={() => setStyle(true)}
       />
       {screen === "landing" && <Landing start={() => go("record")} />}
-      {screen === "record" && <RecordScreen next={() => go("review")} />}
-      {screen === "review" && <ReviewScreen next={() => go("goals")} />}
+      {screen === "record" && (
+        <RecordScreen
+          done={(record, dpr) => {
+            setProfile(record);
+            setImported(dpr ?? null);
+            go(record.completed?.length || record.in_progress?.length ? "review" : "goals");
+          }}
+        />
+      )}
+      {screen === "review" && profile && (
+        <ReviewScreen profile={profile} imported={imported} edit={setProfile} next={() => go("goals")} />
+      )}
       {screen === "goals" && <GoalsScreen build={() => go("building")} />}
       {screen === "building" && <BuildingScreen done={() => go("app")} />}
       {screen === "app" && <AppWorkspace />}

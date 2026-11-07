@@ -101,5 +101,6 @@ def test_sections_return_the_schedule_fields():
 def test_the_screens_other_reads():
     audit = post("/api/audit", profile=SOPHOMORE)
     assert audit["groups"] and audit["totals"]["units"]["needed"] and "see_advisor" in audit
+    assert audit["courses"]["CSC 101"]["title"] == "Introduction to Computing"  # Review shows titles
     assert any(p["id"] == "bs-cs" for p in client.get("/api/programs").json()["programs"])
     assert client.get("/api/course", params={"code": "CSC 340"}).json()["title"] == "Programming Methodology"

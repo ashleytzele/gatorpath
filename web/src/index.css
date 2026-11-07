@@ -3931,3 +3931,12 @@ p, li, small { text-wrap: pretty; }
 .all-ge-areas summary .icon { transition: transform 0.15s ease; transform: rotate(90deg); }
 .all-ge-areas[open] summary .icon { transform: rotate(-90deg); }
 .all-ge-areas summary:focus-visible { outline-offset: -2px; }
+
+.load-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: var(--faint);
+}
