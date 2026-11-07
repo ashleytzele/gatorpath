@@ -52,7 +52,11 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [x] Electives & GE is back (2026-11-07): with the AI choosing, a student still wants to see the other options. It lists
   each class the plan chose for a requirement, and Change opens the same course list
 - [x] Review reads like the DPR (2026-11-07): the Progress tab's requirement list, in the DPR's order (GE, university,
-  major) and words (Completed, In progress, Incomplete), with the record to fix below it
+  major) and words (Completed, In progress, Incomplete). Then a dashboard: tiles (units, upper-division, requirements,
+  GPA), the list, and beside it "Fix your record" (add a course the DPR doesn't show, change a grade, finish or remove
+  one) over collapsed Completed and In progress lists. A GE area the DPR doesn't list is put back or left out in its row
+- [ ] The import's warnings and cross_check no longer show on Review ("Check with an advisor" was removed on request):
+  say them in the chat instead, if they should reach the student
 - [ ] Before a public host: a per-student rate limit and a spend cap on `/api/assist`
 - [x] DPR import finds any major by its Bulletin title ("Public Health-BS" → "Bachelor of Science in Public Health"),
   `dpr_plan` still first (2026-11-07, a real Public Health print). Found with it: "Courses Required = 2 Courses" read as a

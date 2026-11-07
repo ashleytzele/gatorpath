@@ -4119,3 +4119,33 @@ p, li, small { text-wrap: pretty; }
   font-style: normal;
   font-weight: 600;
 }
+/* Review as a dashboard: tiles, the requirements, and the record to fix beside them */
+.flow-page.dash { max-width: 1280px; }
+.dash-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.dash-tile.wide { grid-column: span 2; }
+.dash-tile { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.dash-tile small { color: var(--muted); font-size: 13px; font-weight: 700; }
+.dash-tile b { font-size: 22px; line-height: 1.2; }
+.dash-tile b.text { font-size: 15px; }
+.dash-tile b span { color: var(--faint); font-size: 15px; font-weight: 600; }
+.dash-tile .unit-bar-track { height: 6px; }
+.dash-grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; align-items: start; }
+.dash-side { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; display: grid; gap: 14px; }
+.dash-side .section-card { margin: 0; }
+.record-add { padding: 16px 18px; }
+.record-add p { margin: 0; color: var(--muted); font-size: 13px; }
+.record-list summary { list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; cursor: pointer; font-weight: 700; font-size: 15px; }
+.record-list summary::-webkit-details-marker { display: none; }
+.record-list summary > span:last-child { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+.record-list summary .icon { transition: transform 0.15s ease; }
+.record-list[open] summary .icon { transform: rotate(90deg); }
+.record-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 10px 18px; border-top: 1px solid #eceeed; font-size: 13px; }
+.record-row b { display: block; font-size: 14px; }
+.record-row small { display: block; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.record-row select { width: auto; padding: 6px 8px; font-size: 13px; }
+.record-row button { border: 0; background: none; color: var(--muted); cursor: pointer; padding: 4px; }
+.ge-area-name .let-pick { padding: 0; text-align: left; }
+@media (max-width: 1000px) {
+  .dash-grid { grid-template-columns: 1fr; }
+  .dash-side { position: static; max-height: none; overflow: visible; }
+}
