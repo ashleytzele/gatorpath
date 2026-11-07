@@ -511,6 +511,10 @@ def gpa(rows: list[dict], skip: set[int], catalog: dict) -> float | None:
     return round(points / units, 3) if units else None
 
 
+DPR_TOTALS = {"units": "units toward 120", "upper_division_units": "upper-division units", "residence_units": "residence units",
+              "residence_upper_division_units": "upper-division residence units"}
+
+
 def totals(profile: dict, taken: dict, groups: list[dict], university: dict, catalog: dict, warnings: list[str]) -> dict:
     t = university["totals"]
     caps = t.get("max_units_from", {})
@@ -559,12 +563,13 @@ def totals(profile: dict, taken: dict, groups: list[dict], university: dict, cat
     if over_685:
         warnings.append(f"{', '.join(teaching)}: only {caps['projects_in_teaching_685']} units of \"Projects in Teaching\" "
                         f"685 courses apply to the degree ({caps['source']})")
-    # import_dpr: what the DPR counts beyond the rows its print lists (lists cut at 10 rows, unlisted transfer work)
-    unlisted = profile.get("unlisted_units") or {}
-    more = lambda key: unlisted.get(key, 0)
-    if more("units"):
-        warnings.append(f"{more('units'):g} units your DPR counts aren't listed course by course on its print (a list cut "
-                        "at 10 rows, or transfer work it lists nowhere): they count toward the totals as the DPR has them")
+    # import_dpr: the DPR's totals are the rule. Each offset makes done + in progress read as the DPR's count (a list
+    # cut at 10 rows hides courses, transfer work is listed nowhere, the DPR applies credit its own way)
+    offsets = {k: v for k, v in (profile.get("dpr_unit_offsets") or {}).items() if k in DPR_TOTALS}
+    more = lambda key: offsets.get(key, 0)
+    if offsets:
+        warnings.append("Unit totals follow your DPR, adjusted from the courses read off its print: "
+                        + ", ".join(f"{DPR_TOTALS[k]} {v:+g}" for k, v in offsets.items()))
     return {
         "units": check(sfsu_units - over_685 + transfer_units - sum(r["transfer_dup_units"] for r in taken.values())
                        + more("units"), t["min_units"]),

@@ -446,7 +446,7 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
     audit = {g["id"]: g for g in server.audit_progress(p)["groups"]}
     assert audit["ge_a1"]["status"] == "satisfied"  # "Area A1 - Oral Communication" done on the DPR
     # the DPR counts 74 units, more than its rows show: the rest is recorded, so the totals agree with it
-    assert p["unlisted_units"]["units"] > 0 and [w.split(":")[0] for w in got["cross_check"]] == ["Not found on this DPR"]
+    assert p["dpr_unit_offsets"]["units"] > 0 and [w.split(":")[0] for w in got["cross_check"]] == ["Not found on this DPR"]
     t = server.audit_progress(p)["totals"]
     assert t["units"]["value"] + t["units_in_progress"] == 74
     assert [a["role"] for a in got["see_advisor"]] == ["dpr"]

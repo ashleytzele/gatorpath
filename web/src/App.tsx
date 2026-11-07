@@ -1041,16 +1041,19 @@ function ReviewScreen({
                t.upper_division_units.needed ?? 0],
               ["Requirements completed", met, going, a.groups.length],
             ] as [string, number, number, number][]
-          ).map(([label, value, more, of]) => (
-            <div className="dash-tile" key={label}>
-              <small>{label}</small>
-              <b>
-                {value} <span>/ {of}</span>
-              </b>
-              <UnitTrack value={value} going={more} total={of} label={label} />
-              {!!more && <em className="going-note">+{more} in progress</em>}
-            </div>
-          ))}
+          ).map(([label, value, more, of]) => {
+            const units = label !== "Requirements completed"; // units count in progress, as the DPR's "taken" does
+            return (
+              <div className="dash-tile" key={label}>
+                <small>{label}</small>
+                <b>
+                  {units ? value + more : value} <span>/ {of}</span>
+                </b>
+                <UnitTrack value={value} going={more} total={of} label={label} />
+                {!!more && <em className="going-note">{units ? `incl. ${more}` : `+${more}`} in progress</em>}
+              </div>
+            );
+          })}
           {!!gpa && (
             <div className="dash-tile">
               <small>GPA</small>
@@ -2272,7 +2275,10 @@ function DegreeProgress({
           </span>
         </div>
       </div>}
-      <SectionCard title="Degree requirements" count={`${t.units.value} of ${t.units.needed} units earned`}>
+      <SectionCard
+        title="Degree requirements"
+        count={`${t.units.value + t.units_in_progress} of ${t.units.needed} units${t.units_in_progress ? `, incl. ${t.units_in_progress} in progress` : ""}`}
+      >
         <div className="requirement-list">
           {(semesters ? [...major, ...university] : [...university, ...major]).map((r, i) => (
             <details key={r.key} open={i === 0}>
@@ -2311,8 +2317,8 @@ function UnitBar({ value, going = 0, total, label }: { value: number; going?: nu
       <div>
         <b>{label}</b>
         <span>
-          {value} of {total}
-          {!!going && ` · ${going} in progress`}
+          {value + going} of {total}
+          {!!going && ` · incl. ${going} in progress`}
         </span>
       </div>
       <UnitTrack value={value} going={going} total={total} label={label} />

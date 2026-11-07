@@ -88,7 +88,7 @@ class Profile(TypedDict):
     ge_certified: NotRequired[bool]
     prior_bachelors: NotRequired[bool]
     transfer_units: NotRequired[float]
-    unlisted_units: NotRequired[dict[str, float]]  # import_dpr: units the DPR counts beyond the rows its print lists
+    dpr_unit_offsets: NotRequired[dict[str, float]]  # import_dpr: what makes each unit total read as the DPR's
     adt: NotRequired[bool]
     f1: NotRequired[bool]
     max_units_per_term: NotRequired[float]
@@ -911,12 +911,12 @@ def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dic
     profile["dpr_met"] = [norm_code(c) for c in profile["dpr_met"]]
     if left_out := dpr.not_listed(parsed, university):
         profile["not_on_dpr"] = [g["id"] for g in left_out]
-    # The DPR's totals beat the rows its print lists: a list cut at 10 rows hides courses, transfer work may be listed
-    # nowhere. Counted with the courses in progress, as the DPR counts them
+    # The DPR's unit totals are the rule, higher or lower than the rows its print lists add up to (a list cut at 10 rows
+    # hides courses; transfer work is listed nowhere; the DPR applies credit its own way). It counts courses in progress
     seen = audit_progress(profile | {"completed": profile["completed"] + [{"code": c, "grade": "A"} for c in profile["in_progress"]],
                                      "in_progress": []})["totals"]
-    if gap := {k: round(v - seen[k]["value"], 2) for k, v in dpr.unit_totals(parsed).items() if v - seen[k]["value"] > 0.5}:
-        profile["unlisted_units"] = gap
+    if gap := {k: round(v - seen[k]["value"], 2) for k, v in dpr.unit_totals(parsed).items() if abs(v - seen[k]["value"]) > 0.5}:
+        profile["dpr_unit_offsets"] = gap
     ours = audit_progress(profile)
     disagree = dpr.cross_check(parsed, ours, university)
     return {"catalog_year": year, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,
