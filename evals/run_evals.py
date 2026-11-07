@@ -244,7 +244,9 @@ def run_api(model: str, text: str, resume: str | None) -> dict:
     turn = {"calls": [], "answer": "", "session": session, "other_tools": [], "error": None, "usage": Counter()}
 
     async def loop():
-        async with anthropic.AsyncAnthropic(max_retries=6) as api, Client(StdioServerParameters(**SERVER)) as mcp:
+        # MCP's default child environment is minimal: keep uv's, so the server runs in this run's environment
+        uv = {k: v for k, v in os.environ.items() if k.startswith("UV_")}
+        async with anthropic.AsyncAnthropic(max_retries=6) as api, Client(StdioServerParameters(**SERVER, env=uv)) as mcp:
             tools = [{"name": t.name, "description": t.description, "input_schema": t.input_schema}
                      for t in (await mcp.list_tools()).tools]
             system = f"{mcp.instructions}\n\nToday's date is {date.today()}."

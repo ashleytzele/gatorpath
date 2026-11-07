@@ -92,9 +92,10 @@ fit, and none picked a course that hadn't run lately.
 
 Haiku (`claude-haiku-5-5`, inside Claude Code) on the same 47 questions, two runs on 2026-11-06: 45/47 both times, plans
 14/15 and 15/15, goal fit 13/14, 0 hallucinated course codes, a median of about two minutes and 10 tool calls per plan,
-about $1.30 a run at API prices. The misses: it left the plan out of an electives call, so most electives looked
-blocked (a data science student, both runs), skipped check_plan on a last-term plan, and once rewrote a long record's
-grades. A bare API client is built (`--clients haiku`) but hasn't run against the real API yet.
+about $1.30 a run at API prices. The misses: most electives looked blocked for a data science student (both runs),
+Haiku skipped check_plan on a last-term plan, and it once rewrote a long record's grades. After a fix, that data science
+question passed three reruns of three, which makes the report 46/47. A bare API client is built (`--clients haiku`) but
+hasn't run against the real API yet.
 
 ## Limitations
 

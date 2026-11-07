@@ -4,9 +4,9 @@ Run `20261106-haiku`: 47 questions (evals/questions.yaml) through claude, claude
 
 | Metric | claude | claude-haiku | codex |
 |---|---|---|---|
-| Questions fully passed | 46/47 | 45/47 | 47/47 |
+| Questions fully passed | 46/47 | 46/47 | 47/47 |
 | Plans passing check_plan | 15/15 | 15/15 | 15/15 |
-| Electives fit the goal | 14/14 | 13/14 | 14/14 |
+| Electives fit the goal | 14/14 | 14/14 | 14/14 |
 | Profile matches what the student said | 31/32 | 32/33 | 33/33 |
 | Answers with no unknown course codes | 47/47 | 47/47 | 47/47 |
 | States the facts | 23/23 | 23/23 | 23/23 |
@@ -73,7 +73,7 @@ First reply only. A plan question's student gives everything up front, so a good
 | plan-part-time | pass | pass | pass | yes |
 | plan-junior | pass | pass | pass | yes |
 | plan-retake | pass | pass | pass | yes |
-| plan-ccc | pass | **fail** | pass | yes |
+| plan-ccc | pass | pass | pass | yes |
 | plan-fast | pass | pass | pass | yes |
 | plan-p10 | pass | pass | pass | yes |
 | plan-2025 | pass | pass | pass | yes |
@@ -90,4 +90,3 @@ First reply only. A plan question's student gives everything up front, so a good
 
 - **left-p02** (claude): profile_faithful. {"profile": ["qr_pathway: None vs '1/2'"]}
 - **left-p02** (claude-haiku): profile_faithful. {"profile": ["completed: missing [('AA S 210', 'A'), ('AFRS 202', 'A'), ('ARTH 201', 'A'), ('BIOL 100', 'A'), ('BIOL 101', 'A'), ('COMM 150', 'A'), ('CSC 101', 'A'), ('CSC 215', 'A'), ('CSC 220', 'A'), ('CSC 230', 'A'), ('CSC 256', 'A'), ('CSC 300GW', 'A'), ('CSC 317', 'A'), ('CSC 340', 'A'), ('CSC 413', 'A'), ('CSC 415', 'A'), ('CSC 510', 'A'), ('CSC 600', 'B'), ('CSC 648', 'A'), ('CSC 652', 'B'), ('CSC 653', 'B'), ('CSC 665', 'B'), ('CSC 675', 'B'), ('ECON 101', 'A'), ('ENG 114', 'A'), ('ERTH 335', 'A'), ('MATH 225', 'A'), ('MATH 226', 'A'), ('MATH 227', 'A'), ('MATH 324', 'A'), ('PHIL 101',
-- **plan-ccc** (claude-haiku): goal_fit. {"graduates": "2029-fall", "electives": {"picked": ["CSC 603", "CSC 698", "CSC 659", "CSC 641", "CSC 620"], "on_goal": ["CSC 620"]}}

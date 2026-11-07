@@ -35,9 +35,11 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   units no longer says "I transferred in"
 
 - [ ] Run `--clients haiku` on the API (needs ANTHROPIC_API_KEY): no harness prompt there, so expect it to differ
-- [ ] list_eligible_electives without `plan` at a later by_term: nothing planned counts, so most electives read blocked
-  and aren't named in `more`. Haiku does this on plan-ccc, the one miss in both final runs. Default to build_plan's
-  plan there, or at least warn, then run Haiku on several runs to see it hold
+- [x] list_eligible_electives without `plan` at a later by_term: nothing planned counted, so most electives read
+  blocked and weren't named in `more` (plan-ccc, the one miss in both final runs). It now uses build_plan's baseline
+  and says so. plan-ccc alone, rerun three times: 3/3 passed, with CSC 665, 671 and 675 picked; the report is 46/47 with
+  that one question rerun. Haiku happened to send the plan in all three (twice nested in profile, once as `plan`), so
+  those runs show the earlier nested-plan fix, and the baseline path itself is only covered by its test
 - [ ] Rerun Claude Code and Codex after the max_units fix, when a full run is worth the usage
 
 ---
