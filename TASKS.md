@@ -25,12 +25,15 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   three false disagreements fixed. An area was compared with the combined Area C group, UD areas weren't read as GE
   ("UD-B: …" has no "Area"), and transfer courses sharing a generic code merged. A GE area truly absent from a DPR still
   shows, as it should. Keep real DPRs out of iCloud folders (Desktop, Documents)
-- [ ] A print with View All on every list: Expand All leaves long lists at 10 rows, so a cut list can still hide courses
+- [x] A print with lists cut at 10 rows (View All off): its unit totals now come from the DPR's own lines
+  (`dpr_unit_offsets`), and a requirement's courses show under the requirement anyway. Not yet tried: a print with View
+  All on every list, to confirm nothing else hides
 - [x] The DPR decides which GE areas apply (D33): one the rules have and the DPR doesn't list is left out on import, for
   that student only, flagged for an advisor, with "Put it back" on Review. `rules/` doesn't change
-- [ ] The site has no way to give a transfer total (transfer_units)
-- [ ] Engine warnings on Review were written for AI clients ("set transfer_units", "add it to not_on_dpr"): the site has
-  no field for either, so word them for students, or give the site those fields
+- [x] The site has no way to give a transfer total: with a DPR it doesn't need one, the 120 follows the DPR's count.
+  A typed record still has none (the chat's update_record takes transfer_units)
+- [ ] Engine warnings were written for AI clients ("set transfer_units", "add it to not_on_dpr"). Review no longer shows
+  them; if the chat says them (below), word them for students
 - [x] The chat (ARCHITECTURE §7.7, D34, D35): Haiku fills the plan after build_plan, with the MCP server's tools plus
   change_plan, replan and update_record, docked beside the plan. The record stays on the backend. Works without a key
 - [x] First use on the real API, with a real DPR: it filled the plan, but the chat couldn't add a term or change the pace
