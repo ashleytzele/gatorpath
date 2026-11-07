@@ -1013,7 +1013,7 @@ function ReviewScreen({
     const left = profile.not_on_dpr ?? [];
     const notFound = imported?.cross_check.find((line) => line.startsWith("Not found on this DPR")) ?? "";
     const dpr: DprMissing = {
-      missing: universityGroups(a).filter((g) => notFound.includes(g.title)).map((g) => g.id),
+      missing: a.groups.filter((g) => notFound.includes(g.title)).map((g) => g.id),
       left,
       toggle: (id) =>
         edit({ ...profile, not_on_dpr: left.includes(id) ? left.filter((x) => x !== id) : [...left, id] }),
@@ -2216,6 +2216,11 @@ function DegreeProgress({
         label: p.label,
         body: (
           <div className="req-courses">
+            {dpr?.missing.includes(g.id) && (
+              <button className="let-pick" onClick={() => dpr.toggle(g.id)}>
+                {dpr.left.includes(g.id) ? "Not on your DPR · Put it back" : "Not on your DPR · Leave it out"}
+              </button>
+            )}
             {g.counted.map((c) => (
               <CourseStatus name={c} type="done" label={doneWord} key={c} />
             ))}

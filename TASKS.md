@@ -25,7 +25,11 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   three false disagreements fixed. An area was compared with the combined Area C group, UD areas weren't read as GE
   ("UD-B: …" has no "Area"), and transfer courses sharing a generic code merged. A GE area truly absent from a DPR still
   shows, as it should. Keep real DPRs out of iCloud folders (Desktop, Documents)
-- [x] A requirement printed collapsed (no Expand All) counts as complete (2026-11-07): the same student's print with and
+- [x] Each requirement's status is the DPR's icon (D36, 2026-11-07): Complete / In progress / Not Complete / Exception,
+  read from the print's images and its legend, collapsed sections included. Fixed on the Public Health print: BIOL 101
+  and GE 5C showed complete with no rows, and BIOL 100 (2026-27 rules, not on that Fall 2025 DPR) is left out: the plan
+  is PH 520 + PH 480, one term, as the DPR says
+- [x] A requirement printed collapsed (no Expand All) counts as complete when there are no icons (2026-11-07): the same student's print with and
   without Expand All, 26 collapsed and all 26 done. GE areas go in ge_done, course requirements in dpr_met unless the
   course shows elsewhere. The unexpanded print now gives the same audit and plan as the expanded one (it planned
   MATH 225-227, CSC 101 and nine GE areas again). ponytail: a collapsed "X or Y" isn't counted yet

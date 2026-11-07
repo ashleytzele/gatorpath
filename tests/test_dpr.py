@@ -31,7 +31,8 @@ def test_transfer_rows_meet_the_course_they_sit_under_and_substitutions_become_d
     assert {"code": "CSC 215", "grade": "B", "term": "2025-fall"} in got["completed"]
     assert got["dpr_met"] == ["MATH 225"]                                             # MATH 325 under "MATH 225"
     assert got["ge_done"] == ["Area A1 - Oral Communication", "Area A2 - Written Communication I",
-                              "Area A3 - Critical Thinking", "USH"]                   # Area D isn't done; USH from GE D/USH
+                              "Area A3 - Critical Thinking", "USH",                   # Area D isn't done; USH from GE D/USH
+                              "Area E - Lifelong Learning and Self-Development"]       # waived by the Dean's memo: met
     assert got["transfer_units"] == 19 and any("no legend" in w for w in got["warnings"])
     assert [r["requirement"] for r in got["remaining"]] == ["Area D - Social Sciences", "Minimum Units of General Education Coursework",
                                                            "120 Minimum Units Required for Degree", "CSC 413"]
@@ -243,6 +244,48 @@ def test_collapsed_requirements_are_flagged_not_missing():
     assert not any("GE 1A" in w for w in cross_check(got, audit, university))  # on the DPR, just collapsed
 
 
+def test_the_dpr_icons_give_each_requirement_its_status():
+    # The print keeps each requirement's status icon (Complete / Currently in Progress / Not Complete) as an image in a
+    # column at the right; the legend says which image is which. Shapes as pdftocairo -svg and pdftotext -bbox-layout
+    # write them for a real print (2026-11-07), images and text invented
+    icon = lambda name, x, y: f'<use xlink:href="#{name}" transform="matrix(0.6, 0, 0, 0.6, {x}, {y})"/>'
+    svg = ('<svg><defs><image id="ok" width="16" height="16" xlink:href="data:A"/>'
+           '<image id="no" width="16" height="16" xlink:href="data:B"/></defs><pageSet><page>'
+           + icon("ok", 43, 419) + icon("no", 43, 464) + icon("ok", 499, 226) + icon("no", 499, 244)
+           + icon("ok", 373, 262) + "</page></pageSet></svg>")
+    line = lambda x0, y0, x1, words: (f'<line xMin="{x0}" yMin="{y0}" xMax="{x1}" yMax="{y0 + 8}">'
+                                      + "".join(f'<word xMin="0" yMin="0" xMax="0" yMax="0">{w}</word>' for w in words.split())
+                                      + "</line>")
+    boxes = ('<page width="595" height="842">' + line(57, 420, 99, "Complete") + line(57, 465, 120, "Not Complete")
+             + line(59, 226, 220, "Area A1 - Oral Communication") + line(59, 244, 200, "MATH 226")
+             + line(300, 262, 340, "B") + "</page>")
+    got = dpr.icon_statuses(svg, boxes)
+    assert got == [("Area A1 - Oral Communication", "done"), ("MATH 226", "needed")]  # not the course row's at x 373
+    assert dpr.icon_statuses(svg, boxes.replace("Complete", "Finished")) == []  # no legend, no guessing
+
+    # what the icon says wins over a collapsed section and over rows that can't show it
+    text = """
+      General Education Requirements
+   [G11368]
+          Area 1A: English Composition
+          Area 1B: Critical Thinking
+       Major Requirements
+        [R10080]
+          BIOL 101
+           Units Required = 1 Units
+           [R10080 / L0040]
+         Course             Description                               Units        When                    Grade Status
+         BIOL 101           GENERAL BIOLOGY LAB               1.00              Fall, Spring
+"""
+    parsed = parse(text, [("Area 1A: English Composition", "done"), ("Area 1B: Critical Thinking", "needed"),
+                          ("BIOL 101", "done")])
+    status = {r["title"]: r["status"] for r in parsed["requirements"] if r["kind"] != "group"}
+    assert status == {"Area 1A: English Composition": "done", "Area 1B: Critical Thinking": "needed", "BIOL 101": "done"}
+    profile = to_profile(parsed, {}, {})
+    assert profile["ge_done"] == ["Area 1A: English Composition"] and profile["dpr_met"] == ["BIOL 101"]
+    assert [r["requirement"] for r in profile["remaining"]] == ["Area 1B: Critical Thinking"]
+
+
 def pdf_of(text: str) -> bytes:
     """A one-line PDF, offsets and all, so the real pdftotext has something to read."""
     stream = f"BT /F1 12 Tf 72 720 Td ({text}) Tj ET".encode()
@@ -328,3 +371,19 @@ def test_the_dpr_decides_which_ge_areas_apply():
     left = [g["id"] for g in dpr.not_listed(print_, university)]
     assert "ge_f" in left and "ge_a1" not in left and "ge_ud_b" not in left
     assert dpr.not_listed({"requirements": [block("CSC 101", "course")]}, university) == []  # no GE on the print: nothing to go by
+
+
+def test_a_required_course_the_dpr_never_names_is_left_out_too():
+    # A Fall 2025 Public Health print planned with the 2026-27 rules (2026-11-07): they require BIOL 100, which that
+    # DPR doesn't name anywhere, and its Foundation section shows complete. The DPR decides (D33), for the major too:
+    # a required-courses group none of whose courses the print names is left out, flagged, and can be put back
+    program, university = load_rules("2026-27", "bs-public-health")
+    names = lambda *titles: {"requirements": [block(t, "course") for t in titles] + [block("Area 1A: English Composition", "ge")]}
+    left = [g["id"] for g in dpr.not_listed(names("BIOL 101", "BIOL 210 or PH 100", "PH 480"), university, program)]
+    assert "foundation_biol_100" in left and "foundation_biol_101" not in left
+    named = names("BIOL 100", "BIOL 101", "BIOL 210 or PH 100", "PH 480")
+    assert "foundation_biol_100" not in [g["id"] for g in dpr.not_listed(named, university, program)]
+    # a course the print shows as a row counts as named
+    named = names("BIOL 101") | {"requirements": names("BIOL 101")["requirements"] + [
+        block("Courses Not Used", "not_used") | {"rows": [{"code": "BIOL 100"}]}]}
+    assert "foundation_biol_100" not in [g["id"] for g in dpr.not_listed(named, university, program)]

@@ -850,7 +850,8 @@ def import_dpr(pdf_path: str, program: str | None = None) -> dict:
     start_term, then use the profile with the other tools. If it returns unknown_program, ask which of `choices` is
     their major (a concentration doesn't show on the DPR's Plan line) and call again with that id as `program`."""
     path = local_pdf(pdf_path, "~/Downloads/Degree Progress Report.pdf")
-    return path if isinstance(path, dict) else dpr_profile(lambda: dpr.read_pdf(path), program)
+    return path if isinstance(path, dict) else dpr_profile(lambda: dpr.read_pdf(path), program,
+                                                           lambda: dpr.read_statuses(path))
 
 
 DEGREES = {"BA": "Bachelor of Arts", "BS": "Bachelor of Science", "BM": "Bachelor of Music"}
@@ -882,13 +883,20 @@ def program_of(parsed: dict, every: dict[str, dict]) -> tuple[str | None, list[s
     return None, near or [k for k, p in every.items() if p["title"].startswith(DEGREES[degree])]
 
 
-def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dict:
+def dpr_profile(read_text: Callable[[], str], program: str | None = None,
+                read_statuses: Callable[[], list] | None = None) -> dict:
     """import_dpr's result, however the PDF's text is read: from a path here, from an upload's bytes in the web API.
-    `program` is the student's pick when the DPR alone doesn't say (unknown_program's `choices`)."""
+    `program` is the student's pick when the DPR alone doesn't say (unknown_program's `choices`). `read_statuses`: the
+    DPR's status icons (dpr.read_statuses); without them the rows decide each requirement's status."""
     try:
-        parsed = dpr.parse(read_text())
+        text = read_text()
     except (OSError, subprocess.SubprocessError):
         return {"catalog_year": YEAR, "error": "unreadable_pdf", "warnings": ["pdftotext couldn't read that PDF (or isn't installed: brew install poppler)"]}
+    try:
+        statuses = read_statuses() if read_statuses else []
+    except (OSError, subprocess.SubprocessError):
+        statuses = []  # pdftocairo missing or failing: the rows still say
+    parsed = dpr.parse(text, statuses)
     if not parsed["requirements"]:
         return {"catalog_year": YEAR, "error": "unrecognized_dpr_format",
                 "warnings": ["No requirements found. This looks like another Student Center page, such as the Degree "
@@ -915,7 +923,10 @@ def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dic
     profile["completed"] = [r | {"code": norm_code(r["code"])} for r in profile["completed"]]
     profile["in_progress"] = [norm_code(c) for c in profile["in_progress"]]
     profile["dpr_met"] = [norm_code(c) for c in profile["dpr_met"]]
-    if left_out := dpr.not_listed(parsed, university):
+    # a major's required courses the DPR doesn't name are left out only when the rules are another year's than the
+    # student's: with their own year's, a group missing from the print is a print or parse problem, not a requirement
+    other_year = rules if year != held_to(parsed["catalog_term"]) else None
+    if left_out := dpr.not_listed(parsed, university, other_year):
         profile["not_on_dpr"] = [g["id"] for g in left_out]
     # The DPR's unit totals are the rule, higher or lower than the rows its print lists add up to (a list cut at 10 rows
     # hides courses; transfer work is listed nowhere; the DPR applies credit its own way). It counts courses in progress
@@ -926,7 +937,7 @@ def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dic
         if any(v > 0 for v in gap.values()):  # what the DPR listed: a course added later uses up what it didn't (dpr_offsets)
             profile["dpr_seen"] = sorted({r["code"] for r in profile["completed"]} | set(profile["in_progress"]))
     ours = audit_progress(profile)
-    disagree = dpr.cross_check(parsed, ours, university)
+    disagree = dpr.cross_check(parsed, ours, university, other_year)
     return {"catalog_year": year, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,
             "warnings": warnings + got["warnings"] + disagree + year_warning(profile, year),
             "see_advisor": see_advisor([("dpr", "GatorPath's audit and your DPR disagree on what's listed in cross_check; "
