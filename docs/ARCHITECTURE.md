@@ -836,6 +836,8 @@ chooses from the same options.
 - **The AI suggests, the code decides.** The model's only way to change a plan is `change_plan`, small edits (`remove`,
   `add`) that the backend applies to a copy and runs through `check_plan`. A result with more errors than before is
   refused and nothing changes; `check_plan` over the final plan goes back to the page.
+- A later term is made when a course is added to it, and an emptied term goes. `replan` changes the pace through
+  `build_plan`, so the engine says whether a date is reachable; it clears the courses chosen, so the model fills again.
 - **The record stays on our side.** Tools run with the student's profile, so the model never holds it, and it can't
   mistype a grade or drop a row, Haiku's commonest miss in the evals. It gets the major, catalog year, goal, load choices
   and the plan. Name, ID, grades and GPA don't go; a tool result's quoted grade or GPA is scrubbed (`scrub`).

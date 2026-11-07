@@ -1642,7 +1642,7 @@ function PlanView({
   const unitsLeft = semesters.reduce((total, s) => total + termUnits(s, info), 0);
   const years = [...new Set(semesters.map((s) => yearOf(s.term)))];
   const lastTerm = semesters[semesters.length - 1]?.term;
-  const graduation = (semesters.length === plan.semesters.length && plan.est_graduation_term) || lastTerm;
+  const graduation = lastTerm; // the plan as it stands: a chat or a pick can move it past build_plan's estimate
   const unreachable = pace?.on_time === false && !!pace.why_not?.length;
   const planState =
     preview || (!check.valid ? "problem" : unreachable ? "unreachable" : choicesLeft ? "open" : "complete");
@@ -3069,6 +3069,7 @@ function ChatPanel({
             {[
               "Swap one of my electives for something closer to my goal",
               "Move one of my classes to a later term",
+              "Keep every term at 12 units",
               "Why is my first class in this term?",
             ].map((ask) => (
               <button className="suggested" onClick={() => submit(ask)} key={ask}>
@@ -3299,7 +3300,9 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     semesters: r.semesters.map((s) => ({ ...state.semesters.find((o) => o.term === s.term), ...s })),
     check: r.check,
     picks: r.picks,
-    info: { ...state.info, ...r.check.courses },
+    plan: r.rebuilt ?? state.plan,
+    options: { ...state.options, ...r.options },
+    info: { ...state.info, ...r.rebuilt?.courses, ...r.check.courses },
   });
   const fill = async () => {
     setBusy("Choosing your courses with AI…");

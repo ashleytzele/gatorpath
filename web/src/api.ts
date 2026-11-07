@@ -132,6 +132,8 @@ export type Assisted = {
   semesters: Semester[];
   picks: Pick[];
   check: Checked;
+  rebuilt: PlanResult | null; // the chat changed the pace: a new plan, with its own dates
+  options: Options;
 };
 export type Option = {
   code: string;

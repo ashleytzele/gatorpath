@@ -89,6 +89,57 @@ def test_swapping_a_pick_keeps_its_requirement(model):
     assert [(p["group"], p["code"]) for p in got["picks"]] == [(slot, "CSC 645")]
 
 
+def state_of(student=STUDENT) -> dict:
+    plan = plan_of(student)
+    return {"student": student, "semesters": plan["semesters"], "picks": [], "changed": False, "errors": [], "titles": {},
+            "rebuilt": None, "options": {}}
+
+
+def test_a_class_can_move_into_a_term_the_plan_doesnt_have_yet():
+    """"I still want a class in spring": the term is made, and a term left empty goes, so the end date moves with it."""
+    state = state_of()
+    last = state["semesters"][-1]
+    year, season = last["term"].split("-")
+    later = f"{int(year) + 1}-fall" if season == "fall" else f"{year}-fall"
+    slot = next(c["slot"] for c in last["courses"] if isinstance(c, dict))
+    got = assistant.change_plan(state, [{"term": last["term"], "remove": slot}, {"term": later, "add": "CSC 652"}])
+    assert got["applied"] and state["semesters"][-1]["term"] == later and state["semesters"][-1]["courses"] == ["CSC 652"]
+    terms = [s["term"] for s in state["semesters"]]
+    assert terms == sorted(terms, key=assistant.term_key)
+
+    moved = [{"term": later, "remove": "CSC 652"}, {"term": last["term"], "add": "CSC 652"}]
+    assert assistant.change_plan(state, moved)["applied"] and state["semesters"][-1]["term"] == last["term"]
+
+
+def test_a_new_term_has_to_be_a_real_later_term():
+    state = state_of()
+    for term in ("whenever", "1999-fall"):
+        got = assistant.change_plan(state, [{"term": term, "add": "CSC 652"}])
+        assert got["applied"] is False and got["problems"]
+    assert assistant.change_plan(state, [{"term": "2099-fall", "remove": "CSC 652"}])["applied"] is False  # nothing to add
+
+
+def test_replan_changes_the_pace_and_the_page_gets_it(model):
+    client = TestClient(api.app)
+    plan = plan_of()
+    seen = model(use("replan", max_units_per_term=12, nonsense=True), say("Rebuilt."))
+    got = client.post("/api/assist", json={"profile": STUDENT, "plan": plan, "messages": [{"role": "user", "content": "12 units"}]}).json()
+    told = result_of(seen, 1)
+    assert told["open_slots"] and told["est_graduation_term"] and "note" in told
+    assert got["options"] == {"max_units_per_term": 12} and got["changed"] and got["rebuilt"]["pace"]["load"] == "max_units_per_term"
+    assert len(got["semesters"]) > len(plan["semesters"]) and got["picks"] == []
+    assert "nonsense" not in got["options"]
+
+
+def test_replan_says_when_a_date_cant_be_reached(model):
+    seen = model(use("replan", graduate_by="2027-fall"), say("Not reachable."))
+    plan = plan_of()
+    got = assistant.ask(STUDENT, plan, [], [{"role": "user", "content": "Finish next fall"}])
+    told = result_of(seen, 1)
+    assert told["applied"] is False and told["why_not"]
+    assert not got["changed"] and got["semesters"] == plan["semesters"] and got["options"] == {}  # a date out of reach changes nothing
+
+
 def test_the_model_never_gets_the_record(model):
     """Name, ID, grades and GPA stay here: the tools run with them, and their text is scrubbed."""
     seen = model(say("Hello."))
