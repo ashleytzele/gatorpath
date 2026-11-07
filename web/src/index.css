@@ -4024,3 +4024,7 @@ p, li, small { text-wrap: pretty; }
   color: var(--faint);
   margin: 8px 0;
 }
+.chat-privacy svg {
+  display: inline;
+  vertical-align: -2px;
+}

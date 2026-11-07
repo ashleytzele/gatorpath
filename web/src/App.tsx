@@ -3032,7 +3032,9 @@ function ChatPanel({
   const dialogRef = useDialog(close);
   const [text, setText] = useState("");
   const end = useRef<HTMLDivElement>(null);
-  useEffect(() => end.current?.scrollIntoView({ behavior: "smooth" }), [thread, sending, failed]);
+  useEffect(() => {
+    end.current?.scrollIntoView({ behavior: "smooth" }); // returns a Promise now: an effect's return must not be it
+  }, [thread, sending, failed]);
   const submit = (ask: string) => {
     if (!ask.trim() || sending) return;
     setText("");
