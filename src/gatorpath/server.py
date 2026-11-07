@@ -231,7 +231,7 @@ def get_course(code: str) -> dict:
 
 
 @mcp.tool(annotations=READ_ONLY)
-def get_sections(term: str, codes: list[str], online: list[str] | None = None) -> dict:
+def get_sections(term: str, codes: list[str], online: list[str] | None = None, keep: list[str] | None = None) -> dict:
     """Class Search sections of courses in one term (e.g. '2027-spring'), to show after a plan for its first term once
     that term's schedule is out: class number (class_nbr, what Student Center asks for), meetings (days, time,
     where), mode, instructor, seats_open, waitlist_open, enrolled, and attributes (permission numbers, GE tags; Class
@@ -246,7 +246,8 @@ def get_sections(term: str, codes: list[str], online: list[str] | None = None) -
     in_schedule, or clashes_with: the scheduled sections of other courses it overlaps ([]: it fits instead). `sets`:
     how many clash-free sets there are. When none fits, schedule is null and always_clash names the course pairs that
     never fit together: one moves to another term (then check_plan). online: the courses the student wants online: the
-    schedule uses their fully online sections when they have one."""
+    schedule uses their fully online sections when they have one. keep: class numbers the student chose; those sections
+    stay (a lecture with its lab) and the rest fit around them, or schedule is null and always_clash says with what."""
     if not TERM.fullmatch(term):
         return {"catalog_year": YEAR, "error": "bad_term", "warnings": ["term looks like 2027-spring"]}
     want = list(dict.fromkeys(norm_code(c) for c in codes))
@@ -259,7 +260,10 @@ def get_sections(term: str, codes: list[str], online: list[str] | None = None) -
     wanted = {norm_code(c) for c in online or []}
     # ponytail: a lab listed after an in-person lecture drops out with it; online courses here have no labs in Spring 2027
     fully_online = lambda secs: [s for s in secs if str(s.get("mode", "")).startswith("Online")]
-    picked = pick_sections({c: (fully_online(secs) or secs) if c in wanted else secs for c, secs in found.items()})
+    kept = set(keep or [])
+    mine = lambda secs: any(s.get("class_nbr") in kept for s in secs)  # a section chosen by number beats "online"
+    picked = pick_sections({c: (fully_online(secs) or secs) if c in wanted and not mine(secs) else secs
+                            for c, secs in found.items()}, keep=kept)
     for code, secs in found.items():
         for sec in secs:
             if sec.get("class_nbr") in (picked["schedule"] or {}).get(code, []):

@@ -141,6 +141,7 @@ export type Assisted = {
   check: Checked;
   rebuilt: PlanResult | null; // the chat changed the pace: a new plan, with its own dates
   options: Partial<Profile>; // what the chat changed about the student, the record included
+  sections: Record<string, string[]>; // {term: class numbers} the student chose for the Schedule, the chat's too
 };
 export type Option = {
   code: string;
@@ -251,12 +252,18 @@ export const checkPlan = (profile: Profile, plan: Plan) =>
   post<Checked>("/api/check", { profile, plan });
 export const getElectives = (profile: Profile, requirement: string, plan: Plan, by_term: string) =>
   post<Electives>("/api/electives", { profile, requirement, plan, by_term, limit: 100 });
-export function getSections(term: string, courses: string[], online: string[]) {
+export function getSections(term: string, courses: string[], online: string[], keep: string[] = []) {
   const query = new URLSearchParams({ term });
   courses.forEach((c) => query.append("courses", c));
   online.forEach((c) => query.append("online", c));
+  keep.forEach((n) => query.append("keep", n)); // sections the student chose: the rest fit around them
   return call<Sections>(`/api/sections?${query}`);
 }
 /** The AI helper: a chat message, or with none, fills the plan. check_plan decides every change on the server. */
-export const assist = (profile: Profile, semesters: Semester[], picks: Pick[], messages: ChatMessage[]) =>
-  post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages });
+export const assist = (
+  profile: Profile,
+  semesters: Semester[],
+  picks: Pick[],
+  messages: ChatMessage[],
+  sections: Record<string, string[]>,
+) => post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages, sections });

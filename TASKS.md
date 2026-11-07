@@ -38,6 +38,11 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   from how a course last ran that season, and says which. MCP clients get it too
 - [ ] Chat first: Goals could be a conversation, not a form, and an F-1 rebalance across terms still takes Haiku a few tries
 - [x] A class chosen for being online gets its online section on the Schedule (`get_sections`' `online`)
+- [x] A section can be chosen (2026-11-07): the chat couldn't change one, so asking it to left the Schedule as it was.
+  Clicking another section shows it on the calendar (fits, or what it clashes with); "Use this section" keeps it and fits
+  the rest around it, and the chat does the same with `choose_section`. "Let GatorPath pick" undoes it
+- [ ] The AI fill for a new student starting Spring 2027 gave up after 3 minutes: a course covering two GE slots lowers the
+  units before CSC 300GW's 59-unit minimum, so every fill was refused (seen 2026-11-07 in a browser run)
 - [x] Class Search for every subject (2026-11-07): Spring 2027 had only the 94 subjects with GE courses, so a Computer
   Engineering plan couldn't find ENGR. The other 22 added: 479 sections, 116 of 116 subjects. A term with no sections now
   says it isn't published, where it used to list every course as missing

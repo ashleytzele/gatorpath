@@ -1603,6 +1603,9 @@ type Work = {
   applyFold: () => void;
   fill: () => void;
   aiDown: boolean;
+  sections: Record<string, string[]>; // {term: class numbers} the student chose
+  setSections: (term: string, keep: string[]) => void;
+  aiBusy: boolean; // the chat's answer replaces the plan, so a section chosen meanwhile would be lost
 };
 
 function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
@@ -2301,8 +2304,14 @@ function ScheduleView({
   const codes = first.courses.filter((c): c is string => !isSlot(c));
   const label = termLabel(first.term);
   const online = work.picks.filter((p) => p.online && p.term === first.term).map((p) => p.code);
-  const result = useLoad(() => getSections(first.term, codes, online), [first.term, codes.join(), online.join()]);
+  const keep = work.sections[first.term] ?? [];
+  const result = useLoad(
+    () => getSections(first.term, codes, online, keep),
+    [first.term, codes.join(), online.join(), keep.join()],
+  );
   const [preview, setPreview] = useState<"" | "ready" | "not-offered" | "unpublished" | "no-fit" | "full">("");
+  const [peek, setPeek] = useState<{ code: string; nbr: string } | null>(null); // another section, on the calendar
+  const [trying, setTrying] = useState(false);
   if (!codes.length) return <div className="app-content"><p>Choose this term’s courses first.</p></div>;
   if (result.error) return <div className="app-content"><ErrorCard text={result.error} retry={result.retry} /></div>;
   if (!result.data) return <div className="app-content"><Loading label={`Finding ${label} sections…`} /></div>;
@@ -2332,16 +2341,49 @@ function ScheduleView({
     ],
     full: ["All sections full", "Join a waitlist or pick another section", "button"],
   } as const;
-  const blocks = classes.flatMap((c, i) =>
-    c.picked.flatMap((s) =>
-      s.meetings.flatMap((m) => {
-        const time = hours(m);
-        return time && m.days
-          ? m.days.split(" ").map((day) => ({ c, i, s, m, time, day }))
-          : [];
-      }),
+  // The section being looked at, as this answer has it (its clashes are against this schedule)
+  const shown = peek ? r.sections[peek.code]?.find((s) => s.class_nbr === peek.nbr) : undefined;
+  const clashing = (shown?.clashes_with ?? []).map((x) => x.slice(0, x.lastIndexOf(" "))); // "MATH 226 01" -> course
+  const timed = (c: (typeof classes)[number], i: number, s: Section, look = "") =>
+    s.meetings.flatMap((m) => {
+      const time = hours(m);
+      return time && m.days ? m.days.split(" ").map((day) => ({ c, i, s, m, time, day, look })) : [];
+    });
+  const blocks = [
+    ...classes.flatMap((c, i) =>
+      c.picked.flatMap((s) =>
+        timed(c, i, s, c.code === peek?.code ? "faded" : clashing.includes(c.code) ? "clash" : ""),
+      ),
     ),
-  );
+    ...(shown && peek
+      ? timed(
+          classes.find((c) => c.code === peek.code)!,
+          classes.findIndex((c) => c.code === peek.code),
+          shown,
+          clashing.length ? "preview clash" : "preview",
+        )
+      : []),
+  ];
+  const use = async () => {
+    if (!shown || !peek) return;
+    const theirs = r.sections[peek.code].map((s) => s.class_nbr); // one choice per class
+    const next = [...keep.filter((n) => !theirs.includes(n)), shown.class_nbr];
+    setTrying(true);
+    try {
+      const tried = await getSections(first.term, codes, online, next);
+      if (!tried.schedule) {
+        const other = tried.always_clash.flat().filter((c) => c !== peek.code);
+        return toast(`${peek.code} ${shown.section} can’t fit: it overlaps every section of ${other.join(", ")}`);
+      }
+      setPeek(null);
+      work.setSections(first.term, next);
+      toast(`${peek.code} section ${shown.section} is in your schedule`);
+    } catch (e) {
+      toast(message(e));
+    } finally {
+      setTrying(false);
+    }
+  };
   return (
     <div className="app-content">
       <div className="schedule-title">
@@ -2433,6 +2475,27 @@ function ScheduleView({
               </b>
             </div>
           </div>
+          {shown && peek && (
+            <div className={`peek-bar${clashing.length ? " clash" : ""}`} role="status">
+              <p>
+                <b>
+                  {peek.code} section {shown.section}
+                </b>{" "}
+                · {when(shown)} ·{" "}
+                {clashing.length
+                  ? `Clashes with ${shown.clashes_with!.join(", ")} as your schedule is now`
+                  : "Fits with your other classes"}
+              </p>
+              <div>
+                <Button onClick={use} disabled={trying || work.aiBusy}>
+                  {clashing.length ? "Try it, moving the others" : "Use this section"}
+                </Button>
+                <Button kind="ghost" onClick={() => setPeek(null)}>
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
           <div className="calendar-card hourly">
             <div className="calendar-head">
               {["TIME", "MON", "TUE", "WED", "THU", "FRI"].map((x) => (
@@ -2455,8 +2518,8 @@ function ScheduleView({
                   .filter((b) => CALENDAR_DAYS.some(([, code]) => code === b.day))
                   .map((b) => (
                     <div
-                      className={`cal-block c${b.i % 3}`}
-                      key={`${b.s.class_nbr}${b.m.time}${b.day}`}
+                      className={`cal-block c${b.i % 3} ${b.look}`}
+                      key={`${b.look}${b.s.class_nbr}${b.m.time}${b.day}`}
                       style={{
                         top: (b.time.start - 8) * 52 + 1,
                         height: (b.time.end - b.time.start) * 52 - 3,
@@ -2492,7 +2555,7 @@ function ScheduleView({
                     .filter((b) => b.day === code)
                     .sort((a, b) => a.time.start - b.time.start)
                     .map((b) => (
-                      <span key={`${b.s.class_nbr}${b.m.time}`}>
+                      <span className={b.look} key={`${b.look}${b.s.class_nbr}${b.m.time}`}>
                         <i className={`class-dot c${b.i % 3}`} />
                         <strong>{b.c.code}</strong>
                         {b.m.time}
@@ -2505,12 +2568,26 @@ function ScheduleView({
           <div className="section-list">
             {classes.map((c) => {
               const [main, ...linked] = c.picked;
+              const theirs = r.sections[c.code].map((s) => s.class_nbr);
+              const mine = keep.some((n) => theirs.includes(n));
               return (
                 <article className="section-detail" key={c.code}>
                   <div className="section-main">
                     <span>
                       <b>{c.code}</b>
                       <StatusBadge type={main.seats_open ? "ready" : "warning"}>{seats(main)}</StatusBadge>
+                      {mine && (
+                        <>
+                          <em className="your-pick">Your choice</em>
+                          <button
+                            className="let-pick"
+                            disabled={work.aiBusy}
+                            onClick={() => work.setSections(first.term, keep.filter((n) => !theirs.includes(n)))}
+                          >
+                            Let GatorPath pick
+                          </button>
+                        </>
+                      )}
                     </span>
                     <p>
                       Section {main.section} · {when(main)}
@@ -2539,7 +2616,16 @@ function ScheduleView({
                           Other sections <Icon name="chevron" />
                         </summary>
                         {c.others.map((o) => (
-                          <div className={o.clashes_with?.length ? "disabled" : ""} key={o.class_nbr}>
+                          <button
+                            type="button"
+                            className={o.clashes_with?.length ? "clashes" : ""}
+                            aria-pressed={peek?.nbr === o.class_nbr}
+                            onClick={() => {
+                              setPeek({ code: c.code, nbr: o.class_nbr });
+                              document.querySelector(".schedule-controls")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            }}
+                            key={o.class_nbr}
+                          >
                             <span>
                               Section {o.section} · {when(o)} · #{o.class_nbr}
                             </span>
@@ -2550,7 +2636,7 @@ function ScheduleView({
                                   : "Fits instead"}
                               </small>
                             )}
-                          </div>
+                          </button>
                         ))}
                       </details>
                     )}
@@ -3088,6 +3174,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     check: built.plan.check ?? ({ valid: true, errors: [] } as Checked),
     info: built.plan.courses ?? {},
     picks: [] as Pick[],
+    sections: {} as Record<string, string[]>,
   });
   const [busy, setBusy] = useState("");
   const [failed, setFailed] = useState("");
@@ -3126,6 +3213,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
           check: plan.check ?? { valid: true, errors: [] },
           info: plan.courses ?? {},
           picks: [],
+          sections: state.sections, // a section only stays while its class does
         };
       },
       (next) =>
@@ -3196,12 +3284,13 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     plan: r.rebuilt ?? state.plan,
     options: { ...state.options, ...r.options },
     info: { ...state.info, ...r.rebuilt?.courses, ...r.check.courses },
+    sections: r.sections ?? state.sections,
   });
   const fill = async () => {
     setBusy("Choosing your courses with AI…");
     setFailed("");
     try {
-      const r = await assist(student, state.semesters, state.picks, []);
+      const r = await assist(student, state.semesters, state.picks, [], state.sections);
       if (r.changed) {
         setPrevious(state);
         setState(withAnswer(r));
@@ -3220,7 +3309,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     setSending(true);
     setChatFailed("");
     try {
-      const r = await assist(student, state.semesters, state.picks, asked);
+      const r = await assist(student, state.semesters, state.picks, asked, state.sections);
       setThread([...asked, { role: "assistant", content: r.reply }]);
       if (r.changed) {
         setPrevious(state);
@@ -3253,6 +3342,11 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     applyFold,
     fill,
     aiDown,
+    aiBusy: sending || !!busy,
+    setSections: (term, keep) => {
+      setPrevious(state);
+      setState({ ...state, sections: { ...state.sections, [term]: keep } });
+    },
   };
   const undo = previous
     ? () => {

@@ -87,17 +87,19 @@ def electives(profile: Profile = Body(), requirement: str = Body(), plan: Plan |
 
 @app.post("/api/assist")
 def assist(profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = Body(default=[]),
-           messages: list[Message] = Body(default=[])) -> dict:
-    """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py)."""
+           messages: list[Message] = Body(default=[]), sections: dict[str, list[str]] = Body(default={})) -> dict:
+    """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py).
+    sections: {term: [class_nbr]} the student chose on the Schedule, which the chat can change too."""
     try:
-        return assistant.ask(profile, plan, picks, messages)
+        return assistant.ask(profile, plan, picks, messages, sections)
     except assistant.NotConnected as e:
         raise HTTPException(503, str(e)) from e
 
 
 @app.get("/api/sections")
-def sections(term: str, courses: list[str] = Query(), online: list[str] = Query(default=[])) -> dict:
-    return server.get_sections(term, courses, online)
+def sections(term: str, courses: list[str] = Query(), online: list[str] = Query(default=[]),
+             keep: list[str] = Query(default=[])) -> dict:
+    return server.get_sections(term, courses, online, keep)
 
 
 @app.get("/api/programs")

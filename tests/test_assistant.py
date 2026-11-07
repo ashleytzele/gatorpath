@@ -92,7 +92,7 @@ def test_swapping_a_pick_keeps_its_requirement(model):
 def state_of(student=STUDENT) -> dict:
     plan = plan_of(student)
     return {"student": student, "semesters": plan["semesters"], "picks": [], "changed": False, "errors": [], "titles": {},
-            "rebuilt": None, "options": {}}
+            "rebuilt": None, "options": {}, "sections": {}}
 
 
 def test_a_class_can_move_into_a_term_the_plan_doesnt_have_yet():
@@ -116,6 +116,22 @@ def test_a_class_chosen_for_being_online_is_remembered():
     term, slot = slot_in({"semesters": state["semesters"]})
     assert assistant.change_plan(state, [{"term": term, "remove": slot, "add": "CSC 652", "online": True}])["applied"]
     assert state["picks"] == [{"group": slot, "term": term, "code": "CSC 652", "covers": [], "online": True}]
+
+
+def test_the_chat_can_choose_a_section_and_the_rest_fit_around_it(monkeypatch):
+    """"Put me in the Tuesday section": the Schedule shows what the chat chose, or nothing changes when it can't fit."""
+    state = state_of()
+    first = state["semesters"][0]
+    a, b = [c for c in first["courses"] if isinstance(c, str)][:2]
+    row = lambda nbr, days: {"section": f"0{nbr}", "component": "LEC", "mode": "In-Person", "class_nbr": nbr,
+                             "seats_open": 9, "meetings": [{"days": days, "time": "9:00 AM - 10:15 AM"}]}
+    monkeypatch.setattr(server.db, "sections", lambda db, term, codes: (
+        {a: [row("1", "Mo We"), row("2", "Tu Th")], b: [row("3", "Mo We")]}, {c.rsplit(" ", 1)[0]: "2026-10-26" for c in (a, b)}))
+    refused = assistant.run_tool(state, "choose_section", {"term": first["term"], "class_nbr": "1"})
+    assert refused["applied"] is False and refused["always_clash"] and state["sections"] == {} and not state["changed"]
+    assert assistant.run_tool(state, "choose_section", {"term": first["term"], "class_nbr": "9"})["applied"] is False
+    got = assistant.run_tool(state, "choose_section", {"term": first["term"], "class_nbr": "2"})
+    assert got["applied"] and got["schedule"] == {a: ["2"], b: ["3"]} and state["sections"] == {first["term"]: ["2"]}
 
 
 def test_a_new_term_has_to_be_a_real_later_term():
@@ -243,8 +259,10 @@ def test_the_route_returns_the_change_and_says_when_ai_isnt_connected(model, mon
     client = TestClient(api.app)
     plan = plan_of()
     model(say("Hello."))
-    got = client.post("/api/assist", json={"profile": STUDENT, "plan": plan, "messages": [{"role": "user", "content": "Hi"}]})
+    got = client.post("/api/assist", json={"profile": STUDENT, "plan": plan, "messages": [{"role": "user", "content": "Hi"}],
+                                           "sections": {"2027-spring": ["5331"]}})
     assert got.status_code == 200 and got.json()["reply"] == "Hello."
+    assert got.json()["sections"] == {"2027-spring": ["5331"]}  # the Schedule's choices come back as they went
 
     def nothing():
         raise assistant.NotConnected("not connected")

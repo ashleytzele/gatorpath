@@ -66,10 +66,11 @@ def meeting_times(rows: list[dict]) -> list[tuple[str, int, int]]:
             if m.get("days") and (t := CLOCK.fullmatch(m.get("time", ""))) for d in m["days"].split()]
 
 
-def pick_sections(found: dict[str, list[dict]], limit: int = 20000) -> dict:
+def pick_sections(found: dict[str, list[dict]], limit: int = 20000, keep: set[str] = frozenset()) -> dict:
     """A set of sections with no time clashes for one term's courses ({code: Class Search rows}, db.sections), the
     fewest full sections first. A course with a lab or activity is one bundle: a section of its first component and
-    the sections listed after it. Returns schedule {code: [class_nbr, …]} (None when nothing fits), sets: how many
+    the sections listed after it. `keep`: class numbers the student chose; their bundles stay and the rest fit around
+    them. Returns schedule {code: [class_nbr, …]} (None when nothing fits), sets: how many
     clash-free sets (all_counted false past `limit` search steps), clashes_with {class_nbr: [scheduled sections of
     other courses it overlaps]} for every other section ([]: it fits instead), and always_clash: course pairs no two
     sections of which fit together."""
@@ -86,8 +87,9 @@ def pick_sections(found: dict[str, list[dict]], limit: int = 20000) -> dict:
 
     clash = lambda a, b: any(d == e and s < y and x < f for d, s, f in a for e, x, y in b)
     full = lambda b: any(r.get("seats_open", 0) <= 0 for r in b)
-    opts = {c: sorted(((b, meeting_times(b)) for b in bundles(rows)), key=lambda o: (full(o[0]), o[0][0]["class_nbr"]))
-            for c, rows in found.items() if rows}
+    every = {c: sorted(((b, meeting_times(b)) for b in bundles(rows)), key=lambda o: (full(o[0]), o[0][0]["class_nbr"]))
+             for c, rows in found.items() if rows}
+    opts = {c: [o for o in os if any(r["class_nbr"] in keep for r in o[0])] or os for c, os in every.items()}
     order = sorted(opts, key=lambda c: (len(opts[c]), c))  # fewest choices first: dead ends show up sooner
     best: list = []
     sets = steps = 0
@@ -113,7 +115,7 @@ def pick_sections(found: dict[str, list[dict]], limit: int = 20000) -> dict:
         return {"schedule": None, "sets": 0, "all_counted": steps <= limit, "clashes_with": {}, "always_clash": pairs}
     pick = best[0]
     others = {r["class_nbr"]: [f"{c} {p[0]['section']}" for c, p in pick.items() if c != code and clash(t, meeting_times(p))]
-              for code, os in opts.items() for b, t in os if b is not pick[code] for r in b}
+              for code, os in every.items() for b, t in os if b is not pick[code] for r in b}
     return {"schedule": {c: [r["class_nbr"] for r in b] for c, b in pick.items()}, "sets": sets,
             "all_counted": steps <= limit, "clashes_with": others, "always_clash": []}
 

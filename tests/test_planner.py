@@ -1018,6 +1018,14 @@ def test_pick_sections_finds_a_set_with_no_time_clash():
     assert got["clashes_with"]["7"] == got["clashes_with"]["8"] == ["CSC 340 03"]
     stuck = pick_sections({"HIST 121": found["HIST 121"], "AIS 103": [sec("10", "01", "Th", "12:30 PM - 3:15 PM")]})
     assert stuck["schedule"] is None and stuck["always_clash"] == [["AIS 103", "HIST 121"]]
+    # A section the student chose stays, and the others fit around it: BIOL 230's second lab (Mo 11:30) pushes CSC 340
+    # off 03 to 02, the full one. The other sections still say whether they'd fit instead
+    kept = pick_sections(found, keep={"8"})
+    assert kept["schedule"]["BIOL 230"] == ["7", "8"] and kept["schedule"]["CSC 340"] == ["2"]
+    assert kept["clashes_with"]["5"] == [] and kept["clashes_with"]["3"] == ["BIOL 230 03"]
+    # one that nothing fits with says so, and which course it can't share a time with
+    no = pick_sections(found, keep={"1"})
+    assert no["schedule"] is None and no["always_clash"] == [["CSC 340", "HIST 121"]]
 
 
 def test_an_approved_overload_keeps_its_warning_without_the_advisor_handoff():

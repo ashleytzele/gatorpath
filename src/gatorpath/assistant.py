@@ -46,6 +46,8 @@ update_record corrects the record when the student tells you something: a grade,
 
 Act when the student asks: never answer that nothing needs changing, and never ask which class when you can work it out. "chosen" says what each picked class is for, and audit_progress says what counts where. If a request fits several classes ("my GE class"), go through them. If they don't name a class, choose one of their electives yourself, do it, say which, and tell them they can pick another.
 
+To put a class in another section (a time, a day, an instructor), call get_sections for its term, then choose_section with that section's class number: the Schedule shows it. Only choose_section changes a section, and the page's Schedule shows the plan's first term.
+
 To make a class online, or find online options, call list_eligible_electives with online: true, the requirement's group_id and by_term the term. Each option's `online` says how that's known: a section, or only how it last ran. Say which, set online: true on that change so the Schedule shows its online section, and never call a class online from the plan alone. If a term has none, try the requirement in a term that has them. A swap has to keep what the old class covered, so change_plan may refuse it: then try another option.
 
 To fill a plan:
@@ -73,6 +75,11 @@ OWN_TOOLS = [
      "input_schema": {"type": "object", "properties": {
          "graduate_by": {"type": "string", "description": "e.g. 2028-spring"}, "max_units_per_term": {"type": "number"},
          "include_summer": {"type": "boolean"}, "include_winter": {"type": "boolean"}}}},
+    {"name": "choose_section", "description": "Put a class in the section the student wants, by class number (from "
+     "get_sections). It stays in the Schedule and the other classes' sections fit around it; applied is false, with "
+     "always_clash, when nothing fits, and then nothing changed.",
+     "input_schema": {"type": "object", "required": ["term", "class_nbr"], "properties": {
+         "term": {"type": "string"}, "class_nbr": {"type": "string"}}}},
     {"name": "update_record", "description": "Correct the student's record with what they just told you. Pass only what "
      "they said. grades sets a course's grade, or adds a completed course; drop takes a course off the record; not_on_dpr "
      "lists requirements (group ids from audit_progress) that don't apply to them, and passing it replaces the list.",
@@ -202,6 +209,27 @@ def change_plan(state: dict, changes: list[dict], force: bool = False) -> dict:
             "warnings": [w for w in result["warnings"] if "can't check" not in w][:6]}
 
 
+def choose_section(state: dict, args: dict) -> dict:
+    """A section for a class, kept by the Schedule: get_sections with it kept decides whether the rest still fit."""
+    term, nbr = str(args["term"]), str(args["class_nbr"])
+    semester = next((s for s in state["semesters"] if s["term"] == term), None)
+    if semester is None:
+        return {"applied": False, "problems": [f"{term} isn't a term in this plan"]}
+    codes = [c for c in semester["courses"] if isinstance(c, str)]
+    online = [p["code"] for p in state["picks"] if p.get("online") and p["term"] == term]
+    found = server.get_sections(term, codes, online).get("sections", {})
+    code = next((c for c, secs in found.items() if any(x["class_nbr"] == nbr for x in secs)), None)
+    if code is None:
+        return {"applied": False, "problems": [f"{nbr} isn't a section of a class in {term}'s plan"]}
+    theirs = {x["class_nbr"] for x in found[code]}  # one choice per class: a new one replaces the old
+    keep = [n for n in state["sections"].get(term, []) if n not in theirs] + [nbr]
+    got = server.get_sections(term, codes, online, keep)
+    if got["schedule"] is None:
+        return {"applied": False, "always_clash": got["always_clash"], "note": "Refused: no set of sections fits with it"}
+    state |= {"sections": state["sections"] | {term: keep}, "changed": True}
+    return {"applied": True, "schedule": got["schedule"]}
+
+
 def hide(out):
     """A GPA is the student's: audit totals carry them, and the model doesn't need one."""
     if isinstance(out, dict):
@@ -216,6 +244,8 @@ def run_tool(state: dict, name: str, args: dict) -> dict:
         return replan(state, args)
     if name == "update_record":
         return update_record(state, args)
+    if name == "choose_section":
+        return choose_section(state, args)
     if name not in {t["name"] for t in tools()}:
         return {"error": f"no tool named {name}"}
     tool = getattr(server, name)
@@ -231,13 +261,16 @@ def context(state: dict) -> str:
     plan = [{"term": t["term"], **({"max_units": t["max_units"]} if "max_units" in t else {}),
              "courses": [c for c in t["courses"] if isinstance(c, str)]} for t in state["semesters"]]
     chosen = [{"code": p["code"], "term": p["term"], "for": state["titles"].get(p["group"], p["group"])} for p in state["picks"]]
-    return json.dumps({"student": known, "plan": plan, "chosen": chosen, "open_slots": open_slots(state), "problems": state["errors"]})
+    return json.dumps({"student": known, "plan": plan, "chosen": chosen, "open_slots": open_slots(state), "problems": state["errors"]}
+                      | ({"sections_chosen": state["sections"]} if state["sections"] else {}))
 
 
-def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict]) -> dict:
-    """One student request, or filling the plan when `messages` is empty. A failed call changes nothing."""
+def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sections: dict | None = None) -> dict:
+    """One student request, or filling the plan when `messages` is empty. A failed call changes nothing. `sections`:
+    {term: [class_nbr]} the student chose for the Schedule."""
     start = server.check_plan(student, plan)
     state = {"student": student, "semesters": plan["semesters"], "picks": picks, "changed": False, "rebuilt": None, "options": {},
+             "sections": dict(sections or {}),
              "errors": [e["message"] for e in start["errors"]],
              "titles": {g["id"]: g["title"] for g in server.audit_progress(student)["groups"]}}
     recent = [m | {"content": m["content"][:LONGEST]} for m in messages[-HISTORY:]] or [{"role": "user", "content": FILL}]
@@ -271,4 +304,4 @@ def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict]) -> d
         raise NotConnected("The AI helper isn't connected yet (no Anthropic API key), so you can choose your courses yourself.") from e
     final = server.check_plan(state["student"], {"semesters": state["semesters"]})
     return {"reply": reply, "changed": state["changed"], "semesters": state["semesters"], "picks": state["picks"], "check": final,
-            "rebuilt": state["rebuilt"], "options": state["options"]}
+            "rebuilt": state["rebuilt"], "options": state["options"], "sections": state["sections"]}

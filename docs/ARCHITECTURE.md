@@ -637,7 +637,7 @@ and wherever rules are involved, `source` page refs and `warnings[]`.
 | Tool | Input | Output |
 |---|---|---|
 | `search_courses` | `query`, `subject?`, `level?` (`lower`/`upper`/`600`…), `limit=10` | `[{code, title, units, ge_areas, offered: "fall-only"\|"both"\|"rare"\|"unknown"}]` (FTS5 keyword search; embeddings later if needed) |
-| `get_sections` | `term`, `codes`, `online?` | Added 2026-10-26: Class Search sections per course for a scraped term (the plan's first term once its schedule is out): `class_nbr`, `meetings` [{days, time, where}], `mode`, `instructor`, `seats_open`, `waitlist_open`, `enrolled`, `attributes`, summer `dates`, `rate_my_professors` ({name: search link} per named instructor; co-taught names joined with ", "; D26); `not_offered` (subject scraped, no section), `unknown` (not scraped), `scraped_at`. Class Search prints no capacity. `plan_my_degree` shows them after the plan. Added 2026-10-29: time clashes are checked in code (`pick_sections`), not by the AI: `schedule` {code: [class_nbr]} is a set with no clashes, fewest full sections first (a lecture and the lab or activity listed after it are one pick), each section `in_schedule` or `clashes_with` [scheduled sections of other courses it overlaps], `sets`, and `always_clash` pairs when nothing fits |
+| `get_sections` | `term`, `codes`, `online?` | Added 2026-10-26: Class Search sections per course for a scraped term (the plan's first term once its schedule is out): `class_nbr`, `meetings` [{days, time, where}], `mode`, `instructor`, `seats_open`, `waitlist_open`, `enrolled`, `attributes`, summer `dates`, `rate_my_professors` ({name: search link} per named instructor; co-taught names joined with ", "; D26); `not_offered` (subject scraped, no section), `unknown` (not scraped), `scraped_at`. Class Search prints no capacity. `plan_my_degree` shows them after the plan. Added 2026-10-29: time clashes are checked in code (`pick_sections`), not by the AI: `schedule` {code: [class_nbr]} is a set with no clashes, fewest full sections first (a lecture and the lab or activity listed after it are one pick), each section `in_schedule` or `clashes_with` [scheduled sections of other courses it overlaps], `sets`, and `always_clash` pairs when nothing fits. Added 2026-11-07: `keep` [class_nbr], the sections the student chose (on the Schedule or in the chat): they stay and the rest fit around them |
 | `get_course` | `code` | Full record: description, units, grading, `prereq: {raw_text, expr, status, needs_permission}`, `links`, `offered_terms`, `unlocks` (courses whose prereqs name it: "CSC 340 → CSC 413, CSC 415, CSC 510"), `source_page` |
 | `get_prereq_chain` | `code` | Everything that must come before it, as a tree plus a flat ordered list, with min grades and non-course conditions. Answers "what do I need before CSC 653?" |
 
@@ -836,9 +836,10 @@ chooses from the same options.
 
 - **The same tools.** The list comes from `server.mcp.list_tools()` with `profile` and `plan` taken out, because the
   backend fills those in. Left out: `build_plan` (`replan` commits it) and what takes a path on the server's disk.
-- **Three tools change things.** `change_plan` edits classes, makes a later term when a course is added to it, and drops an
+- **Four tools change things.** `change_plan` edits classes, makes a later term when a course is added to it, and drops an
   emptied one. `replan` changes the pace through `build_plan`, and refuses a date out of reach before anything changes.
-  `update_record` corrects the record with what the student said.
+  `update_record` corrects the record with what the student said. `choose_section` keeps a section on the Schedule by
+  class number, the same as clicking one there, and refuses one that nothing else fits around (`get_sections`' `keep`).
 - **The AI suggests, the code decides, the student has the last word.** `change_plan` applies edits to a copy and refuses a
   result with more errors. If the student has heard why and insists, `force` keeps it, and `check_plan`'s errors stay on the
   page: a forced plan reads as failing, never as fine. `force` doesn't skip a change that makes no sense.
