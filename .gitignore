@@ -14,5 +14,9 @@ __pycache__/
 # shareable build (git archive + catalog.db)
 dist/
 
+# web app
+web/node_modules/
+web/dist/
+
 # macOS
 .DS_Store

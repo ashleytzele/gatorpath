@@ -1,0 +1,2870 @@
+import { useEffect, useRef, useState } from "react";
+
+type Screen = "landing" | "record" | "review" | "goals" | "building" | "app";
+type Tab = "plan" | "progress" | "electives" | "schedule";
+type IconName =
+  | "arrow"
+  | "back"
+  | "book"
+  | "calendar"
+  | "check"
+  | "chevron"
+  | "clock"
+  | "copy"
+  | "download"
+  | "edit"
+  | "file"
+  | "info"
+  | "lock"
+  | "menu"
+  | "plus"
+  | "route"
+  | "search"
+  | "spark"
+  | "upload"
+  | "user"
+  | "warning"
+  | "x";
+
+const iconPaths: Record<IconName, React.ReactNode> = {
+  arrow: (
+    <>
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </>
+  ),
+  back: (
+    <>
+      <path d="m15 18-6-6 6-6" />
+    </>
+  ),
+  book: (
+    <>
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13Z" />
+      <path d="M8 7h8M8 11h6" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M16 3v4M8 3v4M3 10h18" />
+    </>
+  ),
+  check: (
+    <>
+      <path d="m5 12 4 4L19 6" />
+    </>
+  ),
+  chevron: (
+    <>
+      <path d="m9 18 6-6-6-6" />
+    </>
+  ),
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </>
+  ),
+  copy: (
+    <>
+      <rect x="8" y="8" width="11" height="11" rx="2" />
+      <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+    </>
+  ),
+  download: (
+    <>
+      <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14" />
+    </>
+  ),
+  edit: (
+    <>
+      <path d="m4 20 4.5-1 10-10a2 2 0 0 0-3-3l-10 10L4 20ZM14 7l3 3" />
+    </>
+  ),
+  file: (
+    <>
+      <path d="M6 2h8l4 4v16H6z" />
+      <path d="M14 2v5h5M9 13h6M9 17h5" />
+    </>
+  ),
+  info: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v6M12 7h.01" />
+    </>
+  ),
+  lock: (
+    <>
+      <rect x="5" y="10" width="14" height="11" rx="2" />
+      <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+    </>
+  ),
+  menu: (
+    <>
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </>
+  ),
+  plus: (
+    <>
+      <path d="M12 5v14M5 12h14" />
+    </>
+  ),
+  route: (
+    <>
+      <circle cx="6" cy="18" r="2" />
+      <circle cx="18" cy="6" r="2" />
+      <path d="M8 18h2a2 2 0 0 0 2-2V8a2 2 0 0 1 2-2h2" />
+    </>
+  ),
+  search: (
+    <>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-4-4" />
+    </>
+  ),
+  spark: (
+    <>
+      <path d="m12 3 1.2 4.2L17 9l-3.8 1.8L12 15l-1.2-4.2L7 9l3.8-1.8L12 3ZM5 15l.7 2.3L8 18l-2.3.7L5 21l-.7-2.3L2 18l2.3-.7L5 15Z" />
+    </>
+  ),
+  upload: (
+    <>
+      <path d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14" />
+    </>
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21a8 8 0 0 1 16 0" />
+    </>
+  ),
+  warning: (
+    <>
+      <path d="M10.3 3.8 2.5 18a2 2 0 0 0 1.8 3h15.4a2 2 0 0 0 1.8-3L13.7 3.8a2 2 0 0 0-3.4 0Z" />
+      <path d="M12 9v4M12 17h.01" />
+    </>
+  ),
+  x: (
+    <>
+      <path d="m6 6 12 12M18 6 6 18" />
+    </>
+  ),
+};
+
+function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
+  return (
+    <svg
+      className="icon"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {iconPaths[name]}
+    </svg>
+  );
+}
+
+function Tooltip({ text }: { text: string }) {
+  return (
+    <span className="tooltip">
+      <Icon name="info" size={15} />
+      <span>{text}</span>
+    </span>
+  );
+}
+
+function Logo({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="logo" aria-label="GatorPath home">
+      <span className="logo-mark">
+        <Icon name="route" size={21} />
+      </span>
+      {!compact && (
+        <span>
+          Gator<span>Path</span>
+        </span>
+      )}
+    </div>
+  );
+}
+
+function Button({
+  children,
+  onClick,
+  kind = "primary",
+  icon,
+  disabled = false,
+  className = "",
+}: {
+  children: React.ReactNode;
+  onClick?: () => void;
+  kind?: "primary" | "secondary" | "ghost";
+  icon?: IconName;
+  disabled?: boolean;
+  className?: string;
+}) {
+  return (
+    <button className={`button ${kind} ${className}`} onClick={onClick} disabled={disabled}>
+      {icon && <Icon name={icon} />}
+      {children}
+    </button>
+  );
+}
+
+function StatusBadge({
+  type,
+  children,
+}: {
+  type: "done" | "progress" | "planned" | "remaining" | "warning" | "ready";
+  children: React.ReactNode;
+}) {
+  const icon =
+    type === "warning"
+      ? "warning"
+      : type === "remaining"
+        ? "clock"
+        : type === "planned"
+          ? "calendar"
+          : "check";
+  return (
+    <span className={`status ${type}`}>
+      <Icon name={icon} size={14} />
+      {children}
+    </span>
+  );
+}
+
+function Header({
+  screen,
+  onHome,
+  onBack,
+  onStyle,
+}: {
+  screen: Screen;
+  onHome: () => void;
+  onBack?: () => void;
+  onStyle: () => void;
+}) {
+  return (
+    <header className="site-header">
+      <div className="header-inner">
+        <button className="brand-button" onClick={onHome}>
+          <Logo />
+        </button>
+        {screen !== "landing" && (
+          <div className="header-actions">
+            {onBack && screen !== "app" && (
+              <button className="header-link" onClick={onBack}>
+                <Icon name="back" size={16} /> Back
+              </button>
+            )}
+            {screen === "app" && (
+              <button
+                className="header-link ask-header"
+                onClick={() => document.dispatchEvent(new Event("gator-ask"))}
+              >
+                Ask about your plan
+              </button>
+            )}
+            <button className="header-link" onClick={onHome}>
+              Start over
+            </button>
+          </div>
+        )}
+        {screen === "landing" && (
+          <div className="header-actions">
+            <Button
+              onClick={() => document.getElementById("how")?.scrollIntoView({ behavior: "smooth" })}
+              kind="secondary"
+            >
+              How it works
+            </Button>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
+
+const ADVISING = {
+  center: "https://advising.sfsu.edu/",
+  navigator: "https://sfsu.campus.eab.com/",
+  csDept: "https://cs.sfsu.edu/undergrads/advising",
+};
+function AdvisingNote() {
+  return (
+    <aside className="advising-note" aria-label="Advising">
+      <Icon name="info" />
+      <p>
+        <b>GatorPath is a planning guide.</b> For any question about your plan, talk to an advisor
+        before you register.
+      </p>
+      <a href={ADVISING.navigator} target="_blank" rel="noreferrer">
+        Book advising <Icon name="arrow" size={14} />
+      </a>
+    </aside>
+  );
+}
+
+const steps = ["Your record", "Your goals", "Your plan", "Your schedule"];
+function Stepper({ current }: { current: number }) {
+  return (
+    <nav className="stepper" aria-label="Planning progress">
+      {steps.map((step, i) => (
+        <div
+          className={`step ${i + 1 === current ? "active" : ""} ${i + 1 < current ? "complete" : ""}`}
+          key={step}
+        >
+          <span className="step-dot">
+            {i + 1 < current ? <Icon name="check" size={14} /> : i + 1}
+          </span>
+          <span>{step}</span>
+          {i < steps.length - 1 && <i />}
+        </div>
+      ))}
+    </nav>
+  );
+}
+
+function Footer() {
+  return (
+    <footer>
+      <Icon name="info" size={15} /> Unofficial student-built tool, not affiliated with SF State.
+      Questions about your plan?{" "}
+      <a href={ADVISING.center} target="_blank" rel="noreferrer">
+        Talk to an advisor
+      </a>
+      .
+    </footer>
+  );
+}
+
+function Landing({ start }: { start: () => void }) {
+  return (
+    <main>
+      <section className="hero">
+        <div className="hero-copy">
+          <h1>
+            Plan your path to graduation in <em>5 minutes.</em>
+          </h1>
+          <p>
+            Upload your DPR, tell us your goal, get a semester-by-semester plan and a
+            clash-free schedule.
+          </p>
+          <div className="hero-actions">
+            <Button onClick={start}>
+              Start planning <Icon name="arrow" />
+            </Button>
+            <Button
+              kind="secondary"
+              onClick={() => document.getElementById("how")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              How it works
+            </Button>
+          </div>
+          <p className="micro-trust">
+            <Icon name="lock" size={16} /> No account needed. Your DPR is processed, then discarded.
+          </p>
+        </div>
+        <div className="plan-preview" aria-label="Sample degree plan">
+          <div className="preview-top">
+            <span>Sample plan</span>
+          </div>
+          <p className="preview-term">Spring 2029</p>
+          <p>Estimated graduation</p>
+          <div className="route-line">
+            {["NOW", "F 27", "S 28", "F 28", "S 29"].map((x, i) => (
+              <div key={x}>
+                <span className={i === 0 ? "current" : i === 4 ? "finish" : ""}>
+                  {i === 4 ? <Icon name="check" size={15} /> : ""}
+                </span>
+                <small>{x}</small>
+              </div>
+            ))}
+          </div>
+          <div className="preview-course">
+            <div>
+              <b>CSC 340</b>
+              <small>Programming Methodology</small>
+            </div>
+            <span>3 units</span>
+          </div>
+          <div className="preview-course">
+            <div>
+              <b>HUM 200</b>
+              <small>Culture & ideas</small>
+            </div>
+            <span>3 units</span>
+          </div>
+        </div>
+      </section>
+      <section className="trust-row">
+        <div>
+          <Icon name="check" />
+          <span>
+            <b>Built from</b> the 2026–27 Bulletin
+          </span>
+        </div>
+        <div>
+          <Icon name="book" />
+          <span>
+            <b>214 majors’</b> roadmaps
+          </span>
+        </div>
+        <div>
+          <Icon name="lock" />
+          <span>
+            <b>Your DPR</b> is never stored
+          </span>
+        </div>
+      </section>
+      <section className="how-section" id="how">
+        <div className="section-heading">
+          <h2>From DPR to a plan you can use.</h2>
+          <p>No spreadsheets. No deciphering degree codes. Just three clear steps.</p>
+        </div>
+        <ol className="how-steps">
+          <li>
+            <b>Upload your DPR.</b> We read your completed courses, major requirements, and GE
+            progress.
+          </li>
+          <li>
+            <b>Pick your goal.</b> Tell us what you want to focus on and when you hope to finish.
+          </li>
+          <li>
+            <b>Get your plan and schedule.</b> See every term, plus a next-semester schedule with
+            class numbers.
+          </li>
+        </ol>
+      </section>
+      <section className="faq-section">
+        <div>
+          <h2>Questions, answered.</h2>
+        </div>
+        <div className="faq-list">
+          <details open>
+            <summary>
+              Is GatorPath official?
+              <Icon name="plus" />
+            </summary>
+            <p>
+              No. GatorPath is a student-built planning aid. For any question about your degree,
+              talk to an advisor at the{" "}
+              <a href={ADVISING.center} target="_blank" rel="noreferrer">
+                Undergraduate Advising Center
+              </a>{" "}
+              or your major department.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Is my data safe?
+              <Icon name="plus" />
+            </summary>
+            <p>
+              Yes. Your PDF is processed to create your plan and then discarded. We never store it.
+            </p>
+          </details>
+          <details>
+            <summary>
+              What’s a DPR?
+              <Icon name="plus" />
+            </summary>
+            <p>
+              Your Degree Progress Report shows completed courses and what your degree still
+              requires.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function UploadPanel({ onSuccess }: { onSuccess: () => void }) {
+  const [state, setState] = useState<"idle" | "uploading" | "error">("idle");
+  const begin = () => {
+    setState("uploading");
+    setTimeout(onSuccess, 1500);
+  };
+  return (
+    <div className="record-panel">
+      {state === "idle" && (
+        <button className="drop-zone" onClick={begin}>
+          <span className="upload-orb">
+            <Icon name="upload" size={26} />
+          </span>
+          <strong>Drop your DPR PDF here</strong>
+          <span>or click to choose a file</span>
+          <small>PDF only · up to 15 MB</small>
+        </button>
+      )}
+      {state === "uploading" && (
+        <div className="drop-zone loading-zone">
+          <span className="upload-orb spin">
+            <Icon name="file" size={26} />
+          </span>
+          <strong>Reading your DPR…</strong>
+          <span>Finding courses and requirements</span>
+          <div className="progress-bar">
+            <i />
+          </div>
+          <small>Usually takes less than 30 seconds</small>
+        </div>
+      )}
+      {state === "error" && (
+        <div className="error-card">
+          <Icon name="warning" />
+          <div>
+            <b>We couldn’t read every requirement.</b>
+            <p>
+              Some requirements were collapsed. Print your DPR again with “Expand All” turned on.
+            </p>
+            <Button kind="secondary" onClick={() => setState("idle")}>
+              Try again
+            </Button>
+          </div>
+        </div>
+      )}
+      <div className="privacy-note">
+        <Icon name="lock" size={16} />
+        <span>
+          <b>Your DPR is never stored.</b> It’s processed securely, used to build your plan, then
+          discarded.
+        </span>
+      </div>
+      <details className="help-box">
+        <summary>
+          <span>
+            <Icon name="info" /> How to get your DPR
+          </span>
+          <Icon name="chevron" />
+        </summary>
+        <ol>
+          <li>
+            Open <b>Student Center</b>
+          </li>
+          <li>
+            Choose <b>Degree Progress Report</b>
+          </li>
+          <li>
+            Click <b>Expand All</b>, then Print → Save as PDF
+          </li>
+        </ol>
+        <div className="shot-row">
+          {[1, 2, 3].map((n) => (
+            <div className="shot" key={n}>
+              <span>{n}</span>
+              <div />
+              <small>{n === 1 ? "Open DPR" : n === 2 ? "Expand All" : "Save PDF"}</small>
+            </div>
+          ))}
+        </div>
+      </details>
+      <button className="demo-error" onClick={() => setState("error")}>
+        Preview upload error
+      </button>
+    </div>
+  );
+}
+
+function RecordScreen({ next }: { next: () => void }) {
+  const [method, setMethod] = useState<"upload" | "type" | "new">("upload");
+  const [courses, setCourses] = useState(["CSC 215 · A-", "MATH 226 · B+"]);
+  return (
+    <main className="flow-page">
+      <Stepper current={1} />
+      <div className="flow-heading">
+        <h1>Tell us what you’ve completed.</h1>
+        <p>
+          Choose the option that works best for you. You can review everything before we build your
+          plan.
+        </p>
+      </div>
+      <div className="method-grid">
+        <button
+          className={`method-card ${method === "upload" ? "selected" : ""}`}
+          onClick={() => setMethod("upload")}
+        >
+          <span className="method-icon">
+            <Icon name="upload" />
+          </span>
+          <span>
+            <b>
+              Upload my DPR <em>Recommended</em>
+            </b>
+            <small>Fastest and most accurate · about 2 minutes</small>
+          </span>
+          <i>{method === "upload" && <Icon name="check" size={14} />}</i>
+        </button>
+        <button
+          className={`method-card ${method === "type" ? "selected" : ""}`}
+          onClick={() => setMethod("type")}
+        >
+          <span className="method-icon">
+            <Icon name="edit" />
+          </span>
+          <span>
+            <b>Type my courses</b>
+            <small>Add courses and grades yourself</small>
+          </span>
+          <i>{method === "type" && <Icon name="check" size={14} />}</i>
+        </button>
+        <button
+          className={`method-card ${method === "new" ? "selected" : ""}`}
+          onClick={() => setMethod("new")}
+        >
+          <span className="method-icon">
+            <Icon name="user" />
+          </span>
+          <span>
+            <b>I’m a new student</b>
+            <small>Start with a major and first term</small>
+          </span>
+          <i>{method === "new" && <Icon name="check" size={14} />}</i>
+        </button>
+      </div>
+      {method === "upload" && <UploadPanel onSuccess={next} />}
+      {method === "type" && (
+        <div className="record-panel form-panel">
+          <h3>Add completed courses</h3>
+          <label>
+            Find a course
+            <div className="search-field">
+              <Icon name="search" />
+              <input defaultValue="CSC 2" />
+              <span>CSC 215 – Intermediate Computer Programming</span>
+            </div>
+          </label>
+          <div className="form-row">
+            <label>
+              Grade
+              <select>
+                <option>A-</option>
+                <option>B+</option>
+                <option>Credit</option>
+              </select>
+            </label>
+            <label>
+              Term
+              <select>
+                <option>Fall 2026</option>
+                <option>Spring 2026</option>
+              </select>
+            </label>
+          </div>
+          <div className="chips">
+            {courses.map((c) => (
+              <span key={c}>
+                {c}
+                <button
+                  onClick={() => setCourses(courses.filter((x) => x !== c))}
+                  aria-label={`Remove ${c}`}
+                >
+                  <Icon name="x" size={13} />
+                </button>
+              </span>
+            ))}
+          </div>
+          <Button onClick={next}>
+            Review my record <Icon name="arrow" />
+          </Button>
+        </div>
+      )}
+      {method === "new" && (
+        <div className="record-panel form-panel">
+          <h3>Let’s start with the basics</h3>
+          <label>
+            Major
+            <select>
+              <option>B.S. Computer Science</option>
+              <option>B.A. Biology</option>
+              <option>Major not listed</option>
+            </select>
+          </label>
+          <label>
+            First term
+            <select>
+              <option>Fall 2026</option>
+              <option>Spring 2027</option>
+            </select>
+          </label>
+          <Button onClick={next}>
+            Continue <Icon name="arrow" />
+          </Button>
+        </div>
+      )}
+    </main>
+  );
+}
+
+const completed = [
+  ["CSC 101", "Introduction to Computer Science", "A-", "Fall 2025", ""],
+  ["ENG 114", "First-Year Written Composition", "A-", "Fall 2025", ""],
+  ["COMM 150", "Fundamentals of Oral Communication", "B+", "Fall 2025", ""],
+  ["CSC 215", "Intermediate Computer Programming", "A", "Spring 2026", ""],
+  ["MATH 226", "Calculus I", "B+", "Spring 2026", "Transfer"],
+];
+type GeProgressState = "Done" | "Planned" | "Remaining";
+const geAreas: {
+  area: string;
+  name: string;
+  met: boolean;
+  evidence: string;
+  attention?: string;
+  askAdvisor?: boolean;
+  progressState: GeProgressState;
+  progressEvidence: string;
+}[] = [
+  {
+    area: "Area 1A",
+    name: "Written Communication",
+    met: true,
+    evidence: "ENG 114 · A- · Fall 2025",
+    progressState: "Done",
+    progressEvidence: "ENG 114 · A- · Fall 2025",
+  },
+  {
+    area: "Area 1B",
+    name: "Critical Thinking",
+    met: true,
+    evidence: "Cal-GETC certification",
+    progressState: "Done",
+    progressEvidence: "Cal-GETC certification",
+  },
+  {
+    area: "Area 1C",
+    name: "Oral Communication",
+    met: true,
+    evidence: "COMM 150 · B+ · Fall 2025",
+    progressState: "Done",
+    progressEvidence: "COMM 150 · B+ · Fall 2025",
+  },
+  {
+    area: "Area 2",
+    name: "Mathematical Concepts",
+    met: true,
+    evidence: "MATH 226 · B+ · Transfer",
+    progressState: "Done",
+    progressEvidence: "MATH 226 · B+ · Transfer",
+  },
+  {
+    area: "Area 3",
+    name: "Arts & Humanities",
+    met: false,
+    evidence: "No completed course found",
+    attention: "No completed course found yet",
+    progressState: "Planned",
+    progressEvidence: "HUM 200 · Fall 2027",
+  },
+  {
+    area: "Area 4",
+    name: "Social & Behavioral Sciences",
+    met: true,
+    evidence: "AP Psychology · score 4",
+    progressState: "Done",
+    progressEvidence: "AP Psychology · score 4",
+  },
+  {
+    area: "Area 5",
+    name: "Physical & Biological Sciences",
+    met: false,
+    evidence: "No completed course found",
+    attention: "No completed course found yet",
+    progressState: "Planned",
+    progressEvidence: "PHYS 230 · Spring 2028",
+  },
+  {
+    area: "Area 6",
+    name: "Ethnic Studies",
+    met: false,
+    evidence: "Not on your DPR",
+    attention: "Not on your DPR",
+    askAdvisor: true,
+    progressState: "Planned",
+    progressEvidence: "LTNS 280 · Spring 2028",
+  },
+  {
+    area: "US History",
+    name: "American Institutions",
+    met: true,
+    evidence: "Cal-GETC certification",
+    progressState: "Done",
+    progressEvidence: "Cal-GETC certification",
+  },
+  {
+    area: "US & CA Government",
+    name: "American Institutions",
+    met: false,
+    evidence: "No course found yet",
+    attention: "No course found yet",
+    progressState: "Planned",
+    progressEvidence: "PLSI 200 · Spring 2029",
+  },
+];
+
+function GeRequirementRows({ mode }: { mode: "review" | "progress" }) {
+  return (
+    <div className={`shared-ge-rows ${mode}`}>
+      {geAreas.map((area) => {
+        const progressType =
+          area.progressState === "Done"
+            ? "done"
+            : area.progressState === "Planned"
+              ? "planned"
+              : "remaining";
+        return (
+          <div className="shared-ge-row" key={area.area}>
+            <div className="ge-area-name">
+              <b>{area.area}</b>
+              <small>{area.name}</small>
+            </div>
+            {mode === "review" ? (
+              <span className={`binary-state ${area.met ? "met" : "not-yet"}`}>
+                {area.met ? <Icon name="check" size={14} /> : <i />}
+                {area.met ? "Met" : "Not yet"}
+              </span>
+            ) : (
+              <StatusBadge type={progressType}>{area.progressState}</StatusBadge>
+            )}
+            <p>{mode === "review" ? (area.met ? area.evidence : "—") : area.progressEvidence}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ReviewScreen({ next }: { next: () => void }) {
+  const [showAll, setShowAll] = useState(false);
+  return (
+    <main className="flow-page wide">
+      <Stepper current={1} />
+      <div className="flow-heading">
+        <h1>Does this look right?</h1>
+        <p>We found this in your DPR. Fix anything that looks off before continuing.</p>
+      </div>
+      <div className="summary-card">
+        <div>
+          <small>Major</small>
+          <b>B.S. Computer Science</b>
+        </div>
+        <div>
+          <small>
+            Catalog year <Tooltip text="The Bulletin year whose degree rules apply to you." />
+          </small>
+          <b>Fall 2025</b>
+        </div>
+        <div>
+          <small>
+            Units <Tooltip text="A unit measures course credit; most classes are 3 units." />
+          </small>
+          <b>
+            47 <span>/ 120</span>
+          </b>
+        </div>
+        <div>
+          <small>GPA</small>
+          <b>3.42</b>
+        </div>
+      </div>
+      <SectionCard title="Completed courses" count="5 courses">
+        <div className="course-table">
+          <div className="table-head">
+            <span>Course</span>
+            <span>Title</span>
+            <span>Grade</span>
+            <span>Term</span>
+            <span />
+          </div>
+          {completed.map((r) => (
+            <div className="table-row" key={r[0]}>
+              <b>{r[0]}</b>
+              <span>
+                {r[1]} {r[4] && <em className="transfer">{r[4]}</em>}
+              </span>
+              <span>{r[2]}</span>
+              <span>{r[3]}</span>
+              <button aria-label={`Edit ${r[0]}`}>
+                <Icon name="edit" size={15} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+      <SectionCard title="In progress" count="2 courses">
+        <div className="in-progress-grid">
+          <CourseMini code="CSC 220" title="Data Structures" status="In progress" />
+          <CourseMini code="MATH 227" title="Calculus II" status="In progress" />
+        </div>
+      </SectionCard>
+      <section className="section-card ge-review-summary">
+        <div className="ge-summary-head">
+          <div>
+            <h3>GE & university requirements</h3>
+            <span>6 of 10 met</span>
+          </div>
+          <div
+            className="ge-summary-progress"
+            role="progressbar"
+            aria-valuenow={6}
+            aria-valuemin={0}
+            aria-valuemax={10}
+            aria-label="6 of 10 requirements met"
+          >
+            <i />
+          </div>
+        </div>
+        <div className="attention-list">
+          <div className="attention-heading">
+            <Icon name="warning" size={16} />
+            <b>Check with an advisor</b>
+          </div>
+          {geAreas
+            .filter((area) => area.askAdvisor)
+            .map((area) => (
+              <div className="attention-row" key={area.area}>
+                <span className="attention-dot" />
+                <p>
+                  <b>
+                    {area.area} · {area.name}:
+                  </b>{" "}
+                  {area.attention}.{" "}
+                  <a href={ADVISING.center} target="_blank" rel="noreferrer">
+                    Ask an advisor how it’s met
+                  </a>
+                </p>
+              </div>
+            ))}
+        </div>
+        <p className="still-to-do">
+          <b>Still to do</b> · we’ll fit these into your plan:{" "}
+          {geAreas
+            .filter((area) => !area.met && !area.askAdvisor)
+            .map((area) => `${area.area} · ${area.name}`)
+            .join(", ")}
+        </p>
+        <details className="all-ge-areas" onToggle={(e) => setShowAll(e.currentTarget.open)}>
+          <summary>
+            <span>{showAll ? "Hide all 10 areas" : "Show all 10 areas"}</span>
+            <Icon name="chevron" />
+          </summary>
+          <GeRequirementRows mode="review" />
+        </details>
+      </section>
+      <div className="flow-action">
+        <Button onClick={next}>
+          Looks right <Icon name="arrow" />
+        </Button>
+      </div>
+    </main>
+  );
+}
+
+function SectionCard({
+  title,
+  count,
+  children,
+  className = "",
+}: {
+  title: string;
+  count?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={`section-card ${className}`}>
+      <div className="section-card-head">
+        <h3>{title}</h3>
+        {count && <span>{count}</span>}
+      </div>
+      {children}
+    </section>
+  );
+}
+function CourseMini({ code, title, status }: { code: string; title: string; status: string }) {
+  return (
+    <div className="course-mini">
+      <div>
+        <b>{code}</b>
+        <small>{title}</small>
+      </div>
+      <StatusBadge type="progress">{status}</StatusBadge>
+    </div>
+  );
+}
+
+function GoalsScreen({ build }: { build: () => void }) {
+  const [goal, setGoal] = useState("AI / Machine Learning");
+  const [advanced, setAdvanced] = useState(false);
+  const [major, setMajor] = useState("B.S. Computer Science");
+  const goalLists: Record<string, string[] | null> = {
+    "B.S. Computer Science": [
+      "AI / Machine Learning",
+      "Cybersecurity",
+      "Web Development",
+      "Game Development",
+      "Data Science",
+      "Systems",
+    ],
+    "B.A. Psychology": [
+      "Clinical / Counseling",
+      "Research",
+      "Developmental",
+      "Industrial-Organizational",
+    ],
+    "B.A. History": [],
+    "B.S. Environmental Studies": null,
+  };
+  const goals = goalLists[major];
+  const hasElectives = goals !== null;
+  return (
+    <main className="flow-page goals-page">
+      <Stepper current={2} />
+      <div className="flow-heading">
+        <h1>What matters to you?</h1>
+        <p>This helps us shape your electives and pace. You can change these choices later.</p>
+      </div>
+      <div className="major-context">
+        <span>
+          <Icon name="book" /> Goals for
+        </span>
+        <select
+          value={major}
+          onChange={(event) => {
+            setMajor(event.target.value);
+            setGoal("");
+          }}
+          aria-label="Preview goal options for major"
+        >
+          <option>B.S. Computer Science</option>
+          <option>B.A. Psychology</option>
+          <option>B.A. History</option>
+          <option>B.S. Environmental Studies</option>
+        </select>
+      </div>
+      {hasElectives && (
+        <div className="question-block">
+          <div className="question-title">
+            <span>1</span>
+            <div>
+              <h3>
+                {goals.length ? "What do you want to focus on?" : "What are you interested in?"}
+              </h3>
+              <p>
+                {goals.length
+                  ? `Options are tailored to ${major}.`
+                  : "We’ll use your answer to rank flexible elective choices."}
+              </p>
+            </div>
+          </div>
+          {goals.length > 0 ? (
+            <div className="choice-chips">
+              {goals.map((x) => (
+                <button className={goal === x ? "selected" : ""} onClick={() => setGoal(x)} key={x}>
+                  {goal === x && <Icon name="check" size={14} />}
+                  {x}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <input className="interest-input" placeholder="What are you interested in?" />
+          )}
+          <button
+            className={`undecided-choice ${goal === "Undecided" ? "selected" : ""}`}
+            onClick={() => setGoal("Undecided")}
+          >
+            {goal === "Undecided" && <Icon name="check" size={14} />} Undecided
+          </button>
+        </div>
+      )}
+      {!hasElectives && (
+        <div className="no-goals-note">
+          <Icon name="check" />
+          <div>
+            <b>No focus question needed for {major}</b>
+            <span>This major has no elective choices, so we’ll skip this step.</span>
+          </div>
+        </div>
+      )}
+      <div className="question-grid">
+        <div className="question-block">
+          <div className="question-title">
+            <span>2</span>
+            <div>
+              <h3>When do you want to graduate?</h3>
+              <p>We’ll tell you if that pace looks realistic.</p>
+            </div>
+          </div>
+          <select aria-label="When do you want to graduate?">
+            <option>Just follow the recommended pace</option>
+            <option>Spring 2028</option>
+            <option>Fall 2028</option>
+            <option>Spring 2029</option>
+          </select>
+        </div>
+        <div className="question-block">
+          <div className="question-title">
+            <span>3</span>
+            <div>
+              <h3>
+                Are you on an F-1 student visa?{" "}
+                <Tooltip text="F-1 students need at least 12 units every fall and spring." />
+              </h3>
+              <p>This affects your minimum course load.</p>
+            </div>
+          </div>
+          <div className="segmented">
+            <button>No</button>
+            <button>Yes</button>
+            <button className="active">Prefer not to say</button>
+          </div>
+        </div>
+      </div>
+      <div className="question-block compact-question">
+        <div className="question-title">
+          <span>4</span>
+          <div>
+            <h3>What is your math placement QR?</h3>
+            <p>We use this to place your first math class.</p>
+          </div>
+        </div>
+        <div className="segmented small">
+          <button className="active">QR 1 / 2</button>
+          <button>QR 3 / 4</button>
+          <button>I’m not sure</button>
+        </div>
+      </div>
+      <button className="advanced-toggle" onClick={() => setAdvanced(!advanced)}>
+        <span>
+          <Icon name="plus" /> Advanced options
+        </span>
+        <Icon name="chevron" />
+      </button>
+      {advanced && (
+        <div className="advanced-panel">
+          <label>
+            <input type="checkbox" /> Include summer terms
+          </label>
+          <label>
+            <input type="checkbox" /> Include Winter Session
+          </label>
+          <label>
+            Maximum units per term <input type="range" min="12" max="19" defaultValue="15" />
+            <small>Roadmap pace: 15. Over 15 units needs advisor approval.</small>
+          </label>
+        </div>
+      )}
+      <div className="flow-action">
+        <span>
+          <Icon name="lock" /> You can change these later.
+        </span>
+        <Button onClick={build}>
+          Build my plan <Icon name="arrow" />
+        </Button>
+      </div>
+    </main>
+  );
+}
+
+function BuildingScreen({ done }: { done: () => void }) {
+  useEffect(() => {
+    const t = setTimeout(done, 1700);
+    return () => clearTimeout(t);
+  }, [done]);
+  return (
+    <main className="building-screen">
+      <div className="building-orb">
+        <Icon name="route" size={32} />
+        <i />
+        <i />
+        <i />
+      </div>
+      <h1>Building your plan from the Bulletin…</h1>
+      <p>Ordering prerequisites, balancing units, and checking course availability.</p>
+      <div className="check-list">
+        <span>
+          <Icon name="check" /> 47 completed units found
+        </span>
+        <span>
+          <Icon name="check" /> Major requirements mapped
+        </span>
+        <span className="checking">
+          <i /> Building semester sequence
+        </span>
+      </div>
+      <div className="skeleton-row">
+        <i />
+        <i />
+        <i />
+      </div>
+    </main>
+  );
+}
+
+type PlanCourse = { code: string; title: string; units: number; page: number };
+type PlanSlot = { label: string; units: number };
+type PlanTerm = {
+  year: string;
+  term: string;
+  courses: PlanCourse[];
+  slots?: PlanSlot[];
+};
+// Sample student: B.S. Computer Science, catalog Fall 2025. Page numbers are illustrative.
+const terms: PlanTerm[] = [
+  {
+    year: "2026–27",
+    term: "Spring 2027",
+    courses: [
+      { code: "CSC 340", title: "Programming Methodology", units: 3, page: 1912 },
+      { code: "CSC 256", title: "Machine Structures", units: 3, page: 1908 },
+      { code: "MATH 324", title: "Probability & Statistics", units: 3, page: 2234 },
+      { code: "MATH 225", title: "Introduction to Linear Algebra", units: 3, page: 2231 },
+      { code: "CSC 300GW", title: "Ethics, Communication & Tools for Software", units: 3, page: 1910 },
+    ],
+  },
+  {
+    year: "2027–28",
+    term: "Fall 2027",
+    courses: [
+      { code: "CSC 317", title: "Introduction to Web Software Development", units: 3, page: 1911 },
+      { code: "CSC 413", title: "Software Development", units: 3, page: 1918 },
+      { code: "CSC 510", title: "Analysis of Algorithms", units: 3, page: 1924 },
+      { code: "HUM 200", title: "Introduction to Humanities", units: 3, page: 2176 },
+    ],
+    slots: [{ label: "Senior elective", units: 3 }],
+  },
+  {
+    year: "2027–28",
+    term: "Spring 2028",
+    courses: [
+      { code: "CSC 415", title: "Operating System Principles", units: 3, page: 1920 },
+      { code: "PHYS 230", title: "General Physics with Calculus II", units: 3, page: 2310 },
+      { code: "PHYS 232", title: "General Physics with Calculus II Lab", units: 1, page: 2310 },
+      { code: "LTNS 280", title: "Race, Gender and Power", units: 3, page: 2211 },
+      { code: "CSC 645", title: "Computer Networks", units: 3, page: 1941 },
+    ],
+    slots: [{ label: "Senior elective", units: 3 }],
+  },
+  {
+    year: "2028–29",
+    term: "Fall 2028",
+    courses: [
+      { code: "CSC 648", title: "Software Engineering", units: 3, page: 1943 },
+      { code: "CSC 665", title: "Artificial Intelligence", units: 3, page: 1948 },
+    ],
+    slots: [
+      { label: "Senior elective", units: 3 },
+      { label: "Upper-division GE (Area 4UD)", units: 3 },
+    ],
+  },
+  {
+    year: "2028–29",
+    term: "Spring 2029",
+    courses: [{ code: "PLSI 200", title: "American Government", units: 3, page: 2328 }],
+  },
+];
+
+const termUnits = (term: PlanTerm) =>
+  term.courses.reduce((total, course) => total + course.units, 0) +
+  (term.slots ?? []).reduce((total, slot) => total + slot.units, 0);
+const unitsLeft = terms.reduce((total, term) => total + termUnits(term), 0);
+const choicesLeft = terms.reduce((total, term) => total + (term.slots?.length ?? 0), 0);
+
+function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
+  const items: [Tab, string, IconName][] = [
+    ["plan", "Plan", "route"],
+    ["progress", "Progress", "check"],
+    ["electives", "Electives & GE", "book"],
+    ["schedule", "Schedule", "calendar"],
+  ];
+  return (
+    <nav className="app-tabs">
+      {items.map(([key, label, icon]) => (
+        <button key={key} className={tab === key ? "active" : ""} onClick={() => setTab(key)}>
+          <Icon name={icon} />
+          {label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function PlanView({
+  openElectives,
+  openCourse,
+  toast,
+}: {
+  openElectives: () => void;
+  openCourse: (x: string) => void;
+  toast: (x: string) => void;
+}) {
+  const [summer, setSummer] = useState(false);
+  const [planState, setPlanState] = useState<"open" | "complete" | "problem" | "unreachable">(
+    "open",
+  );
+  const [pace, setPace] = useState<"lighter" | "faster" | "">("");
+  const [whatIfResult, setWhatIfResult] = useState("");
+  const years = ["2026–27", "2027–28", "2028–29"];
+  const setWhatIf = (result: string) => setWhatIfResult(result);
+  return (
+    <div className="app-content">
+      <div className="variant-switcher">
+        <span>Preview plan state</span>
+        {[
+          ["open", "Choices open"],
+          ["complete", "All choices made"],
+          ["problem", "Has a problem"],
+          ["unreachable", "Date unreachable"],
+        ].map(([value, label]) => (
+          <button
+            className={planState === value ? "active" : ""}
+            onClick={() => setPlanState(value as typeof planState)}
+            key={value}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      {planState === "open" && (
+        <div className="plan-status open">
+          <span>
+            <Icon name="clock" /> <b>{choicesLeft} choices left in your plan</b>
+          </span>
+          <button
+            onClick={() =>
+              document.getElementById("first-open-slot")?.scrollIntoView({ behavior: "smooth" })
+            }
+          >
+            Make choices <Icon name="arrow" size={14} />
+          </button>
+        </div>
+      )}
+      {planState === "complete" && (
+        <div className="plan-status complete">
+          <span>
+            <Icon name="check" /> <b>All choices made.</b> Take this plan to an advisor to confirm
+            it before you register.
+          </span>
+          <a href={ADVISING.navigator} target="_blank" rel="noreferrer">
+            Book advising <Icon name="arrow" size={14} />
+          </a>
+        </div>
+      )}
+      {planState === "problem" && (
+        <div className="plan-problem-panel">
+          <div>
+            <Icon name="warning" />
+            <span>
+              <b>This plan has a problem</b>
+              <small>Fix it below, or ask an advisor what to do.</small>
+            </span>
+          </div>
+          <p>
+            <span>Spring 2028 has 16 units. More than 15 needs advisor approval.</span>
+            <button onClick={() => setPlanState("open")}>Move LTNS 280 to Fall 2028</button>
+          </p>
+        </div>
+      )}
+      {planState === "unreachable" && (
+        <div className="plan-problem-panel unreachable">
+          <div>
+            <Icon name="clock" />
+            <span>
+              <b>Spring 2028 isn’t reachable</b>
+              <small>
+                {unitsLeft} units left need at least 4 terms, even at the 19-unit maximum.
+              </small>
+            </span>
+          </div>
+          <div className="problem-actions">
+            <Button kind="secondary" onClick={() => setPlanState("open")}>
+              Add summer terms
+            </Button>
+            <Button kind="secondary" onClick={() => setPlanState("open")}>
+              Ask an advisor about options
+            </Button>
+          </div>
+        </div>
+      )}
+      <AdvisingNote />
+      <section className="plan-hero">
+        <div>
+          {planState === "problem" ? (
+            <h1>Fix the problem above to see your graduation date</h1>
+          ) : (
+            <h1>
+              You can graduate <em>Spring 2029</em>
+            </h1>
+          )}
+          <div className="hero-badges">
+            <StatusBadge type={planState === "complete" ? "done" : "warning"}>
+              {planState === "complete" ? "All choices made" : `${choicesLeft} choices left`}
+            </StatusBadge>
+            <span>{terms.length} semesters left</span>
+            <span>{unitsLeft} units left</span>
+          </div>
+          <div className="pace-options">
+            <button
+              className={pace === "lighter" ? "selected" : ""}
+              onClick={() => setPace("lighter")}
+            >
+              <b>Lighter</b>
+              <span>Keep every term at 15 units or less · graduate Fall 2029</span>
+            </button>
+            <button
+              className={pace === "faster" ? "selected" : ""}
+              onClick={() => setPace("faster")}
+            >
+              <b>Faster</b>
+              <span>Move PLSI 200 into Fall 2028 (15 units) · graduate Fall 2028</span>
+            </button>
+          </div>
+        </div>
+        <div className="pace-note">
+          <span>
+            <Icon name="route" />
+          </span>
+          <p>
+            Your longest prerequisite chain{" "}
+            <Tooltip text="A prerequisite is a class you must finish before taking another." />{" "}
+            <b>CSC 340 → CSC 413 → CSC 648</b> sets your graduation date.
+          </p>
+        </div>
+      </section>
+      <ol className="plan-route" aria-label="Route to graduation">
+        {terms.map((t, i) => (
+          <li
+            key={t.term}
+            className={i === 0 ? "next" : i === terms.length - 1 ? "finish" : ""}
+          >
+            <span className="route-dot" aria-hidden="true">
+              {i === terms.length - 1 && <Icon name="check" size={12} />}
+            </span>
+            <small>
+              {t.term.startsWith("Spring") ? "Spring" : "Fall"} ’{t.term.slice(-2)}
+            </small>
+          </li>
+        ))}
+      </ol>
+      <section className="what-if">
+        <div>
+          <span>What if I…</span>
+          <button
+            className={summer ? "active" : ""}
+            onClick={() => {
+              setSummer(!summer);
+              setWhatIf(!summer ? "Graduation moves to Fall 2028 (1 term sooner)" : "");
+            }}
+          >
+            <Icon name="plus" /> Add summer
+          </button>
+          <button onClick={() => setWhatIf("Taking LTNS 280 in Winter Session brings Spring 2028 to 13 units")}>
+            <Icon name="plus" /> Add winter
+          </button>
+          <label>
+            Units per term{" "}
+            <select
+              defaultValue="15"
+              onChange={(e) => setWhatIf(`Plan rebalanced to ${e.target.value} units per term`)}
+            >
+              <option>15</option>
+              <option>12</option>
+              <option>18</option>
+            </select>
+          </label>
+          <label>
+            Graduate by{" "}
+            <select onChange={() => setWhatIf("Graduation moves to Fall 2028 (1 term sooner)")}>
+              <option>Recommended</option>
+              <option>Fall 2028</option>
+            </select>
+          </label>
+        </div>
+        {whatIfResult && (
+          <span className="what-if-result">
+            {whatIfResult}
+            <button
+              onClick={() => {
+                setWhatIfResult("");
+                setSummer(false);
+              }}
+            >
+              Undo
+            </button>
+          </span>
+        )}
+      </section>
+      <div className="timeline-heading">
+        <div>
+          <h2>Your semester plan</h2>
+          <p>The next two terms are open. Expand a later term when you need the details.</p>
+        </div>
+      </div>
+      <nav className="year-jump" aria-label="Jump to academic year">
+        <span>Jump to year</span>
+        {years.map((year) => (
+          <a href={`#year-${year.replace("–", "-")}`} key={year}>
+            {year}
+          </a>
+        ))}
+      </nav>
+      <div className="year-plan">
+        {years.map((year) => (
+          <section className="academic-year" id={`year-${year.replace("–", "-")}`} key={year}>
+            <div className="year-heading">
+              <span>{year}</span>
+              <i />
+            </div>
+            {terms
+              .filter((term) => term.year === year)
+              .map((t) => {
+                const ti = terms.indexOf(t);
+                const isLast = ti === terms.length - 1;
+                const units = termUnits(t);
+                const codes = t.courses.map((course) => course.code);
+                return (
+                  <details
+                    className={`term-card vertical ${isLast ? "graduation-term" : ""}`}
+                    open={ti < 2}
+                    key={t.term}
+                  >
+                    <summary className="term-head">
+                      <div>
+                        <span>
+                          {ti === 0 ? "Next term" : isLast ? "Final term" : `Term ${ti + 1}`}
+                        </span>
+                        <h3>{t.term}</h3>
+                      </div>
+                      <p>
+                        {units} units <i>·</i> {t.courses.length + (t.slots?.length ?? 0)}{" "}
+                        {t.courses.length + (t.slots?.length ?? 0) === 1 ? "course" : "courses"}
+                        {ti >= 2 && (
+                          <small>
+                            {" "}
+                            · {codes.slice(0, 2).join(", ")}
+                            {codes.length + (t.slots?.length ?? 0) > 2
+                              ? ` + ${codes.length + (t.slots?.length ?? 0) - Math.min(codes.length, 2)} more`
+                              : ""}
+                          </small>
+                        )}
+                      </p>
+                      {isLast && (
+                        <strong className="graduation-marker">
+                          <Icon name="check" /> Graduation
+                        </strong>
+                      )}
+                      <Icon name="chevron" />
+                    </summary>
+                    <div className="term-courses single-column">
+                      {t.courses.map((c, ci) => (
+                        <button
+                          className="course-row"
+                          onClick={() => openCourse(c.code)}
+                          key={c.code}
+                        >
+                          <span>
+                            <b>{c.code}</b>
+                            <small>{c.title}</small>
+                            <em>
+                              <Icon name="book" size={12} /> Bulletin p.{c.page}
+                            </em>
+                          </span>
+                          <i>{c.units} units</i>
+                          <Icon name="chevron" size={15} />
+                        </button>
+                      ))}
+                      {(t.slots ?? []).map((slot, si) => (
+                        <button
+                          id={ti === 1 && si === 0 ? "first-open-slot" : undefined}
+                          className="slot-card list-slot"
+                          onClick={openElectives}
+                          key={`${slot.label}-${si}`}
+                        >
+                          <span>
+                            <Icon name="plus" />
+                          </span>
+                          <div>
+                            <b>{slot.label}</b>
+                            <small>Open choice · {slot.units} units</small>
+                          </div>
+                          <strong>
+                            Choose <Icon name="arrow" size={14} />
+                          </strong>
+                        </button>
+                      ))}
+                    </div>
+                    {ti === 0 && (
+                      <Button
+                        kind="secondary"
+                        className="term-schedule"
+                        onClick={() =>
+                          document
+                            .querySelector<HTMLButtonElement>(".app-tabs button:last-child")
+                            ?.click()
+                        }
+                      >
+                        View class schedule <Icon name="calendar" />
+                      </Button>
+                    )}
+                  </details>
+                );
+              })}
+          </section>
+        ))}
+      </div>
+      <div className="plan-lower">
+        <div className="warning-card collapsible">
+          <Icon name="warning" />
+          <div>
+            <b>One pace warning</b>
+            <p>
+              <strong>Spring 2028 is 16 units.</strong> Over 15 needs advisor approval.
+            </p>
+          </div>
+          <Icon name="chevron" />
+        </div>
+        <SectionCard title="Questions? Talk to an advisor">
+          <div className="advisor-list">
+            <div>
+              <span>CS department advisor</span>
+              <p>Approve the 16-unit Spring 2028 term and check your senior-elective choices.</p>
+              <a href={ADVISING.csDept} target="_blank" rel="noreferrer">
+                How to book <Icon name="arrow" size={12} />
+              </a>
+            </div>
+            <div>
+              <span>Undergraduate Advising Center</span>
+              <p>GE Area 6 isn’t on your DPR. Ask how it’s met, plus any GE or graduation question.</p>
+              <a href={ADVISING.center} target="_blank" rel="noreferrer">
+                How to book <Icon name="arrow" size={12} />
+              </a>
+            </div>
+          </div>
+        </SectionCard>
+      </div>
+      <div className="plan-actions">
+        <Button kind="secondary" icon="download" onClick={() => window.print()}>
+          Print for your advisor
+        </Button>
+        <Button kind="secondary" icon="copy" onClick={() => toast("Plan copied to clipboard.")}>
+          Copy plan
+        </Button>
+        <a
+          className="button primary"
+          href={ADVISING.navigator}
+          target="_blank"
+          rel="noreferrer"
+          style={{ textDecoration: "none" }}
+        >
+          Book advising <Icon name="arrow" />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function ProgressView() {
+  const groups = [
+    ["Mathematics & Physics", "6 / 8 done", 75],
+    ["Core Computer Science", "3 / 9 done", 34],
+    ["Advanced CS", "0 / 3", 8],
+    ["Senior Electives", "0 / 5", 0],
+    ["General Education", "6 / 10 done · 2 planned", 60],
+    ["SF State Studies", "2 / 4 done", 50],
+    ["American Institutions", "1 / 2 done · 1 planned", 50],
+  ];
+  return (
+    <div className="app-content">
+      <div className="page-title">
+        <h1>Your degree progress</h1>
+        <p>See what’s done, planned, and still remaining.</p>
+      </div>
+      <AdvisingNote />
+      <div className="ring-grid">
+        <UnitBar value={47} total={120} label="Total units" />
+        <UnitBar value={0} total={40} label="Upper-division units" />
+        <div className="legend">
+          <b>Status key</b>
+          <span>
+            <i className="dot done" /> <Icon name="check" /> Done
+          </span>
+          <span>
+            <i className="dot progress" /> <Icon name="clock" /> In progress
+          </span>
+          <span>
+            <i className="dot planned" /> <Icon name="calendar" /> Planned
+          </span>
+          <span>
+            <i className="dot remaining" /> <Icon name="clock" /> Remaining
+          </span>
+        </div>
+      </div>
+      <SectionCard title="Degree requirements" count="47 of 120 units earned">
+        <div className="requirement-list">
+          {groups.map((g, i) => (
+            <details key={g[0]} open={i === 0 || i === 4}>
+              <summary>
+                <span className="req-check" aria-hidden="true">
+                  {g[2] === 100 ? <Icon name="check" /> : null}
+                </span>
+                <b>{g[0]}</b>
+                <div className="mini-progress">
+                  <i style={{ width: `${g[2]}%` }} />
+                </div>
+                <small>{g[1]}</small>
+                <Icon name="chevron" />
+              </summary>
+              {i === 0 && (
+                <div className="req-courses">
+                  <CourseStatus name="MATH 226 · Calculus I" type="done" label="Done" />
+                  <CourseStatus name="MATH 227 · Calculus II" type="progress" label="In progress" />
+                  <CourseStatus
+                    name="PHYS 230 · Physics II"
+                    type="remaining"
+                    label="Planned · Spring 2028"
+                  />
+                </div>
+              )}
+              {i === 4 && <GeRequirementRows mode="progress" />}
+            </details>
+          ))}
+        </div>
+      </SectionCard>
+    </div>
+  );
+}
+function UnitBar({ value, total, label }: { value: number; total: number; label: string }) {
+  return (
+    <div className="unit-bar">
+      <div>
+        <b>{label}</b>
+        <span>
+          {value} of {total}
+        </span>
+      </div>
+      <div className="unit-bar-track" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={total} aria-label={label}>
+        <i style={{ width: `${(value / total) * 100}%` }} />
+      </div>
+    </div>
+  );
+}
+function CourseStatus({
+  name,
+  type,
+  label,
+}: {
+  name: string;
+  type: "done" | "progress" | "remaining";
+  label: string;
+}) {
+  return (
+    <div>
+      <span>{name}</span>
+      <StatusBadge type={type}>{label}</StatusBadge>
+    </div>
+  );
+}
+
+const choiceRequirements = {
+  ge: [
+    ["GE Area 3", "Arts & Humanities", "HUM 200", "Fall 2027", "ENG 218,MUS 110,CWL 250"],
+    ["GE Area 6", "Ethnic Studies", "LTNS 280", "Spring 2028", "ETHS 100,AA S 210,RRS 276"],
+    ["Upper-division GE", "Area 4UD · Social Sciences", "", "Fall 2028", "PSY 431,SOC 300,ECON 300"],
+  ],
+  studies: [
+    [
+      "SF State Studies",
+      "Global Perspectives",
+      "CSC 665",
+      "Fall 2028",
+      "LTNS 280,HIST 450",
+      "Counts twice",
+    ],
+    [
+      "American Institutions",
+      "US & CA Government",
+      "PLSI 200",
+      "Spring 2029",
+      "PLSI 275,HIST 471",
+      "",
+    ],
+  ],
+};
+
+function ChoiceRequirementRows({
+  rows,
+  openPicker,
+}: {
+  rows: string[][];
+  openPicker: (requirement: string) => void;
+}) {
+  return (
+    <div className="choice-requirements">
+      {rows.map((r) => (
+        <div className="choice-requirement-row" key={r[1]}>
+          <div>
+            <span>{r[0]}</span>
+            <b>{r[1]}</b>
+          </div>
+          <div className="planned-choice">
+            <small>In your plan</small>
+            {r[2] ? <b>{r[2]}</b> : <b className="not-chosen">Not chosen yet</b>}
+            <span>{r[3]}</span>
+            {r[5] && <em>{r[5]}</em>}
+          </div>
+          <div className="alternative-choices">
+            <small>Other options</small>
+            <div className="chips">
+              {r[4].split(",").map((option) => (
+                <span key={option}>{option}</span>
+              ))}
+            </div>
+          </div>
+          <button onClick={() => openPicker(`${r[0]} · ${r[1]}`)}>
+            {r[2] ? "See all courses for this area" : "Choose a course"}{" "}
+            <Icon name="arrow" size={14} />
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ElectivesView({
+  openPicker,
+  goToProgress,
+}: {
+  openPicker: (requirement: string) => void;
+  goToProgress: () => void;
+}) {
+  return (
+    <div className="app-content">
+      <div className="page-title">
+        <h1>Electives & GE</h1>
+        <p>These are the requirements where you get to choose.</p>
+      </div>
+      <AdvisingNote />
+      <SectionCard title="Major electives" count="Pick 5 · 2 chosen, 3 to go">
+        <div className="major-electives-summary">
+          <div className="csc-unit-progress">
+            <div>
+              <b>6 of 12 required CSC units</b>
+              <span>50%</span>
+            </div>
+            <div>
+              <i />
+            </div>
+          </div>
+          <div className="chosen-elective">
+            <div>
+              <b>CSC 665 · Artificial Intelligence</b>
+              <small>3 units · Fall 2028</small>
+              <em>Backup: CSC 651</em>
+            </div>
+            <button onClick={() => openPicker("Senior electives")}>Change</button>
+            <span className="counts-twice">Counts twice</span>
+            <StatusBadge type="ready">Ready</StatusBadge>
+          </div>
+          <div className="chosen-elective">
+            <div>
+              <b>CSC 645 · Computer Networks</b>
+              <small>3 units · Spring 2028</small>
+              <em>Backup: CSC 664</em>
+            </div>
+            <button onClick={() => openPicker("Senior electives")}>Change</button>
+            <StatusBadge type="ready">Ready</StatusBadge>
+          </div>
+          <Button kind="secondary" onClick={() => openPicker("Senior electives")}>
+            <Icon name="plus" /> Choose more
+          </Button>
+        </div>
+      </SectionCard>
+      <SectionCard title="GE still needed" count="3 areas · 1 still to choose">
+        <ChoiceRequirementRows rows={choiceRequirements.ge} openPicker={openPicker} />
+      </SectionCard>
+      <SectionCard title="SF State Studies & American Institutions" count="2 areas · both in your plan">
+        <ChoiceRequirementRows rows={choiceRequirements.studies} openPicker={openPicker} />
+      </SectionCard>
+      <details className="already-done">
+        <summary>
+          <span>
+            <Icon name="check" /> Already done
+          </span>
+          <span>
+            6 requirements <Icon name="chevron" />
+          </span>
+        </summary>
+        <div>
+          <p>Area 1A, Area 1B, Area 1C, Area 2, Area 4, and US History.</p>
+          <button onClick={goToProgress}>
+            See completed requirements in Progress <Icon name="arrow" size={14} />
+          </button>
+        </div>
+      </details>
+    </div>
+  );
+}
+
+function ScheduleView({ toast }: { toast: (x: string) => void }) {
+  const [scheduleState, setScheduleState] = useState<
+    "ready" | "not-offered" | "unpublished" | "no-fit" | "full"
+  >("ready");
+  const [preference, setPreference] = useState("afternoons");
+  type Meeting = { days: string; start: number; end: number; time: string; label?: string };
+  type ScheduleClass = {
+    code: string;
+    num: string;
+    section: string;
+    meetings: Meeting[];
+    room: string;
+    open: string;
+    instructor: string;
+    format: string;
+    lab?: { num: string; text: string };
+    others: { text: string; clash?: string }[];
+  };
+  // Spring 2027 = the first term of the plan: same five courses as the Plan tab.
+  const classes: ScheduleClass[] = [
+    {
+      code: "CSC 340",
+      num: "12345",
+      section: "01",
+      meetings: [
+        { days: "MW", start: 14, end: 15.25, time: "2:00–3:15 PM" },
+        { days: "F", start: 16, end: 17.83, time: "4:00–5:50 PM", label: "Lab" },
+      ],
+      room: "HSS 154",
+      open: "12 seats open",
+      instructor: "Dr. Maya Chen",
+      format: "In person",
+      lab: { num: "12346", text: "Lab 02 · Fri 4:00–5:50 PM · SCI 202" },
+      others: [
+        { text: "Section 03 · TR 4:00–5:15 PM" },
+        { text: "Section 02 · MWF 9:00–9:50 AM", clash: "MATH 324 Mon/Wed/Fri 9:00" },
+      ],
+    },
+    {
+      code: "CSC 256",
+      num: "21780",
+      section: "02",
+      meetings: [{ days: "TR", start: 10, end: 11.25, time: "10:00–11:15 AM" }],
+      room: "TH 326",
+      open: "4 seats open",
+      instructor: "Prof. Luis Alvarez",
+      format: "In person",
+      others: [
+        { text: "Section 01 · MW 11:00 AM–12:15 PM" },
+        { text: "Section 03 · TR 12:30–1:45 PM", clash: "MATH 225 Tue/Thu 12:30" },
+      ],
+    },
+    {
+      code: "MATH 324",
+      num: "30891",
+      section: "03",
+      meetings: [{ days: "MWF", start: 9, end: 9.83, time: "9:00–9:50 AM" }],
+      room: "TH 210",
+      open: "Waitlist: 2",
+      instructor: "Dr. Priya Raman",
+      format: "Hybrid",
+      others: [
+        { text: "Section 01 · TR 8:00–9:15 AM · 6 seats open" },
+        { text: "Section 02 · MW 2:00–3:15 PM", clash: "CSC 340 Mon/Wed 2:00" },
+      ],
+    },
+    {
+      code: "MATH 225",
+      num: "30412",
+      section: "01",
+      meetings: [{ days: "TR", start: 12.5, end: 13.75, time: "12:30–1:45 PM" }],
+      room: "HSS 306",
+      open: "9 seats open",
+      instructor: "Dr. Ana Morales",
+      format: "In person",
+      others: [{ text: "Section 02 · MW 12:30–1:45 PM" }],
+    },
+    {
+      code: "CSC 300GW",
+      num: "12510",
+      section: "04",
+      meetings: [],
+      room: "Online",
+      open: "18 seats open",
+      instructor: "Prof. Kim Nguyen",
+      format: "Online · no set meeting time",
+      others: [
+        { text: "Section 01 · TR 10:00–11:15 AM", clash: "CSC 256 Tue/Thu 10:00" },
+      ],
+    },
+  ];
+  const classNumbers = classes.flatMap((c) => [c.num, ...(c.lab ? [c.lab.num] : [])]);
+  const dayCodes = [
+    ["MONDAY", "M"],
+    ["TUESDAY", "T"],
+    ["WEDNESDAY", "W"],
+    ["THURSDAY", "R"],
+    ["FRIDAY", "F"],
+  ];
+  const problemContent = {
+    "not-offered": ["CSC 600 isn’t offered in Spring 2027", "Move it in your plan", "button"],
+    unpublished: ["Spring 2027 schedule not published for PHYS yet", "Check Class Search", "link"],
+    "no-fit": [
+      "No combination fits: CSC 340 and CSC 256 always overlap",
+      "Move one to another term",
+      "button",
+    ],
+    full: ["All sections full", "Join a waitlist or pick another section", "button"],
+  } as const;
+  return (
+    <div className="app-content">
+      <div className="schedule-title">
+        <div>
+          <h1>Your Spring 2027 schedule</h1>
+          <p>One clash-free combination based on your plan.</p>
+        </div>
+        <Button
+          onClick={() => {
+            navigator.clipboard?.writeText(classNumbers.join(", ")).catch(() => {});
+            toast(`${classNumbers.length} class numbers copied: paste them into Student Center`);
+          }}
+          icon="copy"
+        >
+          Copy all class numbers
+        </Button>
+      </div>
+      <AdvisingNote />
+      <div className="variant-switcher schedule-variants">
+        <span>Preview schedule state</span>
+        {[
+          ["ready", "Published"],
+          ["not-offered", "Not offered"],
+          ["unpublished", "Not published"],
+          ["no-fit", "No fit"],
+          ["full", "Sections full"],
+        ].map(([value, label]) => (
+          <button
+            className={scheduleState === value ? "active" : ""}
+            onClick={() => setScheduleState(value as typeof scheduleState)}
+            key={value}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      {scheduleState !== "ready" ? (
+        <div className={`schedule-problem-frame ${scheduleState}`}>
+          <span>
+            <Icon
+              name={
+                scheduleState === "unpublished"
+                  ? "clock"
+                  : scheduleState === "no-fit"
+                    ? "x"
+                    : "warning"
+              }
+            />
+          </span>
+          <div>
+            <h2>{problemContent[scheduleState][0]}</h2>
+            <p>
+              {scheduleState === "no-fit"
+                ? "Move one course so we can build a clash-free schedule."
+                : scheduleState === "full"
+                  ? "No open seats remain in this course right now."
+                  : "Your degree plan is safe; this only affects next term’s schedule."}
+            </p>
+            {problemContent[scheduleState][2] === "link" ? (
+              <a>
+                {problemContent[scheduleState][1]} <Icon name="arrow" size={13} />
+              </a>
+            ) : (
+              <Button kind="secondary" onClick={() => setScheduleState("ready")}>
+                {problemContent[scheduleState][1]}
+              </Button>
+            )}
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="schedule-controls">
+            <div>
+              <b>Schedule 1 of 12 without time clashes</b>
+              <button onClick={() => toast("Showing another clash-free schedule.")}>
+                Show another <Icon name="arrow" size={13} />
+              </button>
+            </div>
+            <div className="preference-chips">
+              <span>Prefer:</span>
+              {["mornings", "afternoons", "no Fridays"].map((item) => (
+                <button
+                  className={preference === item ? "active" : ""}
+                  onClick={() => setPreference(item)}
+                  key={item}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="calendar-card hourly">
+            <div className="calendar-head">
+              {["TIME", "MON", "TUE", "WED", "THU", "FRI"].map((x) => (
+                <span key={x}>{x}</span>
+              ))}
+            </div>
+            <div className="calendar-body">
+              <div className="times">
+                {[
+                  "8 AM",
+                  "9 AM",
+                  "10 AM",
+                  "11 AM",
+                  "12 PM",
+                  "1 PM",
+                  "2 PM",
+                  "3 PM",
+                  "4 PM",
+                  "5 PM",
+                  "6 PM",
+                  "7 PM",
+                  "8 PM",
+                ].map((x) => (
+                  <span key={x}>{x}</span>
+                ))}
+              </div>
+              <div className="day-grid">
+                {[0, 1, 2, 3, 4].map((x) => (
+                  <i key={x} />
+                ))}
+                {classes.flatMap((c, i) =>
+                  c.meetings.flatMap((m) =>
+                    m.days.split("").map((day) => (
+                      <div
+                        className={`cal-block c${i % 3}`}
+                        key={`${c.code}${m.label ?? ""}${day}`}
+                        style={{
+                          top: (m.start - 8) * 52 + 1,
+                          height: (m.end - m.start) * 52 - 3,
+                          left: `calc(${dayCodes.findIndex((item) => item[1] === day)} * 20% + 4px)`,
+                        }}
+                      >
+                        <b>
+                          {c.code}
+                          {m.label ? ` ${m.label}` : ""}
+                        </b>
+                        <span>{m.time}</span>
+                      </div>
+                    )),
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
+          {classes
+            .filter((c) => !c.meetings.length)
+            .map((c) => (
+              <p className="online-note" key={c.code}>
+                <Icon name="info" size={15} /> <b>{c.code}</b> is online with no set meeting time,
+                so it isn’t on the calendar.
+              </p>
+            ))}
+          <div className="mobile-day-list">
+            {dayCodes.map(([day, code]) => (
+              <div key={day}>
+                <b>{day}</b>
+                <section>
+                  {classes
+                    .flatMap((c, ci) =>
+                      c.meetings
+                        .filter((m) => m.days.includes(code))
+                        .map((m) => ({ c, ci, m })),
+                    )
+                    .sort((a, b) => a.m.start - b.m.start)
+                    .map(({ c, ci, m }) => (
+                      <span key={`${c.code}${m.label ?? ""}`}>
+                        <i className={`class-dot c${ci % 3}`} />
+                        <strong>
+                          {c.code}
+                          {m.label ? ` ${m.label}` : ""}
+                        </strong>
+                        {m.time}
+                      </span>
+                    ))}
+                </section>
+              </div>
+            ))}
+          </div>
+          <div className="section-list">
+            {classes.map((c, i) => (
+              <article className="section-detail" key={c.code}>
+                <div className="section-main">
+                  <span>
+                    <b>{c.code}</b>
+                    <StatusBadge type={c.open.includes("Wait") ? "warning" : "ready"}>
+                      {c.open}
+                    </StatusBadge>
+                  </span>
+                  <p>
+                    Section {c.section} ·{" "}
+                    {c.meetings.length
+                      ? `${c.meetings[0].days} ${c.meetings[0].time} · ${c.room}`
+                      : c.format}
+                  </p>
+                  {c.lab && (
+                    <p className="linked-lab">
+                      <Icon name="route" size={13} /> Includes {c.lab.text} · Class #{c.lab.num}
+                    </p>
+                  )}
+                  <small>
+                    {c.meetings.length ? `${c.format} · ` : ""}
+                    {c.instructor} ·{" "}
+                    <a
+                      href={`https://www.ratemyprofessors.com/search/professors/880?q=${encodeURIComponent(c.instructor)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Rate My Professors (student opinions)
+                    </a>
+                  </small>
+                  <details className="other-sections">
+                    <summary>
+                      Other sections <Icon name="chevron" />
+                    </summary>
+                    {c.others.map((o) => (
+                      <div className={o.clash ? "disabled" : ""} key={o.text}>
+                        <span>{o.text}</span>
+                        {o.clash ? (
+                          <button disabled>Clashes with {o.clash}</button>
+                        ) : (
+                          <button onClick={() => toast(`${o.text.split(" ·")[0]} selected for ${c.code}.`)}>
+                            Use this section
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </details>
+                </div>
+                <div className="class-num">
+                  <small>Class number</small>
+                  <b>#{c.num}</b>
+                  <button onClick={() => toast(`${c.num} copied.`)}>
+                    <Icon name="copy" /> Copy
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="schedule-note">
+            <Icon name="clock" /> Seats and rooms as of Nov 12, 9:00 PM. Confirm in Class Search
+            before registering.
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+type PickerOption = {
+  code: string;
+  title: string;
+  page: number;
+  status: "Ready" | "Check";
+  reason?: string;
+  fit?: string;
+  covers?: string;
+  rare?: boolean;
+  offered?: string;
+  last?: string;
+};
+const pickerOptions: Record<string, PickerOption[]> = {
+  "Senior electives": [
+    {
+      code: "CSC 665",
+      title: "Artificial Intelligence",
+      page: 1948,
+      status: "Ready",
+      fit: "Matches your goal: AI / ML",
+      covers: "SF State Studies – GP",
+    },
+    {
+      code: "CSC 671",
+      title: "Deep Learning",
+      page: 1949,
+      status: "Ready",
+      fit: "Matches your goal: AI / ML",
+    },
+    {
+      code: "CSC 664",
+      title: "Multimedia Systems",
+      page: 1947,
+      status: "Check",
+      reason: "Needs a 3.0 GPA: ask your advisor if you qualify",
+      rare: true,
+    },
+    {
+      code: "CSC 645",
+      title: "Computer Networks",
+      page: 1941,
+      status: "Ready",
+      fit: "Strong foundation course",
+    },
+    {
+      code: "CSC 651",
+      title: "System Administration",
+      page: 1945,
+      status: "Check",
+      reason: "Needs instructor consent: ask the instructor or your advisor",
+    },
+  ],
+  "GE Area 3 · Arts & Humanities": [
+    {
+      code: "HUM 200",
+      title: "Introduction to Humanities",
+      page: 2176,
+      status: "Ready",
+      fit: "In your plan for Fall 2027",
+    },
+    { code: "ENG 218", title: "The Art of English", page: 2041, status: "Ready" },
+    { code: "MUS 110", title: "The Art of Listening", page: 2262, status: "Ready" },
+    {
+      code: "CWL 250",
+      title: "Fables and Tales",
+      page: 2003,
+      status: "Check",
+      reason: "Needs a writing prerequisite: ask your advisor which one counts",
+      rare: true,
+    },
+  ],
+  "GE Area 6 · Ethnic Studies": [
+    {
+      code: "LTNS 280",
+      title: "Race, Gender and Power",
+      page: 2211,
+      status: "Ready",
+      fit: "In your plan for Spring 2028",
+      covers: "SF State Studies – ES",
+    },
+    { code: "ETHS 100", title: "Introduction to Ethnic Studies", page: 2072, status: "Ready" },
+    { code: "AA S 210", title: "History of Asians in America", page: 1820, status: "Ready" },
+  ],
+  "SF State Studies · Global Perspectives": [
+    {
+      code: "CSC 665",
+      title: "Artificial Intelligence",
+      page: 1948,
+      status: "Ready",
+      covers: "Senior elective",
+    },
+    {
+      code: "LTNS 280",
+      title: "Race, Gender and Power",
+      page: 2211,
+      status: "Ready",
+      covers: "GE Area 6",
+    },
+    {
+      code: "HIST 450",
+      title: "Global History",
+      page: 2153,
+      status: "Check",
+      reason: "Needs upper-division standing (60+ units) by that term",
+    },
+  ],
+  "Upper-division GE · Area 4UD · Social Sciences": [
+    { code: "PSY 431", title: "Developmental Psychology", page: 2341, status: "Ready", offered: "Fall, Spring", last: "Fall 2026" },
+    { code: "SOC 300", title: "Sociological Analysis", page: 2402, status: "Ready", offered: "Fall, Spring", last: "Fall 2026" },
+    {
+      code: "ECON 300",
+      title: "Economics in Society",
+      page: 2012,
+      status: "Check",
+      reason: "Needs upper-division standing (60+ units) by that term",
+      offered: "Spring only",
+      last: "Spring 2026",
+    },
+  ],
+  "American Institutions · US & CA Government": [
+    {
+      code: "PLSI 200",
+      title: "American Politics",
+      page: 2328,
+      status: "Ready",
+      fit: "In your plan for Spring 2029",
+    },
+    { code: "PLSI 275", title: "California Politics", page: 2332, status: "Ready" },
+    {
+      code: "HIST 471",
+      title: "California History",
+      page: 2158,
+      status: "Check",
+      reason: "Needs HIST 300: not currently in your plan",
+      rare: true,
+    },
+  ],
+};
+function useDialog(close: () => void) {
+  const ref = useRef<HTMLElement>(null);
+  const closeRef = useRef(close);
+  closeRef.current = close;
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null;
+    ref.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeRef.current();
+      if (e.key === "Tab" && ref.current) {
+        const items = ref.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], select, input, summary, [tabindex]:not([tabindex="-1"])',
+        );
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      previous?.focus();
+    };
+  }, []);
+  return ref;
+}
+
+function ElectiveDrawer({
+  requirement,
+  close,
+  choose,
+}: {
+  requirement: string;
+  close: () => void;
+  choose: (x: string) => void;
+}) {
+  const dialogRef = useDialog(close);
+  const options = pickerOptions[requirement] ?? pickerOptions["Senior electives"];
+  const isSenior = requirement === "Senior electives";
+  // Senior electives allow several picks; every other requirement takes one course,
+  // starting from the course already in the plan.
+  const [chosen, setChosen] = useState<string[]>(
+    isSenior
+      ? ["CSC 665", "CSC 645"]
+      : options.filter((o) => o.fit?.startsWith("In your plan")).map((o) => o.code),
+  );
+  const [inlineError, setInlineError] = useState("");
+  return (
+    <div className="overlay" onMouseDown={close}>
+      <aside
+        className="drawer elective-drawer"
+        onMouseDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Choose courses"
+        tabIndex={-1}
+        ref={dialogRef}
+      >
+        <div className="drawer-head">
+          <div>
+            <h2>{isSenior ? "Pick 5 electives" : requirement}</h2>
+            <p>
+              {isSenior
+                ? "At least 12 units must be in CSC."
+                : "Choose a course that fits this requirement and term."}
+            </p>
+          </div>
+          <button onClick={close} aria-label="Close">
+            <Icon name="x" />
+          </button>
+        </div>
+        {isSenior && (
+          <div className="picker-progress">
+            <div>
+              <b>{chosen.length} of 5 chosen</b>
+              <span>{chosen.length * 3} of 15 units</span>
+            </div>
+            <div>
+              <i style={{ width: `${(chosen.length / 5) * 100}%` }} />
+            </div>
+          </div>
+        )}
+        <div className="sort-row">
+          <span>
+            Sorted by{" "}
+            <b>{isSenior ? "fit with AI / Machine Learning" : "readiness and availability"}</b>
+          </span>
+          <button>
+            <Icon name="menu" /> Filters
+          </button>
+        </div>
+        <div className="elective-list">
+          {options.map((e, i) => {
+            const isChosen = chosen.includes(e.code);
+            return (
+              <article className={`elective-card ${isChosen ? "chosen" : ""}`} key={e.code}>
+                <div className="elective-card-top">
+                  <div>
+                    <b>
+                      {e.code} · {e.title}
+                    </b>
+                    <small>3 units · Bulletin p.{e.page}</small>
+                  </div>
+                  <StatusBadge type={e.status === "Ready" ? "ready" : "warning"}>
+                    {e.status}
+                  </StatusBadge>
+                </div>
+                {e.fit && (
+                  <span className="fit-tag">
+                    <Icon name="check" />
+                    {e.fit}
+                  </span>
+                )}
+                {e.reason && (
+                  <p className="check-reason">
+                    <Icon name="warning" size={13} />
+                    {e.reason}
+                  </p>
+                )}
+                <p>
+                  Usually offered: {e.offered ?? (e.rare ? "Rarely" : "Fall, Spring")} <span>·</span> Last
+                  offered: {e.last ?? (e.rare ? "Spring 2023" : "Fall 2026")}
+                </p>
+                {e.status === "Ready" && (
+                  <p className="ready-reason">
+                    <Icon name="check" size={13} /> Prerequisites met by this term
+                  </p>
+                )}
+                {e.rare && (
+                  <p className="rare-note">
+                    <Icon name="warning" size={13} /> Ran once in 4 years · pick a backup
+                  </p>
+                )}
+                {e.covers && (
+                  <span className="counts-twice">Counts twice · Also covers: {e.covers}</span>
+                )}
+                {inlineError && e.code === "CSC 664" && (
+                  <div className="picker-error">
+                    {inlineError}
+                    <button onClick={() => setInlineError("")}>Set CSC 651 as backup</button>
+                  </div>
+                )}
+                <div className="elective-actions">
+                  <button>Set as backup</button>
+                  <Button
+                    kind={isChosen ? "secondary" : "primary"}
+                    onClick={() => {
+                      if (e.code === "CSC 664" && !isChosen) {
+                        setInlineError(
+                          "Needs a 3.0 GPA. Ask your advisor before choosing it, or pick a backup.",
+                        );
+                        return;
+                      }
+                      const n = isChosen
+                        ? chosen.filter((x) => x !== e.code)
+                        : isSenior
+                          ? [...chosen, e.code]
+                          : [e.code];
+                      setChosen(n);
+                      if (!isChosen) choose(e.code);
+                    }}
+                  >
+                    {isChosen ? (
+                      <>
+                        <Icon name="check" /> Chosen
+                      </>
+                    ) : (
+                      "Choose"
+                    )}
+                  </Button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        <div className="drawer-footer">
+          <Button onClick={close}>Done choosing</Button>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+function CourseDrawer({ course, close }: { course: string; close: () => void }) {
+  const dialogRef = useDialog(close);
+  const selectedCourse = terms.flatMap((term) => term.courses).find((item) => item.code === course);
+  return (
+    <div className="overlay" onMouseDown={close}>
+      <aside
+        className="drawer course-drawer"
+        onMouseDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Course details"
+        tabIndex={-1}
+        ref={dialogRef}
+      >
+        <div className="drawer-head">
+          <div>
+            <h2>{course}</h2>
+            <p>
+              {selectedCourse?.title ?? "Course"} · {selectedCourse?.units ?? 3} units
+            </p>
+          </div>
+          <button onClick={close} aria-label="Close">
+            <Icon name="x" />
+          </button>
+        </div>
+        <span className="bulletin-ref">
+          <Icon name="book" size={14} /> Bulletin p.{selectedCourse?.page ?? 1905}
+        </span>
+        <div className="detail-block">
+          <h3>Description</h3>
+          <p>
+            Object-oriented design, testing, and collaborative software development using modern
+            programming practices.
+          </p>
+        </div>
+        <div className="detail-block">
+          <h3>
+            Prerequisites <Tooltip text="A prerequisite is a course you need to finish first." />
+          </h3>
+          <span className="prereq">
+            <Icon name="check" /> CSC 220 · Complete by Fall 2026
+          </span>
+        </div>
+        <div className="detail-block why">
+          <span>
+            <Icon name="route" />
+          </span>
+          <div>
+            <h3>Why it’s in this term</h3>
+            <p>Needed before CSC 413. Delaying it pushes back graduation.</p>
+          </div>
+        </div>
+        <div className="detail-block">
+          <h3>Usually offered</h3>
+          <div className="chips">
+            <span>Fall</span>
+            <span>Spring</span>
+          </div>
+        </div>
+        <Button onClick={close}>Got it</Button>
+      </aside>
+    </div>
+  );
+}
+
+function ChatPanel({ close }: { close: () => void }) {
+  const dialogRef = useDialog(close);
+  const [asked, setAsked] = useState(false);
+  return (
+    <div className="overlay chat-overlay" onMouseDown={close}>
+      <aside
+        className="drawer chat-drawer"
+        onMouseDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Ask about your plan"
+        tabIndex={-1}
+        ref={dialogRef}
+      >
+        <div className="drawer-head">
+          <div>
+            <h2>Ask about your plan</h2>
+            <p>3 of 5 questions left today</p>
+          </div>
+          <button onClick={close} aria-label="Close">
+            <Icon name="x" />
+          </button>
+        </div>
+        <div className="chat-intro">
+          <h3>What would you like to know?</h3>
+          <p>I can explain your plan using the Bulletin. For decisions, talk to an advisor.</p>
+        </div>
+        <button className="suggested" onClick={() => setAsked(true)}>
+          Can I take a GE class in Winter Session? <Icon name="arrow" />
+        </button>
+        {asked && (
+          <>
+            <div className="chat-bubble user">Can I take a GE class in Winter Session?</div>
+            <div className="chat-bubble bot">
+              <b>Yes, if that course is offered.</b> Winter courses are compressed, so we recommend
+              taking only one. I can update your plan to show this option.
+            </div>
+          </>
+        )}
+        <div className="chat-rest">
+          <Icon name="clock" />
+          <span>
+            <b>Chat is resting for today.</b>Your plan and schedule still work.
+          </span>
+        </div>
+        <div className="chat-input">
+          <input placeholder="Ask a question about your plan…" />
+          <button aria-label="Send question">
+            <Icon name="arrow" />
+          </button>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+function StyleGuide({ close }: { close: () => void }) {
+  const dialogRef = useDialog(close);
+  return (
+    <div className="overlay" onMouseDown={close}>
+      <aside
+        className="drawer style-drawer"
+        onMouseDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Style guide"
+        tabIndex={-1}
+        ref={dialogRef}
+      >
+        <div className="drawer-head">
+          <div>
+            <h2>GatorPath style guide</h2>
+            <p>Calm, clear, and trustworthy.</p>
+          </div>
+          <button onClick={close} aria-label="Close">
+            <Icon name="x" />
+          </button>
+        </div>
+        <h3>Colors</h3>
+        <div className="swatches">
+          {[
+            ["#235347", "Path green"],
+            ["#F5F3EE", "Warm canvas"],
+            ["#287565", "Done"],
+            ["#3268B2", "In progress"],
+            ["#B66A24", "Warning"],
+            ["#B5413B", "Error"],
+          ].map((x) => (
+            <div key={x[0]}>
+              <i style={{ background: x[0] }} />
+              <b>{x[1]}</b>
+              <small>{x[0]}</small>
+            </div>
+          ))}
+        </div>
+        <h3>Type scale</h3>
+        <div className="type-scale">
+          <span>Display · 52 / 56</span>
+          <h2>Plan with confidence.</h2>
+          <span>Heading · 28 / 34</span>
+          <h3>A clear path forward</h3>
+          <span>Body · 15 / 24</span>
+          <p>Plain language helps students make decisions under pressure.</p>
+        </div>
+        <h3>Spacing & components</h3>
+        <p>8px base grid · 12px controls · 18–24px cards · 32–80px sections</p>
+        <div className="guide-components">
+          <StatusBadge type="done">Done</StatusBadge>
+          <StatusBadge type="progress">In progress</StatusBadge>
+          <StatusBadge type="warning">Warning</StatusBadge>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+function AppWorkspace({ initialTab = "plan" }: { initialTab?: Tab }) {
+  const [tab, setTab] = useState<Tab>(initialTab);
+  const [picker, setPicker] = useState("");
+  const [course, setCourse] = useState("");
+  const [chat, setChat] = useState(false);
+  const [toast, setToast] = useState("");
+  const showToast = (x: string) => {
+    setToast(x);
+    setTimeout(() => setToast(""), 2500);
+  };
+  useEffect(() => {
+    const openChat = () => setChat(true);
+    document.addEventListener("gator-ask", openChat);
+    return () => document.removeEventListener("gator-ask", openChat);
+  }, []);
+  return (
+    <>
+      <Tabs tab={tab} setTab={setTab} />
+      {tab === "plan" && (
+        <PlanView
+          openElectives={() => setPicker("Senior electives")}
+          openCourse={setCourse}
+          toast={showToast}
+        />
+      )}
+      {tab === "progress" && <ProgressView />}
+      {tab === "electives" && (
+        <ElectivesView openPicker={setPicker} goToProgress={() => setTab("progress")} />
+      )}
+      {tab === "schedule" && <ScheduleView toast={showToast} />}
+      {picker && (
+        <ElectiveDrawer
+          requirement={picker}
+          close={() => setPicker("")}
+          choose={(x) => showToast(`${x} added to your plan`)}
+        />
+      )}
+      {course && <CourseDrawer course={course} close={() => setCourse("")} />}
+      {chat && <ChatPanel close={() => setChat(false)} />}
+      {toast && (
+        <div className="toast">
+          <Icon name="check" />
+          {toast}
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function App() {
+  const [screen, setScreen] = useState<Screen>("landing");
+  const [style, setStyle] = useState(false);
+  const back = () =>
+    setScreen(
+      screen === "review"
+        ? "record"
+        : screen === "goals"
+          ? "review"
+          : screen === "record"
+            ? "landing"
+            : screen,
+    );
+  const home = () => {
+    setScreen("landing");
+    window.scrollTo(0, 0);
+  };
+  const go = (s: Screen) => {
+    setScreen(s);
+    window.scrollTo(0, 0);
+  };
+  return (
+    <div className="site-shell">
+      <Header
+        screen={screen}
+        onHome={home}
+        onBack={screen !== "landing" ? back : undefined}
+        onStyle={() => setStyle(true)}
+      />
+      {screen === "landing" && <Landing start={() => go("record")} />}
+      {screen === "record" && <RecordScreen next={() => go("review")} />}
+      {screen === "review" && <ReviewScreen next={() => go("goals")} />}
+      {screen === "goals" && <GoalsScreen build={() => go("building")} />}
+      {screen === "building" && <BuildingScreen done={() => go("app")} />}
+      {screen === "app" && <AppWorkspace />}
+      {style && <StyleGuide close={() => setStyle(false)} />}
+      <Footer />
+    </div>
+  );
+}
