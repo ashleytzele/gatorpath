@@ -47,7 +47,8 @@ mcp = MCPServer(
         "the student that the DPR and an advisor are the final word. A course meets a GE, SF State Studies or American "
         "Institutions area only where a tool shows it (`ge_areas`, `counted`, `major_courses`): never infer one from "
         "a course's subject or title. "
-        "Never guess what transfer credit covers (the DPR shows it) or when a student will graduate (build_plan says). "
+        "Never guess what transfer credit covers (the DPR shows it), what's left or whether a student is done "
+        "(audit_progress says, from the courses they typed), or when they will graduate (build_plan says). "
         "To plan a degree without the plan_my_degree prompt, call get_planning_steps first and follow it: a typed "
         "course list is enough to plan from, so don't hold the plan back for a DPR. After a plan passes check_plan, "
         "show its first term's sections (class number, days, times, room, instructor, seats) with get_sections when "
@@ -111,6 +112,7 @@ class Slot(TypedDict):
 class Semester(TypedDict):
     term: str
     courses: list[str | Slot]
+    max_units: NotRequired[float]  # build_plan's cap for the term. Not in here, MCP drops it and check_plan caps at 15
 
 
 class Plan(TypedDict):

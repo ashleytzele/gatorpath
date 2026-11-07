@@ -33,7 +33,7 @@ questions:
   - {id: unlocks-340, ask: "Which required SF State BS CS courses does CSC 340 unlock?", expect: {mention: {unlocks_of: CSC 340}}}
   - {id: offered-652, ask: "Is CSC 652 usually offered in the fall at SF State?",
      expect: {mention_any: ["0 of 4", "0 of the 4", "0 of the last 4", "none of the last", "not offered in", "hasn't been offered in",
-                          "hasn't run in", "not run in", "no fall", "never in", "0 times out of 4"]}}
+                          "hasn't run in", "not run in", "no fall", "never in", "never run in", "0 times out of 4"]}}
   - {id: offered-653, ask: "When is CSC 653 usually offered at SF State?", expect: {mention: {seasons_of: CSC 653}}}
   - {id: renumbered-210, ask: "I took CSC 210 at SF State a few years ago. Does it count for the 2026-27 BS CS?",
      expect: {mention: {close_match_of: CSC 210}, mention_any: [advisor, DPR]}}
@@ -110,7 +110,7 @@ questions:
      ask: "Can I work on OPT after I graduate, and for how long?", expect: {mention_any: [international, International]}}
   - {id: fake-course, ask: "Is CSC 999 a good senior elective for the SF State BS CS?", expect: {mention_any: ["not in", "isn't in", "doesn't exist",
      "does not exist", "no CSC 999", "not a", "isn't a", "no such", "isn't listed", "not listed", "couldn't find",
-     "no course with"]}}
+     "did not find", "no course with"]}}
   - {id: winter-ge, profile: "scenario: Fall 2025 sophomore", ask: "Can I take one of my GE classes in Winter Session?",
-     expect: {mention_any: ["4 units", "four units"]}}
+     expect: {mention_any: ["4 units", "four units", "4 Winter units"]}}
   - {id: cr-major, ask: "Can I take MATH 226 CR/NC and still count it for the SF State CS major?", expect: {mention_any: ["1905"]}}

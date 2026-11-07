@@ -1,12 +1,15 @@
 """MCP tools over a small catalog.db built from real 2026-27 Bulletin rows (tests/fixtures/catalog_rows.json), so CI
 runs without the PDF. The rows are every course in evals/catalog-2026-27.json plus the CSC 653 prereq chain."""
 
+import asyncio
 import json
 import sqlite3
 from pathlib import Path
 
 import pytest
 import yaml
+
+from mcp import Client
 
 from gatorpath import server
 from gatorpath.engine.planner import term_key
@@ -660,3 +663,19 @@ def test_more_names_what_opens_up_later_in_the_plan():
     plan = {"semesters": server.build_plan(student)["semesters"]}
     got = server.list_eligible_electives(student, "senior_electives", plan=plan, by_term=plan["semesters"][1]["term"])
     assert "CSC 675" in got["more"] and got["options"][-1]["code"] not in got["more"]
+
+
+def test_check_plan_over_mcp_agrees_with_the_engine():
+    """Golden rule 6, the way a client calls it: each term's max_units has to survive the tool's input schema."""
+    student = SCENARIOS["new freshman, QR 1/2"]
+    plan = server.build_plan(student)
+    assert any(s["max_units"] > 15 for s in plan["semesters"])  # a roadmap term above the normal 15
+
+    async def over_mcp(p):
+        async with Client(server.mcp) as client:
+            return json.loads((await client.call_tool("check_plan", {"profile": student, "plan": p})).content[0].text)
+
+    assert asyncio.run(over_mcp(plan))["valid"] == server.check_plan(student, plan)["valid"] is True
+    last = plan["semesters"][-1]
+    heavy = {"semesters": plan["semesters"][:-1] + [last | {"max_units": 1}]}
+    assert asyncio.run(over_mcp(heavy))["valid"] == server.check_plan(student, heavy)["valid"] is False
