@@ -3973,3 +3973,13 @@ p, li, small { text-wrap: pretty; }
 .warning-card.collapsible {
   align-self: start;
 }
+
+.attention-row button {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--green);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

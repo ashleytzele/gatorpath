@@ -437,6 +437,8 @@ def test_import_dpr_builds_a_profile_and_drops_pii(tmp_path, monkeypatch):
     assert audit["ge_a1"]["status"] == "satisfied"  # "Area A1 - Oral Communication" done on the DPR
     assert [w.split(":")[0] for w in got["cross_check"]] == ["Units toward the 120", "Not found on this DPR"]
     assert [a["role"] for a in got["see_advisor"]] == ["dpr"]
+    assert "ge_f" in p["not_on_dpr"]  # the DPR doesn't list it, so it's left out, and the audit flags it for an advisor
+    assert audit["ge_f"]["waived_by"] and any("left out" in w for w in server.audit_progress(p)["warnings"])
 
 
 FRESH = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall"}

@@ -173,6 +173,17 @@ def count_transfer_units(requirements: list[dict]) -> float:
     return sum(key[2] * max(under_courses[key], *(c[key] for c in lists)) for key in set().union(*lists))
 
 
+def not_listed(dpr: dict, university: dict) -> list[dict]:
+    """GE groups the rules have and this DPR doesn't list: the DPR decides what applies to its student (D33). GE only:
+    SF State Studies and American Institutions aren't "Area …" titles on a DPR. No GE on the print, nothing to go by."""
+    areas = [b["title"] for b in dpr["requirements"] if b["kind"] == "ge"]
+    if not areas:
+        return []
+    by_area = area_groups(university)
+    seen = {by_area[a] for title in areas for a in translate_ge([title], university)[0] if a in by_area}
+    return [g for g in university["groups"] if g["id"].startswith("ge_") and g["id"] in by_area.values() and g["id"] not in seen]
+
+
 def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
     """The DPR's status vs GatorPath's audit for every DPR requirement GatorPath also tracks: course requirements by
     code, GE areas through translate_ge, GWAR, and units toward the 120. One warning per disagreement, saying the DPR
@@ -184,11 +195,9 @@ def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
         code_status |= {c: "in_progress" for c in g.get("in_progress", []) if c not in code_status}
         code_status |= {c: "done" for c in g.get("counted", [])}
     by_area = area_groups(university)
-    out, seen = [], set()
+    out = []
     for b in dpr["requirements"]:
         if b["status"] in ("info", "waived", "collapsed"):
-            if b["kind"] == "ge":
-                seen.update(by_area[a] for a in translate_ge([b["title"]], university)[0] if a in by_area)
             continue
         if b["kind"] == "course":
             codes = re.findall(r"[A-Z]{1,5}(?: [A-Z]{1,3})? \d{3}[A-Z]{0,3}", b["title"])
@@ -199,7 +208,6 @@ def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
                                                            if a in by_area]
             if not ids or any(i not in groups for i in ids):
                 continue
-            seen.update(ids)
             states = [word.get(groups[i]["status"], groups[i]["status"]) for i in ids]
             ours = "done" if all(x == "done" for x in states) else "needed" if "needed" in states else "in_progress"
         elif b["title"].startswith("120 Minimum Units") and b["needed"]:
@@ -216,13 +224,9 @@ def cross_check(dpr: dict, audit: dict, university: dict) -> list[str]:
             out.append(f"{b['title']}: the DPR says {b['status'].replace('_', ' ')}, GatorPath says "
                        f"{ours.replace('_', ' ')}. The DPR wins; ask an advisor if it looks wrong, and tell GatorPath "
                        "if its rule is the one that's off")
-    if any(b["kind"] == "ge" for b in dpr["requirements"]):
-        # GE areas only: SF State Studies and American Institutions aren't "Area …" titles on a DPR
-        missing = [g["title"] for g in university["groups"]
-                   if g["id"].startswith("ge_") and g["id"] in by_area.values() and g["id"] not in seen]
-        if missing:
-            out.append(f"Not found on this DPR: {', '.join(missing)}. If the DPR really doesn't have one (an older "
-                       "catalog), add it to not_on_dpr; if the print was cut, print it again with View All")
+    if missing := not_listed(dpr, university):
+        out.append(f"Not found on this DPR: {', '.join(g['title'] for g in missing)}. Left out of the plan, because the DPR "
+                   "decides what's required: confirm with an advisor. If the print was cut, print it again with View All")
     return out
 
 

@@ -890,6 +890,7 @@ function RecordScreen({ done }: { done: (profile: Profile, imported?: ImportResu
   );
 }
 
+const NOT_ON_DPR = "not on the student's DPR"; // the engine's waived_by for a requirement the student left out
 const isDone = (g: Group) => g.status === "satisfied" || g.status === "waived";
 const universityGroups = (audit: Audit) => audit.groups.filter((g) => g.kind === "university");
 
@@ -907,6 +908,7 @@ function GeRequirementRows({
       {groups.map((g) => {
         const planned = plannedIn?.(g);
         const done = isDone(g);
+        const leftOut = g.waived_by === NOT_ON_DPR;
         return (
           <div className="shared-ge-row" key={g.id}>
             <div className="ge-area-name">
@@ -916,11 +918,11 @@ function GeRequirementRows({
             {mode === "review" ? (
               <span className={`binary-state ${done ? "met" : "not-yet"}`}>
                 {done ? <Icon name="check" size={14} /> : <i />}
-                {done ? "Met" : "Not yet"}
+                {leftOut ? "Left out" : done ? "Met" : "Not yet"}
               </span>
             ) : (
               <StatusBadge type={done ? "done" : g.in_progress.length ? "progress" : planned ? "planned" : "remaining"}>
-                {done ? "Done" : g.in_progress.length ? "In progress" : planned ? "Planned" : "Remaining"}
+                {leftOut ? "Left out" : done ? "Done" : g.in_progress.length ? "In progress" : planned ? "Planned" : "Remaining"}
               </StatusBadge>
             )}
             <p>{[...g.counted, ...g.in_progress].join(", ") || planned || "—"}</p>
@@ -954,7 +956,12 @@ function ReviewScreen({
     const uni = universityGroups(a);
     const met = uni.filter(isDone).length;
     const todo = uni.filter((g) => !isDone(g));
-    const attention = [...new Set([...(imported?.cross_check ?? []), ...(imported?.warnings ?? [])])];
+    const left = profile.not_on_dpr ?? [];
+    const notFound = imported?.cross_check.find((line) => line.startsWith("Not found on this DPR")) ?? "";
+    const missing = uni.filter((g) => notFound.includes(g.title));
+    const attention = [...new Set([...(imported?.cross_check ?? []), ...(imported?.warnings ?? [])])].filter(
+      (line) => !missing.length || line !== notFound,
+    );
     const gpa = profile.gpa ?? a.totals.gpa_sf_state?.value; // the DPR's, when there is one
     return (
       <>
@@ -1061,12 +1068,37 @@ function ReviewScreen({
               <i style={{ width: `${(met / Math.max(uni.length, 1)) * 100}%` }} />
             </div>
           </div>
-          {!!attention.length && (
+          {!!(attention.length || missing.length) && (
             <div className="attention-list">
               <div className="attention-heading">
                 <Icon name="warning" size={16} />
                 <b>Check with an advisor</b>
               </div>
+              {missing.map((g) => (
+                <div className="attention-row" key={g.id}>
+                  <span className="attention-dot" />
+                  {left.includes(g.id) ? (
+                    <p>
+                      <b>{g.title}</b> isn’t on your DPR, so it’s left out of your plan. Confirm with an
+                      advisor.{" "}
+                      <button
+                        onClick={() =>
+                          edit({ ...profile, not_on_dpr: left.filter((id) => id !== g.id) })
+                        }
+                      >
+                        Put it back
+                      </button>
+                    </p>
+                  ) : (
+                    <p>
+                      <b>{g.title}</b> isn’t on your DPR, but it’s back in your plan.{" "}
+                      <button onClick={() => edit({ ...profile, not_on_dpr: [...left, g.id] })}>
+                        Leave it out
+                      </button>
+                    </p>
+                  )}
+                </div>
+              ))}
               {attention.map((line) => (
                 <div className="attention-row" key={line}>
                   <span className="attention-dot" />

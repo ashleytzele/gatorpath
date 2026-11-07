@@ -25,6 +25,7 @@ export type Profile = Options & {
   completed?: Taken[];
   in_progress?: string[];
   gpa?: number;
+  not_on_dpr?: string[];
   [field: string]: unknown;
 };
 export type Advisor = {
@@ -48,6 +49,7 @@ export type Group = {
   remaining?: string[];
   units_done?: number;
   units_needed?: number;
+  waived_by?: string;
   quote?: string;
   min_units_from?: { subject: string; units: number; done: number };
 };

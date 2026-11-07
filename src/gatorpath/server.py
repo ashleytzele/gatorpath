@@ -835,6 +835,8 @@ def dpr_profile(read_text: Callable[[], str]) -> dict:
     profile["completed"] = [r | {"code": norm_code(r["code"])} for r in profile["completed"]]
     profile["in_progress"] = [norm_code(c) for c in profile["in_progress"]]
     profile["dpr_met"] = [norm_code(c) for c in profile["dpr_met"]]
+    if left_out := dpr.not_listed(parsed, university):
+        profile["not_on_dpr"] = [g["id"] for g in left_out]
     ours = audit_progress(profile)
     disagree = dpr.cross_check(parsed, ours, university)
     return {"catalog_year": year, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,
@@ -884,9 +886,9 @@ no AP / IB or transfer credit, nothing in progress. Say so in one line and plan;
    - ge_done: GE areas the DPR shows complete, in the DPR's own codes ("A2", "D", "UD-D", or "1A"); the tools
      translate older codes. Plus USH / USG / CSLG when American Institutions are met.
    - dpr_met: required courses the DPR shows met by a different course (MATH 325 listed under "MATH 225").
-   - not_on_dpr: requirements audit_progress lists that the DPR doesn't have at all (older catalogs, e.g. GE "6"
-     Ethnic Studies); import_dpr's cross_check names them ("Not found on this DPR"). Add only those the student
-     confirms their DPR lacks, re-run, and tell them to confirm with an advisor.
+   - not_on_dpr: requirements the rules have that the student's DPR doesn't list. The DPR decides: import_dpr's profile
+     already leaves out those GE areas and its cross_check names them ("Not found on this DPR"), so keep them out and
+     tell the student to confirm with an advisor. From a typed list, add only those the student confirms their DPR lacks.
    - gpa from the DPR; transfer_units (AP and IB units too); adt: true only for a verified AA-T/AS-T from a California Community College
      in a similar approved major; ge_certified: true for Cal-GETC certification of lower-division GE; first_time:
      false for a student who says they transferred, true for a freshman with AP or IB units; prior_bachelors: true if they already hold a bachelor's or higher degree from a

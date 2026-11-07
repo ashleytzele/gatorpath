@@ -26,7 +26,9 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
   ("UD-B: …" has no "Area"), and transfer courses sharing a generic code merged. A GE area truly absent from a DPR still
   shows, as it should. Keep real DPRs out of iCloud folders (Desktop, Documents)
 - [ ] A print with View All on every list: Expand All leaves long lists at 10 rows, so a cut list can still hide courses
-- [ ] The site has no way to give a transfer total (transfer_units), mark a requirement as not on the DPR (not_on_dpr)
+- [x] The DPR decides which GE areas apply (D33): one the rules have and the DPR doesn't list is left out on import, for
+  that student only, flagged for an advisor, with "Put it back" on Review. `rules/` doesn't change
+- [ ] The site has no way to give a transfer total (transfer_units)
 - [ ] Engine warnings on Review were written for AI clients ("set transfer_units", "add it to not_on_dpr"): the site has
   no field for either, so word them for students, or give the site those fields
 - [ ] The goal ranks nothing: a student reads the options. Rank by goal in the engine if it should

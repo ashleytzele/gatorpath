@@ -236,3 +236,11 @@ def test_upper_division_ge_is_read_when_the_dpr_titles_it_ud():
     audit = {"groups": [{"id": "ge_ud_b", "status": "satisfied"}, {"id": "ge_ud_c", "status": "remaining"}], "totals": {}}
     found = " ".join(cross_check(got, audit, university))
     assert "GE UD-B" not in found and "GE UD-C" not in found  # on the DPR, so not "Not found"
+
+
+def test_the_dpr_decides_which_ge_areas_apply():
+    _, university = load_rules("2024-25", "bs-cs")
+    print_ = {"requirements": [block("Area A1 - Oral Communication", "ge"), block("UD-B: Physical/Life Science", "ge")]}
+    left = [g["id"] for g in dpr.not_listed(print_, university)]
+    assert "ge_f" in left and "ge_a1" not in left and "ge_ud_b" not in left
+    assert dpr.not_listed({"requirements": [block("CSC 101", "course")]}, university) == []  # no GE on the print: nothing to go by

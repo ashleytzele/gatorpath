@@ -101,6 +101,18 @@ def test_sections_return_the_schedule_fields():
     assert client.get("/api/sections", params={"term": "spring", "courses": ["CSC 340"]}).json()["error"] == "bad_term"
 
 
+def test_a_requirement_a_student_leaves_out_reaches_the_audit_and_the_plan():
+    """Review's "not on my DPR": for this student only, flagged for an advisor, and nothing plans for it."""
+    student = SCENARIOS["Fall 2024 catalog (old GE)"]
+    slots = lambda plan: [c["slot"] for s in plan["semesters"] for c in s["courses"] if isinstance(c, dict)]
+    assert "ge_f" in slots(post("/api/plan", profile=student))
+    left_out = student | {"not_on_dpr": ["ge_f"]}
+    plan = post("/api/plan", profile=left_out)
+    assert "ge_f" not in slots(plan) and plan["check"]["valid"]
+    assert any("confirm with an advisor" in w and "Ethnic" in w for w in plan["warnings"])
+    assert next(g for g in post("/api/audit", profile=left_out)["groups"] if g["id"] == "ge_f")["waived_by"]
+
+
 def test_the_screens_other_reads():
     audit = post("/api/audit", profile=SOPHOMORE)
     assert audit["groups"] and audit["totals"]["units"]["needed"] and "see_advisor" in audit
