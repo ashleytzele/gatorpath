@@ -515,6 +515,34 @@ DPR_TOTALS = {"units": "units toward 120", "upper_division_units": "upper-divisi
               "residence_upper_division_units": "upper-division residence units"}
 
 
+def dpr_offsets(profile: dict, university: dict, catalog: dict) -> dict[str, float]:
+    """dpr_unit_offsets once the student has edited the record. A course added since the import (not in dpr_seen) was
+    most likely one the DPR's 120-unit total already counted without listing it: as far as that difference goes, it's
+    taken as already counted in every total it belongs to (upper-division, residence), so none counts it twice. Past
+    that, an added course adds as usual."""
+    offsets = profile.get("dpr_unit_offsets") or {}
+    left = max(0.0, offsets.get("units", 0))
+    if "dpr_seen" not in profile or not left:
+        return offsets
+    seen = set(profile["dpr_seen"])
+    lo, hi = university["totals"].get("upper_division_numbers", [300, 699])
+    added = {r["code"]: (r.get("units", catalog[r["code"]]["units_min"]), bool(r.get("transfer")))
+             for r in profile.get("completed", []) if r["code"] not in seen and r["code"] in catalog}
+    added |= {c: (catalog[c]["units_min"], False) for c in profile.get("in_progress", []) if c not in seen and c in catalog}
+    upper = lambda c: lo <= number(c) <= hi
+    belongs = {"units": lambda c, transfer: True, "upper_division_units": lambda c, transfer: upper(c),
+               "residence_units": lambda c, transfer: not transfer,
+               "residence_upper_division_units": lambda c, transfer: not transfer and upper(c)}
+    out = dict(offsets)
+    for code, (units, transfer) in added.items():
+        counted = min(units, left)
+        left -= counted
+        for key, fits in belongs.items():
+            if counted and fits(code, transfer):
+                out[key] = out.get(key, 0) - counted
+    return out
+
+
 def totals(profile: dict, taken: dict, groups: list[dict], university: dict, catalog: dict, warnings: list[str]) -> dict:
     t = university["totals"]
     caps = t.get("max_units_from", {})

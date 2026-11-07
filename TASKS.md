@@ -56,8 +56,8 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [x] Both progress pages show units in progress beside the done ones (totals' upper_division_units_in_progress too)
 - [x] Unit totals follow the DPR (2026-11-07, "the DPR is the rule"): import_dpr records `dpr_unit_offsets` so done + in
   progress reads as the DPR's "taken" for the 120, upper-division and residence totals, up or down. The pages headline
-  done + in progress, as the DPR does. Two real prints now match on all four. ponytail: a course the student adds on
-  Review that the print had hidden counts twice in the total; lower the offset by it if that shows up
+  done + in progress, as the DPR does. Two real prints now match on all four. A course added later (Review, the chat)
+  is taken as one the DPR counted but didn't list, as far as that difference goes (`dpr_seen`, `dpr_offsets`)
 - [x] Review reads like the DPR (2026-11-07): the Progress tab's requirement list, in the DPR's order (GE, university,
   major) and words (Completed, In progress, Incomplete). Then a dashboard: tiles (units, upper-division, requirements,
   GPA), the list, and beside it "Fix your record" (add a course the DPR doesn't show, change a grade, finish or remove

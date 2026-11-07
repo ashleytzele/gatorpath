@@ -23,7 +23,8 @@ from gatorpath.engine.planner import compare_programs as engine_compare_programs
 from gatorpath.engine.planner import check_plan as engine_check_plan
 from gatorpath.engine.planner import TERM, cover_combinations, eligible_options, pick_sections, see_advisor
 from gatorpath.engine.prereq import granted, prereq_chain, prereq_warnings, reverse_index
-from gatorpath.engine.rules import RULES_DIR, area_groups, audit, first_time, load_rules, min_grade_of, number, translate_ge
+from gatorpath.engine.rules import (RULES_DIR, area_groups, audit, dpr_offsets, first_time, load_rules, min_grade_of, number,
+                                    translate_ge)
 
 # Requirements follow the student's catalog year (rules/<kind>/<year>/); course facts are the newest Bulletin's (D23).
 YEARS = sorted(p.stem for p in (RULES_DIR / "university").glob("*.yaml"))
@@ -89,6 +90,7 @@ class Profile(TypedDict):
     prior_bachelors: NotRequired[bool]
     transfer_units: NotRequired[float]
     dpr_unit_offsets: NotRequired[dict[str, float]]  # import_dpr: what makes each unit total read as the DPR's
+    dpr_seen: NotRequired[list[str]]  # import_dpr: the courses it listed, so one added later isn't counted twice
     adt: NotRequired[bool]
     f1: NotRequired[bool]
     max_units_per_term: NotRequired[float]
@@ -413,6 +415,9 @@ def prepare(profile: dict, university: dict, year: str = YEAR) -> tuple[dict, li
                        "dpr_met": [norm_code(c) for c in profile.get("dpr_met", [])],
                        "permissions": [norm_code(c) for c in profile.get("permissions", [])],
                        "approved": {g: [norm_code(c) for c in cs] for g, cs in (profile.get("approved") or {}).items()}}
+    if "dpr_seen" in clean:  # the record as edited since the import, before any plan adds to it
+        clean["dpr_unit_offsets"] = dpr_offsets(clean | {"dpr_seen": [norm_code(c) for c in clean["dpr_seen"]]},
+                                                university, catalog_for(clean))
     unbacked = ["first_time: false needs transfer work (transfer_units or transfer rows): treated as a first-time "
                 "student until it's listed"] if profile.get("first_time") is False and first_time(clean) else []
     return clean, year_warning(profile, year) + ge_warnings + unbacked
@@ -917,6 +922,8 @@ def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dic
                                      "in_progress": []})["totals"]
     if gap := {k: round(v - seen[k]["value"], 2) for k, v in dpr.unit_totals(parsed).items() if abs(v - seen[k]["value"]) > 0.5}:
         profile["dpr_unit_offsets"] = gap
+        if any(v > 0 for v in gap.values()):  # what the DPR listed: a course added later uses up what it didn't (dpr_offsets)
+            profile["dpr_seen"] = sorted({r["code"] for r in profile["completed"]} | set(profile["in_progress"]))
     ours = audit_progress(profile)
     disagree = dpr.cross_check(parsed, ours, university)
     return {"catalog_year": year, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,

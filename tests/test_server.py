@@ -480,6 +480,27 @@ def test_every_major_s_dpr_finds_its_program():
     assert as_dpr("Physics-BS", program="bs-art")["error"] == "unknown_program"
 
 
+def test_a_course_added_after_the_dpr_isnt_counted_twice(tmp_path, monkeypatch):
+    # The DPR's 74 units include courses its print didn't list. A course the student adds on Review (or in the chat)
+    # was most likely one of those, so it uses up that difference before it adds to the total
+    pdf = tmp_path / "Degree Progress Report.pdf"
+    pdf.write_bytes(b"%PDF-1.4")
+    monkeypatch.setattr(server.dpr, "read_pdf", lambda path: DPR)
+    p = server.import_dpr(str(pdf))["profile"]
+    hidden = p["dpr_unit_offsets"]["units"]
+    total = lambda q: (lambda t: t["units"]["value"] + t["units_in_progress"])(server.audit_progress(q)["totals"])
+    assert total(p) == 74
+    added = p | {"completed": p["completed"] + [{"code": "CSC 317", "grade": "B", "term": "2025-fall"}]}  # 3 units
+    assert total(added) == 74 and hidden >= 3
+    more = [{"code": c, "grade": "B", "term": "2025-fall"} for c in
+            ("CSC 317", "CSC 340", "CSC 413", "CSC 415", "CSC 510", "CSC 600", "CSC 641", "CSC 642", "CSC 645", "CSC 648")]
+    assert hidden < 30  # ten 3-unit courses: past what the DPR could have hidden, so the rest adds
+    assert total(p | {"completed": p["completed"] + more}) == 74 - hidden + 30
+    # what's planned is the future, never what the DPR hid: a plan's courses still add in full
+    plan = server.build_plan(p | {"qr_pathway": "1/2"})
+    assert plan["check"]["valid"] or all(e.get("total") != "units" for e in plan["check"]["errors"])
+
+
 FRESH = {"program": "bs-cs", "catalog_year": "2026-27", "start_term": "2027-fall"}
 MATH_FRESH = FRESH | {"program": "bs-applied-math"}
 SCENARIOS = {
