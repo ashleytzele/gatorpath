@@ -1,14 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  buildPlan,
+  checkPlan,
   getAudit,
   getCourse,
   getPrograms,
   importDpr,
   message,
+  type Advisor,
   type Audit,
+  type Checked,
+  type CourseInfo,
   type Group,
   type ImportResult,
+  type Options,
+  type PlanResult,
   type Profile,
+  type Semester,
+  type Slot,
   type Taken,
 } from "./api";
 
@@ -1141,54 +1150,90 @@ function CourseMini({ code, title, status }: { code: string; title: string; stat
   );
 }
 
-function GoalsScreen({ build }: { build: () => void }) {
-  const [goal, setGoal] = useState("AI / Machine Learning");
+const GOALS: Record<string, string[] | null> = {
+  "bs-cs": [
+    "AI / Machine Learning",
+    "Cybersecurity",
+    "Web Development",
+    "Game Development",
+    "Data Science",
+    "Systems",
+  ],
+  "ba-psychology": ["Clinical / Counseling", "Research", "Developmental", "Industrial-Organizational"],
+};
+const PREVIEW_MAJORS = ["bs-cs", "ba-psychology", "ba-history", "bs-environmental-studies"];
+
+function GoalsScreen({
+  profile,
+  saved,
+  needs,
+  build,
+}: {
+  profile: Profile;
+  saved: Options;
+  needs?: string;
+  build: (options: Options) => void;
+}) {
+  const [goal, setGoal] = useState(saved.goal ?? "");
   const [advanced, setAdvanced] = useState(false);
-  const [major, setMajor] = useState("B.S. Computer Science");
-  const goalLists: Record<string, string[] | null> = {
-    "B.S. Computer Science": [
-      "AI / Machine Learning",
-      "Cybersecurity",
-      "Web Development",
-      "Game Development",
-      "Data Science",
-      "Systems",
-    ],
-    "B.A. Psychology": [
-      "Clinical / Counseling",
-      "Research",
-      "Developmental",
-      "Industrial-Organizational",
-    ],
-    "B.A. History": [],
-    "B.S. Environmental Studies": null,
-  };
-  const goals = goalLists[major];
+  const [previewMajor, setPreviewMajor] = useState(profile.program);
+  const [graduateBy, setGraduateBy] = useState(saved.graduate_by ?? "");
+  const [f1, setF1] = useState(saved.f1);
+  const [qr, setQr] = useState(saved.qr_pathway ?? profile.qr_pathway);
+  const [start, setStart] = useState(saved.start_term ?? "");
+  const [summer, setSummer] = useState(saved.include_summer ?? false);
+  const [winter, setWinter] = useState(saved.include_winter ?? false);
+  const [maxUnits, setMaxUnits] = useState(saved.max_units_per_term);
+  const major = DEMO ? previewMajor : profile.program;
+  const goals = major === "bs-environmental-studies" ? null : (GOALS[major] ?? []);
   const hasElectives = goals !== null;
+  const brandNew = !profile.completed?.length && !profile.in_progress?.length;
+  const askQr = !profile.qr_pathway && (brandNew || needs === "qr_pathway");
+  const programs = useLoad(getPrograms, []);
+  const title = programs.data?.find((p) => p.id === major)?.title ?? major;
   return (
     <main className="flow-page goals-page">
       <Stepper current={2} />
       <div className="flow-heading">
         <h1>What matters to you?</h1>
-        <p>This helps us shape your electives and pace. You can change these choices later.</p>
+        <p>Your dates and load set your pace. Your focus stays next to your elective choices.</p>
       </div>
+      {needs && (
+        <div className="error-card" role="alert">
+          <Icon name="warning" />
+          <div>
+            <b>
+              {needs === "qr_pathway"
+                ? "We need your math placement to place your first math class."
+                : "We need your first term to start your plan."}
+            </b>
+            <p>
+              Not sure?{" "}
+              <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+                Ask an advisor in Navigator
+              </a>
+            </p>
+          </div>
+        </div>
+      )}
       <div className="major-context">
         <span>
-          <Icon name="book" /> Goals for
+          <Icon name="book" /> Goals for {DEMO ? "" : title}
         </span>
-        <select
-          value={major}
-          onChange={(event) => {
-            setMajor(event.target.value);
-            setGoal("");
-          }}
-          aria-label="Preview goal options for major"
-        >
-          <option>B.S. Computer Science</option>
-          <option>B.A. Psychology</option>
-          <option>B.A. History</option>
-          <option>B.S. Environmental Studies</option>
-        </select>
+        {DEMO && (
+          <select
+            value={previewMajor}
+            onChange={(event) => {
+              setPreviewMajor(event.target.value);
+              setGoal("");
+            }}
+            aria-label="Preview goal options for major"
+          >
+            {[...new Set([profile.program, ...PREVIEW_MAJORS])].map((id) => (
+              <option key={id}>{id}</option>
+            ))}
+          </select>
+        )}
       </div>
       {hasElectives && (
         <div className="question-block">
@@ -1198,11 +1243,7 @@ function GoalsScreen({ build }: { build: () => void }) {
               <h3>
                 {goals.length ? "What do you want to focus on?" : "What are you interested in?"}
               </h3>
-              <p>
-                {goals.length
-                  ? `Options are tailored to ${major}.`
-                  : "We’ll use your answer to rank flexible elective choices."}
-              </p>
+              <p>We’ll show it next to your elective choices, so you can pick with it in mind.</p>
             </div>
           </div>
           {goals.length > 0 ? (
@@ -1215,7 +1256,12 @@ function GoalsScreen({ build }: { build: () => void }) {
               ))}
             </div>
           ) : (
-            <input className="interest-input" placeholder="What are you interested in?" />
+            <input
+              className="interest-input"
+              placeholder="What are you interested in?"
+              value={goal === "Undecided" ? "" : goal}
+              onChange={(e) => setGoal(e.target.value)}
+            />
           )}
           <button
             className={`undecided-choice ${goal === "Undecided" ? "selected" : ""}`}
@@ -1229,7 +1275,7 @@ function GoalsScreen({ build }: { build: () => void }) {
         <div className="no-goals-note">
           <Icon name="check" />
           <div>
-            <b>No focus question needed for {major}</b>
+            <b>No focus question needed for {title}</b>
             <span>This major has no elective choices, so we’ll skip this step.</span>
           </div>
         </div>
@@ -1243,11 +1289,17 @@ function GoalsScreen({ build }: { build: () => void }) {
               <p>We’ll tell you if that pace looks realistic.</p>
             </div>
           </div>
-          <select aria-label="When do you want to graduate?">
-            <option>Just follow the recommended pace</option>
-            <option>Spring 2028</option>
-            <option>Fall 2028</option>
-            <option>Spring 2029</option>
+          <select
+            aria-label="When do you want to graduate?"
+            value={graduateBy}
+            onChange={(e) => setGraduateBy(e.target.value)}
+          >
+            <option value="">Just follow the recommended pace</option>
+            {nearbyTerms(0, 12).map((t) => (
+              <option value={t} key={t}>
+                {termLabel(t)}
+              </option>
+            ))}
           </select>
         </div>
         <div className="question-block">
@@ -1262,26 +1314,59 @@ function GoalsScreen({ build }: { build: () => void }) {
             </div>
           </div>
           <div className="segmented">
-            <button>No</button>
-            <button>Yes</button>
-            <button className="active">Prefer not to say</button>
+            <button className={f1 === false ? "active" : ""} onClick={() => setF1(false)}>
+              No
+            </button>
+            <button className={f1 === true ? "active" : ""} onClick={() => setF1(true)}>
+              Yes
+            </button>
+            <button className={f1 === undefined ? "active" : ""} onClick={() => setF1(undefined)}>
+              Prefer not to say
+            </button>
           </div>
         </div>
       </div>
-      <div className="question-block compact-question">
-        <div className="question-title">
-          <span>4</span>
-          <div>
-            <h3>What is your math placement QR?</h3>
-            <p>We use this to place your first math class.</p>
+      {askQr && (
+        <div className="question-block compact-question">
+          <div className="question-title">
+            <span>4</span>
+            <div>
+              <h3>What is your math placement QR?</h3>
+              <p>We use this to place your first math class.</p>
+            </div>
+          </div>
+          <div className="segmented small">
+            <button className={qr === "1/2" ? "active" : ""} onClick={() => setQr("1/2")}>
+              QR 1 / 2
+            </button>
+            <button className={qr === "3/4" ? "active" : ""} onClick={() => setQr("3/4")}>
+              QR 3 / 4
+            </button>
+            <button className={qr === undefined ? "active" : ""} onClick={() => setQr(undefined)}>
+              I’m not sure
+            </button>
           </div>
         </div>
-        <div className="segmented small">
-          <button className="active">QR 1 / 2</button>
-          <button>QR 3 / 4</button>
-          <button>I’m not sure</button>
+      )}
+      {needs === "start_term" && (
+        <div className="question-block compact-question">
+          <div className="question-title">
+            <span>5</span>
+            <div>
+              <h3>What’s your first term?</h3>
+              <p>Your plan starts here.</p>
+            </div>
+          </div>
+          <select aria-label="First term" value={start} onChange={(e) => setStart(e.target.value)}>
+            <option value="">Choose a term</option>
+            {nearbyTerms(0, 4).map((t) => (
+              <option value={t} key={t}>
+                {termLabel(t)}
+              </option>
+            ))}
+          </select>
         </div>
-      </div>
+      )}
       <button className="advanced-toggle" onClick={() => setAdvanced(!advanced)}>
         <span>
           <Icon name="plus" /> Advanced options
@@ -1291,14 +1376,23 @@ function GoalsScreen({ build }: { build: () => void }) {
       {advanced && (
         <div className="advanced-panel">
           <label>
-            <input type="checkbox" /> Include summer terms
+            <input type="checkbox" checked={summer} onChange={(e) => setSummer(e.target.checked)} />{" "}
+            Include summer terms
           </label>
           <label>
-            <input type="checkbox" /> Include Winter Session
+            <input type="checkbox" checked={winter} onChange={(e) => setWinter(e.target.checked)} />{" "}
+            Include Winter Session
           </label>
           <label>
-            Maximum units per term <input type="range" min="12" max="19" defaultValue="15" />
-            <small>Roadmap pace: 15. Over 15 units needs advisor approval.</small>
+            Maximum units per term: {maxUnits ?? "the roadmap’s pace"}{" "}
+            <input
+              type="range"
+              min="12"
+              max="19"
+              value={maxUnits ?? 15}
+              onChange={(e) => setMaxUnits(Number(e.target.value))}
+            />
+            <small>Above the roadmap’s load needs advisor approval.</small>
           </label>
         </div>
       )}
@@ -1306,7 +1400,20 @@ function GoalsScreen({ build }: { build: () => void }) {
         <span>
           <Icon name="lock" /> You can change these later.
         </span>
-        <Button onClick={build}>
+        <Button
+          onClick={() =>
+            build({
+              ...(goal && { goal }),
+              ...(graduateBy && { graduate_by: graduateBy }),
+              ...(f1 !== undefined && { f1 }),
+              ...(qr && { qr_pathway: qr }),
+              ...(start && { start_term: start }),
+              ...(summer && { include_summer: true }),
+              ...(winter && { include_winter: true }),
+              ...(maxUnits !== undefined && { max_units_per_term: maxUnits }),
+            })
+          }
+        >
           Build my plan <Icon name="arrow" />
         </Button>
       </div>
@@ -1314,13 +1421,38 @@ function GoalsScreen({ build }: { build: () => void }) {
   );
 }
 
-function BuildingScreen({ done }: { done: () => void }) {
+function BuildingScreen({
+  profile,
+  options,
+  done,
+  back,
+}: {
+  profile: Profile;
+  options: Options;
+  done: (plan: PlanResult, audit: Audit) => void;
+  back: () => void;
+}) {
+  const built = useLoad(
+    () => Promise.all([buildPlan(profile, options), getAudit({ ...profile, ...options })]),
+    [],
+  );
   useEffect(() => {
-    const t = setTimeout(done, 1700);
-    return () => clearTimeout(t);
-  }, [done]);
+    if (built.data) done(...built.data);
+  }, [built.data]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (built.error) {
+    return (
+      <main className="flow-page">
+        <ErrorCard text={built.error} retry={built.retry} />
+        <div className="flow-action">
+          <Button kind="secondary" onClick={back}>
+            Back to your goals
+          </Button>
+        </div>
+      </main>
+    );
+  }
   return (
-    <main className="building-screen">
+    <main className="building-screen" role="status">
       <div className="building-orb">
         <Icon name="route" size={32} />
         <i />
@@ -1331,13 +1463,10 @@ function BuildingScreen({ done }: { done: () => void }) {
       <p>Ordering prerequisites, balancing units, and checking course availability.</p>
       <div className="check-list">
         <span>
-          <Icon name="check" /> 47 completed units found
-        </span>
-        <span>
-          <Icon name="check" /> Major requirements mapped
+          <Icon name="check" /> Your record is in
         </span>
         <span className="checking">
-          <i /> Building semester sequence
+          <i /> Mapping requirements and building semesters
         </span>
       </div>
       <div className="skeleton-row">
@@ -1349,74 +1478,37 @@ function BuildingScreen({ done }: { done: () => void }) {
   );
 }
 
-type PlanCourse = { code: string; title: string; units: number; page: number };
-type PlanSlot = { label: string; units: number };
-type PlanTerm = {
-  year: string;
-  term: string;
-  courses: PlanCourse[];
-  slots?: PlanSlot[];
+const isSlot = (c: string | Slot): c is Slot => typeof c !== "string";
+const yearOf = (term: string) => {
+  const year = Number(term.slice(0, 4));
+  const first = term.endsWith("fall") ? year : year - 1;
+  return `${first}–${String(first + 1).slice(2)}`;
 };
-// Sample student: B.S. Computer Science, catalog Fall 2025. Page numbers are illustrative.
-const terms: PlanTerm[] = [
-  {
-    year: "2026–27",
-    term: "Spring 2027",
-    courses: [
-      { code: "CSC 340", title: "Programming Methodology", units: 3, page: 1912 },
-      { code: "CSC 256", title: "Machine Structures", units: 3, page: 1908 },
-      { code: "MATH 324", title: "Probability & Statistics", units: 3, page: 2234 },
-      { code: "MATH 225", title: "Introduction to Linear Algebra", units: 3, page: 2231 },
-      { code: "CSC 300GW", title: "Ethics, Communication & Tools for Software", units: 3, page: 1910 },
-    ],
-  },
-  {
-    year: "2027–28",
-    term: "Fall 2027",
-    courses: [
-      { code: "CSC 317", title: "Introduction to Web Software Development", units: 3, page: 1911 },
-      { code: "CSC 413", title: "Software Development", units: 3, page: 1918 },
-      { code: "CSC 510", title: "Analysis of Algorithms", units: 3, page: 1924 },
-      { code: "HUM 200", title: "Introduction to Humanities", units: 3, page: 2176 },
-    ],
-    slots: [{ label: "Senior elective", units: 3 }],
-  },
-  {
-    year: "2027–28",
-    term: "Spring 2028",
-    courses: [
-      { code: "CSC 415", title: "Operating System Principles", units: 3, page: 1920 },
-      { code: "PHYS 230", title: "General Physics with Calculus II", units: 3, page: 2310 },
-      { code: "PHYS 232", title: "General Physics with Calculus II Lab", units: 1, page: 2310 },
-      { code: "LTNS 280", title: "Race, Gender and Power", units: 3, page: 2211 },
-      { code: "CSC 645", title: "Computer Networks", units: 3, page: 1941 },
-    ],
-    slots: [{ label: "Senior elective", units: 3 }],
-  },
-  {
-    year: "2028–29",
-    term: "Fall 2028",
-    courses: [
-      { code: "CSC 648", title: "Software Engineering", units: 3, page: 1943 },
-      { code: "CSC 665", title: "Artificial Intelligence", units: 3, page: 1948 },
-    ],
-    slots: [
-      { label: "Senior elective", units: 3 },
-      { label: "Upper-division GE (Area 4UD)", units: 3 },
-    ],
-  },
-  {
-    year: "2028–29",
-    term: "Spring 2029",
-    courses: [{ code: "PLSI 200", title: "American Government", units: 3, page: 2328 }],
-  },
-];
+const unitsOf = (c: string | Slot, info: Record<string, CourseInfo>) =>
+  isSlot(c) ? c.units : parseFloat(String(info[c]?.units)) || 0;
+const termUnits = (s: Semester, info: Record<string, CourseInfo>) =>
+  s.courses.reduce((total, c) => total + unitsOf(c, info), 0);
+const slotLabel = (slot: Slot, audit: Audit) =>
+  slot.slot === "elective"
+    ? "Free elective: any course"
+    : (audit.groups.find((g) => g.id === slot.slot)?.title ?? slot.slot);
 
-const termUnits = (term: PlanTerm) =>
-  term.courses.reduce((total, course) => total + course.units, 0) +
-  (term.slots ?? []).reduce((total, slot) => total + slot.units, 0);
-const unitsLeft = terms.reduce((total, term) => total + termUnits(term), 0);
-const choicesLeft = terms.reduce((total, term) => total + (term.slots?.length ?? 0), 0);
+/** One plan and what's known about it, shared by the tabs. It lives in memory only. */
+type Work = {
+  student: Profile;
+  options: Options;
+  audit: Audit;
+  plan: PlanResult;
+  semesters: Semester[];
+  check: Checked;
+  info: Record<string, CourseInfo>;
+  busy: string;
+  failed: string;
+  whatIf: (change: Options, label: string) => void;
+  applyFold: () => void;
+  undo?: () => void;
+  note: string;
+};
 
 function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
   const items: [Tab, string, IconName][] = [
@@ -1437,42 +1529,86 @@ function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
   );
 }
 
+function AdvisorCards({ items }: { items: Advisor[] }) {
+  return (
+    <div className="advisor-list">
+      {items.map((a) => (
+        <div key={a.role}>
+          <b>{a.who}</b>
+          <p>
+            {a.why.join(" ")} {a.how_to_book}
+          </p>
+          <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+            Book in Navigator <Icon name="arrow" size={12} />
+          </a>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function PlanView({
-  openElectives,
+  work,
+  openChoice,
   openCourse,
+  openSchedule,
   toast,
 }: {
-  openElectives: () => void;
-  openCourse: (x: string) => void;
+  work: Work;
+  openChoice: (slot: Slot, term: string) => void;
+  openCourse: (code: string) => void;
+  openSchedule: () => void;
   toast: (x: string) => void;
 }) {
-  const [summer, setSummer] = useState(false);
-  const [planState, setPlanState] = useState<"open" | "complete" | "problem" | "unreachable">(
-    "open",
+  const { audit, check, info, options, plan, semesters } = work;
+  const pace = plan.pace;
+  const [preview, setPreview] = useState<"" | "open" | "complete" | "problem" | "unreachable">("");
+  const slots = semesters.flatMap((s) => s.courses.filter(isSlot).map((slot) => ({ slot, term: s.term })));
+  const choicesLeft = slots.length;
+  const unitsLeft = semesters.reduce((total, s) => total + termUnits(s, info), 0);
+  const years = [...new Set(semesters.map((s) => yearOf(s.term)))];
+  const lastTerm = semesters[semesters.length - 1]?.term;
+  const graduation = semesters.length === plan.semesters.length ? plan.est_graduation_term : lastTerm;
+  const unreachable = pace?.on_time === false && !!pace.why_not?.length;
+  const planState =
+    preview || (!check.valid ? "problem" : unreachable ? "unreachable" : choicesLeft ? "open" : "complete");
+  const errors = check.errors.length ? check.errors : [{ message: "Sample problem, from the preview bar." }];
+  const warnings = [...new Set([...plan.warnings, ...(check.warnings ?? [])])];
+  const advisors = [...(check.see_advisor ?? []), ...(plan.see_advisor ?? [])].filter(
+    (a, i, all) => all.findIndex((x) => x.role === a.role) === i,
   );
-  const [pace, setPace] = useState<"lighter" | "faster" | "">("");
-  const [whatIfResult, setWhatIfResult] = useState("");
-  const years = ["2026–27", "2027–28", "2028–29"];
-  const setWhatIf = (result: string) => setWhatIfResult(result);
+  const chain = pace?.longest_chain ?? [];
+  const copyPlan = () => {
+    const text = semesters
+      .map(
+        (s) =>
+          `${termLabel(s.term)}: ${s.courses.map((c) => (isSlot(c) ? slotLabel(c, audit) : c)).join(", ")}`,
+      )
+      .join("\n");
+    navigator.clipboard?.writeText(text).catch(() => {});
+    toast("Plan copied to clipboard.");
+  };
   return (
     <div className="app-content">
-      <div className="variant-switcher">
-        <span>Preview plan state</span>
-        {[
-          ["open", "Choices open"],
-          ["complete", "All choices made"],
-          ["problem", "Has a problem"],
-          ["unreachable", "Date unreachable"],
-        ].map(([value, label]) => (
-          <button
-            className={planState === value ? "active" : ""}
-            onClick={() => setPlanState(value as typeof planState)}
-            key={value}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      {DEMO && (
+        <div className="variant-switcher">
+          <span>Preview plan state</span>
+          {[
+            ["open", "Choices open"],
+            ["complete", "All choices made"],
+            ["problem", "Has a problem"],
+            ["unreachable", "Date unreachable"],
+          ].map(([value, label]) => (
+            <button
+              className={planState === value ? "active" : ""}
+              onClick={() => setPreview(value as typeof preview)}
+              key={value}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
       {planState === "open" && (
         <div className="plan-status open">
           <span>
@@ -1494,7 +1630,7 @@ function PlanView({
             it before you register.
           </span>
           <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-            Book advising <Icon name="arrow" size={14} />
+            Book advising in Navigator <Icon name="arrow" size={14} />
           </a>
         </div>
       )}
@@ -1504,13 +1640,14 @@ function PlanView({
             <Icon name="warning" />
             <span>
               <b>This plan has a problem</b>
-              <small>Fix it below, or ask an advisor what to do.</small>
+              <small>Change your choices below, or ask an advisor what to do.</small>
             </span>
           </div>
-          <p>
-            <span>Spring 2028 has 16 units. More than 15 needs advisor approval.</span>
-            <button onClick={() => setPlanState("open")}>Move LTNS 280 to Fall 2028</button>
-          </p>
+          {errors.map((e) => (
+            <p key={e.message}>
+              <span>{e.message}</span>
+            </p>
+          ))}
         </div>
       )}
       {planState === "unreachable" && (
@@ -1518,19 +1655,20 @@ function PlanView({
           <div>
             <Icon name="clock" />
             <span>
-              <b>Spring 2028 isn’t reachable</b>
-              <small>
-                {unitsLeft} units left need at least 4 terms, even at the 19-unit maximum.
-              </small>
+              <b>{termLabel(pace?.graduate_by) || "That date"} isn’t reachable</b>
+              <small>{pace?.why_not?.join(" ")}</small>
             </span>
           </div>
           <div className="problem-actions">
-            <Button kind="secondary" onClick={() => setPlanState("open")}>
+            <Button
+              kind="secondary"
+              onClick={() => work.whatIf({ include_summer: true }, "With summers")}
+            >
               Add summer terms
             </Button>
-            <Button kind="secondary" onClick={() => setPlanState("open")}>
-              Ask an advisor about options
-            </Button>
+            <a className="button secondary" href={NAVIGATOR} target="_blank" rel="noreferrer">
+              Ask an advisor in Navigator
+            </a>
           </div>
         </div>
       )}
@@ -1541,55 +1679,74 @@ function PlanView({
             <h1>Fix the problem above to see your graduation date</h1>
           ) : (
             <h1>
-              You can graduate <em>Spring 2029</em>
+              You can graduate <em>{termLabel(graduation)}</em>
             </h1>
           )}
           <div className="hero-badges">
-            <StatusBadge type={planState === "complete" ? "done" : "warning"}>
-              {planState === "complete" ? "All choices made" : `${choicesLeft} choices left`}
+            <StatusBadge type={choicesLeft ? "warning" : "done"}>
+              {choicesLeft ? `${choicesLeft} choices left` : "All choices made"}
             </StatusBadge>
-            <span>{terms.length} semesters left</span>
+            <span>{semesters.length} semesters left</span>
             <span>{unitsLeft} units left</span>
           </div>
-          <div className="pace-options">
-            <button
-              className={pace === "lighter" ? "selected" : ""}
-              onClick={() => setPace("lighter")}
-            >
-              <b>Lighter</b>
-              <span>Keep every term at 15 units or less · graduate Fall 2029</span>
-            </button>
-            <button
-              className={pace === "faster" ? "selected" : ""}
-              onClick={() => setPace("faster")}
-            >
-              <b>Faster</b>
-              <span>Move PLSI 200 into Fall 2028 (15 units) · graduate Fall 2028</span>
-            </button>
+          {(pace?.normal_load || pace?.fold_last_term) && (
+            <div className="pace-options">
+              {pace.normal_load && (
+                <button
+                  onClick={() =>
+                    work.whatIf(
+                      { max_units_per_term: pace.normal_load!.max_units_per_term },
+                      "At a lighter pace",
+                    )
+                  }
+                >
+                  <b>Lighter</b>
+                  <span>
+                    Keep every term at {pace.normal_load.max_units_per_term} units or less · graduate{" "}
+                    {termLabel(pace.normal_load.est_graduation_term)}
+                  </span>
+                </button>
+              )}
+              {pace.fold_last_term && (
+                <button onClick={work.applyFold}>
+                  <b>Faster</b>
+                  <span>
+                    One {pace.fold_last_term.units}-unit {termLabel(pace.fold_last_term.term)} · graduate{" "}
+                    {termLabel(pace.fold_last_term.est_graduation_term)}
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+        {pace && (
+          <div className="pace-note">
+            <span>
+              <Icon name="route" />
+            </span>
+            {pace.min_terms_by_prereqs >= pace.min_terms_by_units && chain.length > 0 ? (
+              <p>
+                Your longest prerequisite chain{" "}
+                <Tooltip text="A prerequisite is a class you must finish before taking another." />{" "}
+                <b>{chain.join(" → ")}</b> sets your graduation date.
+              </p>
+            ) : (
+              <p>
+                Your units per term set your graduation date: you need at least{" "}
+                <b>{pace.min_terms_by_units} terms</b> at this pace.
+              </p>
+            )}
           </div>
-        </div>
-        <div className="pace-note">
-          <span>
-            <Icon name="route" />
-          </span>
-          <p>
-            Your longest prerequisite chain{" "}
-            <Tooltip text="A prerequisite is a class you must finish before taking another." />{" "}
-            <b>CSC 340 → CSC 413 → CSC 648</b> sets your graduation date.
-          </p>
-        </div>
+        )}
       </section>
       <ol className="plan-route" aria-label="Route to graduation">
-        {terms.map((t, i) => (
-          <li
-            key={t.term}
-            className={i === 0 ? "next" : i === terms.length - 1 ? "finish" : ""}
-          >
+        {semesters.map((s, i) => (
+          <li key={s.term} className={i === 0 ? "next" : i === semesters.length - 1 ? "finish" : ""}>
             <span className="route-dot" aria-hidden="true">
-              {i === terms.length - 1 && <Icon name="check" size={12} />}
+              {i === semesters.length - 1 && <Icon name="check" size={12} />}
             </span>
             <small>
-              {t.term.startsWith("Spring") ? "Spring" : "Fall"} ’{t.term.slice(-2)}
+              {termLabel(s.term).split(" ")[0]} ’{s.term.slice(2, 4)}
             </small>
           </li>
         ))}
@@ -1598,49 +1755,80 @@ function PlanView({
         <div>
           <span>What if I…</span>
           <button
-            className={summer ? "active" : ""}
-            onClick={() => {
-              setSummer(!summer);
-              setWhatIf(!summer ? "Graduation moves to Fall 2028 (1 term sooner)" : "");
-            }}
+            className={options.include_summer ? "active" : ""}
+            disabled={!!work.busy}
+            onClick={() =>
+              work.whatIf(
+                { include_summer: !options.include_summer },
+                options.include_summer ? "Without summers" : "With summers",
+              )
+            }
           >
             <Icon name="plus" /> Add summer
           </button>
-          <button onClick={() => setWhatIf("Taking LTNS 280 in Winter Session brings Spring 2028 to 13 units")}>
+          <button
+            className={options.include_winter ? "active" : ""}
+            disabled={!!work.busy}
+            onClick={() =>
+              work.whatIf(
+                { include_winter: !options.include_winter },
+                options.include_winter ? "Without Winter Session" : "With Winter Session",
+              )
+            }
+          >
             <Icon name="plus" /> Add winter
           </button>
           <label>
             Units per term{" "}
             <select
-              defaultValue="15"
-              onChange={(e) => setWhatIf(`Plan rebalanced to ${e.target.value} units per term`)}
+              disabled={!!work.busy}
+              value={options.max_units_per_term ?? ""}
+              onChange={(e) =>
+                work.whatIf(
+                  { max_units_per_term: e.target.value ? Number(e.target.value) : undefined },
+                  e.target.value ? `At ${e.target.value} units a term` : "At the roadmap’s pace",
+                )
+              }
             >
-              <option>15</option>
-              <option>12</option>
-              <option>18</option>
+              <option value="">Roadmap</option>
+              {[12, 15, 18].map((n) => (
+                <option key={n}>{n}</option>
+              ))}
             </select>
           </label>
           <label>
             Graduate by{" "}
-            <select onChange={() => setWhatIf("Graduation moves to Fall 2028 (1 term sooner)")}>
-              <option>Recommended</option>
-              <option>Fall 2028</option>
+            <select
+              disabled={!!work.busy}
+              value={options.graduate_by ?? ""}
+              onChange={(e) =>
+                work.whatIf(
+                  { graduate_by: e.target.value || undefined },
+                  e.target.value ? `Aiming for ${termLabel(e.target.value)}` : "At the recommended pace",
+                )
+              }
+            >
+              <option value="">Recommended</option>
+              {nearbyTerms(0, 12).map((t) => (
+                <option value={t} key={t}>
+                  {termLabel(t)}
+                </option>
+              ))}
             </select>
           </label>
         </div>
-        {whatIfResult && (
-          <span className="what-if-result">
-            {whatIfResult}
-            <button
-              onClick={() => {
-                setWhatIfResult("");
-                setSummer(false);
-              }}
-            >
-              Undo
-            </button>
+        {work.busy && (
+          <span className="what-if-result" role="status">
+            {work.busy}
           </span>
         )}
+        {work.note && !work.busy && (
+          <span className="what-if-result">
+            {work.note}
+            {work.undo && <button onClick={work.undo}>Undo</button>}
+          </span>
+        )}
+        {work.failed && <ErrorCard text={work.failed} />}
       </section>
       <div className="timeline-heading">
         <div>
@@ -1663,36 +1851,33 @@ function PlanView({
               <span>{year}</span>
               <i />
             </div>
-            {terms
-              .filter((term) => term.year === year)
-              .map((t) => {
-                const ti = terms.indexOf(t);
-                const isLast = ti === terms.length - 1;
-                const units = termUnits(t);
-                const codes = t.courses.map((course) => course.code);
+            {semesters
+              .filter((s) => yearOf(s.term) === year)
+              .map((s) => {
+                const ti = semesters.indexOf(s);
+                const isLast = ti === semesters.length - 1;
+                const codes = s.courses.filter((c): c is string => !isSlot(c));
+                const count = s.courses.length;
                 return (
                   <details
                     className={`term-card vertical ${isLast ? "graduation-term" : ""}`}
                     open={ti < 2}
-                    key={t.term}
+                    key={s.term}
                   >
                     <summary className="term-head">
                       <div>
                         <span>
                           {ti === 0 ? "Next term" : isLast ? "Final term" : `Term ${ti + 1}`}
                         </span>
-                        <h3>{t.term}</h3>
+                        <h3>{termLabel(s.term)}</h3>
                       </div>
                       <p>
-                        {units} units <i>·</i> {t.courses.length + (t.slots?.length ?? 0)}{" "}
-                        {t.courses.length + (t.slots?.length ?? 0) === 1 ? "course" : "courses"}
+                        {termUnits(s, info)} units <i>·</i> {count} {count === 1 ? "course" : "courses"}
                         {ti >= 2 && (
                           <small>
                             {" "}
                             · {codes.slice(0, 2).join(", ")}
-                            {codes.length + (t.slots?.length ?? 0) > 2
-                              ? ` + ${codes.length + (t.slots?.length ?? 0) - Math.min(codes.length, 2)} more`
-                              : ""}
+                            {count > 2 ? ` + ${count - Math.min(codes.length, 2)} more` : ""}
                           </small>
                         )}
                       </p>
@@ -1704,35 +1889,31 @@ function PlanView({
                       <Icon name="chevron" />
                     </summary>
                     <div className="term-courses single-column">
-                      {t.courses.map((c, ci) => (
-                        <button
-                          className="course-row"
-                          onClick={() => openCourse(c.code)}
-                          key={c.code}
-                        >
+                      {codes.map((code) => (
+                        <button className="course-row" onClick={() => openCourse(code)} key={code}>
                           <span>
-                            <b>{c.code}</b>
-                            <small>{c.title}</small>
+                            <b>{code}</b>
+                            <small>{info[code]?.title}</small>
                             <em>
-                              <Icon name="book" size={12} /> Bulletin p.{c.page}
+                              <Icon name="book" size={12} /> Bulletin p.{info[code]?.source_page}
                             </em>
                           </span>
-                          <i>{c.units} units</i>
+                          <i>{info[code]?.units} units</i>
                           <Icon name="chevron" size={15} />
                         </button>
                       ))}
-                      {(t.slots ?? []).map((slot, si) => (
+                      {s.courses.filter(isSlot).map((slot, si) => (
                         <button
-                          id={ti === 1 && si === 0 ? "first-open-slot" : undefined}
+                          id={slots[0]?.slot === slot ? "first-open-slot" : undefined}
                           className="slot-card list-slot"
-                          onClick={openElectives}
-                          key={`${slot.label}-${si}`}
+                          onClick={() => openChoice(slot, s.term)}
+                          key={`${slot.slot}-${si}`}
                         >
                           <span>
                             <Icon name="plus" />
                           </span>
                           <div>
-                            <b>{slot.label}</b>
+                            <b>{slotLabel(slot, audit)}</b>
                             <small>Open choice · {slot.units} units</small>
                           </div>
                           <strong>
@@ -1742,15 +1923,7 @@ function PlanView({
                       ))}
                     </div>
                     {ti === 0 && (
-                      <Button
-                        kind="secondary"
-                        className="term-schedule"
-                        onClick={() =>
-                          document
-                            .querySelector<HTMLButtonElement>(".app-tabs button:last-child")
-                            ?.click()
-                        }
-                      >
+                      <Button kind="secondary" className="term-schedule" onClick={openSchedule}>
                         View class schedule <Icon name="calendar" />
                       </Button>
                     )}
@@ -1761,40 +1934,34 @@ function PlanView({
         ))}
       </div>
       <div className="plan-lower">
-        <div className="warning-card collapsible">
-          <Icon name="warning" />
-          <div>
-            <b>One pace warning</b>
-            <p>
-              <strong>Spring 2028 is 16 units.</strong> Over 15 needs advisor approval.
-            </p>
-          </div>
-          <Icon name="chevron" />
-        </div>
+        {!!warnings.length && (
+          <details className="warning-card collapsible">
+            <summary>
+              <Icon name="warning" /> <b>{warnings.length} things to check</b>
+            </summary>
+            <ul>
+              {warnings.map((w) => (
+                <li key={w}>{w}</li>
+              ))}
+            </ul>
+          </details>
+        )}
         <SectionCard title="Questions? Talk to an advisor">
-          <div className="advisor-list">
-            <div>
-              <span>CS department advisor</span>
-              <p>Approve the 16-unit Spring 2028 term and check your senior-elective choices.</p>
-              <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-                How to book <Icon name="arrow" size={12} />
-              </a>
-            </div>
-            <div>
-              <span>Undergraduate Advising Center</span>
-              <p>GE Area 6 isn’t on your DPR. Ask how it’s met, plus any GE or graduation question.</p>
-              <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-                How to book <Icon name="arrow" size={12} />
-              </a>
-            </div>
-          </div>
+          <AdvisorCards items={advisors} />
+          <p className="advisor-fallback">
+            For any question about your plan, book advising in{" "}
+            <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+              Navigator
+            </a>
+            .
+          </p>
         </SectionCard>
       </div>
       <div className="plan-actions">
         <Button kind="secondary" icon="download" onClick={() => window.print()}>
           Print for your advisor
         </Button>
-        <Button kind="secondary" icon="copy" onClick={() => toast("Plan copied to clipboard.")}>
+        <Button kind="secondary" icon="copy" onClick={copyPlan}>
           Copy plan
         </Button>
         <a
@@ -1804,23 +1971,48 @@ function PlanView({
           rel="noreferrer"
           style={{ textDecoration: "none" }}
         >
-          Book advising <Icon name="arrow" />
+          Book advising in Navigator <Icon name="arrow" />
         </a>
       </div>
     </div>
   );
 }
 
-function ProgressView() {
-  const groups = [
-    ["Mathematics & Physics", "6 / 8 done", 75],
-    ["Core Computer Science", "3 / 9 done", 34],
-    ["Advanced CS", "0 / 3", 8],
-    ["Senior Electives", "0 / 5", 0],
-    ["General Education", "6 / 10 done · 2 planned", 60],
-    ["SF State Studies", "2 / 4 done", 50],
-    ["American Institutions", "1 / 2 done · 1 planned", 50],
+/** Done, in progress and left in one group, whichever way the rules count it. */
+function groupProgress(g: Group) {
+  const courses = g.counted.length + g.in_progress.length + (g.remaining?.length ?? 0);
+  const done = isDone(g);
+  if (courses && g.remaining) {
+    return {
+      percent: done ? 100 : (g.counted.length / courses) * 100,
+      label: `${g.counted.length} / ${courses} done`,
+    };
+  }
+  const needed = g.units_needed ?? 0;
+  const have = g.units_done ?? 0;
+  return {
+    percent: done ? 100 : needed ? (have / needed) * 100 : 0,
+    label: needed ? `${have} / ${needed} units` : done ? "Done" : "Not yet",
+  };
+}
+
+function ProgressView({ work }: { work: Work }) {
+  const { audit, semesters } = work;
+  const plannedTerm = (code: string) => semesters.find((s) => s.courses.includes(code))?.term;
+  const plannedSlot = (g: Group) => {
+    const term = semesters.find((s) => s.courses.some((c) => isSlot(c) && c.slot === g.id))?.term;
+    return term && `Planned · ${termLabel(term)}`;
+  };
+  const buckets: [string, Group[]][] = [
+    ["General Education", audit.groups.filter((g) => g.id.startsWith("ge_"))],
+    ["SF State Studies", audit.groups.filter((g) => g.id.startsWith("sfss_"))],
+    ["American Institutions", audit.groups.filter((g) => g.id.startsWith("ai_"))],
+    [
+      "Other university requirements",
+      audit.groups.filter((g) => g.kind === "university" && !/^(ge|sfss|ai)_/.test(g.id)),
+    ],
   ];
+  const t = audit.totals;
   return (
     <div className="app-content">
       <div className="page-title">
@@ -1829,8 +2021,12 @@ function ProgressView() {
       </div>
       <AdvisingNote />
       <div className="ring-grid">
-        <UnitBar value={47} total={120} label="Total units" />
-        <UnitBar value={0} total={40} label="Upper-division units" />
+        <UnitBar value={t.units.value} total={t.units.needed ?? 120} label="Total units" />
+        <UnitBar
+          value={t.upper_division_units.value}
+          total={t.upper_division_units.needed ?? 0}
+          label="Upper-division units"
+        />
         <div className="legend">
           <b>Status key</b>
           <span>
@@ -1847,34 +2043,71 @@ function ProgressView() {
           </span>
         </div>
       </div>
-      <SectionCard title="Degree requirements" count="47 of 120 units earned">
+      <SectionCard
+        title="Degree requirements"
+        count={`${t.units.value} of ${t.units.needed} units earned`}
+      >
         <div className="requirement-list">
-          {groups.map((g, i) => (
-            <details key={g[0]} open={i === 0 || i === 4}>
-              <summary>
-                <span className="req-check" aria-hidden="true">
-                  {g[2] === 100 ? <Icon name="check" /> : null}
-                </span>
-                <b>{g[0]}</b>
-                <div className="mini-progress">
-                  <i style={{ width: `${g[2]}%` }} />
-                </div>
-                <small>{g[1]}</small>
-                <Icon name="chevron" />
-              </summary>
-              {i === 0 && (
-                <div className="req-courses">
-                  <CourseStatus name="MATH 226 · Calculus I" type="done" label="Done" />
-                  <CourseStatus name="MATH 227 · Calculus II" type="progress" label="In progress" />
-                  <CourseStatus
-                    name="PHYS 230 · Physics II"
-                    type="remaining"
-                    label="Planned · Spring 2028"
-                  />
-                </div>
-              )}
-            </details>
-          ))}
+          {audit.groups
+            .filter((g) => g.kind === "major")
+            .map((g, i) => {
+              const p = groupProgress(g);
+              return (
+                <details key={g.id} open={i === 0}>
+                  <summary>
+                    <span className="req-check" aria-hidden="true">
+                      {p.percent === 100 ? <Icon name="check" /> : null}
+                    </span>
+                    <b>{g.title}</b>
+                    <div className="mini-progress">
+                      <i style={{ width: `${p.percent}%` }} />
+                    </div>
+                    <small>{p.label}</small>
+                    <Icon name="chevron" />
+                  </summary>
+                  <div className="req-courses">
+                    {g.counted.map((c) => (
+                      <CourseStatus name={c} type="done" label="Done" key={c} />
+                    ))}
+                    {g.in_progress.map((c) => (
+                      <CourseStatus name={c} type="progress" label="In progress" key={c} />
+                    ))}
+                    {g.remaining?.map((c) => (
+                      <CourseStatus
+                        name={c}
+                        type="remaining"
+                        label={plannedTerm(c) ? `Planned · ${termLabel(plannedTerm(c))}` : "Remaining"}
+                        key={c}
+                      />
+                    ))}
+                  </div>
+                </details>
+              );
+            })}
+          {buckets
+            .filter(([, groups]) => groups.length)
+            .map(([title, groups]) => {
+              const met = groups.filter(isDone).length;
+              const percent = (met / groups.length) * 100;
+              return (
+                <details key={title}>
+                  <summary>
+                    <span className="req-check" aria-hidden="true">
+                      {percent === 100 ? <Icon name="check" /> : null}
+                    </span>
+                    <b>{title}</b>
+                    <div className="mini-progress">
+                      <i style={{ width: `${percent}%` }} />
+                    </div>
+                    <small>
+                      {met} / {groups.length} done
+                    </small>
+                    <Icon name="chevron" />
+                  </summary>
+                  <GeRequirementRows groups={groups} mode="progress" plannedIn={plannedSlot} />
+                </details>
+              );
+            })}
         </div>
       </SectionCard>
     </div>
@@ -2738,9 +2971,11 @@ function ElectiveDrawer({
   );
 }
 
-function CourseDrawer({ course, close }: { course: string; close: () => void }) {
+function CourseDrawer({ code, why, close }: { code: string; why?: string; close: () => void }) {
   const dialogRef = useDialog(close);
-  const selectedCourse = terms.flatMap((term) => term.courses).find((item) => item.code === course);
+  const course = useLoad(() => getCourse(code), [code]);
+  const c = course.data;
+  const seasons = (["fall", "spring", "summer"] as const).filter((s) => c?.offered_terms?.[s]?.[0]);
   return (
     <div className="overlay" onMouseDown={close}>
       <aside
@@ -2754,49 +2989,62 @@ function CourseDrawer({ course, close }: { course: string; close: () => void }) 
       >
         <div className="drawer-head">
           <div>
-            <h2>{course}</h2>
-            <p>
-              {selectedCourse?.title ?? "Course"} · {selectedCourse?.units ?? 3} units
-            </p>
+            <h2>{code}</h2>
+            {c && (
+              <p>
+                {c.title} ·{" "}
+                {c.units_min === c.units_max ? c.units_min : `${c.units_min}-${c.units_max}`} units
+              </p>
+            )}
           </div>
           <button onClick={close} aria-label="Close">
             <Icon name="x" />
           </button>
         </div>
-        <span className="bulletin-ref">
-          <Icon name="book" size={14} /> Bulletin p.{selectedCourse?.page ?? 1905}
-        </span>
-        <div className="detail-block">
-          <h3>Description</h3>
-          <p>
-            Object-oriented design, testing, and collaborative software development using modern
-            programming practices.
-          </p>
-        </div>
-        <div className="detail-block">
-          <h3>
-            Prerequisites <Tooltip text="A prerequisite is a course you need to finish first." />
-          </h3>
-          <span className="prereq">
-            <Icon name="check" /> CSC 220 · Complete by Fall 2026
-          </span>
-        </div>
-        <div className="detail-block why">
-          <span>
-            <Icon name="route" />
-          </span>
-          <div>
-            <h3>Why it’s in this term</h3>
-            <p>Needed before CSC 413. Delaying it pushes back graduation.</p>
-          </div>
-        </div>
-        <div className="detail-block">
-          <h3>Usually offered</h3>
-          <div className="chips">
-            <span>Fall</span>
-            <span>Spring</span>
-          </div>
-        </div>
+        {course.error && <ErrorCard text={course.error} retry={course.retry} />}
+        {course.loading && <Loading label="Finding it in the Bulletin…" />}
+        {c && (
+          <>
+            <span className="bulletin-ref">
+              <Icon name="book" size={14} /> Bulletin p.{c.source_page}
+            </span>
+            {c.description && (
+              <div className="detail-block">
+                <h3>Description</h3>
+                <p>{c.description}</p>
+              </div>
+            )}
+            <div className="detail-block">
+              <h3>
+                Prerequisites <Tooltip text="A prerequisite is a course you need to finish first." />
+              </h3>
+              <p>{c.prereq?.raw_text || "None listed in the Bulletin."}</p>
+            </div>
+            {why && (
+              <div className="detail-block why">
+                <span>
+                  <Icon name="route" />
+                </span>
+                <div>
+                  <h3>Why it’s in this term</h3>
+                  <p>{why}</p>
+                </div>
+              </div>
+            )}
+            <div className="detail-block">
+              <h3>Usually offered</h3>
+              {seasons.length ? (
+                <div className="chips">
+                  {seasons.map((s) => (
+                    <span key={s}>{s[0].toUpperCase() + s.slice(1)}</span>
+                  ))}
+                </div>
+              ) : (
+                <p>No offering history here: check Class Search.</p>
+              )}
+            </div>
+          </>
+        )}
         <Button onClick={close}>Got it</Button>
       </aside>
     </div>
@@ -2919,32 +3167,115 @@ function StyleGuide({ close }: { close: () => void }) {
   );
 }
 
-function AppWorkspace({ initialTab = "plan" }: { initialTab?: Tab }) {
-  const [tab, setTab] = useState<Tab>(initialTab);
+function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
+  const [tab, setTab] = useState<Tab>("plan");
   const [picker, setPicker] = useState("");
   const [course, setCourse] = useState("");
   const [chat, setChat] = useState(false);
   const [toast, setToast] = useState("");
+  const [state, setState] = useState({
+    options: built.options,
+    plan: built.plan,
+    semesters: built.plan.semesters,
+    check: built.plan.check ?? ({ valid: true, errors: [] } as Checked),
+    info: built.plan.courses ?? {},
+  });
+  const [busy, setBusy] = useState("");
+  const [failed, setFailed] = useState("");
+  const [note, setNote] = useState("");
+  const [previous, setPrevious] = useState<typeof state | null>(null);
+  const student = { ...profile, ...state.options };
   const showToast = (x: string) => {
     setToast(x);
     setTimeout(() => setToast(""), 2500);
+  };
+  const attempt = async (label: string, run: () => Promise<typeof state>, done: (next: typeof state) => string) => {
+    setBusy(label);
+    setFailed("");
+    try {
+      const next = await run();
+      setPrevious(state);
+      setState(next);
+      setNote(done(next));
+    } catch (e) {
+      setFailed(message(e));
+    } finally {
+      setBusy("");
+    }
+  };
+  const whatIf = (change: Options, label: string) =>
+    attempt(
+      "Rebuilding your plan…",
+      async () => {
+        const options = { ...state.options, ...change };
+        const plan = await buildPlan(profile, options);
+        if (plan.needs_input) throw new Error("That change needs more about you: go back to your goals.");
+        return {
+          options,
+          plan,
+          semesters: plan.semesters,
+          check: plan.check ?? { valid: true, errors: [] },
+          info: plan.courses ?? {},
+        };
+      },
+      (next) => `${label}: graduate ${termLabel(next.plan.est_graduation_term)}`,
+    );
+  const applyFold = () => {
+    const fold = state.plan.pace?.fold_last_term;
+    if (!fold) return;
+    const last = state.semesters[state.semesters.length - 1];
+    const semesters = state.semesters
+      .slice(0, -1)
+      .map((s) =>
+        s.term === fold.term
+          ? { ...s, courses: [...s.courses, ...last.courses], max_units: fold.units }
+          : s,
+      );
+    attempt(
+      "Checking the faster plan…",
+      async () => {
+        const check = await checkPlan(student, { semesters });
+        return { ...state, semesters, check, info: { ...state.info, ...check.courses } };
+      },
+      () => `Faster: graduate ${termLabel(fold.est_graduation_term)}`,
+    );
+  };
+  const work: Work = {
+    ...state,
+    student,
+    audit: built.audit,
+    busy,
+    failed,
+    whatIf,
+    applyFold,
+    note,
+    undo: previous
+      ? () => {
+          setState(previous);
+          setPrevious(null);
+          setNote("");
+        }
+      : undefined,
   };
   useEffect(() => {
     const openChat = () => setChat(true);
     document.addEventListener("gator-ask", openChat);
     return () => document.removeEventListener("gator-ask", openChat);
   }, []);
+  const why = state.semesters.find((s) => s.why?.[course])?.why?.[course];
   return (
     <>
       <Tabs tab={tab} setTab={setTab} />
       {tab === "plan" && (
         <PlanView
-          openElectives={() => setPicker("Senior electives")}
+          work={work}
+          openChoice={() => setPicker("Senior electives")}
           openCourse={setCourse}
+          openSchedule={() => setTab("schedule")}
           toast={showToast}
         />
       )}
-      {tab === "progress" && <ProgressView />}
+      {tab === "progress" && <ProgressView work={work} />}
       {tab === "electives" && (
         <ElectivesView openPicker={setPicker} goToProgress={() => setTab("progress")} />
       )}
@@ -2956,7 +3287,7 @@ function AppWorkspace({ initialTab = "plan" }: { initialTab?: Tab }) {
           choose={(x) => showToast(`${x} added to your plan`)}
         />
       )}
-      {course && <CourseDrawer course={course} close={() => setCourse("")} />}
+      {course && <CourseDrawer code={course} why={why} close={() => setCourse("")} />}
       {chat && <ChatPanel close={() => setChat(false)} />}
       {toast && (
         <div className="toast">
@@ -2968,11 +3299,16 @@ function AppWorkspace({ initialTab = "plan" }: { initialTab?: Tab }) {
   );
 }
 
+type Built = { options: Options; plan: PlanResult; audit: Audit };
+
 export default function App() {
   const [screen, setScreen] = useState<Screen>("landing");
   const [style, setStyle] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [imported, setImported] = useState<ImportResult | null>(null);
+  const [options, setOptions] = useState<Options>({});
+  const [needs, setNeeds] = useState<string>();
+  const [built, setBuilt] = useState<Built | null>(null);
   const back = () =>
     setScreen(
       screen === "review"
@@ -2986,6 +3322,9 @@ export default function App() {
   const home = () => {
     setProfile(null); // start over means forget it
     setImported(null);
+    setOptions({});
+    setNeeds(undefined);
+    setBuilt(null);
     setScreen("landing");
     window.scrollTo(0, 0);
   };
@@ -3014,9 +3353,31 @@ export default function App() {
       {screen === "review" && profile && (
         <ReviewScreen profile={profile} imported={imported} edit={setProfile} next={() => go("goals")} />
       )}
-      {screen === "goals" && <GoalsScreen build={() => go("building")} />}
-      {screen === "building" && <BuildingScreen done={() => go("app")} />}
-      {screen === "app" && <AppWorkspace />}
+      {screen === "goals" && profile && (
+        <GoalsScreen
+          profile={profile}
+          saved={options}
+          needs={needs}
+          build={(chosen) => {
+            setOptions(chosen);
+            go("building");
+          }}
+        />
+      )}
+      {screen === "building" && profile && (
+        <BuildingScreen
+          profile={profile}
+          options={options}
+          back={() => go("goals")}
+          done={(plan, audit) => {
+            setNeeds(plan.needs_input);
+            if (plan.needs_input) return go("goals");
+            setBuilt({ options, plan, audit });
+            go("app");
+          }}
+        />
+      )}
+      {screen === "app" && profile && built && <AppWorkspace profile={profile} built={built} />}
       {style && <StyleGuide close={() => setStyle(false)} />}
       <Footer />
     </div>

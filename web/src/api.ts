@@ -90,6 +90,38 @@ export type Offered = {
   online_only?: string[];
 };
 
+export type Pace = {
+  terms: number;
+  load: string;
+  planned_units: number;
+  normal_load?: { max_units_per_term: number; terms: number; est_graduation_term: string; note: string };
+  fold_last_term?: { term: string; units: number; terms: number; est_graduation_term: string; note: string };
+  min_terms_by_prereqs: number;
+  min_terms_by_units: number;
+  longest_chain: string[];
+  graduate_by?: string;
+  on_time?: boolean;
+  why_not?: string[];
+};
+export type PlanError = { error?: string; message: string; term?: string };
+export type Checked = {
+  valid: boolean;
+  errors: PlanError[];
+  warnings?: string[];
+  see_advisor?: Advisor[];
+  courses?: Record<string, CourseInfo>;
+};
+export type PlanResult = {
+  semesters: Semester[];
+  needs_input?: string;
+  est_graduation_term?: string;
+  pace?: Pace;
+  warnings: string[];
+  see_advisor?: Advisor[];
+  check?: Checked;
+  courses?: Record<string, CourseInfo>;
+};
+
 class EngineError extends Error {}
 
 async function call<T>(path: string, init?: RequestInit): Promise<T> {
@@ -132,3 +164,7 @@ export function getPrograms() {
   return programs;
 }
 export const getCourse = (code: string) => call<Course>(`/api/course?code=${encodeURIComponent(code)}`);
+export const buildPlan = (profile: Profile, options: Options) =>
+  post<PlanResult>("/api/plan", { profile, options });
+export const checkPlan = (profile: Profile, plan: Plan) =>
+  post<Checked>("/api/check", { profile, plan });
