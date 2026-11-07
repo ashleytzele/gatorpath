@@ -864,7 +864,10 @@ def program_of(parsed: dict, every: dict[str, dict]) -> tuple[str | None, list[s
     base = title.split(":")[0]
     near = [k for k, p in every.items() if p["title"] == base or p["title"].startswith(f"{base}:")]
     exact = next((k for k in near if every[k]["title"] == title), None)
-    return (exact, []) if exact and (len(near) == 1 or title != base) else (None, near)
+    if exact and (len(near) == 1 or title != base):
+        return exact, []
+    # no title by that name (a name cut short, or "Bachelor of Music: Concentration in …"): the degree's programs
+    return None, near or [k for k, p in every.items() if p["title"].startswith(DEGREES[degree])]
 
 
 def dpr_profile(read_text: Callable[[], str], program: str | None = None) -> dict:

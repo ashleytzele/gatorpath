@@ -459,9 +459,11 @@ def test_every_major_s_dpr_finds_its_program():
     assert as_dpr("Physics-BS", program="bs-physics-astrophysics")["profile"]["program"] == "bs-physics-astrophysics"
     # a section that names the concentration settles it
     assert as_dpr("Physics-BS", "B.S. in Physics: Concentration in Astrophysics")["profile"]["program"] == "bs-physics-astrophysics"
-    # a plan name that matches nothing (cut short, say) lists every program
+    # a plan name that matches no title (cut short, say) lists the degree's programs; no degree, every program
     got = as_dpr("Speech Lang & Hearing-BS")
-    assert got["error"] == "unknown_program" and len(got["choices"]) == len(server.programs())
+    assert got["error"] == "unknown_program" and {c["title"].split(" in ")[0] for c in got["choices"]} == {"Bachelor of Science"}
+    assert {c["id"][:3] for c in as_dpr("Music-BM")["choices"]} == {"bm-"}
+    assert len(as_dpr("Mystery")["choices"]) == len(server.programs())
     assert as_dpr("Physics-BS", program="bs-art")["error"] == "unknown_program"
 
 
