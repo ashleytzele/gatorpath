@@ -133,7 +133,7 @@ export type Assisted = {
   picks: Pick[];
   check: Checked;
   rebuilt: PlanResult | null; // the chat changed the pace: a new plan, with its own dates
-  options: Options;
+  options: Partial<Profile>; // what the chat changed about the student, the record included
 };
 export type Option = {
   code: string;

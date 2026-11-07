@@ -140,6 +140,64 @@ def test_replan_says_when_a_date_cant_be_reached(model):
     assert not got["changed"] and got["semesters"] == plan["semesters"] and got["options"] == {}  # a date out of reach changes nothing
 
 
+def tool_named(name: str) -> dict:
+    return next(t for t in assistant.tools() if t["name"] == name)
+
+
+def test_the_chat_has_the_mcp_servers_tools_with_the_record_kept_out_of_them():
+    names = {t["name"] for t in assistant.tools()}
+    assert {"audit_progress", "get_prereq_chain", "compare_programs", "get_roadmap", "check_plan", "search_courses",
+            "list_eligible_electives", "ge_combinations", "get_sections", "change_plan", "replan", "update_record"} <= names
+    assert not names & {"save_profile", "load_profile", "import_dpr", "import_transcript"}  # paths on the server's disk
+    for tool in assistant.tools():
+        assert not {"profile", "plan"} & set(tool["input_schema"].get("properties", {})), tool["name"]
+        assert "$defs" not in tool["input_schema"]
+
+
+def test_a_tool_runs_with_the_record_and_never_shows_a_gpa():
+    state = state_of()
+    audit = assistant.run_tool(state, "audit_progress", {})
+    assert audit["groups"] and "3.123" not in json.dumps(audit) and "gpa" not in json.dumps(audit["totals"])
+    assert assistant.run_tool(state, "check_plan", {})["valid"] is True
+    assert assistant.run_tool(state, "compare_programs", {"target": "bs-applied-math"})["target"]
+    assert "ways" in assistant.run_tool(state, "ge_combinations", {})
+    assert "error" in assistant.run_tool(state, "save_profile", {"path": "/tmp/x"})  # a tool that isn't offered doesn't run
+
+
+def test_the_student_can_correct_their_record_from_the_chat(model):
+    client = TestClient(api.app)
+    code = STUDENT["completed"][0]["code"]
+    seen = model(use("update_record", grades=[{"code": code, "grade": "F"}, {"code": "CSC 215", "grade": "A"}],
+                     transfer_units=12, goal="Data Science", not_on_dpr=["ge_6"]), say("Updated."))
+    got = client.post("/api/assist", json={"profile": STUDENT, "plan": plan_of(), "messages": [{"role": "user", "content": "My grade was wrong"}]}).json()
+    assert result_of(seen, 1)["applied"] is True and got["changed"]
+    rows = {r["code"]: r["grade"] for r in got["options"]["completed"]}
+    assert rows[code] == "F" and rows["CSC 215"] == "A"
+    assert got["options"]["transfer_units"] == 12 and got["options"]["goal"] == "Data Science" and got["options"]["not_on_dpr"] == ["ge_6"]
+
+
+def test_a_record_change_checks_what_it_is_given():
+    state = state_of()
+    assert assistant.update_record(state, {"grades": [{"code": "CSC 101", "grade": "great"}]})["applied"] is False
+    assert assistant.update_record(state, {})["applied"] is False
+    gone = STUDENT["completed"][0]["code"]
+    assert assistant.update_record(state, {"drop": [gone]})["applied"] is True
+    assert gone not in {r["code"] for r in state["student"]["completed"]}
+
+
+def test_the_student_can_insist_and_the_plan_still_says_it_has_a_problem():
+    state = state_of()
+    first = state["semesters"][0]
+    required = next(c for c in first["courses"] if isinstance(c, str))
+    change = [{"term": first["term"], "remove": required}]
+    assert assistant.change_plan(state, change)["applied"] is False
+    got = assistant.change_plan(state, change, force=True)
+    assert got["applied"] is True and got["valid"] is False and got["errors"]
+    assert required not in state["semesters"][0]["courses"] and state["errors"]
+    bad = assistant.change_plan(state, [{"term": "someday", "add": "CSC 652"}], force=True)
+    assert bad["applied"] is False  # force skips the plan's checks, not sense
+
+
 def test_the_model_never_gets_the_record(model):
     """Name, ID, grades and GPA stay here: the tools run with them, and their text is scrubbed."""
     seen = model(say("Hello."))
@@ -162,7 +220,7 @@ def test_a_filled_plan_starts_from_the_fill_instruction_and_history_stays_short(
 
 
 def test_the_model_cant_run_forever_or_crash_on_bad_input(model):
-    seen = model(*[use("list_options", term="nope") for _ in range(assistant.ROUNDS)])
+    seen = model(*[use("get_course") for _ in range(assistant.ROUNDS)])
     got = assistant.ask(STUDENT, plan_of(), [], [{"role": "user", "content": "Go"}])
     assert "advisor" in got["reply"].lower() and len(seen) == assistant.ROUNDS
     assert "error" in result_of(seen, 1)  # a missing argument goes back to the model as an error

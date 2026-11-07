@@ -572,8 +572,8 @@ function Landing({ start }: { start: () => void }) {
             <p>
               Your PDF is read in memory to find your courses, then discarded. It’s never written
               to disk, and your name and student ID are dropped as it’s read. To choose courses and
-              chat, Claude Haiku (Anthropic’s AI) gets your major, goal and planned courses, never
-              your name, ID, grades or GPA.
+              chat, Claude Haiku (Anthropic’s AI) gets your major, goal and course list, never your
+              name, ID or GPA, and a grade only if you type one in the chat.
             </p>
           </details>
           <details>
@@ -660,7 +660,7 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
         <Icon name="lock" size={16} />
         <span>
           <b>Your DPR is never stored.</b> It’s read in memory, then discarded. Our AI helper sees your
-          major, goal and planned courses, never your name, ID, grades or GPA.
+          major, goal and course list, never your name, ID, grades or GPA.
         </span>
       </div>
       <details className="help-box">
@@ -1561,8 +1561,6 @@ type Work = {
   whatIf: (change: Options, label: string) => void;
   applyFold: () => void;
   fill: () => void;
-  undo?: () => void;
-  note: string;
 };
 
 function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
@@ -1747,12 +1745,6 @@ function PlanView({
               Ask an advisor in Navigator
             </a>
           </div>
-        </div>
-      )}
-      {work.note && !work.busy && (
-        <div className="ai-note">
-          <p>{work.note}</p>
-          {work.undo && <button onClick={work.undo}>Undo</button>}
         </div>
       )}
       <AdvisingNote />
@@ -3017,23 +3009,26 @@ function CourseDrawer({ code, why, close }: { code: string; why?: string; close:
 }
 
 function ChatPanel({
+  open,
   thread,
   sending,
   failed,
   send,
+  undo,
   close,
 }: {
+  open: boolean;
   thread: ChatMessage[];
   sending: boolean;
   failed: string;
   send: (text: string) => void;
+  undo?: () => void;
   close: () => void;
 }) {
-  const dialogRef = useDialog(close);
   const [text, setText] = useState("");
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    end.current?.scrollIntoView({ behavior: "smooth" }); // returns a Promise now: an effect's return must not be it
+    end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); // returns a Promise now: an effect's return must not be it
   }, [thread, sending, failed]);
   const submit = (ask: string) => {
     if (!ask.trim() || sending) return;
@@ -3041,81 +3036,72 @@ function ChatPanel({
     send(ask.trim());
   };
   return (
-    <div className="overlay chat-overlay" onMouseDown={close}>
-      <aside
-        className="drawer chat-drawer"
-        onMouseDown={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Ask about your plan"
-        tabIndex={-1}
-        ref={dialogRef}
-      >
-        <div className="drawer-head">
-          <div>
-            <h2>Ask about your plan</h2>
-            <p>Change a class and your plan updates. GatorPath checks every change.</p>
-          </div>
-          <button onClick={close} aria-label="Close">
-            <Icon name="x" />
-          </button>
+    <aside className={`chat-dock ${open ? "open" : ""}`} aria-label="Chat with GatorPath">
+      <div className="chat-dock-head">
+        <div>
+          <h2>Ask GatorPath</h2>
+          <p>Ask anything, or tell it what to change. Your plan updates beside you.</p>
         </div>
-        {!thread.length && (
-          <>
-            <div className="chat-intro">
-              <h3>What would you like to change?</h3>
-              <p>This is an AI helper and it can be wrong. For decisions, talk to an advisor.</p>
-            </div>
+        <button className="chat-close" onClick={close} aria-label="Close chat">
+          <Icon name="x" />
+        </button>
+      </div>
+      <div className="chat-thread" aria-live="polite">
+        {thread.map((m, i) => (
+          <div className={`chat-bubble ${m.role === "user" ? "user" : "bot"}`} key={i}>
+            {m.content}
+          </div>
+        ))}
+        {sending && (
+          <div className="chat-bubble bot" role="status">
+            Working on it…
+          </div>
+        )}
+        {failed && <ErrorCard text={failed} />}
+        {thread.length < 2 && !sending && (
+          <div className="chat-suggestions">
             {[
+              "What do I still need to graduate?",
               "Swap one of my electives for something closer to my goal",
-              "Move one of my classes to a later term",
-              "Keep every term at 12 units",
-              "Why is my first class in this term?",
+              "Add a class in a later term",
+              "One of my grades is wrong",
             ].map((ask) => (
               <button className="suggested" onClick={() => submit(ask)} key={ask}>
                 {ask} <Icon name="arrow" />
               </button>
             ))}
-          </>
+          </div>
         )}
-        <div className="chat-thread" aria-live="polite">
-          {thread.map((m, i) => (
-            <div className={`chat-bubble ${m.role === "user" ? "user" : "bot"}`} key={i}>
-              {m.content}
-            </div>
-          ))}
-          {sending && (
-            <div className="chat-bubble bot" role="status">
-              Working on it…
-            </div>
-          )}
-          {failed && <ErrorCard text={failed} />}
-          <div ref={end} />
-        </div>
-        <p className="chat-privacy">
-          <Icon name="lock" size={13} /> Claude Haiku sees your major, goal and planned courses, never
-          your name, ID, grades or GPA.{" "}
-          <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-            Ask an advisor in Navigator
-          </a>
-        </p>
-        <div className="chat-input">
-          <input
-            autoFocus
-            value={text}
-            maxLength={2000}
-            disabled={sending}
-            aria-label="Your question"
-            placeholder="Try: swap CSC 651 for something in security"
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && submit(text)}
-          />
-          <button aria-label="Send question" disabled={sending} onClick={() => submit(text)}>
-            <Icon name="arrow" />
-          </button>
-        </div>
-      </aside>
-    </div>
+        <div ref={end} />
+      </div>
+      {undo && !sending && (
+        <button className="chat-undo" onClick={undo}>
+          Undo the last change
+        </button>
+      )}
+      <p className="chat-privacy">
+        <Icon name="lock" size={13} /> Claude Haiku sees your major, goal and course list, never your name,
+        ID or GPA. It can be wrong: for decisions,{" "}
+        <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+          ask an advisor in Navigator
+        </a>
+        .
+      </p>
+      <div className="chat-input">
+        <input
+          value={text}
+          maxLength={2000}
+          disabled={sending}
+          aria-label="Your message"
+          placeholder="Ask anything, or say what to change"
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && submit(text)}
+        />
+        <button aria-label="Send" disabled={sending} onClick={() => submit(text)}>
+          <Icon name="arrow" />
+        </button>
+      </div>
+    </aside>
   );
 }
 
@@ -3189,7 +3175,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
   const [chatFailed, setChatFailed] = useState("");
   const [toast, setToast] = useState("");
   const [state, setState] = useState({
-    options: built.options,
+    options: built.options as Partial<Profile>,
     plan: built.plan,
     semesters: built.plan.semesters,
     check: built.plan.check ?? ({ valid: true, errors: [] } as Checked),
@@ -3198,9 +3184,9 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
   });
   const [busy, setBusy] = useState("");
   const [failed, setFailed] = useState("");
-  const [note, setNote] = useState("");
   const [previous, setPrevious] = useState<typeof state | null>(null);
   const student = { ...profile, ...state.options };
+  const say = (content: string) => setThread((t) => [...t, { role: "assistant", content }]);
   const showToast = (x: string) => {
     setToast(x);
     setTimeout(() => setToast(""), 2500);
@@ -3212,7 +3198,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
       const next = await run();
       setPrevious(state);
       setState(next);
-      setNote(done(next));
+      say(done(next));
     } catch (e) {
       setFailed(message(e));
     } finally {
@@ -3224,7 +3210,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
       "Rebuilding your plan…",
       async () => {
         const options = { ...state.options, ...change };
-        const plan = await buildPlan(profile, options);
+        const plan = await buildPlan({ ...profile, ...options }, {}); // the chat may have changed the record too
         if (plan.needs_input) throw new Error("That change needs more about you: go back to your goals.");
         return {
           options,
@@ -3313,9 +3299,9 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
         setPrevious(state);
         setState(withAnswer(r));
       }
-      setNote(r.reply);
+      say(r.reply);
     } catch (e) {
-      setNote(message(e)); // the plan works without AI: say so, without an error
+      say(message(e)); // the plan works without AI: say so, without an error
     } finally {
       setBusy("");
     }
@@ -3331,7 +3317,6 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
       if (r.changed) {
         setPrevious(state);
         setState(withAnswer(r));
-        setNote("Your plan was updated from the chat.");
       }
     } catch (e) {
       setChatFailed(message(e));
@@ -3359,37 +3344,47 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     whatIf,
     applyFold,
     fill,
-    note,
-    undo: previous
-      ? () => {
-          setState(previous);
-          setPrevious(null);
-          setNote("");
-        }
-      : undefined,
   };
+  const undo = previous
+    ? () => {
+        setState(previous);
+        setPrevious(null);
+        say("I put your plan back the way it was.");
+      }
+    : undefined;
   const why = state.semesters.find((s) => s.why?.[course])?.why?.[course];
   return (
-    <>
-      <Tabs tab={tab} setTab={setTab} />
-      {tab === "plan" && (
-        <PlanView
-          work={work}
-          openChoice={(slot, term) =>
-            setPicker({ group: slot.slot, term, title: slotLabel(slot, built.audit) })
-          }
-          openCourse={setCourse}
-          openSchedule={() => setTab("schedule")}
-          toast={showToast}
-        />
-      )}
-      {tab === "progress" && <ProgressView work={work} />}
-      {tab === "electives" && (
-        <ElectivesView work={work} openPicker={setPicker} goToProgress={() => setTab("progress")} />
-      )}
-      {tab === "schedule" && (
-        <ScheduleView work={work} openPlan={() => setTab("plan")} toast={showToast} />
-      )}
+    <div className="workspace">
+      <div className="workspace-main">
+        <Tabs tab={tab} setTab={setTab} />
+        {tab === "plan" && (
+          <PlanView
+            work={work}
+            openChoice={(slot, term) =>
+              setPicker({ group: slot.slot, term, title: slotLabel(slot, built.audit) })
+            }
+            openCourse={setCourse}
+            openSchedule={() => setTab("schedule")}
+            toast={showToast}
+          />
+        )}
+        {tab === "progress" && <ProgressView work={work} />}
+        {tab === "electives" && (
+          <ElectivesView work={work} openPicker={setPicker} goToProgress={() => setTab("progress")} />
+        )}
+        {tab === "schedule" && (
+          <ScheduleView work={work} openPlan={() => setTab("plan")} toast={showToast} />
+        )}
+      </div>
+      <ChatPanel
+        open={chat}
+        thread={thread}
+        sending={sending || !!busy}
+        failed={chatFailed}
+        send={send}
+        undo={undo}
+        close={() => setChat(false)}
+      />
       {picker && (
         <ElectiveDrawer
           work={work}
@@ -3399,22 +3394,13 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
         />
       )}
       {course && <CourseDrawer code={course} why={why} close={() => setCourse("")} />}
-      {chat && (
-        <ChatPanel
-          thread={thread}
-          sending={sending}
-          failed={chatFailed}
-          send={send}
-          close={() => setChat(false)}
-        />
-      )}
       {toast && (
         <div className="toast">
           <Icon name="check" />
           {toast}
         </div>
       )}
-    </>
+    </div>
   );
 }
 

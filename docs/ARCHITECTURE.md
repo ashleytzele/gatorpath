@@ -827,20 +827,25 @@ a URL (`/api/electives` is a POST for this reason) and the access log is off.
 Every question a person should answer goes to Navigator. `?demo` adds the prototype's preview bars, which force a state
 on top of real data.
 
-### 7.7 The web's AI helper (`assistant.py`)
+### 7.7 The chat (`assistant.py`)
 
-`POST /api/assist` is the one route with an LLM behind it (D34). After `build_plan`, Claude Haiku fills the open slots
-for the student's goal; in the chat it changes classes on request. The site works without it: no key, and the student
+The chat is the product and the page is its display (D35): a web version of Claude Code with this MCP server. It stays
+docked beside the plan, it fills the plan after `build_plan`, and every result lands in it, what-ifs included.
+`POST /api/assist` is the one route with an LLM behind it (D34). The site still works without it: no key, and the student
 chooses from the same options.
 
-- **The AI suggests, the code decides.** The model's only way to change a plan is `change_plan`, small edits (`remove`,
-  `add`) that the backend applies to a copy and runs through `check_plan`. A result with more errors than before is
-  refused and nothing changes; `check_plan` over the final plan goes back to the page.
-- A later term is made when a course is added to it, and an emptied term goes. `replan` changes the pace through
-  `build_plan`, so the engine says whether a date is reachable; it clears the courses chosen, so the model fills again.
-- **The record stays on our side.** Tools run with the student's profile, so the model never holds it, and it can't
-  mistype a grade or drop a row, Haiku's commonest miss in the evals. It gets the major, catalog year, goal, load choices
-  and the plan. Name, ID, grades and GPA don't go; a tool result's quoted grade or GPA is scrubbed (`scrub`).
+- **The same tools.** The list comes from `server.mcp.list_tools()` with `profile` and `plan` taken out, because the
+  backend fills those in. Left out: `build_plan` (`replan` commits it) and what takes a path on the server's disk.
+- **Three tools change things.** `change_plan` edits classes, makes a later term when a course is added to it, and drops an
+  emptied one. `replan` changes the pace through `build_plan`, and refuses a date out of reach before anything changes.
+  `update_record` corrects the record with what the student said.
+- **The AI suggests, the code decides, the student has the last word.** `change_plan` applies edits to a copy and refuses a
+  result with more errors. If the student has heard why and insists, `force` keeps it, and `check_plan`'s errors stay on the
+  page: a forced plan reads as failing, never as fine. `force` doesn't skip a change that makes no sense.
+- **The record stays on our side.** The model can't mistype a grade or drop a row, Haiku's commonest miss in the evals. It
+  sees the major, catalog year, goal, load choices, the plan and, through `audit_progress`, the course list. Name, ID, grades
+  and GPA don't go: results lose every GPA key (`hide`), a quoted grade or GPA is scrubbed (`scrub`), and a grade reaches
+  the model only if the student types one.
 - A failed call changes nothing. History and message length are capped, and one request stops at 40 model calls.
   ponytail: no per-student rate limit or spend cap, needed before this is on a public host.
 
@@ -1073,6 +1078,7 @@ students; 0 hallucinated courses."*
 | D32 | A web app beside the MCP server, on the same functions: thin routes in `api.py`, no database, nothing kept past the tab, every question sent to Navigator | Most students have no MCP client. D1 put the UI later, and this stays within golden rule 5 because the site stores nothing; saving reports or plans would need the written exception the brainstorm notes describe | 2026-11-06 |
 | D33 | The DPR decides which GE areas apply: a GE requirement in the rules that a student's DPR doesn't list is left out for that student on import (`not_on_dpr`), said in cross_check and flagged for an advisor, and they can put it back on Review | The rules hold the Bulletin's catalog; catalog rights can change what one student owes, and the DPR already reflects that. `rules/` doesn't change. The cost: a heading GatorPath misreads reads as not listed, so the line stays visible and reversible rather than silent | 2026-11-06 |
 | D34 | The web backend may call an LLM (Claude Haiku), the MCP server still doesn't: `assistant.py` is a client of the same functions, the model edits a plan only through `check_plan`, and the student's record stays on the backend | Students on the web have no AI client of their own, and a plan with 20 open slots isn't a plan yet. Golden rule 4 protects deterministic tools, which this keeps (a test checks `server.py` never imports it). It changes what the site can promise: planned courses and the goal now reach Anthropic, and the site says so | 2026-11-07 |
+| D35 | The chat is the product; the page shows what it did. It gets the MCP server's tools, stays docked beside the plan, and can change anything the student can, the record included. A student who insists can keep a plan that fails, and it stays marked as failing | The owner's direction (2026-11-07): the site should be Claude Code with this server, with the page as the visual part. This replaces the brainstorm's "no chat always on screen". Golden rule 6 holds: `check_plan`'s verdict is never hidden or softened, only no longer a veto over the student's own plan | 2026-11-07 |
 
 ---
 

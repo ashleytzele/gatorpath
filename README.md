@@ -62,20 +62,23 @@ and nothing checks that plan.
 
 ## Website
 
-The same planner for students with no AI app: upload your DPR (or type your courses), check what it read, and get a
-filled-in plan and a clash-free schedule. A chat changes classes on request. Needs Node as well as the Setup above:
+Claude Code with this server, for students with no AI app: upload your DPR (or type your courses), and a chat beside your
+plan does the rest. Ask anything about your degree, or tell it what to change, and the plan updates. Needs Node as well as
+the Setup above:
 
 ```bash
 (cd web && npm install && npm run build)
 ANTHROPIC_API_KEY=... uv run gatorpath-web     # http://127.0.0.1:8000
 ```
 
-Claude Haiku picks the electives and GE for your goal and handles the chat, and GatorPath's checks decide: a change that
-makes the plan worse is refused. Without a key the site still plans, and you choose the courses yourself.
+Claude Haiku has the same tools as an AI app with this server. It fills your electives and GE for your goal, answers
+questions, changes classes and the pace, and corrects your record when you tell it to. GatorPath's checks run on every
+change. A change that makes the plan worse is refused unless you insist, and then the plan stays marked as failing. Without
+a key the site still plans, and you choose the courses yourself.
 
 Nothing is stored: the PDF is read in memory, your name and ID are dropped as it's read, and your record stays in the
-browser tab until you start over. Anthropic's API receives your major, catalog year, goal, load choices and planned
-courses, never your name, ID, grades or GPA. Questions an advisor should answer go to
+browser tab until you start over. Anthropic's API receives your major, catalog year, goal, load choices and course list,
+never your name, ID or GPA, and a grade only if you type one in the chat. Questions an advisor should answer go to
 [Navigator](https://sfsu.campus.eab.com/).
 
 ## Evals
