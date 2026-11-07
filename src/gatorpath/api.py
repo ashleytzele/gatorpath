@@ -94,8 +94,8 @@ def assist(profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = B
 
 
 @app.get("/api/sections")
-def sections(term: str, courses: list[str] = Query()) -> dict:
-    return server.get_sections(term, courses)
+def sections(term: str, courses: list[str] = Query(), online: list[str] = Query(default=[])) -> dict:
+    return server.get_sections(term, courses, online)
 
 
 @app.get("/api/programs")

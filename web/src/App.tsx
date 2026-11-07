@@ -37,7 +37,7 @@ import {
 const DEMO = new URLSearchParams(window.location.search).has("demo");
 
 type Screen = "landing" | "record" | "review" | "goals" | "building" | "app";
-type Tab = "plan" | "progress" | "electives" | "schedule";
+type Tab = "plan" | "progress" | "schedule";
 type IconName =
   | "arrow"
   | "back"
@@ -1538,6 +1538,14 @@ const unitsOf = (c: string | Slot, info: Record<string, CourseInfo>) =>
 const termUnits = (s: Semester, info: Record<string, CourseInfo>) =>
   s.courses.reduce((total, c) => total + unitsOf(c, info), 0);
 const unitText = (units?: number | string) => `${units} ${Number(units) === 1 ? "unit" : "units"}`;
+/** What a class in the plan is for: what it was picked for, or the requirement that lists it. */
+function countsFor(code: string, picks: Pick[], audit: Audit) {
+  const group = picks.find((p) => p.code === code)?.group;
+  if (group === "elective") return "Free elective";
+  return audit.groups.find(
+    (g) => g.id === group || [...(g.remaining ?? []), ...g.in_progress].includes(code),
+  )?.title;
+}
 const slotLabel = (slot: Slot, audit: Audit) =>
   slot.slot === "elective"
     ? "Free elective: any course"
@@ -1561,13 +1569,13 @@ type Work = {
   whatIf: (change: Options, label: string) => void;
   applyFold: () => void;
   fill: () => void;
+  aiDown: boolean;
 };
 
 function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
   const items: [Tab, string, IconName][] = [
     ["plan", "Plan", "route"],
     ["progress", "Progress", "check"],
-    ["electives", "Electives & GE", "book"],
     ["schedule", "Schedule", "calendar"],
   ];
   return (
@@ -1703,13 +1711,15 @@ function PlanView({
             <button onClick={work.fill}>
               Fill them with AI <Icon name="spark" size={14} />
             </button>
-            <button
-              onClick={() =>
-                document.getElementById("first-open-slot")?.scrollIntoView({ behavior: "smooth" })
-              }
-            >
-              Choose myself <Icon name="arrow" size={14} />
-            </button>
+            {work.aiDown && (
+              <button
+                onClick={() =>
+                  document.getElementById("first-open-slot")?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Choose myself <Icon name="arrow" size={14} />
+              </button>
+            )}
           </span>
         </div>
       )}
@@ -1965,7 +1975,11 @@ function PlanView({
                             <small>{info[code]?.title}</small>
                             <em>
                               <Icon name="book" size={12} /> Bulletin p.{info[code]?.source_page}
+                              {countsFor(code, work.picks, audit) && ` · ${countsFor(code, work.picks, audit)}`}
                             </em>
+                            {work.picks.some((p) => p.code === code && !p.readiness) && (
+                              <em className="ai-pick">AI pick</em>
+                            )}
                           </span>
                           <i>{unitText(info[code]?.units)}</i>
                           <Icon name="chevron" size={15} />
@@ -2218,155 +2232,6 @@ function CourseStatus({
   );
 }
 
-type ChoiceRow = { id: string; title: string; term: string; units?: number; pick?: Pick };
-
-function ChoiceRequirementRows({
-  rows,
-  audit,
-  openPicker,
-}: {
-  rows: ChoiceRow[];
-  audit: Audit;
-  openPicker: (target: Target) => void;
-}) {
-  return (
-    <div className="choice-requirements">
-      {rows.map((r, i) => (
-        <div className="choice-requirement-row" key={`${r.id}-${r.term}-${i}`}>
-          <div>
-            <span>{r.id === "elective" ? "Any course" : "Requirement"}</span>
-            <b>{r.title}</b>
-          </div>
-          <div className="planned-choice">
-            <small>In your plan</small>
-            {r.pick ? <b>{r.pick.code}</b> : <b className="not-chosen">Not chosen yet</b>}
-            <span>{termLabel(r.term)}</span>
-            {!!r.pick?.covers.length && <em>Counts twice</em>}
-          </div>
-          <div className="alternative-choices">
-            <small>{r.id === "elective" ? "Units" : "Bulletin"}</small>
-            <span>{audit.groups.find((g) => g.id === r.id)?.source ?? r.units}</span>
-          </div>
-          <button
-            onClick={() =>
-              openPicker({ group: r.id, term: r.term, title: r.title, replacing: r.pick?.code })
-            }
-          >
-            {r.pick ? "Change" : "Choose a course"} <Icon name="arrow" size={14} />
-          </button>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ElectivesView({
-  work,
-  openPicker,
-  goToProgress,
-}: {
-  work: Work;
-  openPicker: (target: Target) => void;
-  goToProgress: () => void;
-}) {
-  const { audit, check, info, picks, semesters, student } = work;
-  const rows: ChoiceRow[] = [
-    ...semesters.flatMap((s) =>
-      s.courses.filter(isSlot).map((slot) => ({
-        id: slot.slot,
-        title: slotLabel(slot, audit),
-        term: s.term,
-        units: slot.units,
-      })),
-    ),
-    ...picks.map((pick) => ({
-      id: pick.group,
-      title: pick.group === "elective" ? "Free elective: any course" : (audit.groups.find((g) => g.id === pick.group)?.title ?? pick.group),
-      term: pick.term,
-      pick,
-    })),
-  ];
-  const major = rows.filter((r) => audit.groups.find((g) => g.id === r.id)?.kind === "major");
-  const ge = rows.filter((r) => r.id.startsWith("ge_"));
-  const free = rows.filter((r) => r.id === "elective");
-  const studies = rows.filter((r) => !major.includes(r) && !ge.includes(r) && !free.includes(r));
-  const count = (list: ChoiceRow[]) => `${list.filter((r) => r.pick).length} chosen, ${list.filter((r) => !r.pick).length} to go`;
-  const done = audit.groups.filter(isDone);
-  const short = audit.groups.find((g) => g.min_units_from && !isDone(g));
-  const inSubject = short?.min_units_from
-    ? picks
-        .filter((p) => p.group === short.id && p.code.startsWith(short.min_units_from!.subject))
-        .reduce((total, p) => total + unitsOf(p.code, info), short.min_units_from.done)
-    : 0;
-  return (
-    <div className="app-content">
-      <div className="page-title">
-        <h1>Electives & GE</h1>
-        <p>
-          These are the requirements where you get to choose.
-          {student.goal && student.goal !== "Undecided" ? ` Your focus: ${student.goal}.` : ""}
-        </p>
-      </div>
-      <AdvisingNote />
-      {!check.valid && <ProblemPanel errors={check.errors} />}
-      {work.busy && <Loading label={work.busy} />}
-      {work.failed && <ErrorCard text={work.failed} />}
-      {!!major.length && (
-        <SectionCard title="Major electives" count={count(major)}>
-          {short?.min_units_from && (
-            <div className="major-electives-summary">
-              <div className="csc-unit-progress">
-                <div>
-                  <b>
-                    {inSubject} of {short.min_units_from.units} required {short.min_units_from.subject} units
-                  </b>
-                  <span>{Math.min(100, Math.round((inSubject / short.min_units_from.units) * 100))}%</span>
-                </div>
-                <div>
-                  <i style={{ width: `${Math.min(100, (inSubject / short.min_units_from.units) * 100)}%` }} />
-                </div>
-              </div>
-            </div>
-          )}
-          <ChoiceRequirementRows rows={major} audit={audit} openPicker={openPicker} />
-        </SectionCard>
-      )}
-      {!!ge.length && (
-        <SectionCard title="GE still needed" count={count(ge)}>
-          <ChoiceRequirementRows rows={ge} audit={audit} openPicker={openPicker} />
-        </SectionCard>
-      )}
-      {!!studies.length && (
-        <SectionCard title="SF State Studies & American Institutions" count={count(studies)}>
-          <ChoiceRequirementRows rows={studies} audit={audit} openPicker={openPicker} />
-        </SectionCard>
-      )}
-      {!!free.length && (
-        <SectionCard title="Free electives" count={count(free)}>
-          <ChoiceRequirementRows rows={free} audit={audit} openPicker={openPicker} />
-        </SectionCard>
-      )}
-      {!rows.length && <p className="still-to-do">Nothing left to choose in this plan.</p>}
-      {!!done.length && <details className="already-done">
-        <summary>
-          <span>
-            <Icon name="check" /> Already done
-          </span>
-          <span>
-            {done.length} requirements <Icon name="chevron" />
-          </span>
-        </summary>
-        <div>
-          <p>{done.map((g) => g.title).join(", ")}</p>
-          <button onClick={goToProgress}>
-            See completed requirements in Progress <Icon name="arrow" size={14} />
-          </button>
-        </div>
-      </details>}
-    </div>
-  );
-}
-
 const CALENDAR_DAYS = [
   ["MONDAY", "Mo"],
   ["TUESDAY", "Tu"],
@@ -2402,7 +2267,8 @@ function ScheduleView({
   const first = work.semesters[0];
   const codes = first.courses.filter((c): c is string => !isSlot(c));
   const label = termLabel(first.term);
-  const result = useLoad(() => getSections(first.term, codes), [first.term, codes.join()]);
+  const online = work.picks.filter((p) => p.online && p.term === first.term).map((p) => p.code);
+  const result = useLoad(() => getSections(first.term, codes, online), [first.term, codes.join(), online.join()]);
   const [preview, setPreview] = useState<"" | "ready" | "not-offered" | "unpublished" | "no-fit" | "full">("");
   if (!codes.length) return <div className="app-content"><p>Choose this term’s courses first.</p></div>;
   if (result.error) return <div className="app-content"><ErrorCard text={result.error} retry={result.retry} /></div>;
@@ -2417,7 +2283,7 @@ function ScheduleView({
   const derived =
     r.schedule === null && r.always_clash.length
       ? "no-fit"
-      : r.schedule === null && !Object.keys(r.sections).length
+      : !Object.keys(r.sections).length // no sections at all: an unpublished term, not a gap in one course
         ? r.unknown.length
           ? "unpublished"
           : "not-offered"
@@ -2502,7 +2368,9 @@ function ScheduleView({
                 ? "Move one course so we can build a clash-free schedule."
                 : scheduleState === "full"
                   ? "No open seats remain in this course right now."
-                  : "Your degree plan is safe; this only affects next term’s schedule."}
+                  : scheduleState === "unpublished"
+                    ? "SF State hasn’t posted this term’s classes yet, so there are no sections to show. Your plan is fine."
+                    : "Your degree plan is safe; this only affects next term’s schedule."}
             </p>
             {problemContent[scheduleState][2] === "link" ? (
               <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
@@ -2565,7 +2433,10 @@ function ScheduleView({
                       <b>
                         {b.c.code} {b.s.component !== "LEC" ? b.s.component : ""}
                       </b>
-                      <span>{b.m.time}</span>
+                      <span>
+                        {b.m.time}
+                        {b.s.mode.startsWith("Hybrid") ? " · Hybrid" : b.s.mode.startsWith("Online") ? " · Online" : ""}
+                      </span>
                     </div>
                   ))}
               </div>
@@ -2639,11 +2510,13 @@ function ScheduleView({
                             <span>
                               Section {o.section} · {when(o)} · #{o.class_nbr}
                             </span>
-                            <small>
-                              {o.clashes_with?.length
-                                ? `Clashes with ${o.clashes_with.join(", ")}`
-                                : "Fits instead"}
-                            </small>
+                            {o.clashes_with && (
+                              <small>
+                                {o.clashes_with.length
+                                  ? `Clashes with ${o.clashes_with.join(", ")}`
+                                  : "Fits instead"}
+                              </small>
+                            )}
                           </div>
                         ))}
                       </details>
@@ -3173,6 +3046,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
   const [thread, setThread] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
   const [chatFailed, setChatFailed] = useState("");
+  const [aiDown, setAiDown] = useState(false);
   const [toast, setToast] = useState("");
   const [state, setState] = useState({
     options: built.options as Partial<Profile>,
@@ -3302,6 +3176,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
       say(r.reply);
     } catch (e) {
       say(message(e)); // the plan works without AI: say so, without an error
+      setAiDown(true);
     } finally {
       setBusy("");
     }
@@ -3344,6 +3219,7 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
     whatIf,
     applyFold,
     fill,
+    aiDown,
   };
   const undo = previous
     ? () => {
@@ -3369,9 +3245,6 @@ function AppWorkspace({ profile, built }: { profile: Profile; built: Built }) {
           />
         )}
         {tab === "progress" && <ProgressView work={work} />}
-        {tab === "electives" && (
-          <ElectivesView work={work} openPicker={setPicker} goToProgress={() => setTab("progress")} />
-        )}
         {tab === "schedule" && (
           <ScheduleView work={work} openPlan={() => setTab("plan")} toast={showToast} />
         )}

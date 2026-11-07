@@ -125,7 +125,14 @@ export type PlanResult = {
 };
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
-export type Pick = { group: string; term: string; code: string; readiness?: string; covers: string[] };
+export type Pick = {
+  group: string;
+  term: string;
+  code: string;
+  readiness?: string;
+  covers: string[];
+  online?: boolean;
+};
 export type Assisted = {
   reply: string;
   changed: boolean;
@@ -240,9 +247,10 @@ export const checkPlan = (profile: Profile, plan: Plan) =>
   post<Checked>("/api/check", { profile, plan });
 export const getElectives = (profile: Profile, requirement: string, plan: Plan, by_term: string) =>
   post<Electives>("/api/electives", { profile, requirement, plan, by_term, limit: 100 });
-export function getSections(term: string, courses: string[]) {
+export function getSections(term: string, courses: string[], online: string[]) {
   const query = new URLSearchParams({ term });
   courses.forEach((c) => query.append("courses", c));
+  online.forEach((c) => query.append("online", c));
   return call<Sections>(`/api/sections?${query}`);
 }
 /** The AI helper: a chat message, or with none, fills the plan. check_plan decides every change on the server. */

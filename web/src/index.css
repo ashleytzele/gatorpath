@@ -4120,3 +4120,14 @@ p, li, small { text-wrap: pretty; }
   display: inline;
   vertical-align: -2px;
 }
+.ai-pick {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+}

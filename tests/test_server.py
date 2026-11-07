@@ -729,3 +729,15 @@ def test_online_options_say_how_they_know(fixture_db):
     assert "F-1" not in " ".join(server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-spring", online=True)["warnings"])
     told = " ".join(server.list_eligible_electives(student, "ge_4ud", by_term="2027-spring", online=True)["warnings"])
     assert "F-1" in told and "units" in told
+
+
+def test_sections_prefer_the_online_one_for_a_class_chosen_for_it(monkeypatch):
+    rows = [{"section": "01", "component": "LEC", "mode": "In-Person", "class_nbr": "1", "seats_open": 9,
+             "meetings": [{"days": "Mo We", "time": "9:00 AM - 10:15 AM"}]},
+            {"section": "02", "component": "LEC", "mode": "Online asynchronous", "class_nbr": "2", "seats_open": 9, "meetings": []}]
+    monkeypatch.setattr(server.db, "sections", lambda db, term, codes: ({"ENVS 401": rows}, {"ENVS": "2026-10-26"}))
+    assert server.get_sections("2027-spring", ["ENVS 401"])["schedule"] == {"ENVS 401": ["1"]}
+    assert server.get_sections("2027-spring", ["ENVS 401"], ["ENVS 401"])["schedule"] == {"ENVS 401": ["2"]}
+    only_in_person = {"ENVS 401": rows[:1]}
+    monkeypatch.setattr(server.db, "sections", lambda db, term, codes: (only_in_person, {"ENVS": "2026-10-26"}))
+    assert server.get_sections("2027-spring", ["ENVS 401"], ["ENVS 401"])["schedule"] == {"ENVS 401": ["1"]}  # none: as it is

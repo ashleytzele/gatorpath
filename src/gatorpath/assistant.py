@@ -46,7 +46,7 @@ update_record corrects the record when the student tells you something: a grade,
 
 Act when the student asks: never answer that nothing needs changing, and never ask which class when you can work it out. "chosen" says what each picked class is for, and audit_progress says what counts where. If a request fits several classes ("my GE class"), go through them. If they don't name a class, choose one of their electives yourself, do it, say which, and tell them they can pick another.
 
-To make a class online, or find online options, call list_eligible_electives with online: true, the requirement's group_id and by_term the term. Each option's `online` says how that's known: a section, or only how it last ran. Say which, and never call a class online from the plan alone. If a term has none, try the requirement in a term that has them. A swap has to keep what the old class covered, so change_plan may refuse it: then try another option.
+To make a class online, or find online options, call list_eligible_electives with online: true, the requirement's group_id and by_term the term. Each option's `online` says how that's known: a section, or only how it last ran. Say which, set online: true on that change so the Schedule shows its online section, and never call a class online from the plan alone. If a term has none, try the requirement in a term that has them. A swap has to keep what the old class covered, so change_plan may refuse it: then try another option.
 
 To fill a plan:
 1. Call ge_combinations once. Put the courses of its first way into the plan: one course can cover several requirements, so remove the slots it covers.
@@ -65,7 +65,8 @@ OWN_TOOLS = [
      "input_schema": {"type": "object", "required": ["changes"], "properties": {"force": {"type": "boolean"}, "changes": {"type": "array", "items": {
          "type": "object", "required": ["term"], "properties": {
              "term": {"type": "string"}, "remove": {"type": "string", "description": "A slot name or course code in that term"},
-             "add": {"type": "string", "description": "A course code"}}}}}}},
+             "add": {"type": "string", "description": "A course code"},
+             "online": {"type": "boolean", "description": "The student chose this class for being online"}}}}}}},
     {"name": "replan", "description": "Rebuild the whole plan at another pace: the date to graduate by, the most units a "
      "term, summers, Winter Session. Pass only what changes. Clears the courses chosen so far and returns the open slots to "
      "fill again. A date it can't reach is refused with why_not, and nothing changes.",
@@ -186,7 +187,8 @@ def change_plan(state: dict, changes: list[dict], force: bool = False) -> dict:
             term["courses"].insert(at, code)
             group = gone["slot"] if isinstance(gone, dict) else next((p["group"] for p in picks if p["code"] == gone), None)
             if group:
-                added.append({"group": group, "term": term["term"], "code": code, "covers": []})
+                added.append({"group": group, "term": term["term"], "code": code, "covers": []}
+                             | ({"online": True} if change.get("online") else {}))
     semesters = [s for s in semesters if s["courses"]]
     result = server.check_plan(state["student"], {"semesters": semesters})
     errors = [e["message"] for e in result["errors"]]

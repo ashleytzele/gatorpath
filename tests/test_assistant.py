@@ -111,6 +111,13 @@ def test_a_class_can_move_into_a_term_the_plan_doesnt_have_yet():
     assert assistant.change_plan(state, moved)["applied"] and state["semesters"][-1]["term"] == last["term"]
 
 
+def test_a_class_chosen_for_being_online_is_remembered():
+    state = state_of()
+    term, slot = slot_in({"semesters": state["semesters"]})
+    assert assistant.change_plan(state, [{"term": term, "remove": slot, "add": "CSC 652", "online": True}])["applied"]
+    assert state["picks"] == [{"group": slot, "term": term, "code": "CSC 652", "covers": [], "online": True}]
+
+
 def test_a_new_term_has_to_be_a_real_later_term():
     state = state_of()
     for term in ("whenever", "1999-fall"):

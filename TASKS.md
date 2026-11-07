@@ -37,7 +37,12 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [x] Online classes: list_eligible_electives takes `online`, from a term's sections once its schedule is out, before that
   from how a course last ran that season, and says which. MCP clients get it too
 - [ ] Chat first: Goals could be a conversation, not a form, and an F-1 rebalance across terms still takes Haiku a few tries
-- [ ] Schedule picks the clash-free set by seats, so it can show an in-person section of a class chosen for being online
+- [x] A class chosen for being online gets its online section on the Schedule (`get_sections`' `online`)
+- [x] Class Search for every subject (2026-11-07): Spring 2027 had only the 94 subjects with GE courses, so a Computer
+  Engineering plan couldn't find ENGR. The other 22 added: 479 sections, 116 of 116 subjects. A term with no sections now
+  says it isn't published, where it used to list every course as missing
+- [x] The Electives & GE tab is gone: the chat chooses, and an open slot on the plan still opens the course list. Each
+  class says what it counts for and whether the AI picked it
 - [ ] Before a public host: a per-student rate limit and a spend cap on `/api/assist`
 - [ ] DPR import reads CS and Psychology only (`dpr_plan`): other majors get `unknown_program` and type their courses
 - [ ] A what-if rebuilds the plan and clears course picks (the screen says so, and Undo restores them)

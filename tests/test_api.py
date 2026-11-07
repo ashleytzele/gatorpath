@@ -99,6 +99,7 @@ def test_sections_return_the_schedule_fields():
     got = client.get("/api/sections", params={"term": "2027-spring", "courses": ["CSC 340", "MATH 225"]}).json()
     assert {"sections", "schedule", "sets", "always_clash", "not_offered", "unknown", "scraped_at", "warnings"} <= set(got)
     assert client.get("/api/sections", params={"term": "spring", "courses": ["CSC 340"]}).json()["error"] == "bad_term"
+    assert client.get("/api/sections", params={"term": "2027-spring", "courses": ["CSC 340"], "online": ["CSC 340"]}).status_code == 200
 
 
 def test_a_requirement_a_student_leaves_out_reaches_the_audit_and_the_plan():
