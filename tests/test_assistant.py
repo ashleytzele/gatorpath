@@ -208,6 +208,12 @@ def test_the_model_never_gets_the_record(model):
     assert "3.2" not in assistant.scrub("over the limit (SF State GPA 3.215); checked with your SF State GPA (3.2)")
 
 
+def test_the_model_knows_what_each_chosen_class_is_for():
+    state = state_of() | {"picks": [{"group": "ge_6", "term": "2028-spring", "code": "AIS 160", "covers": []}],
+                          "titles": {"ge_6": "GE 6 Ethnic Studies"}}
+    assert {"code": "AIS 160", "term": "2028-spring", "for": "GE 6 Ethnic Studies"} in json.loads(assistant.context(state))["chosen"]
+
+
 def test_a_filled_plan_starts_from_the_fill_instruction_and_history_stays_short(model):
     seen = model(say("Filled."))
     assistant.ask(STUDENT, plan_of(), [], [])

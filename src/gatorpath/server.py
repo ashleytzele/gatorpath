@@ -569,9 +569,26 @@ def build_plan(profile: Profile) -> dict:
     return out
 
 
+def online_options(out: dict, cat: dict[str, dict]) -> dict:
+    """Only the options that can be taken online at by_term, each saying how that's known: a section once the term's
+    Class Search schedule is out, before that only how it last ran that season. Hybrid isn't online."""
+    term = out["by_term"]
+    published = any(term in ((r.get("offered") or {}).get("schedule") or {}) for r in cat.values())
+    found = db.sections(DB, term, [o["code"] for o in out["options"]])[0] if published else {}
+
+    def how(code: str) -> str | None:
+        if published:
+            count = sum(str(s.get("mode", "")).startswith("Online") for s in found.get(code, []))
+            return f"{count} online section{'s' if count != 1 else ''} in {term}" if count else None
+        last = ((cat.get(code) or {}).get("offered") or {}).get("online_only", ())
+        return f"last ran only online in {term[5:]}; {term}'s schedule isn't out" if term[5:] in last else None
+
+    return out | {"options": [o | {"online": how(o["code"])} for o in out["options"] if how(o["code"])]}
+
+
 @mcp.tool(annotations=READ_ONLY)
 def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None = None, by_term: str | None = None,
-                            limit: int = 25, full: bool = False) -> dict:
+                            limit: int = 25, full: bool = False, online: bool = False) -> dict:
     """Courses that can fill one requirement group's slot (e.g. 'senior_electives', 'ge_4ud', 'sfss_esca'), with the
     Bulletin description, so you can pick by the student's goal.
 
@@ -590,6 +607,10 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     (a section that term; these come first), false, or "unknown" (its subject wasn't scraped). crosslisted: the same
     class under other codes (one option, not two). Without full, `more` names (code: title) the ones past `limit`
     that are ready or open up later in the plan, so a course that fits the goal isn't missed for ranking low.
+
+    online: true keeps only the options that can be taken online at by_term, and `online` on each says how that's known:
+    a fully online section when by_term's schedule is out (hybrid doesn't count), before that only how it last ran that
+    season, so an empty list for a later term means not known yet, not none.
     """
     if err := profile_error(profile):
         return err
@@ -603,6 +624,11 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
             plan = {"semesters": semesters}
             notes = notes + [f"No plan given: readiness at {by_term} counts build_plan's baseline. Pass the plan if it has changed"]
     out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs_for(clean), plan, by_term, 10**6)
+    if "options" in out and online:
+        out = online_options(out, catalog(DB, YEAR))
+        rcl = university.get("f1_final_term")
+        if profile.get("f1") and rcl:
+            notes = notes + [f"F-1: only {rcl['online_units_count']:g} units of online classes count toward the minimum ({rcl['source']})"]
     if "options" in out and full:
         term, cat = out["by_term"], catalog(DB, YEAR)
         has = lambda c: (cat.get(c, {}).get("offered") or {}).get("schedule", {})

@@ -44,7 +44,9 @@ replan changes the pace: an earlier or different graduation date, fewer or more 
 
 update_record corrects the record when the student tells you something: a grade, a course taken or not, transfer units, F-1, math placement, a requirement that doesn't apply to them. Pass only what they said, and never change the record on your own. If it changes what the plan needs, say so, and offer to replan.
 
-Act when the student asks: never answer that nothing needs changing. If they don't name a class, choose one of their electives yourself, do it, say which, and tell them they can pick another.
+Act when the student asks: never answer that nothing needs changing, and never ask which class when you can work it out. "chosen" says what each picked class is for, and audit_progress says what counts where. If a request fits several classes ("my GE class"), go through them. If they don't name a class, choose one of their electives yourself, do it, say which, and tell them they can pick another.
+
+To make a class online, or find online options, call list_eligible_electives with online: true, the requirement's group_id and by_term the term. Each option's `online` says how that's known: a section, or only how it last ran. Say which, and never call a class online from the plan alone. If a term has none, try the requirement in a term that has them. A swap has to keep what the old class covered, so change_plan may refuse it: then try another option.
 
 To fill a plan:
 1. Call ge_combinations once. Put the courses of its first way into the plan: one course can cover several requirements, so remove the slots it covers.
@@ -226,7 +228,8 @@ def context(state: dict) -> str:
     known = {k: s[k] for k in ("program", "catalog_year", "goal", "f1", "max_units_per_term", "include_summer", "graduate_by") if k in s}
     plan = [{"term": t["term"], **({"max_units": t["max_units"]} if "max_units" in t else {}),
              "courses": [c for c in t["courses"] if isinstance(c, str)]} for t in state["semesters"]]
-    return json.dumps({"student": known, "plan": plan, "open_slots": open_slots(state), "problems": state["errors"]})
+    chosen = [{"code": p["code"], "term": p["term"], "for": state["titles"].get(p["group"], p["group"])} for p in state["picks"]]
+    return json.dumps({"student": known, "plan": plan, "chosen": chosen, "open_slots": open_slots(state), "problems": state["errors"]})
 
 
 def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict]) -> dict:

@@ -702,3 +702,30 @@ def test_electives_at_a_later_term_without_a_plan_use_the_baseline():
     assert "needs_input" in server.build_plan({"program": "bs-cs"})
     for profile, term in (({"program": "bs-cs"}, "2029-spring"), (student, "2099-fall")):
         assert not any("baseline" in w for w in server.list_eligible_electives(profile, "senior_electives", by_term=term)["warnings"])
+
+
+def test_online_options_say_how_they_know(fixture_db):
+    """A published term has sections to go by; before that, only how the course last ran that season."""
+    con = sqlite3.connect(fixture_db)
+    con.execute("create table if not exists offering (term, code, section, component, mode, enrolled, class_nbr, meetings, "
+                "dates, instructor, seats_open, waitlist_open, attributes)")
+    con.execute("create table if not exists offering_scrape (term, subject, scraped_at)")
+    con.executemany("insert into offering (term, code, section, component, mode) values (?, ?, '01', 'LEC', ?)",
+                    [("2027-spring", "ENVS 401", "Online asynchronous"), ("2027-spring", "HIST 470", "In-Person"),
+                     ("2027-spring", "BECA 422", "Hybrid (Combination of in-person and online synchronous)")])
+    con.commit()
+    con.close()
+    server.catalog.cache_clear()
+    student = TRANSFER_SENIOR | {"f1": True}
+    catalog = server.catalog(server.DB, server.YEAR)
+    published = {c: dict(r) | {"offered": (r.get("offered") or {}) | {"schedule": {"2027-spring": True}}} for c, r in catalog.items()}
+    got = server.online_options({"by_term": "2027-spring", "options": [{"code": "ENVS 401"}, {"code": "HIST 470"}, {"code": "BECA 422"}]}, published)
+    assert [o["code"] for o in got["options"]] == ["ENVS 401"] and "section" in got["options"][0]["online"]
+    earlier = {"ENVS 401": {"offered": {"online_only": ["fall"], "schedule": {"2027-spring": True}}}, "HIST 470": {"offered": {}}}
+    got = server.online_options({"by_term": "2027-fall", "options": [{"code": "ENVS 401"}, {"code": "HIST 470"}]}, earlier)
+    assert [o["code"] for o in got["options"]] == ["ENVS 401"] and "last" in got["options"][0]["online"]
+    assert server.online_options({"by_term": "2027-fall", "options": [{"code": "HIST 470"}]}, earlier)["options"] == []
+    server.catalog.cache_clear()
+    assert "F-1" not in " ".join(server.list_eligible_electives(TRANSFER_SENIOR, "ge_4ud", by_term="2027-spring", online=True)["warnings"])
+    told = " ".join(server.list_eligible_electives(student, "ge_4ud", by_term="2027-spring", online=True)["warnings"])
+    assert "F-1" in told and "units" in told

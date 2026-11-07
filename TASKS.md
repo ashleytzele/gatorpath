@@ -34,7 +34,10 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 - [x] The chat (ARCHITECTURE §7.7, D34, D35): Haiku fills the plan after build_plan, with the MCP server's tools plus
   change_plan, replan and update_record, docked beside the plan. The record stays on the backend. Works without a key
 - [x] First use on the real API, with a real DPR: it filled the plan, but the chat couldn't add a term or change the pace
+- [x] Online classes: list_eligible_electives takes `online`, from a term's sections once its schedule is out, before that
+  from how a course last ran that season, and says which. MCP clients get it too
 - [ ] Chat first: Goals could be a conversation, not a form, and an F-1 rebalance across terms still takes Haiku a few tries
+- [ ] Schedule picks the clash-free set by seats, so it can show an in-person section of a class chosen for being online
 - [ ] Before a public host: a per-student rate limit and a spend cap on `/api/assist`
 - [ ] DPR import reads CS and Psychology only (`dpr_plan`): other majors get `unknown_program` and type their courses
 - [ ] A what-if rebuilds the plan and clears course picks (the screen says so, and Undo restores them)
