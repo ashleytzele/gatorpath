@@ -134,6 +134,24 @@ def test_the_chat_can_choose_a_section_and_the_rest_fit_around_it(monkeypatch):
     assert got["applied"] and got["schedule"] == {a: ["2"], b: ["3"]} and state["sections"] == {first["term"]: ["2"]}
 
 
+def test_a_slot_another_course_covers_keeps_its_units_as_an_elective():
+    """A course that covers two GE areas frees a slot, but its units still count toward 120 and toward minimums like
+    CSC 300GW's 59 units before it: a new student's whole AI fill was refused for that (2026-11-07)."""
+    state = state_of()
+    term, slot = next((s["term"], c) for s in state["semesters"] for c in s["courses"]
+                      if isinstance(c, dict) and c["units"] and c["slot"].startswith("ge_"))
+    units = lambda: sum(c["units"] for s in state["semesters"] if s["term"] == term for c in s["courses"] if isinstance(c, dict))
+    before = units()
+    # (forced: here no course covers the area, so the checks would refuse it)
+    assert assistant.change_plan(state, [{"term": term, "remove": slot["slot"]}], force=True)["applied"]
+    after = next(s for s in state["semesters"] if s["term"] == term)["courses"]
+    assert slot not in after and {"slot": "elective", "units": slot["units"]} in [
+        {k: c[k] for k in ("slot", "units")} for c in after if isinstance(c, dict)] and units() == before
+    zero = next((s["term"], c["slot"]) for s in state["semesters"] for c in s["courses"] if isinstance(c, dict) and not c["units"])
+    assert assistant.change_plan(state, [{"term": zero[0], "remove": zero[1]}], force=True)["applied"]  # 0 units: just gone
+    assert all(c.get("slot") != "elective" or c["units"] for s in state["semesters"] for c in s["courses"] if isinstance(c, dict))
+
+
 def test_a_new_term_has_to_be_a_real_later_term():
     state = state_of()
     for term in ("whenever", "1999-fall"):

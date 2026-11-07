@@ -51,7 +51,7 @@ To put a class in another section (a time, a day, an instructor), call get_secti
 To make a class online, or find online options, call list_eligible_electives with online: true, the requirement's group_id and by_term the term. Each option's `online` says how that's known: a section, or only how it last ran. Say which, set online: true on that change so the Schedule shows its online section, and never call a class online from the plan alone. If a term has none, try the requirement in a term that has them. A swap has to keep what the old class covered, so change_plan may refuse it: then try another option.
 
 To fill a plan:
-1. Call ge_combinations once. Put the courses of its first way into the plan: one course can cover several requirements, so remove the slots it covers.
+1. Call ge_combinations once. Put the courses of its first way into the plan: one course can cover several requirements, so remove the slots it covers. A removed slot with units turns into an elective slot of the same units, because those units still count toward 120 and toward unit minimums.
 2. For each other group with open slots, call list_eligible_electives once, with by_term the group's first slot's term. Pick by the student's goal, 'ready' options first. Respect the group's minimum units in a subject.
 3. A slot named "elective" takes any course of about those units that fits the goal: find one with search_courses.
 4. Send the changes to change_plan together, then fix what it reports. Stop when no slots are left, or when the rest can't be filled, and say which.
@@ -61,7 +61,8 @@ Reply in two to four plain sentences: what you found or changed, and any problem
 OWN_TOOLS = [
     {"name": "change_plan", "description": "Change the plan, all changes together. Each removes a slot or course from a "
      "term, adds a course to it, or both: {\"term\": \"2028-spring\", \"remove\": \"ge_6\", \"add\": \"AA S 106\"} fills a "
-     "slot. GatorPath's checks run on the result: applied is false if it refuses, and then nothing changed. Returns the "
+     "slot. Removing a slot with units and adding nothing leaves an elective slot of those units (they still count). "
+     "GatorPath's checks run on the result: applied is false if it refuses, and then nothing changed. Returns the "
      "errors and the slots still open. force: true keeps a change that fails the checks, only when the student has heard "
      "the problem and insists.",
      "input_schema": {"type": "object", "required": ["changes"], "properties": {"force": {"type": "boolean"}, "changes": {"type": "array", "items": {
@@ -173,6 +174,7 @@ def change_plan(state: dict, changes: list[dict], force: bool = False) -> dict:
     it stays, with its errors on the page. check_plan's verdict is never hidden. A change that makes no sense never lands."""
     semesters = json.loads(json.dumps(state["semesters"]))
     picks, added, problems = [dict(p) for p in state["picks"]], [], []
+    moving = any(c.get("add") and not c.get("remove") for c in changes)  # a slot removed here is added there
     for change in changes:
         term = next((s for s in semesters if s["term"] == change.get("term")), None)
         if term is None and change.get("add") and not change.get("remove") and later_term(change.get("term"), semesters):
@@ -189,6 +191,9 @@ def change_plan(state: dict, changes: list[dict], force: bool = False) -> dict:
                 continue
             at = names.index(change["remove"])
             gone = term["courses"].pop(at)
+            if isinstance(gone, dict) and gone["units"] and gone["slot"] != "elective" and not change.get("add") and not moving:
+                # covered by a course elsewhere: its units still count toward 120 and minimums (CSC 300GW's 59)
+                term["courses"].insert(at, {"slot": "elective", "units": gone["units"]})
         if change.get("add"):
             code = server.norm_code(change["add"])
             term["courses"].insert(at, code)
