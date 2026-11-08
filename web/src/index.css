@@ -3124,3 +3124,21 @@ p, li, small { text-wrap: pretty; }
   .pl-tag { grid-column: 2 / 4; text-align: left; }
   .pl-schedule { margin-left: 0; }
 }
+
+/* Electives & GE: a heading over a 2px rule, rows split by 1px lines */
+.el-rows { list-style: none; margin: 0; padding: 0; }
+.el-rows > li { position: relative; border-bottom: 1px solid var(--line-soft); }
+.el-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) 110px 70px; gap: var(--space-3); align-items: baseline; padding: var(--space-3) 0; }
+.el-req { color: var(--muted); }
+.el-none { color: var(--amber); font-weight: 700; }
+.el-row .pl-link { justify-self: end; min-height: 24px; }
+.el-rows .floating-card { left: 0; right: auto; width: min(480px, 100%); }
+.pl-opt-line { display: block; color: var(--muted); }
+.pl-more { margin-top: var(--space-2); }
+.pl-more summary { min-height: 32px; display: flex; align-items: center; cursor: pointer; font-weight: 700; }
+@media (max-width: 640px) {
+  .el-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .el-req, .el-course { grid-column: 1; }
+  .el-term { grid-column: 1; color: var(--muted); }
+  .el-row .pl-link { grid-column: 2; grid-row: 1 / 4; align-self: center; }
+}

@@ -275,16 +275,50 @@ function CourseFacts({ code, why, going }: { code: string; why?: string; going?:
 }
 
 /** Courses that fit an open choice (or replace a chosen one) in its term, to Select. */
-function ChoiceOptions({ work, target, select }: { work: Work; target: Target; select: (code: string, option: Option) => void }) {
+function ChoiceOptions({
+  work,
+  target,
+  select,
+  all,
+}: {
+  work: Work;
+  target: Target;
+  select: (code: string, option: Option) => void;
+  all?: boolean; // the Electives & GE tab: also the ones past the first three, and why the rest can't be taken
+}) {
   const found = useLoad(
     () => getElectives(work.student, target.group, { semesters: work.semesters }, target.term),
     [target.group, target.term, target.replacing],
   );
-  // ponytail: the first three that fit, in the server's order; the Electives & GE tab lists the rest
-  const options = (found.data?.options ?? [])
-    .filter((o) => o.readiness !== "blocked" && o.code !== target.replacing)
-    .slice(0, 3);
+  // ponytail: the first three that fit, in the server's order
+  const others = (found.data?.options ?? []).filter((o) => o.code !== target.replacing);
+  const fits = others.filter((o) => o.readiness !== "blocked");
+  const blocked = all ? others.filter((o) => o.readiness === "blocked") : [];
+  const options = fits.slice(0, 3);
+  const more = all ? fits.slice(3) : [];
   const term = termLabel(target.term);
+  const row = (o: Option) => {
+    const covers = o.also_covers.map((id) => work.audit.groups.find((g) => g.id === id)?.title ?? id);
+    return (
+      <li key={o.code}>
+        <b>{o.code}</b>
+        <span>
+          {o.title}
+          <small>
+            {" · "}
+            {o.readiness === "check"
+              ? `Check: ${plainText(o.cannot_check?.join("; ") || o.note || "its prerequisites", work.audit)}`
+              : "Ready"}
+          </small>
+          {all && <small className="pl-opt-line">{offeredText(o.offered)}</small>}
+          {!!covers.length && <small className="pl-opt-line">Also counts for {covers.join(", ")}</small>}
+        </span>
+        <button type="button" className="pl-link" disabled={work.aiBusy} onClick={() => select(o.code, o)}>
+          Select<span className="sr-only"> {o.code}</span>
+        </button>
+      </li>
+    );
+  };
   return (
     <>
       <p className="pl-card-lead">
@@ -298,23 +332,32 @@ function ChoiceOptions({ work, target, select }: { work: Work; target: Target; s
           {found.data.approval}. {ASK_ADVISOR} which courses count.
         </p>
       )}
-      {!!options.length && (
-        <ul className="pl-options">
-          {options.map((o) => (
-            <li key={o.code}>
-              <b>{o.code}</b>
-              <span>
-                {o.title}
-                {o.readiness === "check" && (
-                  <small> · Check: {plainText(o.cannot_check?.join("; ") || o.note || "its prerequisites", work.audit)}</small>
-                )}
-              </span>
-              <button type="button" className="pl-link" disabled={work.aiBusy} onClick={() => select(o.code, o)}>
-                Select<span className="sr-only"> {o.code}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
+      {!!options.length && <ul className="pl-options">{options.map(row)}</ul>}
+      {!!more.length && (
+        <details className="pl-more">
+          <summary>{more.length} more that fit</summary>
+          <ul className="pl-options">{more.map(row)}</ul>
+        </details>
+      )}
+      {!!blocked.length && (
+        <details className="pl-more">
+          <summary>
+            {blocked.length} not possible {term}
+          </summary>
+          <ul className="pl-options">
+            {blocked.map((o) => (
+              <li key={o.code}>
+                <b>{o.code}</b>
+                <span>
+                  {o.title}
+                  <small className="pl-opt-line">
+                    {plainText([...(o.blocked_by ?? []), o.not_offered].filter(Boolean).join("; ") || "Not possible that term", work.audit)}
+                  </small>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </details>
       )}
       {found.data && !options.length && !found.data.approval && <p>No course that fits {term} was found.</p>}
       {!work.aiDown && (
@@ -644,50 +687,92 @@ type ChoiceRow = { id: string; title: string; term: string; units?: number; pick
 
 function ChoiceRequirementRows({
   rows,
-  audit,
-  openPicker,
+  work,
+  open,
+  setOpen,
+  select,
 }: {
   rows: ChoiceRow[];
-  audit: Audit;
-  openPicker: (target: Target) => void;
+  work: Work;
+  open: string;
+  setOpen: (key: string) => void;
+  select: (target: Target, code: string, option: Option) => void;
 }) {
   return (
-    <div className="choice-requirements">
-      {rows.map((r, i) => (
-        <div className="choice-requirement-row" key={`${r.id}-${r.term}-${i}`}>
-          <div>
-            <span>{r.id === "elective" ? "Any course" : "Requirement"}</span>
-            <b>{r.title}</b>
-          </div>
-          <div className="planned-choice">
-            <small>In your plan</small>
-            {r.pick ? <b>{r.pick.code}</b> : <b className="not-chosen">Not chosen yet</b>}
-            <span>{termLabel(r.term)}</span>
-            {!!r.pick?.covers.length && <em>Counts twice</em>}
-          </div>
-          <div className="alternative-choices">
-            {r.units ? (
-              <>
-                <small>Units</small>
-                <span>{r.units}</span>
-              </>
-            ) : null}
-          </div>
-          <button
-            onClick={() =>
-              openPicker({ group: r.id, term: r.term, title: r.title, replacing: r.pick?.code })
-            }
-          >
-            {r.pick ? "Change" : "Choose a course"} <Icon name="arrow" size={14} />
-          </button>
-        </div>
-      ))}
-    </div>
+    <ul className="el-rows">
+      {rows.map((r, i) => {
+        const key = `${r.id}|${r.term}|${i}`;
+        const target = { group: r.id, term: r.term, title: r.title, replacing: r.pick?.code };
+        const about = r.pick && (work.info[r.pick.code] ?? work.audit.courses[r.pick.code]);
+        return (
+          <li key={key}>
+            <div className="el-row">
+              <span className="el-req">{r.title}</span>
+              <span className="el-course">
+                {r.pick ? (
+                  <>
+                    <b>{r.pick.code}</b> {about?.title}
+                  </>
+                ) : (
+                  <span className="el-none">Not chosen yet</span>
+                )}
+                {!!r.pick?.covers.length && <small> · Counts twice</small>}
+              </span>
+              <span className="el-term">{termLabel(r.term)}</span>
+              <button
+                type="button"
+                className="pl-link"
+                aria-expanded={open === key}
+                disabled={work.aiBusy}
+                onClick={(e) => {
+                  e.currentTarget.focus(); // Safari doesn't focus a clicked button; the card returns focus here
+                  setOpen(open === key ? "" : key);
+                }}
+              >
+                {r.pick ? "Swap" : "Choose"}
+                <span className="sr-only"> {r.title}</span>
+              </button>
+            </div>
+            {open === key && (
+              <FloatingCard label={`Options for ${r.title}`} onClose={() => setOpen("")}>
+                <div className="pl-card">
+                  <h3>{r.title}</h3>
+                  <p className="pl-card-sub">
+                    {r.pick
+                      ? `In your plan: ${r.pick.code}${about?.title ? ` · ${about.title}` : ""}`
+                      : r.units
+                        ? `Open choice · ${unitText(r.units)}`
+                        : "Open choice"}
+                  </p>
+                  <ChoiceOptions
+                    work={work}
+                    target={target}
+                    all
+                    select={(code, option) => {
+                      setOpen("");
+                      select(target, code, option);
+                    }}
+                  />
+                </div>
+              </FloatingCard>
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
-function ElectivesView({ work, openPicker }: { work: Work; openPicker: (target: Target) => void }) {
+function ElectivesView({
+  work,
+  select,
+}: {
+  work: Work;
+  select: (target: Target, code: string, option: Option) => void;
+}) {
   const { audit, check, info, picks, semesters, student } = work;
+  const [open, setOpen] = useState(""); // the row whose card is open: one at a time
+  useEffect(() => setOpen(""), [semesters]); // a change moves rows under an open card
   const rows: ChoiceRow[] = [
     ...semesters.flatMap((s) =>
       s.courses.filter(isSlot).map((slot) => ({
@@ -708,6 +793,7 @@ function ElectivesView({ work, openPicker }: { work: Work; openPicker: (target: 
   const ge = rows.filter((r) => r.id.startsWith("ge_"));
   const free = rows.filter((r) => r.id === "elective");
   const studies = rows.filter((r) => !major.includes(r) && !ge.includes(r) && !free.includes(r));
+  const open_ = rows.filter((r) => !r.pick).length;
   const count = (list: ChoiceRow[]) => `${list.filter((r) => r.pick).length} chosen, ${list.filter((r) => !r.pick).length} to go`;
   const short = audit.groups.find((g) => g.min_units_from && !isDone(g));
   const inSubject = short?.min_units_from
@@ -715,54 +801,48 @@ function ElectivesView({ work, openPicker }: { work: Work; openPicker: (target: 
         .filter((p) => p.group === short.id && p.code.startsWith(short.min_units_from!.subject))
         .reduce((total, p) => total + unitsOf(p.code, info), short.min_units_from.done)
     : 0;
+  const section = (title: string, list: ChoiceRow[], extra?: React.ReactNode) =>
+    !!list.length && (
+      <SectionCard title={title} count={count(list)}>
+        {extra}
+        <ChoiceRequirementRows rows={list} work={work} open={open} setOpen={setOpen} select={select} />
+      </SectionCard>
+    );
   return (
     <div className="app-content">
       <div className="page-title">
         <h1>Electives & GE</h1>
         <p>
-          These are the requirements where you get to choose. Change a class here to see its options, or ask
-          the chat.
-          {student.goal && student.goal !== "Undecided" ? ` Your focus: ${student.goal}.` : ""}
+          {open_ ? `${open_} of ${rows.length} choices still open` : "All choices made"}
+          {student.goal && student.goal !== "Undecided" ? `, picked around your focus: ${student.goal}` : ""}. Swap or
+          Choose a row to see the courses that fit, or ask the chat.
         </p>
       </div>
       {!check.valid && <ProblemPanel errors={check.errors} audit={audit} ask={work.ask} />}
       {work.busy && <Loading label={work.busy} />}
       {work.failed && <ErrorCard text={work.failed} />}
-      {!!major.length && (
-        <SectionCard title="Major electives" count={count(major)}>
-          {short?.min_units_from && (
-            <div className="major-electives-summary">
-              <div className="csc-unit-progress">
-                <div>
-                  <b>
-                    {inSubject} of {short.min_units_from.units} required {short.min_units_from.subject} units
-                  </b>
-                  <span>{Math.min(100, Math.round((inSubject / short.min_units_from.units) * 100))}%</span>
-                </div>
-                <div>
-                  <i style={{ width: `${Math.min(100, (inSubject / short.min_units_from.units) * 100)}%` }} />
-                </div>
+      {section(
+        "Major electives",
+        major,
+        short?.min_units_from && (
+          <div className="major-electives-summary">
+            <div className="csc-unit-progress">
+              <div>
+                <b>
+                  {inSubject} of {short.min_units_from.units} required {short.min_units_from.subject} units
+                </b>
+                <span>{Math.min(100, Math.round((inSubject / short.min_units_from.units) * 100))}%</span>
+              </div>
+              <div>
+                <i style={{ width: `${Math.min(100, (inSubject / short.min_units_from.units) * 100)}%` }} />
               </div>
             </div>
-          )}
-          <ChoiceRequirementRows rows={major} audit={audit} openPicker={openPicker} />
-        </SectionCard>
+          </div>
+        ),
       )}
-      {!!ge.length && (
-        <SectionCard title="GE still needed" count={count(ge)}>
-          <ChoiceRequirementRows rows={ge} audit={audit} openPicker={openPicker} />
-        </SectionCard>
-      )}
-      {!!studies.length && (
-        <SectionCard title="SF State Studies & American Institutions" count={count(studies)}>
-          <ChoiceRequirementRows rows={studies} audit={audit} openPicker={openPicker} />
-        </SectionCard>
-      )}
-      {!!free.length && (
-        <SectionCard title="Free electives" count={count(free)}>
-          <ChoiceRequirementRows rows={free} audit={audit} openPicker={openPicker} />
-        </SectionCard>
-      )}
+      {section("GE still needed", ge)}
+      {section("SF State Studies & American Institutions", studies)}
+      {section("Free electives", free)}
       {!rows.length && <p className="still-to-do">Nothing left to choose in this plan.</p>}
     </div>
   );
@@ -1229,168 +1309,6 @@ function offeredText(o?: Offered | null) {
   return `Ran: ${ran.join(", ")}${o.last ? ` · last ran ${termLabel(o.last)}` : ""}`;
 }
 
-function OptionCard({
-  option: o,
-  chosen,
-  audit,
-  choose,
-  locked,
-}: {
-  option: Option;
-  chosen: boolean;
-  audit: Audit;
-  choose: () => void;
-  locked: boolean; // the AI is working: a choice now would be lost
-}) {
-  const blocked = o.readiness === "blocked";
-  const covers = o.also_covers.map((id) => audit.groups.find((g) => g.id === id)?.title ?? id);
-  return (
-    <article className={`elective-card ${chosen ? "chosen" : ""}`}>
-      <div className="elective-card-top">
-        <div>
-          <b>
-            {o.code} · {o.title}
-          </b>
-          <small>
-            {unitText(o.units)} · Bulletin p.{o.source_page}
-          </small>
-        </div>
-        <StatusBadge type={o.readiness === "ready" ? "ready" : "warning"}>
-          {o.readiness === "ready" ? "Ready" : blocked ? "Not yet" : "Check"}
-        </StatusBadge>
-      </div>
-      {o.description && <p>{o.description}</p>}
-      {[...(o.cannot_check ?? []), ...(o.blocked_by ?? [])].map((reason) => (
-        <p className="check-reason" key={reason}>
-          <Icon name="warning" size={13} />
-          {plainText(reason)}
-        </p>
-      ))}
-      {o.ready_by && (
-        <p className="check-reason">
-          <Icon name="clock" size={13} />
-          Opens up in {termLabel(o.ready_by)}
-        </p>
-      )}
-      {o.note && <p className="check-reason">{plainText(o.note)}</p>}
-      <p>{offeredText(o.offered)}</p>
-      {o.not_offered && (
-        <p className="rare-note">
-          <Icon name="warning" size={13} /> {plainText(o.not_offered)}
-        </p>
-      )}
-      {o.readiness === "ready" && (
-        <p className="ready-reason">
-          <Icon name="check" size={13} /> Prerequisites met by this term
-        </p>
-      )}
-      {!!covers.length && <span className="counts-twice">Counts twice · Also covers: {covers.join(", ")}</span>}
-      <div className="elective-actions">
-        <Button kind={chosen ? "secondary" : "primary"} disabled={blocked || chosen || locked} onClick={choose}>
-          {chosen ? (
-            <>
-              <Icon name="check" /> Chosen
-            </>
-          ) : (
-            "Choose"
-          )}
-        </Button>
-      </div>
-    </article>
-  );
-}
-
-function ElectiveDrawer({
-  work,
-  target,
-  close,
-  choose,
-}: {
-  work: Work;
-  target: Target;
-  close: () => void;
-  choose: (code: string, option?: Option) => void;
-}) {
-  const dialogRef = useDialog(close);
-  const result = useLoad(
-    () => getElectives(work.student, target.group, { semesters: work.semesters }, target.term),
-    [target],
-  );
-  const options = result.data?.options ?? [];
-  const open = options.filter((o) => o.readiness !== "blocked");
-  const blocked = options.filter((o) => o.readiness === "blocked");
-  const min = result.data?.min_units_from;
-  const card = (o: Option) => (
-    <OptionCard
-      option={o}
-      chosen={o.code === target.replacing}
-      audit={work.audit}
-      choose={() => choose(o.code, o)}
-      locked={work.aiBusy}
-      key={o.code}
-    />
-  );
-  return (
-    <div className="overlay" onMouseDown={close}>
-      <aside
-        className="drawer elective-drawer"
-        onMouseDown={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Choose courses"
-        tabIndex={-1}
-        ref={dialogRef}
-      >
-        <div className="drawer-head">
-          <div>
-            <h2>{target.title}</h2>
-            <p>
-              For {termLabel(target.term)}.
-              {min ? ` At least ${min.units} units must be in ${min.subject}.` : ""}
-              {work.student.goal && work.student.goal !== "Undecided" ? ` Your focus: ${work.student.goal}.` : ""}
-            </p>
-          </div>
-          <button onClick={close} aria-label="Close">
-            <Icon name="x" />
-          </button>
-        </div>
-        {result.loading && <Loading label="Finding courses that fit…" />}
-        {result.error && <ErrorCard text={result.error} retry={result.retry} />}
-        {result.data?.approval && (
-          <p className="check-reason">
-            <Icon name="warning" size={13} />
-            {result.data.approval}. {ASK_ADVISOR} which courses count.
-          </p>
-        )}
-        {!!options.length && (
-          <>
-            <div className="sort-row">
-              <span>
-                Sorted by <b>readiness, then what else each course covers</b>
-              </span>
-            </div>
-            <div className="elective-list">{open.map(card)}</div>
-            {!!blocked.length && (
-              <details className="other-sections">
-                <summary>
-                  {blocked.length} more that aren’t ready by {termLabel(target.term)}{" "}
-                  <Icon name="chevron" />
-                </summary>
-                <div className="elective-list">{blocked.map(card)}</div>
-              </details>
-            )}
-          </>
-        )}
-        <div className="drawer-footer">
-          <Button kind="secondary" onClick={close}>
-            Close
-          </Button>
-        </div>
-      </aside>
-    </div>
-  );
-}
-
 function StyleGuide({ close }: { close: () => void }) {
   const dialogRef = useDialog(close);
   return (
@@ -1478,7 +1396,6 @@ function AppWorkspace({
   notes: string[];
 }) {
   const [tab, setTab] = useState<Tab>("plan");
-  const [picker, setPicker] = useState<Target | null>(null);
   const [chat, setChat] = useState(false);
   const [docked, setDocked] = useState(true); // on a wide screen the chat sits beside the plan until hidden
   const lastTerm = (semesters: Semester[]) => semesters[semesters.length - 1]?.term ?? "";
@@ -1597,7 +1514,6 @@ function AppWorkspace({
     );
   };
   const choose = (target: Target, code: string, option?: Option) => {
-    setPicker(null);
     attempt(
       "Checking your plan…",
       async () => {
@@ -1768,7 +1684,7 @@ function AppWorkspace({
           </div>
         )}
         {tab === "electives" && (
-          <ElectivesView work={work} openPicker={setPicker} />
+          <ElectivesView work={work} select={choose} />
         )}
         {tab === "schedule" && (
           <ScheduleView work={work} openPlan={() => setTab("plan")} toast={showToast} />
@@ -1801,14 +1717,6 @@ function AppWorkspace({
         >
           <Icon name="spark" size={16} /> Ask GatorPath
         </button>
-      )}
-      {picker && (
-        <ElectiveDrawer
-          work={work}
-          target={picker}
-          close={() => setPicker(null)}
-          choose={(code, option) => choose(picker, code, option)}
-        />
       )}
       {toast && (
         <div className="toast">
