@@ -198,3 +198,8 @@ def test_every_course_on_the_landing_page_is_in_the_catalog():
     assert codes and all(c in rows for c in codes), [c for c in codes if c not in rows]
     for code, after in re.findall(r"\b([A-Z]{2,5} \d{3}[A-Z]{0,3}) ([A-Z][a-z][^·<\"]*)", text):  # a title written next to a code
         assert after.strip().startswith(rows[code]), (code, after)
+
+
+def test_the_first_screen_shows_how_to_get_the_dpr():
+    record = (Path(__file__).parents[1] / "web/src/Record.tsx").read_text()
+    assert "How to get your DPR" in record and "help-box" not in record and "{PRIVACY}" not in record

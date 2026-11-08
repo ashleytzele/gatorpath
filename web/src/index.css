@@ -359,19 +359,19 @@
   display: block;
 }
 .method-card b {
-  font-size: 13px;
+  font-size: 15px;
 }
 .method-card b em {
   color: var(--accent);
   display: block;
   font-style: normal;
-  font-size: 13px;
+  font-size: 14px;
   
   letter-spacing: 0;
 }
 .method-card small {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
   margin-top: var(--space-1);
 }
 .method-icon {
@@ -483,81 +483,6 @@
   to {
     width: 85%;
   }
-}
-.privacy-note {
-  display: flex;
-  gap: var(--space-2);
-  padding: var(--space-4);
-  background: var(--accent-2);
-  color: var(--muted);
-  border-radius: var(--radius);
-  margin-top: var(--space-4);
-  font-size: 14px;
-}
-.privacy-note .icon {
-  color: var(--accent);
-  margin-top: 2px;
-}
-.help-box {
-  margin-top: var(--space-4);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-.help-box summary {
-  list-style: none;
-  padding: var(--space-4);
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  font-weight: 600;
-}
-.help-box summary span {
-  display: flex;
-  gap: var(--space-2);
-}
-.help-box[open] > summary > .icon {
-  transform: rotate(90deg);
-}
-.help-box ol {
-  color: var(--muted);
-  line-height: 2;
-}
-.shot-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-3);
-  padding: 0 var(--space-4) var(--space-4);
-}
-.shot {
-  background: var(--surface);
-  border-radius: var(--radius);
-  height: 90px;
-  padding: var(--space-2);
-  position: relative;
-}
-.shot > span {
-  width: 18px;
-  height: 18px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--accent);
-  color: white;
-  font-size: 13px;
-}
-.shot > div {
-  height: 3px;
-  background: var(--line-strong);
-  margin: var(--space-2) var(--space-1);
-  box-shadow:
-    0 7px var(--line-strong),
-    0 14px var(--line-strong);
-}
-.shot small {
-  position: absolute;
-  bottom: 5px;
-  left: 9px;
-  color: var(--muted);
 }
 .demo-error {
   display: block;
@@ -2918,12 +2843,6 @@
   .drop-zone {
     min-height: 220px;
   }
-  .shot-row {
-    grid-template-columns: 1fr;
-  }
-  .shot {
-    height: 75px;
-  }
   .form-row {
     grid-template-columns: 1fr;
   }
@@ -3830,9 +3749,25 @@ p, li, small { text-wrap: pretty; }
   background: transparent; padding: var(--space-3) var(--space-4);
 }
 .record-panel:not(.form-panel) { background: none; border: 0; box-shadow: none; padding: 0; }
-.record-panel:not(.form-panel) .privacy-note { background: none; padding: var(--space-2) 0; }
-.record-panel:not(.form-panel) .help-box { border: 0; border-top: 1px solid var(--line); border-radius: 0; }
-.record-panel:not(.form-panel) .help-box summary { padding-inline: 0; }
+
+/* How to get your DPR: a 16:9 video placeholder beside the written steps; steps go under it on a phone */
+.howto { margin-top: var(--space-6); padding-top: var(--space-5); border-top: 1px solid var(--line); }
+.howto h2 { font-size: 20px; margin: 0 0 var(--space-4); }
+.howto-body { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+.howto-video {
+  aspect-ratio: 16 / 9; background: var(--line-soft); border: 1px solid var(--line); border-radius: var(--radius);
+  display: grid; place-content: center; justify-items: center; gap: var(--space-2); color: var(--muted); font-size: 14px;
+}
+.howto-video i {
+  width: 48px; height: 48px; border-radius: 50%; background: var(--accent); display: grid; place-items: center;
+}
+.howto-video i::before {
+  content: ""; margin-left: 4px; border-style: solid; border-width: 8px 0 8px 13px;
+  border-color: transparent transparent transparent white;
+}
+.howto ol { margin: 0; padding-left: var(--space-5); color: var(--muted); font-size: 15px; line-height: 1.9; }
+.howto ol b { color: var(--ink); }
+@media (max-width: 720px) { .howto-body { grid-template-columns: 1fr; gap: var(--space-4); } }
 
 /* Targets: at least 24 px everywhere (WCAG 2.2 2.5.8), 44 px on a phone */
 .let-pick, .plan-problem-panel > p button, .problem-more, .choice-requirement-row > button, .class-num button,
