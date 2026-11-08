@@ -1,6 +1,6 @@
 // Run: node web/src/logic.check.ts
 import assert from "node:assert/strict";
-import { countSection, describeChange, goalText, leftText, markOf, pathwayLine, suggestions, termLabel, withPlanned } from "./logic.ts";
+import { countSection, describeChange, goalText, leftText, markOf, pathwayLine, plainWarning, suggestions, termLabel, warnedGroups, withPlanned } from "./logic.ts";
 
 const g = (id: string, status: string) => ({ id, title: id, kind: "major", source: "", status, counted: [], in_progress: [] });
 const term = (t: string, courses: (string | { slot: string; units: number })[]) => ({ term: t, courses });
@@ -33,4 +33,11 @@ assert.equal(suggestions(planWith({ fold_last_term: { est_graduation_term: "2029
 assert.deepEqual(suggestions(planWith({ fold_last_term: { est_graduation_term: "2029-spring" } }), { include_summer: true }, 2).map((s) => s.id), ["choose", "sooner", "winter"]);
 assert.equal(suggestions(planWith({ normal_load: { est_graduation_term: "2030-fall" } }), {}, 0)[0].label, "Lighter terms (graduate Fall 2030)");
 assert.equal(withPlanned(profile, [term("2027-spring", ["CSC 256"])]).completed!.at(-1)!.code, "CSC 256");
+const imported = { catalog_year: "2026-27", profile, remaining: null, cross_check: [], warnings: [], see_advisor: [], warnings_by_group: { ge_4: ["…"] } };
+assert.deepEqual(warnedGroups({ ...profile, not_on_dpr: ["ge_2"] }, imported), new Set(["ge_2", "ge_4"]));
+assert.deepEqual(warnedGroups(profile, null), new Set());
+assert.equal(
+  plainWarning("CSC 220: the DPR says done, GatorPath says needed. The DPR wins; ask an advisor if it looks wrong, and tell GatorPath if its rule is the one that's off"),
+  "CSC 220: your DPR says done, GatorPath says needed. Your DPR wins; ask an advisor if it looks wrong.",
+);
 console.log("logic.check: ok");

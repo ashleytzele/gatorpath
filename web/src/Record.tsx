@@ -1,17 +1,23 @@
 import { useRef, useState } from "react";
 import {
   EngineError,
+  getAudit,
   getCourse,
   getPrograms,
   importDpr,
   message,
+  type Audit,
   type Choice,
-  type CourseInfo,
+  type Group,
   type ImportResult,
   type Profile,
+  type Semester,
+  type Slot,
   type Taken,
 } from "./api";
-import { termLabel } from "./logic";
+import { FloatingCard } from "./FloatingCard";
+import { NOT_ON_DPR, countSection, markOf, plainWarning, termLabel, unitText, warnedGroups, type Mark } from "./logic";
+import { StatusMark, WORD } from "./StatusMark";
 import { Button, DEMO, ErrorCard, Icon, Loading, Stepper, nearbyTerms, useLoad } from "./ui";
 
 function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void }) {
@@ -344,24 +350,79 @@ export function RecordScreen({ done }: { done: (profile: Profile, imported?: Imp
   );
 }
 
-
-/** The record beside Review: add a course the DPR doesn't show, change a grade, finish or remove a course. */
-export function RecordEditor({
+/** Edit's card: change a grade, finish a course in progress (no `row`), or take the course off the record. */
+function CourseEdit({
   profile,
-  titles,
+  code,
+  row,
   edit,
+  close,
 }: {
   profile: Profile;
-  titles: Record<string, CourseInfo>;
+  code: string;
+  row?: Taken;
   edit: (profile: Profile) => void;
+  close: () => void;
 }) {
   const rows = profile.completed ?? [];
   const going = profile.in_progress ?? [];
-  const now = nearbyTerms(1, 0)[0];
+  return (
+    <div className="form-panel rq-card">
+      <h3>{code}</h3>
+      <label>
+        {row ? "Grade" : "Status"}
+        <select
+          value={row?.grade ?? ""}
+          onChange={(e) => {
+            if (row) return edit({ ...profile, completed: rows.map((x) => (x === row ? { ...x, grade: e.target.value } : x)) });
+            edit({
+              ...profile,
+              in_progress: going.filter((x) => x !== code),
+              completed: [...rows, { code, grade: e.target.value, term: nearbyTerms(1, 0)[0] }],
+            });
+            close();
+          }}
+        >
+          {row ? (
+            [...new Set([row.grade, ...GRADES])].map((g) => <option key={g}>{g}</option>)
+          ) : (
+            <>
+              <option value="">In progress</option>
+              {GRADES.map((g) => (
+                <option value={g} key={g}>
+                  Finished: {g}
+                </option>
+              ))}
+            </>
+          )}
+        </select>
+      </label>
+      <Button
+        kind="secondary"
+        icon="x"
+        onClick={() => {
+          edit(
+            row
+              ? { ...profile, completed: rows.filter((x) => x !== row) }
+              : { ...profile, in_progress: going.filter((x) => x !== code) },
+          );
+          close();
+        }}
+      >
+        Remove from my record
+      </Button>
+    </div>
+  );
+}
+
+/** "+ Add a course": one the DPR doesn't show, or one finished since. */
+function AddCourse({ profile, edit }: { profile: Profile; edit: (profile: Profile) => void }) {
+  const rows = profile.completed ?? [];
+  const going = profile.in_progress ?? [];
   const [code, setCode] = useState("");
   const [grade, setGrade] = useState("A");
-  const [term, setTerm] = useState(now);
-  const [state, setState] = useState<{ loading?: boolean; error?: string }>({});
+  const [term, setTerm] = useState(nearbyTerms(1, 0)[0]);
+  const [state, setState] = useState<{ loading?: boolean; error?: string; added?: string }>({});
   const add = async () => {
     setState({ loading: true });
     try {
@@ -376,122 +437,393 @@ export function RecordEditor({
             },
       );
       setCode("");
-      setState({});
+      setState({ added: c });
     } catch (e) {
       setState({ error: message(e) });
     }
   };
   return (
-    <>
-      <section className="section-card form-panel record-add">
-        <h2>Fix your record</h2>
-        <p>A course your DPR doesn’t show, or one you’ve finished since? Add it here.</p>
-        <label>
-          Course code
-          <div className="search-field">
-            <Icon name="search" />
-            <input
-              value={code}
-              placeholder="CSC 215"
-              onChange={(e) => setCode(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && code && add()}
-            />
-          </div>
-        </label>
-        <div className="form-row">
-          <label>
-            Grade
-            <select value={grade} onChange={(e) => setGrade(e.target.value)}>
-              {[...GRADES, IN_PROGRESS].map((g) => (
-                <option key={g}>{g}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Term
-            <select value={term} disabled={grade === IN_PROGRESS} onChange={(e) => setTerm(e.target.value)}>
-              {nearbyTerms(12, 0)
-                .reverse()
-                .map((x) => (
-                  <option value={x} key={x}>
-                    {termLabel(x)}
-                  </option>
-                ))}
-            </select>
-          </label>
+    <div className="form-panel rq-card">
+      <h3>Add a course</h3>
+      <label>
+        Course code
+        <div className="search-field">
+          <Icon name="search" />
+          <input
+            value={code}
+            placeholder="CSC 215"
+            onChange={(e) => setCode(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && code && add()}
+          />
         </div>
-        <Button kind="secondary" icon="plus" onClick={add} disabled={!code || state.loading}>
-          {state.loading ? "Finding it in the Bulletin…" : "Add course"}
-        </Button>
-        {state.error && <ErrorCard text={state.error} />}
-      </section>
-      <details className="section-card record-list">
-        <summary>
-          <span>Completed courses</span>
-          <span>
-            {rows.length} <Icon name="chevron" />
-          </span>
-        </summary>
-        {rows.map((r, i) => (
-          <div className="record-row" key={`${r.code}-${r.term ?? i}`}>
-            <div>
-              <b>
-                {r.code} {r.transfer && <em className="transfer">Transfer</em>}
-              </b>
-              <small>{[titles[r.code]?.title, termLabel(r.term)].filter(Boolean).join(" · ")}</small>
-            </div>
-            <select
-              aria-label={`Grade for ${r.code}`}
-              value={r.grade}
-              onChange={(e) => edit({ ...profile, completed: rows.map((x) => (x === r ? { ...x, grade: e.target.value } : x)) })}
-            >
-              {[...new Set([r.grade, ...GRADES])].map((g) => (
-                <option key={g}>{g}</option>
-              ))}
-            </select>
-            <button aria-label={`Remove ${r.code}`} onClick={() => edit({ ...profile, completed: rows.filter((x) => x !== r) })}>
-              <Icon name="x" size={14} />
-            </button>
-          </div>
-        ))}
-      </details>
-      <details className="section-card record-list">
-        <summary>
-          <span>In progress</span>
-          <span>
-            {going.length} <Icon name="chevron" />
-          </span>
-        </summary>
-        {going.map((c) => (
-          <div className="record-row" key={c}>
-            <div>
-              <b>{c}</b>
-              <small>{titles[c]?.title}</small>
-            </div>
-            <select
-              aria-label={`${c}: in progress, or the grade you got`}
-              value=""
-              onChange={(e) =>
-                edit({
-                  ...profile,
-                  in_progress: going.filter((x) => x !== c),
-                  completed: [...rows, { code: c, grade: e.target.value, term: now }],
-                })
-              }
-            >
-              <option value="">In progress</option>
-              {GRADES.map((g) => (
-                <option value={g} key={g}>
-                  Finished: {g}
+      </label>
+      <div className="form-row">
+        <label>
+          Grade
+          <select value={grade} onChange={(e) => setGrade(e.target.value)}>
+            {[...GRADES, IN_PROGRESS].map((g) => (
+              <option key={g}>{g}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Term
+          <select value={term} disabled={grade === IN_PROGRESS} onChange={(e) => setTerm(e.target.value)}>
+            {nearbyTerms(12, 0)
+              .reverse()
+              .map((x) => (
+                <option value={x} key={x}>
+                  {termLabel(x)}
                 </option>
               ))}
-            </select>
-            <button aria-label={`Remove ${c}`} onClick={() => edit({ ...profile, in_progress: going.filter((x) => x !== c) })}>
-              <Icon name="x" size={14} />
-            </button>
-          </div>
+          </select>
+        </label>
+      </div>
+      <Button kind="secondary" icon="plus" onClick={add} disabled={!code || state.loading}>
+        {state.loading ? "Finding it in the Bulletin…" : "Add course"}
+      </Button>
+      {state.error && <ErrorCard text={state.error} />}
+      <p role="status" className="rq-added">
+        {state.added && `Added ${state.added}.`}
+      </p>
+    </div>
+  );
+}
+
+const NOT_FOUND = "Not found on this DPR"; // the cross-check line for requirements the DPR doesn't list
+const SECTIONS: [string, (g: Group) => boolean][] = [
+  ["General Education", (g) => g.id.startsWith("ge_")],
+  ["SF State Studies", (g) => g.id.startsWith("sfss_")],
+  ["American Institutions", (g) => g.id.startsWith("ai_")],
+  ["Other university requirements", (g) => g.kind === "university" && !/^(ge|sfss|ai)_/.test(g.id)],
+  ["Major", (g) => g.kind === "major"],
+];
+const MARKS: Mark[] = ["complete", "progress", "incomplete", "exception", "warning"];
+const plannedText = (term?: string) => (term ? `Planned · ${termLabel(term)}` : "Planned");
+
+/** One course line under a requirement: a `row` or `going` makes it editable. */
+type Line = { key: string; code: string; units?: number | string; when: string; grade?: string; row?: Taken; going?: boolean };
+
+/** GatorPath's reading of the record, in the DPR's order: every requirement from the audit, every disagreement with
+ * the DPR as a Warning. Sections start closed. With `withPlan` (the audit of withPlanned(profile, semesters)) it also
+ * counts what the plan completes and says when a course is planned. */
+export function RequirementsView({
+  profile,
+  imported,
+  audit,
+  withPlan,
+  semesters,
+  edit,
+  leave,
+}: {
+  profile: Profile;
+  imported: ImportResult | null;
+  audit: Audit;
+  withPlan?: Audit;
+  semesters?: Semester[]; // the plan's terms, for "Planned · Spring 2027"
+  edit: (profile: Profile) => void;
+  leave?: { label: string; go: () => void };
+}) {
+  const [editing, setEditing] = useState<string | null>(null); // one card at a time: a line's key, or "add"
+  const close = () => setEditing(null);
+  const toggle = (key: string) => setEditing(editing === key ? null : key);
+  const warned = warnedGroups(profile, imported);
+  const rows = profile.completed ?? [];
+  const going = profile.in_progress ?? [];
+  const left = profile.not_on_dpr ?? [];
+  const units = (code: string) => audit.courses[code]?.units;
+  const plannedIn = (test: (c: string | Slot) => boolean) => semesters?.find((s) => s.courses.some(test))?.term;
+
+  const line = (l: Line) => (
+    <div className="rq-course" key={l.key}>
+      <b className="rq-code">{l.code}</b>
+      <span className="rq-title">{audit.courses[l.code]?.title}</span>
+      <span className="rq-units">{l.units != null && unitText(l.units)}</span>
+      <span className={`rq-when ${l.going ? "going" : ""}`}>{l.when}</span>
+      <b className="rq-grade">{l.grade}</b>
+      {(l.row || l.going) && (
+        <>
+          <button type="button" className="rq-link rq-edit" aria-expanded={editing === l.key} onClick={() => toggle(l.key)}>
+            Edit<span className="sr-only"> {l.code}</span>
+          </button>
+          {editing === l.key && (
+            <FloatingCard label={`Edit ${l.code}`} onClose={close}>
+              <CourseEdit profile={profile} code={l.code} row={l.row} edit={edit} close={close} />
+            </FloatingCard>
+          )}
+        </>
+      )}
+    </div>
+  );
+  const rowLine = (where: string, r: Taken, i: number): Line => ({
+    key: `${where}:${r.code}:${r.term ?? i}`,
+    code: r.code,
+    units: units(r.code),
+    when: r.transfer ? "Transfer" : termLabel(r.term),
+    grade: r.grade,
+    row: r,
+  });
+  const taken = (where: string, code: string): Line[] => {
+    const mine = rows.filter((r) => r.code === code);
+    return mine.length
+      ? mine.map((r, i) => rowLine(where, r, i))
+      : [{ key: `${where}:${code}`, code, units: units(code), when: "Met on your DPR" }]; // a substitution (dpr_met)
+  };
+  const inProgress = (where: string, code: string): Line => ({
+    key: `${where}:${code}:going`, code, units: units(code), when: "In progress", going: true,
+  });
+
+  const requirement = (g: Group) => {
+    const mark = markOf(g, warned.has(g.id));
+    const warnings = imported?.warnings_by_group?.[g.id] ?? [];
+    const missing = left.includes(g.id) || warnings.some((w) => w.startsWith(NOT_FOUND));
+    const planned = (withPlan?.groups.find((x) => x.id === g.id)?.counted ?? []).filter(
+      (c) => !g.counted.includes(c) && !g.in_progress.includes(c),
+    );
+    const needed = (g.remaining ?? []).filter((c) => !planned.includes(c));
+    const slot = plannedIn((c) => typeof c !== "string" && c.slot === g.id);
+    const ongoing = g.in_progress.reduce((n, c) => n + (Number(units(c)) || 0), 0); // the DPR's "taken" counts these
+    const short = (g.units_needed ?? 0) - (g.units_done ?? 0) - ongoing;
+    const details = [
+      // an import's ge_done is every GE area the DPR shows done; typed, it is only transfer, AP or IB credit
+      g.met_by === "ge_done" && (imported ? "Met on your DPR" : "Met by transfer credit"),
+      g.status === "unparsed" && "GatorPath can’t check this one. Check it on your DPR.",
+      !!g.units_needed &&
+        `${unitText(g.units_needed)} required, ${(g.units_done ?? 0) + ongoing} taken${short > 0 ? `, ${short} needed` : ""}`,
+      ...(imported?.notes_by_group?.[g.id] ?? (g.waived_by && g.waived_by !== NOT_ON_DPR ? [`Waived: ${g.waived_by}`] : [])),
+      needed.length > 0 && `Needed: ${needed.join(", ")}`,
+      slot && plannedText(slot),
+    ].filter((x): x is string => !!x);
+    return (
+      <div className="rq-req" key={g.id}>
+        <div className="rq-req-head">
+          <span aria-hidden="true">
+            <StatusMark mark={mark} />
+          </span>
+          <b>{g.title}</b>
+          <span className={`rq-word ${mark}`}>{WORD[mark]}</span>
+        </div>
+        {details.map((d, i) => (
+          <p className="rq-detail" key={i}>
+            {d}
+          </p>
         ))}
+        {missing && (
+          <p className="rq-note">
+            <span>
+              {left.includes(g.id)
+                ? "Your DPR doesn’t list this, so it’s left out of your plan. Confirm with an advisor that you don’t need it."
+                : "Your DPR doesn’t list this, but it’s back in your plan."}
+            </span>
+            <button
+              type="button"
+              className="rq-link"
+              onClick={() =>
+                edit({ ...profile, not_on_dpr: left.includes(g.id) ? left.filter((x) => x !== g.id) : [...left, g.id] })
+              }
+            >
+              {left.includes(g.id) ? "Put it back" : "Leave it out"}
+            </button>
+          </p>
+        )}
+        {warnings
+          .filter((w) => !w.startsWith(NOT_FOUND))
+          .map((w, i) => (
+            <p className="rq-note" key={i}>
+              {plainWarning(w)}
+            </p>
+          ))}
+        {g.met_by !== "ge_done" && g.counted.flatMap((c) => taken(g.id, c)).map(line)}
+        {g.in_progress.map((c) => line(inProgress(g.id, c)))}
+        {planned.map((c) =>
+          line({ key: `${g.id}:${c}:planned`, code: c, units: units(c), when: plannedText(plannedIn((x) => x === c)) }),
+        )}
+      </div>
+    );
+  };
+
+  // Every course on the record shows somewhere, so each can be edited: under a requirement, in the DPR's own
+  // "Courses Not Used" (editable when the record has that row), or with the other courses
+  const shown = new Set(audit.groups.flatMap((g) => [...g.counted, ...g.in_progress]));
+  const listed = new Set<Taken | string>();
+  const notUsed = (imported?.not_used ?? []).map((r, i): Line => {
+    const mine = rows.find((x) => x.code === r.code && (x.term ?? null) === (r.term ?? null));
+    if (mine) {
+      listed.add(mine);
+      return { ...rowLine("unused", mine, i), units: r.units };
+    }
+    if (!r.grade && going.includes(r.code)) {
+      listed.add(r.code);
+      return { ...inProgress("unused", r.code), units: r.units };
+    }
+    return { key: `unused:${r.code}:${i}`, code: r.code, units: r.units, when: termLabel(r.term), grade: r.grade };
+  });
+  const other = [
+    ...rows.filter((r) => !shown.has(r.code) && !listed.has(r)).map((r, i) => rowLine("other", r, i)),
+    ...going.filter((c) => !shown.has(c) && !listed.has(c)).map((c) => inProgress("other", c)),
+  ];
+  const list = (name: string, lines: Line[]) =>
+    !!lines.length && (
+      <details className="rq-section rq-list" onToggle={(e) => !e.currentTarget.open && close()}>
+        <summary>
+          <span className="rq-chevron" aria-hidden="true" />
+          <span className="rq-name">{name}</span>
+          <span className="rq-count">{lines.length}</span>
+        </summary>
+        <div className="rq-body">{lines.map(line)}</div>
       </details>
-    </>
+    );
+
+  return (
+    <div className="rq">
+      <div className="rq-head">
+        <h2>Requirements</h2>
+        <ul className="rq-key" aria-label="Status key">
+          {MARKS.map((m) => (
+            <li key={m}>
+              <span aria-hidden="true">
+                <StatusMark mark={m} />
+              </span>
+              {WORD[m]}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="rq-cols" aria-hidden="true">
+        <span>Complete</span>
+        {withPlan && <span>With your plan</span>}
+      </div>
+      {SECTIONS.map(([name, test]) => {
+        const groups = audit.groups.filter(test);
+        if (!groups.length) return null;
+        const n = countSection(groups, warned);
+        const p = withPlan && countSection(withPlan.groups.filter(test), warned);
+        return (
+          <details className="rq-section" key={name} onToggle={(e) => !e.currentTarget.open && close()}>
+            <summary>
+              <span className="rq-chevron" aria-hidden="true" />
+              <span aria-hidden="true">
+                <StatusMark mark={n.done === n.total ? "complete" : "incomplete"} />
+              </span>
+              <span className="rq-name">{name}</span>
+              <span className="rq-flag" aria-hidden="true">
+                {!!n.warned && <StatusMark mark="warning" />}
+              </span>
+              <span className="rq-count" aria-hidden="true">
+                {n.done}/{n.total}
+              </span>
+              {p && (
+                <span className="rq-count" aria-hidden="true">
+                  {p.done}/{p.total}
+                </span>
+              )}
+              <span className="sr-only">
+                {`, ${n.done} of ${n.total} complete`}
+                {p && `, ${p.done} with your plan`}
+                {!!n.warned && `, ${n.warned} ${n.warned === 1 ? "warning" : "warnings"}`}
+              </span>
+            </summary>
+            <div className="rq-body">{groups.map(requirement)}</div>
+          </details>
+        );
+      })}
+      {list(imported ? "Other courses on your record" : "Courses not used for a requirement", other)}
+      {list("Courses not used for a requirement", notUsed)}
+      <div className="rq-actions">
+        <div className="rq-add">
+          <button type="button" className="rq-link" aria-expanded={editing === "add"} onClick={() => toggle("add")}>
+            + Add a course{imported ? " your DPR doesn’t show" : ""}
+          </button>
+          {editing === "add" && (
+            <FloatingCard label="Add a course" onClose={close}>
+              <AddCourse profile={profile} edit={edit} />
+            </FloatingCard>
+          )}
+        </div>
+        {leave && <Button onClick={leave.go}>{leave.label}</Button>}
+      </div>
+    </div>
+  );
+}
+
+/** "Does this look right?": the DPR-style summary, then the requirements, before the goals. */
+export function ReviewScreen({
+  profile,
+  imported,
+  edit,
+  next,
+}: {
+  profile: Profile;
+  imported: ImportResult | null;
+  edit: (profile: Profile) => void;
+  next: () => void;
+}) {
+  const audit = useLoad(() => getAudit(profile), [profile]);
+  const programs = useLoad(getPrograms, []);
+  const a = audit.data;
+  const t = a?.totals;
+  const gpa = profile.gpa;
+  const sfGpa = profile.sf_state_gpa ?? t?.gpa_sf_state?.value;
+  return (
+    <main className="flow-page rq-page">
+      <Stepper current={1} />
+      <div className="flow-heading">
+        <h1>Does this look right?</h1>
+        <p>
+          {imported ? "This is how GatorPath reads your DPR." : "This is what you told us, checked against the Bulletin."}{" "}
+          Open a section to check its courses and grades.{imported && " Your DPR is the official record."}
+        </p>
+      </div>
+      {audit.error ? (
+        <ErrorCard text={audit.error} retry={audit.retry} />
+      ) : !a || !t ? (
+        <Loading label="Checking your record against the Bulletin…" />
+      ) : (
+        <>
+          <section className="rq-summary" aria-label="Summary">
+            <div className="rq-summary-head">
+              <b>{programs.data?.find((p) => p.id === profile.program)?.title ?? profile.program}</b>
+              <span>Catalog year {profile.catalog_year ?? a.catalog_year}</span>
+            </div>
+            <dl>
+              {(
+                [
+                  ["Units", t.units, t.units_in_progress],
+                  ["Upper-division units", t.upper_division_units, t.upper_division_units_in_progress ?? 0],
+                ] as const
+              ).map(([label, total, more]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>
+                    {total.value + more}
+                    {total.needed != null && <span> of {total.needed}</span>}
+                  </dd>
+                  {!!more && <dd className="rq-going">incl. {more} in progress</dd>}
+                </div>
+              ))}
+              {gpa != null && (
+                <div>
+                  <dt>Overall GPA</dt>
+                  <dd>{gpa.toFixed(3)}</dd>
+                </div>
+              )}
+              {sfGpa != null && (
+                <div>
+                  <dt>SF State GPA</dt>
+                  <dd>{sfGpa.toFixed(3)}</dd>
+                </div>
+              )}
+            </dl>
+          </section>
+          <RequirementsView
+            profile={profile}
+            imported={imported}
+            audit={a}
+            edit={edit}
+            leave={{ label: "Looks right → Your goals", go: next }}
+          />
+        </>
+      )}
+    </main>
   );
 }

@@ -34,8 +34,8 @@ import {
   type Taken,
 } from "./api";
 import { Landing } from "./Landing";
-import { RecordEditor, RecordScreen } from "./Record";
-import { termLabel } from "./logic";
+import { RecordScreen, ReviewScreen } from "./Record";
+import { NOT_ON_DPR, termLabel, unitText } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, type IconName, Loading, Logo, NAVIGATOR,
   Stepper, StatusBadge, Tooltip, nearbyTerms, plainText, useLoad, type Screen,
@@ -58,44 +58,21 @@ function AdvisingNote() {
   );
 }
 
-const NOT_ON_DPR = "not on the student's DPR"; // the engine's waived_by for a requirement the student left out
 const isDone = (g: Group) => g.status === "satisfied" || g.status === "waived";
 const universityGroups = (audit: Audit) => audit.groups.filter((g) => g.kind === "university");
 
-/** GE and university rows. Without a plan (Review, from the DPR) they use the DPR's words: Completed, Incomplete. */
-/** Areas the DPR doesn't list (D33): left out on import, and the student can put one back or leave it out again. */
-type DprMissing = { missing: string[]; left: string[]; set: (ids: string[], leave: boolean) => void };
-
+/** GE and university rows. Without a plan they use the DPR's words: Completed, Incomplete. */
 function GeRequirementRows({
   groups,
   plannedIn,
-  dpr,
 }: {
   groups: Group[];
   plannedIn?: (group: Group) => string | undefined;
-  dpr?: DprMissing;
 }) {
   const record = !plannedIn;
-  const askable = groups.filter((g) => dpr?.missing.includes(g.id)).map((g) => g.id);
-  const out = askable.filter((id) => dpr?.left.includes(id));
-  const [they, them] = askable.length === 1 ? ["it’s", "it"] : ["they’re", "them"];
   return (
     <div className="shared-ge-rows progress">
-      {!!askable.length && dpr && (
-        <div className="dpr-missing-note">
-          <Icon name="info" size={15} />
-          <p>
-            {askable.length === 1 ? "One of these isn’t" : `${askable.length} of these aren’t`} on your DPR,
-            {out.length
-              ? ` so ${they} left out of your plan. Confirm with an advisor that you don’t need ${them}.`
-              : ` but ${they} back in your plan.`}
-          </p>
-          <button className="let-pick" onClick={() => dpr.set(askable, !out.length)}>
-            {out.length ? "Put them back in my plan" : "Leave them out"}
-          </button>
-        </div>
-      )}
-      {[...groups.filter((g) => askable.includes(g.id)), ...groups.filter((g) => !askable.includes(g.id))].map((g) => {
+      {groups.map((g) => {
         const planned = plannedIn?.(g);
         const done = isDone(g);
         const leftOut = g.waived_by === NOT_ON_DPR;
@@ -122,104 +99,6 @@ function GeRequirementRows({
         );
       })}
     </div>
-  );
-}
-
-function ReviewScreen({
-  profile,
-  imported,
-  edit,
-  next,
-}: {
-  profile: Profile;
-  imported: ImportResult | null;
-  edit: (profile: Profile) => void;
-  next: () => void;
-}) {
-  const audit = useLoad(() => getAudit(profile), [profile]);
-  const programs = useLoad(getPrograms, []);
-  const body = () => {
-    if (audit.error) return <ErrorCard text={audit.error} retry={audit.retry} />;
-    if (!audit.data) return <Loading label="Checking your record against the Bulletin…" />;
-    const a = audit.data;
-    const t = a.totals;
-    const left = profile.not_on_dpr ?? [];
-    const notFound = imported?.cross_check.find((line) => line.startsWith("Not found on this DPR")) ?? "";
-    const dpr: DprMissing = {
-      missing: a.groups.filter((g) => notFound.includes(g.title)).map((g) => g.id),
-      left,
-      set: (ids, leave) =>
-        edit({ ...profile, not_on_dpr: leave ? [...new Set([...left, ...ids])] : left.filter((x) => !ids.includes(x)) }),
-    };
-    const met = a.groups.filter(isDone).length;
-    const going = a.groups.filter((g) => !isDone(g) && g.in_progress.length).length;
-    const gpa = profile.gpa ?? t.gpa_sf_state?.value; // the DPR's, when there is one
-    return (
-      <>
-        <div className="dash-tiles">
-          <div className="dash-tile wide">
-            <small>Major</small>
-            <b className="text">{programs.data?.find((p) => p.id === profile.program)?.title ?? profile.program}</b>
-          </div>
-          <div className="dash-tile">
-            <small>
-              Catalog year <Tooltip text="The Bulletin year whose degree rules apply to you." />
-            </small>
-            <b className="text">{profile.catalog_year ?? a.catalog_year}</b>
-          </div>
-          {(
-            [
-              ["Units", t.units.value, t.units_in_progress, t.units.needed ?? 120],
-              ["Upper-division units", t.upper_division_units.value, t.upper_division_units_in_progress ?? 0,
-               t.upper_division_units.needed ?? 0],
-              ["Requirements completed", met, going, a.groups.length],
-            ] as [string, number, number, number][]
-          ).map(([label, value, more, of]) => {
-            const units = label !== "Requirements completed"; // units count in progress, as the DPR's "taken" does
-            return (
-              <div className="dash-tile" key={label}>
-                <small>{label}</small>
-                <b>
-                  {units ? value + more : value} <span>/ {of}</span>
-                </b>
-                <UnitTrack value={value} going={more} total={of} label={label} />
-                {!!more && <em className="going-note">{units ? `incl. ${more}` : `+${more}`} in progress</em>}
-              </div>
-            );
-          })}
-          {!!gpa && (
-            <div className="dash-tile">
-              <small>GPA</small>
-              <b>{gpa}</b>
-            </div>
-          )}
-        </div>
-        <div className="dash-grid">
-          <div className="dash-main">
-            <DegreeProgress audit={a} bars={false} dpr={dpr} />
-          </div>
-          <aside className="dash-side">
-            <RecordEditor profile={profile} titles={a.courses} edit={edit} />
-            <Button onClick={next}>
-              Looks right <Icon name="arrow" />
-            </Button>
-          </aside>
-        </div>
-      </>
-    );
-  };
-  return (
-    <main className="flow-page wide dash">
-      <Stepper current={1} />
-      <div className="flow-heading">
-        <h1>Does this look right?</h1>
-        <p>
-          {imported ? "This is what your DPR shows." : "This is what you told us."} Fix a grade, or add a
-          course it doesn’t show. Your DPR is the official record.
-        </p>
-      </div>
-      {body()}
-    </main>
   );
 }
 
@@ -594,7 +473,6 @@ const unitsOf = (c: string | Slot, info: Record<string, CourseInfo>) =>
   isSlot(c) ? c.units : parseFloat(String(info[c]?.units)) || 0;
 const termUnits = (s: Semester, info: Record<string, CourseInfo>) =>
   s.courses.reduce((total, c) => total + unitsOf(c, info), 0);
-const unitText = (units?: number | string) => `${units} ${Number(units) === 1 ? "unit" : "units"}`;
 /** What a class in the plan is for: what it was picked for, or the requirement that lists it. */
 function countsFor(code: string, picks: Pick[], audit: Audit) {
   const group = picks.find((p) => p.code === code)?.group;
@@ -1176,19 +1054,8 @@ function ProgressView({ work }: { work: Work }) {
   );
 }
 
-/** Units and every requirement, done to left. With a plan it says what's planned; without one (Review, straight from
- * the DPR) it reads like the DPR: Completed, In progress, Incomplete, GE and university requirements before the major. */
-function DegreeProgress({
-  audit,
-  semesters,
-  bars = true,
-  dpr,
-}: {
-  audit: Audit;
-  semesters?: Semester[];
-  bars?: boolean;
-  dpr?: DprMissing;
-}) {
+/** Units and every requirement, done to left, and what's planned (the Progress tab; Your record has RequirementsView). */
+function DegreeProgress({ audit, semesters }: { audit: Audit; semesters?: Semester[] }) {
   const plannedTerm = (code: string) => semesters?.find((s) => s.courses.includes(code))?.term;
   const plannedSlot = semesters
     ? (g: Group) => {
@@ -1217,11 +1084,6 @@ function DegreeProgress({
         label: p.label,
         body: (
           <div className="req-courses">
-            {dpr?.missing.includes(g.id) && (
-              <button className="let-pick" onClick={() => dpr.set([g.id], !dpr.left.includes(g.id))}>
-                {dpr.left.includes(g.id) ? "Not on your DPR · Put it back" : "Not on your DPR · Leave it out"}
-              </button>
-            )}
             {g.counted.map((c) => (
               <CourseStatus name={c} type="done" label={doneWord} key={c} />
             ))}
@@ -1249,32 +1111,30 @@ function DegreeProgress({
         title,
         percent: (met / groups.length) * 100,
         label: `${met} / ${groups.length} done`,
-        body: <GeRequirementRows groups={groups} plannedIn={plannedSlot} dpr={dpr} />,
+        body: <GeRequirementRows groups={groups} plannedIn={plannedSlot} />,
       };
     });
   const t = audit.totals;
   return (
     <>
-      {bars && (
-        <section className="progress-summary" aria-label="Units">
-          <div className="progress-meters">
-            <UnitBar value={t.units.value} going={t.units_in_progress} total={t.units.needed ?? 120} label="Total units" />
-            <UnitBar
-              value={t.upper_division_units.value}
-              going={t.upper_division_units_in_progress}
-              total={t.upper_division_units.needed ?? 0}
-              label="Upper-division units"
-            />
-          </div>
-          <div className="status-key">
-            <span>Status key</span>
-            <StatusBadge type="done">{doneWord}</StatusBadge>
-            <StatusBadge type="progress">In progress</StatusBadge>
-            {semesters && <StatusBadge type="planned">Planned</StatusBadge>}
-            <StatusBadge type="remaining">{leftWord}</StatusBadge>
-          </div>
-        </section>
-      )}
+      <section className="progress-summary" aria-label="Units">
+        <div className="progress-meters">
+          <UnitBar value={t.units.value} going={t.units_in_progress} total={t.units.needed ?? 120} label="Total units" />
+          <UnitBar
+            value={t.upper_division_units.value}
+            going={t.upper_division_units_in_progress}
+            total={t.upper_division_units.needed ?? 0}
+            label="Upper-division units"
+          />
+        </div>
+        <div className="status-key">
+          <span>Status key</span>
+          <StatusBadge type="done">{doneWord}</StatusBadge>
+          <StatusBadge type="progress">In progress</StatusBadge>
+          {semesters && <StatusBadge type="planned">Planned</StatusBadge>}
+          <StatusBadge type="remaining">{leftWord}</StatusBadge>
+        </div>
+      </section>
       <SectionCard
         title="Degree requirements"
         count={`${t.units.value + t.units_in_progress} of ${t.units.needed} units${t.units_in_progress ? `, incl. ${t.units_in_progress} in progress` : ""}`}

@@ -1,6 +1,6 @@
 import type { Mark } from "./logic.ts";
 
-const WORD: Record<Mark, string> = {
+export const WORD: Record<Mark, string> = {
   complete: "Complete",
   progress: "In progress",
   incomplete: "Incomplete",

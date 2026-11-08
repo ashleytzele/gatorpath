@@ -1,8 +1,10 @@
 // Plain functions for the pages: no React, no calls. Run `node web/src/logic.check.ts` to check them.
-import type { Group, Left, Options, PlanResult, Profile, Semester } from "./api.ts";
+import type { Group, ImportResult, Left, Options, PlanResult, Profile, Semester } from "./api.ts";
 
 export const termLabel = (term?: string | null) =>
   term ? `${term[5].toUpperCase()}${term.slice(6)} ${term.slice(0, 4)}` : "";
+export const unitText = (units?: number | string) => `${units} ${Number(units) === 1 ? "unit" : "units"}`;
+export const NOT_ON_DPR = "not on the student's DPR"; // the engine's waived_by for a requirement the student left out
 
 export type Suggestion = { id: "sooner" | "lighter" | "summer" | "winter" | "choose"; label: string };
 /** The few next steps worth offering under a plan, in this order, at most three. */
@@ -43,6 +45,16 @@ export function countSection(groups: Group[], warned: Set<string>) {
     warned: marks.filter((m) => m === "warning").length,
   };
 }
+
+/** Requirements with something to check against the DPR: left out because it doesn't list them, or a disagreement. */
+export const warnedGroups = (profile: Profile, imported: ImportResult | null) =>
+  new Set([...(profile.not_on_dpr ?? []), ...Object.keys(imported?.warnings_by_group ?? {})]);
+
+/** A cross-check line as the student reads it: "your DPR", without the note to the AI client. */
+export const plainWarning = (text: string) =>
+  text
+    .replace(/\b([Tt])he DPR\b/g, (_, t) => `${t === "T" ? "Your" : "your"} DPR`)
+    .replace(/, and tell GatorPath if its rule is the one that's off$/, ".");
 
 export function goalText(interests: string[], after: string[]): string {
   const mine = interests.filter((i) => i !== "Not sure yet").join(", ");
