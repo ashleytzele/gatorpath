@@ -16,6 +16,7 @@ export type IconName =
   | "download"
   | "edit"
   | "file"
+  | "flag"
   | "info"
   | "lock"
   | "menu"
@@ -87,6 +88,11 @@ export const iconPaths: Record<IconName, React.ReactNode> = {
     <>
       <path d="M6 2h8l4 4v16H6z" />
       <path d="M14 2v5h5M9 13h6M9 17h5" />
+    </>
+  ),
+  flag: (
+    <>
+      <path d="M6 21V4M6 4h11l-2.5 4 2.5 4H6" />
     </>
   ),
   info: (

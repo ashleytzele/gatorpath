@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import BuildingScreen from "./Building";
 import {
   assist,
@@ -36,74 +36,20 @@ import {
 } from "./api";
 import { GoalsScreen, type Picks } from "./Goals";
 import { Landing } from "./Landing";
-import { RecordScreen, ReviewScreen } from "./Record";
+import { RecordScreen, RequirementsView, ReviewScreen } from "./Record";
+import { FloatingCard } from "./FloatingCard";
+import { StatusMark } from "./StatusMark";
 import { ChatPanel } from "./Chat";
-import { NOT_ON_DPR, changeLine, suggestions, termLabel, unitText, type ChatLine } from "./logic";
+import { changeLine, countSection, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, type ChatLine } from "./logic";
 import {
-  ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, type IconName, Loading, Logo, NAVIGATOR,
-  Stepper, StatusBadge, Tooltip, nearbyTerms, plainText, useLoad, type Screen,
+  ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, Loading, Logo, NAVIGATOR,
+  Stepper, StatusBadge, plainText, useLoad, type Screen,
 } from "./ui";
 
-type Tab = "plan" | "progress" | "electives" | "schedule";
-
-function AdvisingNote() {
-  return (
-    <aside className="advising-note" aria-label="Advising">
-      <Icon name="info" />
-      <p>
-        <b>GatorPath is a planning guide.</b> For any question about your plan, talk to an advisor
-        before you register.
-      </p>
-      <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-        {ASK_ADVISOR} <Icon name="arrow" size={14} />
-      </a>
-    </aside>
-  );
-}
+/** "record" is Your record with the plan beside it, reached from the Plan tab, not the tab bar. */
+type Tab = "plan" | "electives" | "schedule" | "record";
 
 const isDone = (g: Group) => g.status === "satisfied" || g.status === "waived";
-const universityGroups = (audit: Audit) => audit.groups.filter((g) => g.kind === "university");
-
-/** GE and university rows. Without a plan they use the DPR's words: Completed, Incomplete. */
-function GeRequirementRows({
-  groups,
-  plannedIn,
-}: {
-  groups: Group[];
-  plannedIn?: (group: Group) => string | undefined;
-}) {
-  const record = !plannedIn;
-  return (
-    <div className="shared-ge-rows progress">
-      {groups.map((g) => {
-        const planned = plannedIn?.(g);
-        const done = isDone(g);
-        const leftOut = g.waived_by === NOT_ON_DPR;
-        return (
-          <div className="shared-ge-row" key={g.id}>
-            <div className="ge-area-name" title={`Bulletin ${g.source}`}>
-              <b>{g.title}</b>
-            </div>
-            <StatusBadge
-              type={leftOut ? "warning" : done ? "done" : g.in_progress.length ? "progress" : planned ? "planned" : "remaining"}
-            >
-              {leftOut
-                ? "Not on your DPR"
-                : done
-                  ? record ? "Completed" : "Done"
-                  : g.in_progress.length
-                    ? "In progress"
-                    : planned
-                      ? "Planned"
-                      : record ? "Incomplete" : "Remaining"}
-            </StatusBadge>
-            <p>{[...g.counted, ...g.in_progress].join(", ") || planned || "—"}</p>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 function SectionCard({
   title,
@@ -126,18 +72,6 @@ function SectionCard({
     </section>
   );
 }
-function CourseMini({ code, title, status }: { code: string; title: string; status: string }) {
-  return (
-    <div className="course-mini">
-      <div>
-        <b>{code}</b>
-        <small>{title}</small>
-      </div>
-      <StatusBadge type="progress">{status}</StatusBadge>
-    </div>
-  );
-}
-
 const isSlot = (c: string | Slot): c is Slot => typeof c !== "string";
 const yearOf = (term: string) => {
   const year = Number(term.slice(0, 4));
@@ -146,8 +80,6 @@ const yearOf = (term: string) => {
 };
 const unitsOf = (c: string | Slot, info: Record<string, CourseInfo>) =>
   isSlot(c) ? c.units : parseFloat(String(info[c]?.units)) || 0;
-const termUnits = (s: Semester, info: Record<string, CourseInfo>) =>
-  s.courses.reduce((total, c) => total + unitsOf(c, info), 0);
 /** What a class in the plan is for: what it was picked for, or the requirement that lists it. */
 function countsFor(code: string, picks: Pick[], audit: Audit) {
   const group = picks.find((p) => p.code === code)?.group;
@@ -176,9 +108,7 @@ type Work = {
   picks: Pick[];
   busy: string;
   failed: string;
-  whatIf: (change: Options, label: string) => void;
-  applyFold: () => void;
-  fill: () => void;
+  whatIf: (change: Options) => void;
   aiDown: boolean;
   sections: Record<string, string[]>; // {term: class numbers} the student chose
   setSections: (term: string, keep: string[]) => void;
@@ -187,24 +117,23 @@ type Work = {
 };
 
 function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
-  const items: [Tab, string, IconName, string][] = [
-    ["plan", "Plan", "route", "Plan"],
-    ["progress", "Progress", "check", "Progress"],
-    ["electives", "Electives & GE", "book", "Electives"],
-    ["schedule", "Schedule", "calendar", "Schedule"],
+  const items: [Tab, string][] = [
+    ["plan", "Plan"],
+    ["electives", "Electives & GE"],
+    ["schedule", "Schedule"],
   ];
+  const current = tab === "record" ? "plan" : tab; // the requirements are the plan's
   return (
     <nav className="app-tabs" aria-label="Your plan">
-      {items.map(([key, label, icon, short]) => (
+      {items.map(([key, label]) => (
         <button
+          type="button"
           key={key}
-          className={tab === key ? "active" : ""}
-          aria-current={tab === key ? "page" : undefined}
+          className={current === key ? "active" : ""}
+          aria-current={current === key ? "page" : undefined}
           onClick={() => setTab(key)}
         >
-          <Icon name={icon} />
-          <span className="long-label">{label}</span>
-          <span className="short-label">{short}</span>
+          {label}
         </button>
       ))}
     </nav>
@@ -260,47 +189,253 @@ function ProblemPanel({ errors, audit, ask }: { errors: PlanError[]; audit: Audi
   );
 }
 
-function AdvisorCards({ items, audit }: { items: Advisor[]; audit: Audit }) {
+const sentence = (s: string) => (/[.!?]$/.test(s) ? s : `${s}.`);
+const listed = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}` : xs[0]);
+
+/** One office `see_advisor` names: this student's reasons, its links (booking, page, email), then where and how. */
+function AdvisorRow({ a, audit }: { a: Advisor; audit: Audit }) {
+  const book = a.how_to_book?.match(/https?:\/\/\S+/)?.[0].replace(/[.,;)]+$/, "");
+  const how = a.how_to_book?.split(/(?<=\.)\s+/).filter((s) => !/https?:\/\//.test(s)).join(" ");
+  const emails = a.contact?.match(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g) ?? [];
+  const rest = emails.reduce((text, e) => text.replace(e, ""), a.contact ?? "").replace(/^[\s,]+|[\s,]+$/g, "");
+  const page = a.link?.startsWith("http") ? a.link : undefined; // the DPR's "link" is where to find it, not a URL
+  const where = [a.location, rest, !page && a.link].filter(Boolean).join(" · ");
+  const links = [
+    ...(book ? [{ href: book, text: book === NAVIGATOR ? "Book in Navigator" : "How to book" }] : []),
+    ...(page && page !== book ? [{ href: page, text: page.replace(/^https?:\/\//, "").replace(/\/$/, "") }] : []),
+    ...emails.map((e) => ({ href: `mailto:${e}`, text: e })),
+  ];
   return (
-    <div className="advisor-list">
-      {items.map((a) => (
-        <div key={a.role}>
-          <b>{a.who}</b>
-          <p>{plainText(`${a.why.join(" ")} ${a.how_to_book ?? ""}`, audit)}</p>
-          <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-            {ASK_ADVISOR} <Icon name="arrow" size={12} />
-          </a>
-        </div>
-      ))}
+    <div className="pl-advisor">
+      <b>{a.who}</b>
+      <p>{plainText(a.why.map(sentence).join(" "), audit)}</p>
+      {!!links.length && (
+        <p className="pl-links">
+          {links.map((l) => (
+            <a href={l.href} target="_blank" rel="noreferrer" key={l.href}>
+              {l.text}
+            </a>
+          ))}
+        </p>
+      )}
+      {where && <p className="pl-where">{where}</p>}
+      {how && <p className="pl-where">{how}</p>}
     </div>
   );
 }
 
-function PlanView({
+/** A course's facts from the Bulletin, and why it sits in its term. */
+function CourseFacts({ code, why, going }: { code: string; why?: string; going?: boolean }) {
+  const course = useLoad(() => getCourse(code), [code]);
+  const c = course.data;
+  const [more, setMore] = useState(false);
+  const [long, setLong] = useState(false); // the description runs past its two lines
+  const text = useRef<HTMLParagraphElement>(null);
+  useLayoutEffect(() => {
+    if (text.current && !more) setLong(text.current.scrollHeight > text.current.clientHeight + 1);
+  }, [c, more]);
+  if (course.error) return <ErrorCard text={course.error} retry={course.retry} />;
+  if (!c) return <p role="status">Finding it in the Bulletin…</p>;
+  const { now, opens } = splitWhy(why);
+  const seasons = (["fall", "spring", "summer"] as const)
+    .filter((s) => c.offered_terms?.[s]?.[0])
+    .map((s) => s[0].toUpperCase() + s.slice(1));
+  return (
+    <>
+      {c.description && (
+        <p ref={text} className={`pl-desc ${more ? "" : "clamped"}`}>
+          {c.description}
+        </p>
+      )}
+      {(long || more) && (
+        <button type="button" className="pl-link" aria-expanded={more} onClick={() => setMore(!more)}>
+          {more ? "Less" : "More"}
+        </button>
+      )}
+      <dl className="pl-facts">
+        <dt>Needs</dt>
+        <dd>{c.prereq?.raw_text || "None listed in the Bulletin"}</dd>
+        <dt>Offered</dt>
+        <dd>{seasons.length ? listed(seasons) : "No offering history here: check Class Search"}</dd>
+        {(going || now) && (
+          <>
+            <dt>Why now</dt>
+            <dd>{going ? "You’re taking it now." : plainText(now)}</dd>
+          </>
+        )}
+        {opens && (
+          <>
+            <dt>Opens</dt>
+            <dd>{opens}</dd>
+          </>
+        )}
+      </dl>
+    </>
+  );
+}
+
+/** Courses that fit an open choice (or replace a chosen one) in its term, to Select. */
+function ChoiceOptions({ work, target, select }: { work: Work; target: Target; select: (code: string, option: Option) => void }) {
+  const found = useLoad(
+    () => getElectives(work.student, target.group, { semesters: work.semesters }, target.term),
+    [target.group, target.term, target.replacing],
+  );
+  // ponytail: the first three that fit, in the server's order; the Electives & GE tab lists the rest
+  const options = (found.data?.options ?? [])
+    .filter((o) => o.readiness !== "blocked" && o.code !== target.replacing)
+    .slice(0, 3);
+  const term = termLabel(target.term);
+  return (
+    <>
+      <p className="pl-card-lead">
+        Select one for {term}
+        {target.replacing ? `, in place of ${target.replacing}` : ""}.
+      </p>
+      {found.loading && !found.data && <p role="status">Finding courses that fit…</p>}
+      {found.error && <ErrorCard text={found.error} retry={found.retry} />}
+      {found.data?.approval && (
+        <p>
+          {found.data.approval}. {ASK_ADVISOR} which courses count.
+        </p>
+      )}
+      {!!options.length && (
+        <ul className="pl-options">
+          {options.map((o) => (
+            <li key={o.code}>
+              <b>{o.code}</b>
+              <span>
+                {o.title}
+                {o.readiness === "check" && (
+                  <small> · Check: {plainText(o.cannot_check?.join("; ") || o.note || "its prerequisites", work.audit)}</small>
+                )}
+              </span>
+              <button type="button" className="pl-link" disabled={work.aiBusy} onClick={() => select(o.code, o)}>
+                Select<span className="sr-only"> {o.code}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {found.data && !options.length && !found.data.approval && <p>No course that fits {term} was found.</p>}
+      {!work.aiDown && (
+        <p className="pl-card-lead">
+          Or{" "}
+          <button
+            type="button"
+            className="pl-link"
+            disabled={work.aiBusy}
+            onClick={() =>
+              work.ask(
+                target.replacing
+                  ? `Swap ${target.replacing} in ${term} for another course for ${target.title}`
+                  : `Choose a course for ${target.title} in ${term}`,
+              )
+            }
+          >
+            ask the chat to choose one
+          </button>
+        </p>
+      )}
+    </>
+  );
+}
+
+/** The floating card of a row: a course's facts, or an open choice's options. */
+function CourseCard({
   work,
-  openChoice,
-  openCourse,
-  openSchedule,
-  toast,
+  item,
+  term,
+  why,
+  going,
+  select,
 }: {
   work: Work;
-  openChoice: (slot: Slot, term: string) => void;
-  openCourse: (code: string) => void;
-  openSchedule: () => void;
-  toast: (x: string) => void;
+  item: string | Slot;
+  term?: string;
+  why?: string;
+  going?: boolean;
+  select: (target: Target, code: string, option: Option) => void;
 }) {
-  const { audit, check, info, options, plan, semesters } = work;
+  const [swapping, setSwapping] = useState(false);
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (swapping) heading.current?.focus(); // the Swap button is gone: keep focus in the card
+  }, [swapping]);
+  if (isSlot(item)) {
+    const target = { group: item.slot, term: term!, title: slotLabel(item, work.audit) }; // slots are only in planned terms
+    return (
+      <div className="pl-card">
+        <h3>{target.title}</h3>
+        <p className="pl-card-sub">
+          {item.units ? `Open choice · ${unitText(item.units)}` : "A course you choose for another requirement can cover this"}
+        </p>
+        <ChoiceOptions work={work} target={target} select={(code, option) => select(target, code, option)} />
+      </div>
+    );
+  }
+  const about = work.info[item] ?? work.audit.courses[item];
+  const pick = work.picks.find((p) => p.code === item);
+  const swap = pick && {
+    group: pick.group,
+    term: pick.term,
+    title: slotLabel({ slot: pick.group, units: 0 }, work.audit),
+    replacing: item,
+  };
+  return (
+    <div className="pl-card">
+      <h3 tabIndex={-1} ref={heading}>
+        {item}
+      </h3>
+      <p className="pl-card-sub">{[about?.title, about && unitText(about.units)].filter(Boolean).join(" · ")}</p>
+      {swap && swapping ? (
+        <ChoiceOptions work={work} target={swap} select={(code, option) => select(swap, code, option)} />
+      ) : (
+        <>
+          <CourseFacts code={item} why={why} going={going} />
+          <p className="pl-card-actions">
+            {about && <span>Bulletin p.{about.source_page}</span>}
+            {!work.aiDown && (
+              <button type="button" className="pl-link" disabled={work.aiBusy} onClick={() => work.ask(`Tell me about ${item} in my plan`)}>
+                Ask about this course
+              </button>
+            )}
+            {swap && (
+              <button type="button" className="pl-link" disabled={work.aiBusy} onClick={() => setSwapping(true)}>
+                Swap it
+              </button>
+            )}
+          </p>
+        </>
+      )}
+    </div>
+  );
+}
+
+/** One stop on the route: a term and its courses ("This term" holds what's in progress now). */
+type Stop = { key: string; title: string; term?: string; courses: (string | Slot)[]; why?: Record<string, string>; now?: boolean };
+
+function PlanView({
+  work,
+  coverage,
+  select,
+  openSchedule,
+  openRecord,
+}: {
+  work: Work;
+  coverage?: { done: number; total: number };
+  select: (target: Target, code: string, option: Option) => void;
+  openSchedule: () => void;
+  openRecord: () => void;
+}) {
+  const { audit, check, info, plan, semesters, student } = work;
   const pace = plan.pace;
-  const [preview, setPreview] = useState<"" | "open" | "complete" | "problem" | "unreachable">("");
-  const slots = semesters.flatMap((s) => s.courses.filter(isSlot).map((slot) => ({ slot, term: s.term })));
-  const choicesLeft = slots.length;
-  const unitsLeft = semesters.reduce((total, s) => total + termUnits(s, info), 0);
-  const years = [...new Set(semesters.map((s) => yearOf(s.term)))];
-  const lastTerm = semesters[semesters.length - 1]?.term;
-  const graduation = lastTerm; // the plan as it stands: a chat or a pick can move it past build_plan's estimate
+  const [preview, setPreview] = useState<"" | "problem" | "unreachable">("");
+  const [open, setOpen] = useState(""); // the row whose card is open: one at a time
+  useEffect(() => setOpen(""), [semesters]); // a change moves rows under an open card
+  const choices = semesters.reduce((n, s) => n + s.courses.filter(isSlot).length, 0);
+  const graduation = semesters[semesters.length - 1]?.term; // the plan as it stands: a chat or a pick can move it past build_plan's estimate
   const unreachable = pace?.on_time === false && !!pace.why_not?.length;
-  const planState =
-    preview || (!check.valid ? "problem" : unreachable ? "unreachable" : choicesLeft ? "open" : "complete");
+  const planState = preview || (!check.valid ? "problem" : unreachable ? "unreachable" : "");
   // "Stopped at …" says why the plan can't finish: the errors are only what that left uncovered
   const stopped = plan.warnings.filter((w) => w.startsWith("Stopped at")).map((w) => ({ message: w }));
   const found = [...stopped, ...check.errors];
@@ -312,65 +447,32 @@ function PlanView({
     (a, i, all) => all.findIndex((x) => x.role === a.role) === i,
   );
   const chain = pace?.longest_chain ?? [];
+  const going = student.in_progress ?? [];
+  const stops: Stop[] = [
+    ...(going.length ? [{ key: "now", title: "This term", courses: going, now: true }] : []),
+    ...semesters.map((s) => ({ key: s.term, title: termLabel(s.term), term: s.term, courses: s.courses, why: s.why })),
+  ];
+  const about = (code: string) => info[code] ?? audit.courses[code];
+  const units = (c: string | Slot) => (isSlot(c) ? c.units : parseFloat(String(about(c)?.units)) || 0);
+  const count = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
   return (
-    <div className="app-content">
+    <div className="app-content plan-tab">
       {DEMO && (
         <div className="variant-switcher">
           <span>Preview plan state</span>
           {[
-            ["open", "Choices open"],
-            ["complete", "All choices made"],
+            ["", "As it is"],
             ["problem", "Has a problem"],
             ["unreachable", "Date unreachable"],
           ].map(([value, label]) => (
             <button
-              className={planState === value ? "active" : ""}
+              className={preview === value ? "active" : ""}
               onClick={() => setPreview(value as typeof preview)}
               key={value}
             >
               {label}
             </button>
           ))}
-        </div>
-      )}
-      {work.busy && (
-        <div className="plan-status open" role="status">
-          <span>
-            <Icon name="spark" /> <b>{work.busy}</b> Your plan below is already real, and this can take a
-            minute or two.
-          </span>
-        </div>
-      )}
-      {planState === "open" && !work.busy && (
-        <div className="plan-status open">
-          <span>
-            <Icon name="clock" /> <b>{choicesLeft} choices left in your plan</b>
-          </span>
-          <span className="plan-status-actions">
-            <button onClick={work.fill}>
-              Fill them with AI <Icon name="spark" size={14} />
-            </button>
-            {work.aiDown && (
-              <button
-                onClick={() =>
-                  document.getElementById("first-open-slot")?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Choose myself <Icon name="arrow" size={14} />
-              </button>
-            )}
-          </span>
-        </div>
-      )}
-      {planState === "complete" && (
-        <div className="plan-status complete">
-          <span>
-            <Icon name="check" /> <b>All choices made.</b> Take this plan to an advisor to confirm
-            it before you register.
-          </span>
-          <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-            {ASK_ADVISOR} <Icon name="arrow" size={14} />
-          </a>
         </div>
       )}
       {planState === "problem" && <ProblemPanel errors={errors} audit={audit} ask={work.ask} />}
@@ -384,496 +486,156 @@ function PlanView({
             </span>
           </div>
           <div className="problem-actions">
-            <Button
-              kind="secondary"
-              onClick={() => work.whatIf({ include_summer: true }, "With summers")}
-            >
+            <Button kind="secondary" disabled={work.aiBusy} onClick={() => work.whatIf({ include_summer: true })}>
               Add summer terms
             </Button>
             <a className="button secondary" href={NAVIGATOR} target="_blank" rel="noreferrer">
-              Ask an advisor in Navigator
+              {ASK_ADVISOR}
             </a>
           </div>
         </div>
       )}
-      <section className="plan-hero">
-        <div>
-          {planState === "problem" ? (
-            <>
-              <h1>
-                You could graduate <em>{termLabel(graduation)}</em>
-              </h1>
-              <p className="hero-note">Once the problems above are fixed. Until then the date isn’t certain.</p>
-            </>
-          ) : (
-            <h1>
-              You can graduate <em>{termLabel(graduation)}</em>
-            </h1>
-          )}
-          <div className="hero-badges">
-            <StatusBadge type={choicesLeft ? "warning" : "done"}>
-              {choicesLeft ? `${choicesLeft} choices left` : "All choices made"}
-            </StatusBadge>
-            <span>{semesters.length} semesters left</span>
-            <span>{unitsLeft} units left</span>
-          </div>
-          {(pace?.normal_load || pace?.fold_last_term) && (
-            <div className="pace-options">
-              {pace.normal_load && (
-                <button
-                  onClick={() =>
-                    work.whatIf(
-                      { max_units_per_term: pace.normal_load!.max_units_per_term },
-                      "At a lighter pace",
-                    )
-                  }
-                >
-                  <b>Lighter</b>
-                  <span>
-                    Keep every term at {pace.normal_load.max_units_per_term} units or less · graduate{" "}
-                    {termLabel(pace.normal_load.est_graduation_term)}
-                  </span>
-                </button>
-              )}
-              {pace.fold_last_term && (
-                <button onClick={work.applyFold}>
-                  <b>Faster</b>
-                  <span>
-                    One {pace.fold_last_term.units}-unit {termLabel(pace.fold_last_term.term)} · graduate{" "}
-                    {termLabel(pace.fold_last_term.est_graduation_term)}
-                  </span>
-                </button>
-              )}
-            </div>
-          )}
-        </div>
+      <section className="pl-head">
+        <h1>
+          You {planState === "problem" ? "could" : "can"} graduate <em>{termLabel(graduation)}</em>
+        </h1>
+        {planState === "problem" && (
+          <p className="hero-note">Once the problems above are fixed. Until then the date isn’t certain.</p>
+        )}
+        <p className="pl-sub">
+          {count(semesters.length, "semester")} after this one ·{" "}
+          {choices ? `${count(choices, "choice")} still open` : "all choices made"}
+        </p>
         {pace && (
-          <div className="pace-note">
-            <span>
-              <Icon name="route" />
-            </span>
-            {pace.min_terms_by_prereqs >= pace.min_terms_by_units && chain.length > 0 ? (
-              <p>
-                Your longest prerequisite chain{" "}
-                <Tooltip text="A prerequisite is a class you must finish before taking another." />{" "}
-                <b>{chain.join(" → ")}</b> sets your graduation date.
-              </p>
-            ) : (
-              <p>
-                Your units per term set your graduation date: you need at least{" "}
-                <b>{pace.min_terms_by_units} terms</b> at this pace.
-              </p>
-            )}
-          </div>
-        )}
-      </section>
-      <ol className="plan-route" aria-label="Route to graduation">
-        {semesters.map((s, i) => (
-          <li key={s.term} className={i === 0 ? "next" : i === semesters.length - 1 ? "finish" : ""}>
-            <span className="route-dot" aria-hidden="true">
-              {i === semesters.length - 1 && <Icon name="check" size={12} />}
-            </span>
-            <small>
-              {termLabel(s.term).split(" ")[0]} ’{s.term.slice(2, 4)}
-            </small>
-          </li>
-        ))}
-      </ol>
-      <section className="what-if">
-        <div>
-          <span>What if I…</span>
-          <button
-            className={options.include_summer ? "active" : ""}
-            disabled={!!work.busy}
-            onClick={() =>
-              work.whatIf(
-                { include_summer: !options.include_summer },
-                options.include_summer ? "Without summers" : "With summers",
-              )
-            }
-          >
-            <Icon name="plus" /> Add summer
-          </button>
-          <button
-            className={options.include_winter ? "active" : ""}
-            disabled={!!work.busy}
-            onClick={() =>
-              work.whatIf(
-                { include_winter: !options.include_winter },
-                options.include_winter ? "Without Winter Session" : "With Winter Session",
-              )
-            }
-          >
-            <Icon name="plus" /> Add winter
-          </button>
-          <label>
-            Units per term{" "}
-            <select
-              disabled={!!work.busy}
-              value={options.max_units_per_term ?? ""}
-              onChange={(e) =>
-                work.whatIf(
-                  { max_units_per_term: e.target.value ? Number(e.target.value) : undefined },
-                  e.target.value ? `At ${e.target.value} units a term` : "At the roadmap’s pace",
-                )
-              }
-            >
-              <option value="">Recommended</option>
-              {[12, 15, 18].map((n) => (
-                <option key={n}>{n}</option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Graduate by{" "}
-            <select
-              disabled={!!work.busy}
-              value={options.graduate_by ?? ""}
-              onChange={(e) =>
-                work.whatIf(
-                  { graduate_by: e.target.value || undefined },
-                  e.target.value ? `Aiming for ${termLabel(e.target.value)}` : "At the recommended pace",
-                )
-              }
-            >
-              <option value="">Recommended</option>
-              {nearbyTerms(0, 12).map((t) => (
-                <option value={t} key={t}>
-                  {termLabel(t)}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        {work.busy && (
-          <span className="what-if-result" role="status">
-            {work.busy}
-          </span>
-        )}
-        {work.failed && <ErrorCard text={work.failed} />}
-      </section>
-      <div className="timeline-heading">
-        <div>
-          <h2>Your semester plan</h2>
-          <p>The next two terms are open. Expand a later term when you need the details.</p>
-        </div>
-      </div>
-      <nav className="year-jump" aria-label="Jump to academic year">
-        <span>Jump to year</span>
-        {years.map((year) => (
-          <a href={`#year-${year.replace("–", "-")}`} key={year}>
-            {year}
-          </a>
-        ))}
-      </nav>
-      <div className="year-plan">
-        {years.map((year) => (
-          <section className="academic-year" id={`year-${year.replace("–", "-")}`} key={year}>
-            <div className="year-heading">
-              <span>{year}</span>
-              <i />
-            </div>
-            {semesters
-              .filter((s) => yearOf(s.term) === year)
-              .map((s) => {
-                const ti = semesters.indexOf(s);
-                const isLast = ti === semesters.length - 1;
-                const codes = s.courses.filter((c): c is string => !isSlot(c));
-                const count = s.courses.length;
-                return (
-                  <details
-                    className={`term-card vertical ${isLast ? "graduation-term" : ""}`}
-                    open={ti < 2}
-                    key={s.term}
-                  >
-                    <summary className="term-head">
-                      <div>
-                        <span>
-                          {ti === 0 ? "Next term" : isLast ? "Final term" : `Term ${ti + 1}`}
-                        </span>
-                        <h3>{termLabel(s.term)}</h3>
-                      </div>
-                      <p>
-                        {unitText(termUnits(s, info))} <i>·</i> {count} {count === 1 ? "course" : "courses"}
-                        {ti >= 2 && (
-                          <small>
-                            {" "}
-                            · {codes.slice(0, 2).join(", ")}
-                            {count > 2 ? ` + ${count - Math.min(codes.length, 2)} more` : ""}
-                          </small>
-                        )}
-                      </p>
-                      {isLast && (
-                        <strong className="graduation-marker">
-                          <Icon name="check" /> Graduation
-                        </strong>
-                      )}
-                      <Icon name="chevron" />
-                    </summary>
-                    <div className="term-courses single-column">
-                      {codes.map((code) => (
-                        <button className="course-row" data-code={code} onClick={() => openCourse(code)} key={code}>
-                          <span>
-                            <b>{code}</b>
-                            <small>{info[code]?.title}</small>
-                            {countsFor(code, work.picks, audit) && (
-                              <em>Counts for {countsFor(code, work.picks, audit)}</em>
-                            )}
-                            {work.picks.some((p) => p.code === code && !p.readiness) && (
-                              <em className="ai-pick">AI pick</em>
-                            )}
-                          </span>
-                          <i>{unitText(info[code]?.units)}</i>
-                          <Icon name="chevron" size={15} />
-                        </button>
-                      ))}
-                      {s.courses.filter(isSlot).map((slot, si) => (
-                        <button
-                          id={slots[0]?.slot === slot ? "first-open-slot" : undefined}
-                          className="slot-card list-slot"
-                          disabled={work.aiBusy}
-                          onClick={() => openChoice(slot, s.term)}
-                          key={`${slot.slot}-${si}`}
-                        >
-                          <span>
-                            <Icon name="plus" />
-                          </span>
-                          <div>
-                            <b>{slotLabel(slot, audit)}</b>
-                            <small>
-                              {slot.units
-                                ? `Open choice · ${unitText(slot.units)}`
-                                : "A course you pick for another requirement can cover this"}
-                            </small>
-                          </div>
-                          <strong>
-                            Choose <Icon name="arrow" size={14} />
-                          </strong>
-                        </button>
-                      ))}
-                    </div>
-                    {ti === 0 && (
-                      <Button kind="secondary" className="term-schedule" onClick={openSchedule}>
-                        View class schedule <Icon name="calendar" />
-                      </Button>
-                    )}
-                  </details>
-                );
-              })}
-          </section>
-        ))}
-      </div>
-      <div className="plan-lower">
-        {!!warnings.length && (
-          <details className="warning-card collapsible">
-            <summary>
-              <Icon name="warning" /> <b>{warnings.length} things to check</b>
-              <span className="summary-chevron" aria-hidden="true">
-                <Icon name="chevron" />
-              </span>
-            </summary>
-            <ul>
-              {warnings.map((w) => (
-                <li key={w}>{plainText(w, audit)}</li>
-              ))}
-            </ul>
-          </details>
-        )}
-        <section className="advisor-card">
-          <div className="advisor-card-head">
-            <Icon name="info" /> <h2>Questions? Talk to an advisor</h2>
-            {!!advisors.length && <span>{advisors.length} things worth asking</span>}
-          </div>
-          <p className="advisor-fallback">
-            GatorPath is a planning guide. For any question about your plan, talk to an advisor before you
-            register.
+          <p>
+            {pace.min_terms_by_prereqs >= pace.min_terms_by_units && chain.length
+              ? `Your longest prerequisite chain, ${chain.join(" → ")}, sets this date.`
+              : `Your units per term set this date: you need at least ${pace.min_terms_by_units} terms at this pace.`}
           </p>
-          <AdvisorCards items={advisors} audit={audit} />
-        </section>
-      </div>
+        )}
+        <p>
+          {coverage && `With this plan, ${coverage.done} of ${coverage.total} requirements are complete. `}
+          <button type="button" className="pl-link" onClick={openRecord}>
+            See your requirements
+          </button>
+        </p>
+      </section>
+      <ol className="pl-route" aria-label="Route to graduation">
+        {stops.map((stop, si) => {
+          const next = !!stop.term && stop.term === semesters[0]?.term;
+          const grad = !!stop.term && stop.term === graduation;
+          const year = stop.term && yearOf(stop.term);
+          const before = stops[si - 1]?.term;
+          const kind = [stop.now && "now", next && "next", grad && "grad", /summer|winter/.test(stop.term ?? "") && "short"];
+          return (
+            <li className={`pl-stop ${kind.filter(Boolean).join(" ")}`} key={stop.key}>
+              {year && (!before || yearOf(before) !== year) && (
+                <p className="pl-year">
+                  <span>{year}</span>
+                </p>
+              )}
+              <div className="pl-term">
+                <span className="pl-dot" aria-hidden="true">
+                  {grad && <Icon name="flag" size={12} />}
+                </span>
+                <h2>{stop.title}</h2>
+                <span>{unitText(stop.courses.reduce((t, c) => t + units(c), 0))}</span>
+                {stop.now && <b className="pl-badge now">In progress</b>}
+                {next && <b className="pl-badge">Register next</b>}
+                {grad && <b className="pl-badge">Graduate</b>}
+                {next && (
+                  <button type="button" className="pl-link pl-schedule" onClick={openSchedule}>
+                    See its schedule →
+                  </button>
+                )}
+              </div>
+              <ul className="pl-rows">
+                {stop.courses.map((c, ci) => {
+                  const key = `${stop.key}|${ci}`; // by place: a choice filled in place keeps its row, and focus
+                  const slot = isSlot(c);
+                  const title = slot ? slotLabel(c, audit) : about(c)?.title;
+                  return (
+                    <li key={key}>
+                      <button
+                        type="button"
+                        className={`pl-row ${slot ? "open-choice" : ""}`}
+                        data-code={slot ? undefined : c}
+                        aria-expanded={open === key}
+                        onClick={(e) => {
+                          e.currentTarget.focus(); // Safari doesn't focus a clicked button; the card returns focus here
+                          setOpen(open === key ? "" : key);
+                        }}
+                      >
+                        {!slot && <b className="pl-code">{c}</b>}
+                        <span className="pl-title">{title}</span>
+                        <span className="pl-units">
+                          {!!units(c) && (
+                            <>
+                              {units(c)}
+                              <span className="sr-only"> units</span>
+                            </>
+                          )}
+                        </span>
+                        <span className="pl-tag">{slot ? "Not chosen yet" : countsFor(c, work.picks, audit)}</span>
+                      </button>
+                      {open === key && (
+                        <FloatingCard label={slot ? `Choose a course for ${title}` : `${c} details`} onClose={() => setOpen("")}>
+                          <CourseCard
+                            work={work}
+                            item={c}
+                            term={stop.term}
+                            why={slot ? undefined : stop.why?.[c]}
+                            going={stop.now}
+                            select={(target, code, option) => {
+                              setOpen("");
+                              select(target, code, option);
+                            }}
+                          />
+                        </FloatingCard>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          );
+        })}
+      </ol>
+      {!!warnings.length && (
+        <details className="pl-checks">
+          <summary>
+            <StatusMark mark="warning" />
+            <b>{count(warnings.length, "thing")} to check</b>
+            <span className="rq-chevron" aria-hidden="true" />
+          </summary>
+          <ul>
+            {warnings.map((w) => (
+              <li key={w}>{plainText(w, audit)}</li>
+            ))}
+          </ul>
+        </details>
+      )}
+      <section className="pl-section" aria-labelledby="pl-advisors">
+        <h2 id="pl-advisors">Talk to an advisor</h2>
+        <p className="pl-lead">Take this plan with you. Your DPR and your advisor have the final word.</p>
+        {advisors.map((a) => (
+          <AdvisorRow a={a} audit={audit} key={a.role} />
+        ))}
+        {audit.directory?.link && (
+          <p className="pl-lead">
+            Not sure who to ask?{" "}
+            <a href={audit.directory.link} target="_blank" rel="noreferrer">
+              The {audit.directory.who.replace(/ \(.*\)$/, "")}
+            </a>{" "}
+            lists every advising office.
+          </p>
+        )}
+      </section>
       <div className="plan-actions">
         <Button kind="secondary" icon="download" onClick={() => window.print()}>
           Print my plan
         </Button>
       </div>
-    </div>
-  );
-}
-
-/** Done, in progress and left in one group, whichever way the rules count it. */
-function groupProgress(g: Group) {
-  const courses = g.counted.length + g.in_progress.length + (g.remaining?.length ?? 0);
-  const done = isDone(g);
-  if (courses && g.remaining) {
-    return {
-      percent: done ? 100 : (g.counted.length / courses) * 100,
-      label: `${g.counted.length} / ${courses} done`,
-    };
-  }
-  const needed = g.units_needed ?? 0;
-  const have = g.units_done ?? 0;
-  return {
-    percent: done ? 100 : needed ? (have / needed) * 100 : 0,
-    label: needed ? `${have} / ${needed} units` : done ? "Done" : "Not yet",
-  };
-}
-
-function ProgressView({ work }: { work: Work }) {
-  return (
-    <div className="app-content">
-      <div className="page-title">
-        <h1>Your degree progress</h1>
-        <p>See what’s done, planned, and still remaining.</p>
-      </div>
-      <DegreeProgress audit={work.audit} semesters={work.semesters} />
-    </div>
-  );
-}
-
-/** Units and every requirement, done to left, and what's planned (the Progress tab; Your record has RequirementsView). */
-function DegreeProgress({ audit, semesters }: { audit: Audit; semesters?: Semester[] }) {
-  const plannedTerm = (code: string) => semesters?.find((s) => s.courses.includes(code))?.term;
-  const plannedSlot = semesters
-    ? (g: Group) => {
-        const term = semesters.find((s) => s.courses.some((c) => isSlot(c) && c.slot === g.id))?.term;
-        return term && `Planned · ${termLabel(term)}`;
-      }
-    : undefined;
-  const [doneWord, leftWord] = semesters ? ["Done", "Remaining"] : ["Completed", "Incomplete"];
-  const buckets: [string, Group[]][] = [
-    ["General Education", audit.groups.filter((g) => g.id.startsWith("ge_"))],
-    ["SF State Studies", audit.groups.filter((g) => g.id.startsWith("sfss_"))],
-    ["American Institutions", audit.groups.filter((g) => g.id.startsWith("ai_"))],
-    [
-      "Other university requirements",
-      audit.groups.filter((g) => g.kind === "university" && !/^(ge|sfss|ai)_/.test(g.id)),
-    ],
-  ];
-  const major = audit.groups
-    .filter((g) => g.kind === "major")
-    .map((g) => {
-      const p = groupProgress(g);
-      return {
-        key: g.id,
-        title: g.title,
-        percent: p.percent,
-        label: p.label,
-        body: (
-          <div className="req-courses">
-            {g.counted.map((c) => (
-              <CourseStatus name={c} type="done" label={doneWord} key={c} />
-            ))}
-            {g.in_progress.map((c) => (
-              <CourseStatus name={c} type="progress" label="In progress" key={c} />
-            ))}
-            {g.remaining?.map((c) => (
-              <CourseStatus
-                name={c}
-                type="remaining"
-                label={plannedTerm(c) ? `Planned · ${termLabel(plannedTerm(c))}` : leftWord}
-                key={c}
-              />
-            ))}
-          </div>
-        ),
-      };
-    });
-  const university = buckets
-    .filter(([, groups]) => groups.length)
-    .map(([title, groups]) => {
-      const met = groups.filter(isDone).length;
-      return {
-        key: title,
-        title,
-        percent: (met / groups.length) * 100,
-        label: `${met} / ${groups.length} done`,
-        body: <GeRequirementRows groups={groups} plannedIn={plannedSlot} />,
-      };
-    });
-  const t = audit.totals;
-  return (
-    <>
-      <section className="progress-summary" aria-label="Units">
-        <div className="progress-meters">
-          <UnitBar value={t.units.value} going={t.units_in_progress} total={t.units.needed ?? 120} label="Total units" />
-          <UnitBar
-            value={t.upper_division_units.value}
-            going={t.upper_division_units_in_progress}
-            total={t.upper_division_units.needed ?? 0}
-            label="Upper-division units"
-          />
-        </div>
-        <div className="status-key">
-          <span>Status key</span>
-          <StatusBadge type="done">{doneWord}</StatusBadge>
-          <StatusBadge type="progress">In progress</StatusBadge>
-          {semesters && <StatusBadge type="planned">Planned</StatusBadge>}
-          <StatusBadge type="remaining">{leftWord}</StatusBadge>
-        </div>
-      </section>
-      <SectionCard
-        title="Degree requirements"
-        count={`${t.units.value + t.units_in_progress} of ${t.units.needed} units${t.units_in_progress ? `, incl. ${t.units_in_progress} in progress` : ""}`}
-      >
-        <div className="requirement-list">
-          {(semesters ? [...major, ...university] : [...university, ...major]).map((r, i) => (
-            <details key={r.key} open={i === 0}>
-              <summary>
-                <span className="req-check" aria-hidden="true">
-                  {r.percent === 100 ? <Icon name="check" /> : null}
-                </span>
-                <b>{r.title}</b>
-                <div className="mini-progress">
-                  <i style={{ width: `${r.percent}%` }} />
-                </div>
-                <small>{r.label}</small>
-                <Icon name="chevron" />
-              </summary>
-              {r.body}
-            </details>
-          ))}
-        </div>
-      </SectionCard>
-    </>
-  );
-}
-/** Done, then in progress after it in a lighter shade: the DPR counts both. */
-function UnitTrack({ value, going = 0, total, label }: { value: number; going?: number; total: number; label: string }) {
-  const share = (x: number) => (total ? Math.min(100, (x / total) * 100) : 0);
-  return (
-    <div className="unit-bar-track" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={total} aria-label={label}>
-      <i style={{ width: `${share(value)}%` }} />
-      {!!going && <i className="going" style={{ width: `${Math.min(share(going), 100 - share(value))}%` }} />}
-    </div>
-  );
-}
-function UnitBar({ value, going = 0, total, label }: { value: number; going?: number; total: number; label: string }) {
-  return (
-    <div className="unit-bar">
-      <div>
-        <b>{label}</b>
-        <span>
-          {value + going} of {total}
-          {!!going && `, incl. ${going} in progress`}
-        </span>
-      </div>
-      <UnitTrack value={value} going={going} total={total} label={label} />
-    </div>
-  );
-}
-function CourseStatus({
-  name,
-  type,
-  label,
-}: {
-  name: string;
-  type: "done" | "progress" | "remaining";
-  label: string;
-}) {
-  return (
-    <div>
-      <span>{name}</span>
-      <StatusBadge type={type}>{label}</StatusBadge>
     </div>
   );
 }
@@ -1629,86 +1391,6 @@ function ElectiveDrawer({
   );
 }
 
-function CourseDrawer({ code, why, close }: { code: string; why?: string; close: () => void }) {
-  const dialogRef = useDialog(close);
-  const course = useLoad(() => getCourse(code), [code]);
-  const c = course.data;
-  const seasons = (["fall", "spring", "summer"] as const).filter((s) => c?.offered_terms?.[s]?.[0]);
-  return (
-    <div className="overlay" onMouseDown={close}>
-      <aside
-        className="drawer course-drawer"
-        onMouseDown={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Course details"
-        tabIndex={-1}
-        ref={dialogRef}
-      >
-        <div className="drawer-head">
-          <div>
-            <h2>{code}</h2>
-            {c && (
-              <p>
-                {c.title} ·{" "}
-                {c.units_min === c.units_max ? c.units_min : `${c.units_min}-${c.units_max}`} units
-              </p>
-            )}
-          </div>
-          <button onClick={close} aria-label="Close">
-            <Icon name="x" />
-          </button>
-        </div>
-        {course.error && <ErrorCard text={course.error} retry={course.retry} />}
-        {course.loading && <Loading label="Finding it in the Bulletin…" />}
-        {c && (
-          <>
-            <span className="bulletin-ref">
-              <Icon name="book" size={14} /> Bulletin p.{c.source_page}
-            </span>
-            {c.description && (
-              <div className="detail-block">
-                <h3>Description</h3>
-                <p>{c.description}</p>
-              </div>
-            )}
-            <div className="detail-block">
-              <h3>
-                Prerequisites <Tooltip text="A prerequisite is a course you need to finish first." />
-              </h3>
-              <p>{c.prereq?.raw_text || "None listed in the Bulletin."}</p>
-            </div>
-            {why && (
-              <div className="detail-block why">
-                <span>
-                  <Icon name="route" />
-                </span>
-                <div>
-                  <h3>Why it’s in this term</h3>
-                  <p>{why}</p>
-                </div>
-              </div>
-            )}
-            <div className="detail-block">
-              <h3>Usually offered</h3>
-              {seasons.length ? (
-                <div className="chips">
-                  {seasons.map((s) => (
-                    <span key={s}>{s[0].toUpperCase() + s.slice(1)}</span>
-                  ))}
-                </div>
-              ) : (
-                <p>No offering history here: check Class Search.</p>
-              )}
-            </div>
-          </>
-        )}
-        <Button onClick={close}>Got it</Button>
-      </aside>
-    </div>
-  );
-}
-
 function StyleGuide({ close }: { close: () => void }) {
   const dialogRef = useDialog(close);
   return (
@@ -1784,10 +1466,19 @@ const applyAnswer = <T extends { semesters: Semester[]; plan: PlanResult; option
   sections: r.sections ?? state.sections,
 });
 
-function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Built; notes: string[] }) {
+function AppWorkspace({
+  profile,
+  built,
+  imported,
+  notes,
+}: {
+  profile: Profile;
+  built: Built;
+  imported: ImportResult | null;
+  notes: string[];
+}) {
   const [tab, setTab] = useState<Tab>("plan");
   const [picker, setPicker] = useState<Target | null>(null);
-  const [course, setCourse] = useState("");
   const [chat, setChat] = useState(false);
   const [docked, setDocked] = useState(true); // on a wide screen the chat sits beside the plan until hidden
   const lastTerm = (semesters: Semester[]) => semesters[semesters.length - 1]?.term ?? "";
@@ -1844,15 +1535,16 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     setToast(x);
     setTimeout(() => setToast(""), 2500);
   };
-  /** A change GatorPath makes itself. Only a plan that passes the check is applied; otherwise nothing changes. */
-  const attempt = async (label: string, run: () => Promise<typeof state>, note = "") => {
+  /** A change GatorPath makes itself. Only a plan that passes the check is applied; otherwise nothing changes.
+   * `applied`: a fact the student states (a record edit) stands either way, and a failed check shows its problem. */
+  const attempt = async (label: string, run: () => Promise<typeof state>, note = "", applied = false) => {
     if (sending || busy) return;
     setBusy(label);
     setFailed("");
     try {
       const next = await run();
-      const line = changeLine(state.semesters, next.semesters, next.check, lastTerm(next.semesters));
-      if (line.kind === "ok") {
+      const line = changeLine(state.semesters, next.semesters, next.check, lastTerm(next.semesters), applied);
+      if (line.kind !== "refused") {
         setPrevious(state);
         setState(next);
         line.text += note;
@@ -1864,7 +1556,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
       setBusy("");
     }
   };
-  const whatIf = (change: Options, _label?: string) =>
+  const whatIf = (change: Options) =>
     attempt(
       "Rebuilding your plan…",
       async () => {
@@ -1938,6 +1630,18 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
       },
     );
   };
+  /** A record edit after the plan exists: re-checked as the plan stands, choices kept, logged with Undo. */
+  const editRecord = (edited: Profile) =>
+    attempt(
+      "Checking your plan…",
+      async () => {
+        const options = { ...state.options, ...edited };
+        const check = await checkPlan({ ...profile, ...options }, { semesters: state.semesters });
+        return { ...state, options, check, info: { ...state.info, ...check.courses } };
+      },
+      "",
+      true,
+    );
   const fill = async () => {
     if (sending || busy) return;
     setBusy("Choosing your courses with AI…");
@@ -1968,9 +1672,9 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
   const suggest = (id: string) => {
     const pace = state.plan.pace;
     if (id === "sooner") applyFold();
-    else if (id === "lighter" && pace?.normal_load) whatIf({ max_units_per_term: pace.normal_load.max_units_per_term }, "");
-    else if (id === "summer") whatIf({ include_summer: true }, "");
-    else if (id === "winter") whatIf({ include_winter: true }, "");
+    else if (id === "lighter" && pace?.normal_load) whatIf({ max_units_per_term: pace.normal_load.max_units_per_term });
+    else if (id === "summer") whatIf({ include_summer: true });
+    else if (id === "winter") whatIf({ include_winter: true });
     else if (id === "choose") fill();
   };
   const show = (codes: string[]) => {
@@ -1996,15 +1700,17 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     document.addEventListener("gator-ask", open);
     return () => document.removeEventListener("gator-ask", open);
   }, []);
+  // the record as it stands (edits change it), and as if every planned course were passed: "With your plan"
+  const record = useLoad(() => getAudit(student), [state.options]);
+  const withPlan = useLoad(() => getAudit(withPlanned(student, state.semesters)), [state.options, state.semesters]);
+  const audit = record.data ?? built.audit;
   const work: Work = {
     ...state,
     student,
-    audit: built.audit,
+    audit,
     busy,
     failed,
     whatIf,
-    applyFold,
-    fill,
     aiDown,
     aiBusy: sending || !!busy,
     ask: (text) => {
@@ -2026,7 +1732,10 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     setPrevious(null);
     say("I put your plan back the way it was.");
   };
-  const why = state.semesters.find((s) => s.why?.[course])?.why?.[course];
+  const go = (to: Tab) => {
+    setTab(to);
+    window.scrollTo(0, 0);
+  };
   return (
     <div className={`workspace ${docked ? "" : "chat-hidden"}`}>
       <div className="workspace-main">
@@ -2034,15 +1743,29 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
         {tab === "plan" && (
           <PlanView
             work={work}
-            openChoice={(slot, term) =>
-              setPicker({ group: slot.slot, term, title: slotLabel(slot, built.audit) })
-            }
-            openCourse={setCourse}
+            coverage={withPlan.data && countSection(withPlan.data.groups, warnedGroups(student, imported))}
+            select={choose}
             openSchedule={() => setTab("schedule")}
-            toast={showToast}
+            openRecord={() => go("record")}
           />
         )}
-        {tab === "progress" && <ProgressView work={work} />}
+        {tab === "record" && (
+          <div className="app-content">
+            <div className="page-title">
+              <h1>Your requirements</h1>
+              <p>What your record covers now, and with your plan. An edit here re-checks your plan as it stands.</p>
+            </div>
+            <RequirementsView
+              profile={student}
+              imported={imported}
+              audit={audit}
+              withPlan={withPlan.data}
+              semesters={state.semesters}
+              edit={editRecord}
+              leave={{ label: "Back to your plan", go: () => go("plan") }}
+            />
+          </div>
+        )}
         {tab === "electives" && (
           <ElectivesView work={work} openPicker={setPicker} />
         )}
@@ -2086,7 +1809,6 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
           choose={(code, option) => choose(picker, code, option)}
         />
       )}
-      {course && <CourseDrawer code={course} why={why} close={() => setCourse("")} />}
       {toast && (
         <div className="toast">
           <Icon name="check" />
@@ -2183,6 +1905,7 @@ export default function App() {
         <AppWorkspace
           profile={profile}
           built={built}
+          imported={imported}
           notes={imported ? [...new Set([...imported.cross_check, ...imported.warnings])] : []}
         />
       )}

@@ -143,6 +143,15 @@ def test_the_screens_other_reads():
     assert client.get("/api/course", params={"code": "CSC 340"}).json()["title"] == "Programming Methodology"
 
 
+def test_the_audit_carries_the_advising_directory_for_the_plans_advisor_list():
+    found = post("/api/audit", profile=SOPHOMORE)["directory"]
+    assert found["role"] == "directory" and found["link"].startswith("https://")
+
+
+def test_the_plan_tab_has_no_what_if_row_or_ai_tags():
+    assert "What if I" not in APP and "AI pick" not in APP and '"Progress"' not in APP and "ProgressView" not in APP
+
+
 def test_the_site_never_calls_a_plan_verified_and_sends_questions_to_navigator():
     assert "verified" not in APP.lower() and "https://sfsu.campus.eab.com/" in APP
     assert "advising.sfsu.edu" not in APP and "/undergrads/advising" not in APP

@@ -56,7 +56,18 @@ export function changeLine(before: Semester[], after: Semester[], check: Checked
   return { kind: "ok", text: `${change} · graduate ${termLabel(graduation)} · checked against the Bulletin`, codes };
 }
 
-export type Mark = "complete" | "progress" | "incomplete" | "exception" | "warning";
+/** The planner's `why` (clauses joined by "; ") for the course card: what it unlocks, as a course list, and the rest. */
+export function splitWhy(why?: string): { now: string; opens: string } {
+  const parts = (why ?? "").split("; ").filter(Boolean);
+  const isOpens = (p: string) => /^opens \d+ senior-elective option\(s\): /i.test(p);
+  const now = parts.filter((p) => !isOpens(p)).join("; ").replace(/\(s\)/g, "");
+  return {
+    now: now.charAt(0).toUpperCase() + now.slice(1),
+    opens: parts.find(isOpens)?.replace(/^[^:]*: /, "") ?? "",
+  };
+}
+
+export type Mark ="complete" | "progress" | "incomplete" | "exception" | "warning";
 export const markOf = (g: Group, warned: boolean): Mark =>
   warned ? "warning" : g.status === "satisfied" ? "complete" : g.status === "waived" ? "exception" : g.status === "in_progress" ? "progress" : "incomplete";
 

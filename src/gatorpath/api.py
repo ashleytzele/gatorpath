@@ -120,9 +120,15 @@ async def import_dpr(request: Request) -> dict:
 
 @app.post("/api/audit")
 def audit(profile: Profile = Body(embed=True)) -> dict:
+    """The audit, plus what the record and plan pages show beside it: each taken course's title, and the rules'
+    advising directory ("Not sure who to ask?") under the plan's advisor list."""
+    out = server.audit_progress(profile)
+    if "error" in out:
+        return out
     taken = [server.norm_code(r["code"]) for r in profile.get("completed", [])] + profile.get("in_progress", [])
-    return server.audit_progress(profile) | {"courses": server.plan_courses({"semesters": [{"courses": taken}]},
-                                                                            server.catalog(server.DB, server.YEAR))}
+    advising = server.load_rules(server.rules_year(profile), profile["program"])[1].get("advising", [])
+    return out | {"courses": server.plan_courses({"semesters": [{"courses": taken}]}, server.catalog(server.DB, server.YEAR)),
+                  "directory": next((a for a in advising if a["role"] == "directory"), None)}
 
 
 @app.post("/api/plan")

@@ -66,6 +66,7 @@ export type Audit = {
   warnings: string[];
   see_advisor: Advisor[];
   courses: Record<string, CourseInfo>;
+  directory?: Advisor | null; // the rules' advising directory: "Not sure who to ask?"
 };
 export type ImportResult = {
   catalog_year: string;
