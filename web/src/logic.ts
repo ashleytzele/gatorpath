@@ -9,13 +9,11 @@ export type Suggestion = { id: "sooner" | "lighter" | "summer" | "winter" | "cho
 export function suggestions(plan: PlanResult, options: Options, open: number): Suggestion[] {
   const out: Suggestion[] = [];
   const { fold_last_term: sooner, normal_load: lighter } = plan.pace ?? {};
+  if (open > 0) out.push({ id: "choose", label: "Choose my open courses" });
   if (sooner) out.push({ id: "sooner", label: `Finish sooner (graduate ${termLabel(sooner.est_graduation_term)})` });
   if (lighter) out.push({ id: "lighter", label: `Lighter terms (graduate ${termLabel(lighter.est_graduation_term)})` });
-  // ponytail: summer and winter are offered only next to a pace option (the check pins that an empty pace offers nothing)
-  const paced = Boolean(sooner || lighter);
-  if (paced && !options.include_summer) out.push({ id: "summer", label: "Add summer" });
-  if (paced && !options.include_winter) out.push({ id: "winter", label: "Add Winter Session" });
-  if (open > 0) out.push({ id: "choose", label: "Choose my open courses" });
+  if (!options.include_summer) out.push({ id: "summer", label: "Add summer" });
+  if (!options.include_winter) out.push({ id: "winter", label: "Add Winter Session" });
   return out.slice(0, 3);
 }
 

@@ -26,8 +26,11 @@ assert.deepEqual(countSection([g("a", "satisfied"), g("b", "waived"), g("c", "in
 assert.equal(describeChange([term("2027-spring", [slot])], [term("2027-spring", ["BIOL 100"])]), "BIOL 100 added to Spring 2027");
 assert.equal(describeChange([term("2027-spring", ["CSC 645"])], [term("2028-fall", ["CSC 645"])]), "CSC 645 moved to Fall 2028");
 assert.equal(describeChange([term("2027-spring", ["CSC 645"])], [term("2027-spring", ["CSC 645"])]), "");
-assert.deepEqual(suggestions(planWith({}), {}, 0), []);
-assert.deepEqual(suggestions(planWith({ fold_last_term: { est_graduation_term: "2029-spring" } }), { include_summer: true }, 2).map((s) => s.id), ["sooner", "winter", "choose"]);
+const both = { include_summer: true, include_winter: true };
+assert.deepEqual(suggestions(planWith({}), both, 0), []);
+assert.deepEqual(suggestions(planWith({}), {}, 0).map((s) => s.label), ["Add summer", "Add Winter Session"]);
+assert.equal(suggestions(planWith({ fold_last_term: { est_graduation_term: "2029-spring" }, normal_load: { est_graduation_term: "2030-fall" } }), {}, 1)[0].id, "choose");
+assert.deepEqual(suggestions(planWith({ fold_last_term: { est_graduation_term: "2029-spring" } }), { include_summer: true }, 2).map((s) => s.id), ["choose", "sooner", "winter"]);
 assert.equal(suggestions(planWith({ normal_load: { est_graduation_term: "2030-fall" } }), {}, 0)[0].label, "Lighter terms (graduate Fall 2030)");
 assert.equal(withPlanned(profile, [term("2027-spring", ["CSC 256"])]).completed!.at(-1)!.code, "CSC 256");
 console.log("logic.check: ok");
