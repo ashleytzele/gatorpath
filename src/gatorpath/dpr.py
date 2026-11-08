@@ -237,7 +237,7 @@ def groups_for(block: dict, audit: dict, university: dict) -> list[str]:
     if block["kind"] == "course":
         codes = re.findall(r"[A-Z]{1,5}(?: [A-Z]{1,3})? \d{3}[A-Z]{0,3}", block["title"])
         return [g["id"] for g in audit["groups"]
-                if any(c in g.get(k) or () for c in codes for k in ("counted", "in_progress", "remaining")
+                if any(c in g[k] for c in codes for k in ("counted", "in_progress", "remaining")
                        if isinstance(g.get(k), list))]
     if block["kind"] == "ge" or "GWAR" in block["title"]:
         if "GWAR" in block["title"]:
