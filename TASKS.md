@@ -95,8 +95,8 @@ Decided:
   ARCHITECTURE first, and lets the chat show "N questions left today"
 
 To do:
-- [ ] (?) Run the site with GATORPATH_AI_PER_DAY=30 and GATORPATH_AI_PER_HOUR=5, or make those the defaults in `api.py`
-  and AGENTS.md; raise them once a question's real cost is measured
+- [x] The AI limits' defaults are 30 a day for everyone and 5 an hour per address (`api.py`, AGENTS.md, ARCHITECTURE);
+  raise them once a question's real cost is measured
 - [ ] Prompt caching on the assistant's fixed system prompt and tools, then measure cost per question (needs a key)
 - [ ] The chat shows its limit: "N questions left" under the input once 5 or fewer are left; at zero the input is off
   with when it's back and that planning still works (the API returns the count with each answer)

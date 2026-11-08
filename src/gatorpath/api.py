@@ -30,10 +30,10 @@ DIST = Path(__file__).parents[2] / "web/dist"
 app = FastAPI(title="GatorPath")
 
 # The AI helper costs money per request; nothing else here does. Until there are accounts, one address gets PER_HOUR
-# requests in any hour, and everyone together PER_DAY, set where it runs. The Anthropic console's spend limit stays the
-# last word.
-PER_HOUR = int(os.environ.get("GATORPATH_AI_PER_HOUR", 30))
-PER_DAY = int(os.environ.get("GATORPATH_AI_PER_DAY", 2000))
+# requests in any hour, and everyone together PER_DAY, set where it runs. The defaults fit a $20 a month budget at an
+# estimated 2 cents a question (not yet measured); the Anthropic console's spend limit stays the last word.
+PER_HOUR = int(os.environ.get("GATORPATH_AI_PER_HOUR", 5))
+PER_DAY = int(os.environ.get("GATORPATH_AI_PER_DAY", 30))
 
 
 @dataclass
