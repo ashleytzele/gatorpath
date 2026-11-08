@@ -162,7 +162,9 @@ def test_the_ai_helper_has_an_hourly_limit_per_address_and_a_daily_one_for_every
     ask = lambda who="1.1.1.1": client.post("/api/assist", json={"profile": STUDENT, "plan": {"semesters": []}},
                                          headers={"X-Test-Client": who})
     monkeypatch.setattr(api, "address", lambda request: request.headers.get("X-Test-Client", "?"))
-    assert [ask().status_code for _ in range(3)] == [200, 200, 200]
+    answers = [ask() for _ in range(3)]
+    assert [a.status_code for a in answers] == [200, 200, 200]
+    assert [a.json()["left"] for a in answers] == [{"hour": 2, "day": 4}, {"hour": 1, "day": 3}, {"hour": 0, "day": 2}]
     over = ask()
     assert over.status_code == 429 and "this hour" in over.json()["detail"] and "minute" in over.json()["detail"]
     assert ask("2.2.2.2").status_code == 200 and ask("3.3.3.3").status_code == 200  # someone else: their own hour

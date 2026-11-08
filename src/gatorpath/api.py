@@ -55,8 +55,9 @@ def address(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
-def admit(who: str) -> None:
-    """Counts one AI request, or refuses it with 429 and when to come back. Planning never comes through here."""
+def admit(who: str) -> dict[str, int]:
+    """Counts one AI request, or refuses it with 429 and when to come back. Returns what's left: this hour for who,
+    today for everyone. Planning never comes through here."""
     now, today = time.time(), date.today()
     with used.lock:
         if used.day != today:
@@ -74,6 +75,7 @@ def admit(who: str) -> None:
                                      f"minute{'s' if wait != 1 else ''}; planning works without it.")
         times.append(now)
         used.today += 1
+        return {"hour": PER_HOUR - len(times), "day": PER_DAY - used.today}
 
 
 class Options(TypedDict, total=False):
@@ -146,9 +148,10 @@ def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(), pic
     """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py).
     sections: {term: [class_nbr]} the student chose on the Schedule, which the chat can change too. notes: what the DPR
     import found, said in the first reply."""
-    admit(address(request))
+    left = admit(address(request))
     try:
-        return assistant.ask(profile, plan, picks, messages, sections, [n[:LONGEST_NOTE] for n in notes[:12]])
+        return {**assistant.ask(profile, plan, picks, messages, sections, [n[:LONGEST_NOTE] for n in notes[:12]]),
+                "left": left}
     except assistant.NotConnected as e:
         raise HTTPException(503, str(e)) from e
 
