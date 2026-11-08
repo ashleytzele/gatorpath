@@ -187,3 +187,14 @@ def test_the_landing_page_says_only_what_is_true():
     majors = len(list((Path(__file__).parents[1] / "rules/programs/2026-27").glob("*.yaml")))
     assert f"Rules for {majors} majors" in APP and "Watch the demo" in APP
     assert "Trusted by" not in APP and "testimonial" not in APP.lower()
+
+
+def test_every_course_on_the_landing_page_is_in_the_catalog():
+    import json
+
+    rows = {r["code"]: r["title"] for r in json.loads((Path(__file__).parents[1] / "tests/fixtures/catalog_rows.json").read_text())}
+    text = (Path(__file__).parents[1] / "web/src/Landing.tsx").read_text()
+    codes = re.findall(r"\b[A-Z]{2,5} \d{3}[A-Z]{0,3}\b", text)
+    assert codes and all(c in rows for c in codes), [c for c in codes if c not in rows]
+    for code, after in re.findall(r"\b([A-Z]{2,5} \d{3}[A-Z]{0,3}) ([A-Z][a-z][^·<\"]*)", text):  # a title written next to a code
+        assert after.strip().startswith(rows[code]), (code, after)

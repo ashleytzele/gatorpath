@@ -16,7 +16,7 @@ const FEATURES = [
 ];
 
 const ROUTE = [
-  { term: "Fall 2026", tag: "In progress", state: "now", courses: "CSC 220 · CSC 230 · ART 101" },
+  { term: "Fall 2026", tag: "In progress", state: "now", courses: "CSC 220 · CSC 230 · ENG 114" },
   { term: "Spring 2027", tag: "Register next", state: "next", courses: "CSC 256 · MATH 227 · PHYS 230" },
   { term: "Fall 2027", tag: "", state: "later", courses: "CSC 340 · MATH 225 · CSC 300GW" },
   { term: "Spring 2029", tag: "Graduate", state: "next", courses: "CSC 648 · two electives" },
@@ -101,7 +101,7 @@ export function Landing({ start }: { start: () => void }) {
                   <p className="dot on"><b>Spring 2027</b> <span>· Register next</span></p>
                   <p className="sub">CSC 256 Machine Structures · MATH 227 Calculus II</p>
                   <p className="dot off"><b>Fall 2027</b></p>
-                  <p className="sub">CSC 340 Programming Languages · MATH 324</p>
+                  <p className="sub">CSC 340 Programming Methodology · MATH 324</p>
                   <p className="dot on"><b>Spring 2029</b> <span>· Graduate</span></p>
                 </div>
               </div>
@@ -119,7 +119,7 @@ export function Landing({ start }: { start: () => void }) {
             </button>
             {played && <p role="status" className="ld-soon">The demo video is coming soon.</p>}
           </div>
-          <p className="ld-caption">1-minute demo with a made-up student · captions</p>
+          <p className="ld-caption">Demo video coming soon · about a minute, with a made-up student</p>
         </section>
 
         <section className="ld-facts" aria-label="About GatorPath">
