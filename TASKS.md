@@ -33,9 +33,17 @@ Decided:
   summer and Winter Session as checkboxes; Advanced options goes away. Math placement only when needed (below): QR 1/2
   and QR 3/4 each with one line from the major's roadmaps (CS: MATH 226 first, p.1908; MATH 197 and 198 first,
   p.1910) and the Bulletin's Gator Smart Start link. No first-term question: the new-student card asks it
+- Building: stays a page, and now waits for the AI too. Three steps (record in; semesters built from the roadmap;
+  choosing electives and GE with AI, "about a minute") and "Skip and choose them myself", which opens the plan with the
+  choices open and drops the AI's late answer. Without the AI helper it moves on in seconds, as now
 
 To do:
-- [ ] (?) Building, then Your plan's pages: text first, then the canvas
+- [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
+  plan page opens and takes a minute or two, "Choose a course" and "Change" stay enabled, `choose()` clears the busy
+  line in its `finally`, and the fill's `setState(withAnswer(r))` then replaces the plan with the AI's answer to the
+  plan it was sent. Fix: run the first fill on Building (above), and while any AI change is running (fill or chat) lock
+  the course buttons with one "The AI is updating your plan…" line
+- [ ] (?) Your plan's pages: text first, then the canvas
 - [ ] build_plan asks for qr_pathway while any MATH below 300 is left (`planner.py`, the "MATH below 300" ponytail), so a
   student past MATH 226 who still needs MATH 227 or 225 is asked, though the pathway changes nothing for them. Ask only
   while the placement can still change the plan: the first math course the pathways share (CS: MATH 226) isn't done
