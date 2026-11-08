@@ -42,12 +42,16 @@ Decided:
 - Your plan, Plan tab: the chat is open on the right from the start (Hide → an "Ask GatorPath" button; on a phone a
   bottom bar that opens it full screen). The plan is one column down a route line: a dot per term (in progress, "Register
   next" with "See its schedule", later terms, a flag at graduation), the year on the line, plain course rows (code,
-  title, units, what it counts for, "AI pick"), an open choice as "Choose a course →". Heading "You can graduate …",
+  title, units, what it counts for; no "AI pick" tag), an open choice as a plain row whose last column says "Not
+  chosen yet". Heading "You can graduate …",
   one line of counts, one line on what sets the date. The What-if row and the Lighter / Faster buttons go: those
   become the chat's suggestion buttons. A course opens a small floating card under its row (a sheet from the bottom on
   a phone), not the side drawer: description cut to two lines, Needs, Offered, Why now (plain words, not the
   planner's text), Opens, the Bulletin page, Ask about this course, Swap it (choices only). An open choice's card lists
-  options to add, or "ask the chat to pick one". Below the route: "! N things to check" closed, the advisor line, Print
+  options to add, or "ask the chat to pick one". Below the route: "! N things to check" closed, then "Talk to an advisor": one row per office
+  see_advisor names, each with its own links from the rules' `advising:` (the CS department: Navigator, its advising
+  page, email; the Advising Center: Navigator, advising.sfsu.edu, email; the international office for F-1 students
+  only), its place and hours, and the Advising Hub for anyone unsure. Then Print
 
 To do:
 - [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
