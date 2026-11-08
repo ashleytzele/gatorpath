@@ -33,6 +33,7 @@ import {
   type Slot,
   type Taken,
 } from "./api";
+import { GoalsScreen, type Picks } from "./Goals";
 import { Landing } from "./Landing";
 import { RecordScreen, ReviewScreen } from "./Record";
 import { NOT_ON_DPR, termLabel, unitText } from "./logic";
@@ -132,277 +133,6 @@ function CourseMini({ code, title, status }: { code: string; title: string; stat
       </div>
       <StatusBadge type="progress">{status}</StatusBadge>
     </div>
-  );
-}
-
-const GOALS: Record<string, string[] | null> = {
-  "bs-cs": [
-    "AI / Machine Learning",
-    "Cybersecurity",
-    "Web Development",
-    "Game Development",
-    "Data Science",
-    "Systems",
-  ],
-  "ba-psychology": ["Clinical / Counseling", "Research", "Developmental", "Industrial-Organizational"],
-};
-const PREVIEW_MAJORS = ["bs-cs", "ba-psychology", "ba-history", "bs-environmental-studies"];
-
-function GoalsScreen({
-  profile,
-  saved,
-  needs,
-  build,
-}: {
-  profile: Profile;
-  saved: Options;
-  needs?: string;
-  build: (options: Options) => void;
-}) {
-  const [goal, setGoal] = useState(saved.goal ?? "");
-  const [advanced, setAdvanced] = useState(false);
-  const [previewMajor, setPreviewMajor] = useState(profile.program);
-  const [graduateBy, setGraduateBy] = useState(saved.graduate_by ?? "");
-  const [f1, setF1] = useState(saved.f1);
-  const [qr, setQr] = useState(saved.qr_pathway ?? profile.qr_pathway);
-  const [start, setStart] = useState(saved.start_term ?? "");
-  const [summer, setSummer] = useState(saved.include_summer ?? false);
-  const [winter, setWinter] = useState(saved.include_winter ?? false);
-  const [maxUnits, setMaxUnits] = useState(saved.max_units_per_term);
-  const major = DEMO ? previewMajor : profile.program;
-  const goals = major === "bs-environmental-studies" ? null : (GOALS[major] ?? []);
-  const hasElectives = goals !== null;
-  const brandNew = !profile.completed?.length && !profile.in_progress?.length;
-  const askQr = !profile.qr_pathway && (brandNew || needs === "qr_pathway");
-  const programs = useLoad(getPrograms, []);
-  const title = programs.data?.find((p) => p.id === major)?.title ?? major;
-  return (
-    <main className="flow-page goals-page">
-      <Stepper current={2} />
-      <div className="flow-heading">
-        <h1>What matters to you?</h1>
-        <p>Your dates and load set your pace. Your focus shapes the courses we choose for you.</p>
-      </div>
-      {needs && (
-        <div className="error-card" role="alert">
-          <Icon name="warning" />
-          <div>
-            <b>
-              {needs === "qr_pathway"
-                ? "We need your math placement to place your first math class."
-                : "We need your first term to start your plan."}
-            </b>
-            <p>
-              Not sure?{" "}
-              <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-                Ask an advisor in Navigator
-              </a>
-            </p>
-          </div>
-        </div>
-      )}
-      <div className="major-context">
-        <span>
-          <Icon name="book" /> Goals for {DEMO ? "" : title}
-        </span>
-        {DEMO && (
-          <select
-            value={previewMajor}
-            onChange={(event) => {
-              setPreviewMajor(event.target.value);
-              setGoal("");
-            }}
-            aria-label="Preview goal options for major"
-          >
-            {[...new Set([profile.program, ...PREVIEW_MAJORS])].map((id) => (
-              <option key={id}>{id}</option>
-            ))}
-          </select>
-        )}
-      </div>
-      {hasElectives && (
-        <div className="question-block">
-          <div className="question-title">
-            <span>1</span>
-            <div>
-              <h2>
-                {goals.length ? "What do you want to focus on?" : "What are you interested in?"}
-              </h2>
-              <p>We’ll choose your electives around it. You can change any of them.</p>
-            </div>
-          </div>
-          {goals.length > 0 ? (
-            <div className="choice-chips">
-              {goals.map((x) => (
-                <button className={goal === x ? "selected" : ""} onClick={() => setGoal(x)} key={x}>
-                  {goal === x && <Icon name="check" size={14} />}
-                  {x}
-                </button>
-              ))}
-            </div>
-          ) : (
-            <input
-              className="interest-input"
-              placeholder="What are you interested in?"
-              value={goal === "Undecided" ? "" : goal}
-              onChange={(e) => setGoal(e.target.value)}
-            />
-          )}
-          <button
-            className={`undecided-choice ${goal === "Undecided" ? "selected" : ""}`}
-            onClick={() => setGoal("Undecided")}
-          >
-            {goal === "Undecided" && <Icon name="check" size={14} />} Undecided
-          </button>
-        </div>
-      )}
-      {!hasElectives && (
-        <div className="no-goals-note">
-          <Icon name="check" />
-          <div>
-            <b>No focus question needed for {title}</b>
-            <span>This major has no elective choices, so we’ll skip this step.</span>
-          </div>
-        </div>
-      )}
-      <div className="question-grid">
-        <div className="question-block">
-          <div className="question-title">
-            <span>2</span>
-            <div>
-              <h2>When do you want to graduate?</h2>
-              <p>We’ll tell you if that pace looks realistic.</p>
-            </div>
-          </div>
-          <select
-            aria-label="When do you want to graduate?"
-            value={graduateBy}
-            onChange={(e) => setGraduateBy(e.target.value)}
-          >
-            <option value="">Just follow the recommended pace</option>
-            {nearbyTerms(0, 12).map((t) => (
-              <option value={t} key={t}>
-                {termLabel(t)}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="question-block">
-          <div className="question-title">
-            <span>3</span>
-            <div>
-              <h2>
-                Are you on an F-1 student visa?{" "}
-                <Tooltip text="F-1 students need at least 12 units every fall and spring." />
-              </h2>
-              <p>This affects your minimum course load.</p>
-            </div>
-          </div>
-          <div className="segmented">
-            <button className={f1 === false ? "active" : ""} onClick={() => setF1(false)}>
-              No
-            </button>
-            <button className={f1 === true ? "active" : ""} onClick={() => setF1(true)}>
-              Yes
-            </button>
-            <button className={f1 === undefined ? "active" : ""} onClick={() => setF1(undefined)}>
-              Prefer not to say
-            </button>
-          </div>
-        </div>
-      </div>
-      {askQr && (
-        <div className="question-block compact-question">
-          <div className="question-title">
-            <span>4</span>
-            <div>
-              <h2>What is your math placement QR?</h2>
-              <p>We use this to place your first math class.</p>
-            </div>
-          </div>
-          <div className="segmented small">
-            <button className={qr === "1/2" ? "active" : ""} onClick={() => setQr("1/2")}>
-              QR 1 / 2
-            </button>
-            <button className={qr === "3/4" ? "active" : ""} onClick={() => setQr("3/4")}>
-              QR 3 / 4
-            </button>
-            <button className={qr === undefined ? "active" : ""} onClick={() => setQr(undefined)}>
-              I’m not sure
-            </button>
-          </div>
-        </div>
-      )}
-      {needs === "start_term" && (
-        <div className="question-block compact-question">
-          <div className="question-title">
-            <span>5</span>
-            <div>
-              <h2>What’s your first term?</h2>
-              <p>Your plan starts here.</p>
-            </div>
-          </div>
-          <select aria-label="First term" value={start} onChange={(e) => setStart(e.target.value)}>
-            <option value="">Choose a term</option>
-            {nearbyTerms(0, 4).map((t) => (
-              <option value={t} key={t}>
-                {termLabel(t)}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-      <button className="advanced-toggle" onClick={() => setAdvanced(!advanced)}>
-        <span>
-          <Icon name="plus" /> Advanced options
-        </span>
-        <Icon name="chevron" />
-      </button>
-      {advanced && (
-        <div className="advanced-panel">
-          <label>
-            <input type="checkbox" checked={summer} onChange={(e) => setSummer(e.target.checked)} />{" "}
-            Include summer terms
-          </label>
-          <label>
-            <input type="checkbox" checked={winter} onChange={(e) => setWinter(e.target.checked)} />{" "}
-            Include Winter Session
-          </label>
-          <label>
-            Maximum units per term: {maxUnits ?? "the roadmap’s pace"}{" "}
-            <input
-              type="range"
-              min="12"
-              max="19"
-              value={maxUnits ?? 15}
-              onChange={(e) => setMaxUnits(Number(e.target.value))}
-            />
-            <small>Above the roadmap’s load needs advisor approval.</small>
-          </label>
-        </div>
-      )}
-      <div className="flow-action">
-        <span>
-          <Icon name="lock" /> You can change these later.
-        </span>
-        <Button
-          onClick={() =>
-            build({
-              ...(goal && { goal }),
-              ...(graduateBy && { graduate_by: graduateBy }),
-              ...(f1 !== undefined && { f1 }),
-              ...(qr && { qr_pathway: qr }),
-              ...(start && { start_term: start }),
-              ...(summer && { include_summer: true }),
-              ...(winter && { include_winter: true }),
-              ...(maxUnits !== undefined && { max_units_per_term: maxUnits }),
-            })
-          }
-        >
-          Build my plan <Icon name="arrow" />
-        </Button>
-      </div>
-    </main>
   );
 }
 
@@ -2521,6 +2251,7 @@ export default function App() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [imported, setImported] = useState<ImportResult | null>(null);
   const [options, setOptions] = useState<Options>({});
+  const [picks, setPicks] = useState<Picks>({ interests: [], after: [] });
   const [needs, setNeeds] = useState<string>();
   const [built, setBuilt] = useState<Built | null>(null);
   const back = () =>
@@ -2571,9 +2302,11 @@ export default function App() {
         <GoalsScreen
           profile={profile}
           saved={options}
+          picks={picks}
           needs={needs}
-          build={(chosen) => {
+          build={(chosen, chips) => {
             setOptions(chosen);
+            setPicks(chips);
             go("building");
           }}
         />
