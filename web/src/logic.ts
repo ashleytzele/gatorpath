@@ -1,5 +1,5 @@
 // Plain functions for the pages: no React, no calls. Run `node web/src/logic.check.ts` to check them.
-import type { Checked, Group, ImportResult, Left, Meeting, Options, PlanResult, Profile, Semester } from "./api.ts";
+import type { Checked, Group, ImportResult, Left, Meeting, Offered, Options, PlanResult, Profile, Semester } from "./api.ts";
 
 export const termLabel = (term?: string | null) =>
   term ? `${term[5].toUpperCase()}${term.slice(6)} ${term.slice(0, 4)}` : "";
@@ -32,10 +32,22 @@ const moves = (before: Semester[], after: Semester[]) => {
   return { moved, removed };
 };
 
+/** Open choices that landed in a term: "2 open choices moved to Spring 2030" ("added to" when none left another term). */
+const slotMoves = (before: Semester[], after: Semester[]) => {
+  const open = (s: Semester) => s.courses.filter((c) => typeof c !== "string").length;
+  const was = new Map(before.map((s) => [s.term, open(s)]));
+  const now = new Map(after.map((s) => [s.term, open(s)]));
+  const left = [...was].some(([term, n]) => n > (now.get(term) ?? 0));
+  return after.flatMap((s) => {
+    const n = open(s) - (was.get(s.term) ?? 0);
+    return n > 0 ? [{ n, text: `${n} open ${n === 1 ? "choice" : "choices"} ${left ? "moved" : "added"} to ${termLabel(s.term)}` }] : [];
+  });
+};
+
 /** What moved between two plans, in words: "BIOL 100 added to Spring 2027 · CSC 645 moved to Fall 2028". */
 export function describeChange(before: Semester[], after: Semester[]): string {
   const { moved, removed } = moves(before, after);
-  return [...moved.map((m) => m.text), ...removed].join(" · ");
+  return [...moved.map((m) => m.text), ...removed, ...slotMoves(before, after).map((m) => m.text)].join(" · ");
 }
 
 /** One chat line. "me" and "ai" go to the model as the conversation; "ok" and "refused" are only shown. */
@@ -45,8 +57,12 @@ export type ChatLine = { kind: "me" | "ai" | "ok" | "refused" | "problem"; text:
  * already in force (an AI answer, a record edit), so a failed check is a problem to show, not a refusal. */
 export function changeLine(before: Semester[], after: Semester[], check: Checked, graduation: string, applied = false): ChatLine {
   const { moved, removed } = moves(before, after);
-  const n = moved.length + removed.length;
-  const change = n > 4 ? `${n} courses moved` : describeChange(before, after) || "no course moved"; // a rebuilt plan can move many
+  const slots = slotMoves(before, after);
+  const courses = moved.length + removed.length;
+  const open = slots.reduce((t, m) => t + m.n, 0);
+  const many = [courses && `${courses} ${courses === 1 ? "course" : "courses"}`, open && `${open} open ${open === 1 ? "choice" : "choices"}`];
+  const change = // a rebuilt plan can move many
+    courses + slots.length > 4 ? `${many.filter(Boolean).join(" and ")} moved` : describeChange(before, after) || "no course moved";
   const codes = moved.map((m) => m.code);
   const first = check.errors[0]?.message ?? "the plan did not pass the check";
   if (!check.valid)
@@ -122,6 +138,14 @@ export function withPlanned(profile: Profile, semesters: Semester[]): Profile {
   return { ...profile, completed: [...(profile.completed ?? []), ...planned] };
 }
 
+/** What an AI refusal says about the limits: the hour or the day is used up (the other stays as known, or open). */
+export const limitOf = (refusal: string, left?: Left): Left | undefined =>
+  /limit for everyone/.test(refusal)
+    ? { hour: left?.hour ?? 1, day: 0 }
+    : /times this hour/.test(refusal)
+      ? { hour: 0, day: left?.day ?? 1 }
+      : left;
+
 /** null when unknown or plenty left; else the smaller of the hour and the day. */
 export function leftText(left?: Left): string | null {
   if (!left) return null;
@@ -134,6 +158,17 @@ export function leftText(left?: Left): string | null {
 export function plannedLine(done: number | undefined, needed: number | undefined, rowUnits: number[]) {
   if (!needed) return "";
   return `${(done ?? 0) + rowUnits.reduce((t, u) => t + u, 0)} of ${needed} units planned`;
+}
+
+/** When a course ran, in words: "Offered every fall and 2 of the last 5 springs · last Spring 2027". */
+export function offeredText(o?: Offered | null) {
+  if (!o) return "No offering history here: check Class Search";
+  const ran = (["fall", "spring", "summer"] as const).flatMap((season) => {
+    const [n, of] = o[season] ?? [0, 0];
+    return n ? [n === of ? `every ${season}` : `${n} of the last ${of} ${season}s`] : [];
+  });
+  const when = ran.length > 1 ? `${ran.slice(0, -1).join(", ")} and ${ran[ran.length - 1]}` : ran[0];
+  return [when ? `Offered ${when}` : "Not offered in recent terms", o.last && `last ${termLabel(o.last)}`].filter(Boolean).join(" · ");
 }
 
 /** "10:00AM" -> 10, "1:20PM" -> 13.33 (hours since midnight). */

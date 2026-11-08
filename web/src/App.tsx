@@ -22,7 +22,6 @@ import {
   type Group,
   type ImportResult,
   type Meeting,
-  type Offered,
   type Option,
   type Options,
   type Pick,
@@ -40,7 +39,7 @@ import { RecordScreen, RequirementsView, ReviewScreen } from "./Record";
 import { FloatingCard } from "./FloatingCard";
 import { StatusMark } from "./StatusMark";
 import { ChatPanel } from "./Chat";
-import { blockOf, changeLine, countSection, plannedLine, hours, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
+import { blockOf, changeLine, countSection, limitOf, offeredText, plannedLine, hours, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, Loading, Logo, NAVIGATOR,
   Stepper, StatusBadge, calmScroll, plainText, useLoad, type Screen,
@@ -51,22 +50,13 @@ type Tab = "plan" | "electives" | "schedule" | "record";
 
 const isDone = (g: Group) => g.status === "satisfied" || g.status === "waived";
 
-function SectionCard({
-  title,
-  count,
-  children,
-  className = "",
-}: {
-  title: string;
-  count?: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
+/** An open section: a heading over a 2px rule, rows split by 1px lines. */
+function Section({ title, count, children }: { title: string; count: string; children: React.ReactNode }) {
   return (
-    <section className={`section-card ${className}`}>
-      <div className="section-card-head">
+    <section className="el-section">
+      <div className="el-head">
         <h2>{title}</h2>
-        {count && <span>{count}</span>}
+        <span>{count}</span>
       </div>
       {children}
     </section>
@@ -557,7 +547,8 @@ function PlanView({
           </p>
         )}
         <p>
-          {coverage && `With this plan, ${coverage.done} of ${coverage.total} requirements are complete. `}
+          {coverage &&
+            `With ${choices ? "the courses planned so far" : "this plan"}, ${coverage.done} of ${coverage.total} requirements are complete. `}
           <button type="button" className="pl-link" onClick={openRecord}>
             See your requirements
           </button>
@@ -675,7 +666,7 @@ function PlanView({
         )}
       </section>
       <div className="plan-actions">
-        <Button kind="secondary" icon="download" onClick={() => window.print()}>
+        <Button kind="secondary" icon="print" onClick={() => window.print()}>
           Print my plan
         </Button>
       </div>
@@ -683,7 +674,7 @@ function PlanView({
   );
 }
 
-type ChoiceRow = { id: string; title: string; term: string; units?: number; pick?: Pick };
+type ChoiceRow = { key: string; id: string; title: string; term: string; units?: number; pick?: Pick };
 
 function ChoiceRequirementRows({
   rows,
@@ -698,10 +689,16 @@ function ChoiceRequirementRows({
   setOpen: (key: string) => void;
   select: (target: Target, code: string, option: Option) => void;
 }) {
+  const back = useRef(""); // the row a Select came from: focus goes back to it once the check is done
+  useEffect(() => {
+    if (work.aiBusy || !back.current) return;
+    document.querySelector<HTMLElement>(`[data-row="${back.current}"]`)?.focus();
+    back.current = "";
+  }, [work.aiBusy]);
   return (
     <ul className="el-rows">
-      {rows.map((r, i) => {
-        const key = `${r.id}|${r.term}|${i}`;
+      {rows.map((r) => {
+        const key = r.key;
         const target = { group: r.id, term: r.term, title: r.title, replacing: r.pick?.code };
         const about = r.pick && (work.info[r.pick.code] ?? work.audit.courses[r.pick.code]);
         return (
@@ -722,6 +719,7 @@ function ChoiceRequirementRows({
               <button
                 type="button"
                 className="pl-link"
+                data-row={key}
                 aria-expanded={open === key}
                 disabled={work.aiBusy}
                 onClick={(e) => {
@@ -749,6 +747,7 @@ function ChoiceRequirementRows({
                     target={target}
                     all
                     select={(code, option) => {
+                      back.current = key;
                       setOpen("");
                       select(target, code, option);
                     }}
@@ -773,22 +772,16 @@ function ElectivesView({
   const { audit, check, info, picks, semesters, student } = work;
   const [open, setOpen] = useState(""); // the row whose card is open: one at a time
   useEffect(() => setOpen(""), [semesters]); // a change moves rows under an open card
-  const rows: ChoiceRow[] = [
-    ...semesters.flatMap((s) =>
-      s.courses.filter(isSlot).map((slot) => ({
-        id: slot.slot,
-        title: slotLabel(slot, audit),
-        term: s.term,
-        units: slot.units,
-      })),
-    ),
-    ...picks.map((pick) => ({
-      id: pick.group,
-      title: pick.group === "elective" ? "Free elective: any course" : (audit.groups.find((g) => g.id === pick.group)?.title ?? pick.group),
-      term: pick.term,
-      pick,
-    })),
-  ];
+  // In plan order, keyed by place: a choice filled in place keeps its row. ponytail: a pick is always in its term's
+  // courses (the server keeps only those; choose and Finish sooner move both), so none is left out here.
+  const rows: ChoiceRow[] = semesters.flatMap((s) =>
+    s.courses.flatMap((c, i): ChoiceRow[] => {
+      const key = `${s.term}|${i}`;
+      if (isSlot(c)) return [{ key, id: c.slot, title: slotLabel(c, audit), term: s.term, units: c.units }];
+      const pick = picks.find((p) => p.code === c && p.term === s.term);
+      return pick ? [{ key, id: pick.group, title: slotLabel({ slot: pick.group, units: 0 }, audit), term: s.term, pick }] : [];
+    }),
+  );
   const major = rows.filter((r) => audit.groups.find((g) => g.id === r.id)?.kind === "major");
   const ge = rows.filter((r) => r.id.startsWith("ge_"));
   const free = rows.filter((r) => r.id === "elective");
@@ -808,19 +801,19 @@ function ElectivesView({
   );
   const section = (title: string, list: ChoiceRow[], extra?: React.ReactNode) =>
     !!list.length && (
-      <SectionCard title={title} count={count(list)}>
+      <Section title={title} count={count(list)}>
         {extra}
         <ChoiceRequirementRows rows={list} work={work} open={open} setOpen={setOpen} select={select} />
-      </SectionCard>
+      </Section>
     );
   return (
     <div className="app-content">
       <div className="page-title">
         <h1>Electives & GE</h1>
         <p>
-          {openCount ? `${openCount} of ${rows.length} choices still open` : "All choices made"}
-          {student.goal && student.goal !== "Undecided" ? `, picked around your focus: ${student.goal}` : ""}. Swap or
-          Choose a row to see the courses that fit, or ask the chat.
+          {picks.some((p) => p.ai) && student.goal && student.goal !== "Undecided" && `Picked around your focus: ${student.goal}. `}
+          {openCount ? `${openCount} of ${rows.length} choices still open.` : "All choices made."} Swap or Choose a row to see
+          the courses that fit, or ask the chat.
         </p>
       </div>
       {!check.valid && <ProblemPanel errors={check.errors} audit={audit} ask={work.ask} />}
@@ -830,18 +823,16 @@ function ElectivesView({
         "Major electives",
         major,
         short?.min_units_from && (
-          <div className="major-electives-summary">
-            <div className="csc-unit-progress">
-              <div>
-                <b>
-                  {planned ? `${planned}, ` : ""}
-                  {inSubject} of {short.min_units_from.units} in {short.min_units_from.subject}
-                </b>
-                <span>{Math.min(100, Math.round((inSubject / short.min_units_from.units) * 100))}%</span>
-              </div>
-              <div>
-                <i style={{ width: `${Math.min(100, (inSubject / short.min_units_from.units) * 100)}%` }} />
-              </div>
+          <div className="csc-unit-progress">
+            <div>
+              <b>
+                {planned ? `${planned}, ` : ""}
+                {inSubject} of {short.min_units_from.units} in {short.min_units_from.subject}
+              </b>
+              <span>{Math.min(100, Math.round((inSubject / short.min_units_from.units) * 100))}%</span>
+            </div>
+            <div>
+              <i style={{ width: `${Math.min(100, (inSubject / short.min_units_from.units) * 100)}%` }} />
             </div>
           </div>
         ),
@@ -1010,8 +1001,6 @@ function ScheduleView({
   const fitText = (s: Section) =>
     s.clashes_with ? (s.clashes_with.length ? `Clashes with ${s.clashes_with.join(", ")}` : "Fits") : "";
   const roomType = (s: Section, m: { where?: string }) => [m.where, s.component].filter(Boolean).join(" · ");
-  const sectionRoom = (s: Section) =>
-    [...new Set(s.meetings.map((m) => m.where).filter(Boolean))].join(", ");
   return (
     <div className="app-content">
       <div className="schedule-title">
@@ -1108,7 +1097,9 @@ function ScheduleView({
                   <div className="calendar-body" style={{ height: (end - start) * HOUR_PX }}>
                     <div className="times">
                       {Array.from({ length: end - start + 1 }, (_, k) => (
-                        <span key={k}>{hourName(start + k)}</span>
+                        <span key={k} style={{ top: k * HOUR_PX }}>
+                          {hourName(start + k)}
+                        </span>
                       ))}
                     </div>
                     <div className="day-grid" style={{ "--hp": `${HOUR_PX}px` } as React.CSSProperties}>
@@ -1241,7 +1232,6 @@ function ScheduleView({
                                           <b>Section {o.section}</b> · {when(o)} · Class #{o.class_nbr}
                                         </p>
                                         <p className="os-sub">
-                                          {sectionRoom(o) && `${sectionRoom(o)} · `}
                                           {o.mode}
                                           <Instructors section={o} /> · {seats(o)}
                                         </p>
@@ -1312,7 +1302,7 @@ function ScheduleView({
             ))}
           {!!classes.length && (
             <div className="plan-actions">
-              <Button kind="secondary" icon="download" onClick={() => window.print()}>
+              <Button kind="secondary" icon="print" onClick={() => window.print()}>
                 Print my schedule
               </Button>
             </div>
@@ -1355,14 +1345,6 @@ function useDialog(close: () => void) {
     };
   }, []);
   return ref;
-}
-
-function offeredText(o?: Offered | null) {
-  if (!o) return "No offering history here: check Class Search";
-  const ran = (["fall", "spring", "summer"] as const)
-    .filter((season) => o[season])
-    .map((season) => `${season} ${o[season]![0]} of ${o[season]![1]}`);
-  return `Ran: ${ran.join(", ")}${o.last ? ` · last ran ${termLabel(o.last)}` : ""}`;
 }
 
 function StyleGuide({ close }: { close: () => void }) {
@@ -1426,14 +1408,17 @@ function StyleGuide({ close }: { close: () => void }) {
 }
 
 /** A plan after an AI answer: the API returns what it was sent of each term, so keep what only build_plan has (why). */
-const applyAnswer = <T extends { semesters: Semester[]; plan: PlanResult; options: Partial<Profile>; info: Record<string, CourseInfo>; sections: Record<string, string[]> }>(
+const applyAnswer = <T extends { semesters: Semester[]; plan: PlanResult; options: Partial<Profile>; info: Record<string, CourseInfo>; picks: Pick[]; sections: Record<string, string[]> }>(
   state: T,
   r: Assisted,
 ) => ({
   ...state,
   semesters: r.semesters.map((s) => ({ ...state.semesters.find((o) => o.term === s.term), ...s })),
   check: r.check,
-  picks: r.picks,
+  picks: r.picks.map((p) => {
+    const had = state.picks.find((q) => q.code === p.code);
+    return { ...p, ai: had ? had.ai : true }; // what the AI added; the student's own choices stay theirs
+  }),
   plan: r.rebuilt ?? state.plan,
   options: { ...state.options, ...r.options },
   info: { ...state.info, ...r.rebuilt?.courses, ...r.check.courses },
@@ -1463,7 +1448,7 @@ function AppWorkspace({
       : []),
     ...(built.why ? [{ kind: "refused" as const, text: built.why }] : []),
   ]);
-  const [left, setLeft] = useState(built.filled?.left);
+  const [left, setLeft] = useState(() => built.filled?.left ?? limitOf(built.why)); // the first fill may have hit a limit
   const [sending, setSending] = useState(false);
   const [aiDown, setAiDown] = useState(down(built.why));
   const [toast, setToast] = useState("");
@@ -1491,8 +1476,7 @@ function AppWorkspace({
   const unanswered = (e: unknown) => {
     const m = message(e);
     if (down(m)) setAiDown(true);
-    else if (/limit for everyone/.test(m)) setLeft({ hour: left?.hour ?? 0, day: 0 });
-    else if (/times this hour/.test(m)) setLeft({ hour: 0, day: left?.day ?? 0 });
+    else setLeft(limitOf(m, left));
     log({ kind: "refused", text: m });
   };
   /** An AI answer: its words, then one line for any change (check_plan already passed it on the server). */

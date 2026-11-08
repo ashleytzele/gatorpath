@@ -139,6 +139,7 @@ export type Pick = {
   readiness?: string;
   covers: string[];
   online?: boolean;
+  ai?: boolean; // the page's own note: the AI helper chose it (the server ignores it)
 };
 export type Assisted = {
   reply: string;

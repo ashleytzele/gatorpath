@@ -1,6 +1,6 @@
 // Run: node web/src/logic.check.ts
 import assert from "node:assert/strict";
-import { blockOf, changeLine, countSection, describeChange, goalText, leftText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutUrls, withPlanned } from "./logic.ts";
+import { blockOf, changeLine, countSection, describeChange, goalText, leftText, limitOf, offeredText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutUrls, withPlanned } from "./logic.ts";
 
 const g = (id: string, status: string) => ({ id, title: id, kind: "major", source: "", status, counted: [], in_progress: [] });
 const term = (t: string, courses: (string | { slot: string; units: number })[]) => ({ term: t, courses });
@@ -18,6 +18,9 @@ assert.equal(leftText(undefined), null);
 assert.equal(leftText({ hour: 9, day: 20 }), null);
 assert.equal(leftText({ hour: 1, day: 20 }), "1 question left this hour");
 assert.equal(leftText({ hour: 4, day: 3 }), "3 questions left today");
+assert.deepEqual(limitOf("You've asked the AI helper 5 times this hour. Try again in 39 minutes"), { hour: 0, day: 1 });
+assert.deepEqual(limitOf("The AI helper reached its daily limit for everyone", { hour: 3, day: 9 }), { hour: 3, day: 0 });
+assert.equal(limitOf("The AI helper isn't connected yet"), undefined);
 assert.equal(markOf(g("a", "satisfied"), true), "warning");
 assert.equal(markOf(g("a", "waived"), false), "exception");
 assert.equal(markOf(g("a", "in_progress"), false), "progress");
@@ -26,6 +29,15 @@ assert.deepEqual(countSection([g("a", "satisfied"), g("b", "waived"), g("c", "in
 assert.equal(describeChange([term("2027-spring", [slot])], [term("2027-spring", ["BIOL 100"])]), "BIOL 100 added to Spring 2027");
 assert.equal(describeChange([term("2027-spring", ["CSC 645"])], [term("2028-fall", ["CSC 645"])]), "CSC 645 moved to Fall 2028");
 assert.equal(describeChange([term("2027-spring", ["CSC 645"])], [term("2027-spring", ["CSC 645"])]), "");
+// Finish sooner folds the last term into the one before: its open choices move, and the line says so
+const fold = [term("2030-spring", ["CSC 600", slot]), term("2030-fall", [slot, slot])];
+const folded = [term("2030-spring", ["CSC 600", slot, slot, slot])];
+assert.equal(describeChange(fold, folded), "2 open choices moved to Spring 2030");
+assert.equal(changeLine(fold, folded, { valid: true, errors: [] }, "2030-spring").text, "2 open choices moved to Spring 2030 · graduate Spring 2030 · checked against the Bulletin");
+assert.equal(describeChange([term("2028-fall", ["CSC 645"])], [term("2028-fall", [slot])]), "CSC 645 removed from Fall 2028 · 1 open choice added to Fall 2028");
+const spread = (n: number) => [term("2028-fall", Array.from({ length: n }, (_, i) => `CSC ${600 + i}`))];
+assert.equal(changeLine(spread(4), [term("2029-spring", ["CSC 600", "CSC 601", "CSC 602", "CSC 603", slot])], { valid: true, errors: [] }, "2029-spring", true).text.split(" · ")[0], "4 courses and 1 open choice moved");
+assert.equal(changeLine(spread(1), spread(1), { valid: true, errors: [] }, "2028-fall", true).text.split(" · ")[0], "no course moved");
 const before = [term("2027-spring", [slot])];
 const after = [term("2027-spring", ["BIOL 100"])];
 const ok = changeLine(before, after, { valid: true, errors: [] }, "2027-spring");
@@ -68,6 +80,10 @@ assert.equal(plannedLine(undefined, 15, []), "0 of 15 units planned");
 assert.equal(plannedLine(6, undefined, [3]), "");
 assert.deepEqual(blockOf({ days: "Mo We", time: "10:00AM - 11:15AM" }, 8, 60), { top: 120, height: 75 });
 assert.deepEqual(blockOf({ days: "Tu", time: "12:30PM - 1:20PM" }, 8, 60), { top: 270, height: 50 });
+assert.equal(offeredText({ fall: [4, 4], spring: [5, 5], summer: [4, 4], last: "2027-spring" }), "Offered every fall, every spring and every summer · last Spring 2027");
+assert.equal(offeredText({ fall: [1, 4], spring: [2, 5], summer: [0, 4], last: "2027-spring" }), "Offered 1 of the last 4 falls and 2 of the last 5 springs · last Spring 2027");
+assert.equal(offeredText({ summer: [0, 4] }), "Not offered in recent terms");
+assert.equal(offeredText(null), "No offering history here: check Class Search");
 assert.equal(blockOf({ days: "Mo" }, 8, 60), null);
 assert.equal(blockOf({ time: "TBA" }, 8, 60), null);
 console.log("logic.check: ok");

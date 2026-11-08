@@ -13,7 +13,7 @@ export type IconName =
   | "chevron"
   | "clock"
   | "copy"
-  | "download"
+  | "print"
   | "edit"
   | "file"
   | "flag"
@@ -74,9 +74,10 @@ export const iconPaths: Record<IconName, React.ReactNode> = {
       <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
     </>
   ),
-  download: (
+  print: (
     <>
-      <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14" />
+      <path d="M7 9V3h10v6M7 18H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+      <rect x="7" y="14" width="10" height="7" rx="1" />
     </>
   ),
   edit: (
