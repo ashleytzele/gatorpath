@@ -793,7 +793,7 @@ function ElectivesView({
   const ge = rows.filter((r) => r.id.startsWith("ge_"));
   const free = rows.filter((r) => r.id === "elective");
   const studies = rows.filter((r) => !major.includes(r) && !ge.includes(r) && !free.includes(r));
-  const open_ = rows.filter((r) => !r.pick).length;
+  const openCount = rows.filter((r) => !r.pick).length;
   const count = (list: ChoiceRow[]) => `${list.filter((r) => r.pick).length} chosen, ${list.filter((r) => !r.pick).length} to go`;
   const short = audit.groups.find((g) => g.min_units_from && !isDone(g));
   const inSubject = short?.min_units_from
@@ -801,6 +801,11 @@ function ElectivesView({
         .filter((p) => p.group === short.id && p.code.startsWith(short.min_units_from!.subject))
         .reduce((total, p) => total + unitsOf(p.code, info), short.min_units_from.done)
     : 0;
+  const planned = plannedLine(
+    short?.units_done,
+    short?.units_needed,
+    rows.filter((r) => r.id === short?.id).map((r) => (r.pick ? unitsOf(r.pick.code, info) : (r.units ?? 0))),
+  );
   const section = (title: string, list: ChoiceRow[], extra?: React.ReactNode) =>
     !!list.length && (
       <SectionCard title={title} count={count(list)}>
@@ -813,7 +818,7 @@ function ElectivesView({
       <div className="page-title">
         <h1>Electives & GE</h1>
         <p>
-          {open_ ? `${open_} of ${rows.length} choices still open` : "All choices made"}
+          {openCount ? `${openCount} of ${rows.length} choices still open` : "All choices made"}
           {student.goal && student.goal !== "Undecided" ? `, picked around your focus: ${student.goal}` : ""}. Swap or
           Choose a row to see the courses that fit, or ask the chat.
         </p>
@@ -829,7 +834,8 @@ function ElectivesView({
             <div className="csc-unit-progress">
               <div>
                 <b>
-                  {inSubject} of {short.min_units_from.units} required {short.min_units_from.subject} units
+                  {planned ? `${planned}, ` : ""}
+                  {inSubject} of {short.min_units_from.units} in {short.min_units_from.subject}
                 </b>
                 <span>{Math.min(100, Math.round((inSubject / short.min_units_from.units) * 100))}%</span>
               </div>

@@ -1,6 +1,6 @@
 // Run: node web/src/logic.check.ts
 import assert from "node:assert/strict";
-import { changeLine, countSection, describeChange, goalText, leftText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, withoutUrls, withPlanned } from "./logic.ts";
+import { changeLine, countSection, describeChange, goalText, leftText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutUrls, withPlanned } from "./logic.ts";
 
 const g = (id: string, status: string) => ({ id, title: id, kind: "major", source: "", status, counted: [], in_progress: [] });
 const term = (t: string, courses: (string | { slot: string; units: number })[]) => ({ term: t, courses });
@@ -63,4 +63,7 @@ assert.equal(
 );
 assert.equal(withoutUrls("Schedule through Navigator at https://sfsu.campus.eab.com/. Email cs-dept@sfsu.edu if you can't access Navigator."), "Schedule through Navigator. Email cs-dept@sfsu.edu if you can't access Navigator.");
 assert.equal(withoutUrls("Navigator, https://sfsu.campus.eab.com/"), "Navigator");
+assert.equal(plannedLine(6, 15, [3, 3, 3]), "15 of 15 units planned");
+assert.equal(plannedLine(undefined, 15, []), "0 of 15 units planned");
+assert.equal(plannedLine(6, undefined, [3]), "");
 console.log("logic.check: ok");

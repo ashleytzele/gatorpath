@@ -129,3 +129,9 @@ export function leftText(left?: Left): string | null {
   const n = today ? left.day : left.hour;
   return n > 5 ? null : `${n} ${n === 1 ? "question" : "questions"} left ${today ? "today" : "this hour"}`;
 }
+
+/** "15 of 15 units planned": what's done plus every row the plan holds for the group, out of what it needs. "" when the group names no total. */
+export function plannedLine(done: number | undefined, needed: number | undefined, rowUnits: number[]) {
+  if (!needed) return "";
+  return `${(done ?? 0) + rowUnits.reduce((t, u) => t + u, 0)} of ${needed} units planned`;
+}
