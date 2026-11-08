@@ -182,7 +182,9 @@ def test_build_plan_tool():
     assert got["check"]["valid"], got["check"]["errors"]
     assert got["variant"] == "qr-3-4" and got["est_graduation_term"] == got["semesters"][-1]["term"]
     assert server.check_plan(profile, {"semesters": got["semesters"]})["valid"]
-    assert server.build_plan(profile | {"qr_pathway": None})["needs_input"] == "qr_pathway"
+    assert "needs_input" not in server.build_plan(profile | {"qr_pathway": None})  # MATH 226 is in progress: nothing to ask
+    ahead = profile | {"qr_pathway": None, "in_progress": [c for c in profile["in_progress"] if c != "MATH 226"]}
+    assert server.build_plan(ahead)["needs_input"] == "qr_pathway"
 
 
 TRANSFER_SENIOR = {"catalog_year": "2026-27", "program": "bs-cs", "transfer_units": 70, "gpa": 4.0,

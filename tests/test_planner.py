@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from gatorpath.engine.planner import check_plan, pick_sections
+from gatorpath.engine.planner import check_plan, pathway_courses, pick_sections
 from gatorpath.engine.prereq import parse_prereq
 from gatorpath.engine.rules import load_rules
 
@@ -1036,3 +1036,17 @@ def test_an_approved_overload_keeps_its_warning_without_the_advisor_handoff():
     assert load(asked) and not load(approved)
     assert any("advisor approved this overload" in w for w in approved["warnings"])
     assert errors(approved) == []  # the cap is still max_units_per_term's
+
+
+def test_pathway_courses_are_the_math_before_the_shared_gate():
+    road = yaml.safe_load((ROOT / "rules/roadmaps/2026-27/bs-cs.yaml").read_text())
+    assert pathway_courses(road) == {"1/2": ["MATH 226"], "3/4": ["MATH 197", "MATH 198", "MATH 226"]}
+
+
+def test_placement_isnt_asked_once_the_gate_course_is_done():
+    p = {"catalog_year": "2026-27", "program": "bs-cs", "start_term": "2027-fall",
+         "completed": [{"code": "MATH 226", "grade": "B", "term": "2026-spring"},
+                       {"code": "CSC 101", "grade": "A", "term": "2026-spring"}]}
+    assert "needs_input" not in plan_for(p)  # MATH 227 and 225 are left, the pathway changes nothing
+    del p["completed"][0]
+    assert plan_for(p)["needs_input"] == "qr_pathway"

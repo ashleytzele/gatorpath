@@ -164,6 +164,11 @@ def programs() -> dict:
     return server.list_programs()
 
 
+@app.get("/api/pathways")
+def pathways(program: str, catalog_year: str | None = None) -> dict:
+    return server.qr_pathways(program, catalog_year)
+
+
 @app.get("/api/course")
 def course(code: str) -> dict:
     return server.get_course(code)

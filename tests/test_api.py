@@ -162,3 +162,10 @@ def test_the_ai_helper_has_an_hourly_limit_per_address_and_a_daily_one_for_every
     assert full.status_code == 429 and "today" in full.json()["detail"] and "planning" in full.json()["detail"]
     assert client.post("/api/plan", json={"profile": STUDENT}).status_code == 200  # planning isn't limited
 
+
+
+def test_pathways_name_each_placements_first_math():
+    got = client.get("/api/pathways", params={"program": "bs-cs"}).json()["pathways"]
+    assert [(p["pathway"], [c["code"] for c in p["courses"]]) for p in got] == [
+        ("1/2", ["MATH 226"]), ("3/4", ["MATH 197", "MATH 198", "MATH 226"])]
+    assert all(c["title"] for p in got for c in p["courses"])

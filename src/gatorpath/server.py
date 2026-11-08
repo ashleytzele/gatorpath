@@ -21,7 +21,7 @@ from gatorpath import db, dpr, transcript
 from gatorpath.engine.planner import build_plan as engine_build_plan
 from gatorpath.engine.planner import compare_programs as engine_compare_programs
 from gatorpath.engine.planner import check_plan as engine_check_plan
-from gatorpath.engine.planner import TERM, cover_combinations, eligible_options, pick_sections, see_advisor
+from gatorpath.engine.planner import TERM, cover_combinations, pathway_courses, eligible_options, pick_sections, see_advisor
 from gatorpath.engine.prereq import granted, prereq_chain, prereq_warnings, reverse_index
 from gatorpath.engine.rules import (RULES_DIR, area_groups, audit, dpr_offsets, first_time, load_rules, min_grade_of, number,
                                     translate_ge)
@@ -550,6 +550,16 @@ def roadmap_plan(clean: dict, program: dict, university: dict, year: str) -> dic
     """The baseline plan on the program's Bulletin roadmap: build_plan's result before its notes."""
     road = yaml.safe_load(roadmap_path(year, clean["program"]).read_text())
     return engine_build_plan(clean, program, university, road, catalog_for(clean), prereqs_for(clean))
+
+
+def qr_pathways(program: str, catalog_year: str | None = None) -> dict:
+    """The math each QR pathway takes before the course all of them share: what the placement question asks about."""
+    year = rules_year({"catalog_year": catalog_year, "program": program})
+    cat = catalog_for({})
+    road = yaml.safe_load(roadmap_path(year, program).read_text())
+    return {"catalog_year": year, "warnings": [],
+            "pathways": [{"pathway": q, "courses": [{"code": c, "title": cat[c]["title"]} for c in codes]}
+                         for q, codes in pathway_courses(road).items()]}
 
 
 @mcp.tool(annotations=READ_ONLY)

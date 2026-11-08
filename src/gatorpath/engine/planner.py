@@ -860,6 +860,18 @@ def chunks(units: float, size: float = 3) -> list[float]:
     return out + [units - size * len(out)] if units % size else out
 
 
+def pathway_courses(roadmap: dict) -> dict[str, list[str]]:
+    """Each QR pathway's MATH courses in semester order, from its first through the gate, minus the courses every pathway
+    shares but the gate. The gate: the first MATH course of a variant that appears in every QR variant. {} if none."""
+    maths = {v["qr_pathway"]: [c for s in v["semesters"] for c in s["items"] if isinstance(c, str) and c.startswith("MATH ")]
+             for v in roadmap["variants"].values() if v.get("qr_pathway")}
+    gate = next((m[0] for m in maths.values() if m and all(m[0] in o for o in maths.values())), None)
+    if gate is None:
+        return {}
+    shared = set.intersection(*map(set, maths.values())) - {gate}
+    return {q: [c for c in m[:m.index(gate) + 1] if c not in shared] for q, m in maths.items()}
+
+
 def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, catalog: dict, prereqs: dict) -> dict:
     """Deterministic baseline plan (ARCHITECTURE §8): roadmap semester first, then required courses by critical path,
     then slots. Passes check_plan."""
@@ -881,9 +893,11 @@ def build_plan(profile: dict, program: dict, university: dict, roadmap: dict, ca
                       "in_progress": []}
     status = audit(base, program, university, catalog)
     required = [c for g in status["groups"] for c in g.get("remaining", []) if c in catalog]
-    # The QR pathway only changes the math before MATH 226, so ask for it only while lower-division math is left.
-    # ponytail: "MATH below 300" stands for the placement-dependent courses; read it from the roadmaps if a program differs.
-    if variant is None and any(c.startswith("MATH ") and number(c) < 300 for c in required):
+    # The QR pathway only changes the math before the gate course (MATH 226 for BS CS), so ask for it only while that
+    # course is still required. ponytail: with no gate in the roadmaps, any MATH below 300 stands in for it.
+    paths = pathway_courses(roadmap)
+    gate = next(iter(paths.values()))[-1] if paths else None
+    if variant is None and (gate in required if gate else any(c.startswith("MATH ") and number(c) < 300 for c in required)):
         return {"catalog_year": program["catalog_year"], "needs_input": "qr_pathway",
                 "warnings": ["The roadmap (and the math courses before MATH 226) depends on the QR pathway / math "
                              "placement: give qr_pathway ('1/2' or '3/4'), or adt: true for a verified AA-T/AS-T"]}

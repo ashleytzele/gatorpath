@@ -738,7 +738,8 @@ deterministic (D6). The prompt gives the client its workflow:
 1. `load_profile` if the student has one. If `dpr_imported` is stale, ask them to re-import.
 2. Get courses: `import_dpr` (preferred), `import_transcript`, or typed.
 3. Ask for the math placement / QR pathway if it's unknown and lower-division math isn't done (it only changes the
-   math before MATH 226; `build_plan` returns `needs_input: qr_pathway` only then).
+   math before MATH 226; `build_plan` returns `needs_input: qr_pathway` only while that gate course (the first MATH
+   course every QR variant shares, `pathway_courses`) is still required).
 4. Call `audit_progress` (with a DPR: as the cross-check).
 5. Ask when they want to graduate and pass `graduate_by` (D25), then call `build_plan`: the roadmap's own loads
    (D24), raised to fit the goal when they'd end later. For "3, 4 or 5 years", add 18 units + summer and 12, and
