@@ -9,6 +9,36 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ---
 
+## Now — Record (Review) page redesign: pick a layout, then build it (2026-11-07)
+
+The user doesn't like the Review page as boxes and widget cards everywhere, and asked for other layouts. Four ideas are
+in one local prototype (made-up CS student, no real data; `.superpowers/` isn't in git):
+`open .superpowers/canvas/record-layouts.html` (the dark bar at the top switches A-D). The Claude artifact tools stopped
+working in that session, so it wasn't published; a new session brings them back if a shared link is wanted.
+
+- A · The report: one column like the DPR, a one-sentence summary and one bar, sections as headings with plain rows
+  (status mark, requirement, course), Edit on hover, a bottom bar with "Add or fix a course" and "Looks right"
+- B · Outline and table: a section list with counts on the left, the chosen section as a plain table on the right, totals
+  as two numbers in a line, "Add a course" as the table's last row
+- C · What's left first: grouped by status, not category. Still needed (goes into the plan) first, then In progress, Not
+  on your DPR as one line, Done folded into one line. Shortest, and matches "the DPR is the rule, plan what's left"
+- D · Transcript: courses by term with grade and what each counts for, requirements as a short list on the side
+
+Recommended: C, written in A's plain-row style, with D as a "View as transcript" link for checking grades.
+
+- [ ] (?) The user picks a direction (or a mix) in the prototype
+- [ ] Build it into ReviewScreen (`web/src/App.tsx`): it keeps today's behaviour: the record editor (add a course, change a
+  grade, finish or remove one), "Not on your DPR" with one put-back control, units the DPR's way ("74 of 120, incl. 19 in
+  progress"), Looks right. Check it in headless Chrome at 1440 and 390, then `/impeccable critique` again
+
+Open from the same day:
+- [ ] Re-run `/impeccable critique` and `/impeccable audit` for new scores: last 29/40 and 14/20 (`.impeccable/critique/`),
+  before the layout fixes in 86dd25f and 2650604
+- [ ] The schedule's co-taught fix (each meeting and instructor once) hasn't been seen on screen: no test plan had a class
+  with two instructors. Check it on a real plan
+- [ ] Progress, Electives & GE and Schedule still use cards; if the Review redesign lands, consider the same plain-row
+  style there (PRODUCT.md: calm, clear, trustworthy; no widget cards)
+
 ## Done 2026-11-06 — The website (branch `web-app`)
 
 - [x] `src/gatorpath/api.py` and `gatorpath-web`: thin routes over the tools' functions (ARCHITECTURE §7.6, D32).
