@@ -9,35 +9,47 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ---
 
-## Now — Record (Review) page redesign: pick a layout, then build it (2026-11-07)
+## Now — Redesign every page, one at a time (2026-11-07)
 
-The user doesn't like the Review page as boxes and widget cards everywhere, and asked for other layouts. Four ideas are
-in one local prototype (made-up CS student, no real data; `.superpowers/` isn't in git):
-`open .superpowers/canvas/record-layouts.html` (the dark bar at the top switches A-D). The Claude artifact tools stopped
-working in that session, so it wasn't published; a new session brings them back if a shared link is wanted.
+The user doesn't want widget cards. Each page is written out in text first, then prototyped on one private Claude canvas
+(made-up CS student, no real data): https://claude.ai/artifact/7bqvvHgUn4oNUD3qWRAxWE. Order: Your record → Your goals →
+Building → Your plan (Plan, Progress, Electives & GE, Schedule). The earlier four-layout file
+(`.superpowers/canvas/record-layouts.html`, not in git) is superseded.
 
-- A · The report: one column like the DPR, a one-sentence summary and one bar, sections as headings with plain rows
-  (status mark, requirement, course), Edit on hover, a bottom bar with "Add or fix a course" and "Looks right"
-- B · Outline and table: a section list with counts on the left, the chosen section as a plain table on the right, totals
-  as two numbers in a line, "Add a course" as the table's last row
-- C · What's left first: grouped by status, not category. Still needed (goes into the plan) first, then In progress, Not
-  on your DPR as one line, Done folded into one line. Shortest, and matches "the DPR is the rule, plan what's left"
-- D · Transcript: courses by term with grade and what each counts for, requirements as a short list on the side
+Decided:
+- Every page: the site's current stepper (numbered dots joined by lines); headings in Source Serif 4, body in Source
+  Sans 3 (the "Report" direction); sections divided by thin lines, not cards
+- Your record, first screen: the three method cards as the site has them today; under Upload, today's drop zone, then
+  "How to get your DPR" as a video (a placeholder until it's recorded with a made-up or blurred DPR, with captions)
+  beside the four written steps. No privacy sentence on this screen (the landing page keeps it)
+- Your record, "Does this look right?": reads like a better DPR. A summary (major, catalog year, units incl. in progress,
+  upper-division units, Overall GPA, SF State GPA); sections in the DPR's order, all closed at first. Each section line:
+  a status icon (✓ all complete, ○ otherwise), the name, an amber ! when something inside needs a look, and "8/16" under
+  a Complete column. Opened: each requirement with its status (Complete, In progress, Incomplete, Exception, Warning),
+  its courses (code, title, units, term, grade, Edit) and any warning note. Courses not used at the end, then "Add a
+  course your DPR doesn't show" and Looks right
+- Your goals: numbered questions divided by lines. Interests and after-graduation as chips plus a type-your-own box
+  (typed ones become chips); graduation term; units per term (12 / 15 recommended / 18) and F-1 as radio buttons;
+  summer and Winter Session as checkboxes; Advanced options goes away. Math placement only when needed (below): QR 1/2
+  and QR 3/4 each with one line from the major's roadmaps (CS: MATH 226 first, p.1908; MATH 197 and 198 first,
+  p.1910) and the Bulletin's Gator Smart Start link. No first-term question: the new-student card asks it
 
-Recommended: C, written in A's plain-row style, with D as a "View as transcript" link for checking grades.
-
-- [ ] (?) The user picks a direction (or a mix) in the prototype
-- [ ] Build it into ReviewScreen (`web/src/App.tsx`): it keeps today's behaviour: the record editor (add a course, change a
-  grade, finish or remove one), "Not on your DPR" with one put-back control, units the DPR's way ("74 of 120, incl. 19 in
-  progress"), Looks right. Check it in headless Chrome at 1440 and 390, then `/impeccable critique` again
+To do:
+- [ ] (?) Building, then Your plan's pages: text first, then the canvas
+- [ ] build_plan asks for qr_pathway while any MATH below 300 is left (`planner.py`, the "MATH below 300" ponytail), so a
+  student past MATH 226 who still needs MATH 227 or 225 is asked, though the pathway changes nothing for them. Ask only
+  while the placement can still change the plan: the first math course the pathways share (CS: MATH 226) isn't done
+  or in progress. Read it from the roadmap variants, not a course list; add a test
+- [ ] Your goals asks for the math placement up front only from a new student (no courses) or one who hasn't reached that
+  course; everyone else answers only if build_plan asks
+- [ ] Build the agreed pages into `web/src/App.tsx`, keeping today's behaviour (the record editor, "Not on your DPR" with
+  put-back, the DPR's unit wording). Check them in headless Chrome at 1440 and 390, then `/impeccable critique` again
 
 Open from the same day:
 - [ ] Re-run `/impeccable critique` and `/impeccable audit` for new scores: last 29/40 and 14/20 (`.impeccable/critique/`),
   before the layout fixes in 86dd25f and 2650604
 - [ ] The schedule's co-taught fix (each meeting and instructor once) hasn't been seen on screen: no test plan had a class
   with two instructors. Check it on a real plan
-- [ ] Progress, Electives & GE and Schedule still use cards; if the Review redesign lands, consider the same plain-row
-  style there (PRODUCT.md: calm, clear, trustworthy; no widget cards)
 
 ## Done 2026-11-06 — The website (branch `web-app`)
 
