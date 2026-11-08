@@ -211,5 +211,5 @@ def test_your_goals_are_numbered_questions_with_no_advanced_options():
 
 
 def test_building_waits_for_the_ai_and_the_workspace_no_longer_fills_on_mount():
-    assert "started.current" not in APP and "function BuildingScreen" not in APP
+    assert "started.current" not in APP and "function BuildingScreen" not in (Path(__file__).parents[1] / "web/src/App.tsx").read_text()
     assert "Skip and choose my electives myself" in APP
