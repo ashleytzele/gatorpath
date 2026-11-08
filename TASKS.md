@@ -60,13 +60,18 @@ Decided:
   page, email; the Advising Center: Navigator, advising.sfsu.edu, email; the international office for F-1 students
   only), its place and hours, and the Advising Hub for anyone unsure. Then Print
 
+- No Progress tab (2026-11-07): it repeated Your record and the Plan's "counts for" column. Your record gains a "With
+  your plan" column (8/16 → 15/16) and "Planned · term" once a plan exists; the Plan heading gets one coverage line
+  ("Every requirement is covered except UD-D …") and a "See your requirements" link. Tabs: Plan · Electives & GE ·
+  Schedule
+
 To do:
 - [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
   plan page opens and takes a minute or two, "Choose a course" and "Change" stay enabled, `choose()` clears the busy
   line in its `finally`, and the fill's `setState(withAnswer(r))` then replaces the plan with the AI's answer to the
   plan it was sent. Fix: run the first fill on Building (above), and while any AI change is running (fill or chat) lock
   the course buttons with one "The AI is updating your plan…" line
-- [ ] (?) Progress, Electives & GE and Schedule: text first, then the canvas
+- [ ] (?) Electives & GE and Schedule: text first, then the canvas
 - [ ] build_plan asks for qr_pathway while any MATH below 300 is left (`planner.py`, the "MATH below 300" ponytail), so a
   student past MATH 226 who still needs MATH 227 or 225 is asked, though the pathway changes nothing for them. Ask only
   while the placement can still change the plan: the first math course the pathways share (CS: MATH 226) isn't done
