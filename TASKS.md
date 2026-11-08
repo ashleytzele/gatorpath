@@ -88,7 +88,18 @@ Decided:
 - Words on buttons: **Swap** to replace something chosen, **Select** to take an option, **Choose** for an open choice.
   Never "Change" or "Pick"
 
+- AI budget (2026-11-07): $20 a month. A spend limit on the API key's workspace in the Anthropic Console is the hard
+  ceiling. Estimate, not measured: a question is ~1-2 cents on Haiku 5.5 ($0.10 / $0.50 per million tokens, up to 40
+  model calls), so about 30 questions a day for everyone. Accounts don't cap the bill; an SF State email sign-in (one-time
+  code, chat only, hashed email and a count stored) is for fairness, needs a decision against golden rule 5 in
+  ARCHITECTURE first, and lets the chat show "N questions left today"
+
 To do:
+- [ ] (?) Run the site with GATORPATH_AI_PER_DAY=30 and GATORPATH_AI_PER_HOUR=5, or make those the defaults in `api.py`
+  and AGENTS.md; raise them once a question's real cost is measured
+- [ ] Prompt caching on the assistant's fixed system prompt and tools, then measure cost per question (needs a key)
+- [ ] The chat shows its limit: "N questions left" under the input once 5 or fewer are left; at zero the input is off
+  with when it's back and that planning still works (the API returns the count with each answer)
 - [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
   plan page opens and takes a minute or two, "Choose a course" and "Change" stay enabled, `choose()` clears the busy
   line in its `finally`, and the fill's `setState(withAnswer(r))` then replaces the plan with the AI's answer to the
