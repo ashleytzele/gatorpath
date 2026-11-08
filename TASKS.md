@@ -75,12 +75,14 @@ Decided:
 
 - Schedule tab (next term only; later terms say "Check Class Search when it's out"): heading "Your Spring 2027
   schedule", "No time clashes · N classes · N units", the seats' date with a Class Search link. A Mon-Fri week trimmed to
-  the class hours, one soft block per meeting (code, type, room); a day-by-day list on a phone; classes with no set time
+  the class hours, one soft block per meeting (code, time, room and type); a day-by-day list on a phone; classes with no set time
   in one line under it; a choice not made yet says so with a link to Electives & GE. "Your sections": the site's current
   layout, one row per course: code, title and a seats pill ("12 seats open", amber "Full · N waitlist spots"), then
   section, type, days and time, room, mode and instructor with ratings; on the right, big, "Class number #24816" with
-  Copy. "Other sections ⌄" opens the list under the course (not a floating card): each with "Fits" or "Clashes with …"
-  (from GatorPath's clash check, never guessed) and **Select**, or "Select and move others" when it clashes. Pointing at a
+  Copy. "Other sections ⌄" opens a floating card under the course, as wide as the row so it fits the column (a list
+  opening downward pushed every course below it): each section with time, room and class number, "Fits" or "Clashes
+  with …" (from GatorPath's clash check, never guessed), **See on week** (scrolls up to the week with it dashed in and
+  a bar "Previewing … · Select section 01 · Cancel") and **Select**, or "Select and move others" when it clashes. Pointing at a
   section shows it dashed on the week; clicking a block opens its course's card. "Copy all N class numbers" (for the
   Student Center cart) and Print. A problem (not offered, always clash) is one amber line with "Ask the chat to move one"
 - Words on buttons: **Swap** to replace something chosen, **Select** to take an option, **Choose** for an open choice.
