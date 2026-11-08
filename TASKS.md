@@ -33,9 +33,12 @@ Decided:
   summer and Winter Session as checkboxes; Advanced options goes away. Math placement only when needed (below): QR 1/2
   and QR 3/4 each with one line from the major's roadmaps (CS: MATH 226 first, p.1908; MATH 197 and 198 first,
   p.1910) and the Bulletin's Gator Smart Start link. No first-term question: the new-student card asks it
-- Building: stays a page, and now waits for the AI too. Three steps (record in; semesters built from the roadmap;
-  choosing electives and GE with AI, "about a minute") and "Skip and choose them myself", which opens the plan with the
-  choices open and drops the AI's late answer. Without the AI helper it moves on in seconds, as now
+- Building: stays a page in today's look (the ringed route icon, "Building your plan from the Bulletin…", three
+  placeholder bars), and now waits for the AI too. Its checklist grows a line per step, each something the planner or
+  the AI really does: reading the DPR (units found), mapping requirements, semesters from the roadmap, prerequisites,
+  units per term, offerings, electives with AI ("about a minute"), the Bulletin check. During the AI step, "Skip and
+  choose my electives myself" opens the plan with the choices open and drops the AI's late answer. Without the AI
+  helper it moves on in seconds
 
 To do:
 - [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
