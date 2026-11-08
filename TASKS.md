@@ -65,13 +65,21 @@ Decided:
   ("Every requirement is covered except UD-D …") and a "See your requirements" link. Tabs: Plan · Electives & GE ·
   Schedule
 
+- Electives & GE tab: sections open (Major electives with one line "15 of 15 units planned, 12 of 12 in CSC"; GE still
+  needed; SF State Studies and American Institutions; Free electives when any), plain rows: requirement, the chosen
+  course or "Not chosen yet", term, and **Swap** (never "Change") or Choose. That opens a floating card under the row
+  (a sheet on a phone), not the side drawer: the current course ("In your plan"), then up to three options with Pick,
+  readiness in words ("Ready", "Check: needs …"), when it's offered and "also counts for …", then "N more that fit",
+  "N not possible that term" and "Or ask the chat to pick one". A pick is checked and logged in the chat as "Plan
+  updated" with Undo
+
 To do:
 - [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
   plan page opens and takes a minute or two, "Choose a course" and "Change" stay enabled, `choose()` clears the busy
   line in its `finally`, and the fill's `setState(withAnswer(r))` then replaces the plan with the AI's answer to the
   plan it was sent. Fix: run the first fill on Building (above), and while any AI change is running (fill or chat) lock
   the course buttons with one "The AI is updating your plan…" line
-- [ ] (?) Electives & GE and Schedule: text first, then the canvas
+- [ ] (?) Schedule: text first, then the canvas
 - [ ] build_plan asks for qr_pathway while any MATH below 300 is left (`planner.py`, the "MATH below 300" ponytail), so a
   student past MATH 226 who still needs MATH 227 or 225 is asked, though the pathway changes nothing for them. Ask only
   while the placement can still change the plan: the first math course the pathways share (CS: MATH 226) isn't done
