@@ -990,9 +990,8 @@ function GeRequirementRows({
         const leftOut = g.waived_by === NOT_ON_DPR;
         return (
           <div className="shared-ge-row" key={g.id}>
-            <div className="ge-area-name">
+            <div className="ge-area-name" title={`Bulletin ${g.source}`}>
               <b>{g.title}</b>
-              <small>{g.source}</small>
             </div>
             <StatusBadge
               type={leftOut ? "warning" : done ? "done" : g.in_progress.length ? "progress" : planned ? "planned" : "remaining"}
@@ -2016,7 +2015,7 @@ function PlanView({
                 )
               }
             >
-              <option value="">Roadmap</option>
+              <option value="">Recommended</option>
               {[12, 15, 18].map((n) => (
                 <option key={n}>{n}</option>
               ))}
@@ -2114,10 +2113,9 @@ function PlanView({
                           <span>
                             <b>{code}</b>
                             <small>{info[code]?.title}</small>
-                            <em>
-                              <Icon name="book" size={12} /> Bulletin p.{info[code]?.source_page}
-                              {countsFor(code, work.picks, audit) && ` · ${countsFor(code, work.picks, audit)}`}
-                            </em>
+                            {countsFor(code, work.picks, audit) && (
+                              <em>Counts for {countsFor(code, work.picks, audit)}</em>
+                            )}
                             {work.picks.some((p) => p.code === code && !p.readiness) && (
                               <em className="ai-pick">AI pick</em>
                             )}
@@ -2436,8 +2434,12 @@ function ChoiceRequirementRows({
             {!!r.pick?.covers.length && <em>Counts twice</em>}
           </div>
           <div className="alternative-choices">
-            <small>{r.id === "elective" ? "Units" : "Bulletin"}</small>
-            <span>{audit.groups.find((g) => g.id === r.id)?.source ?? r.units}</span>
+            {r.units ? (
+              <>
+                <small>Units</small>
+                <span>{r.units}</span>
+              </>
+            ) : null}
           </div>
           <button
             onClick={() =>
@@ -3279,6 +3281,7 @@ function ChatPanel({
   send,
   undo,
   close,
+  doing,
 }: {
   open: boolean;
   thread: ChatMessage[];
@@ -3287,8 +3290,16 @@ function ChatPanel({
   send: (text: string) => void;
   undo?: () => void;
   close: () => void;
+  doing?: string; // what the AI is doing, when the page started it (filling the plan)
 }) {
   const [text, setText] = useState("");
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    if (!sending) return setSeconds(0);
+    const started = Date.now();
+    const tick = setInterval(() => setSeconds(Math.round((Date.now() - started) / 1000)), 1000);
+    return () => clearInterval(tick);
+  }, [sending]);
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => {
     end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); // returns a Promise now: an effect's return must not be it
@@ -3305,7 +3316,7 @@ function ChatPanel({
           <h2>Ask GatorPath</h2>
           <p>Ask anything, or tell it what to change. Your plan updates beside you.</p>
         </div>
-        <button className="chat-close" onClick={close} aria-label="Close chat">
+        <button className="chat-close" onClick={close} aria-label="Hide the chat">
           <Icon name="x" />
         </button>
       </div>
@@ -3316,8 +3327,10 @@ function ChatPanel({
           </div>
         ))}
         {sending && (
-          <div className="chat-bubble bot" role="status">
-            Working on it…
+          <div className="chat-bubble bot working" role="status">
+            {doing || "Working on it…"}
+            {seconds >= 3 && <small> {seconds}s</small>}
+            {seconds >= 15 && <small className="working-hint">Filling a plan takes about a minute; you can keep reading it meanwhile.</small>}
           </div>
         )}
         {failed && <ErrorCard text={failed} />}
@@ -3433,6 +3446,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
   const [picker, setPicker] = useState<Target | null>(null);
   const [course, setCourse] = useState("");
   const [chat, setChat] = useState(false);
+  const [docked, setDocked] = useState(true); // on a wide screen the chat sits beside the plan until hidden
   const [thread, setThread] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
   const [chatFailed, setChatFailed] = useState("");
@@ -3602,7 +3616,10 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     fill();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
-    const open = () => setChat(true);
+    const open = () => {
+      setChat(true);
+      setDocked(true);
+    };
     document.addEventListener("gator-ask", open);
     return () => document.removeEventListener("gator-ask", open);
   }, []);
@@ -3620,6 +3637,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     ask: (text) => {
       if (sending || busy) return;
       setChat(true);
+      setDocked(true);
       send(text);
     },
     setSections: (term, keep) => {
@@ -3636,7 +3654,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     : undefined;
   const why = state.semesters.find((s) => s.why?.[course])?.why?.[course];
   return (
-    <div className="workspace">
+    <div className={`workspace ${docked ? "" : "chat-hidden"}`}>
       <div className="workspace-main">
         <Tabs tab={tab} setTab={setTab} />
         {tab === "plan" && (
@@ -3665,8 +3683,17 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
         failed={chatFailed}
         send={send}
         undo={undo}
-        close={() => setChat(false)}
+        close={() => {
+          setChat(false);
+          setDocked(false);
+        }}
+        doing={busy}
       />
+      {!docked && (
+        <button className="chat-reopen" onClick={() => setDocked(true)}>
+          <Icon name="spark" size={16} /> Chat
+        </button>
+      )}
       {picker && (
         <ElectiveDrawer
           work={work}
