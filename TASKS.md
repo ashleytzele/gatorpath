@@ -16,6 +16,10 @@ The user doesn't want widget cards. Each page is written out in text first, then
 Building → Your plan (Plan, Progress, Electives & GE, Schedule). The earlier four-layout file
 (`.superpowers/canvas/record-layouts.html`, not in git) is superseded.
 
+Design to build from: `docs/superpowers/specs/2026-11-07-web-redesign-design.md` (it wins where this list differs).
+"Does this look right?" shows GatorPath's reading of the DPR (the audit's groups, DPR statuses, disagreements as
+Warnings), not the DPR's own lines (owner's choice B, 2026-11-07).
+
 Decided:
 - Every page: the site's current stepper (numbered dots joined by lines); headings in Source Serif 4, body in Source
   Sans 3 (the "Report" direction); sections divided by thin lines, not cards
