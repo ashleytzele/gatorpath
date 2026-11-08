@@ -3132,7 +3132,7 @@ p, li, small { text-wrap: pretty; }
 .el-req { color: var(--muted); }
 .el-none { color: var(--amber); font-weight: 700; }
 .el-row .pl-link { justify-self: end; min-height: 24px; }
-.el-rows .floating-card { left: 0; right: auto; width: min(480px, 100%); }
+@media (min-width: 641px) { .el-rows .floating-card { left: 0; right: auto; width: min(480px, 100%); } }
 .pl-opt-line { display: block; color: var(--muted); }
 .pl-more { margin-top: var(--space-2); }
 .pl-more summary { min-height: 32px; display: flex; align-items: center; cursor: pointer; font-weight: 700; }
@@ -3158,7 +3158,7 @@ button.cal-block:focus-visible { outline: 2px solid var(--ink); outline-offset: 
 .seats-date { font-size: 13px; color: var(--muted); }
 .other-wrap { position: relative; }
 .other-btn { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 32px; margin-top: var(--space-2); padding: 0; border: 0; background: none; color: var(--accent); font-size: 13px; cursor: pointer; }
-.other-wrap .floating-card { left: 0; right: auto; width: min(520px, 100%); }
+@media (min-width: 641px) { .other-wrap .floating-card { left: 0; right: auto; width: min(520px, 100%); } }
 .os-title { margin: 0 32px var(--space-2) 0; font-size: 16px; }
 .os-rows { list-style: none; margin: 0; padding: 0; }
 .os-rows li { padding: var(--space-3) 0; border-top: 1px solid var(--line); }
@@ -3171,3 +3171,4 @@ button.cal-block:focus-visible { outline: 2px solid var(--ink); outline-offset: 
   .other-btn { min-height: 44px; }
   .os-actions .button { flex: 1; min-height: 44px; }
 }
+.sd-title { color: var(--muted); font-size: 14px; }

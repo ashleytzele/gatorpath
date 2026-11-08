@@ -43,7 +43,7 @@ import { ChatPanel } from "./Chat";
 import { blockOf, changeLine, countSection, plannedLine, hours, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, Loading, Logo, NAVIGATOR,
-  Stepper, StatusBadge, plainText, useLoad, type Screen,
+  Stepper, StatusBadge, calmScroll, plainText, useLoad, type Screen,
 } from "./ui";
 
 /** "record" is Your record with the plan beside it, reached from the Plan tab, not the tab bar. */
@@ -976,7 +976,7 @@ function ScheduleView({
 
   const toWeek = (focusBar: boolean) =>
     setTimeout(() => {
-      document.querySelector(".schedule-controls")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      calmScroll(document.querySelector(".schedule-controls"));
       if (focusBar) document.querySelector<HTMLElement>(".peek-bar button")?.focus({ preventScroll: true });
     }, 0); // after the card has closed and given focus back
   const cancel = () => {
@@ -1085,7 +1085,8 @@ function ScheduleView({
                     <b>
                       Previewing {pinned.code} section {shown.section}
                     </b>{" "}
-                    · {when(shown)} · {fitText(shown) || "Fits"}
+                    · {when(shown)}
+                    {fitText(shown) && ` · ${fitText(shown)}`}
                   </p>
                   <div>
                     <Button onClick={() => use(pinned)} disabled={trying || work.aiBusy}>
@@ -1129,7 +1130,7 @@ function ScheduleView({
                               onClick={(e) => {
                                 e.currentTarget.focus();
                                 setOpen(b.c.code);
-                                setTimeout(() => document.querySelector(`[data-course="${b.c.code}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 0);
+                                setTimeout(() => calmScroll(document.querySelector(`[data-course="${b.c.code}"]`), "center"), 0);
                               }}
                             >
                               <b>
@@ -1178,6 +1179,9 @@ function ScheduleView({
                       <div className="section-main">
                         <span>
                           <b>{c.code}</b>
+                          {(work.info[c.code] ?? work.audit.courses[c.code])?.title && (
+                            <span className="sd-title">{(work.info[c.code] ?? work.audit.courses[c.code]).title}</span>
+                          )}
                           <StatusBadge type={main.seats_open ? "ready" : "warning"}>{seats(main)}</StatusBadge>
                           {mine && (
                             <>
@@ -1306,6 +1310,13 @@ function ScheduleView({
                 <Icon name="warning" /> <span>{plainText(w, work.audit)}</span>
               </div>
             ))}
+          {!!classes.length && (
+            <div className="plan-actions">
+              <Button kind="secondary" icon="download" onClick={() => window.print()}>
+                Print my schedule
+              </Button>
+            </div>
+          )}
         </>
       )}
     </div>
@@ -1647,8 +1658,7 @@ function AppWorkspace({
         r.closest("details")?.setAttribute("open", "");
         r.classList.add("row-flash");
       });
-      const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      rows[0]?.scrollIntoView({ block: "center", behavior: calm ? "auto" : "smooth" });
+      calmScroll(rows[0], "center");
       setTimeout(() => rows.forEach((r) => r.classList.remove("row-flash")), 2500);
     }, 50);
   };

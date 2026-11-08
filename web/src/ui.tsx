@@ -405,3 +405,9 @@ export function nearbyTerms(back: number, ahead: number) {
   });
 }
 
+
+/** scrollIntoView that stays still for people who asked for less motion. */
+export function calmScroll(el: Element | null | undefined, block: ScrollLogicalPosition = "start") {
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el?.scrollIntoView({ behavior: calm ? "auto" : "smooth", block });
+}

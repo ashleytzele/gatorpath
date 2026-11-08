@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Left } from "./api";
 import { leftText, type ChatLine, type Suggestion } from "./logic";
-import { Icon, NAVIGATOR, plainText } from "./ui";
+import { Icon, NAVIGATOR, calmScroll, plainText } from "./ui";
 
 /** A chat reply's light markdown as React elements (nothing is injected as HTML): paragraphs, "- " and "1. " lists,
  * **bold** and links. */
@@ -77,8 +77,7 @@ export function ChatPanel(props: {
   const off = whyOff(left, aiDown);
   const lastOk = lines.map((l) => l.kind === "ok" || l.kind === "problem").lastIndexOf(true);
   useEffect(() => {
-    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    end.current?.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "nearest" });
+    calmScroll(end.current, "nearest");
   }, [lines, busy]);
   useEffect(() => {
     const el = box.current;
