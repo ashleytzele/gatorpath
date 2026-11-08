@@ -39,6 +39,13 @@ Decided:
   units per term, offerings, electives with AI ("about a minute"), the Bulletin check. During the AI step, "Skip and
   choose my electives myself" opens the plan with the choices open and drops the AI's late answer. Without the AI
   helper it moves on in seconds
+- The chat (every page that has it): no box, a thin line between it and the plan; a small header (route icon,
+  "GatorPath", Hide). The AI writes a lead sentence and a few short bullets, with 2-3 replies to tap under its latest
+  message only (no fixed row of chips). Every plan change gets a line: "✓ Plan updated · what changed · the graduation
+  term · checked against the Bulletin" with Show in plan (scrolls to and highlights the rows) and Undo; a change the
+  check refuses is an amber "! Not changed · why". The student's messages are light green bubbles on the right. The
+  input grows with the text, with a round send arrow inside; one line under it: "Every change is checked against the
+  Bulletin. Your DPR and an advisor have the final word." While the AI works: "Checking against the Bulletin…"
 - Your plan, Plan tab: the chat is open on the right from the start (Hide → an "Ask GatorPath" button; on a phone a
   bottom bar that opens it full screen). The plan is one column down a route line: a dot per term (in progress, "Register
   next" with "See its schedule", later terms, a flag at graduation), the year on the line, plain course rows (code,
