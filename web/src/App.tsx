@@ -40,7 +40,7 @@ import { RecordScreen, RequirementsView, ReviewScreen } from "./Record";
 import { FloatingCard } from "./FloatingCard";
 import { StatusMark } from "./StatusMark";
 import { ChatPanel } from "./Chat";
-import { changeLine, countSection, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, type ChatLine } from "./logic";
+import { changeLine, countSection, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, Loading, Logo, NAVIGATOR,
   Stepper, StatusBadge, plainText, useLoad, type Screen,
@@ -195,7 +195,7 @@ const listed = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(", ")}
 /** One office `see_advisor` names: this student's reasons, its links (booking, page, email), then where and how. */
 function AdvisorRow({ a, audit }: { a: Advisor; audit: Audit }) {
   const book = a.how_to_book?.match(/https?:\/\/\S+/)?.[0].replace(/[.,;)]+$/, "");
-  const how = a.how_to_book?.split(/(?<=\.)\s+/).filter((s) => !/https?:\/\//.test(s)).join(" ");
+  const how = withoutUrls(a.how_to_book ?? ""); // the rules' words stay; their URLs are the links below
   const emails = a.contact?.match(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g) ?? [];
   const rest = emails.reduce((text, e) => text.replace(e, ""), a.contact ?? "").replace(/^[\s,]+|[\s,]+$/g, "");
   const page = a.link?.startsWith("http") ? a.link : undefined; // the DPR's "link" is where to find it, not a URL
@@ -219,7 +219,7 @@ function AdvisorRow({ a, audit }: { a: Advisor; audit: Audit }) {
         </p>
       )}
       {where && <p className="pl-where">{where}</p>}
-      {how && <p className="pl-where">{how}</p>}
+      {how && !links.some((l) => l.text.includes(how)) && <p className="pl-where">{how}</p>}
     </div>
   );
 }
@@ -1762,6 +1762,7 @@ function AppWorkspace({
               withPlan={withPlan.data}
               semesters={state.semesters}
               edit={editRecord}
+              locked={work.aiBusy}
               leave={{ label: "Back to your plan", go: () => go("plan") }}
             />
           </div>

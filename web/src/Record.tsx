@@ -357,17 +357,19 @@ function CourseEdit({
   row,
   edit,
   close,
+  locked,
 }: {
   profile: Profile;
   code: string;
   row?: Taken;
   edit: (profile: Profile) => void;
   close: () => void;
+  locked?: boolean;
 }) {
   const rows = profile.completed ?? [];
   const going = profile.in_progress ?? [];
   return (
-    <div className="form-panel rq-card">
+    <fieldset className="form-panel rq-card" disabled={locked}>
       <h3>{code}</h3>
       <label>
         {row ? "Grade" : "Status"}
@@ -411,12 +413,12 @@ function CourseEdit({
       >
         Remove from my record
       </Button>
-    </div>
+    </fieldset>
   );
 }
 
 /** "+ Add a course": one the DPR doesn't show, or one finished since. */
-function AddCourse({ profile, edit }: { profile: Profile; edit: (profile: Profile) => void }) {
+function AddCourse({ profile, edit, locked }: { profile: Profile; edit: (profile: Profile) => void; locked?: boolean }) {
   const rows = profile.completed ?? [];
   const going = profile.in_progress ?? [];
   const [code, setCode] = useState("");
@@ -443,7 +445,7 @@ function AddCourse({ profile, edit }: { profile: Profile; edit: (profile: Profil
     }
   };
   return (
-    <div className="form-panel rq-card">
+    <fieldset className="form-panel rq-card" disabled={locked}>
       <h3>Add a course</h3>
       <label>
         Course code
@@ -486,7 +488,7 @@ function AddCourse({ profile, edit }: { profile: Profile; edit: (profile: Profil
       <p role="status" className="rq-added">
         {state.added && `Added ${state.added}.`}
       </p>
-    </div>
+    </fieldset>
   );
 }
 
@@ -514,6 +516,7 @@ export function RequirementsView({
   withPlan,
   semesters,
   edit,
+  locked,
   leave,
 }: {
   profile: Profile;
@@ -522,6 +525,7 @@ export function RequirementsView({
   withPlan?: Audit;
   semesters?: Semester[]; // the plan's terms, for "Planned · Spring 2027"
   edit: (profile: Profile) => void;
+  locked?: boolean; // the chat is changing the plan: an edit now would be lost
   leave?: { label: string; go: () => void };
 }) {
   const [editing, setEditing] = useState<string | null>(null); // one card at a time: a line's key, or "add"
@@ -543,12 +547,12 @@ export function RequirementsView({
       <b className="rq-grade">{l.grade}</b>
       {(l.row || l.going) && (
         <>
-          <button type="button" className="rq-link rq-edit" aria-expanded={editing === l.key} onClick={() => toggle(l.key)}>
+          <button type="button" className="rq-link rq-edit" aria-expanded={editing === l.key} disabled={locked} onClick={() => toggle(l.key)}>
             Edit<span className="sr-only"> {l.code}</span>
           </button>
           {editing === l.key && (
             <FloatingCard label={`Edit ${l.code}`} onClose={close}>
-              <CourseEdit profile={profile} code={l.code} row={l.row} edit={edit} close={close} />
+              <CourseEdit profile={profile} code={l.code} row={l.row} edit={edit} close={close} locked={locked} />
             </FloatingCard>
           )}
         </>
@@ -618,6 +622,7 @@ export function RequirementsView({
             <button
               type="button"
               className="rq-link"
+              disabled={locked}
               onClick={() =>
                 edit({ ...profile, not_on_dpr: left.includes(g.id) ? left.filter((x) => x !== g.id) : [...left, g.id] })
               }
@@ -731,12 +736,12 @@ export function RequirementsView({
       {list("Courses not used for a requirement", notUsed)}
       <div className="rq-actions">
         <div className="rq-add">
-          <button type="button" className="rq-link" aria-expanded={editing === "add"} onClick={() => toggle("add")}>
+          <button type="button" className="rq-link" aria-expanded={editing === "add"} disabled={locked} onClick={() => toggle("add")}>
             + Add a course{imported ? " your DPR doesn’t show" : ""}
           </button>
           {editing === "add" && (
             <FloatingCard label="Add a course" onClose={close}>
-              <AddCourse profile={profile} edit={edit} />
+              <AddCourse profile={profile} edit={edit} locked={locked} />
             </FloatingCard>
           )}
         </div>

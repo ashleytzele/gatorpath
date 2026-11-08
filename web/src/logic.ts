@@ -67,7 +67,15 @@ export function splitWhy(why?: string): { now: string; opens: string } {
   };
 }
 
-export type Mark ="complete" | "progress" | "incomplete" | "exception" | "warning";
+/** The rules' booking text with its URLs taken out (the page shows them as links), and the "at", comma or brackets
+ * that led to them: "… in Navigator (https://…), and ask …" -> "… in Navigator, and ask …". */
+export const withoutUrls = (text: string) =>
+  text
+    .replace(/(?:\s+at|,)?\s*\(?https?:\/\/[^\s()]*[^\s().,;:]\)?/g, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+export type Mark = "complete" | "progress" | "incomplete" | "exception" | "warning";
 export const markOf = (g: Group, warned: boolean): Mark =>
   warned ? "warning" : g.status === "satisfied" ? "complete" : g.status === "waived" ? "exception" : g.status === "in_progress" ? "progress" : "incomplete";
 

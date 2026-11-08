@@ -2940,6 +2940,7 @@ p, li, small { text-wrap: pretty; }
 .rq-note { margin: var(--space-2) 0 0 32px; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); background: var(--amber-soft); color: var(--amber-ink); font-size: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-1) var(--space-4); }
 .rq-link { padding: 0; border: 0; background: none; font: inherit; font-weight: 600; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .rq-note .rq-link { color: var(--amber); font-weight: 700; }
+.rq-link:disabled { color: var(--faint); cursor: not-allowed; }
 .rq-course {
   position: relative; display: grid; grid-template-columns: 96px minmax(0, 1fr) 64px 140px 32px 44px;
   grid-template-areas: "code title units when grade edit"; gap: 2px var(--space-3); align-items: baseline;
@@ -2953,6 +2954,7 @@ p, li, small { text-wrap: pretty; }
 .rq-grade { grid-area: grade; text-align: center; color: var(--ink); }
 .rq-edit { grid-area: edit; justify-self: end; }
 .rq-list .rq-course { margin: 0; padding: var(--space-2) 0; border-top: 1px solid var(--line-soft); }
+.rq-card { min-width: 0; margin: 0; padding: 0; border: 0; } /* a fieldset, so a lock disables every control in it */
 .rq-card h3 { margin: 0; padding-right: var(--space-7); font-size: 18px; }
 .rq-added { margin: 0; font-size: 14px; color: var(--green); }
 .rq-actions { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4); margin-top: 40px; }

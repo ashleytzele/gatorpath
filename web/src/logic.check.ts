@@ -1,6 +1,6 @@
 // Run: node web/src/logic.check.ts
 import assert from "node:assert/strict";
-import { changeLine, countSection, describeChange, goalText, leftText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, withPlanned } from "./logic.ts";
+import { changeLine, countSection, describeChange, goalText, leftText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, withoutUrls, withPlanned } from "./logic.ts";
 
 const g = (id: string, status: string) => ({ id, title: id, kind: "major", source: "", status, counted: [], in_progress: [] });
 const term = (t: string, courses: (string | { slot: string; units: number })[]) => ({ term: t, courses });
@@ -57,4 +57,10 @@ assert.equal(
 assert.deepEqual(splitWhy("needed before CSC 220 in this plan; opens 2 senior-elective option(s): CSC 685, CSC 686"), { now: "Needed before CSC 220 in this plan", opens: "CSC 685, CSC 686" });
 assert.deepEqual(splitWhy("Opens 1 senior-elective option(s): CSC 699; no slack: delaying it pushes back CSC 648"), { now: "No slack: delaying it pushes back CSC 648", opens: "CSC 699" });
 assert.deepEqual(splitWhy(undefined), { now: "", opens: "" });
+assert.equal(
+  withoutUrls("Email cs-dept@sfsu.edu, or book a department advisor in Navigator (https://sfsu.campus.eab.com/), and ask for a senior advisor's approval before taking the course."),
+  "Email cs-dept@sfsu.edu, or book a department advisor in Navigator, and ask for a senior advisor's approval before taking the course.",
+);
+assert.equal(withoutUrls("Schedule through Navigator at https://sfsu.campus.eab.com/. Email cs-dept@sfsu.edu if you can't access Navigator."), "Schedule through Navigator. Email cs-dept@sfsu.edu if you can't access Navigator.");
+assert.equal(withoutUrls("Navigator, https://sfsu.campus.eab.com/"), "Navigator");
 console.log("logic.check: ok");
