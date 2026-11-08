@@ -1799,16 +1799,6 @@ function PlanView({
     (a, i, all) => all.findIndex((x) => x.role === a.role) === i,
   );
   const chain = pace?.longest_chain ?? [];
-  const copyPlan = () => {
-    const text = semesters
-      .map(
-        (s) =>
-          `${termLabel(s.term)}: ${s.courses.map((c) => (isSlot(c) ? slotLabel(c, audit) : c)).join(", ")}`,
-      )
-      .join("\n");
-    navigator.clipboard?.writeText(text).catch(() => {});
-    toast("Plan copied to clipboard.");
-  };
   return (
     <div className="app-content">
       {DEMO && (
@@ -2164,6 +2154,9 @@ function PlanView({
           <details className="warning-card collapsible">
             <summary>
               <Icon name="warning" /> <b>{warnings.length} things to check</b>
+              <span className="summary-chevron" aria-hidden="true">
+                <Icon name="chevron" />
+              </span>
             </summary>
             <ul>
               {warnings.map((w) => (
@@ -2172,35 +2165,22 @@ function PlanView({
             </ul>
           </details>
         )}
-        <details className="advisor-card">
-          <summary>
-            <Icon name="info" /> <b>Questions? Talk to an advisor</b>
+        <section className="advisor-card">
+          <div className="advisor-card-head">
+            <Icon name="info" /> <h2>Questions? Talk to an advisor</h2>
             {!!advisors.length && <span>{advisors.length} things worth asking</span>}
-            <Icon name="chevron" />
-          </summary>
+          </div>
           <p className="advisor-fallback">
             GatorPath is a planning guide. For any question about your plan, talk to an advisor before you
             register.
           </p>
           <AdvisorCards items={advisors} audit={audit} />
-        </details>
+        </section>
       </div>
       <div className="plan-actions">
         <Button kind="secondary" icon="download" onClick={() => window.print()}>
-          Print for your advisor
+          Print my plan
         </Button>
-        <Button kind="secondary" icon="copy" onClick={copyPlan}>
-          Copy plan
-        </Button>
-        <a
-          className="button primary"
-          href={NAVIGATOR}
-          target="_blank"
-          rel="noreferrer"
-          style={{ textDecoration: "none" }}
-        >
-          {ASK_ADVISOR} <Icon name="arrow" />
-        </a>
       </div>
     </div>
   );
@@ -2315,32 +2295,26 @@ function DegreeProgress({
   const t = audit.totals;
   return (
     <>
-      {bars && <div className="ring-grid">
-        <UnitBar value={t.units.value} going={t.units_in_progress} total={t.units.needed ?? 120} label="Total units" />
-        <UnitBar
-          value={t.upper_division_units.value}
-          going={t.upper_division_units_in_progress}
-          total={t.upper_division_units.needed ?? 0}
-          label="Upper-division units"
-        />
-        <div className="legend">
-          <b>Status key</b>
-          <span>
-            <i className="dot done" /> <Icon name="check" /> {doneWord}
-          </span>
-          <span>
-            <i className="dot progress" /> <Icon name="clock" /> In progress
-          </span>
-          {semesters && (
-            <span>
-              <i className="dot planned" /> <Icon name="calendar" /> Planned
-            </span>
-          )}
-          <span>
-            <i className="dot remaining" /> <Icon name="clock" /> {leftWord}
-          </span>
-        </div>
-      </div>}
+      {bars && (
+        <section className="progress-summary" aria-label="Units">
+          <div className="progress-meters">
+            <UnitBar value={t.units.value} going={t.units_in_progress} total={t.units.needed ?? 120} label="Total units" />
+            <UnitBar
+              value={t.upper_division_units.value}
+              going={t.upper_division_units_in_progress}
+              total={t.upper_division_units.needed ?? 0}
+              label="Upper-division units"
+            />
+          </div>
+          <div className="status-key">
+            <span>Status key</span>
+            <StatusBadge type="done">{doneWord}</StatusBadge>
+            <StatusBadge type="progress">In progress</StatusBadge>
+            {semesters && <StatusBadge type="planned">Planned</StatusBadge>}
+            <StatusBadge type="remaining">{leftWord}</StatusBadge>
+          </div>
+        </section>
+      )}
       <SectionCard
         title="Degree requirements"
         count={`${t.units.value + t.units_in_progress} of ${t.units.needed} units${t.units_in_progress ? `, incl. ${t.units_in_progress} in progress` : ""}`}
@@ -2384,7 +2358,7 @@ function UnitBar({ value, going = 0, total, label }: { value: number; going?: nu
         <b>{label}</b>
         <span>
           {value + going} of {total}
-          {!!going && ` · incl. ${going} in progress`}
+          {!!going && `, incl. ${going} in progress`}
         </span>
       </div>
       <UnitTrack value={value} going={going} total={total} label={label} />
@@ -2554,8 +2528,33 @@ function hours(meeting: Meeting) {
   const end = hourOf(to);
   return start === null || end === null ? null : { start, end };
 }
+/** A section's meetings, each once: Class Search lists a co-taught meeting once per instructor. */
 const when = (s: Section) =>
-  s.meetings.map((m) => [m.days, m.time, m.where].filter(Boolean).join(" ")).join("; ") || s.mode;
+  [...new Set(s.meetings.map((m) => [m.days, m.time, m.where].filter(Boolean).join(" ")))].join("; ") || s.mode;
+/** Who teaches it, each name once, linked to Rate My Professors (student opinions) where there's a search. */
+function Instructors({ section }: { section: Section }) {
+  const names = [...new Set((section.instructor ?? "").split(", ").filter(Boolean))];
+  if (!names.length || names.every((n) => n === "To be announced")) return <> · Instructor to be announced</>;
+  const links = section.rate_my_professors ?? {};
+  return (
+    <>
+      {" · "}
+      {names.map((name, i) => (
+        <span key={name}>
+          {i > 0 && ", "}
+          {links[name] ? (
+            <a href={links[name]} target="_blank" rel="noreferrer" title="Rate My Professors: student opinions">
+              {name}
+            </a>
+          ) : (
+            name
+          )}
+        </span>
+      ))}
+      {names.some((n) => links[n]) && <span className="rmp-note"> (names link to Rate My Professors)</span>}
+    </>
+  );
+}
 const seats = (s: Section) =>
   s.seats_open ? `${s.seats_open} seats open` : s.waitlist_open ? "Full · waitlist open" : "Full";
 
@@ -2589,7 +2588,6 @@ function ScheduleView({
     picked: r.sections[code].filter((s) => numbers.includes(s.class_nbr)),
     others: r.sections[code].filter((s) => !numbers.includes(s.class_nbr)),
   }));
-  const classNumbers = Object.values(r.schedule ?? {}).flat();
   const derived =
     r.schedule === null && r.always_clash.length
       ? "no-fit"
@@ -2659,16 +2657,6 @@ function ScheduleView({
           <h1>Your {label} schedule</h1>
           <p>One clash-free combination based on your plan.</p>
         </div>
-        <Button
-          disabled={!classNumbers.length}
-          onClick={() => {
-            navigator.clipboard?.writeText(classNumbers.join(", ")).catch(() => {});
-            toast(`${classNumbers.length} class numbers copied: paste them into Student Center`);
-          }}
-          icon="copy"
-        >
-          Copy all class numbers
-        </Button>
       </div>
       {DEMO && (
         <div className="variant-switcher schedule-variants">
@@ -2867,15 +2855,7 @@ function ScheduleView({
                     ))}
                     <small>
                       {main.mode}
-                      {main.instructor ? ` · ${main.instructor}` : ""}
-                      {Object.entries(main.rate_my_professors ?? {}).map(([name, link]) => (
-                        <span key={name}>
-                          {" · "}
-                          <a href={link} target="_blank" rel="noreferrer">
-                            Rate My Professors (student opinions)
-                          </a>
-                        </span>
-                      ))}
+                      <Instructors section={main} />
                     </small>
                     {!!c.others.length && (
                       <details className="other-sections">
@@ -3356,8 +3336,8 @@ function ChatPanel({
         </button>
       )}
       <p className="chat-privacy">
-        <Icon name="lock" size={13} /> The AI helper (Claude Haiku) sees your major, goal and courses, never
-        your name, ID, grades or GPA. It can be wrong: for decisions,{" "}
+        <Icon name="lock" size={13} /> Claude Haiku sees your major, goal and courses, never your name, ID,
+        grades or GPA. It can be wrong: for decisions,{" "}
         <a href={NAVIGATOR} target="_blank" rel="noreferrer">
           ask an advisor in Navigator
         </a>

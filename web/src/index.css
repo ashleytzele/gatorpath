@@ -1813,14 +1813,6 @@
 }
 
 .ring-card,
-.legend {
-  background: white;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: var(--space-5);
-  display: grid;
-  place-items: center;
-}
 .ring {
   width: 135px;
   height: 135px;
@@ -1851,40 +1843,6 @@
 .ring small {
   color: var(--muted);
   font-size: 13px;
-}
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: flex-start;
-  gap: var(--space-4) var(--space-6);
-  padding: var(--space-7);
-}
-.legend b {
-  width: 100%;
-}
-.legend span {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  font-size: 13px;
-}
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-.dot.done {
-  background: var(--green);
-}
-.dot.progress {
-  background: var(--blue);
-}
-.dot.planned {
-  background: var(--lavender);
-}
-.dot.remaining {
-  background: #929794;
 }
 .requirement-list details {
   border-bottom: 1px solid var(--line-soft);
@@ -3403,18 +3361,12 @@
   .plan-actions .button {
     width: 100%;
   }
-  .ring-grid {
-    grid-template-columns: 1fr 1fr;
-  }
   .ring-card {
     padding: var(--space-3);
   }
   .ring {
     width: 115px;
     height: 115px;
-  }
-  .legend {
-    grid-column: 1 / -1;
   }
   .requirement-list summary {
     grid-template-columns: 30px 1fr 50px 17px;
@@ -3833,13 +3785,6 @@ footer a {
 .plan-route li.next small { color: var(--ink); font-weight: 600; }
 
 /* progress bars replacing rings */
-.ring-grid {
-  margin: var(--space-6) 0 var(--space-4);
-  display: grid;
-  grid-template-columns: 1fr 1fr 1.2fr;
-  gap: var(--space-7);
-  align-items: start;
-}
 .unit-bar > div:first-child { display: flex; justify-content: space-between; margin-bottom: var(--space-2); font-size: 14px; }
 .unit-bar > div:first-child span { color: var(--muted); }
 
@@ -3854,7 +3799,6 @@ footer a {
 .unit-bar-track i.going { background: var(--focus); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
 .going-note { color: var(--muted); font-size: 14px; font-style: normal; }
 @media (max-width: 760px) {
-  .ring-grid { grid-template-columns: 1fr; }
   .plan-route small { font-size: 13px; }
 }
 
@@ -4192,11 +4136,6 @@ p, li, small { text-wrap: pretty; }
 .hero-note { color: var(--muted); margin: var(--space-1) 0 var(--space-3); }
 /* Advisors: one disclosure under the plan */
 .advisor-card { background: white; border: 1px solid var(--line); border-radius: var(--radius); }
-.advisor-card summary { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-5); cursor: pointer; list-style: none; }
-.advisor-card summary::-webkit-details-marker { display: none; }
-.advisor-card summary span { color: var(--muted); font-size: 13px; margin-left: auto; }
-.advisor-card summary .icon:last-child { transition: transform 0.15s ease; }
-.advisor-card[open] summary .icon:last-child { transform: rotate(90deg); }
 .advisor-card > p, .advisor-card .advisor-list { padding: 0 var(--space-5); }
 .advisor-card .advisor-list { padding-bottom: var(--space-3); }
 /* Not on the DPR: one note and one decision for the group */
@@ -4230,16 +4169,45 @@ p, li, small { text-wrap: pretty; }
 /* Targets: at least 24 px everywhere (WCAG 2.2 2.5.8), 44 px on a phone */
 .let-pick, .plan-problem-panel > p button, .problem-more, .choice-requirement-row > button, .class-num button,
 .other-sections summary, .record-row button, .record-row select, .header-link, .chat-undo, .what-if select,
-.what-if button, .chat-close, .copy-button, .advisor-list a, .warning-card.collapsible summary, .advisor-card summary {
+.what-if button, .chat-close, .copy-button, .advisor-list a, .warning-card.collapsible summary {
   min-height: 24px;
 }
 @media (max-width: 760px) {
   .let-pick, .plan-problem-panel > p button, .problem-more, .choice-requirement-row > button, .class-num button,
   .other-sections summary, .record-row button, .record-row select, .header-link, .chat-undo, .what-if select,
-  .what-if button, .chat-close, .advisor-list a, .warning-card.collapsible summary, .advisor-card summary {
+  .what-if button, .chat-close, .advisor-list a, .warning-card.collapsible summary {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
   }
   .record-row button, .chat-close { min-width: 44px; justify-content: center; }
 }
+/* Progress: two meters and a status key that looks like the rows below it */
+.progress-summary {
+  display: grid; gap: var(--space-4); padding: var(--space-5) var(--space-6); margin: var(--space-6) 0 var(--space-4);
+  background: white; border: 1px solid var(--line); border-radius: var(--radius-lg);
+}
+.progress-meters { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-7); }
+.unit-bar > div:first-child { align-items: baseline; gap: var(--space-3); }
+.unit-bar > div:first-child b { font-size: 14px; }
+.unit-bar > div:first-child span { font-size: 14px; text-align: right; }
+.unit-bar-track i.going { background: color-mix(in srgb, var(--blue) 55%, white); }
+.status-key {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3);
+  padding-top: var(--space-4); border-top: 1px solid var(--line-soft);
+}
+.status-key > span:first-child { font-size: 13px; font-weight: 650; color: var(--muted); margin-right: var(--space-1); }
+@media (max-width: 760px) {
+  .progress-meters { grid-template-columns: 1fr; gap: var(--space-4); }
+  .progress-summary { padding: var(--space-4); }
+}
+/* Plan: the checks open downward, the advisor section is always open */
+.warning-card.collapsible summary .summary-chevron { margin-left: auto; display: inline-flex; transform: rotate(90deg); transition: transform 0.15s ease; }
+.warning-card.collapsible[open] summary .summary-chevron { transform: rotate(-90deg); }
+.warning-card.collapsible summary::-webkit-details-marker { display: none; }
+.warning-card.collapsible summary { list-style: none; }
+.advisor-card-head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-5) var(--space-2); }
+.advisor-card-head h2 { margin: 0; font-size: 15px; }
+.advisor-card-head span { margin-left: auto; color: var(--muted); font-size: 13px; }
+/* Schedule: who teaches it */
+.rmp-note { color: var(--faint); }
