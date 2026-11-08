@@ -37,7 +37,8 @@ import {
 import { GoalsScreen, type Picks } from "./Goals";
 import { Landing } from "./Landing";
 import { RecordScreen, ReviewScreen } from "./Record";
-import { NOT_ON_DPR, termLabel, unitText } from "./logic";
+import { ChatPanel } from "./Chat";
+import { NOT_ON_DPR, changeLine, suggestions, termLabel, unitText, type ChatLine } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, type IconName, Loading, Logo, NAVIGATOR,
   Stepper, StatusBadge, Tooltip, nearbyTerms, plainText, useLoad, type Screen,
@@ -611,7 +612,7 @@ function PlanView({
                     </summary>
                     <div className="term-courses single-column">
                       {codes.map((code) => (
-                        <button className="course-row" onClick={() => openCourse(code)} key={code}>
+                        <button className="course-row" data-code={code} onClick={() => openCourse(code)} key={code}>
                           <span>
                             <b>{code}</b>
                             <small>{info[code]?.title}</small>
@@ -630,6 +631,7 @@ function PlanView({
                         <button
                           id={slots[0]?.slot === slot ? "first-open-slot" : undefined}
                           className="slot-card list-slot"
+                          disabled={work.aiBusy}
                           onClick={() => openChoice(slot, s.term)}
                           key={`${slot.slot}-${si}`}
                         >
@@ -1470,11 +1472,13 @@ function OptionCard({
   chosen,
   audit,
   choose,
+  locked,
 }: {
   option: Option;
   chosen: boolean;
   audit: Audit;
   choose: () => void;
+  locked: boolean; // the AI is working: a choice now would be lost
 }) {
   const blocked = o.readiness === "blocked";
   const covers = o.also_covers.map((id) => audit.groups.find((g) => g.id === id)?.title ?? id);
@@ -1520,7 +1524,7 @@ function OptionCard({
       )}
       {!!covers.length && <span className="counts-twice">Counts twice · Also covers: {covers.join(", ")}</span>}
       <div className="elective-actions">
-        <Button kind={chosen ? "secondary" : "primary"} disabled={blocked || chosen} onClick={choose}>
+        <Button kind={chosen ? "secondary" : "primary"} disabled={blocked || chosen || locked} onClick={choose}>
           {chosen ? (
             <>
               <Icon name="check" /> Chosen
@@ -1560,6 +1564,7 @@ function ElectiveDrawer({
       chosen={o.code === target.replacing}
       audit={work.audit}
       choose={() => choose(o.code, o)}
+      locked={work.aiBusy}
       key={o.code}
     />
   );
@@ -1704,157 +1709,6 @@ function CourseDrawer({ code, why, close }: { code: string; why?: string; close:
   );
 }
 
-/** A chat reply's light markdown as React elements (nothing is injected as HTML): paragraphs, "- " and "1. " lists,
- * **bold** and links. */
-function Rich({ text }: { text: string }) {
-  const inline = (raw: string) =>
-    plainText(raw).split(/(\*\*[^*]+\*\*|https?:\/\/[^\s)]*[^\s).,;:])/g).map((part, i) =>
-      part.startsWith("**") && part.endsWith("**") && part.length > 4 ? (
-        <b key={i}>{part.slice(2, -2)}</b>
-      ) : /^https?:\/\//.test(part) ? (
-        <a key={i} href={part} target="_blank" rel="noreferrer">
-          {part}
-        </a>
-      ) : (
-        part
-      ),
-    );
-  const blocks: { list?: "ul" | "ol"; lines: string[] }[] = [];
-  for (const raw of text.split("\n")) {
-    const item = raw.match(/^\s*(?:([-*•])|\d+[.)])\s+(.*)$/);
-    const list = item ? (item[1] ? "ul" : "ol") : undefined;
-    const last = blocks[blocks.length - 1];
-    if (!raw.trim()) blocks.push({ lines: [] });
-    else if (list && last?.list === list) last.lines.push(item![2]);
-    else blocks.push({ list, lines: [item ? item[2] : raw.replace(/^#+\s*/, "")] });
-  }
-  return (
-    <>
-      {blocks
-        .filter((b) => b.lines.length)
-        .map((b, i) => {
-          if (!b.list) return <p key={i}>{inline(b.lines.join(" "))}</p>;
-          const List = b.list;
-          return (
-            <List key={i}>
-              {b.lines.map((line, j) => (
-                <li key={j}>{inline(line)}</li>
-              ))}
-            </List>
-          );
-        })}
-    </>
-  );
-}
-
-function ChatPanel({
-  open,
-  thread,
-  sending,
-  failed,
-  send,
-  undo,
-  close,
-  doing,
-}: {
-  open: boolean;
-  thread: ChatMessage[];
-  sending: boolean;
-  failed: string;
-  send: (text: string) => void;
-  undo?: () => void;
-  close: () => void;
-  doing?: string; // what the AI is doing, when the page started it (filling the plan)
-}) {
-  const [text, setText] = useState("");
-  const [seconds, setSeconds] = useState(0);
-  useEffect(() => {
-    if (!sending) return setSeconds(0);
-    const started = Date.now();
-    const tick = setInterval(() => setSeconds(Math.round((Date.now() - started) / 1000)), 1000);
-    return () => clearInterval(tick);
-  }, [sending]);
-  const end = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    end.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); // returns a Promise now: an effect's return must not be it
-  }, [thread, sending, failed]);
-  const submit = (ask: string) => {
-    if (!ask.trim() || sending) return;
-    setText("");
-    send(ask.trim());
-  };
-  return (
-    <aside className={`chat-dock ${open ? "open" : ""}`} aria-label="Chat with GatorPath">
-      <div className="chat-dock-head">
-        <div>
-          <h2>Ask GatorPath</h2>
-          <p>Ask anything, or tell it what to change. Your plan updates beside you.</p>
-        </div>
-        <button className="chat-close" onClick={close} aria-label="Hide the chat">
-          <Icon name="x" />
-        </button>
-      </div>
-      <div className="chat-thread" aria-live="polite">
-        {thread.map((m, i) => (
-          <div className={`chat-bubble ${m.role === "user" ? "user" : "bot"}`} key={i}>
-            {m.role === "user" ? m.content : <Rich text={m.content} />}
-          </div>
-        ))}
-        {sending && (
-          <div className="chat-bubble bot working" role="status">
-            {doing || "Working on it…"}
-            {seconds >= 3 && <small> {seconds}s</small>}
-            {seconds >= 15 && <small className="working-hint">Filling a plan takes about a minute; you can keep reading it meanwhile.</small>}
-          </div>
-        )}
-        {failed && <ErrorCard text={failed} />}
-        {thread.length < 2 && !sending && (
-          <div className="chat-suggestions">
-            {[
-              "What do I still need to graduate?",
-              "Swap one of my electives for something closer to my goal",
-              "Add a class in a later term",
-              "One of my grades is wrong",
-            ].map((ask) => (
-              <button className="suggested" onClick={() => submit(ask)} key={ask}>
-                {ask} <Icon name="arrow" />
-              </button>
-            ))}
-          </div>
-        )}
-        <div ref={end} />
-      </div>
-      {undo && !sending && (
-        <button className="chat-undo" onClick={undo}>
-          Undo the last change
-        </button>
-      )}
-      <p className="chat-privacy">
-        <Icon name="lock" size={13} /> Claude Haiku sees your major, goal and courses, never your name, ID,
-        grades or GPA. It can be wrong: for decisions,{" "}
-        <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-          ask an advisor in Navigator
-        </a>
-        .
-      </p>
-      <div className="chat-input">
-        <input
-          value={text}
-          maxLength={2000}
-          disabled={sending}
-          aria-label="Your message"
-          placeholder="Ask anything, or say what to change"
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && submit(text)}
-        />
-        <button aria-label="Send" disabled={sending} onClick={() => submit(text)}>
-          <Icon name="arrow" />
-        </button>
-      </div>
-    </aside>
-  );
-}
-
 function StyleGuide({ close }: { close: () => void }) {
   const dialogRef = useDialog(close);
   return (
@@ -1936,12 +1790,18 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
   const [course, setCourse] = useState("");
   const [chat, setChat] = useState(false);
   const [docked, setDocked] = useState(true); // on a wide screen the chat sits beside the plan until hidden
-  const [thread, setThread] = useState<ChatMessage[]>(
-    built.filled ? [{ role: "assistant", content: built.filled.reply }] : built.why ? [{ role: "assistant", content: built.why }] : [],
-  );
+  const lastTerm = (semesters: Semester[]) => semesters[semesters.length - 1]?.term ?? "";
+  const down = (m: string) => /isn't connected/.test(m); // the AI has no key here
+  const [lines, setLines] = useState<ChatLine[]>(() => [
+    ...(built.filled ? [{ kind: "ai" as const, text: built.filled.reply }] : []),
+    ...(built.filled?.changed
+      ? [changeLine(built.plan.semesters, built.filled.semesters, built.filled.check, lastTerm(built.filled.semesters))]
+      : []),
+    ...(built.why ? [{ kind: "refused" as const, text: built.why }] : []),
+  ]);
+  const [left, setLeft] = useState(built.filled?.left);
   const [sending, setSending] = useState(false);
-  const [chatFailed, setChatFailed] = useState("");
-  const [aiDown, setAiDown] = useState(!!built.why);
+  const [aiDown, setAiDown] = useState(down(built.why));
   const [toast, setToast] = useState("");
   const [state, setState] = useState(() => {
     const first = {
@@ -1959,26 +1819,52 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
   const [failed, setFailed] = useState("");
   const [previous, setPrevious] = useState<typeof state | null>(null);
   const student = { ...profile, ...state.options };
-  const say = (content: string) => setThread((t) => [...t, { role: "assistant", content }]);
+  const log = (line: ChatLine) => setLines((ls) => [...ls, line]);
+  const say = (text: string) => log({ kind: "ai", text });
+  const history = (ls: ChatLine[]): ChatMessage[] =>
+    ls.filter((l) => l.kind === "me" || l.kind === "ai").map((l) => ({ role: l.kind === "me" ? "user" : "assistant", content: l.text }));
+  /** The AI could not answer: a plain line, and what that means for the input. */
+  const unanswered = (e: unknown) => {
+    const m = message(e);
+    if (down(m)) setAiDown(true);
+    else if (/limit for everyone/.test(m)) setLeft({ hour: left?.hour ?? 0, day: 0 });
+    else if (/times this hour/.test(m)) setLeft({ hour: 0, day: left?.day ?? 0 });
+    log({ kind: "refused", text: m });
+  };
+  /** An AI answer: its words, then one line for any change (check_plan already passed it on the server). */
+  const absorb = (r: Assisted) => {
+    if (r.left) setLeft(r.left);
+    say(r.reply);
+    if (!r.changed) return;
+    setPrevious(state);
+    setState(applyAnswer(state, r));
+    log(changeLine(state.semesters, r.semesters, r.check, lastTerm(r.semesters)));
+  };
   const showToast = (x: string) => {
     setToast(x);
     setTimeout(() => setToast(""), 2500);
   };
-  const attempt = async (label: string, run: () => Promise<typeof state>, done: (next: typeof state) => string) => {
+  /** A change GatorPath makes itself. Only a plan that passes the check is applied; otherwise nothing changes. */
+  const attempt = async (label: string, run: () => Promise<typeof state>, note = "") => {
+    if (sending || busy) return;
     setBusy(label);
     setFailed("");
     try {
       const next = await run();
-      setPrevious(state);
-      setState(next);
-      say(done(next));
+      const line = changeLine(state.semesters, next.semesters, next.check, lastTerm(next.semesters));
+      if (line.kind === "ok") {
+        setPrevious(state);
+        setState(next);
+        line.text += note;
+      }
+      log(line);
     } catch (e) {
-      setFailed(message(e));
+      log({ kind: "refused", text: `Not changed · ${message(e)}` });
     } finally {
       setBusy("");
     }
   };
-  const whatIf = (change: Options, label: string) =>
+  const whatIf = (change: Options, _label?: string) =>
     attempt(
       "Rebuilding your plan…",
       async () => {
@@ -1995,8 +1881,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
           sections: state.sections, // a section only stays while its class does
         };
       },
-      (next) =>
-        `${label}: graduate ${termLabel(next.plan.est_graduation_term)}${state.picks.length ? ". Your course choices were cleared" : ""}`,
+      state.picks.length ? " · your course choices were cleared" : "",
     );
   const applyFold = () => {
     const fold = state.plan.pace?.fold_last_term;
@@ -2014,9 +1899,9 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
       async () => {
         const check = await checkPlan(student, { semesters });
         const picks = state.picks.map((p) => (p.term === last.term ? { ...p, term: fold.term } : p));
-        return { ...state, semesters, check, picks, info: { ...state.info, ...check.courses } };
+        const pace = { ...state.plan.pace!, fold_last_term: undefined }; // it is done: don't offer it again
+        return { ...state, semesters, check, picks, plan: { ...state.plan, pace }, info: { ...state.info, ...check.courses } };
       },
-      () => `Faster: graduate ${termLabel(fold.est_graduation_term)}`,
     );
   };
   const choose = (target: Target, code: string, option?: Option) => {
@@ -2051,45 +1936,56 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
           picks: [...state.picks.filter((p) => p.code !== target.replacing), pick],
         };
       },
-      (next) => (next.check.valid ? `${code} is in your plan` : `${code} is in your plan, but the plan has a problem`),
     );
   };
-  const withAnswer = (r: Assisted) => applyAnswer(state, r);
   const fill = async () => {
+    if (sending || busy) return;
     setBusy("Choosing your courses with AI…");
     setFailed("");
     try {
       const r = await assist(student, state.semesters, state.picks, [], state.sections, told.current ? [] : notes);
       told.current = true;
-      if (r.changed) {
-        setPrevious(state);
-        setState(withAnswer(r));
-      }
-      say(r.reply);
+      absorb(r);
     } catch (e) {
-      say(message(e)); // the plan works without AI: say so, without an error
-      setAiDown(true);
+      unanswered(e); // the plan works without AI
     } finally {
       setBusy("");
     }
   };
   const send = async (text: string) => {
-    const asked: ChatMessage[] = [...thread, { role: "user", content: text }];
-    setThread(asked);
+    if (sending || busy) return;
+    const asked: ChatLine[] = [...lines, { kind: "me", text }];
+    setLines(asked);
     setSending(true);
-    setChatFailed("");
     try {
-      const r = await assist(student, state.semesters, state.picks, asked, state.sections);
-      setThread([...asked, { role: "assistant", content: r.reply }]);
-      if (r.changed) {
-        setPrevious(state);
-        setState(withAnswer(r));
-      }
+      absorb(await assist(student, state.semesters, state.picks, history(asked), state.sections));
     } catch (e) {
-      setChatFailed(message(e));
+      unanswered(e);
     } finally {
       setSending(false);
     }
+  };
+  const suggest = (id: string) => {
+    const pace = state.plan.pace;
+    if (id === "sooner") applyFold();
+    else if (id === "lighter" && pace?.normal_load) whatIf({ max_units_per_term: pace.normal_load.max_units_per_term }, "");
+    else if (id === "summer") whatIf({ include_summer: true }, "");
+    else if (id === "winter") whatIf({ include_winter: true }, "");
+    else if (id === "choose") fill();
+  };
+  const show = (codes: string[]) => {
+    setTab("plan");
+    setChat(false); // on a phone the chat covers the page
+    setTimeout(() => {
+      const rows = codes.flatMap((c) => [...document.querySelectorAll<HTMLElement>(`[data-code="${CSS.escape(c)}"]`)]);
+      rows.forEach((r) => {
+        r.closest("details")?.setAttribute("open", "");
+        r.classList.add("row-flash");
+      });
+      const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      rows[0]?.scrollIntoView({ block: "center", behavior: calm ? "auto" : "smooth" });
+      setTimeout(() => rows.forEach((r) => r.classList.remove("row-flash")), 2500);
+    }, 50);
   };
   const told = useRef(!!built.filled); // the DPR notes go with the first request only
   useEffect(() => {
@@ -2118,17 +2014,18 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
       send(text);
     },
     setSections: (term, keep) => {
+      if (sending || busy) return;
       setPrevious(state);
+      log({ kind: "ok", text: `Class sections for ${termLabel(term)} updated` });
       setState({ ...state, sections: { ...state.sections, [term]: keep } });
     },
   };
-  const undo = previous
-    ? () => {
-        setState(previous);
-        setPrevious(null);
-        say("I put your plan back the way it was.");
-      }
-    : undefined;
+  const undo = () => {
+    if (!previous || sending || busy) return;
+    setState(previous);
+    setPrevious(null);
+    say("I put your plan back the way it was.");
+  };
   const why = state.semesters.find((s) => s.why?.[course])?.why?.[course];
   return (
     <div className={`workspace ${docked ? "" : "chat-hidden"}`}>
@@ -2155,20 +2052,30 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
       </div>
       <ChatPanel
         open={chat}
-        thread={thread}
-        sending={sending || !!busy}
-        failed={chatFailed}
-        send={send}
-        undo={undo}
-        close={() => {
+        lines={lines}
+        suggestions={suggestions(state.plan, student, state.semesters.flatMap((x) => x.courses.filter(isSlot)).length)}
+        onSuggest={suggest}
+        onSend={send}
+        onUndo={undo}
+        canUndo={!!previous}
+        onShow={show}
+        busy={sending ? "Checking against the Bulletin…" : busy}
+        left={left}
+        aiDown={aiDown}
+        hide={() => {
           setChat(false);
           setDocked(false);
         }}
-        doing={busy}
       />
-      {!docked && (
-        <button className="chat-reopen" onClick={() => setDocked(true)}>
-          <Icon name="spark" size={16} /> Chat
+      {(!docked || !chat) && (
+        <button
+          className={`chat-reopen ${docked ? "phone-only" : ""}`}
+          onClick={() => {
+            setChat(true);
+            setDocked(true);
+          }}
+        >
+          <Icon name="spark" size={16} /> Ask GatorPath
         </button>
       )}
       {picker && (

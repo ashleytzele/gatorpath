@@ -1,5 +1,5 @@
 // Plain functions for the pages: no React, no calls. Run `node web/src/logic.check.ts` to check them.
-import type { Group, ImportResult, Left, Options, PlanResult, Profile, Semester } from "./api.ts";
+import type { Checked, Group, ImportResult, Left, Options, PlanResult, Profile, Semester } from "./api.ts";
 
 export const termLabel = (term?: string | null) =>
   term ? `${term[5].toUpperCase()}${term.slice(6)} ${term.slice(0, 4)}` : "";
@@ -13,23 +13,45 @@ export function suggestions(plan: PlanResult, options: Options, open: number): S
   const { fold_last_term: sooner, normal_load: lighter } = plan.pace ?? {};
   if (open > 0) out.push({ id: "choose", label: "Choose my open courses" });
   if (sooner) out.push({ id: "sooner", label: `Finish sooner (graduate ${termLabel(sooner.est_graduation_term)})` });
-  if (lighter) out.push({ id: "lighter", label: `Lighter terms (graduate ${termLabel(lighter.est_graduation_term)})` });
+  if (lighter && options.max_units_per_term !== lighter.max_units_per_term) out.push({ id: "lighter", label: `Lighter terms (graduate ${termLabel(lighter.est_graduation_term)})` });
   if (!options.include_summer) out.push({ id: "summer", label: "Add summer" });
   if (!options.include_winter) out.push({ id: "winter", label: "Add Winter Session" });
   return out.slice(0, 3);
 }
 
-/** What moved between two plans, in words: "BIOL 100 added to Spring 2027 · CSC 645 moved to Fall 2028". */
-export function describeChange(before: Semester[], after: Semester[]): string {
+/** Courses that appeared or moved between two plans, with where they went. */
+const moves = (before: Semester[], after: Semester[]) => {
   const where = (semesters: Semester[]) =>
     new Map(semesters.flatMap((s) => s.courses.filter((c) => typeof c === "string").map((c) => [c as string, s.term] as const)));
   const was = where(before);
   const now = where(after);
-  const lines = [...now].flatMap(([code, term]) =>
-    !was.has(code) ? [`${code} added to ${termLabel(term)}`] : was.get(code) !== term ? [`${code} moved to ${termLabel(term)}`] : [],
+  const moved = [...now].flatMap(([code, term]) =>
+    !was.has(code) ? [{ code, text: `${code} added to ${termLabel(term)}` }] : was.get(code) !== term ? [{ code, text: `${code} moved to ${termLabel(term)}` }] : [],
   );
-  for (const [code, term] of was) if (!now.has(code)) lines.push(`${code} removed from ${termLabel(term)}`);
-  return lines.join(" · ");
+  const removed = [...was].filter(([code]) => !now.has(code)).map(([code, term]) => `${code} removed from ${termLabel(term)}`);
+  return { moved, removed };
+};
+
+/** What moved between two plans, in words: "BIOL 100 added to Spring 2027 · CSC 645 moved to Fall 2028". */
+export function describeChange(before: Semester[], after: Semester[]): string {
+  const { moved, removed } = moves(before, after);
+  return [...moved.map((m) => m.text), ...removed].join(" · ");
+}
+
+/** One chat line. "me" and "ai" go to the model as the conversation; "ok" and "refused" are only shown. */
+export type ChatLine = { kind: "me" | "ai" | "ok" | "refused"; text: string; codes?: string[] };
+
+/** The one line a plan change gets: what moved, or why the check said no (the first error). */
+export function changeLine(before: Semester[], after: Semester[], check: Checked, graduation: string): ChatLine {
+  if (!check.valid) return { kind: "refused", text: `Not changed · ${check.errors[0]?.message ?? "the plan did not pass the check"}` };
+  const { moved, removed } = moves(before, after);
+  const n = moved.length + removed.length;
+  const change = n > 4 ? `${n} courses moved` : describeChange(before, after) || "no course moved"; // a rebuilt plan can move many
+  return {
+    kind: "ok",
+    text: `${change} · graduate ${termLabel(graduation)} · checked against the Bulletin`,
+    codes: moved.map((m) => m.code),
+  };
 }
 
 export type Mark = "complete" | "progress" | "incomplete" | "exception" | "warning";
