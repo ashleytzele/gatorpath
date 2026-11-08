@@ -40,7 +40,7 @@ import { RecordScreen, RequirementsView, ReviewScreen } from "./Record";
 import { FloatingCard } from "./FloatingCard";
 import { StatusMark } from "./StatusMark";
 import { ChatPanel } from "./Chat";
-import { changeLine, countSection, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
+import { changeLine, countSection, plannedLine, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, Loading, Logo, NAVIGATOR,
   Stepper, StatusBadge, plainText, useLoad, type Screen,
