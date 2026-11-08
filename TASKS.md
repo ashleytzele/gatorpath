@@ -83,8 +83,8 @@ Decided:
   opening downward pushed every course below it): each section with time, room and class number, "Fits" or "Clashes
   with …" (from GatorPath's clash check, never guessed), **See on week** (scrolls up to the week with it dashed in and
   a bar "Previewing … · Select section 01 · Cancel") and **Select**, or "Select and move others" when it clashes. Pointing at a
-  section shows it dashed on the week; clicking a block opens its course's card. "Copy all N class numbers" (for the
-  Student Center cart) and Print. A problem (not offered, always clash) is one amber line with "Ask the chat to move one"
+  section shows it dashed on the week; clicking a block opens its course's card. Print (no "Copy all class numbers":
+  the user removed it; each class number has its own Copy). A problem (not offered, always clash) is one amber line with "Ask the chat to move one"
 - Words on buttons: **Swap** to replace something chosen, **Select** to take an option, **Choose** for an open choice.
   Never "Change" or "Pick"
 
