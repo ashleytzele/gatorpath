@@ -39,6 +39,15 @@ Decided:
   units per term, offerings, electives with AI ("about a minute"), the Bulletin check. During the AI step, "Skip and
   choose my electives myself" opens the plan with the choices open and drops the AI's late answer. Without the AI
   helper it moves on in seconds
+- Your plan, Plan tab: the chat is open on the right from the start (Hide → an "Ask GatorPath" button; on a phone a
+  bottom bar that opens it full screen). The plan is one column down a route line: a dot per term (in progress, "Register
+  next" with "See its schedule", later terms, a flag at graduation), the year on the line, plain course rows (code,
+  title, units, what it counts for, "AI pick"), an open choice as "Choose a course →". Heading "You can graduate …",
+  one line of counts, one line on what sets the date. The What-if row and the Lighter / Faster buttons go: those
+  become the chat's suggestion buttons. A course opens a small floating card under its row (a sheet from the bottom on
+  a phone), not the side drawer: description cut to two lines, Needs, Offered, Why now (plain words, not the
+  planner's text), Opens, the Bulletin page, Ask about this course, Swap it (choices only). An open choice's card lists
+  options to add, or "ask the chat to pick one". Below the route: "! N things to check" closed, the advisor line, Print
 
 To do:
 - [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
@@ -46,7 +55,7 @@ To do:
   line in its `finally`, and the fill's `setState(withAnswer(r))` then replaces the plan with the AI's answer to the
   plan it was sent. Fix: run the first fill on Building (above), and while any AI change is running (fill or chat) lock
   the course buttons with one "The AI is updating your plan…" line
-- [ ] (?) Your plan's pages: text first, then the canvas
+- [ ] (?) Progress, Electives & GE and Schedule: text first, then the canvas
 - [ ] build_plan asks for qr_pathway while any MATH below 300 is left (`planner.py`, the "MATH below 300" ponytail), so a
   student past MATH 226 who still needs MATH 227 or 225 is asked, though the pathway changes nothing for them. Ask only
   while the placement can still change the plan: the first math course the pathways share (CS: MATH 226) isn't done
