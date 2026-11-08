@@ -85,6 +85,14 @@ Decided:
   a bar "Previewing … · Select section 01 · Cancel") and **Select**, or "Select and move others" when it clashes. Pointing at a
   section shows it dashed on the week; clicking a block opens its course's card. Print (no "Copy all class numbers":
   the user removed it; each class number has its own Copy). A problem (not offered, always clash) is one amber line with "Ask the chat to move one"
+- Landing page, in the structure of the Figma "Modern Product Launch" template (plugin-value-scrum.figma.site): sticky
+  nav (What you get, How it works, Questions, Start planning); centered hero with a mono label, a large serif headline
+  ("Plan your path to graduation in 5 minutes."), Start planning and Watch the demo; a large rounded demo-video frame
+  (placeholder poster from the Plan page and the chat until it's recorded with a made-up student, captions, no
+  autoplay); a mono strip of facts (2026-27 Bulletin, rules for 108 majors, every plan checked, DPR never stored);
+  "What you get" as four items in a 2x2 grid with lines; "See your whole route" split with a route picture;
+  "Helpful, not official" (GatorPath does / only SF State does); three steps like the step bar; five questions; a
+  dark green call to action panel; footer. No made-up logos or testimonial
 - Words on buttons: **Swap** to replace something chosen, **Select** to take an option, **Choose** for an open choice.
   Never "Change" or "Pick"
 
