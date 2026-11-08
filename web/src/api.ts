@@ -19,7 +19,9 @@ export type Options = {
   qr_pathway?: string;
   start_term?: string;
 };
+export type Left = { hour: number; day: number };
 export type Profile = Options & {
+  sf_state_gpa?: number;
   program: string;
   catalog_year?: string;
   completed?: Taken[];
@@ -52,6 +54,7 @@ export type Group = {
   waived_by?: string;
   quote?: string;
   min_units_from?: { subject: string; units: number; done: number };
+  met_by?: string;
 };
 export type Total = { value: number; needed?: number; max?: number; ok: boolean };
 export type Audit = {
@@ -71,6 +74,9 @@ export type ImportResult = {
   cross_check: string[];
   warnings: string[];
   see_advisor: Advisor[];
+  not_used?: Taken[];
+  notes_by_group?: Record<string, string[]>;
+  warnings_by_group?: Record<string, string[]>;
 };
 export type Program = { id: string; title: string };
 export type Course = {
@@ -141,6 +147,7 @@ export type Assisted = {
   check: Checked;
   rebuilt: PlanResult | null; // the chat changed the pace: a new plan, with its own dates
   options: Partial<Profile>; // what the chat changed about the student, the record included
+  left?: Left; // AI questions left this hour and today
   sections: Record<string, string[]>; // {term: class numbers} the student chose for the Schedule, the chat's too
 };
 export type Option = {
@@ -245,6 +252,11 @@ export function getPrograms() {
   programs.catch(() => (programs = undefined)); // a failed call can be retried
   return programs;
 }
+export type Pathway = { pathway: string; courses: { code: string; title: string }[] };
+export const getPathways = (program: string, catalogYear?: string) =>
+  call<{ pathways: Pathway[] }>(
+    `/api/pathways?program=${encodeURIComponent(program)}${catalogYear ? `&catalog_year=${encodeURIComponent(catalogYear)}` : ""}`,
+  ).then((r) => r.pathways);
 export const getCourse = (code: string) => call<Course>(`/api/course?code=${encodeURIComponent(code)}`);
 export const buildPlan = (profile: Profile, options: Options) =>
   post<PlanResult>("/api/plan", { profile, options });

@@ -12,7 +12,9 @@ from test_server import DPR, SCENARIOS, fixture_db, use_fixture_db  # noqa: F401
 from gatorpath import api, dpr, server
 
 client = TestClient(api.app)
-APP = (Path(__file__).parents[1] / "web/src/App.tsx").read_text()
+APP = "\n".join(  # every web source file but the node checks
+    f.read_text() for f in sorted((Path(__file__).parents[1] / "web/src").glob("*.ts*")) if not f.name.endswith(".check.ts")
+)
 STUDENT = SCENARIOS["new freshman, QR 1/2"]
 SOPHOMORE = SCENARIOS["sophomore"]
 

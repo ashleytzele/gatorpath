@@ -30,6 +30,9 @@
     --surface: #f7f8f7; --line-soft: #eceeed; --line-strong: #cfd2cf;
     --amber-line: #eedab9; --amber-ink: #705d47; --focus: #82b9ad; --sage: #89aa9f;
     --forest: #1f332d; --mist: #d7e0dc;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: "Source Code Pro", ui-monospace, Menlo, monospace;
   }
   * {
     box-sizing: border-box;
@@ -41,7 +44,7 @@
     margin: 0;
     color: var(--ink);
     background: var(--canvas);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--sans);
     font-size: 15px;
     line-height: 1.5;
   }
@@ -3587,7 +3590,7 @@
 :root { color-scheme: light; }
 ::selection { background: var(--mist); color: var(--ink); }
 body { font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
-h1, h2, h3 { font-weight: 650; letter-spacing: -0.015em; text-wrap: balance; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.015em; text-wrap: balance; }
 button:focus { outline: none; }
 button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visible, input:focus-visible {
   outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius-sm);
@@ -3851,6 +3854,9 @@ footer a {
   .shared-ge-rows .shared-ge-row { grid-template-columns: 1fr; gap: var(--space-2); }
 }
 .step > span:nth-child(2) { color: var(--muted); }
+.step .step-dot { color: var(--faint); }
+.step.active .step-dot { color: white; }
+.step.complete .step-dot { color: var(--green); }
 .step.active > span:nth-child(2) { color: var(--ink); }
 .other-sections summary { min-height: 32px; display: flex; align-items: center; }
 .preview-term { font-size: 29px; font-weight: 650; letter-spacing: -0.015em; margin: var(--space-2) 0 0; color: var(--ink); }
@@ -4211,3 +4217,25 @@ p, li, small { text-wrap: pretty; }
 .advisor-card-head span { margin-left: auto; color: var(--muted); font-size: 13px; }
 /* Schedule: who teaches it */
 .rmp-note { color: var(--faint); }
+
+/* ===== Shared pieces: status marks, the floating card ===== */
+.status-mark { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: 12px; font-weight: 700; line-height: 1; flex: none; }
+.status-mark.complete { background: var(--green); color: #fff; }
+.status-mark.progress { color: var(--blue); font-size: 18px; }
+.status-mark.incomplete { border: 1.5px solid var(--line-strong); color: transparent; }
+.status-mark.exception { background: var(--lavender-soft); color: var(--lavender); }
+.status-mark.warning { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-line); }
+.floating-card {
+  position: absolute; top: calc(100% + 8px); left: 8px; right: 8px; z-index: 20;
+  background: var(--card); border: 1px solid var(--line-strong); border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(20, 30, 25, 0.14); padding: var(--space-4); max-height: 380px; overflow: auto;
+}
+.floating-card::before {
+  content: ""; position: absolute; top: -6px; left: 24px; width: 10px; height: 10px; background: var(--card);
+  border-left: 1px solid var(--line-strong); border-top: 1px solid var(--line-strong); transform: rotate(45deg);
+}
+.floating-close { position: absolute; top: var(--space-2); right: var(--space-2); width: 32px; height: 32px; border: 0; background: none; font-size: 22px; line-height: 1; color: var(--muted); cursor: pointer; border-radius: var(--radius-sm); }
+@media (max-width: 640px) {
+  .floating-card { position: fixed; top: auto; left: 0; right: 0; bottom: 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; max-height: 70vh; }
+  .floating-card::before { display: none; }
+}
