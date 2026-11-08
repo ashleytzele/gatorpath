@@ -812,20 +812,26 @@ fields come back as they are:
 
 | Route | Calls |
 |---|---|
-| `POST /api/import-dpr` | `dpr_profile`, from the upload's bytes |
-| `POST /api/audit` | `audit_progress`, plus each course's title for the Review table |
+| `POST /api/import-dpr` | `dpr_profile`, from the upload's bytes; adds `not_used`, `notes_by_group`, `warnings_by_group` and `profile.sf_state_gpa` for "Does this look right?" |
+| `POST /api/audit` | `audit_progress`, plus each course's title and the Advising Hub `directory` entry from the rules |
 | `POST /api/plan` | `build_plan`, with the Goals answers merged into the profile |
 | `POST /api/check` | `check_plan` |
 | `POST /api/electives` | `list_eligible_electives` |
 | `GET /api/sections` | `get_sections` |
+| `GET /api/pathways` | `qr_pathways`: `{pathways: [{pathway, courses: [{code, title}]}]}` for Your goals |
 | `GET /api/programs`, `GET /api/course` | `list_programs`, `get_course` |
+
+The math placement is asked only while the pathway's gate course is still ahead. Every `/api/assist` answer carries
+`left: {hour, day}`, the questions left.
 
 What keeps golden rule 5: the site has no database and sets no cookies, and a student's record lives in the tab's memory
 until they start over. The PDF never reaches the disk: Starlette writes an upload past its 1 MB spool to a temp file, so
 the spool limit sits above a size checked before parsing, and `pdftotext` reads it over stdin. No student data goes in
 a URL (`/api/electives` is a POST for this reason) and the access log is off.
 
-Every question a person should answer goes to Navigator. `?demo` adds the prototype's preview bars, which force a state
+The site's files: `App.tsx` is the workspace (Plan, Electives & GE, Schedule, and the record view reached from the plan);
+`Landing`, `Record`, `Goals`, `Building` and `Chat` are the other screens; `logic.ts` holds the pure functions, checked by
+`node web/src/logic.check.ts`. Every question a person should answer goes to Navigator. `?demo` adds the prototype's preview bars, which force a state
 on top of real data.
 
 ### 7.7 The chat (`assistant.py`)
@@ -848,6 +854,15 @@ chooses from the same options.
   sees the major, catalog year, goal, load choices, the plan and, through `audit_progress`, the course list. Name, ID, grades
   and GPA don't go: results lose every GPA key (`hide`), a quoted grade or GPA is scrubbed (`scrub`), and a grade reaches
   the model only if the student types one.
+- **Suggested replies come from GatorPath, not the model** (`suggestions()` in `logic.ts`): choose my open courses,
+  finish sooner, lighter terms, add summer, add Winter Session. Pace changes run `build_plan` and `check_plan` without
+  the AI and cost no question; only free text and "Choose my open courses" go to the AI.
+- **Every plan change logs one line** (`changeLine`): "Plan updated · …"; "Not changed · …" when GatorPath's own change
+  failed the check and wasn't applied; "Plan updated, with a problem · …" when a change the server or a record edit
+  already applied leaves a problem. Undo sits on the latest change line only and restores the whole state from before
+  it. "Show in plan" highlights the rows. Course buttons and record edits lock while the AI works.
+- **The limit shows.** Under the input once 5 or fewer questions are left. At 0, or with no key, the input is off and
+  says why.
 - A failed call changes nothing. History and message length are capped, and one request stops at 40 model calls.
   Limits until there are accounts: one address gets `GATORPATH_AI_PER_HOUR` requests an hour (5), everyone together
   `GATORPATH_AI_PER_DAY` a day (30), sized for $20 a month at an estimated 2 cents a question; past either the route says when to come back, and planning goes on without AI.

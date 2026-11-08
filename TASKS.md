@@ -110,22 +110,23 @@ To do:
 - [x] The AI limits' defaults are 30 a day for everyone and 5 an hour per address (`api.py`, AGENTS.md, ARCHITECTURE);
   raise them once a question's real cost is measured
 - [ ] Prompt caching on the assistant's fixed system prompt and tools, then measure cost per question (needs a key)
-- [ ] The chat shows its limit: "N questions left" under the input once 5 or fewer are left; at zero the input is off
+- [x] The chat shows its limit: "N questions left" under the input once 5 or fewer are left; at zero the input is off
   with when it's back and that planning still works (the API returns the count with each answer)
-- [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
+- [x] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
   plan page opens and takes a minute or two, "Choose a course" and "Change" stay enabled, `choose()` clears the busy
   line in its `finally`, and the fill's `setState(withAnswer(r))` then replaces the plan with the AI's answer to the
   plan it was sent. Fix: run the first fill on Building (above), and while any AI change is running (fill or chat) lock
   the course buttons with one "The AI is updating your plan…" line
 - [x] Every page designed and prototyped on the canvas (2026-11-07)
-- [ ] build_plan asks for qr_pathway while any MATH below 300 is left (`planner.py`, the "MATH below 300" ponytail), so a
+- [x] build_plan asks for qr_pathway while any MATH below 300 is left (`planner.py`, the "MATH below 300" ponytail), so a
   student past MATH 226 who still needs MATH 227 or 225 is asked, though the pathway changes nothing for them. Ask only
   while the placement can still change the plan: the first math course the pathways share (CS: MATH 226) isn't done
   or in progress. Read it from the roadmap variants, not a course list; add a test
-- [ ] Your goals asks for the math placement up front only from a new student (no courses) or one who hasn't reached that
+- [x] Your goals asks for the math placement up front only from a new student (no courses) or one who hasn't reached that
   course; everyone else answers only if build_plan asks
-- [ ] Build the agreed pages into `web/src/App.tsx`, keeping today's behaviour (the record editor, "Not on your DPR" with
-  put-back, the DPR's unit wording). Check them in headless Chrome at 1440 and 390, then `/impeccable critique` again
+- [x] Build the agreed pages (`web/src/`: Landing, Record, Goals, Building, Chat, and App.tsx's workspace), keeping today's
+  behaviour (2026-11-08)
+- [ ] Look check of the whole flow in headless Chrome at 1440 and 390, with and without the key (Task 14 step 3)
 
 Open from the same day:
 - [ ] Re-run `/impeccable critique` and `/impeccable audit` for new scores: last 29/40 and 14/20 (`.impeccable/critique/`),

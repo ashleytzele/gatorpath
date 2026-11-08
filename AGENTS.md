@@ -83,6 +83,7 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 | `src/gatorpath/api.py` | Web API: thin routes over the same functions (ARCHITECTURE §7.6). No planning logic, nothing stored |
 | `src/gatorpath/assistant.py` | The web's AI helper: Haiku's tool loop. Never imported by `server.py` (golden rule 4; ARCHITECTURE §7.7) |
 | `web/` | React + Vite site. `src/api.ts` holds the calls; `?demo` shows the preview bars |
+| `web/src/` | `App.tsx` the workspace (Plan, Electives & GE, Schedule, record view); `Landing`, `Record`, `Goals`, `Building`, `Chat` the screens; `ui.tsx`, `FloatingCard`, `StatusMark` shared pieces; `logic.ts` pure functions, self-check `node web/src/logic.check.ts` |
 | `src/gatorpath/engine/` | `prereq.py`, `rules.py`, `planner.py`: all logic, pure functions |
 | `src/gatorpath/ingest/` | Offline builders: Bulletin PDF and class search → `data/catalog.db`; program pages → source text and AI drafts |
 | `src/gatorpath/dpr.py` | Local DPR PDF → profile + what's left (PII dropped); the main import |
