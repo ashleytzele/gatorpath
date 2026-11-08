@@ -40,7 +40,7 @@ import { RecordScreen, RequirementsView, ReviewScreen } from "./Record";
 import { FloatingCard } from "./FloatingCard";
 import { StatusMark } from "./StatusMark";
 import { ChatPanel } from "./Chat";
-import { changeLine, countSection, plannedLine, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
+import { blockOf, changeLine, countSection, plannedLine, hours, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, Loading, Logo, NAVIGATOR,
   Stepper, StatusBadge, plainText, useLoad, type Screen,
@@ -862,16 +862,6 @@ const CALENDAR_DAYS = [
   ["FRIDAY", "Fr"],
 ];
 const CLASS_SEARCH = "https://webapps.sfsu.edu/public/classservices/classsearch";
-function hourOf(text?: string) {
-  const m = text?.match(/(\d+):(\d+)\s*(AM|PM)/);
-  return m ? (Number(m[1]) % 12) + (m[3] === "PM" ? 12 : 0) + Number(m[2]) / 60 : null;
-}
-function hours(meeting: Meeting) {
-  const [from, to] = (meeting.time ?? "").split(" - ");
-  const start = hourOf(from);
-  const end = hourOf(to);
-  return start === null || end === null ? null : { start, end };
-}
 /** A section's meetings, each once: Class Search lists a co-taught meeting once per instructor. */
 const when = (s: Section) =>
   [...new Set(s.meetings.map((m) => [m.days, m.time, m.where].filter(Boolean).join(" ")))].join("; ") || s.mode;
@@ -900,19 +890,29 @@ function Instructors({ section }: { section: Section }) {
   );
 }
 const seats = (s: Section) =>
-  s.seats_open ? `${s.seats_open} seats open` : s.waitlist_open ? "Full · waitlist open" : "Full";
+  s.seats_open
+    ? `${s.seats_open} seats open`
+    : s.waitlist_open
+      ? `Full · ${s.waitlist_open} waitlist ${s.waitlist_open === 1 ? "spot" : "spots"}`
+      : "Full";
+const HOUR_PX = 60;
+const hourName = (h: number) => `${h % 12 || 12} ${h < 12 ? "AM" : "PM"}`;
+/** "MATH 226 01" -> "MATH 226" */
+const courseOf = (x: string) => x.slice(0, x.lastIndexOf(" "));
+type Look = { code: string; nbr: string };
 
 function ScheduleView({
   work,
-  openPlan,
+  openElectives,
   toast,
 }: {
   work: Work;
-  openPlan: () => void;
+  openElectives: () => void;
   toast: (x: string) => void;
 }) {
   const first = work.semesters[0];
   const codes = first.courses.filter((c): c is string => !isSlot(c));
+  const open_choices = first.courses.filter((c) => isSlot(c)).length;
   const label = termLabel(first.term);
   const online = work.picks.filter((p) => p.online && p.term === first.term).map((p) => p.code);
   const keep = work.sections[first.term] ?? [];
@@ -920,8 +920,9 @@ function ScheduleView({
     () => getSections(first.term, codes, online, keep),
     [first.term, codes.join(), online.join(), keep.join()],
   );
-  const [preview, setPreview] = useState<"" | "ready" | "not-offered" | "unpublished" | "no-fit" | "full">("");
-  const [peek, setPeek] = useState<{ code: string; nbr: string } | null>(null); // another section, on the calendar
+  const [open, setOpen] = useState(""); // the course whose Other sections card is open: one at a time
+  const [hover, setHover] = useState<Look | null>(null); // pointed at or focused, dashed on the week
+  const [pinned, setPinned] = useState<Look | null>(null); // See on week: stays until Select or Cancel
   const [trying, setTrying] = useState(false);
   if (!codes.length) return <div className="app-content"><p>Choose this term’s courses first.</p></div>;
   if (result.error) return <div className="app-content"><ErrorCard text={result.error} retry={result.retry} /></div>;
@@ -932,33 +933,22 @@ function ScheduleView({
     picked: r.sections[code].filter((s) => numbers.includes(s.class_nbr)),
     others: r.sections[code].filter((s) => !numbers.includes(s.class_nbr)),
   }));
-  const derived =
-    r.schedule === null && r.always_clash.length
-      ? "no-fit"
-      : !Object.keys(r.sections).length // no sections at all: an unpublished term, not a gap in one course
-        ? r.unknown.length
-          ? "unpublished"
-          : "not-offered"
-        : "ready";
-  const scheduleState = preview || derived;
-  const problemContent = {
-    "not-offered": [`${r.not_offered[0] ?? "A course"} isn’t offered in ${label}`, "Move it in your plan", "button"],
-    unpublished: [`${label} schedule isn’t published yet`, "Check Class Search", "link"],
-    "no-fit": [
-      `No combination fits: ${r.always_clash[0]?.join(" and ") ?? "two courses"} always overlap`,
-      "Move one to another term",
-      "button",
-    ],
-    full: ["All sections full", "Join a waitlist or pick another section", "button"],
-  } as const;
-  // The section being looked at, as this answer has it (its clashes are against this schedule)
-  const shown = peek ? r.sections[peek.code]?.find((s) => s.class_nbr === peek.nbr) : undefined;
-  const clashing = (shown?.clashes_with ?? []).map((x) => x.slice(0, x.lastIndexOf(" "))); // "MATH 226 01" -> course
+  const unpublished = !Object.keys(r.sections).length && !!r.unknown.length;
+  const problems = [
+    ...r.not_offered.map((c) => `${c} isn’t offered in ${label}.`),
+    ...(r.schedule === null && r.always_clash.length
+      ? [`${r.always_clash[0].join(" and ")} always overlap, so no combination fits.`]
+      : []),
+  ];
+  const lookup = (l: Look | null) => (l ? r.sections[l.code]?.find((s) => s.class_nbr === l.nbr) : undefined);
+  const peek = hover && lookup(hover) ? hover : pinned && lookup(pinned) ? pinned : null;
+  const shown = lookup(peek);
+  const clashing = (shown?.clashes_with ?? []).map(courseOf);
   const timed = (c: (typeof classes)[number], i: number, s: Section, look = "") =>
-    s.meetings.flatMap((m) => {
-      const time = hours(m);
-      return time && m.days ? m.days.split(" ").map((day) => ({ c, i, s, m, time, day, look })) : [];
-    });
+    s.meetings.flatMap((m) =>
+      hours(m) && m.days ? m.days.split(" ").map((day) => ({ c, i, s, m, day, look })) : [],
+    );
+  const ci = (code: string) => classes.findIndex((c) => c.code === code);
   const blocks = [
     ...classes.flatMap((c, i) =>
       c.picked.flatMap((s) =>
@@ -966,34 +956,62 @@ function ScheduleView({
       ),
     ),
     ...(shown && peek
-      ? timed(
-          classes.find((c) => c.code === peek.code)!,
-          classes.findIndex((c) => c.code === peek.code),
-          shown,
-          clashing.length ? "preview clash" : "preview",
-        )
+      ? timed(classes[ci(peek.code)], ci(peek.code), shown, clashing.length ? "preview clash" : "preview")
       : []),
   ];
-  const use = async () => {
-    if (!shown || !peek) return;
-    const theirs = r.sections[peek.code].map((s) => s.class_nbr); // one choice per class
-    const next = [...keep.filter((n) => !theirs.includes(n)), shown.class_nbr];
+  // The week runs from the first class hour to the last. ponytail: a hover preview outside it is clipped; See on week widens it.
+  const span = [
+    ...classes.flatMap((c) => c.picked.flatMap((s) => s.meetings)),
+    ...(lookup(pinned) ? lookup(pinned)!.meetings : []),
+  ].flatMap((m) => {
+    const t = hours(m);
+    return t && m.days ? [t] : [];
+  });
+  const start = span.length ? Math.floor(Math.min(...span.map((t) => t.start))) : 8;
+  const end = span.length ? Math.ceil(Math.max(...span.map((t) => t.end))) : 9;
+  const dayIndex = (day: string) => CALENDAR_DAYS.findIndex(([, code]) => code === day);
+  const units = codes.reduce((n, c) => n + (parseFloat(String((work.info[c] ?? work.audit.courses[c])?.units)) || 0), 0);
+  const untimed = classes.filter((c) => !c.picked.some((s) => s.meetings.some((m) => m.days && hours(m))));
+  const after = work.semesters[1];
+
+  const toWeek = (focusBar: boolean) =>
+    setTimeout(() => {
+      document.querySelector(".schedule-controls")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (focusBar) document.querySelector<HTMLElement>(".peek-bar button")?.focus({ preventScroll: true });
+    }, 0); // after the card has closed and given focus back
+  const cancel = () => {
+    const back = pinned?.code;
+    setPinned(null);
+    setHover(null);
+    setTimeout(() => document.querySelector<HTMLElement>(`[data-others="${back}"]`)?.focus(), 0);
+  };
+  const use = async (look: Look) => {
+    const section = lookup(look);
+    if (!section) return;
+    const theirs = r.sections[look.code].map((s) => s.class_nbr); // one choice per class
+    const next = [...keep.filter((n) => !theirs.includes(n)), section.class_nbr];
     setTrying(true);
     try {
       const tried = await getSections(first.term, codes, online, next);
       if (!tried.schedule) {
-        const other = tried.always_clash.flat().filter((c) => c !== peek.code);
-        return toast(`${peek.code} ${shown.section} can’t fit: it overlaps every section of ${other.join(", ")}`);
+        const other = tried.always_clash.flat().filter((c) => c !== look.code);
+        return toast(`${look.code} ${section.section} can’t fit: it overlaps every section of ${other.join(", ")}`);
       }
-      setPeek(null);
+      setPinned(null);
+      setHover(null);
+      setOpen("");
       work.setSections(first.term, next);
-      toast(`${peek.code} section ${shown.section} is in your schedule`);
     } catch (e) {
       toast(message(e));
     } finally {
       setTrying(false);
     }
   };
+  const fitText = (s: Section) =>
+    s.clashes_with ? (s.clashes_with.length ? `Clashes with ${s.clashes_with.join(", ")}` : "Fits") : "";
+  const roomType = (s: Section, m: { where?: string }) => [m.where, s.component].filter(Boolean).join(" · ");
+  const sectionRoom = (s: Section) =>
+    [...new Set(s.meetings.map((m) => m.where).filter(Boolean))].join(", ");
   return (
     <div className="app-content">
       <div className="schedule-title">
@@ -1002,263 +1020,284 @@ function ScheduleView({
           <p>One clash-free combination based on your plan.</p>
         </div>
       </div>
-      {DEMO && (
-        <div className="variant-switcher schedule-variants">
-          <span>Preview schedule state</span>
-          {[
-            ["ready", "Published"],
-            ["not-offered", "Not offered"],
-            ["unpublished", "Not published"],
-            ["no-fit", "No fit"],
-            ["full", "Sections full"],
-          ].map(([value, text]) => (
-            <button
-              className={scheduleState === value ? "active" : ""}
-              onClick={() => setPreview(value as typeof preview)}
-              key={value}
-            >
-              {text}
-            </button>
-          ))}
-        </div>
-      )}
-      {scheduleState !== "ready" ? (
-        <div className={`schedule-problem-frame ${scheduleState}`}>
+      {unpublished ? (
+        <div className="schedule-problem-frame unpublished">
           <span>
-            <Icon
-              name={
-                scheduleState === "unpublished"
-                  ? "clock"
-                  : scheduleState === "no-fit"
-                    ? "x"
-                    : "warning"
-              }
-            />
+            <Icon name="clock" />
           </span>
           <div>
-            <h2>{problemContent[scheduleState][0]}</h2>
-            <p>
-              {scheduleState === "no-fit"
-                ? "Move one course so we can build a clash-free schedule."
-                : scheduleState === "full"
-                  ? "No open seats remain in this course right now."
-                  : scheduleState === "unpublished"
-                    ? "SF State hasn’t posted this term’s classes yet, so there are no sections to show. Your plan is fine."
-                    : "Your degree plan is safe; this only affects next term’s schedule."}
-            </p>
-            {problemContent[scheduleState][2] === "link" ? (
-              <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
-                {problemContent[scheduleState][1]} <Icon name="arrow" size={13} />
-              </a>
-            ) : (
-              <Button kind="secondary" onClick={openPlan}>
-                {problemContent[scheduleState][1]}
-              </Button>
-            )}
+            <h2>{label} schedule isn’t published yet</h2>
+            <p>SF State hasn’t posted this term’s classes yet, so there are no sections to show. Your plan is fine.</p>
+            <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
+              Check Class Search <Icon name="arrow" size={13} />
+            </a>
           </div>
         </div>
       ) : (
         <>
-          {[...r.not_offered, ...r.unknown].map((code) => (
+          {!!problems.length && (
+            <p className="sched-problem" role="status">
+              <Icon name="warning" size={15} /> <span>{problems.join(" ")}</span>
+              <button
+                type="button"
+                disabled={work.aiBusy}
+                onClick={() => work.ask(`Please move one of my ${label} classes so my schedule has no time clashes. ${problems.join(" ")}`)}
+              >
+                Ask the chat to move one
+              </button>
+            </p>
+          )}
+          {r.unknown.map((code) => (
             <p className="online-note" key={code}>
-              <Icon name="warning" size={15} /> <b>{code}</b>{" "}
-              {r.not_offered.includes(code)
-                ? `has no section in ${label}. Move it in your plan.`
-                : "isn’t in our schedule data. Check Class Search."}
+              <Icon name="warning" size={15} /> <b>{code}</b> isn’t in our schedule data. Check{" "}
+              <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">Class Search</a>.
             </p>
           ))}
-          <div className="schedule-controls">
-            <div>
-              <b>
-                No time clashes{r.sets > 1 ? `: one of ${r.sets} ways to fit these classes` : ""}
-              </b>
-            </div>
-          </div>
-          {shown && peek && (
-            <div className={`peek-bar${clashing.length ? " clash" : ""}`} role="status">
-              <p>
-                <b>
-                  {peek.code} section {shown.section}
-                </b>{" "}
-                · {when(shown)} ·{" "}
-                {clashing.length
-                  ? `Clashes with ${shown.clashes_with!.join(", ")} as your schedule is now`
-                  : "Fits with your other classes"}
-              </p>
-              <div>
-                <Button onClick={use} disabled={trying || work.aiBusy}>
-                  {clashing.length ? "Try it, moving the others" : "Use this section"}
-                </Button>
-                <Button kind="ghost" onClick={() => setPeek(null)}>
-                  Cancel
-                </Button>
-              </div>
-            </div>
+          {open_choices > 0 && (
+            <p className="online-note">
+              <Icon name="info" size={15} /> {open_choices === 1 ? "One choice isn’t" : `${open_choices} choices aren’t`} made
+              yet, so {open_choices === 1 ? "it isn’t" : "they aren’t"} here.{" "}
+              <button type="button" className="inline-link" onClick={openElectives}>
+                Choose in Electives &amp; GE
+              </button>
+            </p>
           )}
-          <div className="calendar-card hourly">
-            <div className="calendar-head">
-              {["TIME", "MON", "TUE", "WED", "THU", "FRI"].map((x) => (
-                <span key={x}>{x}</span>
-              ))}
-            </div>
-            <div className="calendar-body">
-              <div className="times">
-                {["8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM"].map(
-                  (x) => (
-                    <span key={x}>{x}</span>
-                  ),
+          {!!classes.length && (
+            <>
+              <div className="schedule-controls">
+                <div>
+                  <b>
+                    No time clashes · {classes.length} {classes.length === 1 ? "class" : "classes"} · {unitText(units)}
+                  </b>
+                </div>
+                {r.scraped_at && (
+                  <span className="seats-date">
+                    Seats as of {new Date(r.scraped_at).toLocaleDateString()} ·{" "}
+                    <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
+                      Class Search
+                    </a>
+                  </span>
                 )}
               </div>
-              <div className="day-grid">
-                {[0, 1, 2, 3, 4].map((x) => (
-                  <i key={x} />
-                ))}
-                {blocks
-                  .filter((b) => CALENDAR_DAYS.some(([, code]) => code === b.day))
-                  .map((b) => (
-                    <div
-                      className={`cal-block c${b.i % 3} ${b.look}`}
-                      key={`${b.look}${b.s.class_nbr}${b.m.time}${b.day}`}
-                      style={{
-                        top: (b.time.start - 8) * 52 + 1,
-                        height: (b.time.end - b.time.start) * 52 - 3,
-                        left: `calc(${CALENDAR_DAYS.findIndex(([, code]) => code === b.day)} * 20% + 4px)`,
-                      }}
-                    >
-                      <b>
-                        {b.c.code} {b.s.component !== "LEC" ? b.s.component : ""}
-                      </b>
-                      <span>
-                        {b.m.time}
-                        {b.s.mode.startsWith("Hybrid") ? " · Hybrid" : b.s.mode.startsWith("Online") ? " · Online" : ""}
-                      </span>
+              {pinned && shown && lookup(pinned) === shown && (
+                <div className={`peek-bar${clashing.length ? " clash" : ""}`} role="status">
+                  <p>
+                    <b>
+                      Previewing {pinned.code} section {shown.section}
+                    </b>{" "}
+                    · {when(shown)} · {fitText(shown) || "Fits"}
+                  </p>
+                  <div>
+                    <Button onClick={() => use(pinned)} disabled={trying || work.aiBusy}>
+                      {clashing.length ? "Select and move others" : `Select section ${shown.section}`}
+                    </Button>
+                    <Button kind="ghost" onClick={cancel}>
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
+              {!!blocks.length && (
+                <div className="calendar-card hourly">
+                  <div className="calendar-head">
+                    {["TIME", "MON", "TUE", "WED", "THU", "FRI"].map((x) => (
+                      <span key={x}>{x}</span>
+                    ))}
+                  </div>
+                  <div className="calendar-body" style={{ height: (end - start) * HOUR_PX }}>
+                    <div className="times">
+                      {Array.from({ length: end - start + 1 }, (_, k) => (
+                        <span key={k}>{hourName(start + k)}</span>
+                      ))}
                     </div>
-                  ))}
-              </div>
-            </div>
-          </div>
-          {classes
-            .filter((c) => !c.picked.some((s) => s.meetings.some((m) => m.days)))
-            .map((c) => (
-              <p className="online-note" key={c.code}>
-                <Icon name="info" size={15} /> <b>{c.code}</b> has no set meeting time, so it isn’t on
-                the calendar.
-              </p>
-            ))}
-          <div className="mobile-day-list">
-            {CALENDAR_DAYS.map(([day, code]) => (
-              <div key={day}>
-                <b>{day}</b>
-                <section>
-                  {blocks
-                    .filter((b) => b.day === code)
-                    .sort((a, b) => a.time.start - b.time.start)
-                    .map((b) => (
-                      <span className={b.look} key={`${b.look}${b.s.class_nbr}${b.m.time}`}>
-                        <i className={`class-dot c${b.i % 3}`} />
-                        <strong>{b.c.code}</strong>
-                        {b.m.time}
-                      </span>
-                    ))}
-                </section>
-              </div>
-            ))}
-          </div>
-          <div className="section-list">
-            {classes.map((c) => {
-              const [main, ...linked] = c.picked;
-              const theirs = r.sections[c.code].map((s) => s.class_nbr);
-              const mine = keep.some((n) => theirs.includes(n));
-              return (
-                <article className="section-detail" key={c.code}>
-                  <div className="section-main">
-                    <span>
-                      <b>{c.code}</b>
-                      <StatusBadge type={main.seats_open ? "ready" : "warning"}>{seats(main)}</StatusBadge>
-                      {mine && (
-                        <>
-                          <em className="your-pick">Your choice</em>
-                          <button
-                            className="let-pick"
-                            disabled={work.aiBusy}
-                            onClick={() => work.setSections(first.term, keep.filter((n) => !theirs.includes(n)))}
-                          >
-                            Let GatorPath pick
-                          </button>
-                        </>
-                      )}
-                    </span>
-                    <p>
-                      Section {main.section} · {when(main)}
-                    </p>
-                    {linked.map((s) => (
-                      <p className="linked-lab" key={s.class_nbr}>
-                        <Icon name="route" size={13} /> Includes {s.component} {s.section} · {when(s)} · Class #
-                        {s.class_nbr}
-                      </p>
-                    ))}
-                    <small>
-                      {main.mode}
-                      <Instructors section={main} />
-                    </small>
-                    {!!c.others.length && (
-                      <details className="other-sections">
-                        <summary>
-                          Other sections <Icon name="chevron" />
-                        </summary>
-                        {c.others.map((o) => (
-                          <button
-                            type="button"
-                            className={o.clashes_with?.length ? "clashes" : ""}
-                            aria-pressed={peek?.nbr === o.class_nbr}
-                            onClick={() => {
-                              setPeek({ code: c.code, nbr: o.class_nbr });
-                              document.querySelector(".schedule-controls")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                            }}
-                            key={o.class_nbr}
-                          >
-                            <span>
-                              Section {o.section} · {when(o)} · #{o.class_nbr}
-                            </span>
-                            {o.clashes_with && (
-                              <small>
-                                {o.clashes_with.length
-                                  ? `Clashes with ${o.clashes_with.join(", ")}`
-                                  : "Fits instead"}
-                              </small>
-                            )}
-                          </button>
+                    <div className="day-grid" style={{ "--hp": `${HOUR_PX}px` } as React.CSSProperties}>
+                      {[0, 1, 2, 3, 4].map((x) => (
+                        <i key={x} />
+                      ))}
+                      {blocks
+                        .filter((b) => dayIndex(b.day) >= 0)
+                        .map((b) => {
+                          const pos = blockOf(b.m, start, HOUR_PX);
+                          if (!pos || pos.top < 0 || pos.top + pos.height > (end - start) * HOUR_PX) return null;
+                          return (
+                            <button
+                              type="button"
+                              className={`cal-block c${b.i % 3} ${b.look}`}
+                              key={`${b.look}${b.s.class_nbr}${b.m.time}${b.day}`}
+                              style={{ top: pos.top + 1, height: pos.height - 3, left: `calc(${dayIndex(b.day)} * 20% + 4px)` }}
+                              aria-label={`${b.c.code} ${b.m.time}. Open its other sections`}
+                              onClick={(e) => {
+                                e.currentTarget.focus();
+                                setOpen(b.c.code);
+                                setTimeout(() => document.querySelector(`[data-course="${b.c.code}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 0);
+                              }}
+                            >
+                              <b>
+                                {b.c.code} {b.m.time}
+                              </b>
+                              <span>{roomType(b.s, b.m)}</span>
+                            </button>
+                          );
+                        })}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {untimed.map((c) => (
+                <p className="online-note" key={c.code}>
+                  <Icon name="info" size={15} /> <b>{c.code}</b> has no set meeting time, so it isn’t on the week.
+                </p>
+              ))}
+              <div className="mobile-day-list">
+                {CALENDAR_DAYS.map(([day, code]) => (
+                  <div key={day}>
+                    <b>{day}</b>
+                    <section>
+                      {blocks
+                        .filter((b) => b.day === code)
+                        .sort((a, b) => hours(a.m)!.start - hours(b.m)!.start)
+                        .map((b) => (
+                          <span className={b.look} key={`${b.look}${b.s.class_nbr}${b.m.time}`}>
+                            <i className={`class-dot c${b.i % 3}`} />
+                            <strong>{b.c.code}</strong>
+                            {b.m.time} · {roomType(b.s, b.m)}
+                          </span>
                         ))}
-                      </details>
-                    )}
+                    </section>
                   </div>
-                  <div className="class-num">
-                    <small>Class number</small>
-                    <b>#{main.class_nbr}</b>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard?.writeText(main.class_nbr).catch(() => {});
-                        toast(`${main.class_nbr} copied.`);
-                      }}
-                    >
-                      <Icon name="copy" /> Copy
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-          {r.scraped_at && (
-            <div className="schedule-note">
-              <Icon name="clock" />
-              <span>
-                Seats and rooms as of {new Date(r.scraped_at).toLocaleDateString()}. Confirm in{" "}
-                <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
-                  Class Search
-                </a>{" "}
-                before registering.
-              </span>
-            </div>
+                ))}
+              </div>
+              <h2 className="sched-head">Your sections</h2>
+              <div className="section-list">
+                {classes.map((c) => {
+                  const [main, ...linked] = c.picked;
+                  const theirs = r.sections[c.code].map((s) => s.class_nbr);
+                  const mine = keep.some((n) => theirs.includes(n));
+                  return (
+                    <article className="section-detail" key={c.code} data-course={c.code}>
+                      <div className="section-main">
+                        <span>
+                          <b>{c.code}</b>
+                          <StatusBadge type={main.seats_open ? "ready" : "warning"}>{seats(main)}</StatusBadge>
+                          {mine && (
+                            <>
+                              <em className="your-pick">Your choice</em>
+                              <button
+                                className="let-pick"
+                                disabled={work.aiBusy}
+                                onClick={() => work.setSections(first.term, keep.filter((n) => !theirs.includes(n)))}
+                              >
+                                Let GatorPath pick
+                              </button>
+                            </>
+                          )}
+                        </span>
+                        <p>
+                          Section {main.section} · {when(main)}
+                        </p>
+                        {linked.map((s) => (
+                          <p className="linked-lab" key={s.class_nbr}>
+                            <Icon name="route" size={13} /> Includes {s.component} {s.section} · {when(s)} · Class #
+                            {s.class_nbr}
+                          </p>
+                        ))}
+                        <small>
+                          {main.mode}
+                          <Instructors section={main} />
+                        </small>
+                        {!!c.others.length && (
+                          <div className="other-wrap">
+                            <button
+                              type="button"
+                              className="other-btn"
+                              data-others={c.code}
+                              aria-expanded={open === c.code}
+                              onClick={(e) => {
+                                e.currentTarget.focus(); // Safari doesn't focus a clicked button; the card returns focus here
+                                setOpen(open === c.code ? "" : c.code);
+                              }}
+                            >
+                              Other sections <Icon name="chevron" />
+                            </button>
+                            {open === c.code && (
+                              <FloatingCard label={`Other sections of ${c.code}`} onClose={() => { setOpen(""); setHover(null); }}>
+                                <h3 className="os-title">Other sections of {c.code}</h3>
+                                <ul className="os-rows">
+                                  {c.others.map((o) => {
+                                    const look = { code: c.code, nbr: o.class_nbr };
+                                    return (
+                                      <li
+                                        key={o.class_nbr}
+                                        onMouseEnter={() => setHover(look)}
+                                        onMouseLeave={() => setHover(null)}
+                                        onFocus={() => setHover(look)}
+                                        onBlur={() => setHover(null)}
+                                      >
+                                        <p>
+                                          <b>Section {o.section}</b> · {when(o)} · Class #{o.class_nbr}
+                                        </p>
+                                        <p className="os-sub">
+                                          {sectionRoom(o) && `${sectionRoom(o)} · `}
+                                          {o.mode}
+                                          <Instructors section={o} /> · {seats(o)}
+                                        </p>
+                                        {!!fitText(o) && (
+                                          <p className={o.clashes_with?.length ? "os-clash" : "os-fits"}>{fitText(o)}</p>
+                                        )}
+                                        <div className="os-actions">
+                                          <button
+                                            type="button"
+                                            className="button ghost"
+                                            onClick={() => {
+                                              setPinned(look);
+                                              setHover(null);
+                                              setOpen("");
+                                              toWeek(true);
+                                            }}
+                                          >
+                                            See on week
+                                          </button>
+                                          <button
+                                            type="button"
+                                            className="button secondary"
+                                            disabled={trying || work.aiBusy}
+                                            onClick={() => use(look)}
+                                          >
+                                            {o.clashes_with?.length ? "Select and move others" : "Select"}
+                                          </button>
+                                        </div>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              </FloatingCard>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="class-num">
+                        <small>Class number</small>
+                        <b>#{main.class_nbr}</b>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard?.writeText(main.class_nbr).catch(() => {});
+                            toast(`${main.class_nbr} copied.`);
+                          }}
+                        >
+                          <Icon name="copy" /> Copy
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </>
+          )}
+          {after && (
+            <p className="online-note">
+              <Icon name="info" size={15} /> {termLabel(after.term)} classes will be listed when SF State publishes them. Check{" "}
+              <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">Class Search</a> then.
+            </p>
           )}
           {r.warnings
             .filter((w) => !w.startsWith("Class Search as of"))
@@ -1693,7 +1732,7 @@ function AppWorkspace({
           <ElectivesView work={work} select={choose} />
         )}
         {tab === "schedule" && (
-          <ScheduleView work={work} openPlan={() => setTab("plan")} toast={showToast} />
+          <ScheduleView work={work} openElectives={() => setTab("electives")} toast={showToast} />
         )}
       </div>
       <ChatPanel

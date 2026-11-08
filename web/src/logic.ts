@@ -1,5 +1,5 @@
 // Plain functions for the pages: no React, no calls. Run `node web/src/logic.check.ts` to check them.
-import type { Checked, Group, ImportResult, Left, Options, PlanResult, Profile, Semester } from "./api.ts";
+import type { Checked, Group, ImportResult, Left, Meeting, Options, PlanResult, Profile, Semester } from "./api.ts";
 
 export const termLabel = (term?: string | null) =>
   term ? `${term[5].toUpperCase()}${term.slice(6)} ${term.slice(0, 4)}` : "";
@@ -134,4 +134,21 @@ export function leftText(left?: Left): string | null {
 export function plannedLine(done: number | undefined, needed: number | undefined, rowUnits: number[]) {
   if (!needed) return "";
   return `${(done ?? 0) + rowUnits.reduce((t, u) => t + u, 0)} of ${needed} units planned`;
+}
+
+/** "10:00AM" -> 10, "1:20PM" -> 13.33 (hours since midnight). */
+export function hourOf(text?: string) {
+  const m = text?.match(/(\d+):(\d+)\s*(AM|PM)/);
+  return m ? (Number(m[1]) % 12) + (m[3] === "PM" ? 12 : 0) + Number(m[2]) / 60 : null;
+}
+export function hours(meeting: Meeting) {
+  const [from, to] = (meeting.time ?? "").split(" - ");
+  const start = hourOf(from);
+  const end = hourOf(to);
+  return start === null || end === null ? null : { start, end };
+}
+/** Where a meeting sits on the week: px from the first hour, and its height. null when it has no set time. */
+export function blockOf(meeting: Meeting, start: number, hourPx: number) {
+  const t = hours(meeting);
+  return t ? { top: Math.round((t.start - start) * hourPx), height: Math.round((t.end - t.start) * hourPx) } : null;
 }

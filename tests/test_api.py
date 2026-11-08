@@ -159,7 +159,7 @@ def test_the_site_never_calls_a_plan_verified_and_sends_questions_to_navigator()
 
 def test_the_preview_bars_stay_behind_demo():
     bars = [m.start() for m in re.finditer(r'variant-switcher|demo-error|Preview goal options', APP)]
-    assert len(bars) == 4
+    assert len(bars) == 3  # the Schedule tab has none now: its problems are one line, not states
     assert all("{DEMO && (" in APP[max(0, at - 250):at] for at in bars)
 
 

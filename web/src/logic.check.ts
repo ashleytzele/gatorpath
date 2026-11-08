@@ -1,6 +1,6 @@
 // Run: node web/src/logic.check.ts
 import assert from "node:assert/strict";
-import { changeLine, countSection, describeChange, goalText, leftText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutUrls, withPlanned } from "./logic.ts";
+import { blockOf, changeLine, countSection, describeChange, goalText, leftText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutUrls, withPlanned } from "./logic.ts";
 
 const g = (id: string, status: string) => ({ id, title: id, kind: "major", source: "", status, counted: [], in_progress: [] });
 const term = (t: string, courses: (string | { slot: string; units: number })[]) => ({ term: t, courses });
@@ -66,4 +66,8 @@ assert.equal(withoutUrls("Navigator, https://sfsu.campus.eab.com/"), "Navigator"
 assert.equal(plannedLine(6, 15, [3, 3, 3]), "15 of 15 units planned");
 assert.equal(plannedLine(undefined, 15, []), "0 of 15 units planned");
 assert.equal(plannedLine(6, undefined, [3]), "");
+assert.deepEqual(blockOf({ days: "Mo We", time: "10:00AM - 11:15AM" }, 8, 60), { top: 120, height: 75 });
+assert.deepEqual(blockOf({ days: "Tu", time: "12:30PM - 1:20PM" }, 8, 60), { top: 270, height: 50 });
+assert.equal(blockOf({ days: "Mo" }, 8, 60), null);
+assert.equal(blockOf({ time: "TBA" }, 8, 60), null);
 console.log("logic.check: ok");
