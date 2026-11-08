@@ -28,13 +28,16 @@ export default function BuildingScreen({
   const plan = built.data?.[0];
   const needsAi = !!plan && !plan.needs_input && (notes.length > 0 || plan.semesters.some((s) => s.courses.some((c) => typeof c !== "string")));
 
-  useEffect(() => () => void (cancelled.current = true), []);
   useEffect(() => {
     if (!plan) return;
     if (!needsAi) return setAi({ filled: null, why: "" });
+    let stale = false; // this effect's own flag: StrictMode's simulated unmount must not drop the real answer
     assist({ ...profile, ...options }, plan.semesters, [], [], {}, notes)
-      .then((filled) => !cancelled.current && setAi({ filled, why: "" }))
-      .catch((e) => !cancelled.current && setAi({ filled: null, why: message(e) })); // 503, 429 or any error: go on without it
+      .then((filled) => !stale && !cancelled.current && setAi({ filled, why: "" }))
+      .catch((e) => !stale && !cancelled.current && setAi({ filled: null, why: message(e) })); // 503, 429 or any error: go on without it
+    return () => {
+      stale = true;
+    };
   }, [plan]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const t = setInterval(() => setShown((n) => n + 1), STEP_MS);
