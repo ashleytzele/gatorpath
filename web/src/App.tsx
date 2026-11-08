@@ -307,9 +307,10 @@ function Header({
                   className="header-link ask-header"
                   onClick={() => document.dispatchEvent(new Event("gator-ask"))}
                 >
-                  Ask about your plan
+                  <span className="long-label">Ask about your plan</span>
+                  <span className="short-label">Chat</span>
                 </button>
-                <a className="header-link" href={NAVIGATOR} target="_blank" rel="noreferrer">
+                <a className="header-link advisor-link" href={NAVIGATOR} target="_blank" rel="noreferrer">
                   Ask an advisor
                 </a>
               </>
@@ -335,6 +336,15 @@ function Header({
 }
 
 const NAVIGATOR = "https://sfsu.campus.eab.com/";
+const ASK_ADVISOR = "Ask an advisor in Navigator"; // the one name for the advising link
+const PRIVACY = "Your DPR is read in memory and never stored. The AI helper sees your major, goal and courses, never your name, ID, grades or GPA.";
+/** Engine text in the student's words: "2027-spring" -> "Spring 2027", a requirement's id -> its title. */
+function plainText(text: string, audit?: Audit) {
+  const titles = new Map((audit?.groups ?? []).map((g) => [g.id, g.title]));
+  return text
+    .replace(/\b(\d{4})-(spring|summer|fall|winter)\b/gi, (_, y: string, t: string) => `${t[0].toUpperCase()}${t.slice(1).toLowerCase()} ${y}`)
+    .replace(/\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b/g, (id) => titles.get(id) ?? id.replace(/_/g, " "));
+}
 function AdvisingNote() {
   return (
     <aside className="advising-note" aria-label="Advising">
@@ -344,7 +354,7 @@ function AdvisingNote() {
         before you register.
       </p>
       <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-        Book advising in Navigator <Icon name="arrow" size={14} />
+        {ASK_ADVISOR} <Icon name="arrow" size={14} />
       </a>
     </aside>
   );
@@ -357,6 +367,7 @@ function Stepper({ current }: { current: number }) {
       {steps.map((step, i) => (
         <div
           className={`step ${i + 1 === current ? "active" : ""} ${i + 1 < current ? "complete" : ""}`}
+          aria-current={i + 1 === current ? "step" : undefined}
           key={step}
         >
           <span className="step-dot">
@@ -373,11 +384,13 @@ function Stepper({ current }: { current: number }) {
 function Footer() {
   return (
     <footer>
-      <Icon name="info" size={15} /> Unofficial student-built tool, not affiliated with SF State.
-      Questions about your plan?{" "}
-      <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-        Talk to an advisor in Navigator
-      </a>
+      <Icon name="info" size={15} />
+      <span>
+        Unofficial student-built tool, not affiliated with SF State. Questions about your plan?{" "}
+        <a href={NAVIGATOR} target="_blank" rel="noreferrer">
+          {ASK_ADVISOR}
+        </a>
+      </span>
     </footer>
   );
 }
@@ -472,7 +485,7 @@ function Landing({ start }: { start: () => void }) {
             </Button>
           </div>
           <p className="micro-trust">
-            <Icon name="lock" size={16} /> No account needed. Your DPR is processed, then discarded.
+            <Icon name="lock" size={16} /> No account needed. Your DPR is never stored.
           </p>
         </div>
         <div className="plan-preview" aria-label="Sample degree plan">
@@ -558,9 +571,8 @@ function Landing({ start }: { start: () => void }) {
             </summary>
             <p>
               No. GatorPath is a student-built planning aid. For any question about your degree,
-              talk to an advisor:{" "}
               <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-                book one in Navigator
+                ask an advisor in Navigator
               </a>
               .
             </p>
@@ -571,10 +583,8 @@ function Landing({ start }: { start: () => void }) {
               <Icon name="plus" />
             </summary>
             <p>
-              Your PDF is read in memory to find your courses, then discarded. It’s never written
-              to disk, and your name and student ID are dropped as it’s read. To choose courses and
-              chat, Claude Haiku (Anthropic’s AI) gets your major, goal and course list, never your
-              name, ID or GPA, and a grade only if you type one in the chat.
+              {PRIVACY} The AI helper is Claude Haiku, Anthropic’s AI; it only learns a grade if you
+              type one in the chat.
             </p>
           </details>
           <details>
@@ -669,7 +679,7 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
       {state === "error" && <ErrorCard text={problem} retry={() => setState("idle")} />}
       {state === "choose" && (
         <div className="form-panel choose-major">
-          <h3>Which major is this DPR for?</h3>
+          <h2>Which major is this DPR for?</h2>
           <p>{problem}</p>
           <label>
             Major
@@ -692,8 +702,7 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
       <div className="privacy-note">
         <Icon name="lock" size={16} />
         <span>
-          <b>Your DPR is never stored.</b> It’s read in memory, then discarded. Our AI helper sees your
-          major, goal and course list, never your name, ID, grades or GPA.
+          {PRIVACY}
         </span>
       </div>
       <details className="help-box">
@@ -780,7 +789,7 @@ function TypedPanel({ done }: { done: (profile: Profile) => void }) {
   };
   return (
     <div className="record-panel form-panel">
-      <h3>Add your courses</h3>
+      <h2>Add your courses</h2>
       <MajorSelect value={program} set={setProgram} />
       <label>
         Course code
@@ -857,7 +866,7 @@ function NewStudentPanel({ done }: { done: (profile: Profile) => void }) {
   const [start, setStart] = useState(terms[0]);
   return (
     <div className="record-panel form-panel">
-      <h3>Let’s start with the basics</h3>
+      <h2>Let’s start with the basics</h2>
       <MajorSelect value={program} set={setProgram} />
       <label>
         First term
@@ -900,7 +909,7 @@ function RecordScreen({ done }: { done: (profile: Profile, imported?: ImportResu
             <b>
               Upload my DPR <em>Recommended</em>
             </b>
-            <small>Fastest and most accurate · about 2 minutes</small>
+            <small>Fastest and most accurate</small>
           </span>
           <i>{method === "upload" && <Icon name="check" size={14} />}</i>
         </button>
@@ -944,7 +953,7 @@ const universityGroups = (audit: Audit) => audit.groups.filter((g) => g.kind ===
 
 /** GE and university rows. Without a plan (Review, from the DPR) they use the DPR's words: Completed, Incomplete. */
 /** Areas the DPR doesn't list (D33): left out on import, and the student can put one back or leave it out again. */
-type DprMissing = { missing: string[]; left: string[]; toggle: (id: string) => void };
+type DprMissing = { missing: string[]; left: string[]; set: (ids: string[], leave: boolean) => void };
 
 function GeRequirementRows({
   groups,
@@ -956,9 +965,26 @@ function GeRequirementRows({
   dpr?: DprMissing;
 }) {
   const record = !plannedIn;
+  const askable = groups.filter((g) => dpr?.missing.includes(g.id)).map((g) => g.id);
+  const out = askable.filter((id) => dpr?.left.includes(id));
+  const [they, them] = askable.length === 1 ? ["it’s", "it"] : ["they’re", "them"];
   return (
     <div className="shared-ge-rows progress">
-      {groups.map((g) => {
+      {!!askable.length && dpr && (
+        <div className="dpr-missing-note">
+          <Icon name="info" size={15} />
+          <p>
+            {askable.length === 1 ? "One of these isn’t" : `${askable.length} of these aren’t`} on your DPR,
+            {out.length
+              ? ` so ${they} left out of your plan. Confirm with an advisor that you don’t need ${them}.`
+              : ` but ${they} back in your plan.`}
+          </p>
+          <button className="let-pick" onClick={() => dpr.set(askable, !out.length)}>
+            {out.length ? "Put them back in my plan" : "Leave them out"}
+          </button>
+        </div>
+      )}
+      {[...groups.filter((g) => askable.includes(g.id)), ...groups.filter((g) => !askable.includes(g.id))].map((g) => {
         const planned = plannedIn?.(g);
         const done = isDone(g);
         const leftOut = g.waived_by === NOT_ON_DPR;
@@ -967,15 +993,12 @@ function GeRequirementRows({
             <div className="ge-area-name">
               <b>{g.title}</b>
               <small>{g.source}</small>
-              {dpr?.missing.includes(g.id) && (
-                <button className="let-pick" onClick={() => dpr.toggle(g.id)}>
-                  {dpr.left.includes(g.id) ? "Not on your DPR · Put it back" : "Not on your DPR · Leave it out"}
-                </button>
-              )}
             </div>
-            <StatusBadge type={done ? "done" : g.in_progress.length ? "progress" : planned ? "planned" : "remaining"}>
+            <StatusBadge
+              type={leftOut ? "warning" : done ? "done" : g.in_progress.length ? "progress" : planned ? "planned" : "remaining"}
+            >
               {leftOut
-                ? "Left out"
+                ? "Not on your DPR"
                 : done
                   ? record ? "Completed" : "Done"
                   : g.in_progress.length
@@ -1015,8 +1038,8 @@ function ReviewScreen({
     const dpr: DprMissing = {
       missing: a.groups.filter((g) => notFound.includes(g.title)).map((g) => g.id),
       left,
-      toggle: (id) =>
-        edit({ ...profile, not_on_dpr: left.includes(id) ? left.filter((x) => x !== id) : [...left, id] }),
+      set: (ids, leave) =>
+        edit({ ...profile, not_on_dpr: leave ? [...new Set([...left, ...ids])] : left.filter((x) => !ids.includes(x)) }),
     };
     const met = a.groups.filter(isDone).length;
     const going = a.groups.filter((g) => !isDone(g) && g.in_progress.length).length;
@@ -1129,7 +1152,7 @@ function RecordEditor({
   return (
     <>
       <section className="section-card form-panel record-add">
-        <h3>Fix your record</h3>
+        <h2>Fix your record</h2>
         <p>A course your DPR doesn’t show, or one you’ve finished since? Add it here.</p>
         <label>
           Course code
@@ -1255,7 +1278,7 @@ function SectionCard({
   return (
     <section className={`section-card ${className}`}>
       <div className="section-card-head">
-        <h3>{title}</h3>
+        <h2>{title}</h2>
         {count && <span>{count}</span>}
       </div>
       {children}
@@ -1364,9 +1387,9 @@ function GoalsScreen({
           <div className="question-title">
             <span>1</span>
             <div>
-              <h3>
+              <h2>
                 {goals.length ? "What do you want to focus on?" : "What are you interested in?"}
-              </h3>
+              </h2>
               <p>We’ll choose your electives around it. You can change any of them.</p>
             </div>
           </div>
@@ -1409,7 +1432,7 @@ function GoalsScreen({
           <div className="question-title">
             <span>2</span>
             <div>
-              <h3>When do you want to graduate?</h3>
+              <h2>When do you want to graduate?</h2>
               <p>We’ll tell you if that pace looks realistic.</p>
             </div>
           </div>
@@ -1430,10 +1453,10 @@ function GoalsScreen({
           <div className="question-title">
             <span>3</span>
             <div>
-              <h3>
+              <h2>
                 Are you on an F-1 student visa?{" "}
                 <Tooltip text="F-1 students need at least 12 units every fall and spring." />
-              </h3>
+              </h2>
               <p>This affects your minimum course load.</p>
             </div>
           </div>
@@ -1455,7 +1478,7 @@ function GoalsScreen({
           <div className="question-title">
             <span>4</span>
             <div>
-              <h3>What is your math placement QR?</h3>
+              <h2>What is your math placement QR?</h2>
               <p>We use this to place your first math class.</p>
             </div>
           </div>
@@ -1477,7 +1500,7 @@ function GoalsScreen({
           <div className="question-title">
             <span>5</span>
             <div>
-              <h3>What’s your first term?</h3>
+              <h2>What’s your first term?</h2>
               <p>Your plan starts here.</p>
             </div>
           </div>
@@ -1648,57 +1671,92 @@ type Work = {
   sections: Record<string, string[]>; // {term: class numbers} the student chose
   setSections: (term: string, keep: string[]) => void;
   aiBusy: boolean; // the chat's answer replaces the plan, so a section chosen meanwhile would be lost
+  ask: (text: string) => void; // sends a message to the chat, as if the student typed it
 };
 
 function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
-  const items: [Tab, string, IconName][] = [
-    ["plan", "Plan", "route"],
-    ["progress", "Progress", "check"],
-    ["electives", "Electives & GE", "book"],
-    ["schedule", "Schedule", "calendar"],
+  const items: [Tab, string, IconName, string][] = [
+    ["plan", "Plan", "route", "Plan"],
+    ["progress", "Progress", "check", "Progress"],
+    ["electives", "Electives & GE", "book", "Electives"],
+    ["schedule", "Schedule", "calendar", "Schedule"],
   ];
   return (
-    <nav className="app-tabs">
-      {items.map(([key, label, icon]) => (
-        <button key={key} className={tab === key ? "active" : ""} onClick={() => setTab(key)}>
+    <nav className="app-tabs" aria-label="Your plan">
+      {items.map(([key, label, icon, short]) => (
+        <button
+          key={key}
+          className={tab === key ? "active" : ""}
+          aria-current={tab === key ? "page" : undefined}
+          onClick={() => setTab(key)}
+        >
           <Icon name={icon} />
-          {label}
+          <span className="long-label">{label}</span>
+          <span className="short-label">{short}</span>
         </button>
       ))}
     </nav>
   );
 }
 
-function ProblemPanel({ errors }: { errors: PlanError[] }) {
+/** "Stopped at 2030-spring: nothing more can be scheduled. Blocked: A; B; slots waiting: ids" as one line per course. */
+function problemLines(message: string, audit: Audit): string[] {
+  const stopped = message.match(/^Stopped at (\S+): nothing more can be scheduled\. Blocked: (.*)$/s);
+  if (!stopped) return [plainText(message, audit)];
+  return [
+    `Nothing more fits from ${termLabel(stopped[1])} on:`,
+    ...stopped[2].split("; ").map((part) =>
+      part.startsWith("slots waiting: ")
+        ? `Still to choose: ${part.slice(15).split(", ").map((id) => plainText(id, audit)).join(", ")}`
+        : plainText(part, audit),
+    ),
+  ];
+}
+
+/** What stops the plan, one line each in the student's words; any line can go to the chat to fix. */
+function ProblemPanel({ errors, audit, ask }: { errors: PlanError[]; audit: Audit; ask?: (text: string) => void }) {
+  const [all, setAll] = useState(false);
+  const lines = [...new Set(errors.flatMap((e) => problemLines(e.message, audit)))];
+  const count = lines.filter((l) => !l.endsWith(":")).length;
   return (
     <div className="plan-problem-panel" role="alert">
       <div>
         <Icon name="warning" />
         <span>
-          <b>This plan has a problem</b>
-          <small>Change your choices, or ask an advisor what to do.</small>
+          <b>{count === 1 ? "One thing stops this plan" : `${count} things stop this plan`}</b>
+          <small>Ask GatorPath to fix one, or ask an advisor what to do.</small>
         </span>
       </div>
-      {errors.map((e) => (
-        <p key={e.message}>
-          <span>{e.message}</span>
-        </p>
-      ))}
+      {(all ? lines : lines.slice(0, 6)).map((line) =>
+        line.endsWith(":") ? (
+          <h3 className="problem-lead" key={line}>
+            {line}
+          </h3>
+        ) : (
+          <p key={line}>
+            <span>{line}</span>
+            {ask && <button onClick={() => ask(`Fix this in my plan: ${line}`)}>Ask GatorPath</button>}
+          </p>
+        ),
+      )}
+      {lines.length > 6 && (
+        <button className="let-pick problem-more" onClick={() => setAll(!all)}>
+          {all ? "Show fewer" : `Show all ${count}`}
+        </button>
+      )}
     </div>
   );
 }
 
-function AdvisorCards({ items }: { items: Advisor[] }) {
+function AdvisorCards({ items, audit }: { items: Advisor[]; audit: Audit }) {
   return (
     <div className="advisor-list">
       {items.map((a) => (
         <div key={a.role}>
           <b>{a.who}</b>
-          <p>
-            {a.why.join(" ")} {a.how_to_book}
-          </p>
+          <p>{plainText(`${a.why.join(" ")} ${a.how_to_book ?? ""}`, audit)}</p>
           <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-            Book in Navigator <Icon name="arrow" size={12} />
+            {ASK_ADVISOR} <Icon name="arrow" size={12} />
           </a>
         </div>
       ))}
@@ -1809,18 +1867,18 @@ function PlanView({
             it before you register.
           </span>
           <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-            Book advising in Navigator <Icon name="arrow" size={14} />
+            {ASK_ADVISOR} <Icon name="arrow" size={14} />
           </a>
         </div>
       )}
-      {planState === "problem" && <ProblemPanel errors={errors} />}
+      {planState === "problem" && <ProblemPanel errors={errors} audit={audit} ask={work.ask} />}
       {planState === "unreachable" && (
         <div className="plan-problem-panel unreachable">
           <div>
             <Icon name="clock" />
             <span>
               <b>{termLabel(pace?.graduate_by) || "That date"} isn’t reachable</b>
-              <small>{pace?.why_not?.join(" ")}</small>
+              <small>{plainText(pace?.why_not?.join(" ") ?? "", audit)}</small>
             </span>
           </div>
           <div className="problem-actions">
@@ -1836,11 +1894,15 @@ function PlanView({
           </div>
         </div>
       )}
-      <AdvisingNote />
       <section className="plan-hero">
         <div>
           {planState === "problem" ? (
-            <h1>Fix the problem above to see your graduation date</h1>
+            <>
+              <h1>
+                You could graduate <em>{termLabel(graduation)}</em>
+              </h1>
+              <p className="hero-note">Once the problems above are fixed. Until then the date isn’t certain.</p>
+            </>
           ) : (
             <h1>
               You can graduate <em>{termLabel(graduation)}</em>
@@ -2107,21 +2169,23 @@ function PlanView({
             </summary>
             <ul>
               {warnings.map((w) => (
-                <li key={w}>{w}</li>
+                <li key={w}>{plainText(w, audit)}</li>
               ))}
             </ul>
           </details>
         )}
-        <SectionCard title="Questions? Talk to an advisor">
-          <AdvisorCards items={advisors} />
+        <details className="advisor-card">
+          <summary>
+            <Icon name="info" /> <b>Questions? Talk to an advisor</b>
+            {!!advisors.length && <span>{advisors.length} things worth asking</span>}
+            <Icon name="chevron" />
+          </summary>
           <p className="advisor-fallback">
-            For any question about your plan, book advising in{" "}
-            <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-              Navigator
-            </a>
-            .
+            GatorPath is a planning guide. For any question about your plan, talk to an advisor before you
+            register.
           </p>
-        </SectionCard>
+          <AdvisorCards items={advisors} audit={audit} />
+        </details>
       </div>
       <div className="plan-actions">
         <Button kind="secondary" icon="download" onClick={() => window.print()}>
@@ -2137,7 +2201,7 @@ function PlanView({
           rel="noreferrer"
           style={{ textDecoration: "none" }}
         >
-          Book advising in Navigator <Icon name="arrow" />
+          {ASK_ADVISOR} <Icon name="arrow" />
         </a>
       </div>
     </div>
@@ -2169,7 +2233,6 @@ function ProgressView({ work }: { work: Work }) {
         <h1>Your degree progress</h1>
         <p>See what’s done, planned, and still remaining.</p>
       </div>
-      <AdvisingNote />
       <DegreeProgress audit={work.audit} semesters={work.semesters} />
     </div>
   );
@@ -2217,7 +2280,7 @@ function DegreeProgress({
         body: (
           <div className="req-courses">
             {dpr?.missing.includes(g.id) && (
-              <button className="let-pick" onClick={() => dpr.toggle(g.id)}>
+              <button className="let-pick" onClick={() => dpr.set([g.id], !dpr.left.includes(g.id))}>
                 {dpr.left.includes(g.id) ? "Not on your DPR · Put it back" : "Not on your DPR · Leave it out"}
               </button>
             )}
@@ -2428,8 +2491,7 @@ function ElectivesView({ work, openPicker }: { work: Work; openPicker: (target: 
           {student.goal && student.goal !== "Undecided" ? ` Your focus: ${student.goal}.` : ""}
         </p>
       </div>
-      <AdvisingNote />
-      {!check.valid && <ProblemPanel errors={check.errors} />}
+      {!check.valid && <ProblemPanel errors={check.errors} audit={audit} ask={work.ask} />}
       {work.busy && <Loading label={work.busy} />}
       {work.failed && <ErrorCard text={work.failed} />}
       {!!major.length && (
@@ -2606,7 +2668,6 @@ function ScheduleView({
           Copy all class numbers
         </Button>
       </div>
-      <AdvisingNote />
       {DEMO && (
         <div className="variant-switcher schedule-variants">
           <span>Preview schedule state</span>
@@ -2675,7 +2736,7 @@ function ScheduleView({
           <div className="schedule-controls">
             <div>
               <b>
-                One of {r.sets} {r.sets === 1 ? "schedule" : "schedules"} without time clashes
+                No time clashes{r.sets > 1 ? `: one of ${r.sets} ways to fit these classes` : ""}
               </b>
             </div>
           </div>
@@ -2863,19 +2924,21 @@ function ScheduleView({
           </div>
           {r.scraped_at && (
             <div className="schedule-note">
-              <Icon name="clock" /> Seats and rooms as of {new Date(r.scraped_at).toLocaleDateString()}.
-              Confirm in{" "}
-              <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
-                Class Search
-              </a>{" "}
-              before registering.
+              <Icon name="clock" />
+              <span>
+                Seats and rooms as of {new Date(r.scraped_at).toLocaleDateString()}. Confirm in{" "}
+                <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">
+                  Class Search
+                </a>{" "}
+                before registering.
+              </span>
             </div>
           )}
           {r.warnings
             .filter((w) => !w.startsWith("Class Search as of"))
             .map((w) => (
               <div className="schedule-note" key={w}>
-                <Icon name="warning" /> {w}
+                <Icon name="warning" /> <span>{plainText(w, work.audit)}</span>
               </div>
             ))}
         </>
@@ -2958,7 +3021,7 @@ function OptionCard({
       {[...(o.cannot_check ?? []), ...(o.blocked_by ?? [])].map((reason) => (
         <p className="check-reason" key={reason}>
           <Icon name="warning" size={13} />
-          {reason}
+          {plainText(reason)}
         </p>
       ))}
       {o.ready_by && (
@@ -2967,11 +3030,11 @@ function OptionCard({
           Opens up in {termLabel(o.ready_by)}
         </p>
       )}
-      {o.note && <p className="check-reason">{o.note}</p>}
+      {o.note && <p className="check-reason">{plainText(o.note)}</p>}
       <p>{offeredText(o.offered)}</p>
       {o.not_offered && (
         <p className="rare-note">
-          <Icon name="warning" size={13} /> {o.not_offered}
+          <Icon name="warning" size={13} /> {plainText(o.not_offered)}
         </p>
       )}
       {o.readiness === "ready" && (
@@ -3053,7 +3116,7 @@ function ElectiveDrawer({
         {result.data?.approval && (
           <p className="check-reason">
             <Icon name="warning" size={13} />
-            {result.data.approval}. Ask your advisor in Navigator which courses count.
+            {result.data.approval}. {ASK_ADVISOR} which courses count.
           </p>
         )}
         {!!options.length && (
@@ -3168,8 +3231,8 @@ function CourseDrawer({ code, why, close }: { code: string; why?: string; close:
 /** A chat reply's light markdown as React elements (nothing is injected as HTML): paragraphs, "- " and "1. " lists,
  * **bold** and links. */
 function Rich({ text }: { text: string }) {
-  const inline = (line: string) =>
-    line.split(/(\*\*[^*]+\*\*|https?:\/\/[^\s)]*[^\s).,;:])/g).map((part, i) =>
+  const inline = (raw: string) =>
+    plainText(raw).split(/(\*\*[^*]+\*\*|https?:\/\/[^\s)]*[^\s).,;:])/g).map((part, i) =>
       part.startsWith("**") && part.endsWith("**") && part.length > 4 ? (
         <b key={i}>{part.slice(2, -2)}</b>
       ) : /^https?:\/\//.test(part) ? (
@@ -3280,8 +3343,8 @@ function ChatPanel({
         </button>
       )}
       <p className="chat-privacy">
-        <Icon name="lock" size={13} /> Claude Haiku sees your major, goal and course list, never your name,
-        ID or GPA. It can be wrong: for decisions,{" "}
+        <Icon name="lock" size={13} /> The AI helper (Claude Haiku) sees your major, goal and courses, never
+        your name, ID, grades or GPA. It can be wrong: for decisions,{" "}
         <a href={NAVIGATOR} target="_blank" rel="noreferrer">
           ask an advisor in Navigator
         </a>
@@ -3554,6 +3617,11 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     fill,
     aiDown,
     aiBusy: sending || !!busy,
+    ask: (text) => {
+      if (sending || busy) return;
+      setChat(true);
+      send(text);
+    },
     setSections: (term, keep) => {
       setPrevious(state);
       setState({ ...state, sections: { ...state.sections, [term]: keep } });

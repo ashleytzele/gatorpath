@@ -883,6 +883,7 @@ footer {
   flex-wrap: wrap;
   gap: 11px;
 }
+.form-panel h2,
 .form-panel h3 {
   margin: 0;
 }
@@ -1016,6 +1017,7 @@ footer {
   justify-content: space-between;
   align-items: center;
 }
+.section-card-head h2,
 .section-card-head h3 {
   margin: 0;
   font-size: 15px;
@@ -1220,6 +1222,7 @@ footer {
   font-size: 13px;
   font-weight: 700;
 }
+.question-title h2,
 .question-title h3 {
   margin: 0;
   font-size: 15px;
@@ -4085,12 +4088,14 @@ p, li, small { text-wrap: pretty; }
 }
 .ai-pick {
   display: inline-block;
+  width: fit-content;
+  align-self: flex-start;
   margin-left: 8px;
   padding: 1px 7px;
   border-radius: 999px;
   background: var(--green-soft);
   color: var(--green);
-  font-size: 11px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 600;
 }
@@ -4116,7 +4121,7 @@ p, li, small { text-wrap: pretty; }
 .record-list[open] summary .icon { transform: rotate(90deg); }
 .record-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 10px 18px; border-top: 1px solid #eceeed; font-size: 13px; }
 .record-row b { display: block; font-size: 14px; }
-.record-row small { display: block; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.record-row small { display: block; font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .record-row select { width: auto; padding: 6px 8px; font-size: 13px; }
 .record-row button { border: 0; background: none; color: var(--muted); cursor: pointer; padding: 4px; }
 .ge-area-name .let-pick { padding: 0; text-align: left; }
@@ -4124,3 +4129,30 @@ p, li, small { text-wrap: pretty; }
   .dash-grid { grid-template-columns: 1fr; }
   .dash-side { position: static; max-height: none; overflow: visible; }
 }
+/* Phone: short labels, no crowded header, a timeline that names only where you start and finish */
+.short-label { display: none; }
+.header-link { white-space: nowrap; }
+@media (max-width: 760px) {
+  .long-label { display: none; }
+  .short-label { display: inline; }
+  .header-link.advisor-link { display: none; } /* the footer has it */
+  .plan-route li:not(.next):not(.finish) small { visibility: hidden; }
+}
+/* Problems: one line each, a lead line for what stopped the plan */
+.plan-problem-panel .problem-lead { margin: 12px 0 0; font-size: 13px; font-weight: 650; color: var(--red); }
+.plan-problem-panel .problem-more { margin-top: 10px; color: var(--red); }
+.plan-problem-panel > p button { white-space: nowrap; }
+.hero-note { color: var(--muted); margin: 4px 0 10px; }
+/* Advisors: one disclosure under the plan */
+.advisor-card { background: white; border: 1px solid var(--line); border-radius: 12px; }
+.advisor-card summary { display: flex; align-items: center; gap: 10px; padding: 15px 18px; cursor: pointer; list-style: none; }
+.advisor-card summary::-webkit-details-marker { display: none; }
+.advisor-card summary span { color: var(--muted); font-size: 13px; margin-left: auto; }
+.advisor-card summary .icon:last-child { transition: transform 0.15s ease; }
+.advisor-card[open] summary .icon:last-child { transform: rotate(90deg); }
+.advisor-card > p, .advisor-card .advisor-list { padding: 0 18px; }
+.advisor-card .advisor-list { padding-bottom: 12px; }
+/* Not on the DPR: one note and one decision for the group */
+.dpr-missing-note { display: flex; align-items: flex-start; gap: 8px; padding: 11px 14px; background: var(--amber-soft); color: var(--amber); border-radius: 9px; margin: 8px 0; font-size: 13px; }
+.dpr-missing-note p { margin: 0; flex: 1; color: #705d47; }
+.dpr-missing-note .let-pick { color: var(--amber); font-weight: 650; white-space: nowrap; }

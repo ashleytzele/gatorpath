@@ -686,7 +686,8 @@ def audit(profile: dict, program: dict, university: dict, catalog: dict) -> dict
         warnings.append("Prior bachelor's degree: GE and the other graduation requirements don't apply; only courses "
                         f"required for the major do ({university['prior_degree']['source']}). Confirm with the Registrar")
     if not program.get("verified"):
-        warnings.append(f"{program['program']} rules are not verified yet; confirm with an advisor and your DPR")
+        warnings.append(f"GatorPath's rules for {program.get('title', program['program'])} are not verified yet; confirm "
+                        "with an advisor and your DPR")
     return {
         "catalog_year": program["catalog_year"],
         "program": program["program"],

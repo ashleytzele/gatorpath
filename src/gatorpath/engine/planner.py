@@ -697,7 +697,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         advise.append(("general_advising", f"Confirm that {', '.join(left_out)} isn't required for your catalog year "
                        "(GatorPath left it out because your DPR doesn't list it)"))
     if not program.get("verified"):
-        advise += [("major_advisor", f"GatorPath's {program['program']} rules aren't verified yet: review this plan "
+        advise += [("major_advisor", f"GatorPath's rules for {program.get('title', program['program'])} aren't verified yet: review this plan "
                     "with an advisor before registering"), ("dpr", "Check what counts toward each requirement")]
     return {"catalog_year": program["catalog_year"], "valid": not errors, "errors": errors,
             "warnings": list(dict.fromkeys(warnings)), "see_advisor": see_advisor(advise, program, university),

@@ -384,7 +384,8 @@ def year_warning(profile: dict, year: str) -> list[str]:
         return [] if year == YEAR else [
             f"Requirements are the {year} Bulletin's (the student's catalog year, {given}); courses, prereqs and GE "
             f"tags are the {YEAR} Bulletin's, the one the remaining courses are taken under"]
-    return [f"The student's catalog year is {given}, but GatorPath has {profile['program']} rules only for {', '.join(have)}, so this uses "
+    title = load_rules(YEAR if YEAR in have else have[-1], profile["program"])[0].get("title", profile["program"]) if have else profile["program"]
+    return [f"The student's catalog year is {given}, but GatorPath has rules for {title} only for {', '.join(have)}, so this uses "
             f"{YEAR}. Requirements may differ (GE areas especially). Where the DPR disagrees, the DPR "
             "wins. In continuous attendance a student may elect the graduation requirements in effect when they began "
             "their study, when they entered SF State, or when they graduate (p.2390); ask an advisor before relying on that"]
@@ -504,7 +505,8 @@ def audit_progress(profile: Profile) -> dict:
     out = audit(clean, program, university, catalog_for(clean))
     out["warnings"] = notes + out["warnings"] + unverified(university, "University (GE and graduation)")
     out["see_advisor"] = see_advisor([("dpr", "Your DPR is the official audit; compare it with this one")]
-                                     + ([("major_advisor", f"GatorPath's {profile['program']} rules aren't verified yet")]
+                                     + ([("major_advisor", f"GatorPath's rules for {program.get('title', profile['program'])} "
+                                          "aren't verified yet")]
                                         if not program.get("verified") else []), program, university)
     return out
 
