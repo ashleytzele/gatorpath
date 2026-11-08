@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import BuildingScreen from "./Building";
 import {
   assist,
   buildPlan,
@@ -133,63 +134,6 @@ function CourseMini({ code, title, status }: { code: string; title: string; stat
       </div>
       <StatusBadge type="progress">{status}</StatusBadge>
     </div>
-  );
-}
-
-function BuildingScreen({
-  profile,
-  options,
-  done,
-  back,
-}: {
-  profile: Profile;
-  options: Options;
-  done: (plan: PlanResult, audit: Audit) => void;
-  back: () => void;
-}) {
-  const built = useLoad(
-    () => Promise.all([buildPlan(profile, options), getAudit({ ...profile, ...options })]),
-    [],
-  );
-  useEffect(() => {
-    if (built.data) done(...built.data);
-  }, [built.data]); // eslint-disable-line react-hooks/exhaustive-deps
-  if (built.error) {
-    return (
-      <main className="flow-page">
-        <ErrorCard text={built.error} retry={built.retry} />
-        <div className="flow-action">
-          <Button kind="secondary" onClick={back}>
-            Back to your goals
-          </Button>
-        </div>
-      </main>
-    );
-  }
-  return (
-    <main className="building-screen" role="status">
-      <div className="building-orb">
-        <Icon name="route" size={32} />
-        <i />
-        <i />
-        <i />
-      </div>
-      <h1>Building your plan from the Bulletin…</h1>
-      <p>Ordering prerequisites, balancing units, and checking course availability.</p>
-      <div className="check-list">
-        <span>
-          <Icon name="check" /> Your record is in
-        </span>
-        <span className="checking">
-          <i /> Mapping requirements and building semesters
-        </span>
-      </div>
-      <div className="skeleton-row">
-        <i />
-        <i />
-        <i />
-      </div>
-    </main>
   );
 }
 
@@ -1971,18 +1915,36 @@ function StyleGuide({ close }: { close: () => void }) {
   );
 }
 
+/** A plan after an AI answer: the API returns what it was sent of each term, so keep what only build_plan has (why). */
+const applyAnswer = <T extends { semesters: Semester[]; plan: PlanResult; options: Partial<Profile>; info: Record<string, CourseInfo>; sections: Record<string, string[]> }>(
+  state: T,
+  r: Assisted,
+) => ({
+  ...state,
+  semesters: r.semesters.map((s) => ({ ...state.semesters.find((o) => o.term === s.term), ...s })),
+  check: r.check,
+  picks: r.picks,
+  plan: r.rebuilt ?? state.plan,
+  options: { ...state.options, ...r.options },
+  info: { ...state.info, ...r.rebuilt?.courses, ...r.check.courses },
+  sections: r.sections ?? state.sections,
+});
+
 function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Built; notes: string[] }) {
   const [tab, setTab] = useState<Tab>("plan");
   const [picker, setPicker] = useState<Target | null>(null);
   const [course, setCourse] = useState("");
   const [chat, setChat] = useState(false);
   const [docked, setDocked] = useState(true); // on a wide screen the chat sits beside the plan until hidden
-  const [thread, setThread] = useState<ChatMessage[]>([]);
+  const [thread, setThread] = useState<ChatMessage[]>(
+    built.filled ? [{ role: "assistant", content: built.filled.reply }] : built.why ? [{ role: "assistant", content: built.why }] : [],
+  );
   const [sending, setSending] = useState(false);
   const [chatFailed, setChatFailed] = useState("");
-  const [aiDown, setAiDown] = useState(false);
+  const [aiDown, setAiDown] = useState(!!built.why);
   const [toast, setToast] = useState("");
-  const [state, setState] = useState({
+  const [state, setState] = useState(() => {
+    const first = {
     options: built.options as Partial<Profile>,
     plan: built.plan,
     semesters: built.plan.semesters,
@@ -1990,6 +1952,8 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     info: built.plan.courses ?? {},
     picks: [] as Pick[],
     sections: {} as Record<string, string[]>,
+    };
+    return built.filled ? applyAnswer(first, built.filled) : first;
   });
   const [busy, setBusy] = useState("");
   const [failed, setFailed] = useState("");
@@ -2090,17 +2054,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
       (next) => (next.check.valid ? `${code} is in your plan` : `${code} is in your plan, but the plan has a problem`),
     );
   };
-  // The API returns what it was sent of each term, so keep what only build_plan has (why)
-  const withAnswer = (r: Assisted) => ({
-    ...state,
-    semesters: r.semesters.map((s) => ({ ...state.semesters.find((o) => o.term === s.term), ...s })),
-    check: r.check,
-    picks: r.picks,
-    plan: r.rebuilt ?? state.plan,
-    options: { ...state.options, ...r.options },
-    info: { ...state.info, ...r.rebuilt?.courses, ...r.check.courses },
-    sections: r.sections ?? state.sections,
-  });
+  const withAnswer = (r: Assisted) => applyAnswer(state, r);
   const fill = async () => {
     setBusy("Choosing your courses with AI…");
     setFailed("");
@@ -2137,14 +2091,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
       setSending(false);
     }
   };
-  const started = useRef(false);
-  const told = useRef(false); // the DPR notes go with the first request only
-  useEffect(() => {
-    // the first reply fills the open slots and says what the DPR import found, so it runs for either
-    if (started.current || !(notes.length || state.semesters.some((s) => s.courses.some(isSlot)))) return;
-    started.current = true;
-    fill();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const told = useRef(!!built.filled); // the DPR notes go with the first request only
   useEffect(() => {
     const open = () => {
       setChat(true);
@@ -2243,7 +2190,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
   );
 }
 
-type Built = { options: Options; plan: PlanResult; audit: Audit };
+type Built = { options: Options; plan: PlanResult; audit: Audit; filled: Assisted | null; why: string };
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("landing");
@@ -2315,11 +2262,12 @@ export default function App() {
         <BuildingScreen
           profile={profile}
           options={options}
+          notes={imported ? [...new Set([...imported.cross_check, ...imported.warnings])] : []}
           back={() => go("goals")}
-          done={(plan, audit) => {
+          done={(plan, audit, filled, why = "") => {
             setNeeds(plan.needs_input);
             if (plan.needs_input) return go("goals");
-            setBuilt({ options, plan, audit });
+            setBuilt({ options, plan, audit, filled, why });
             go("app");
           }}
         />
