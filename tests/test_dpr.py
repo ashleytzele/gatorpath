@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from gatorpath import dpr
-from gatorpath.dpr import cross_check, parse, to_profile
+from gatorpath.dpr import cross_check, disagreements, groups_for, parse, to_profile
 from gatorpath.engine.rules import load_rules
 
 DPR = parse((Path(__file__).parent / "fixtures/dpr_synthetic.txt").read_text())
@@ -145,10 +145,8 @@ def test_an_or_requirement_is_done_by_either_course():
     assert cross_check(parse(text), audit, university)[0].startswith("CHEM 115 or PHYS 111: the DPR says done, GatorPath says needed")
 
 
-def test_cross_check_flags_only_real_disagreements():
-    # Phase 6 done-when: the synthetic DPR's courses and GE areas agree with an audit of what it lists; what's left
-    # is explained (unlisted transfer units; GE areas this partial DPR doesn't show)
-    from gatorpath.engine.rules import load_rules
+def audit_and_university():
+    """An audit of what the synthetic DPR lists, and the 2026-27 university rules."""
     _, university = load_rules("2026-27", "bs-cs")
     group = lambda i, status, counted=(), going=(): {"id": i, "status": status, "counted": list(counted), "in_progress": list(going)}
     audit = {"groups": [group("ge_1c", "satisfied"), group("ge_1a", "satisfied"), group("ge_1b", "satisfied"),
@@ -156,6 +154,13 @@ def test_cross_check_flags_only_real_disagreements():
                         group("math_physics", "remaining", ["MATH 225", "MATH 226", "MATH 227"]),
                         group("core_cs", "remaining", ["CSC 101", "CSC 215"], ["CSC 220", "CSC 300GW"])],
              "totals": {"units": {"value": 46.0}, "units_in_progress": 6.0}}
+    return audit, university
+
+
+def test_cross_check_flags_only_real_disagreements():
+    # Phase 6 done-when: the synthetic DPR's courses and GE areas agree with an audit of what it lists; what's left
+    # is explained (unlisted transfer units; GE areas this partial DPR doesn't show)
+    audit, university = audit_and_university()
     got = cross_check(DPR, audit, university)
     assert got[0].startswith("Units toward the 120: the DPR counts 74 taken, GatorPath 52")
     assert got[1].startswith("Not found on this DPR: GE 2 Mathematical") and "SF State Studies" not in got[1]
@@ -163,6 +168,22 @@ def test_cross_check_flags_only_real_disagreements():
     audit["groups"][0]["status"] = "remaining"
     assert cross_check(DPR, audit, university)[0].startswith(
         "Area A1 - Oral Communication: the DPR says done, GatorPath says needed. The DPR wins")
+
+
+def test_each_disagreement_names_its_group():
+    audit, university = audit_and_university()
+    audit["groups"][0]["status"] = "remaining"                     # ge_1c, the DPR's Area A1
+    got = dict(disagreements(DPR, audit, university))
+    a1 = next(t for t in got if t.startswith("Area A1"))
+    assert got[a1] == ["ge_1c"]
+    assert next(ids for t, ids in got.items() if t.startswith("Units toward the 120")) == []
+
+
+def test_a_waiver_is_kept_under_its_group():
+    audit, university = audit_and_university()
+    block = {"id": "x", "title": "Area A1 - Oral Communication", "kind": "ge", "status": "waived", "rows": [],
+             "needed": None, "waived": "Area A1: Requirement waived 3/12/25 (Dean's memo)."}
+    assert groups_for(block, audit, university) == ["ge_1c"]
 
 
 def test_a_minor_and_a_majors_own_areas_dont_pass_for_the_major_and_ge():

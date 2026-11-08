@@ -231,17 +231,33 @@ def not_listed(dpr: dict, university: dict, program: dict | None = None) -> list
             ] + [g for g in (program or {}).get("groups", []) if g.get("all_of") and not set(g["all_of"]) & named]
 
 
-def cross_check(dpr: dict, audit: dict, university: dict, program: dict | None = None) -> list[str]:
+def groups_for(block: dict, audit: dict, university: dict) -> list[str]:
+    """The audit group ids a parsed DPR requirement is about: course codes -> the groups listing them, GE titles ->
+    translate_ge -> area groups, GWAR -> ["gwar"]; [] for anything else (ids may name a group the audit lacks)."""
+    if block["kind"] == "course":
+        codes = re.findall(r"[A-Z]{1,5}(?: [A-Z]{1,3})? \d{3}[A-Z]{0,3}", block["title"])
+        return [g["id"] for g in audit["groups"]
+                if any(c in g.get(k) or () for c in codes for k in ("counted", "in_progress", "remaining")
+                       if isinstance(g.get(k), list))]
+    if block["kind"] == "ge" or "GWAR" in block["title"]:
+        if "GWAR" in block["title"]:
+            return ["gwar"]
+        by_area = area_groups(university)
+        return [by_area[a] for a in translate_ge([block["title"]], university)[0] if a in by_area]
+    return []
+
+
+def disagreements(dpr: dict, audit: dict, university: dict, program: dict | None = None) -> list[tuple[str, list[str]]]:
     """The DPR's status vs GatorPath's audit for every DPR requirement GatorPath also tracks: course requirements by
-    code, GE areas through translate_ge, GWAR, and units toward the 120. One warning per disagreement, saying the DPR
-    wins (catches rule bugs while the rules are verified: false); plus GE areas GatorPath has that the DPR doesn't list."""
+    code, GE areas through translate_ge, GWAR, and units toward the 120. One (warning, group ids) per disagreement, saying
+    the DPR wins (catches rule bugs while the rules are verified: false); plus GE areas GatorPath has that the DPR doesn't
+    list."""
     word = {"satisfied": "done", "remaining": "needed"}
     groups = {g["id"]: g for g in audit["groups"]}
     code_status: dict[str, str] = {}
     for g in audit["groups"]:
         code_status |= {c: "in_progress" for c in g.get("in_progress", []) if c not in code_status}
         code_status |= {c: "done" for c in g.get("counted", [])}
-    by_area = area_groups(university)
     out = []
     for b in dpr["requirements"]:
         if b["status"] in ("info", "waived", "collapsed"):
@@ -253,8 +269,7 @@ def cross_check(dpr: dict, audit: dict, university: dict, program: dict | None =
             ours = ("done" if pick(x == "done" for x in states) else
                     "in_progress" if pick(x != "needed" for x in states) else "needed")
         elif b["kind"] == "ge" or "GWAR" in b["title"]:
-            ids = ["gwar"] if "GWAR" in b["title"] else [by_area[a] for a in translate_ge([b["title"]], university)[0]
-                                                           if a in by_area]
+            ids = groups_for(b, audit, university)
             if not ids or any(i not in groups for i in ids):
                 continue
             states = [word.get(groups[i]["status"], groups[i]["status"]) for i in ids]
@@ -263,20 +278,26 @@ def cross_check(dpr: dict, audit: dict, university: dict, program: dict | None =
             t = audit["totals"]
             ours_units = t["units"]["value"] + t.get("units_in_progress", 0)
             if abs(ours_units - b["needed"]["taken"]) > 0.5:
-                out.append(f"Units toward the 120: the DPR counts {b['needed']['taken']:g} taken, GatorPath "
-                           f"{ours_units:g} (with in-progress). Transfer units the DPR doesn't list under a requirement "
-                           "are the usual reason: set transfer_units from your transcript's Transfer Totals")
+                out.append((f"Units toward the 120: the DPR counts {b['needed']['taken']:g} taken, GatorPath "
+                            f"{ours_units:g} (with in-progress). Transfer units the DPR doesn't list under a requirement "
+                            "are the usual reason: set transfer_units from your transcript's Transfer Totals", []))
             continue
         else:
             continue
         if ours != b["status"]:
-            out.append(f"{b['title']}: the DPR says {b['status'].replace('_', ' ')}, GatorPath says "
-                       f"{ours.replace('_', ' ')}. The DPR wins; ask an advisor if it looks wrong, and tell GatorPath "
-                       "if its rule is the one that's off")
+            out.append((f"{b['title']}: the DPR says {b['status'].replace('_', ' ')}, GatorPath says "
+                        f"{ours.replace('_', ' ')}. The DPR wins; ask an advisor if it looks wrong, and tell GatorPath "
+                        "if its rule is the one that's off", groups_for(b, audit, university)))
     if missing := not_listed(dpr, university, program):
-        out.append(f"Not found on this DPR: {', '.join(g['title'] for g in missing)}. Left out of the plan, because the DPR "
-                   "decides what's required: confirm with an advisor. If the print was cut, print it again with View All")
+        out.append((f"Not found on this DPR: {', '.join(g['title'] for g in missing)}. Left out of the plan, because the DPR "
+                    "decides what's required: confirm with an advisor. If the print was cut, print it again with View All",
+                    [g["id"] for g in missing]))
     return out
+
+
+def cross_check(dpr: dict, audit: dict, university: dict, program: dict | None = None) -> list[str]:
+    """disagreements' texts alone."""
+    return [t for t, _ in disagreements(dpr, audit, university, program)]
 
 
 # The status icons: the print keeps each requirement's (Complete, Currently in Progress, Not Complete, ...) as an image in

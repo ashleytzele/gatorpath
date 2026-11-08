@@ -29,6 +29,14 @@ def upload(data: bytes = b"%PDF-1.4"):
 
 # ---- /api/import-dpr ----
 
+def test_the_web_import_carries_the_dprs_details(monkeypatch):
+    monkeypatch.setattr(dpr, "read_pdf_bytes", lambda data: DPR)
+    got = upload(b"%PDF-1.4 x").json()
+    assert [r["code"] for r in got["not_used"]] == ["TRFX 50NTR"]
+    assert {"notes_by_group", "warnings_by_group"} <= set(got) and got["profile"]["sf_state_gpa"] == 3.15
+    assert "not_used" not in server.dpr_profile(lambda: DPR)     # the MCP tool's result stays lean
+
+
 def test_import_dpr_reads_the_upload_in_memory_and_drops_pii(monkeypatch):
     seen = []
     monkeypatch.setattr(dpr, "read_pdf_bytes", lambda data: seen.append(data) or DPR)

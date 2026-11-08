@@ -317,3 +317,7 @@ def test_the_mcp_server_never_imports_the_ai():
 
     code = "import sys, gatorpath.server; print('anthropic' in sys.modules or 'gatorpath.assistant' in sys.modules)"
     assert subprocess.run([sys.executable, "-c", code], capture_output=True, text=True).stdout.strip() == "False"
+
+
+def test_the_sf_state_gpa_never_reaches_the_model():
+    assert assistant.hide({"sf_state_gpa": 3.15, "program": "bs-cs"}) == {"program": "bs-cs"}

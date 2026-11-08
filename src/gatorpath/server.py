@@ -896,10 +896,11 @@ def program_of(parsed: dict, every: dict[str, dict]) -> tuple[str | None, list[s
 
 
 def dpr_profile(read_text: Callable[[], str], program: str | None = None,
-                read_statuses: Callable[[], list] | None = None) -> dict:
+                read_statuses: Callable[[], list] | None = None, details: bool = False) -> dict:
     """import_dpr's result, however the PDF's text is read: from a path here, from an upload's bytes in the web API.
     `program` is the student's pick when the DPR alone doesn't say (unknown_program's `choices`). `read_statuses`: the
-    DPR's status icons (dpr.read_statuses); without them the rows decide each requirement's status."""
+    DPR's status icons (dpr.read_statuses); without them the rows decide each requirement's status. `details`
+    (the web, not the MCP tool: D31) adds not_used, notes_by_group and warnings_by_group."""
     try:
         text = read_text()
     except (OSError, subprocess.SubprocessError):
@@ -948,12 +949,27 @@ def dpr_profile(read_text: Callable[[], str], program: str | None = None,
         profile["dpr_unit_offsets"] = gap
         if any(v > 0 for v in gap.values()):  # what the DPR listed: a course added later uses up what it didn't (dpr_offsets)
             profile["dpr_seen"] = sorted({r["code"] for r in profile["completed"]} | set(profile["in_progress"]))
+    if parsed["sf_state_gpa"] is not None:
+        profile["sf_state_gpa"] = parsed["sf_state_gpa"]
     ours = audit_progress(profile)
-    disagree = dpr.cross_check(parsed, ours, university, other_year)
-    return {"catalog_year": year, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,
-            "warnings": warnings + got["warnings"] + disagree + year_warning(profile, year),
-            "see_advisor": see_advisor([("dpr", "GatorPath's audit and your DPR disagree on what's listed in cross_check; "
-                                         "the DPR is the official one")] if disagree else [], rules, university)}
+    found = dpr.disagreements(parsed, ours, university, other_year)
+    disagree = [t for t, _ in found]
+    out = {"catalog_year": year, "profile": profile, "remaining": got["remaining"], "cross_check": disagree,
+           "warnings": warnings + got["warnings"] + disagree + year_warning(profile, year),
+           "see_advisor": see_advisor([("dpr", "GatorPath's audit and your DPR disagree on what's listed in cross_check; "
+                                        "the DPR is the official one")] if disagree else [], rules, university)}
+    if details:
+        by_group: dict[str, dict[str, list[str]]] = {"notes_by_group": {}, "warnings_by_group": {}}
+        for b in parsed["requirements"]:
+            if b["waived"]:
+                for i in dpr.groups_for(b, ours, university):
+                    by_group["notes_by_group"].setdefault(i, []).append(b["waived"])
+        for t, ids in found:
+            for i in ids:
+                by_group["warnings_by_group"].setdefault(i, []).append(t)
+        out |= by_group | {"not_used": [{k: r[k] for k in ("code", "units", "term", "grade")}
+                                        for b in parsed["requirements"] if b["kind"] == "not_used" for r in b["rows"]]}
+    return out
 
 
 PLAN_MY_DEGREE = """You're helping an SF State student plan their degree with GatorPath (Bulletins {years}). Every course, prereq,

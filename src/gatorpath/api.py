@@ -113,7 +113,7 @@ async def import_dpr(request: Request) -> dict:
         data = await upload.read()
         program = form.get("program")  # the student's pick from unknown_program's choices
     return await run_in_threadpool(server.dpr_profile, lambda: dpr.read_pdf_bytes(data),
-                                   program if isinstance(program, str) else None, lambda: dpr.read_statuses_bytes(data))
+                                   program if isinstance(program, str) else None, lambda: dpr.read_statuses_bytes(data), details=True)
 
 
 @app.post("/api/audit")
