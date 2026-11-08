@@ -181,3 +181,9 @@ def test_pathways_name_each_placements_first_math():
     assert [(p["pathway"], [c["code"] for c in p["courses"]]) for p in got] == [
         ("1/2", ["MATH 226"]), ("3/4", ["MATH 197", "MATH 198", "MATH 226"])]
     assert all(c["title"] for p in got for c in p["courses"])
+
+
+def test_the_landing_page_says_only_what_is_true():
+    majors = len(list((Path(__file__).parents[1] / "rules/programs/2026-27").glob("*.yaml")))
+    assert f"Rules for {majors} majors" in APP and "Watch the demo" in APP
+    assert "Trusted by" not in APP and "testimonial" not in APP.lower()

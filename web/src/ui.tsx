@@ -285,16 +285,6 @@ export function Header({
             </button>
           </div>
         )}
-        {screen === "landing" && (
-          <div className="header-actions">
-            <Button
-              onClick={() => document.getElementById("how")?.scrollIntoView({ behavior: "smooth" })}
-              kind="secondary"
-            >
-              How it works
-            </Button>
-          </div>
-        )}
       </div>
     </header>
   );

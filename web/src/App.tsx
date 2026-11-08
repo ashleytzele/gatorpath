@@ -33,6 +33,7 @@ import {
   type Slot,
   type Taken,
 } from "./api";
+import { Landing } from "./Landing";
 import { termLabel } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, type IconName, Loading, Logo, NAVIGATOR,
@@ -53,148 +54,6 @@ function AdvisingNote() {
         {ASK_ADVISOR} <Icon name="arrow" size={14} />
       </a>
     </aside>
-  );
-}
-
-function Landing({ start }: { start: () => void }) {
-  return (
-    <main>
-      <section className="hero">
-        <div className="hero-copy">
-          <h1>
-            Plan your path to graduation in <em>5 minutes.</em>
-          </h1>
-          <p>
-            Upload your DPR, tell us your goal, get a semester-by-semester plan and a
-            clash-free schedule.
-          </p>
-          <div className="hero-actions">
-            <Button onClick={start}>
-              Start planning <Icon name="arrow" />
-            </Button>
-            <Button
-              kind="secondary"
-              onClick={() => document.getElementById("how")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              How it works
-            </Button>
-          </div>
-          <p className="micro-trust">
-            <Icon name="lock" size={16} /> No account needed. Your DPR is never stored.
-          </p>
-        </div>
-        <div className="plan-preview" aria-label="Sample degree plan">
-          <div className="preview-top">
-            <span>Sample plan</span>
-          </div>
-          <p className="preview-term">Spring 2029</p>
-          <p>Estimated graduation</p>
-          <div className="route-line">
-            {["NOW", "F 27", "S 28", "F 28", "S 29"].map((x, i) => (
-              <div key={x}>
-                <span className={i === 0 ? "current" : i === 4 ? "finish" : ""}>
-                  {i === 4 ? <Icon name="check" size={15} /> : ""}
-                </span>
-                <small>{x}</small>
-              </div>
-            ))}
-          </div>
-          <div className="preview-course">
-            <div>
-              <b>CSC 340</b>
-              <small>Programming Methodology</small>
-            </div>
-            <span>3 units</span>
-          </div>
-          <div className="preview-course">
-            <div>
-              <b>MATH 324</b>
-              <small>Probability and Statistics with Computing</small>
-            </div>
-            <span>3 units</span>
-          </div>
-        </div>
-      </section>
-      <section className="trust-row">
-        <div>
-          <Icon name="check" />
-          <span>
-            <b>Built from</b> the 2026–27 Bulletin
-          </span>
-        </div>
-        <div>
-          <Icon name="book" />
-          <span>
-            <b>100+ majors’</b> roadmaps
-          </span>
-        </div>
-        <div>
-          <Icon name="lock" />
-          <span>
-            <b>Your DPR</b> is never stored
-          </span>
-        </div>
-      </section>
-      <section className="how-section" id="how">
-        <div className="section-heading">
-          <h2>From DPR to a plan you can use.</h2>
-          <p>No spreadsheets. No deciphering degree codes. Just three clear steps.</p>
-        </div>
-        <ol className="how-steps">
-          <li>
-            <b>Upload your DPR.</b> We read your completed courses, major requirements, and GE
-            progress.
-          </li>
-          <li>
-            <b>Pick your goal.</b> Tell us what you want to focus on and when you hope to finish.
-          </li>
-          <li>
-            <b>Get your plan and schedule.</b> See every term, plus a next-semester schedule with
-            class numbers.
-          </li>
-        </ol>
-      </section>
-      <section className="faq-section">
-        <div>
-          <h2>Questions, answered.</h2>
-        </div>
-        <div className="faq-list">
-          <details open>
-            <summary>
-              Is GatorPath official?
-              <Icon name="plus" />
-            </summary>
-            <p>
-              No. GatorPath is a student-built planning aid. For any question about your degree,
-              <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-                ask an advisor in Navigator
-              </a>
-              .
-            </p>
-          </details>
-          <details>
-            <summary>
-              Is my data safe?
-              <Icon name="plus" />
-            </summary>
-            <p>
-              {PRIVACY} The AI helper is Claude Haiku, Anthropic’s AI; it only learns a grade if you
-              type one in the chat.
-            </p>
-          </details>
-          <details>
-            <summary>
-              What’s a DPR?
-              <Icon name="plus" />
-            </summary>
-            <p>
-              Your Degree Progress Report shows completed courses and what your degree still
-              requires.
-            </p>
-          </details>
-        </div>
-      </section>
-    </main>
   );
 }
 
@@ -3323,12 +3182,12 @@ export default function App() {
   };
   return (
     <div className="site-shell">
-      <Header
+      {screen !== "landing" && <Header
         screen={screen}
         onHome={home}
-        onBack={screen !== "landing" ? back : undefined}
+        onBack={back}
         onStyle={() => setStyle(true)}
-      />
+      />}
       {screen === "landing" && <Landing start={() => go("record")} />}
       {screen === "record" && (
         <RecordScreen
@@ -3374,7 +3233,7 @@ export default function App() {
         />
       )}
       {style && <StyleGuide close={() => setStyle(false)} />}
-      <Footer />
+      {screen !== "landing" && <Footer />}
     </div>
   );
 }
