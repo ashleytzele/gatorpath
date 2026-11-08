@@ -73,13 +73,25 @@ Decided:
   "N not possible that term" and "Or ask the chat to pick one". A pick is checked and logged in the chat as "Plan
   updated" with Undo
 
+- Schedule tab (next term only; later terms say "Check Class Search when it's out"): heading "Your Spring 2027
+  schedule", "No time clashes · N classes · N units", the seats' date with a Class Search link. A Mon-Fri week trimmed to
+  the class hours, one soft block per meeting (code, type, room); a day-by-day list on a phone; classes with no set time
+  in one line under it; a choice not made yet says so with a link to Electives & GE. "Your sections": one row per course
+  (section, type, days and time, room, instructor with ratings, seats or "Full · N waitlist spots", class number with
+  Copy) and **Swap section**, which opens the floating card: each other section with "Fits" or "Clashes with …" (from
+  GatorPath's clash check, never guessed) and **Select**, or "Select and move others" when it clashes. Pointing at a
+  section shows it dashed on the week; clicking a block opens its course's card. "Copy all N class numbers" (for the
+  Student Center cart) and Print. A problem (not offered, always clash) is one amber line with "Ask the chat to move one"
+- Words on buttons: **Swap** to replace something chosen, **Select** to take an option, **Choose** for an open choice.
+  Never "Change" or "Pick"
+
 To do:
 - [ ] A choice made while the AI fills the plan is lost (found 2026-11-07, `web/src/App.tsx`): the fill starts when the
   plan page opens and takes a minute or two, "Choose a course" and "Change" stay enabled, `choose()` clears the busy
   line in its `finally`, and the fill's `setState(withAnswer(r))` then replaces the plan with the AI's answer to the
   plan it was sent. Fix: run the first fill on Building (above), and while any AI change is running (fill or chat) lock
   the course buttons with one "The AI is updating your plan…" line
-- [ ] (?) Schedule: text first, then the canvas
+- [x] Every page designed and prototyped on the canvas (2026-11-07)
 - [ ] build_plan asks for qr_pathway while any MATH below 300 is left (`planner.py`, the "MATH below 300" ponytail), so a
   student past MATH 226 who still needs MATH 227 or 225 is asked, though the pathway changes nothing for them. Ask only
   while the placement can still change the plan: the first math course the pathways share (CS: MATH 226) isn't done
