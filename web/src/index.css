@@ -3970,7 +3970,7 @@ p, li, small { text-wrap: pretty; }
 .chat-change p { margin: 0; }
 .chat-change.ok { color: var(--green); }
 .chat-change.ok p { color: var(--ink); }
-.chat-change.refused { color: var(--amber); background: var(--amber-soft); border-radius: var(--radius); padding: var(--space-2) var(--space-3); }
+.chat-change.refused, .chat-change.problem { color: var(--amber); background: var(--amber-soft); border-radius: var(--radius); padding: var(--space-2) var(--space-3); }
 .chat-change-actions { display: flex; gap: var(--space-4); }
 .chat-change-actions button {
   min-height: 32px; padding: 0; border: 0; background: none; color: var(--green); font: inherit; font-size: 13px;

@@ -1795,7 +1795,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
   const [lines, setLines] = useState<ChatLine[]>(() => [
     ...(built.filled ? [{ kind: "ai" as const, text: built.filled.reply }] : []),
     ...(built.filled?.changed
-      ? [changeLine(built.plan.semesters, built.filled.semesters, built.filled.check, lastTerm(built.filled.semesters))]
+      ? [changeLine(built.plan.semesters, built.filled.semesters, built.filled.check, lastTerm(built.filled.semesters), true)]
       : []),
     ...(built.why ? [{ kind: "refused" as const, text: built.why }] : []),
   ]);
@@ -1838,7 +1838,7 @@ function AppWorkspace({ profile, built, notes }: { profile: Profile; built: Buil
     if (!r.changed) return;
     setPrevious(state);
     setState(applyAnswer(state, r));
-    log(changeLine(state.semesters, r.semesters, r.check, lastTerm(r.semesters)));
+    log(changeLine(state.semesters, r.semesters, r.check, lastTerm(r.semesters), true));
   };
   const showToast = (x: string) => {
     setToast(x);

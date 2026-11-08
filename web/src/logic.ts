@@ -39,19 +39,21 @@ export function describeChange(before: Semester[], after: Semester[]): string {
 }
 
 /** One chat line. "me" and "ai" go to the model as the conversation; "ok" and "refused" are only shown. */
-export type ChatLine = { kind: "me" | "ai" | "ok" | "refused"; text: string; codes?: string[] };
+export type ChatLine = { kind: "me" | "ai" | "ok" | "refused" | "problem"; text: string; codes?: string[] };
 
-/** The one line a plan change gets: what moved, or why the check said no (the first error). */
-export function changeLine(before: Semester[], after: Semester[], check: Checked, graduation: string): ChatLine {
-  if (!check.valid) return { kind: "refused", text: `Not changed · ${check.errors[0]?.message ?? "the plan did not pass the check"}` };
+/** The one line a plan change gets: what moved, or why the check said no (the first error). `applied`: the change is
+ * already in force (an AI answer, a record edit), so a failed check is a problem to show, not a refusal. */
+export function changeLine(before: Semester[], after: Semester[], check: Checked, graduation: string, applied = false): ChatLine {
   const { moved, removed } = moves(before, after);
   const n = moved.length + removed.length;
   const change = n > 4 ? `${n} courses moved` : describeChange(before, after) || "no course moved"; // a rebuilt plan can move many
-  return {
-    kind: "ok",
-    text: `${change} · graduate ${termLabel(graduation)} · checked against the Bulletin`,
-    codes: moved.map((m) => m.code),
-  };
+  const codes = moved.map((m) => m.code);
+  const first = check.errors[0]?.message ?? "the plan did not pass the check";
+  if (!check.valid)
+    return applied
+      ? { kind: "problem", text: `Plan updated, with a problem · ${change} · ${first}`, codes }
+      : { kind: "refused", text: `Not changed · ${first}` };
+  return { kind: "ok", text: `${change} · graduate ${termLabel(graduation)} · checked against the Bulletin`, codes };
 }
 
 export type Mark = "complete" | "progress" | "incomplete" | "exception" | "warning";

@@ -75,7 +75,7 @@ export function ChatPanel(props: {
   const box = useRef<HTMLTextAreaElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const off = whyOff(left, aiDown);
-  const lastOk = lines.map((l) => l.kind).lastIndexOf("ok");
+  const lastOk = lines.map((l) => l.kind === "ok" || l.kind === "problem").lastIndexOf(true);
   useEffect(() => {
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     end.current?.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "nearest" });
@@ -119,7 +119,7 @@ export function ChatPanel(props: {
               <Icon name={l.kind === "ok" ? "check" : "warning"} size={15} />
               <div>
                 <p>{plainText(l.kind === "ok" ? `Plan updated · ${l.text}` : l.text)}</p>
-                {l.kind === "ok" && (
+                {(l.kind === "ok" || l.kind === "problem") && (
                   <span className="chat-change-actions">
                     {!!l.codes?.length && <button onClick={() => props.onShow(l.codes!)}>Show in plan</button>}
                     {i === lastOk && props.canUndo && !busy && <button onClick={props.onUndo}>Undo</button>}
