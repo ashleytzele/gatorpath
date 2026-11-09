@@ -175,11 +175,19 @@ def test_the_plan_tab_has_no_what_if_row_or_old_progress_view():
 
 
 def test_the_workspace_is_the_main_landmark_and_its_copy_matches_its_buttons():
-    assert '<main className="workspace-main">' in APP  # the plan, Electives and Schedule screens have one, like the others
+    assert '<main id="main" tabIndex={-1} className="workspace-main">' in APP  # the plan, Electives and Schedule screens have one, like the others
     assert "Swap or Choose a row" not in APP  # a chosen row's button says Details; an open one says Choose
     assert "of ${same.length}" in APP  # rows of one requirement are numbered, not five of "Electives (15 units)"
     assert "Clear my saved data" in APP and "wiped.on" in APP  # the footer clears this tab's saved record and plan
     assert "Still working" in APP + (Path(__file__).parents[1] / "web/src/Building.tsx").read_text()
+
+
+def test_every_screen_has_a_main_landmark_and_a_skip_link():
+    web = Path(__file__).parents[1] / "web/src"
+    for name in ("App.tsx", "Goals.tsx", "Record.tsx", "Building.tsx"):
+        mains = re.findall(r"<main\b[^>]*>", (web / name).read_text())
+        assert mains and all('id="main"' in m and 'role="status"' not in m for m in mains), (name, mains)  # role=status would drop the landmark
+    assert 'href="#main"' in (web / "App.tsx").read_text() and 'href="#top"' in (web / "Landing.tsx").read_text()
 
 
 def test_the_stylesheet_uses_tokens_for_colors_and_stacking():

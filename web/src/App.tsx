@@ -1829,7 +1829,7 @@ function AppWorkspace({
   };
   return (
     <div className={`workspace ${docked ? "" : "chat-hidden"}`}>
-      <main className="workspace-main">
+      <main id="main" tabIndex={-1} className="workspace-main">
         <div className="workspace-stepper"><Stepper current={3} /></div>
         {saveError && <ErrorCard text="This browser could not save your plan for a reload." />}
         <Tabs tab={tab} setTab={setTab} />
@@ -1951,6 +1951,7 @@ export default function App() {
   };
   return (
     <div className="site-shell">
+      {screen !== "landing" && <a className="skip-link" href="#main">Skip to the main content</a>}
       {screen !== "landing" && <Header
         screen={screen}
         onStyle={() => setStyle(true)}

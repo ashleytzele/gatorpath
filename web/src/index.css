@@ -2435,3 +2435,12 @@ button.cal-block:focus-visible { outline: 2px solid var(--ink); outline-offset: 
   .calendar-card.hourly .cal-block.preview, .mobile-day-list { display: none !important; }
   .calendar-card.hourly .cal-block.faded { opacity: 1; }
 }
+
+/* the first Tab stop on every screen: jumps past the header to the page's main content */
+.skip-link {
+  position: absolute; left: var(--space-3); top: -60px; z-index: var(--z-toast);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-sm);
+  background: var(--ink); color: var(--on-accent); font-weight: 700; text-decoration: none;
+}
+.skip-link:focus { top: var(--space-3); outline: 3px solid var(--focus); outline-offset: 2px; }
+main:focus { outline: none; } /* focused only by the skip link, to start reading there */

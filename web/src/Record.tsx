@@ -383,7 +383,7 @@ export function RecordScreen({ done, back }: { done: (profile: Profile, imported
   });
   useEffect(() => { try { sessionStorage.setItem(RECORD_KEY, JSON.stringify({ ...recordDraft(), method })); } catch { /* storage unavailable */ } }, [method]);
   return (
-    <main className="flow-page">
+    <main id="main" tabIndex={-1} className="flow-page">
       <Stepper current={1} />
       <div className="flow-heading">
         <h1>Tell us what you’ve completed.</h1>
@@ -861,7 +861,7 @@ export function ReviewScreen({
   const gpa = profile.gpa;
   const sfGpa = profile.sf_state_gpa ?? t?.gpa_sf_state?.value;
   return (
-    <main className="flow-page rq-page">
+    <main id="main" tabIndex={-1} className="flow-page rq-page">
       <Stepper current={1} />
       <div className="flow-heading">
         <h1>Does this look right?</h1>

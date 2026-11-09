@@ -177,7 +177,7 @@ export function GoalsScreen({
   let n = 0;
   const goal = goalText(interests, after);
   return (
-    <main className="flow-page goals-page">
+    <main id="main" tabIndex={-1} className="flow-page goals-page">
       <Stepper current={2} />
       <div className="flow-heading">
         <h1>What matters to you?</h1>

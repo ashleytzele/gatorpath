@@ -50,6 +50,7 @@ const FAQ = [
 export function Landing({ start }: { start: () => void }) {
   return (
     <>
+      <a className="skip-link" href="#top">Skip to the main content</a>
       <header className="ld-nav">
         <div className="ld-nav-inner">
           <a href="#top" className="ld-logo" aria-label="GatorPath">
@@ -63,7 +64,7 @@ export function Landing({ start }: { start: () => void }) {
           <button className="ld-btn ld-btn-green ld-btn-sm" onClick={start}>Start planning</button>
         </div>
       </header>
-      <main id="top" className="ld">
+      <main id="top" tabIndex={-1} className="ld">
         <section className="ld-hero">
           <p className="ld-label">For SF State students</p>
           <h1>Plan your path to graduation in 5 minutes.</h1>

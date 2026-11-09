@@ -81,7 +81,7 @@ export default function BuildingScreen({
 
   if (built.error) {
     return (
-      <main className="flow-page">
+      <main id="main" tabIndex={-1} className="flow-page">
         <ErrorCard text={built.error} retry={built.retry} />
         <div className="flow-action">
           <Button kind="secondary" onClick={back}>
@@ -97,7 +97,7 @@ export default function BuildingScreen({
     </span>
   );
   return (
-    <main className="building-screen" role="status">
+    <main id="main" tabIndex={-1} className="building-screen" aria-live="polite">  {/* a live region, not role=status: that would stop it being the main landmark */}
       <div className="building-orb">
         <span className="logo-mark building-logo"><img src={LOGO_SRC} alt="" /></span>
         <i />
