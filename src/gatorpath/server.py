@@ -45,7 +45,7 @@ mcp = MCPServer(
         f"year, courses and prereqs are the newest ({YEAR}). Answers come only from the Bulletin and reviewed rules: "
         "don't add courses, prereqs or requirements the tools didn't return. Cite the `source`/`source_page` each answer "
         "comes with (Bulletin pages; a few office policies cite that office's page), show every warning, and remind "
-        "the student that the DPR and an advisor are the final word. A course meets a GE, SF State Studies or American "
+        "the student that the DPR and an academic advisor are the official sources for degree requirements. A course meets a GE, SF State Studies or American "
         "Institutions area only where a tool shows it (`ge_areas`, `counted`, `major_courses`): never infer one from "
         "a course's subject or title. "
         "Never guess what transfer credit covers (the DPR shows it), what's left or whether a student is done "

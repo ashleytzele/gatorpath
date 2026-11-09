@@ -16,7 +16,7 @@ and they check the answer against their DPR and an advisor.
 GatorPath reads the student's DPR, checks a semester-by-semester plan against the SF State Bulletin, and builds a
 clash-free schedule for next term. The chat is the product: the student asks, and the plan beside it changes; the
 page shows the result. Success is classmates actually using it and reporting where it's wrong, and every plan passing
-GatorPath's checks. The DPR and an advisor are always the final word.
+GatorPath's checks. The DPR and an academic advisor are always the official sources.
 
 ## Brand Personality
 

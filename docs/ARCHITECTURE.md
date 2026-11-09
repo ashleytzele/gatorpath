@@ -781,7 +781,7 @@ What-ifs map to tools, not to new server logic:
 
 ### 7.5 Advisor handoff
 
-GatorPath is for getting a direction. An advisor and the DPR are the final word. Instead of a generic
+GatorPath is for getting a direction. The DPR and an academic advisor are the official sources. Instead of a generic
 disclaimer, tool responses carry `see_advisor: [{why, who, link, how_to_book, source}]` when:
 - an exception or substitution is needed ("Exceptions must be approved in advance by a senior advisor",
   BS CS senior electives, p.1905-1906)
@@ -966,7 +966,7 @@ pass it (tested).
   Bulletin. The AI can't add a course that doesn't exist, because `check_plan` rejects unknown
   codes.
 - **Honest uncertainty.** Every unverifiable condition is surfaced as a warning. Unverified
-  programs are labeled. Every answer points to the DPR and an advisor as the final word.
+  programs are labeled. Every answer points to the DPR and an academic advisor as the official sources.
 - **Bias / equity note.** Offering-history data favors courses that ran recently. "Rare" ≠
   "never", so we say "not offered in the last N terms" rather than "not offered".
 

@@ -700,7 +700,7 @@ function PlanView({
       )}
       <section className="pl-section" aria-labelledby="pl-advisors">
         <h2 id="pl-advisors">Talk to an advisor</h2>
-        <p className="pl-lead">Take this plan with you. Your DPR and your advisor have the final word.</p>
+        <p className="pl-lead">Take this plan with you. Your DPR and your academic advisor are the official sources for your degree requirements.</p>
         {advisors.map((a) => (
           <AdvisorRow a={a} audit={audit} key={a.role} />
         ))}

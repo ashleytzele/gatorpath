@@ -181,7 +181,7 @@ export function ChatPanel(props: {
         {off ? <>{off} <button type="button" className="pl-link" onClick={props.onRetry}>Check again</button></> : (
           <>
             {free && <b>{free}. </b>}
-            Every change is checked against the Bulletin. Your DPR and an advisor have the final word.{" "}
+            Every change is checked against the Bulletin. Your DPR and your academic advisor are the official sources for your degree requirements.{" "}
             <a href={NAVIGATOR} target="_blank" rel="noreferrer">
               Ask an advisor in Navigator
             </a>

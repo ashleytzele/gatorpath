@@ -39,7 +39,7 @@ const STEPS = [
 ];
 
 const FAQ = [
-  ["Is GatorPath official?", "No. GatorPath is a student-built planning aid. Your DPR is the official record, and an advisor has the final word on your degree."],
+  ["Is GatorPath official?", "No. GatorPath is a student-built planning aid. Your DPR is the official record, and your academic advisor confirms what counts toward your degree."],
   ["Is my data safe?", "Your DPR PDF is read in memory and never saved. Your record and plan stay in this browser tab's session storage so a reload keeps your work; they clear when you close the tab or choose Clear my saved data. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA. It only learns a grade if you type one in the chat."],
   ["What’s a DPR, and how do I get it?", "Your Degree Progress Report shows your completed courses and what your degree still requires. In Student Center, open Degree Progress Report, click Expand All and View All, then Print → Save as PDF."],
   ["Does it work for my major?", "It has the 2026–27 rules for the bachelor’s programs listed when you choose your goals, written from the Bulletin. Always compare your plan with your DPR and an advisor."],
@@ -212,7 +212,7 @@ export function Landing({ start }: { start: () => void }) {
             ))}
             <a href={NAVIGATOR} target="_blank" rel="noreferrer">Talk to an advisor</a>
           </nav>
-          <p>Unofficial student-built tool, not affiliated with SF State. Your DPR and an advisor have the final word.</p>
+          <p>Unofficial student-built tool, not affiliated with SF State. Your DPR and your academic advisor are the official sources for your degree requirements.</p>
         </div>
       </footer>
     </>
