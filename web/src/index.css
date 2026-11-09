@@ -688,6 +688,7 @@ legend.q-head + * { clear: both; }
 .q-link {
   margin-left: 37px;
 }
+.q-optional { font-family: var(--sans); font-weight: 400; font-size: 14px; color: var(--muted); }
 .q-error { margin: var(--space-2) 0 0 37px; color: var(--red); font-weight: 600; }
 .q > select {
   width: auto;

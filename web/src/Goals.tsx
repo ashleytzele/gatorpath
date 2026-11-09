@@ -75,12 +75,12 @@ function ChipPicker({ names, picked, set }: { names: string[]; picked: string[];
   );
 }
 
-function Q({ n, title, hint, group, id, children }: { n: number; title: ReactNode; hint?: string; group?: boolean; id?: string; children: ReactNode }) {
+function Q({ n, title, hint, group, id, error, optional, children }: { n: number; title: ReactNode; hint?: string; group?: boolean; id?: string; error?: string; optional?: boolean; children: ReactNode }) {
   const head = (
     <>
       <span className="q-num">{n}</span>
       <span className="q-text">
-        <h2>{title}</h2>
+        <h2>{title}{optional && <span className="q-optional"> (optional)</span>}</h2>
         {hint && <small>{hint}</small>}
       </span>
     </>
@@ -89,11 +89,13 @@ function Q({ n, title, hint, group, id, children }: { n: number; title: ReactNod
     <fieldset className="q" id={id}>
       <legend className="q-head">{head}</legend>
       {children}
+      {error && <p className="q-error" role="alert">{error}</p>}
     </fieldset>
   ) : (
     <section className="q" id={id}>
       <div className="q-head">{head}</div>
       {children}
+      {error && <p className="q-error" role="alert">{error}</p>}
     </section>
   );
 }
@@ -108,11 +110,12 @@ function Radio({ name, value, checked, set, children }: { name: string; value: s
 }
 
 /** Math placement: the QR pathways of this major's roadmap, each with the line it leads to. Nothing if there are none. */
-function QrQuestion({ n, program, qr, set }: { n: number; program: string; qr?: string; set: (v: string) => void }) {
+function QrQuestion({ n, program, qr, set, error, shown }: { n: number; program: string; qr?: string; set: (v: string) => void; error?: string; shown: (on: boolean) => void }) {
   const found = useLoad(() => getPathways(program), [program]);
+  useEffect(() => shown(!!found.data?.length), [found.data]); // eslint-disable-line react-hooks/exhaustive-deps
   if (!found.data?.length) return null;
   return (
-    <Q n={n} group title="What is your math placement?" hint="We use it to place your first math class.">
+    <Q n={n} group id="q-qr" error={error} title="What is your math placement?" hint="We use it to place your first math class.">
       {found.data.map((p) => (
         <Radio name="qr" key={p.pathway} value={p.pathway} checked={qr === p.pathway} set={set}>
           <b>QR {p.pathway}</b>
@@ -156,7 +159,8 @@ export function GoalsScreen({
   const [summer, setSummer] = useState(from("include_summer") ?? false);
   const [winter, setWinter] = useState(from("include_winter") ?? false);
   const [f1, setF1] = useState(String((previous as { f1_choice?: string }).f1_choice ?? (from("f1") === true ? "yes" : from("f1") === false ? "no" : "")));
-  const [f1Missing, setF1Missing] = useState(false); // Build was pressed without an answer
+  const [tried, setTried] = useState(false); // Build was pressed: unanswered questions say so
+  const [qrShown, setQrShown] = useState(false); // the math question is on the page (it is left out if the major has no pathways)
   const [qr, setQr] = useState(from("qr_pathway") ?? profile.qr_pathway);
   const [start, setStart] = useState(from("start_term") ?? "");
   useEffect(() => {
@@ -176,12 +180,22 @@ export function GoalsScreen({
   const title = programs.data?.find((p) => p.id === major)?.title ?? major;
   let n = 0;
   const goal = goalText(interests, after);
+  // every question but summer and Winter Session needs an answer; the graduate-by and units questions start on a visible
+  // choice ("Follow the recommended pace", "About 15 units"), which counts
+  const unanswered: Record<string, string> = {
+    ...(goals && !interests.length && { "q-interests": "Pick at least one, or choose “Not sure yet”." }),
+    ...(!after.length && { "q-after": "Pick at least one, or choose “Not sure yet”." }),
+    ...(!f1 && { "q-f1": "Choose Yes, No or Prefer not to say." }),
+    ...(askQr && qrShown && !qr && { "q-qr": "Choose your math placement. Not sure? Use the link below." }),
+    ...(needs === "start_term" && !start && { "q-start": "Choose the term your plan starts." }),
+  };
+  const shown = (id: string) => (tried ? unanswered[id] : undefined);
   return (
     <main id="main" tabIndex={-1} className="flow-page goals-page">
       <Stepper current={2} />
       <div className="flow-heading">
         <h1>What matters to you?</h1>
-        <p>Your answers set your pace and shape the courses we pick. You can change them later, or in the chat.</p>
+        <p>Your answers set your pace and shape the courses we pick. Please answer every question except summer and Winter Session. You can change them later, or in the chat.</p>
       </div>
       {needs && (
         <div className="error-card" role="alert">
@@ -221,7 +235,7 @@ export function GoalsScreen({
         )}
       </div>
       {goals ? (
-        <Q n={++n} title="What are you interested in?" hint="Pick any that fit. We’ll choose your electives around them.">
+        <Q n={++n} id="q-interests" error={shown("q-interests")} title="What are you interested in?" hint="Pick any that fit. We’ll choose your electives around them.">
           <ChipPicker names={goals} picked={interests} set={setInterests} />
         </Q>
       ) : (
@@ -233,7 +247,7 @@ export function GoalsScreen({
           </div>
         </div>
       )}
-      <Q n={++n} title="What do you want to do after you graduate?" hint="This helps us pick courses that lead there.">
+      <Q n={++n} id="q-after" error={shown("q-after")} title="What do you want to do after you graduate?" hint="This helps us pick courses that lead there.">
         <ChipPicker names={AFTER} picked={after} set={setAfter} />
       </Q>
       <Q n={++n} title="When do you want to graduate?" hint="We’ll tell you if that pace looks realistic.">
@@ -253,7 +267,7 @@ export function GoalsScreen({
         {!["", "12", "18"].includes(units) && <Radio name="units" value={units} checked set={setUnits}>{units} units (set earlier)</Radio>}
         <p className="q-note">More than the roadmap’s load needs an advisor’s OK.</p>
       </Q>
-      <Q n={++n} group title="Will you take summer or Winter Session classes?" hint="They can help you finish sooner. Leave both off if not.">
+      <Q n={++n} group optional title="Will you take summer or Winter Session classes?" hint="They can help you finish sooner. Leave both off if not.">
         <label className="q-radio">
           <input type="checkbox" checked={summer} onChange={(e) => setSummer(e.target.checked)} />
           <span>Summer</span>
@@ -267,20 +281,20 @@ export function GoalsScreen({
         n={++n}
         group
         id="q-f1"
+        error={shown("q-f1")}
         title={<>Are you on an F-1 student visa? <Tooltip text="F-1 students need at least 12 units every fall and spring." /></>}
-        hint="This sets your minimum load. Please answer, so we don't plan terms under 12 units for you by mistake."
+        hint="This sets your minimum load, so we don't plan terms under 12 units for an F-1 student."
       >
-        <Radio name="f1" value="no" checked={f1 === "no"} set={(v) => { setF1(v); setF1Missing(false); }}>No</Radio>
-        <Radio name="f1" value="yes" checked={f1 === "yes"} set={(v) => { setF1(v); setF1Missing(false); }}>Yes</Radio>
-        <Radio name="f1" value="skip" checked={f1 === "skip"} set={(v) => { setF1(v); setF1Missing(false); }}>Prefer not to say</Radio>
-        {f1Missing && <p className="q-error" role="alert">Choose Yes, No or Prefer not to say, then build your plan.</p>}
+        <Radio name="f1" value="no" checked={f1 === "no"} set={setF1}>No</Radio>
+        <Radio name="f1" value="yes" checked={f1 === "yes"} set={setF1}>Yes</Radio>
+        <Radio name="f1" value="skip" checked={f1 === "skip"} set={setF1}>Prefer not to say</Radio>
         {f1 === "yes" && (
           <p className="q-note">Every fall and spring stays at 12 units or more. For other visa questions, ask the international office.</p>
         )}
       </Q>
-      {askQr && <QrQuestion n={++n} program={profile.program} qr={qr} set={setQr} />}
+      {askQr && <QrQuestion n={++n} program={profile.program} qr={qr} set={setQr} error={shown("q-qr")} shown={setQrShown} />}
       {needs === "start_term" && (
-        <Q n={++n} title="When does your plan start?" hint="Your plan starts here.">
+        <Q n={++n} id="q-start" error={shown("q-start")} title="When does your plan start?" hint="Your plan starts here.">
           <select aria-label="When does your plan start?" value={start} onChange={(e) => setStart(e.target.value)}>
             <option value="">Choose a term</option>
             {nearbyTerms(0, 4).map((t) => (
@@ -295,10 +309,9 @@ export function GoalsScreen({
         <Button kind="ghost" onClick={back}><Icon name="back" size={16} /> Back</Button>
         <Button
           onClick={() => {
-            if (!f1) {
-              setF1Missing(true);
-              return calmScroll(document.getElementById("q-f1"), "center");
-            }
+            setTried(true);
+            const first = Object.keys(unanswered)[0];
+            if (first) return calmScroll(document.getElementById(first), "center");
             build(
               {
                 ...(goal && { goal }),

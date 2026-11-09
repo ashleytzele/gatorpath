@@ -203,9 +203,13 @@ def test_the_stylesheet_uses_tokens_for_colors_and_stacking():
     assert not re.findall(r"z-index:\s*\d", css), "a raw z-index: use --z-raised, --z-sticky, --z-bar, --z-sheet, --z-overlay or --z-toast"
 
 
-def test_the_f1_question_has_to_be_answered_before_the_plan_is_built():
+def test_every_goals_question_but_summer_and_winter_has_to_be_answered_before_the_plan_is_built():
     goals = (Path(__file__).parents[1] / "web/src/Goals.tsx").read_text()
-    assert "if (!f1)" in goals and "Choose Yes, No or Prefer not to say" in goals and 'value="skip"' in goals
+    for needed in ('"q-interests"', '"q-after"', '"q-f1"', '"q-qr"', '"q-start"'):  # each has a message and an id to scroll to
+        assert goals.count(needed) >= 2, needed
+    assert "setTried(true)" in goals and "Object.keys(unanswered)[0]" in goals  # Build stops at the first unanswered one
+    assert 'value="skip"' in goals and "Not sure yet" in goals  # "Prefer not to say" and "Not sure yet" are answers
+    assert "group optional title=\"Will you take summer or Winter Session classes?\"" in goals  # the one optional question
 
 
 def test_the_site_never_calls_a_plan_verified_and_sends_questions_to_navigator():
