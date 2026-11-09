@@ -1,17 +1,11 @@
+import { useRef } from "react";
 import { Icon, Logo, NAVIGATOR } from "./ui";
 
 const LINKS = [
-  ["what", "What you get"],
   ["how", "How it works"],
+  ["what", "What you get"],
   ["questions", "Questions"],
 ] as const;
-
-const FEATURES = [
-  { title: "Your record, read for you", text: "Upload your DPR and check every requirement, course, grade and unit on one clear page." },
-  { title: "A plan that passes the Bulletin", text: "Every term is checked: prerequisites, unit loads, and when each course is usually offered." },
-  { title: "Ask, and it changes", text: "Finish sooner, lighter terms, a different GE: ask the chat. Every change is checked again before it lands." },
-  { title: "Next term’s schedule", text: "Sections with no time clashes, with rooms, instructors and class numbers ready for registration." },
-];
 
 const POINTS = [
   ["What’s left, at a glance.", "Open any requirement to see its courses and grades."],
@@ -46,7 +40,11 @@ const FAQ = [
   ["Does it use AI?", "Gator AI chooses electives and answers in the chat (Claude Haiku). Planning and every check use Bulletin rules. Gator AI has hourly and daily limits; planning works without it."],
 ];
 
+// the buttons the chat really offers under a plan
+const ASKS = ["Choose my open courses", "Finish sooner", "Lighter terms", "Add summer", "Add Winter Session", "Compare with another major"];
+
 export function Landing({ start }: { start: () => void }) {
+  const demo = useRef<HTMLVideoElement>(null);
   return (
     <>
       <a className="skip-link" href="#top">Skip to the main content</a>
@@ -64,33 +62,32 @@ export function Landing({ start }: { start: () => void }) {
         </div>
       </header>
       <main id="top" tabIndex={-1} className="ld">
-        <section className="ld-hero">
-          <p className="ld-label">For SF State students</p>
-          <h1>Plan your path to graduation in 5 minutes.</h1>
-          <p className="ld-lede">
-            Upload your DPR, tell us your goals, and get a semester-by-semester plan checked against
-            the Bulletin, plus next term’s schedule with no time clashes.
-          </p>
-          <div className="ld-actions">
-            <button className="ld-btn ld-btn-green" onClick={start}>
-              Start planning <Icon name="arrow" size={18} />
-            </button>
-            <a className="ld-btn ld-btn-outline" href="#demo">
-              <span className="ld-tri" aria-hidden="true" />
-              Watch the demo
-            </a>
+        <section className="lp-hero">
+          <div className="lp-hero-copy">
+            <p className="ld-label">For SF State students</p>
+            <h1>Plan your path to graduation in 5 minutes.</h1>
+            <p className="lp-lede">
+              Upload your DPR, tell us your goals, and get a semester-by-semester plan checked against
+              the Bulletin, plus next term’s schedule with no time clashes.
+            </p>
+            <div className="lp-actions">
+              <button className="ld-btn ld-btn-green" onClick={start}>
+                Start planning <Icon name="arrow" size={18} />
+              </button>
+              <button className="ld-btn ld-btn-outline" onClick={() => demo.current?.play()}>
+                <span className="ld-tri" aria-hidden="true" />
+                Watch the demo
+              </button>
+            </div>
+            <p className="ld-fine">No account needed. Your DPR PDF is never saved.</p>
           </div>
-          <p className="ld-fine">No account needed. Your DPR PDF is never saved.</p>
-        </section>
-
-        <section id="demo" className="ld-demo" aria-label="Demo video">
-          <div className="ld-frame">
-            <video className="ld-demo-video" controls playsInline preload="none" poster="/landing-upload.jpg" aria-label="GatorPath walkthrough from DPR upload to a plan">
+          <figure className="lp-demo">
+            <video ref={demo} className="lp-demo-video" controls playsInline preload="none" poster="/landing-upload.jpg" aria-label="GatorPath walkthrough from DPR upload to a plan">
               <source src="/gatorpath-demo.mp4" type="video/mp4" />
               Your browser can’t play this video. You can still start planning below.
             </video>
-          </div>
-          <p className="ld-caption">A short walkthrough with a fictional student, starting at DPR upload.</p>
+            <figcaption>A short walkthrough with a fictional student, starting at DPR upload.</figcaption>
+          </figure>
         </section>
 
         <section className="ld-facts" aria-label="About GatorPath">
@@ -103,41 +100,96 @@ export function Landing({ start }: { start: () => void }) {
           </ul>
         </section>
 
-        <section id="what" className="ld-sec">
-          <h2>Everything your DPR leaves you to work out.</h2>
-          <p className="ld-sub">Your DPR tells you what’s done. GatorPath works out what to take, and when.</p>
-          <div className="ld-what">
+        <section id="how" className="lp-sec" aria-labelledby="howh">
+          <div className="lp-how">
             <div>
-              {FEATURES.map((f) => (
-                <div className="ld-feature" key={f.title}>
-                  <h3>{f.title}</h3>
-                  <p>{f.text}</p>
-                </div>
-              ))}
+              <h2 id="howh">Three steps, about five minutes.</h2>
+              <ol className="lp-steps">
+                {STEPS.map(([title, text], i) => (
+                  <li key={title}>
+                    <span className="lp-step-dot" aria-hidden="true">{i + 1}</span>
+                    <div>
+                      <h3>{title}</h3>
+                      <p>{text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
-            <figure className="ld-schedule-shot">
-              <img src="/landing-weekly.jpg" alt="A sample weekly class calendar with course times and rooms" loading="lazy" />
-              <figcaption>A sample week for a fictional student: times, rooms and sections together before registration.</figcaption>
+            <figure className="lp-shot">
+              <img src="/landing-building.jpg" width="1000" height="720" alt="The build screen: a checklist of steps (reading your record, mapping your requirements, placing semesters from the roadmap) ending with Gator AI choosing electives and GE" loading="lazy" />
+              <figcaption>Your plan is built from the Bulletin in about a minute.</figcaption>
             </figure>
           </div>
         </section>
 
-        <section className="ld-band" aria-labelledby="route">
-          <div className="ld-split ld-sec">
-            <figure className="ld-route-box">
-              <img src="/landing-plan.jpg" alt="A sample term-by-term GatorPath plan for a fictional student" loading="lazy" />
+        <section id="what" className="lp-sec lp-sec-top" aria-labelledby="whath">
+          <h2 id="whath">Everything your DPR leaves you to work out.</h2>
+          <p className="ld-sub">Your DPR tells you what’s done. GatorPath works out what to take, and when.</p>
+          <div className="lp-row">
+            <div className="lp-copy">
+              <h3>Your record, read for you</h3>
+              <p>Upload your DPR and see every requirement, course, grade and unit on one clear page. Open any section to check it.</p>
+              <ul className="lp-ticks">
+                <li>Complete, in progress, planned and still needed, counted separately</li>
+                <li>Fix anything the DPR got wrong before you plan</li>
+              </ul>
+            </div>
+            <figure className="lp-shot">
+              <img src="/landing-requirements.jpg" width="1400" height="694" alt="The Requirements page: General Education, SF State Studies, American Institutions, University requirements and Major, each with how many requirements are complete, planned and still needed" loading="lazy" />
+            </figure>
+          </div>
+        </section>
+
+        <section className="lp-route" aria-labelledby="route">
+          <div className="lp-route-inner">
+            <figure className="lp-shot lp-shot-light">
+              <img src="/landing-route.jpg" width="1500" height="716" alt="A term-by-term plan: Spring 2027, 16 units, with each course, its units and the requirement it counts for" loading="lazy" />
               <figcaption>Sample plan for a fictional student</figcaption>
             </figure>
-            <div>
+            <div className="lp-copy">
               <h2 id="route">See your whole route.</h2>
-              <p className="ld-sub">Every term to graduation on one page, and the reason each class sits where it does.</p>
-              <ul className="ld-points">
+              <p className="lp-route-sub">Every term to graduation on one page, and the reason each class sits where it does.</p>
+              <ul className="lp-points">
                 {POINTS.map(([lead, text]) => (
-                  <li key={lead}><span aria-hidden="true" /><span><b>{lead}</b> {text}</span></li>
+                  <li key={lead}><b>{lead}</b> {text}</li>
                 ))}
               </ul>
-              <button className="ld-btn ld-btn-dark" onClick={start}>Start planning</button>
+              <button className="ld-btn ld-btn-white" onClick={start}>Start planning</button>
             </div>
+          </div>
+        </section>
+
+        <section className="lp-sec" aria-label="Ask and schedule">
+          <div className="lp-row lp-row-chat">
+            <figure className="lp-chat">
+              <img src="/landing-chat.jpg" width="700" height="1146" alt="The Gator AI chat after a plan is built: it says what it filled, what changed and what to check, then shows a checked change" loading="lazy" />
+            </figure>
+            <div className="lp-copy">
+              <h3>Ask, and it changes</h3>
+              <p>Finish sooner, lighter terms, a different GE: ask the chat. Every change is checked against the Bulletin again before it lands, and you can undo it.</p>
+              <p className="lp-asks-lead">Under your plan, one press does it:</p>
+              <ul className="lp-asks">
+                {ASKS.map((a) => (
+                  <li key={a}>{a}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="lp-row lp-row-spaced">
+            <div className="lp-copy">
+              <h3>Next term’s schedule</h3>
+              <p>Sections with no time clashes, with rooms, instructors and class numbers ready for registration.</p>
+              <ul className="lp-ticks">
+                <li>Choose another section and the rest fit around it</li>
+                <li>Print it, with the right office for each question</li>
+              </ul>
+            </div>
+            <figure className="lp-shot">
+              <img src="/landing-schedule.jpg" width="1400" height="992" alt="A weekly class calendar, Monday to Friday, with each course's time, building and room" loading="lazy" />
+              <figcaption>A sample week for a fictional student.</figcaption>
+            </figure>
           </div>
         </section>
 
@@ -160,24 +212,6 @@ export function Landing({ start }: { start: () => void }) {
                 ))}
               </ul>
             </div>
-          </div>
-        </section>
-
-        <section id="how" className="ld-how" aria-labelledby="howh">
-          <div className="ld-sec">
-            <h2 id="howh">Three steps, about five minutes.</h2>
-            <ol className="ld-steps">
-              {STEPS.map(([title, text], i) => (
-                <li key={title}>
-                  <div className="ld-step-top">
-                    <span className={`ld-step-dot ${i === 0 ? "active" : ""}`} aria-hidden="true">{i + 1}</span>
-                    {i < STEPS.length - 1 && <span className="ld-stepline" aria-hidden="true" />}
-                  </div>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                </li>
-              ))}
-            </ol>
           </div>
         </section>
 
