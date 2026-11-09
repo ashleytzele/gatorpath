@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Left } from "./api";
-import { leftText, type ChatLine, type Suggestion } from "./logic";
+import type { ChatLine, Suggestion } from "./logic";
 import { Icon, LOGO_SRC, NAVIGATOR, calmScroll, plainText } from "./ui";
 
 /** A chat reply's light markdown as React elements (nothing is injected as HTML): paragraphs, "- " and "1. " lists,
@@ -93,7 +93,6 @@ export function ChatPanel(props: {
     props.onSend(ask);
   };
   const latest = lines[lines.length - 1];
-  const free = leftText(left);
   return (
     <aside className={`chat-dock ${props.open ? "open" : ""}`} aria-label="Chat with Gator AI">
       <div className="chat-dock-head">
@@ -180,10 +179,9 @@ export function ChatPanel(props: {
       <p className="chat-note" id="chat-note">
         {off ? <>{off} <button type="button" className="pl-link" onClick={props.onRetry}>Check again</button></> : (
           <>
-            {free && <b>{free}. </b>}
-            Every change is checked against the Bulletin. Your DPR and your academic advisor are the official sources for your degree requirements.{" "}
+            Checked against the Bulletin. For official answers, see your DPR or{" "}
             <a href={NAVIGATOR} target="_blank" rel="noreferrer">
-              Ask an advisor in Navigator
+              ask an advisor in Navigator
             </a>
             .
           </>

@@ -196,6 +196,12 @@ def test_the_landing_page_has_one_kicker_and_no_icon_card_grid():
     assert "ld-grid2" not in landing and "<svg" not in landing and 'className="ld-what"' in landing and "landing-weekly.jpg" in landing
 
 
+def test_the_chat_note_is_short_and_shows_no_question_counter():
+    chat = (Path(__file__).parents[1] / "web/src/Chat.tsx").read_text()
+    assert "Checked against the Bulletin. For official answers, see your DPR or" in chat
+    assert "leftText" not in APP and "{free" not in chat  # the limit is shown only once it is reached
+
+
 def test_the_stylesheet_uses_tokens_for_colors_and_stacking():
     css = (Path(__file__).parents[1] / "web/src/index.css").read_text()
     tokens, _, rules = css.partition("  * {\n    box-sizing: border-box;")

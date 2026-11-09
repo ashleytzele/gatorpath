@@ -205,14 +205,6 @@ export function aiErrorText(text: string) {
   return text.replace(/The AI helper/g, "Gator AI").replace(/AI helper/g, "Gator AI");
 }
 
-/** null when unknown or plenty left; else the smaller of the hour and the day. */
-export function leftText(left?: Left): string | null {
-  if (!left) return null;
-  const today = left.day < left.hour;
-  const n = today ? left.day : left.hour;
-  return n > 5 ? null : `${n} ${n === 1 ? "question" : "questions"} left ${today ? "today" : "this hour"}`;
-}
-
 /** "15 of 15 units planned": what's done plus every row the plan holds for the group, out of what it needs. "" when the group names no total. */
 export function plannedLine(done: number | undefined, needed: number | undefined, rowUnits: number[]) {
   if (!needed) return "";

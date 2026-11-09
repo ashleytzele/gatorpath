@@ -1,6 +1,6 @@
 // Run: node web/src/logic.check.ts
 import assert from "node:assert/strict";
-import { aiErrorText, preferenceNotes, blockOf, changeLine, countSection, coveredBy, describeChange, distinctMeetings, goalText, leftText, limitOf, offeredText, markOf, pathwayLine, plainWarning, restoreMissingSlots, shortRoom, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutCoveredSlots, withoutUrls, withPlanned } from "./logic.ts";
+import { aiErrorText, preferenceNotes, blockOf, changeLine, countSection, coveredBy, describeChange, distinctMeetings, goalText, limitOf, offeredText, markOf, pathwayLine, plainWarning, restoreMissingSlots, shortRoom, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutCoveredSlots, withoutUrls, withPlanned } from "./logic.ts";
 
 const g = (id: string, status: string) => ({ id, title: id, kind: "major", source: "", status, counted: [], in_progress: [] });
 const term = (t: string, courses: (string | { slot: string; units: number })[]) => ({ term: t, courses });
@@ -44,10 +44,6 @@ assert.equal(pathwayLine([{ code: "MATH 197", title: "A" }, { code: "MATH 198", 
 assert.equal(goalText(["Data Science", "Not sure yet"], ["Graduate school"]), "Data Science; after graduating: Graduate school");
 assert.equal(goalText(["AI / Machine Learning", "Data Science"], []), "AI / Machine Learning, Data Science");
 assert.equal(goalText(["Not sure yet"], []), "");
-assert.equal(leftText(undefined), null);
-assert.equal(leftText({ hour: 9, day: 20 }), null);
-assert.equal(leftText({ hour: 1, day: 20 }), "1 question left this hour");
-assert.equal(leftText({ hour: 4, day: 3 }), "3 questions left today");
 assert.deepEqual(limitOf("You've asked the AI helper 5 times this hour. Try again in 39 minutes"), { hour: 0, day: 1 });
 assert.deepEqual(limitOf("The AI helper reached its daily limit for everyone", { hour: 3, day: 9 }), { hour: 3, day: 0 });
 assert.equal(limitOf("The AI helper isn't connected yet"), undefined);
