@@ -208,6 +208,7 @@ def test_every_goals_question_but_summer_and_winter_has_to_be_answered_before_th
     for needed in ('"q-interests"', '"q-after"', '"q-f1"', '"q-qr"', '"q-start"'):  # each has a message and an id to scroll to
         assert goals.count(needed) >= 2, needed
     assert "setTried(true)" in goals and "Object.keys(unanswered)[0]" in goals  # Build stops at the first unanswered one
+    assert "AI / Machine Learning" not in goals and "Clinical / Counseling" not in goals  # no preset interest chips, for any major
     assert 'value="skip"' in goals and "Not sure yet" in goals  # "Prefer not to say" and "Not sure yet" are answers
     assert "group optional title=\"Will you take summer or Winter Session classes?\"" in goals  # the one optional question
 

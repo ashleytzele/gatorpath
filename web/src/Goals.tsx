@@ -5,17 +5,6 @@ import { Button, DEMO, Icon, NAVIGATOR, Stepper, Tooltip, calmScroll, nearbyTerm
 
 export type Picks = { interests: string[]; after: string[] };
 
-const GOALS: Record<string, string[] | null> = {
-  "bs-cs": [
-    "AI / Machine Learning",
-    "Cybersecurity",
-    "Web Development",
-    "Game Development",
-    "Data Science",
-    "Systems",
-  ],
-  "ba-psychology": ["Clinical / Counseling", "Research", "Developmental", "Industrial-Organizational"],
-};
 const AFTER = ["Start working", "Graduate school"];
 const NOT_SURE = "Not sure yet";
 const PREVIEW_MAJORS = ["bs-cs", "ba-psychology", "ba-history", "bs-environmental-studies"];
@@ -173,7 +162,9 @@ export function GoalsScreen({
     })); } catch { /* storage unavailable */ }
   }, [interests, after, graduateBy, units, summer, winter, f1, qr, start]);
   const major = DEMO ? previewMajor : profile.program;
-  const goals = major === "bs-environmental-studies" ? null : (GOALS[major] ?? []);
+  // no preset interest chips for any major: "Not sure yet" and a box to type your own. Environmental Studies has no
+  // elective choices, so it skips the question
+  const goals = major === "bs-environmental-studies" ? null : [];
   const brandNew = !profile.completed?.length && !profile.in_progress?.length;
   const askQr = !profile.qr_pathway && (brandNew || needs === "qr_pathway");
   const programs = useLoad(getPrograms, []);
