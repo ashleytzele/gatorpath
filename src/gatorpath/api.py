@@ -10,6 +10,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
+import re
 from typing import Literal, TypedDict
 
 import uvicorn
@@ -143,8 +144,9 @@ def check(profile: Profile = Body(), plan: Plan = Body()) -> dict:
 
 @app.post("/api/electives")  # POST, not GET: the profile would be in the URL, and URLs get logged (golden rule 5)
 def electives(profile: Profile = Body(), requirement: str = Body(), plan: Plan | None = Body(default=None),
-              by_term: str | None = Body(default=None), limit: int = Body(default=25), full: bool = Body(default=False)) -> dict:
-    return server.list_eligible_electives(profile, requirement, plan, by_term, limit, full)
+              by_term: str | None = Body(default=None), limit: int = Body(default=25), full: bool = Body(default=False),
+              query: str = Body(default="")) -> dict:
+    return server.list_eligible_electives(profile, requirement, plan, by_term, limit, full, query=query)
 
 
 @app.post("/api/assist")
@@ -181,6 +183,21 @@ def pathways(program: str, catalog_year: str | None = None) -> dict:
 @app.get("/api/course")
 def course(code: str) -> dict:
     return server.get_course(code)
+
+
+@app.get("/api/search-courses")
+def search_courses(query: str) -> dict:
+    query = query.strip()[:60]
+    if len(query) < 2:
+        return {"results": []}
+    code = re.fullmatch(r"([A-Za-z]{2,5})\s*(\d{0,3}[A-Za-z]?)?", query)
+    if code:
+        subject = code[1].upper()
+        found = server.search_courses(subject, subject=subject, limit=500)
+        prefix = query.upper().replace(" ", "")
+        rows = [row for row in found["results"] if row["code"].replace(" ", "").startswith(prefix)]
+        return found | {"results": rows, "total_matches": len(rows)}
+    return server.search_courses(query, limit=500)
 
 
 if DIST.is_dir():  # last, so /api wins

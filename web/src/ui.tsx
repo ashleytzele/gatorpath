@@ -192,7 +192,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <div className="logo" aria-label="GatorPath home">
       <span className="logo-mark">
-        <Icon name="route" size={21} />
+        <img src="/gatorpath-logo.png?v=3" alt="" />
       </span>
       {!compact && (
         <span>
@@ -251,28 +251,19 @@ export function StatusBadge({
 
 export function Header({
   screen,
-  onHome,
-  onBack,
   onStyle,
 }: {
   screen: Screen;
-  onHome: () => void;
-  onBack?: () => void;
   onStyle: () => void;
 }) {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <button className="brand-button" onClick={onHome}>
+        <div className="brand-button">
           <Logo />
-        </button>
+        </div>
         {screen !== "landing" && (
           <div className="header-actions">
-            {onBack && screen !== "app" && (
-              <button className="header-link" onClick={onBack}>
-                <Icon name="back" size={16} /> Back
-              </button>
-            )}
             {screen === "app" && (
               <>
                 <button
@@ -287,9 +278,6 @@ export function Header({
                 </a>
               </>
             )}
-            <button className="header-link" onClick={onHome}>
-              Start over
-            </button>
           </div>
         )}
       </div>
@@ -299,7 +287,7 @@ export function Header({
 
 export const NAVIGATOR = "https://sfsu.campus.eab.com/";
 export const ASK_ADVISOR = "Ask an advisor in Navigator"; // the one name for the advising link
-export const PRIVACY = "Your DPR is read in memory and never stored. The AI helper sees your major, goal and courses, never your name, ID, grades or GPA.";
+export const PRIVACY = "Your DPR PDF is never saved. Your record and plan stay in this browser tab through reloads and clear when you close the tab. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA.";
 /** Engine text in the student's words: "2027-spring" -> "Spring 2027", a requirement's id -> its title. */
 export function plainText(text: string, audit?: Audit) {
   const titles = new Map((audit?.groups ?? []).map((g) => [g.id, g.title]));
@@ -307,7 +295,7 @@ export function plainText(text: string, audit?: Audit) {
     .replace(/\b(\d{4})-(spring|summer|fall|winter)\b/gi, (_, y: string, t: string) => `${t[0].toUpperCase()}${t.slice(1).toLowerCase()} ${y}`)
     .replace(/\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b/g, (id) => titles.get(id) ?? id.replace(/_/g, " "));
 }
-const steps = ["Your record", "Your goals", "Your plan", "Your schedule"];
+const steps = ["Your record", "Your goals", "Your plan"];
 export function Stepper({ current }: { current: number }) {
   return (
     <nav className="stepper" aria-label="Planning progress">

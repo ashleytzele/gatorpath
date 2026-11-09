@@ -1,12 +1,37 @@
 // Run: node web/src/logic.check.ts
 import assert from "node:assert/strict";
-import { blockOf, changeLine, countSection, describeChange, goalText, leftText, limitOf, offeredText, markOf, pathwayLine, plainWarning, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutUrls, withPlanned } from "./logic.ts";
+import { aiErrorText, blockOf, changeLine, countSection, coveredBy, describeChange, distinctMeetings, goalText, leftText, limitOf, offeredText, markOf, pathwayLine, plainWarning, restoreMissingSlots, shortRoom, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutCoveredSlots, withoutUrls, withPlanned } from "./logic.ts";
 
 const g = (id: string, status: string) => ({ id, title: id, kind: "major", source: "", status, counted: [], in_progress: [] });
 const term = (t: string, courses: (string | { slot: string; units: number })[]) => ({ term: t, courses });
 const slot = { slot: "elective", units: 3 };
 const planWith = (pace: object) => ({ semesters: [], warnings: [], pace: { terms: 8, load: "", planned_units: 0, min_terms_by_prereqs: 0, min_terms_by_units: 0, longest_chain: [], ...pace } });
 const profile = { program: "bs-cs", completed: [{ code: "MATH 226", grade: "A" }] };
+const envs = { group: "ge_4ud", term: "2027-spring", code: "ENVS 401", covers: ["sfss_esca", "sfss_gp"] };
+assert.equal(coveredBy("sfss_esca", [envs])?.code, "ENVS 401");
+assert.equal(coveredBy("sfss_gp", [envs])?.code, "ENVS 401");
+assert.equal(coveredBy("ge_4ud", [envs]), undefined);
+assert.deepEqual(withoutCoveredSlots([
+  term("2027-spring", ["ENVS 401", { slot: "sfss_esca", units: 0 }]),
+  term("2027-fall", [{ slot: "sfss_gp", units: 0 }]),
+], [envs]), [term("2027-spring", ["ENVS 401"])]);
+const initialGE = [term("2027-spring", [{ slot: "ge_4ud", units: 3 }]),
+  term("2027-fall", [{ slot: "sfss_esca", units: 0 }, { slot: "sfss_gp", units: 0 }])];
+const swappedGE = [term("2027-spring", ["AA S 323"]), term("2027-fall", [])];
+assert.deepEqual(restoreMissingSlots(swappedGE, initialGE,
+  [{ error: "requirement_not_covered", group: "sfss_esca", message: "Environmental Sustainability isn't covered" }], "2027-spring"),
+  [term("2027-spring", ["AA S 323"]), term("2027-fall", [{ slot: "sfss_esca", units: 0 }])]);
+assert.deepEqual(restoreMissingSlots([swappedGE[0]], initialGE,
+  [{ error: "requirement_not_covered", group: "sfss_esca", message: "Environmental Sustainability isn't covered" }], "2027-spring"),
+  [term("2027-spring", ["AA S 323", { slot: "sfss_esca", units: 0 }])]);
+assert.equal(restoreMissingSlots(swappedGE, initialGE,
+  [{ error: "prereq_not_met", message: "AA S 323 needs a prerequisite" }], "2027-spring"), swappedGE);
+assert.equal(shortRoom("Thornton Hall 329"), "TH 329");
+assert.equal(shortRoom("Humanities Building 384"), "HUM 384");
+assert.equal(shortRoom("Online"), "Online");
+const hybrid = [{ days: "Mo", time: "12:30 PM - 3:15 PM", where: "HSS Building 306" }, { days: "Mo", time: "12:30 PM - 3:15 PM", where: "Online" }];
+assert.deepEqual(distinctMeetings(hybrid), [hybrid[0]]);
+assert.deepEqual(distinctMeetings([...hybrid].reverse()), [hybrid[0]]);
 
 assert.equal(termLabel("2027-spring"), "Spring 2027");
 assert.equal(pathwayLine([{ code: "MATH 226", title: "Calculus I" }]), "You start with Calculus I (MATH 226) in your first term.");
@@ -21,11 +46,22 @@ assert.equal(leftText({ hour: 4, day: 3 }), "3 questions left today");
 assert.deepEqual(limitOf("You've asked the AI helper 5 times this hour. Try again in 39 minutes"), { hour: 0, day: 1 });
 assert.deepEqual(limitOf("The AI helper reached its daily limit for everyone", { hour: 3, day: 9 }), { hour: 3, day: 0 });
 assert.equal(limitOf("The AI helper isn't connected yet"), undefined);
+assert.equal(aiErrorText("You've asked the AI helper 5 times this hour. Try again in 7 minutes; planning works without it."), "You've reached Gator AI's hourly limit. Come back in 7 minutes; planning works without it.");
+assert.equal(aiErrorText("The AI helper has reached today's limit for everyone. It's back tomorrow; planning works without it."), "Gator AI's daily limit has been reached. Come back tomorrow; planning works without it.");
+assert.equal(aiErrorText("The AI helper isn't connected yet"), "Gator AI isn't connected yet");
 assert.equal(markOf(g("a", "satisfied"), true), "warning");
 assert.equal(markOf(g("a", "waived"), false), "exception");
 assert.equal(markOf(g("a", "in_progress"), false), "progress");
 assert.equal(markOf(g("a", "remaining"), false), "incomplete");
-assert.deepEqual(countSection([g("a", "satisfied"), g("b", "waived"), g("c", "in_progress"), g("d", "remaining")], new Set(["d"])), { done: 2, total: 4, warned: 1 });
+assert.equal(markOf(g("a", "remaining"), false, true), "planned");
+assert.equal(markOf(g("a", "in_progress"), false, true), "progress");
+assert.equal(markOf({ ...g("a", "remaining"), in_progress: ["CSC 101"] }, false, true), "progress");
+assert.equal(markOf(g("a", "remaining"), true, true), "warning");
+assert.deepEqual(countSection([g("a", "satisfied"), g("b", "waived"), { ...g("c", "remaining"), in_progress: ["CSC 101"] }, g("d", "remaining")], new Set(["d"])), { done: 2, progress: 1, total: 4, warned: 1 });
+assert.deepEqual(countSection([g("a", "satisfied"), { ...g("left", "waived"), waived_by: "not on the student's DPR" }], new Set(["left"])), { done: 1, progress: 0, total: 1, warned: 1 });
+assert.equal(countSection([{ ...g("going", "in_progress"), in_progress: ["CSC 101"] }], new Set()).progress, 1);
+assert.equal(countSection([{ ...g("done", "satisfied"), in_progress: ["CSC 101"] }], new Set()).progress, 0);
+assert.equal(countSection([{ ...g("warned", "remaining"), in_progress: ["CSC 101"] }], new Set(["warned"])).progress, 0);
 assert.equal(describeChange([term("2027-spring", [slot])], [term("2027-spring", ["BIOL 100"])]), "BIOL 100 added to Spring 2027");
 assert.equal(describeChange([term("2027-spring", ["CSC 645"])], [term("2028-fall", ["CSC 645"])]), "CSC 645 moved to Fall 2028");
 assert.equal(describeChange([term("2027-spring", ["CSC 645"])], [term("2027-spring", ["CSC 645"])]), "");

@@ -411,9 +411,11 @@ def test_check_plan_takes_each_terms_cap_and_the_roadmap_load():
     # above the roadmap's load it's an overload again
     above = term(max_units=17, roadmap={"units": 16, "source": "p.1908"})
     assert any("17 units is above the normal load of 15" in w for a in above["see_advisor"] for w in a["why"])
-    # the student's cap wins over a term's
-    assert errors(check_plan(FRESHMAN | {"transfer_units": 60, "max_units_per_term": 16}, {"semesters": [
-        {"term": "2027-spring", "courses": heavy, "max_units": 17}]}, PROGRAM, UNIVERSITY, CATALOG, PREREQS), "over_cap")
+    # the student's initial target does not block a later class choice or move
+    preference = check_plan(FRESHMAN | {"transfer_units": 60, "max_units_per_term": 16}, {"semesters": [
+        {"term": "2027-spring", "courses": heavy, "max_units": 17}]}, PROGRAM, UNIVERSITY, CATALOG, PREREQS)
+    assert not errors(preference, "over_cap")
+    assert "2027-spring: 17 units exceeds your 16-unit initial planning preference" in preference["warnings"]
 
 
 def test_semester_unit_maximum_and_part_time_note():
@@ -1023,9 +1025,9 @@ def test_pick_sections_finds_a_set_with_no_time_clash():
     kept = pick_sections(found, keep={"8"})
     assert kept["schedule"]["BIOL 230"] == ["7", "8"] and kept["schedule"]["CSC 340"] == ["2"]
     assert kept["clashes_with"]["5"] == [] and kept["clashes_with"]["3"] == ["BIOL 230 03"]
-    # one that nothing fits with says so, and which course it can't share a time with
+    # A pinned conflict is not an "always" conflict when another available section fits.
     no = pick_sections(found, keep={"1"})
-    assert no["schedule"] is None and no["always_clash"] == [["CSC 340", "HIST 121"]]
+    assert no["schedule"] is None and no["always_clash"] == []
 
 
 def test_an_approved_overload_keeps_its_warning_without_the_advisor_handoff():

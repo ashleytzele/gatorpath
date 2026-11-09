@@ -39,6 +39,7 @@ Three tools change things, and nothing else does. Never say a change happened un
 change_plan changes classes. It runs GatorPath's checks and refuses a change that makes the plan worse.
 - Filling a slot means replacing it, so remove and add go in the same change: {"term": "2028-spring", "remove": "ge_6", "add": "AA S 106"}. Adding a course without removing its slot counts both, and the term goes over its units. Remove a 0-unit slot once a course you chose covers it.
 - To swap a class, remove the old one and add the new one in the same change. To move one, remove it from one term and add it to another. A later term that isn't in the plan yet is created when you add to it, and a term left empty goes away.
+- The student's units-per-term answer shaped their first plan; it is a preference, not a limit on later changes. If change_plan reports that a term exceeds it, tell the student the new units and their original target. Keep the changed plan.
 - If a change is refused because a term would fall under a minimum (an F-1 student needs 12 units in every fall and spring but the last), rebalance before giving up: move other classes from heavier terms into the light one, in the same call. Try this at least twice.
 - The student has the last word on their own plan. If they've heard why a change was refused and still want it, call change_plan again with force: true, then say plainly that the plan now fails GatorPath's checks and that they should see an advisor. Never force a change they didn't insist on.
 
@@ -221,8 +222,10 @@ def change_plan(state: dict, changes: list[dict], force: bool = False) -> dict:
     kept = [p | {"term": where[p["code"]]} for p in picks if p["code"] in where]
     state |= {"semesters": semesters, "errors": errors, "changed": True,
               "picks": [p for p in kept if p["code"] not in {a["code"] for a in added}] + added}
+    noted = [w for w in result["warnings"] if "can't check" not in w]
     return {"applied": True, "valid": result["valid"], "errors": errors, "open_slots": open_slots(state),
-            "warnings": [w for w in result["warnings"] if "can't check" not in w][:6]}
+            "warnings": [w for w in noted if "initial planning preference" in w]
+                        + [w for w in noted if "initial planning preference" not in w][:6]}
 
 
 def choose_section(state: dict, args: dict) -> dict:
@@ -241,7 +244,11 @@ def choose_section(state: dict, args: dict) -> dict:
     keep = [n for n in state["sections"].get(term, []) if n not in theirs] + [nbr]
     got = server.get_sections(term, codes, online, keep)
     if got["schedule"] is None:
-        return {"applied": False, "always_clash": got["always_clash"], "note": "Refused: no set of sections fits with it"}
+        note = ("Other selected sections prevent this combination; release those choices and let Gator AI pick again"
+                if got["pinned_blocking"] else
+                "Could not check every combination" if not got["all_counted"] else
+                "No set of available sections fits with it")
+        return {"applied": False, "always_clash": got["always_clash"], "note": f"Refused: {note}"}
     state |= {"sections": state["sections"] | {term: keep}, "changed": True}
     return {"applied": True, "schedule": got["schedule"]}
 

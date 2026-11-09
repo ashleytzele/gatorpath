@@ -83,7 +83,7 @@ export default function BuildingScreen({
   return (
     <main className="building-screen" role="status">
       <div className="building-orb">
-        <Icon name="route" size={32} />
+        <span className="logo-mark building-logo"><img src="/gatorpath-logo.png?v=3" alt="" /></span>
         <i />
         <i />
         <i />
@@ -93,7 +93,7 @@ export default function BuildingScreen({
       <div className="check-list">
         {steps.slice(0, Math.min(shown, steps.length)).map((s, i) => line(s, !planned && i === shown - 1, s))}
         {planned && needsAi && line(
-          ai ? (ai.filled ? "Electives and GE chosen with AI" : "AI helper not available, you can choose electives yourself") : "Choosing electives and GE with AI, about a minute",
+          ai ? (ai.filled ? "Electives and GE chosen with Gator AI" : "Gator AI isn't available; you can choose electives yourself") : "Choosing electives and GE with Gator AI, about a minute",
           !ai,
           "ai",
         )}

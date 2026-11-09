@@ -1,10 +1,54 @@
 // Plain functions for the pages: no React, no calls. Run `node web/src/logic.check.ts` to check them.
-import type { Checked, Group, ImportResult, Left, Meeting, Offered, Options, PlanResult, Profile, Semester } from "./api.ts";
+import type { Checked, Group, ImportResult, Left, Meeting, Offered, Options, Pick, PlanError, PlanResult, Profile, Semester } from "./api.ts";
 
 export const termLabel = (term?: string | null) =>
   term ? `${term[5].toUpperCase()}${term.slice(6)} ${term.slice(0, 4)}` : "";
 export const unitText = (units?: number | string) => `${units} ${Number(units) === 1 ? "unit" : "units"}`;
 export const NOT_ON_DPR = "not on the student's DPR"; // the engine's waived_by for a requirement the student left out
+export const coveredBy = (group: string, picks: Pick[]) => picks.find((pick) => pick.covers.includes(group));
+export const withoutCoveredSlots = (semesters: Semester[], picks: Pick[]) =>
+  semesters.map((semester) => ({
+    ...semester,
+    courses: semester.courses.filter((course) => typeof course === "string" || !coveredBy(course.slot, picks)),
+  })).filter((semester) => semester.courses.length);
+
+/** A swap can lose an extra requirement that the old course covered. Reopen its original choice. */
+export function restoreMissingSlots(semesters: Semester[], baseline: Semester[], errors: PlanError[], fallbackTerm: string): Semester[] {
+  let restored = semesters;
+  for (const group of new Set(errors.filter((e) => e.error === "requirement_not_covered").map((e) => e.group).filter((id): id is string => !!id))) {
+    const originals = baseline.flatMap((s) => s.courses.flatMap((course) =>
+      typeof course !== "string" && course.slot === group ? [{ term: s.term, course }] : []));
+    const present = restored.flatMap((s) => s.courses).filter((course) => typeof course !== "string" && course.slot === group).length;
+    const missing = originals[present];
+    if (!missing) continue;
+    if (restored === semesters) restored = semesters.map((s) => ({ ...s, courses: [...s.courses] }));
+    const term = restored.find((s) => s.term === missing.term) ?? restored.find((s) => s.term === fallbackTerm);
+    term?.courses.push({ ...missing.course });
+  }
+  return restored;
+}
+
+const BUILDINGS: Record<string, string> = {
+  "Burk Hall": "BH", "Business Building": "BUS", "Creative Arts Building": "CA", "Creative Arts": "CA",
+  "Downtown Campus": "DTC", "Ethnic Studies/Psych Bldg": "EP", "Fine Arts Building": "FA",
+  "Gymnasium": "GYM", "HSS Building": "HSS", "Hensill Hall": "HH", "Humanities Building": "HUM",
+  "J.P. Leonard Library": "LIB", "Marcus Hall": "MH", "Sci & Engr Innov Center": "SEIC",
+  "Science Building": "SCI", "Thornton Hall": "TH",
+};
+export function shortRoom(where?: string) {
+  if (!where) return "";
+  const building = Object.keys(BUILDINGS).find((name) => where.startsWith(`${name} `));
+  return building ? `${BUILDINGS[building]} ${where.slice(building.length + 1)}` : where;
+}
+export function distinctMeetings(meetings: Meeting[]) {
+  const byTime = new Map<string, Meeting>();
+  for (const meeting of meetings) {
+    const key = `${meeting.days ?? ""}|${meeting.time ?? ""}`;
+    const previous = byTime.get(key);
+    if (!previous || (/online/i.test(previous.where ?? "") && !/online/i.test(meeting.where ?? ""))) byTime.set(key, meeting);
+  }
+  return [...byTime.values()];
+}
 
 export type Suggestion = { id: "sooner" | "lighter" | "summer" | "winter" | "choose"; label: string };
 /** The few next steps worth offering under a plan, in this order, at most three. */
@@ -91,17 +135,19 @@ export const withoutUrls = (text: string) =>
     .replace(/\s{2,}/g, " ")
     .trim();
 
-export type Mark = "complete" | "progress" | "incomplete" | "exception" | "warning";
-export const markOf = (g: Group, warned: boolean): Mark =>
-  warned ? "warning" : g.status === "satisfied" ? "complete" : g.status === "waived" ? "exception" : g.status === "in_progress" ? "progress" : "incomplete";
+export type Mark = "complete" | "progress" | "planned" | "incomplete" | "exception" | "warning";
+export const markOf = (g: Group, warned: boolean, planned = false): Mark =>
+  warned ? "warning" : g.status === "satisfied" ? "complete" : g.status === "waived" ? "exception" : g.status === "in_progress" || g.in_progress.length > 0 ? "progress" : planned ? "planned" : "incomplete";
 
-/** A section's count: done = complete + exception; a warned group counts only as warned. */
+/** A section's count: done = complete + exception; a requirement left out of the plan is excluded from the total. */
 export function countSection(groups: Group[], warned: Set<string>) {
-  const marks = groups.map((g) => markOf(g, warned.has(g.id)));
+  const active = groups.filter((g) => g.waived_by !== NOT_ON_DPR);
+  const marks = active.map((g) => markOf(g, warned.has(g.id)));
   return {
     done: marks.filter((m) => m === "complete" || m === "exception").length,
-    total: groups.length,
-    warned: marks.filter((m) => m === "warning").length,
+    progress: marks.filter((m) => m === "progress").length,
+    total: active.length,
+    warned: groups.filter((g) => warned.has(g.id)).length,
   };
 }
 
@@ -145,6 +191,15 @@ export const limitOf = (refusal: string, left?: Left): Left | undefined =>
     : /times this hour/.test(refusal)
       ? { hour: 0, day: left?.day ?? 1 }
       : left;
+
+export function aiErrorText(text: string) {
+  if (/times this hour/.test(text)) {
+    const wait = text.match(/Try again in (\d+) minutes?/);
+    return `You've reached Gator AI's hourly limit. Come back ${wait ? `in ${wait[1]} minute${wait[1] === "1" ? "" : "s"}` : "in an hour"}; planning works without it.`;
+  }
+  if (/limit for everyone/.test(text)) return "Gator AI's daily limit has been reached. Come back tomorrow; planning works without it.";
+  return text.replace(/The AI helper/g, "Gator AI").replace(/AI helper/g, "Gator AI");
+}
 
 /** null when unknown or plenty left; else the smaller of the hour and the day. */
 export function leftText(left?: Left): string | null {

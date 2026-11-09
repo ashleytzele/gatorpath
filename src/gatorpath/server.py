@@ -214,8 +214,12 @@ def search_courses(query: str, subject: str | None = None, level: str | None = N
     exact = norm_code(query)
     rows = [r | {"offered": offered(r["code"])} for r in db.search_courses(DB, YEAR, query)
             if (not want or r["code"].rsplit(" ", 1)[0].replace(" ", "") == want) and lo <= number(r["code"]) < hi]
-    rows.sort(key=lambda r: r["code"] != exact)  # stable: an exact code hit first, then FTS rank
-    return {"catalog_year": YEAR, "results": rows[:max(1, min(limit, 50))], "total_matches": len(rows),
+    rows.sort(key=lambda r: (number(r["code"]), r["code"]) if want and query.strip().upper() == want else (r["code"] != exact,))
+    total_matches = len(rows)
+    rows = rows[:max(1, min(limit, 500))]
+    descriptions = db.descriptions(DB, YEAR, [r["code"] for r in rows])
+    rows = [r | {"description": descriptions.get(r["code"])} for r in rows]
+    return {"catalog_year": YEAR, "results": rows, "total_matches": total_matches,
             "warnings": [offering_note(DB, YEAR)]}
 
 
@@ -250,7 +254,8 @@ def get_sections(term: str, codes: list[str], online: list[str] | None = None, k
     how many clash-free sets there are. When none fits, schedule is null and always_clash names the course pairs that
     never fit together: one moves to another term (then check_plan). online: the courses the student wants online: the
     schedule uses their fully online sections when they have one. keep: class numbers the student chose; those sections
-    stay (a lecture with its lab) and the rest fit around them, or schedule is null and always_clash says with what."""
+    stay (a lecture with its lab) and the rest fit around them. pinned_blocking says whether releasing chosen
+    sections finds a clash-free set; all_counted is false when the bounded search could not establish impossibility."""
     if not TERM.fullmatch(term):
         return {"catalog_year": YEAR, "error": "bad_term", "warnings": ["term looks like 2027-spring"]}
     want = list(dict.fromkeys(norm_code(c) for c in codes))
@@ -265,8 +270,10 @@ def get_sections(term: str, codes: list[str], online: list[str] | None = None, k
     fully_online = lambda secs: [s for s in secs if str(s.get("mode", "")).startswith("Online")]
     kept = set(keep or [])
     mine = lambda secs: any(s.get("class_nbr") in kept for s in secs)  # a section chosen by number beats "online"
-    picked = pick_sections({c: (fully_online(secs) or secs) if c in wanted and not mine(secs) else secs
-                            for c, secs in found.items()}, keep=kept)
+    available = {c: (fully_online(secs) or secs) if c in wanted and not mine(secs) else secs
+                 for c, secs in found.items()}
+    picked = pick_sections(available, keep=kept)
+    pinned_blocking = bool(kept and picked["schedule"] is None and pick_sections(available)["schedule"] is not None)
     for code, secs in found.items():
         for sec in secs:
             if sec.get("class_nbr") in (picked["schedule"] or {}).get(code, []):
@@ -276,6 +283,8 @@ def get_sections(term: str, codes: list[str], online: list[str] | None = None, k
     subject = lambda c: c.rsplit(" ", 1)[0]
     stamp = min((scraped[subject(c)] for c in found), default=None)
     nothing_fits = ([] if not found or picked["schedule"] is not None else
+                    ["Your chosen sections prevent a clash-free schedule; let Gator AI pick from all available sections"]
+                    if pinned_blocking else
                     ["Too many sections to search for a set without a time clash; check them in Class Search"]
                     if not picked["all_counted"] else
                     [f"No set of sections fits {', '.join(found)} without a time clash"
@@ -283,7 +292,8 @@ def get_sections(term: str, codes: list[str], online: list[str] | None = None, k
                         if picked["always_clash"] else "")
                      + ". Move one to another term and re-run check_plan"])
     return {"catalog_year": YEAR, "term": term, "sections": found, "schedule": picked["schedule"],
-            "sets": picked["sets"], "always_clash": picked["always_clash"],
+            "sets": picked["sets"], "all_counted": picked["all_counted"],
+            "pinned_blocking": pinned_blocking, "always_clash": picked["always_clash"],
             "not_offered": [c for c in known if c not in found and subject(c) in scraped],
             "unknown": [c for c in known if c not in found and subject(c) not in scraped], "scraped_at": stamp,
             "warnings": ([f"Not in the {YEAR} Bulletin: {', '.join(c for c in want if c not in known)}"]
@@ -516,7 +526,8 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     """Validate a term-by-term plan. **Call this before presenting any plan, fix every error, and re-check until
     valid.** `courses` gives each planned course's title, units and source_page for the plan's table: no get_course
     per course. Errors (with Bulletin text/pages): prereq not met by that term, course already passed or planned twice,
-    unknown course, units over the term's cap (profile.max_units_per_term, else the term's max_units, else 15),
+    unknown course, units over the term's cap (term max_units, else 15). The student's max_units_per_term guides the
+    initial plan and produces a warning, not an error, if a later edit exceeds it.
     requirement or 120/upper-division units not covered. Warnings: unverifiable prereqs (GPA not given, permission),
     loads above the normal 15 (p.2393; "as on the Bulletin roadmap" with no advisor when the term's roadmap semester
     prints that load), unfilled slots.
@@ -616,7 +627,7 @@ def online_options(out: dict, cat: dict[str, dict]) -> dict:
 
 @mcp.tool(annotations=READ_ONLY)
 def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None = None, by_term: str | None = None,
-                            limit: int = 25, full: bool = False, online: bool = False) -> dict:
+                            limit: int = 25, full: bool = False, online: bool = False, query: str = "") -> dict:
     """Courses that can fill one requirement group's slot (e.g. 'senior_electives', 'ge_4ud', 'sfss_esca'), with the
     Bulletin description, so you can pick by the student's goal.
 
@@ -652,6 +663,10 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
             plan = {"semesters": semesters}
             notes = notes + [f"No plan given: readiness at {by_term} counts build_plan's baseline. Pass the plan if it has changed"]
     out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs_for(clean), plan, by_term, 10**6)
+    if "options" in out and query.strip():
+        words = query.casefold().split()
+        out["options"] = [o for o in out["options"] if all(w in f'{o["code"]} {o["title"]}'.casefold() for w in words)]
+        out["total_options"] = len(out["options"])
     if "options" in out and online:
         out = online_options(out, catalog(DB, YEAR))
         rcl = university.get("f1_final_term")

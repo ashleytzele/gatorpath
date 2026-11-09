@@ -128,7 +128,8 @@ def test_the_chat_can_choose_a_section_and_the_rest_fit_around_it(monkeypatch):
     monkeypatch.setattr(server.db, "sections", lambda db, term, codes: (
         {a: [row("1", "Mo We"), row("2", "Tu Th")], b: [row("3", "Mo We")]}, {c.rsplit(" ", 1)[0]: "2026-10-26" for c in (a, b)}))
     refused = assistant.run_tool(state, "choose_section", {"term": first["term"], "class_nbr": "1"})
-    assert refused["applied"] is False and refused["always_clash"] and state["sections"] == {} and not state["changed"]
+    assert refused["applied"] is False and refused["always_clash"] == [] and state["sections"] == {} and not state["changed"]
+    assert "Other selected sections" in refused["note"]
     assert assistant.run_tool(state, "choose_section", {"term": first["term"], "class_nbr": "9"})["applied"] is False
     got = assistant.run_tool(state, "choose_section", {"term": first["term"], "class_nbr": "2"})
     assert got["applied"] and got["schedule"] == {a: ["2"], b: ["3"]} and state["sections"] == {first["term"]: ["2"]}

@@ -216,6 +216,16 @@ def test_sections_for_a_terms_courses(tmp_path, monkeypatch):
     assert got["schedule"] == {"CSC 653": ["4321"]} and got["sets"] == 3 and got["always_clash"] == []
     assert got["not_offered"] == ["CSC 648"] and got["unknown"] == ["MATH 226"]  # MATH wasn't scraped that term
     assert got["scraped_at"] == "2026-10-26T21:00:00+00:00" and any("Class Search" in w for w in got["warnings"])
+    # A saved section may block the schedule even though another available section fits.
+    alternative = lec | {"section": "04", "class_nbr": "4324",
+                         "meetings": [{"days": "Tu Th", "time": "11:00 AM - 12:15 PM", "where": "Thornton Hall 329"}]}
+    other = lec | {"code": "CSC 648", "section": "01", "class_nbr": "6481"}
+    write_offerings(path, "2027-spring", "CSC", [lec, alternative, other], "2026-10-26T21:00:00+00:00")
+    pinned = server.get_sections("2027-spring", ["CSC 653", "CSC 648"], keep=["4321"])
+    assert pinned["schedule"] is None and pinned["pinned_blocking"] and pinned["all_counted"]
+    assert "chosen sections" in pinned["warnings"][0]
+    free = server.get_sections("2027-spring", ["CSC 653", "CSC 648"])
+    assert free["schedule"] == {"CSC 648": ["6481"], "CSC 653": ["4324"]}
     assert server.get_sections("2027-fall", ["CSC 653"])["unknown"] == ["CSC 653"]  # schedule not out
     assert server.get_sections("spring", ["CSC 653"])["error"] == "bad_term"
 
@@ -239,6 +249,19 @@ def test_a_free_elective_lists_options_too():
     top = got["options"][0]
     assert top["readiness"] == "ready" and top["also_covers"]
     assert "AA S 213" not in [o["code"] for o in got["options"]]  # done already
+
+
+def test_searches_manual_choices_beyond_first_hundred(monkeypatch):
+    monkeypatch.setattr(server, "DB", REAL_DB)
+    first = server.list_eligible_electives(TRANSFER_SENIOR, "elective", by_term="2027-spring", limit=100)
+    code = next(iter(first["more"]))
+    later = server.list_eligible_electives(TRANSFER_SENIOR, "elective", by_term="2027-spring", limit=100,
+                                            query=code)
+    assert later["total_options"] >= 1
+    assert later["options"][0]["code"] == code
+    assert later["options"][0]["description"]
+    assert first["total_options"] > len(first["options"])
+    assert code not in [o["code"] for o in first["options"]]
 
 
 def test_full_list_puts_the_terms_sections_first(tmp_path, monkeypatch):

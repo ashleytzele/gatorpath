@@ -111,7 +111,7 @@ def pick_sections(found: dict[str, list[dict]], limit: int = 20000, keep: set[st
     search(0, {}, [])
     if not best:
         pairs = [[a, b] for i, a in enumerate(order) for b in order[i + 1:]
-                 if all(clash(ta, tb) for _, ta in opts[a] for _, tb in opts[b])]
+                 if all(clash(ta, tb) for _, ta in every[a] for _, tb in every[b])]
         return {"schedule": None, "sets": 0, "all_counted": steps <= limit, "clashes_with": {}, "always_clash": pairs}
     pick = best[0]
     others = {r["class_nbr"]: [f"{c} {p[0]['section']}" for c, p in pick.items() if c != code and clash(t, meeting_times(p))]
@@ -415,7 +415,7 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
     advise: list[tuple[str, str]] = []
     err = lambda kind, msg, **kw: errors.append({"error": kind, "message": msg, **kw})
     load, levels = university["academic_load"], university["class_level"]
-    fixed = profile.get("max_units_per_term")  # the student's cap; else each term's max_units (build_plan), else 15
+    fixed = profile.get("max_units_per_term")  # initial pacing preference; later edits may exceed it with a warning
     reps, most = university["repeats"], university["max_units"]
     f1_min = load["f1_min"]["undergraduate"] if profile.get("f1") else 0
     rcl = university.get("f1_final_term")
@@ -523,8 +523,10 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         ws = most.get("winter_session", {})
         cap = fixed if fixed is not None else sem.get("max_units", load["normal_max"])
         if term_units > cap:
-            err("over_cap", f"{term}: {term_units:g} units is over {'max_units_per_term' if fixed is not None else 'max_units'} "
-                f"({cap:g})", term=term)
+            if fixed is not None:
+                warnings.append(f"{term}: {term_units:g} units exceeds your {cap:g}-unit initial planning preference")
+            else:
+                err("over_cap", f"{term}: {term_units:g} units is over max_units ({cap:g})", term=term)
         if winter and term_units > ws.get("units", 0):
             err("over_max_units", f"{term}: {term_units:g} units is over the {ws.get('units', 0):g}-unit Winter Session maximum "
                 f"({ws.get('source', 'no Winter Session in this Bulletin')})", term=term)

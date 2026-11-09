@@ -46,13 +46,13 @@ function Rich({ text }: { text: string }) {
   );
 }
 
-const STILL_WORKS = "Your plan, schedule and course lists still work without the chat.";
+const STILL_WORKS = "You can still browse and swap courses yourself.";
 
 /** Why the input is off, or "" when it is on. */
 function whyOff(left: Left | undefined, aiDown: boolean) {
-  if (aiDown) return `The AI helper isn't connected here. ${STILL_WORKS}`;
-  if (left && left.day <= 0) return `You can ask again tomorrow. ${STILL_WORKS}`;
-  if (left && left.hour <= 0) return `You can ask again within the hour. ${STILL_WORKS}`;
+  if (aiDown) return `Gator AI isn't connected here. ${STILL_WORKS}`;
+  if (left && left.day <= 0) return `Gator AI's daily limit has been reached. Come back tomorrow. ${STILL_WORKS}`;
+  if (left && left.hour <= 0) return `You've reached Gator AI's hourly limit. Come back within an hour. ${STILL_WORKS}`;
   return "";
 }
 
@@ -68,6 +68,7 @@ export function ChatPanel(props: {
   busy: string;
   left?: Left;
   aiDown: boolean;
+  onRetry: () => void;
   hide: () => void;
 }) {
   const { lines, busy, left, aiDown } = props;
@@ -94,10 +95,10 @@ export function ChatPanel(props: {
   const latest = lines[lines.length - 1];
   const free = leftText(left);
   return (
-    <aside className={`chat-dock ${props.open ? "open" : ""}`} aria-label="Chat with GatorPath">
+    <aside className={`chat-dock ${props.open ? "open" : ""}`} aria-label="Chat with Gator AI">
       <div className="chat-dock-head">
         <h2>
-          <Icon name="route" size={18} /> GatorPath
+          <span className="logo-mark chat-logo-mark"><img src="/gatorpath-logo.png?v=3" alt="" /></span> Gator AI
         </h2>
         <button className="chat-close" onClick={props.hide} aria-label="Hide the chat">
           Hide
@@ -177,7 +178,7 @@ export function ChatPanel(props: {
         </button>
       </div>
       <p className="chat-note" id="chat-note">
-        {off || (
+        {off ? <>{off} <button type="button" className="pl-link" onClick={props.onRetry}>Check again</button></> : (
           <>
             {free && <b>{free}. </b>}
             Every change is checked against the Bulletin. Your DPR and an advisor have the final word.{" "}

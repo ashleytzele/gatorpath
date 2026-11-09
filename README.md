@@ -68,7 +68,9 @@ the Setup above:
 
 ```bash
 (cd web && npm install && npm run build)
-ANTHROPIC_API_KEY=... uv run gatorpath-web     # http://127.0.0.1:8000
+# Save ANTHROPIC_API_KEY=your_key in the git-ignored .env file first.
+set -a; . ./.env; set +a
+uv run gatorpath-web                           # http://127.0.0.1:8000
 ```
 
 Claude Haiku has the same tools as an AI app with this server. It fills your electives and GE for your goal, answers
@@ -76,8 +78,9 @@ questions, changes classes and the pace, and corrects your record when you tell 
 change. A change that makes the plan worse is refused unless you insist, and then the plan stays marked as failing. Without
 a key the site still plans, and you choose the courses yourself.
 
-Nothing is stored: the PDF is read in memory, your name and ID are dropped as it's read, and your record stays in the
-browser tab until you start over. Anthropic's API receives your major, catalog year, goal, load choices and course list,
+The PDF is read in memory, and your name and ID are dropped as it's read. The web app saves your record and plan in
+this tab's session storage so a reload keeps your work; closing the tab clears it. The server keeps no
+student record. Anthropic's API receives your major, catalog year, goal, load choices and course list,
 never your name, ID or GPA, and a grade only if you type one in the chat. Questions an advisor should answer go to
 [Navigator](https://sfsu.campus.eab.com/).
 

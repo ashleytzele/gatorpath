@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Icon, Logo, NAVIGATOR } from "./ui";
 
 const LINKS = [
@@ -13,13 +12,6 @@ const FEATURES = [
   { title: "A plan that passes the Bulletin", text: "Every term is checked: prerequisites, unit loads, and when each course is usually offered.", icon: "M5 12l4 4L19 6" },
   { title: "Ask, and it changes", text: "Finish sooner, lighter terms, a different GE: ask the chat. Every change is checked again before it lands.", icon: "M4 5h16v11H9l-5 4z" },
   { title: "Next term’s schedule", text: "Sections with no time clashes, with rooms, instructors and class numbers ready for registration.", icon: "M4 6h16v14H4zM4 10h16M9 3v4M15 3v4" },
-];
-
-const ROUTE = [
-  { term: "Fall 2026", tag: "In progress", state: "now", courses: "CSC 220 · CSC 230 · ENG 114" },
-  { term: "Spring 2027", tag: "Register next", state: "next", courses: "CSC 256 · MATH 227 · PHYS 230" },
-  { term: "Fall 2027", tag: "", state: "later", courses: "CSC 340 · MATH 225 · CSC 300GW" },
-  { term: "Spring 2029", tag: "Graduate", state: "next", courses: "CSC 648 · two electives" },
 ];
 
 const POINTS = [
@@ -49,14 +41,13 @@ const STEPS = [
 
 const FAQ = [
   ["Is GatorPath official?", "No. GatorPath is a student-built planning aid. Your DPR is the official record, and an advisor has the final word on your degree."],
-  ["Is my data safe?", "Your DPR is read in memory and never stored. The AI helper sees your major, goal and courses, never your name, ID, grades or GPA. It only learns a grade if you type one in the chat."],
+  ["Is my data safe?", "Your DPR PDF is read in memory and never saved. Your record and plan stay in this browser tab's session storage so a reload keeps your work; they clear when you close the tab. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA. It only learns a grade if you type one in the chat."],
   ["What’s a DPR, and how do I get it?", "Your Degree Progress Report shows your completed courses and what your degree still requires. In Student Center, open Degree Progress Report, click Expand All and View All, then Print → Save as PDF."],
   ["Does it work for my major?", "It has the 2026–27 rules for the bachelor’s programs listed when you choose your goals, written from the Bulletin. Always compare your plan with your DPR and an advisor."],
-  ["Does it use AI?", "Only to choose electives and to answer in the chat (Claude Haiku). Planning and every check are rules from the Bulletin, not AI. The chat has a daily limit; planning works without it."],
+  ["Does it use AI?", "Gator AI chooses electives and answers in the chat (Claude Haiku). Planning and every check use Bulletin rules. Gator AI has hourly and daily limits; planning works without it."],
 ];
 
 export function Landing({ start }: { start: () => void }) {
-  const [played, setPlayed] = useState(false);
   return (
     <>
       <header className="ld-nav">
@@ -89,37 +80,17 @@ export function Landing({ start }: { start: () => void }) {
               Watch the demo
             </a>
           </div>
-          <p className="ld-fine">No account needed. Your DPR is never stored.</p>
+          <p className="ld-fine">No account needed. Your DPR PDF is never saved.</p>
         </section>
 
         <section id="demo" className="ld-demo" aria-label="Demo video">
           <div className="ld-frame">
-            <div className={`ld-poster ${played ? "blur" : ""}`} aria-hidden="true">
-              <div className="ld-poster-plan">
-                <p className="ld-poster-title">You can graduate <span>Spring 2029</span></p>
-                <div className="ld-poster-route">
-                  <p className="dot on"><b>Spring 2027</b> <span>· Register next</span></p>
-                  <p className="sub">CSC 256 Machine Structures · MATH 227 Calculus II</p>
-                  <p className="dot off"><b>Fall 2027</b></p>
-                  <p className="sub">CSC 340 Programming Methodology · MATH 324</p>
-                  <p className="dot on"><b>Spring 2029</b> <span>· Graduate</span></p>
-                </div>
-              </div>
-              <div className="ld-poster-chat">
-                <p className="ask">Can I finish sooner?</p>
-                <div className="reply">
-                  <p className="who">GatorPath</p>
-                  <p>Yes: with summer terms you’d graduate Fall 2028.</p>
-                </div>
-                <p className="note"><b>✓ Plan updated</b> · checked against the Bulletin</p>
-              </div>
-            </div>
-            <button type="button" className="ld-play" aria-label="Play the 1-minute demo" onClick={() => setPlayed(true)}>
-              <span aria-hidden="true" />
-            </button>
-            {played && <p role="status" className="ld-soon">The demo video is coming soon.</p>}
+            <video className="ld-demo-video" controls playsInline preload="none" poster="/landing-upload.jpg" aria-label="GatorPath walkthrough from DPR upload to a plan">
+              <source src="/gatorpath-demo.mp4" type="video/mp4" />
+              Your browser can’t play this video. You can still start planning below.
+            </video>
           </div>
-          <p className="ld-caption">Demo video coming soon · about a minute, with a made-up student</p>
+          <p className="ld-caption">A short walkthrough with a fictional student, starting at DPR upload.</p>
         </section>
 
         <section className="ld-facts" aria-label="About GatorPath">
@@ -128,7 +99,7 @@ export function Landing({ start }: { start: () => void }) {
             {/* the count is the number of rules/programs/2026-27/*.yaml; tests/test_api.py compares it */}
             <li>✓ Rules for 108 majors</li>
             <li>✓ Every plan checked</li>
-            <li>✓ Your DPR is never stored</li>
+            <li>✓ Your DPR PDF is never saved</li>
           </ul>
         </section>
 
@@ -149,21 +120,18 @@ export function Landing({ start }: { start: () => void }) {
               </div>
             ))}
           </div>
+          <figure className="ld-schedule-shot">
+            <img src="/landing-weekly.jpg" alt="A sample weekly class calendar with course times and rooms" loading="lazy" />
+            <figcaption>See class times, rooms, and sections together before registration.</figcaption>
+          </figure>
         </section>
 
         <section className="ld-band" aria-labelledby="route">
           <div className="ld-split ld-sec">
-            <div className="ld-route-box" aria-hidden="true">
-              <div className="ld-route">
-                {ROUTE.map((r) => (
-                  <div className={`stop ${r.state}`} key={r.term}>
-                    <i />
-                    <p><b>{r.term}</b> {r.tag && <span>· {r.tag}</span>}</p>
-                    <p className="c">{r.courses}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <figure className="ld-route-box">
+              <img src="/landing-plan.jpg" alt="A sample term-by-term GatorPath plan for a fictional student" loading="lazy" />
+              <figcaption>Sample plan for a fictional student</figcaption>
+            </figure>
             <div>
               <p className="ld-label">Your route</p>
               <h2 id="route">See your whole route.</h2>

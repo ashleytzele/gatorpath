@@ -84,6 +84,19 @@ def test_a_file_that_isnt_a_pdf_says_so():
 
 # ---- the planning routes return the engine's own fields ----
 
+def test_course_search_lists_the_whole_subject_with_descriptions():
+    response = client.get("/api/search-courses", params={"query": "CSC"})
+    assert response.status_code == 200
+    rows = response.json()["results"]
+    assert len(rows) > 50
+    assert all(row["code"].startswith("CSC ") for row in rows)
+    assert rows[0]["code"] == "CSC 101"
+    assert any(row["description"] for row in rows)
+    narrowed = client.get("/api/search-courses", params={"query": "CSC 6"}).json()["results"]
+    assert narrowed and all(row["code"].startswith("CSC 6") for row in narrowed)
+    assert narrowed == [row for row in rows if row["code"].startswith("CSC 6")]
+
+
 def test_plan_returns_the_engine_fields_and_applies_the_options():
     got = post("/api/plan", profile=STUDENT)
     assert {"semesters", "est_graduation_term", "pace", "see_advisor", "check", "courses", "warnings"} <= set(got)
@@ -112,6 +125,9 @@ def test_electives_take_the_profile_in_the_body_never_the_url():
     term = next(s["term"] for s in plan["semesters"] if any(isinstance(c, dict) and c["slot"] == "senior_electives" for c in s["courses"]))
     got = post("/api/electives", profile=STUDENT, requirement="senior_electives", plan=plan, by_term=term)
     assert got["group"] == "senior_electives" and {"readiness", "description", "offered"} <= set(got["options"][0])
+    found = post("/api/electives", profile=STUDENT, requirement="senior_electives", plan=plan, by_term=term,
+                 query=got["options"][0]["code"])
+    assert found["options"][0]["code"] == got["options"][0]["code"] and found["total_options"] >= 1
     assert post("/api/electives", profile=STUDENT, requirement="no_such_group")["error"]
     assert client.get("/api/electives", params={"requirement": "senior_electives"}).status_code in (404, 405)
 
@@ -148,8 +164,8 @@ def test_the_audit_carries_the_advising_directory_for_the_plans_advisor_list():
     assert found["role"] == "directory" and found["link"].startswith("https://")
 
 
-def test_the_plan_tab_has_no_what_if_row_or_ai_tags():
-    assert "What if I" not in APP and "AI pick" not in APP and '"Progress"' not in APP and "ProgressView" not in APP
+def test_the_plan_tab_has_no_what_if_row_or_old_progress_view():
+    assert "What if I" not in APP and '"Progress"' not in APP and "ProgressView" not in APP
 
 
 def test_the_site_never_calls_a_plan_verified_and_sends_questions_to_navigator():
@@ -204,7 +220,7 @@ def test_every_course_on_the_landing_page_is_in_the_catalog():
     rows = {r["code"]: r["title"] for r in json.loads((Path(__file__).parents[1] / "tests/fixtures/catalog_rows.json").read_text())}
     text = (Path(__file__).parents[1] / "web/src/Landing.tsx").read_text()
     codes = re.findall(r"\b[A-Z]{2,5} \d{3}[A-Z]{0,3}\b", text)
-    assert codes and all(c in rows for c in codes), [c for c in codes if c not in rows]
+    assert all(c in rows for c in codes), [c for c in codes if c not in rows]  # the samples are pictures now: none is fine
     for code, after in re.findall(r"\b([A-Z]{2,5} \d{3}[A-Z]{0,3}) ([A-Z][a-z][^·<\"]*)", text):  # a title written next to a code
         assert after.strip().startswith(rows[code]), (code, after)
 

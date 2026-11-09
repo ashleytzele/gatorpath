@@ -1,4 +1,4 @@
-// The server's fields as the engine returns them. Nothing here is kept: a student's record lives in this tab's memory.
+// The server's fields as the engine returns them. The web app keeps the current plan in this tab's session storage.
 export type Slot = { slot: string; units: number; upper_division?: boolean };
 export type Semester = {
   term: string;
@@ -112,7 +112,7 @@ export type Pace = {
   on_time?: boolean;
   why_not?: string[];
 };
-export type PlanError = { error?: string; message: string; term?: string };
+export type PlanError = { error?: string; message: string; term?: string; group?: string };
 export type Checked = {
   valid: boolean;
   errors: PlanError[];
@@ -175,6 +175,7 @@ export type Electives = {
   min_units_from?: { subject: string; units: number; done: number };
   approval?: string;
   options: Option[];
+  total_options: number;
   warnings: string[];
 };
 export type Meeting = { days?: string; time?: string; where?: string };
@@ -195,6 +196,8 @@ export type Sections = {
   sections: Record<string, Section[]>;
   schedule: Record<string, string[]> | null;
   sets: number;
+  all_counted: boolean;
+  pinned_blocking: boolean;
   always_clash: string[][];
   not_offered: string[];
   unknown: string[];
@@ -260,12 +263,15 @@ export const getPathways = (program: string, catalogYear?: string) =>
     `/api/pathways?program=${encodeURIComponent(program)}${catalogYear ? `&catalog_year=${encodeURIComponent(catalogYear)}` : ""}`,
   ).then((r) => r.pathways);
 export const getCourse = (code: string) => call<Course>(`/api/course?code=${encodeURIComponent(code)}`);
+export type CourseMatch = { code: string; title: string; description: string | null };
+export const searchCourses = (query: string) =>
+  call<{ results: CourseMatch[] }>(`/api/search-courses?query=${encodeURIComponent(query)}`).then((r) => r.results);
 export const buildPlan = (profile: Profile, options: Options) =>
   post<PlanResult>("/api/plan", { profile, options });
 export const checkPlan = (profile: Profile, plan: Plan) =>
   post<Checked>("/api/check", { profile, plan });
-export const getElectives = (profile: Profile, requirement: string, plan: Plan, by_term: string) =>
-  post<Electives>("/api/electives", { profile, requirement, plan, by_term, limit: 100 });
+export const getElectives = (profile: Profile, requirement: string, plan: Plan, by_term: string, query = "") =>
+  post<Electives>("/api/electives", { profile, requirement, plan, by_term, limit: 100, query });
 export function getSections(term: string, courses: string[], online: string[], keep: string[] = []) {
   const query = new URLSearchParams({ term });
   courses.forEach((c) => query.append("courses", c));

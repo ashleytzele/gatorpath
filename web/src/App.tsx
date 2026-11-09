@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BuildingScreen from "./Building";
 import {
   assist,
@@ -21,6 +21,7 @@ import {
   type CourseInfo,
   type Group,
   type ImportResult,
+  type Left,
   type Meeting,
   type Option,
   type Options,
@@ -39,7 +40,7 @@ import { RecordScreen, RequirementsView, ReviewScreen } from "./Record";
 import { FloatingCard } from "./FloatingCard";
 import { StatusMark } from "./StatusMark";
 import { ChatPanel } from "./Chat";
-import { blockOf, changeLine, countSection, limitOf, offeredText, plannedLine, hours, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutUrls, type ChatLine } from "./logic";
+import { aiErrorText, blockOf, changeLine, countSection, coveredBy, distinctMeetings, limitOf, offeredText, plannedLine, hours, restoreMissingSlots, shortRoom, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutCoveredSlots, withoutUrls, type ChatLine } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, Loading, Logo, NAVIGATOR,
   Stepper, StatusBadge, calmScroll, plainText, useLoad, type Screen,
@@ -86,7 +87,7 @@ const slotLabel = (slot: Slot, audit: Audit) =>
 /** A slot of the plan to fill, or a pick to change. */
 type Target = { group: string; term: string; title: string; replacing?: string };
 
-/** One plan and what's known about it, shared by the tabs. It lives in memory only. */
+/** One plan and what's known about it, shared by the tabs. */
 type Work = {
   student: Profile;
   options: Options;
@@ -99,12 +100,57 @@ type Work = {
   busy: string;
   failed: string;
   whatIf: (change: Options) => void;
-  aiDown: boolean;
+  aiAvailable: boolean;
   sections: Record<string, string[]>; // {term: class numbers} the student chose
   setSections: (term: string, keep: string[]) => void;
   aiBusy: boolean; // the chat's answer replaces the plan, so a section chosen meanwhile would be lost
   ask: (text: string) => void; // sends a message to the chat, as if the student typed it
 };
+
+type WorkspaceState = {
+  options: Partial<Profile>;
+  plan: PlanResult;
+  semesters: Semester[];
+  check: Checked;
+  info: Record<string, CourseInfo>;
+  picks: Pick[];
+  sections: Record<string, string[]>;
+};
+type SavedWorkspace = {
+  tab: Tab;
+  chat: boolean;
+  docked: boolean;
+  lines: ChatLine[];
+  left?: Left;
+  aiDown: boolean;
+  state: WorkspaceState;
+  previous: WorkspaceState | null;
+};
+type SavedSession = { profile: Profile; imported: ImportResult | null; built: Built; workspace: SavedWorkspace };
+const SESSION_KEY = "gatorpath-plan-v1";
+const FLOW_KEY = "gatorpath-flow-v1";
+type SavedFlow = { screen: "record" | "review" | "goals" | "building"; profile: Profile | null; imported: ImportResult | null; options: Options; picks: Picks; needs?: string };
+function savedFlow(): SavedFlow | null {
+  try {
+    const flow = JSON.parse(sessionStorage.getItem(FLOW_KEY) || "null");
+    return ["record", "review", "goals", "building"].includes(flow?.screen)
+      && (flow.screen === "record" || typeof flow?.profile?.program === "string") ? flow as SavedFlow : null;
+  } catch { return null; }
+}
+function savedSession(): SavedSession | null {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
+    return typeof saved?.profile?.program === "string"
+      && Array.isArray(saved?.built?.plan?.semesters)
+      && Array.isArray(saved?.workspace?.state?.semesters)
+      && Array.isArray(saved?.workspace?.state?.picks)
+      && Array.isArray(saved?.workspace?.lines)
+      && ["plan", "electives", "schedule", "record"].includes(saved?.workspace?.tab)
+      ? saved as SavedSession : null;
+  } catch {
+    return null;
+  }
+}
 
 function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
   const items: [Tab, string][] = [
@@ -155,7 +201,7 @@ function ProblemPanel({ errors, audit, ask }: { errors: PlanError[]; audit: Audi
         <Icon name="warning" />
         <span>
           <b>{count === 1 ? "One thing stops this plan" : `${count} things stop this plan`}</b>
-          <small>Ask GatorPath to fix one, or ask an advisor what to do.</small>
+          <small>{ask ? "Ask Gator AI to fix one, or ask an advisor what to do." : "Try another course or ask an advisor what to do."}</small>
         </span>
       </div>
       {(all ? lines : lines.slice(0, 6)).map((line) =>
@@ -166,7 +212,7 @@ function ProblemPanel({ errors, audit, ask }: { errors: PlanError[]; audit: Audi
         ) : (
           <p key={line}>
             <span>{line}</span>
-            {ask && <button onClick={() => ask(`Fix this in my plan: ${line}`)}>Ask GatorPath</button>}
+            {ask && <button onClick={() => ask(`Fix this in my plan: ${line}`)}>Ask Gator AI</button>}
           </p>
         ),
       )}
@@ -218,12 +264,6 @@ function AdvisorRow({ a, audit }: { a: Advisor; audit: Audit }) {
 function CourseFacts({ code, why, going }: { code: string; why?: string; going?: boolean }) {
   const course = useLoad(() => getCourse(code), [code]);
   const c = course.data;
-  const [more, setMore] = useState(false);
-  const [long, setLong] = useState(false); // the description runs past its two lines
-  const text = useRef<HTMLParagraphElement>(null);
-  useLayoutEffect(() => {
-    if (text.current && !more) setLong(text.current.scrollHeight > text.current.clientHeight + 1);
-  }, [c, more]);
   if (course.error) return <ErrorCard text={course.error} retry={course.retry} />;
   if (!c) return <p role="status">Finding it in the Bulletin…</p>;
   const { now, opens } = splitWhy(why);
@@ -232,16 +272,7 @@ function CourseFacts({ code, why, going }: { code: string; why?: string; going?:
     .map((s) => s[0].toUpperCase() + s.slice(1));
   return (
     <>
-      {c.description && (
-        <p ref={text} className={`pl-desc ${more ? "" : "clamped"}`}>
-          {c.description}
-        </p>
-      )}
-      {(long || more) && (
-        <button type="button" className="pl-link" aria-expanded={more} onClick={() => setMore(!more)}>
-          {more ? "Less" : "More"}
-        </button>
-      )}
+      {c.description && <p className="pl-desc">{c.description}</p>}
       <dl className="pl-facts">
         <dt>Needs</dt>
         <dd>{c.prereq?.raw_text || "None listed in the Bulletin"}</dd>
@@ -276,12 +307,13 @@ function ChoiceOptions({
   select: (code: string, option: Option) => void;
   all?: boolean; // the Electives & GE tab: also the ones past the first three, and why the rest can't be taken
 }) {
+  const [query, setQuery] = useState("");
   const found = useLoad(
-    () => getElectives(work.student, target.group, { semesters: work.semesters }, target.term),
-    [target.group, target.term, target.replacing],
+    () => getElectives(work.student, target.group, { semesters: work.semesters }, target.term, query),
+    [target.group, target.term, target.replacing, query],
   );
   // ponytail: the first three that fit, in the server's order
-  const others = (found.data?.options ?? []).filter((o) => o.code !== target.replacing);
+  const others = (found.loading ? [] : found.data?.options ?? []).filter((o) => o.code !== target.replacing);
   const fits = others.filter((o) => o.readiness !== "blocked");
   const blocked = all ? others.filter((o) => o.readiness === "blocked") : [];
   const options = fits.slice(0, 3);
@@ -302,6 +334,11 @@ function ChoiceOptions({
           </small>
           {all && <small className="pl-opt-line">{offeredText(o.offered)}</small>}
           {!!covers.length && <small className="pl-opt-line">Also counts for {covers.join(", ")}</small>}
+          <details className="pl-option-details">
+            <summary>Course details</summary>
+            <p>{o.description || "No description in the Bulletin."}</p>
+            <small>Bulletin p.{o.source_page}</small>
+          </details>
         </span>
         <button type="button" className="pl-link" disabled={work.aiBusy} onClick={() => select(o.code, o)}>
           Select<span className="sr-only"> {o.code}</span>
@@ -315,7 +352,8 @@ function ChoiceOptions({
         Select one for {term}
         {target.replacing ? `, in place of ${target.replacing}` : ""}.
       </p>
-      {found.loading && !found.data && <p role="status">Finding courses that fit…</p>}
+      {all && <label className="pl-option-search">Search all courses by code or title<input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="e.g. CSC 600" /></label>}
+      {found.loading && <p role="status">Finding courses that fit…</p>}
       {found.error && <ErrorCard text={found.error} retry={found.retry} />}
       {found.data?.approval && (
         <p>
@@ -329,6 +367,8 @@ function ChoiceOptions({
           <ul className="pl-options">{more.map(row)}</ul>
         </details>
       )}
+      {all && found.data && !found.loading && found.data.total_options > found.data.options.length &&
+        <p className="pl-card-lead">Showing the first {found.data.options.length} of {found.data.total_options} courses. Search by code or title to see more.</p>}
       {!!blocked.length && (
         <details className="pl-more">
           <summary>
@@ -349,8 +389,8 @@ function ChoiceOptions({
           </ul>
         </details>
       )}
-      {found.data && !options.length && !found.data.approval && <p>No course that fits {term} was found.</p>}
-      {!work.aiDown && (
+      {found.data && !found.loading && !options.length && !found.data.approval && <p>No course that fits {term} was found.</p>}
+      {work.aiAvailable && (
         <p className="pl-card-lead">
           Or{" "}
           <button
@@ -402,7 +442,7 @@ function CourseCard({
         <p className="pl-card-sub">
           {item.units ? `Open choice · ${unitText(item.units)}` : "A course you choose for another requirement can cover this"}
         </p>
-        <ChoiceOptions work={work} target={target} select={(code, option) => select(target, code, option)} />
+        <ChoiceOptions work={work} target={target} select={(code, option) => select(target, code, option)} all />
       </div>
     );
   }
@@ -421,13 +461,13 @@ function CourseCard({
       </h3>
       <p className="pl-card-sub">{[about?.title, about && unitText(about.units)].filter(Boolean).join(" · ")}</p>
       {swap && swapping ? (
-        <ChoiceOptions work={work} target={swap} select={(code, option) => select(swap, code, option)} />
+        <ChoiceOptions work={work} target={swap} select={(code, option) => select(swap, code, option)} all />
       ) : (
         <>
           <CourseFacts code={item} why={why} going={going} />
           <p className="pl-card-actions">
             {about && <span>Bulletin p.{about.source_page}</span>}
-            {!work.aiDown && (
+            {work.aiAvailable && (
               <button type="button" className="pl-link" disabled={work.aiBusy} onClick={() => work.ask(`Tell me about ${item} in my plan`)}>
                 Ask about this course
               </button>
@@ -464,9 +504,10 @@ function PlanView({
   const pace = plan.pace;
   const [preview, setPreview] = useState<"" | "problem" | "unreachable">("");
   const [open, setOpen] = useState(""); // the row whose card is open: one at a time
-  useEffect(() => setOpen(""), [semesters]); // a change moves rows under an open card
-  const choices = semesters.reduce((n, s) => n + s.courses.filter(isSlot).length, 0);
-  const graduation = semesters[semesters.length - 1]?.term; // the plan as it stands: a chat or a pick can move it past build_plan's estimate
+  useEffect(() => setOpen(""), [semesters, work.picks]); // a change moves rows under an open card
+  const visibleSemesters = withoutCoveredSlots(semesters, work.picks);
+  const choices = visibleSemesters.reduce((n, s) => n + s.courses.filter(isSlot).length, 0);
+  const graduation = visibleSemesters[visibleSemesters.length - 1]?.term; // a covered-only term no longer extends the visible plan
   const unreachable = pace?.on_time === false && !!pace.why_not?.length;
   const planState = preview || (!check.valid ? "problem" : unreachable ? "unreachable" : "");
   // "Stopped at …" says why the plan can't finish: the errors are only what that left uncovered
@@ -483,7 +524,7 @@ function PlanView({
   const going = student.in_progress ?? [];
   const stops: Stop[] = [
     ...(going.length ? [{ key: "now", title: "This term", courses: going, now: true }] : []),
-    ...semesters.map((s) => ({ key: s.term, title: termLabel(s.term), term: s.term, courses: s.courses, why: s.why })),
+    ...visibleSemesters.map((s) => ({ key: s.term, title: termLabel(s.term), term: s.term, courses: s.courses, why: s.why })),
   ];
   const about = (code: string) => info[code] ?? audit.courses[code];
   const units = (c: string | Slot) => (isSlot(c) ? c.units : parseFloat(String(about(c)?.units)) || 0);
@@ -508,7 +549,7 @@ function PlanView({
           ))}
         </div>
       )}
-      {planState === "problem" && <ProblemPanel errors={errors} audit={audit} ask={work.ask} />}
+      {planState === "problem" && <ProblemPanel errors={errors} audit={audit} ask={work.aiAvailable ? work.ask : undefined} />}
       {planState === "unreachable" && (
         <div className="plan-problem-panel unreachable">
           <div>
@@ -536,7 +577,7 @@ function PlanView({
           <p className="hero-note">Once the problems above are fixed. Until then the date isn’t certain.</p>
         )}
         <p className="pl-sub">
-          {count(semesters.length, "semester")} after this one ·{" "}
+          {count(visibleSemesters.length, "semester")} after this one ·{" "}
           {choices ? `${count(choices, "choice")} still open` : "all choices made"}
         </p>
         {pace && (
@@ -700,58 +741,68 @@ function ChoiceRequirementRows({
       {rows.map((r) => {
         const key = r.key;
         const target = { group: r.id, term: r.term, title: r.title, replacing: r.pick?.code };
-        const about = r.pick && (work.info[r.pick.code] ?? work.audit.courses[r.pick.code]);
+        const covering = r.pick ? undefined : coveredBy(r.id, work.picks);
+        const selected = r.pick?.code ?? covering?.code;
+        const about = selected ? (work.info[selected] ?? work.audit.courses[selected]) : undefined;
+        const details = open === `${key}:details`;
+        const options = open === `${key}:options`;
         return (
           <li key={key}>
             <div className="el-row">
               <span className="el-req">{r.title}</span>
               <span className="el-course">
-                {r.pick ? (
-                  <>
-                    <b>{r.pick.code}</b> {about?.title}
-                  </>
+                {selected ? (
+                  <span className="el-course-main">
+                    <b>{selected}</b> {about?.title}
+                  </span>
                 ) : (
                   <span className="el-none">Not chosen yet</span>
                 )}
-                {!!r.pick?.covers.length && <small> · Counts twice</small>}
+                {covering && <small className="el-coverage">Also fulfills this requirement</small>}
+                {!!r.pick?.covers.length && <small className="el-coverage">Also counts for: {r.pick.covers.map((id) => work.audit.groups.find((g) => g.id === id)?.title ?? id).join(", ")}</small>}
               </span>
-              <span className="el-term">{termLabel(r.term)}</span>
+              <span className="el-term">{termLabel(covering?.term ?? r.term)}</span>
               <button
                 type="button"
                 className="pl-link"
                 data-row={key}
-                aria-expanded={open === key}
+                aria-expanded={details || options}
                 disabled={work.aiBusy}
                 onClick={(e) => {
                   e.currentTarget.focus(); // Safari doesn't focus a clicked button; the card returns focus here
-                  setOpen(open === key ? "" : key);
+                  setOpen(details || options ? "" : `${key}:${selected ? "details" : "options"}`);
                 }}
               >
-                {r.pick ? "Swap" : "Choose"}
+                {selected ? "Details" : "Choose"}
                 <span className="sr-only"> {r.title}</span>
               </button>
             </div>
-            {open === key && (
-              <FloatingCard label={`Options for ${r.title}`} onClose={() => setOpen("")}>
+            {(details || options) && (
+              <FloatingCard key={open} label={details ? `${selected} details` : `Options for ${r.title}`} onClose={() => setOpen("")}>
                 <div className="pl-card">
-                  <h3>{r.title}</h3>
-                  <p className="pl-card-sub">
-                    {r.pick
-                      ? `In your plan: ${r.pick.code}${about?.title ? ` · ${about.title}` : ""}`
-                      : r.units
-                        ? `Open choice · ${unitText(r.units)}`
-                        : "Open choice"}
-                  </p>
-                  <ChoiceOptions
-                    work={work}
-                    target={target}
-                    all
-                    select={(code, option) => {
-                      back.current = key;
-                      setOpen("");
-                      select(target, code, option);
-                    }}
-                  />
+                  {details && selected ? (
+                    <>
+                      <h3>{selected}</h3>
+                      <p className="pl-card-sub">{[about?.title, about && unitText(about.units)].filter(Boolean).join(" · ")}</p>
+                      <CourseFacts code={selected} />
+                      {r.pick && <p className="pl-card-actions"><button type="button" className="pl-link" onClick={() => setOpen(`${key}:options`)}>Swap this course</button></p>}
+                    </>
+                  ) : (
+                    <>
+                      <h3>{r.title}</h3>
+                      <p className="pl-card-sub">{r.pick ? `In your plan: ${r.pick.code}` : r.units ? `Open choice · ${unitText(r.units)}` : "Open choice"}</p>
+                      <ChoiceOptions
+                        work={work}
+                        target={target}
+                        all
+                        select={(code, option) => {
+                          back.current = key;
+                          setOpen("");
+                          select(target, code, option);
+                        }}
+                      />
+                    </>
+                  )}
                 </div>
               </FloatingCard>
             )}
@@ -786,8 +837,11 @@ function ElectivesView({
   const ge = rows.filter((r) => r.id.startsWith("ge_"));
   const free = rows.filter((r) => r.id === "elective");
   const studies = rows.filter((r) => !major.includes(r) && !ge.includes(r) && !free.includes(r));
-  const openCount = rows.filter((r) => !r.pick).length;
-  const count = (list: ChoiceRow[]) => `${list.filter((r) => r.pick).length} chosen, ${list.filter((r) => !r.pick).length} to go`;
+  const openCount = rows.filter((r) => !r.pick && !coveredBy(r.id, picks)).length;
+  const count = (list: ChoiceRow[]) => {
+    const open = list.filter((r) => !r.pick && !coveredBy(r.id, picks)).length;
+    return `${list.length - open} chosen or covered, ${open} to go`;
+  };
   const short = audit.groups.find((g) => g.min_units_from && !isDone(g));
   const inSubject = short?.min_units_from
     ? picks
@@ -813,10 +867,10 @@ function ElectivesView({
         <p>
           {picks.some((p) => p.ai) && student.goal && student.goal !== "Undecided" && `Picked around your focus: ${student.goal}. `}
           {openCount ? `${openCount} of ${rows.length} choices still open.` : "All choices made."} Swap or Choose a row to see
-          the courses that fit, or ask the chat.
+          the courses that fit{work.aiAvailable ? ", or ask the chat" : ""}.
         </p>
       </div>
-      {!check.valid && <ProblemPanel errors={check.errors} audit={audit} ask={work.ask} />}
+      {!check.valid && <ProblemPanel errors={check.errors} audit={audit} ask={work.aiAvailable ? work.ask : undefined} />}
       {work.busy && <Loading label={work.busy} />}
       {work.failed && <ErrorCard text={work.failed} />}
       {section(
@@ -855,7 +909,12 @@ const CALENDAR_DAYS = [
 const CLASS_SEARCH = "https://webapps.sfsu.edu/public/classservices/classsearch";
 /** A section's meetings, each once: Class Search lists a co-taught meeting once per instructor. */
 const when = (s: Section) =>
-  [...new Set(s.meetings.map((m) => [m.days, m.time, m.where].filter(Boolean).join(" ")))].join("; ") || s.mode;
+  distinctMeetings(s.meetings).map((meeting) => {
+    const places = [...new Set(s.meetings.filter((m) => m.days === meeting.days && m.time === meeting.time)
+      .map((m) => shortRoom(m.where)).filter(Boolean))]
+      .sort((a, b) => Number(/^online$/i.test(a)) - Number(/^online$/i.test(b)));
+    return [meeting.days, meeting.time, places.join(" + ")].filter(Boolean).join(" ");
+  }).join("; ") || s.mode;
 /** Who teaches it, each name once, linked to Rate My Professors (student opinions) where there's a search. */
 function Instructors({ section }: { section: Section }) {
   const names = [...new Set((section.instructor ?? "").split(", ").filter(Boolean))];
@@ -927,8 +986,14 @@ function ScheduleView({
   const unpublished = !Object.keys(r.sections).length && !!r.unknown.length;
   const problems = [
     ...r.not_offered.map((c) => `${c} isn’t offered in ${label}.`),
-    ...(r.schedule === null && r.always_clash.length
-      ? [`${r.always_clash[0].join(" and ")} always overlap, so no combination fits.`]
+    ...(r.schedule === null && Object.keys(r.sections).length
+      ? [r.pinned_blocking
+          ? "Your selected sections conflict. Another combination of available sections fits."
+          : !r.all_counted
+            ? "There are too many section combinations to confirm whether one fits. Check Class Search."
+            : r.always_clash.length
+              ? `${r.always_clash[0].join(" and ")} always overlap across their available sections.`
+              : "No combination of the available sections fits without a time clash."]
       : []),
   ];
   const lookup = (l: Look | null) => (l ? r.sections[l.code]?.find((s) => s.class_nbr === l.nbr) : undefined);
@@ -936,7 +1001,7 @@ function ScheduleView({
   const shown = lookup(peek);
   const clashing = (shown?.clashes_with ?? []).map(courseOf);
   const timed = (c: (typeof classes)[number], i: number, s: Section, look = "") =>
-    s.meetings.flatMap((m) =>
+    distinctMeetings(s.meetings).flatMap((m) =>
       hours(m) && m.days ? m.days.split(" ").map((day) => ({ c, i, s, m, day, look })) : [],
     );
   const ci = (code: string) => classes.findIndex((c) => c.code === code);
@@ -985,8 +1050,12 @@ function ScheduleView({
     try {
       const tried = await getSections(first.term, codes, online, next);
       if (!tried.schedule) {
+        if (tried.pinned_blocking) return toast("Your other selected sections prevent this combination. Find another section combination.");
+        if (!tried.all_counted) return toast("Couldn’t check every combination. Check Class Search before choosing this section.");
         const other = tried.always_clash.flat().filter((c) => c !== look.code);
-        return toast(`${look.code} ${section.section} can’t fit: it overlaps every section of ${other.join(", ")}`);
+        return toast(other.length
+          ? `${look.code} ${section.section} overlaps every available section of ${other.join(", ")}.`
+          : `${look.code} ${section.section} cannot fit with the other available sections.`);
       }
       setPinned(null);
       setHover(null);
@@ -1000,7 +1069,7 @@ function ScheduleView({
   };
   const fitText = (s: Section) =>
     s.clashes_with ? (s.clashes_with.length ? `Clashes with ${s.clashes_with.join(", ")}` : "Fits") : "";
-  const roomType = (s: Section, m: { where?: string }) => [m.where, s.component].filter(Boolean).join(" · ");
+  const roomType = (s: Section, m: { where?: string }) => [shortRoom(m.where), s.component].filter(Boolean).join(" · ");
   return (
     <div className="app-content">
       <div className="schedule-title">
@@ -1027,13 +1096,17 @@ function ScheduleView({
           {!!problems.length && (
             <p className="sched-problem" role="status">
               <Icon name="warning" size={15} /> <span>{problems.join(" ")}</span>
-              <button
-                type="button"
-                disabled={work.aiBusy}
-                onClick={() => work.ask(`Please move one of my ${label} classes so my schedule has no time clashes. ${problems.join(" ")}`)}
-              >
-                Ask the chat to move one
-              </button>
+              {r.pinned_blocking ? (
+                <button type="button" onClick={() => work.setSections(first.term, [])}>Find another section combination</button>
+              ) : work.aiAvailable && (r.not_offered.length > 0 || (r.schedule === null && r.all_counted)) && (
+                <button
+                  type="button"
+                  disabled={work.aiBusy}
+                  onClick={() => work.ask(`Please move one of my ${label} classes so my schedule has no time clashes. ${problems.join(" ")}`)}
+                >
+                  Ask the chat to move one
+                </button>
+              )}
             </p>
           )}
           {r.unknown.map((code) => (
@@ -1117,16 +1190,15 @@ function ScheduleView({
                               className={`cal-block c${b.i % 3} ${b.look}`}
                               key={`${b.look}${b.s.class_nbr}${b.m.time}${b.day}`}
                               style={{ top: pos.top + 1, height: pos.height - 3, left: `calc(${dayIndex(b.day)} * 20% + 4px)` }}
-                              aria-label={`${b.c.code} ${b.m.time}. Open its other sections`}
+                              aria-label={`${b.c.code}, ${b.m.time}, ${roomType(b.s, b.m)}. Open its other sections`}
                               onClick={(e) => {
                                 e.currentTarget.focus();
                                 setOpen(b.c.code);
                                 setTimeout(() => calmScroll(document.querySelector(`[data-course="${b.c.code}"]`), "center"), 0);
                               }}
                             >
-                              <b>
-                                {b.c.code} {b.m.time}
-                              </b>
+                              <b>{b.c.code}</b>
+                              <span>{b.m.time}</span>
                               <span>{roomType(b.s, b.m)}</span>
                             </button>
                           );
@@ -1182,7 +1254,7 @@ function ScheduleView({
                                 disabled={work.aiBusy}
                                 onClick={() => work.setSections(first.term, keep.filter((n) => !theirs.includes(n)))}
                               >
-                                Let GatorPath pick
+                                Find another section
                               </button>
                             </>
                           )}
@@ -1191,10 +1263,15 @@ function ScheduleView({
                           Section {main.section} · {when(main)}
                         </p>
                         {linked.map((s) => (
-                          <p className="linked-lab" key={s.class_nbr}>
-                            <Icon name="route" size={13} /> Includes {s.component} {s.section} · {when(s)} · Class #
-                            {s.class_nbr}
-                          </p>
+                          <div className="linked-section" key={s.class_nbr}>
+                            <span><Icon name="route" size={13} /> {s.component} {s.section} · {when(s)}</span>
+                            <span>Class #{s.class_nbr}
+                              <button type="button" onClick={() => {
+                                navigator.clipboard?.writeText(s.class_nbr).catch(() => {});
+                                toast(`${s.class_nbr} copied.`);
+                              }}><Icon name="copy" size={14} /> Copy</button>
+                            </span>
+                          </div>
                         ))}
                         <small>
                           {main.mode}
@@ -1288,10 +1365,16 @@ function ScheduleView({
             </>
           )}
           {after && (
-            <p className="online-note">
-              <Icon name="info" size={15} /> {termLabel(after.term)} classes will be listed when SF State publishes them. Check{" "}
-              <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">Class Search</a> then.
-            </p>
+            <aside className="online-note">
+              <Icon name="info" size={18} />
+              <div>
+                <strong>Looking ahead</strong>
+                <p>
+                  {termLabel(after.term)} sections aren’t available here yet. Check{" "}
+                  <a href={CLASS_SEARCH} target="_blank" rel="noreferrer">SF State Class Search</a> when they’re published.
+                </p>
+              </div>
+            </aside>
           )}
           {r.warnings
             .filter((w) => !w.startsWith("Class Search as of"))
@@ -1430,29 +1513,35 @@ function AppWorkspace({
   built,
   imported,
   notes,
+  saved,
 }: {
   profile: Profile;
   built: Built;
   imported: ImportResult | null;
   notes: string[];
+  saved: SavedWorkspace | null;
 }) {
-  const [tab, setTab] = useState<Tab>("plan");
-  const [chat, setChat] = useState(false);
-  const [docked, setDocked] = useState(true); // on a wide screen the chat sits beside the plan until hidden
+  const [tab, setTab] = useState<Tab>(saved?.tab ?? "plan");
+  const [chat, setChat] = useState(saved?.chat ?? false);
+  const [docked, setDocked] = useState(saved?.docked ?? true); // on a wide screen the chat sits beside the plan until hidden
   const lastTerm = (semesters: Semester[]) => semesters[semesters.length - 1]?.term ?? "";
   const down = (m: string) => /isn't connected/.test(m); // the AI has no key here
-  const [lines, setLines] = useState<ChatLine[]>(() => [
+  const [lines, setLines] = useState<ChatLine[]>(() => saved?.lines?.filter((line) => saved.aiDown || line.kind !== "refused" || !down(line.text)).map((line) =>
+    line.kind === "refused" ? { ...line, text: aiErrorText(line.text) } : line,
+  ) ?? [
     ...(built.filled ? [{ kind: "ai" as const, text: built.filled.reply }] : []),
     ...(built.filled?.changed
       ? [changeLine(built.plan.semesters, built.filled.semesters, built.filled.check, lastTerm(built.filled.semesters), true)]
       : []),
-    ...(built.why ? [{ kind: "refused" as const, text: built.why }] : []),
+    ...(built.why ? [{ kind: "refused" as const, text: aiErrorText(built.why) }] : []),
   ]);
-  const [left, setLeft] = useState(() => built.filled?.left ?? limitOf(built.why)); // the first fill may have hit a limit
+  const [left, setLeft] = useState(() => saved?.left ?? built.filled?.left ?? limitOf(built.why)); // the first fill may have hit a limit
   const [sending, setSending] = useState(false);
-  const [aiDown, setAiDown] = useState(down(built.why));
+  const [aiDown, setAiDown] = useState(saved?.aiDown ?? down(built.why));
   const [toast, setToast] = useState("");
+  const [saveError, setSaveError] = useState(false);
   const [state, setState] = useState(() => {
+    if (saved) return saved.state;
     const first = {
     options: built.options as Partial<Profile>,
     plan: built.plan,
@@ -1466,7 +1555,17 @@ function AppWorkspace({
   });
   const [busy, setBusy] = useState("");
   const [failed, setFailed] = useState("");
-  const [previous, setPrevious] = useState<typeof state | null>(null);
+  const [previous, setPrevious] = useState<WorkspaceState | null>(saved?.previous ?? null);
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+        profile, built, imported,
+        workspace: { tab, chat, docked, lines, left, aiDown, state, previous },
+      } satisfies SavedSession));
+    } catch {
+      setSaveError(true);
+    }
+  }, [profile, built, imported, tab, chat, docked, lines, left, aiDown, state, previous]);
   const student = { ...profile, ...state.options };
   const log = (line: ChatLine) => setLines((ls) => [...ls, line]);
   const say = (text: string) => log({ kind: "ai", text });
@@ -1477,7 +1576,7 @@ function AppWorkspace({
     const m = message(e);
     if (down(m)) setAiDown(true);
     else setLeft(limitOf(m, left));
-    log({ kind: "refused", text: m });
+    log({ kind: "refused", text: aiErrorText(m) });
   };
   /** An AI answer: its words, then one line for any change (check_plan already passed it on the server). */
   const absorb = (r: Assisted) => {
@@ -1486,7 +1585,10 @@ function AppWorkspace({
     if (!r.changed) return;
     setPrevious(state);
     setState(applyAnswer(state, r));
-    log(changeLine(state.semesters, r.semesters, r.check, lastTerm(r.semesters), true));
+    const line = changeLine(state.semesters, r.semesters, r.check, lastTerm(r.semesters), true);
+    line.text += (r.check.warnings ?? []).filter((w) => w.includes("initial planning preference") && !state.check.warnings?.includes(w))
+      .map((w) => ` · Warning: ${w}`).join("");
+    log(line);
   };
   const showToast = (x: string) => {
     setToast(x);
@@ -1505,6 +1607,8 @@ function AppWorkspace({
         setPrevious(state);
         setState(next);
         line.text += note;
+        line.text += (next.check.warnings ?? []).filter((w) => w.includes("initial planning preference") && !state.check.warnings?.includes(w))
+          .map((w) => ` · Warning: ${w}`).join("");
       }
       log(line);
     } catch (e) {
@@ -1557,7 +1661,7 @@ function AppWorkspace({
     attempt(
       "Checking your plan…",
       async () => {
-        const semesters = state.semesters.map((s) => {
+        let semesters = state.semesters.map((s) => {
           if (s.term !== target.term) return s;
           let placed = false;
           const courses = s.courses.map((c) => {
@@ -1568,7 +1672,14 @@ function AppWorkspace({
           });
           return { ...s, courses };
         });
-        const check = await checkPlan(student, { semesters });
+        let check = await checkPlan(student, { semesters });
+        const newlyMissing = check.errors.filter((e) => e.error === "requirement_not_covered"
+          && !state.check.errors.some((old) => old.error === e.error && old.group === e.group));
+        const restored = restoreMissingSlots(semesters, state.plan.semesters, newlyMissing, target.term);
+        if (restored !== semesters) {
+          semesters = restored;
+          check = await checkPlan(student, { semesters });
+        }
         const pick = {
           group: target.group,
           term: target.term,
@@ -1584,6 +1695,8 @@ function AppWorkspace({
           picks: [...state.picks.filter((p) => p.code !== target.replacing), pick],
         };
       },
+      "",
+      true,
     );
   };
   /** A record edit after the plan exists: re-checked as the plan stands, choices kept, logged with Undo. */
@@ -1600,7 +1713,7 @@ function AppWorkspace({
     );
   const fill = async () => {
     if (sending || busy) return;
-    setBusy("Choosing your courses with AI…");
+    setBusy("Choosing your courses with Gator AI…");
     setFailed("");
     try {
       const r = await assist(student, state.semesters, state.picks, [], state.sections, told.current ? [] : notes);
@@ -1666,10 +1779,10 @@ function AppWorkspace({
     busy,
     failed,
     whatIf,
-    aiDown,
+    aiAvailable: !aiDown && (!left || (left.hour > 0 && left.day > 0)),
     aiBusy: sending || !!busy,
     ask: (text) => {
-      if (sending || busy) return;
+      if (sending || busy || aiDown || (left && (left.hour <= 0 || left.day <= 0))) return;
       setChat(true);
       setDocked(true);
       send(text);
@@ -1694,6 +1807,8 @@ function AppWorkspace({
   return (
     <div className={`workspace ${docked ? "" : "chat-hidden"}`}>
       <div className="workspace-main">
+        <div className="workspace-stepper"><Stepper current={3} /></div>
+        {saveError && <ErrorCard text="This browser could not save your plan for a reload." />}
         <Tabs tab={tab} setTab={setTab} />
         {tab === "plan" && (
           <PlanView
@@ -1741,6 +1856,11 @@ function AppWorkspace({
         busy={sending ? "Checking against the Bulletin…" : busy}
         left={left}
         aiDown={aiDown}
+        onRetry={() => {
+          setAiDown(false);
+          setLeft(undefined);
+          setLines((old) => old.filter((line) => line.kind !== "refused" || !down(line.text)));
+        }}
         hide={() => {
           setChat(false);
           setDocked(false);
@@ -1754,7 +1874,7 @@ function AppWorkspace({
             setDocked(true);
           }}
         >
-          <Icon name="spark" size={16} /> Ask GatorPath
+          <Icon name="spark" size={16} /> Ask Gator AI
         </button>
       )}
       {toast && (
@@ -1770,33 +1890,32 @@ function AppWorkspace({
 type Built = { options: Options; plan: PlanResult; audit: Audit; filled: Assisted | null; why: string };
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>("landing");
+  const [saved, setSaved] = useState(savedSession);
+  const [flow] = useState(savedFlow);
+  const [screen, setScreen] = useState<Screen>(flow?.screen ?? (saved ? "app" : "landing"));
   const [style, setStyle] = useState(false);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [imported, setImported] = useState<ImportResult | null>(null);
-  const [options, setOptions] = useState<Options>({});
-  const [picks, setPicks] = useState<Picks>({ interests: [], after: [] });
-  const [needs, setNeeds] = useState<string>();
-  const [built, setBuilt] = useState<Built | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(saved?.profile ?? flow?.profile ?? null);
+  const [imported, setImported] = useState<ImportResult | null>(saved?.imported ?? flow?.imported ?? null);
+  const [options, setOptions] = useState<Options>(flow?.options ?? {});
+  const [picks, setPicks] = useState<Picks>(flow?.picks ?? { interests: [], after: [] });
+  const [needs, setNeeds] = useState<string | undefined>(flow?.needs);
+  const [built, setBuilt] = useState<Built | null>(saved?.built ?? null);
+  useEffect(() => {
+    try {
+      if (screen === "landing" || screen === "app") sessionStorage.removeItem(FLOW_KEY);
+      else sessionStorage.setItem(FLOW_KEY, JSON.stringify({ screen, profile, imported, options, picks, needs }));
+    } catch { /* storage is unavailable */ }
+  }, [screen, profile, imported, options, picks, needs]);
   const back = () =>
     setScreen(
       screen === "review"
         ? "record"
         : screen === "goals"
-          ? "review"
+          ? profile?.completed?.length || profile?.in_progress?.length ? "review" : "record"
           : screen === "record"
             ? "landing"
             : screen,
     );
-  const home = () => {
-    setProfile(null); // start over means forget it
-    setImported(null);
-    setOptions({});
-    setNeeds(undefined);
-    setBuilt(null);
-    setScreen("landing");
-    window.scrollTo(0, 0);
-  };
   const go = (s: Screen) => {
     setScreen(s);
     window.scrollTo(0, 0);
@@ -1805,13 +1924,11 @@ export default function App() {
     <div className="site-shell">
       {screen !== "landing" && <Header
         screen={screen}
-        onHome={home}
-        onBack={back}
         onStyle={() => setStyle(true)}
       />}
       {screen === "landing" && <Landing start={() => go("record")} />}
       {screen === "record" && (
-        <RecordScreen
+        <RecordScreen back={back}
           done={(record, dpr) => {
             setProfile(record);
             setImported(dpr ?? null);
@@ -1820,7 +1937,7 @@ export default function App() {
         />
       )}
       {screen === "review" && profile && (
-        <ReviewScreen profile={profile} imported={imported} edit={setProfile} next={() => go("goals")} />
+        <ReviewScreen profile={profile} imported={imported} edit={setProfile} back={back} next={() => go("goals")} />
       )}
       {screen === "goals" && profile && (
         <GoalsScreen
@@ -1828,6 +1945,7 @@ export default function App() {
           saved={options}
           picks={picks}
           needs={needs}
+          back={back}
           build={(chosen, chips) => {
             setOptions(chosen);
             setPicks(chips);
@@ -1844,6 +1962,7 @@ export default function App() {
           done={(plan, audit, filled, why = "") => {
             setNeeds(plan.needs_input);
             if (plan.needs_input) return go("goals");
+            setSaved(null);
             setBuilt({ options, plan, audit, filled, why });
             go("app");
           }}
@@ -1855,9 +1974,11 @@ export default function App() {
           built={built}
           imported={imported}
           notes={imported ? [...new Set([...imported.cross_check, ...imported.warnings])] : []}
+          saved={saved?.workspace ?? null}
         />
       )}
       {style && <StyleGuide close={() => setStyle(false)} />}
+      {screen === "app" && <div className="workspace-back"><Button kind="ghost" icon="back" onClick={() => go("goals")}>Back</Button></div>}
       {screen !== "landing" && <Footer />}
     </div>
   );

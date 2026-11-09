@@ -1,13 +1,15 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   EngineError,
   getAudit,
   getCourse,
   getPrograms,
+  searchCourses,
   importDpr,
   message,
   type Audit,
   type Choice,
+  type CourseMatch,
   type Group,
   type ImportResult,
   type Profile,
@@ -119,10 +121,10 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
       <section className="howto" aria-labelledby="howto-title">
         <h2 id="howto-title">How to get your DPR</h2>
         <div className="howto-body">
-          <div className="howto-video" role="img" aria-label="Video coming soon">
-            <i aria-hidden="true" />
-            <span>Video coming soon</span>
-          </div>
+          <video className="howto-video" controls playsInline preload="none" poster="/dpr-video-poster.jpg" aria-label="How to get your DPR from Student Center">
+            <source src="/how-to-get-your-dpr.mp4" type="video/mp4" />
+            Your browser can’t play this video. Follow the steps beside it to save your DPR as a PDF.
+          </video>
           <ol>
             <li>
               Open <b>Student Center</b>
@@ -156,6 +158,93 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
 
 const GRADES = ["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F", "CR", "NC", "W", "I"];
 const IN_PROGRESS = "In progress";
+const RECORD_KEY = "gatorpath-record-v1";
+function recordDraft(): Record<string, unknown> {
+  try { return JSON.parse(sessionStorage.getItem(RECORD_KEY) || "{}") || {}; } catch { return {}; }
+}
+
+const courseCache = new Map<string, Promise<CourseMatch[]>>();
+function CourseSearch({ code, setCode, add }: { code: string; setCode: (code: string) => void; add: () => void }) {
+  const subject = /^[A-Za-z]{2,5}/.exec(code.trim())?.[0].toUpperCase() ?? "";
+  const [found, setFound] = useState<{ subject: string; rows: CourseMatch[] }>({ subject: "", rows: [] });
+  const [selected, setSelected] = useState<CourseMatch | null>(null);
+  const [open, setOpen] = useState(true);
+  const [active, setActive] = useState(0);
+  const [error, setError] = useState("");
+  useEffect(() => { if (!code) { setSelected(null); setOpen(true); } }, [code]);
+  useEffect(() => {
+    if (!subject) return;
+    let cancelled = false;
+    let pending = courseCache.get(subject);
+    if (!pending) {
+      pending = searchCourses(subject);
+      courseCache.set(subject, pending);
+      pending.catch(() => courseCache.delete(subject));
+    }
+    pending.then((rows) => {
+      if (!cancelled) { setFound({ subject, rows }); setError(""); }
+    }).catch(() => { if (!cancelled) setError("Search is unavailable. You can still enter a course code."); });
+    return () => { cancelled = true; };
+  }, [subject]);
+  const prefix = code.toUpperCase().replace(/\s/g, "");
+  const results = found.subject === subject && subject
+    ? found.rows.filter((course) => course.code.replace(/\s/g, "").startsWith(prefix)) : [];
+  const choose = (course: CourseMatch) => {
+    setSelected(course);
+    setCode(course.code);
+    setOpen(false);
+  };
+  return (
+    <div className="course-search">
+      <div className="search-field">
+        <Icon name="search" />
+        <input
+          id="course-code"
+          value={code}
+          placeholder="Try CSC or CSC 215"
+          aria-expanded={open && !!results.length}
+          aria-controls="course-suggestions"
+          onFocus={() => { if (!selected) setOpen(true); }}
+          onChange={(e) => { setSelected(null); setCode(e.target.value); setActive(0); setOpen(true); }}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowDown" && open && results.length) { e.preventDefault(); setActive((active + 1) % results.length); }
+            if (e.key === "ArrowUp" && open && results.length) { e.preventDefault(); setActive((active - 1 + results.length) % results.length); }
+            if (e.key === "Escape") setOpen(false);
+            if (e.key === "Enter" && code) {
+              e.preventDefault();
+              if (open && results.length && !selected) choose(results[active]);
+              else add();
+            }
+          }}
+        />
+      </div>
+      <div className="course-search-results" id="course-suggestions">
+        {selected && !open ? (
+          <div className="course-selected">
+            <span>Selected course</span>
+            <strong>{selected.code} · {selected.title}</strong>
+            <p>{selected.description || "No description in the Bulletin."}</p>
+          </div>
+        ) : results.length && open ? (
+          <ul className="course-suggestions" aria-label="Matching courses">
+            {results.map((course, index) => (
+              <li key={course.code}>
+                <button type="button" className={index === active ? "active" : ""} onClick={() => choose(course)}>
+                  <strong>{course.code} · {course.title}</strong>
+                  <small>{course.description ? `${course.description.slice(0, 160)}${course.description.length > 160 ? "…" : ""}` : "No description in the Bulletin."}</small>
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="course-search-hint" role="status">
+            {error || (subject && found.subject !== subject ? "Finding courses…" : subject && !open ? "Focus the field to see matches." : subject ? "No matching courses. Try another code." : "Enter a subject like CSC to browse its courses.")}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function MajorSelect({ value, set }: { value: string; set: (id: string) => void }) {
   const programs = useLoad(getPrograms, []);
@@ -175,12 +264,14 @@ function MajorSelect({ value, set }: { value: string; set: (id: string) => void 
   );
 }
 
-function TypedPanel({ done }: { done: (profile: Profile) => void }) {
-  const [program, setProgram] = useState("bs-cs");
-  const [rows, setRows] = useState<(Taken & { title: string })[]>([]);
-  const [code, setCode] = useState("");
-  const [grade, setGrade] = useState("A");
-  const [term, setTerm] = useState(nearbyTerms(6, 0)[5]);
+function TypedPanel({ done, back }: { done: (profile: Profile) => void; back: () => void }) {
+  const [draft] = useState(recordDraft);
+  const [program, setProgram] = useState(typeof draft.program === "string" ? draft.program : "bs-cs");
+  const [rows, setRows] = useState<(Taken & { title: string })[]>(Array.isArray(draft.rows) ? draft.rows : []);
+  const [code, setCode] = useState(typeof draft.code === "string" ? draft.code : "");
+  const [grade, setGrade] = useState(typeof draft.grade === "string" ? draft.grade : "A");
+  const [term, setTerm] = useState(typeof draft.term === "string" ? draft.term : nearbyTerms(6, 0)[5]);
+  useEffect(() => { try { sessionStorage.setItem(RECORD_KEY, JSON.stringify({ ...recordDraft(), program, rows, code, grade, term })); } catch { /* storage unavailable */ } }, [program, rows, code, grade, term]);
   const [state, setState] = useState<{ loading?: boolean; error?: string }>({});
   const add = async () => {
     setState({ loading: true });
@@ -197,18 +288,10 @@ function TypedPanel({ done }: { done: (profile: Profile) => void }) {
     <div className="record-panel form-panel">
       <h2>Add your courses</h2>
       <MajorSelect value={program} set={setProgram} />
-      <label>
-        Course code
-        <div className="search-field">
-          <Icon name="search" />
-          <input
-            value={code}
-            placeholder="CSC 215"
-            onChange={(e) => setCode(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && code && add()}
-          />
-        </div>
-      </label>
+      <div className="course-search-field">
+        <label htmlFor="course-code">Course code</label>
+        <CourseSearch code={code} setCode={setCode} add={add} />
+      </div>
       <div className="form-row">
         <label>
           Grade
@@ -248,28 +331,24 @@ function TypedPanel({ done }: { done: (profile: Profile) => void }) {
           </span>
         ))}
       </div>
-      <Button
-        disabled={!rows.length}
-        onClick={() =>
-          done({
-            program,
-            completed: rows
-              .filter((r) => r.grade !== IN_PROGRESS)
-              .map(({ code, grade, term }) => ({ code, grade, term })),
-            in_progress: rows.filter((r) => r.grade === IN_PROGRESS).map((r) => r.code),
-          })
-        }
-      >
-        Review my record <Icon name="arrow" />
-      </Button>
+      <div className="flow-action">
+        <Button kind="ghost" onClick={back}><Icon name="back" size={16} /> Back</Button>
+        <Button disabled={!rows.length} onClick={() => done({
+          program,
+          completed: rows.filter((r) => r.grade !== IN_PROGRESS).map(({ code, grade, term }) => ({ code, grade, term })),
+          in_progress: rows.filter((r) => r.grade === IN_PROGRESS).map((r) => r.code),
+        })}>Next <Icon name="arrow" /></Button>
+      </div>
     </div>
   );
 }
 
-function NewStudentPanel({ done }: { done: (profile: Profile) => void }) {
+function NewStudentPanel({ done, back }: { done: (profile: Profile) => void; back: () => void }) {
   const terms = nearbyTerms(0, 4);
-  const [program, setProgram] = useState("bs-cs");
-  const [start, setStart] = useState(terms[0]);
+  const [draft] = useState(recordDraft);
+  const [program, setProgram] = useState(typeof draft.newProgram === "string" ? draft.newProgram : "bs-cs");
+  const [start, setStart] = useState(typeof draft.start === "string" ? draft.start : terms[0]);
+  useEffect(() => { try { sessionStorage.setItem(RECORD_KEY, JSON.stringify({ ...recordDraft(), newProgram: program, start })); } catch { /* storage unavailable */ } }, [program, start]);
   return (
     <div className="record-panel form-panel">
       <h2>Let’s start with the basics</h2>
@@ -284,15 +363,20 @@ function NewStudentPanel({ done }: { done: (profile: Profile) => void }) {
           ))}
         </select>
       </label>
-      <Button onClick={() => done({ program, start_term: start })}>
-        Continue <Icon name="arrow" />
-      </Button>
+      <div className="flow-action">
+        <Button kind="ghost" onClick={back}><Icon name="back" size={16} /> Back</Button>
+        <Button onClick={() => done({ program, start_term: start })}>Next <Icon name="arrow" /></Button>
+      </div>
     </div>
   );
 }
 
-export function RecordScreen({ done }: { done: (profile: Profile, imported?: ImportResult) => void }) {
-  const [method, setMethod] = useState<"upload" | "type" | "new">("upload");
+export function RecordScreen({ done, back }: { done: (profile: Profile, imported?: ImportResult) => void; back: () => void }) {
+  const [method, setMethod] = useState<"upload" | "type" | "new">(() => {
+    const value = recordDraft().method;
+    return value === "type" || value === "new" ? value : "upload";
+  });
+  useEffect(() => { try { sessionStorage.setItem(RECORD_KEY, JSON.stringify({ ...recordDraft(), method })); } catch { /* storage unavailable */ } }, [method]);
   return (
     <main className="flow-page">
       <Stepper current={1} />
@@ -344,8 +428,9 @@ export function RecordScreen({ done }: { done: (profile: Profile, imported?: Imp
         </button>
       </div>
       {method === "upload" && <UploadPanel onSuccess={(r) => done(r.profile, r)} />}
-      {method === "type" && <TypedPanel done={done} />}
-      {method === "new" && <NewStudentPanel done={done} />}
+      {method === "type" && <TypedPanel done={done} back={back} />}
+      {method === "new" && <NewStudentPanel done={done} back={back} />}
+      {method === "upload" && <div className="flow-action"><Button kind="ghost" onClick={back}><Icon name="back" size={16} /> Back</Button></div>}
     </main>
   );
 }
@@ -445,20 +530,15 @@ function AddCourse({ profile, edit, locked }: { profile: Profile; edit: (profile
     }
   };
   return (
-    <fieldset className="form-panel rq-card" disabled={locked}>
-      <h3>Add a course</h3>
-      <label>
-        Course code
-        <div className="search-field">
-          <Icon name="search" />
-          <input
-            value={code}
-            placeholder="CSC 215"
-            onChange={(e) => setCode(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && code && add()}
-          />
-        </div>
-      </label>
+    <fieldset className="form-panel rq-card add-course-card" disabled={locked}>
+      <div className="add-course-heading">
+        <h3>Add a course</h3>
+        <p>Find it in the Bulletin, then add it to your record.</p>
+      </div>
+      <div className="course-search-field">
+        <label htmlFor="course-code">Course code</label>
+        <CourseSearch code={code} setCode={setCode} add={add} />
+      </div>
       <div className="form-row">
         <label>
           Grade
@@ -481,9 +561,11 @@ function AddCourse({ profile, edit, locked }: { profile: Profile; edit: (profile
           </select>
         </label>
       </div>
-      <Button kind="secondary" icon="plus" onClick={add} disabled={!code || state.loading}>
-        {state.loading ? "Finding it in the Bulletin…" : "Add course"}
-      </Button>
+      <div className="add-course-footer">
+        <Button icon="plus" onClick={add} disabled={!/\d/.test(code) || state.loading}>
+          {state.loading ? "Checking course…" : "Add to my record"}
+        </Button>
+      </div>
       {state.error && <ErrorCard text={state.error} />}
       <p role="status" className="rq-added">
         {state.added && `Added ${state.added}.`}
@@ -497,10 +579,10 @@ const SECTIONS: [string, (g: Group) => boolean][] = [
   ["General Education", (g) => g.id.startsWith("ge_")],
   ["SF State Studies", (g) => g.id.startsWith("sfss_")],
   ["American Institutions", (g) => g.id.startsWith("ai_")],
-  ["Other university requirements", (g) => g.kind === "university" && !/^(ge|sfss|ai)_/.test(g.id)],
+  ["University requirements", (g) => g.kind === "university" && !/^(ge|sfss|ai)_/.test(g.id)],
   ["Major", (g) => g.kind === "major"],
 ];
-const MARKS: Mark[] = ["complete", "progress", "incomplete", "exception", "warning"];
+const MARKS: Mark[] = ["complete", "progress", "planned", "incomplete", "exception", "warning"];
 const plannedText = (term?: string) => (term ? `Planned · ${termLabel(term)}` : "Planned");
 
 /** One course line under a requirement: a `row` or `going` makes it editable. */
@@ -535,6 +617,7 @@ export function RequirementsView({
   const rows = profile.completed ?? [];
   const going = profile.in_progress ?? [];
   const left = profile.not_on_dpr ?? [];
+  const excluded = audit.groups.filter((g) => g.waived_by === NOT_ON_DPR).length;
   const units = (code: string) => audit.courses[code]?.units;
   const plannedIn = (test: (c: string | Slot) => boolean) => semesters?.find((s) => s.courses.some(test))?.term;
 
@@ -578,10 +661,11 @@ export function RequirementsView({
   });
 
   const requirement = (g: Group) => {
-    const mark = markOf(g, warned.has(g.id));
+    const projected = withPlan?.groups.find((x) => x.id === g.id);
+    const mark = markOf(g, warned.has(g.id), projected?.status === "satisfied" || projected?.status === "waived");
     const warnings = imported?.warnings_by_group?.[g.id] ?? [];
     const missing = left.includes(g.id) || warnings.some((w) => w.startsWith(NOT_FOUND));
-    const planned = (withPlan?.groups.find((x) => x.id === g.id)?.counted ?? []).filter(
+    const planned = (projected?.counted ?? []).filter(
       (c) => !g.counted.includes(c) && !g.in_progress.includes(c),
     );
     const needed = (g.remaining ?? []).filter((c) => !planned.includes(c));
@@ -694,37 +778,37 @@ export function RequirementsView({
           ))}
         </ul>
       </div>
-      <div className="rq-cols" aria-hidden="true">
-        <span>Complete</span>
-        {withPlan && <span>With your plan</span>}
-      </div>
+      {!!excluded && <p className="rq-count-note">{excluded} {excluded === 1 ? "requirement" : "requirements"} left out of these totals. Confirm with an advisor.</p>}
       {SECTIONS.map(([name, test]) => {
         const groups = audit.groups.filter(test);
         if (!groups.length) return null;
         const n = countSection(groups, warned);
-        const p = withPlan && countSection(withPlan.groups.filter(test), warned);
+        const projected = withPlan?.groups.filter(test);
+        const p = projected && countSection(projected, warned);
+        const planned = groups.filter((g) => {
+          if (g.waived_by === NOT_ON_DPR || markOf(g, warned.has(g.id)) !== "incomplete") return false;
+          const status = projected?.find((x) => x.id === g.id)?.status;
+          return status === "satisfied" || status === "waived";
+        }).length;
+        const needed = n.total - n.done - n.progress - planned;
         return (
           <details className="rq-section" key={name} onToggle={(e) => !e.currentTarget.open && close()}>
             <summary>
               <span className="rq-chevron" aria-hidden="true" />
               <span aria-hidden="true">
-                <StatusMark mark={n.done === n.total ? "complete" : "incomplete"} />
+                <StatusMark mark={n.total > 0 && n.done === n.total ? "complete" : p && p.total > 0 && p.done === p.total ? "planned" : needed === 0 && n.progress > 0 ? "progress" : "incomplete"} />
               </span>
               <span className="rq-name">{name}</span>
               <span className="rq-flag" aria-hidden="true">
                 {!!n.warned && <StatusMark mark="warning" />}
               </span>
-              <span className="rq-count" aria-hidden="true">
-                {n.done}/{n.total}
+              <span className="rq-status">
+                <span><b>{n.done}/{n.total}</b> complete</span>
+                {!!n.progress && <span>{n.progress} in progress</span>}
+                {!!planned && <span>{planned} planned</span>}
+                {p && p.total > 0 && p.done === p.total ? <strong>All covered by your plan</strong> : needed > 0 && <span>{needed} still needed</span>}
               </span>
-              {p && (
-                <span className="rq-count" aria-hidden="true">
-                  {p.done}/{p.total}
-                </span>
-              )}
               <span className="sr-only">
-                {`, ${n.done} of ${n.total} complete`}
-                {p && `, ${p.done} with your plan`}
                 {!!n.warned && `, ${n.warned} ${n.warned === 1 ? "warning" : "warnings"}`}
               </span>
             </summary>
@@ -757,11 +841,13 @@ export function ReviewScreen({
   imported,
   edit,
   next,
+  back,
 }: {
   profile: Profile;
   imported: ImportResult | null;
   edit: (profile: Profile) => void;
   next: () => void;
+  back: () => void;
 }) {
   const audit = useLoad(() => getAudit(profile), [profile]);
   const programs = useLoad(getPrograms, []);
@@ -825,8 +911,11 @@ export function ReviewScreen({
             imported={imported}
             audit={a}
             edit={edit}
-            leave={{ label: "Looks right → Your goals", go: next }}
           />
+          <div className="flow-action">
+            <Button kind="ghost" onClick={back}><Icon name="back" size={16} /> Back</Button>
+            <Button onClick={next}>Next <Icon name="arrow" size={16} /></Button>
+          </div>
         </>
       )}
     </main>

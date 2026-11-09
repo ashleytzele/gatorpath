@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { getPathways, getPrograms, type Options, type Profile } from "./api";
 import { goalText, pathwayLine, termLabel } from "./logic";
 import { Button, DEMO, Icon, NAVIGATOR, Stepper, Tooltip, nearbyTerms, useLoad } from "./ui";
@@ -19,6 +19,10 @@ const GOALS: Record<string, string[] | null> = {
 const AFTER = ["Start working", "Graduate school"];
 const NOT_SURE = "Not sure yet";
 const PREVIEW_MAJORS = ["bs-cs", "ba-psychology", "ba-history", "bs-environmental-studies"];
+const GOALS_KEY = "gatorpath-goals-v1";
+function goalDraft(): { program?: string; options?: Options; picks?: Picks } {
+  try { return JSON.parse(sessionStorage.getItem(GOALS_KEY) || "{}") || {}; } catch { return {}; }
+}
 
 /** Chips for the listed choices, "Not sure yet" (clears the others), and a box whose entries become removable chips. */
 function ChipPicker({ names, picked, set }: { names: string[]; picked: string[]; set: (v: string[]) => void }) {
@@ -128,23 +132,39 @@ export function GoalsScreen({
   picks,
   needs,
   build,
+  back,
 }: {
   profile: Profile;
   saved: Options;
   picks: Picks;
   needs?: string;
   build: (options: Options, picks: Picks) => void;
+  back: () => void;
 }) {
-  const [interests, setInterests] = useState(picks.interests);
-  const [after, setAfter] = useState(picks.after);
+  const [draft] = useState(() => {
+    const found = goalDraft();
+    return found.program === profile.program ? found : {};
+  });
+  const previous = draft.options ?? {};
+  const [interests, setInterests] = useState(picks.interests.length ? picks.interests : draft.picks?.interests ?? []);
+  const [after, setAfter] = useState(picks.after.length ? picks.after : draft.picks?.after ?? []);
   const [previewMajor, setPreviewMajor] = useState(profile.program);
-  const [graduateBy, setGraduateBy] = useState(saved.graduate_by ?? "");
-  const [units, setUnits] = useState(saved.max_units_per_term === 12 || saved.max_units_per_term === 18 ? String(saved.max_units_per_term) : "");
-  const [summer, setSummer] = useState(saved.include_summer ?? false);
-  const [winter, setWinter] = useState(saved.include_winter ?? false);
-  const [f1, setF1] = useState(saved.f1 === true ? "yes" : saved.f1 === false ? "no" : "");
-  const [qr, setQr] = useState(saved.qr_pathway ?? profile.qr_pathway);
-  const [start, setStart] = useState(saved.start_term ?? "");
+  const [graduateBy, setGraduateBy] = useState(saved.graduate_by ?? previous.graduate_by ?? "");
+  const [units, setUnits] = useState(String(saved.max_units_per_term ?? previous.max_units_per_term ?? ""));
+  const [summer, setSummer] = useState(saved.include_summer ?? previous.include_summer ?? false);
+  const [winter, setWinter] = useState(saved.include_winter ?? previous.include_winter ?? false);
+  const [f1, setF1] = useState(saved.f1 === true ? "yes" : saved.f1 === false ? "no" : previous.f1 === true ? "yes" : previous.f1 === false ? "no" : "");
+  const [qr, setQr] = useState(saved.qr_pathway ?? previous.qr_pathway ?? profile.qr_pathway);
+  const [start, setStart] = useState(saved.start_term ?? previous.start_term ?? "");
+  useEffect(() => {
+    try { sessionStorage.setItem(GOALS_KEY, JSON.stringify({
+      program: profile.program,
+      picks: { interests, after },
+      options: { graduate_by: graduateBy, max_units_per_term: units ? Number(units) : undefined,
+        include_summer: summer, include_winter: winter, f1: f1 === "yes" ? true : f1 === "no" ? false : undefined,
+        qr_pathway: qr, start_term: start },
+    })); } catch { /* storage unavailable */ }
+  }, [interests, after, graduateBy, units, summer, winter, f1, qr, start]);
   const major = DEMO ? previewMajor : profile.program;
   const goals = major === "bs-environmental-studies" ? null : (GOALS[major] ?? []);
   const brandNew = !profile.completed?.length && !profile.in_progress?.length;
@@ -266,9 +286,7 @@ export function GoalsScreen({
         </Q>
       )}
       <div className="flow-action">
-        <span>
-          <Icon name="lock" /> You can change these later.
-        </span>
+        <Button kind="ghost" onClick={back}><Icon name="back" size={16} /> Back</Button>
         <Button
           onClick={() =>
             build(
