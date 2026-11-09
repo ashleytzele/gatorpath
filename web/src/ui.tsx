@@ -192,7 +192,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <div className="logo" aria-label="GatorPath home">
       <span className="logo-mark">
-        <img src="/gatorpath-logo.png?v=3" alt="" />
+        <img src="/gatorpath-logo.png?v=4" alt="" />
       </span>
       {!compact && (
         <span>

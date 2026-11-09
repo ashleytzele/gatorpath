@@ -111,6 +111,22 @@ def test_a_class_can_move_into_a_term_the_plan_doesnt_have_yet():
     assert assistant.change_plan(state, moved)["applied"] and state["semesters"][-1]["term"] == last["term"]
 
 
+def test_every_client_treats_the_units_per_term_as_a_preference_not_a_limit():
+    """The MCP tool, the web route and the chat share check_plan: a later edit over the student's own number keeps the
+    plan and warns; the term's own maximum still applies."""
+    student = STUDENT | {"max_units_per_term": 12}
+    state = state_of(student)
+    term, slot = slot_in({"semesters": state["semesters"]})
+    got = assistant.change_plan(state, [{"term": term, "remove": slot, "add": "CSC 652"}])  # 3 units in place of a 3-unit slot
+    assert got["applied"] and not [e for e in got["errors"] if "over" in e.lower()]
+    plan = {"semesters": state["semesters"]}
+    heavy = {"semesters": [dict(s, courses=s["courses"] + (["CSC 413", "CSC 415", "CSC 510"] if s["term"] == term else []))
+                           for s in plan["semesters"]]}
+    for check in (server.check_plan(student, heavy), TestClient(api.app).post("/api/check", json={"profile": student, "plan": heavy}).json()):
+        assert not [e for e in check["errors"] if e.get("error") == "over_cap"]
+        assert any("initial planning preference" in w for w in check["warnings"])
+
+
 def test_a_class_chosen_for_being_online_is_remembered():
     state = state_of()
     term, slot = slot_in({"semesters": state["semesters"]})

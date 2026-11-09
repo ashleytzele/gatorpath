@@ -98,7 +98,7 @@ export function ChatPanel(props: {
     <aside className={`chat-dock ${props.open ? "open" : ""}`} aria-label="Chat with Gator AI">
       <div className="chat-dock-head">
         <h2>
-          <span className="logo-mark chat-logo-mark"><img src="/gatorpath-logo.png?v=3" alt="" /></span> Gator AI
+          <span className="logo-mark chat-logo-mark"><img src="/gatorpath-logo.png?v=4" alt="" /></span> Gator AI
         </h2>
         <button className="chat-close" onClick={props.hide} aria-label="Hide the chat">
           Hide

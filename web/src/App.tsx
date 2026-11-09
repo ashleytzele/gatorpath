@@ -6,6 +6,7 @@ import {
   checkPlan,
   EngineError,
   type Choice,
+  getAiStatus,
   getAudit,
   getCourse,
   getElectives,
@@ -307,7 +308,12 @@ function ChoiceOptions({
   select: (code: string, option: Option) => void;
   all?: boolean; // the Electives & GE tab: also the ones past the first three, and why the rest can't be taken
 }) {
-  const [query, setQuery] = useState("");
+  const [typed, setTyped] = useState("");
+  const [query, setQuery] = useState(""); // what was typed, once typing pauses
+  useEffect(() => {
+    const wait = setTimeout(() => setQuery(typed.trim()), 250);
+    return () => clearTimeout(wait);
+  }, [typed]);
   const found = useLoad(
     () => getElectives(work.student, target.group, { semesters: work.semesters }, target.term, query),
     [target.group, target.term, target.replacing, query],
@@ -352,7 +358,7 @@ function ChoiceOptions({
         Select one for {term}
         {target.replacing ? `, in place of ${target.replacing}` : ""}.
       </p>
-      {all && <label className="pl-option-search">Search all courses by code or title<input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="e.g. CSC 600" /></label>}
+      {all && <label className="pl-option-search">Search all courses by code or title<input type="search" value={typed} onChange={(e) => setTyped(e.target.value)} placeholder="e.g. CSC 600" /></label>}
       {found.loading && <p role="status">Finding courses that fit…</p>}
       {found.error && <ErrorCard text={found.error} retry={found.retry} />}
       {found.data?.approval && (
@@ -1097,7 +1103,7 @@ function ScheduleView({
             <p className="sched-problem" role="status">
               <Icon name="warning" size={15} /> <span>{problems.join(" ")}</span>
               {r.pinned_blocking ? (
-                <button type="button" onClick={() => work.setSections(first.term, [])}>Find another section combination</button>
+                <button type="button" disabled={work.aiBusy} onClick={() => work.setSections(first.term, [])}>Find another section combination</button>
               ) : work.aiAvailable && (r.not_offered.length > 0 || (r.schedule === null && r.all_counted)) && (
                 <button
                   type="button"
@@ -1856,7 +1862,12 @@ function AppWorkspace({
         busy={sending ? "Checking against the Bulletin…" : busy}
         left={left}
         aiDown={aiDown}
-        onRetry={() => {
+        onRetry={async () => {
+          try {
+            if (!(await getAiStatus()).connected) return showToast("Gator AI still isn't connected here.");
+          } catch (e) {
+            return showToast(message(e));
+          }
           setAiDown(false);
           setLeft(undefined);
           setLines((old) => old.filter((line) => line.kind !== "refused" || !down(line.text)));

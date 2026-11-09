@@ -585,8 +585,8 @@ def build_plan(profile: Profile) -> dict:
     Fill each slot with list_eligible_electives + the student's goal, then call check_plan again before presenting.
     Unit loads follow the roadmap (D24): each spring/fall term's cap is the printed units of the roadmap semester the
     student's units have reached (16, 15, 16, … for a BS CS QR 1/2 freshman; the last semester's past its end; never
-    under 12 for f1), shown as each semester's max_units and roadmap. max_units_per_term is the student's own cap and
-    overrides it. Also include_summer, include_winter (Winter Session terms
+    under 12 for f1), shown as each semester's max_units and roadmap. max_units_per_term is the student's own pace and
+    overrides it for this plan (check_plan only warns when a later edit goes above it). Also include_summer, include_winter (Winter Session terms
     between fall and spring: up to 4 units of GE, American Institutions or free electives) and f1 (F-1 visa: spring/fall
     terms filled toward 12 units, pp.2390, 2393). Returns needs_input
     (qr_pathway, start_term) instead of guessing. Each semester has `why`: per course, what it's needed before, the

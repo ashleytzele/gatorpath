@@ -217,6 +217,16 @@ def test_without_a_key_a_question_isnt_counted_against_the_limit(monkeypatch):
 
 
 
+def test_check_again_says_whether_the_ai_has_a_key_and_counts_nothing(monkeypatch):
+    monkeypatch.setattr(api, "used", api.Usage())
+    for key in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN"):
+        monkeypatch.delenv(key, raising=False)
+    assert client.get("/api/ai-status").json() == {"connected": False}
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+    assert client.get("/api/ai-status").json() == {"connected": True}
+    assert api.used.today == 0 and not any(api.used.recent.values())
+
+
 def test_pathways_name_each_placements_first_math():
     got = client.get("/api/pathways", params={"program": "bs-cs"}).json()["pathways"]
     assert [(p["pathway"], [c["code"] for c in p["courses"]]) for p in got] == [

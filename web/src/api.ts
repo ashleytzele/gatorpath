@@ -262,6 +262,7 @@ export const getPathways = (program: string, catalogYear?: string) =>
   call<{ pathways: Pathway[] }>(
     `/api/pathways?program=${encodeURIComponent(program)}${catalogYear ? `&catalog_year=${encodeURIComponent(catalogYear)}` : ""}`,
   ).then((r) => r.pathways);
+export const getAiStatus = () => call<{ connected: boolean }>("/api/ai-status");
 export const getCourse = (code: string) => call<Course>(`/api/course?code=${encodeURIComponent(code)}`);
 export type CourseMatch = { code: string; title: string; description: string | null };
 export const searchCourses = (query: string) =>

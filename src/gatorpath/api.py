@@ -166,6 +166,16 @@ def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(), pic
         raise HTTPException(503, str(e)) from e
 
 
+@app.get("/api/ai-status")
+def ai_status() -> dict:
+    """Whether the AI helper has a key here: the page's "Check again". Free, and no limit counts it."""
+    try:
+        assistant.connect()
+    except assistant.NotConnected:
+        return {"connected": False}
+    return {"connected": True}
+
+
 @app.get("/api/sections")
 def sections(term: str, courses: list[str] = Query(), online: list[str] = Query(default=[]),
              keep: list[str] = Query(default=[])) -> dict:

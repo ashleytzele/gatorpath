@@ -617,8 +617,8 @@ prior_bachelors: false             # bachelor's or higher from a regionally accr
                                    # graduation requirements waived, major courses still required (p.2313)
 # completed rows may add `units` (variable-unit courses) and `transfer: true` (articulated
 # transfer course: counts for requirements, not residence or GPA; its units are in transfer_units)
-max_units_per_term: 18             # optional, the student's own cap; without it each term follows its roadmap
-                                   # semester's printed load (D24)
+max_units_per_term: 18             # optional, the student's pace for the first plan; without it each term follows its
+                                   # roadmap semester's printed load (D24). A later edit above it is a warning, not an error
 current_term: 2026-fall            # set by the server from today's date (month boundaries), never by the client:
                                    # the in-progress courses fill it, so plans start after it (eval run 2026-10-18)
 include_summer: false
@@ -917,7 +917,8 @@ Roadmap-led since 2026-10-18 (D17). Before that, the critical-path greedy in ste
    15, 13), so a new freshman follows it term by term, a 62-unit transfer starts on semester 5's load, and the ADT
    roadmap (which starts at transfer) counts SF State units. Past the last semester, that semester's load. Never
    above the 19-unit fall/spring maximum, and never under 12 for an F-1 student (p.2390). Summer and Winter Session
-   keep their own limits. The student's `max_units_per_term` overrides all of it. Each semester carries its
+   keep their own limits. The student's `max_units_per_term` overrides all of it when planning; once the plan exists it is a preference:
+   check_plan warns when an edit takes a term above it, and the university maximums still apply. Each semester carries its
    `max_units` and `roadmap` {units, source}; check_plan uses a term's `max_units` when the profile has no cap, and
    a load over 15 that its roadmap semester prints is "as on the Bulletin roadmap (p.X)", not an advisor handoff
    (above the roadmap's load is). When the roadmap goes above 15, `pace.normal_load` reports the lighter plan at the

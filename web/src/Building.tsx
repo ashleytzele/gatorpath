@@ -83,7 +83,7 @@ export default function BuildingScreen({
   return (
     <main className="building-screen" role="status">
       <div className="building-orb">
-        <span className="logo-mark building-logo"><img src="/gatorpath-logo.png?v=3" alt="" /></span>
+        <span className="logo-mark building-logo"><img src="/gatorpath-logo.png?v=4" alt="" /></span>
         <i />
         <i />
         <i />

@@ -247,6 +247,7 @@ export function GoalsScreen({
         <Radio name="units" value="12" checked={units === "12"} set={setUnits}>12 units</Radio>
         <Radio name="units" value="" checked={units === ""} set={setUnits}>About 15 units (recommended)</Radio>
         <Radio name="units" value="18" checked={units === "18"} set={setUnits}>18 units</Radio>
+        {!["", "12", "18"].includes(units) && <Radio name="units" value={units} checked set={setUnits}>{units} units (set earlier)</Radio>}
         <p className="q-note">More than the roadmap’s load needs an advisor’s OK.</p>
       </Q>
       <Q n={++n} group title="Will you take summer or Winter Session classes?" hint="They can help you finish sooner. Leave both off if not.">
