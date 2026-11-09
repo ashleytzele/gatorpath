@@ -41,10 +41,10 @@ import { RecordScreen, RequirementsView, ReviewScreen } from "./Record";
 import { FloatingCard } from "./FloatingCard";
 import { StatusMark } from "./StatusMark";
 import { ChatPanel } from "./Chat";
-import { aiErrorText, blockOf, changeLine, countSection, coveredBy, distinctMeetings, limitOf, offeredText, plannedLine, hours, restoreMissingSlots, shortRoom, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutCoveredSlots, withoutUrls, type ChatLine } from "./logic";
+import { aiErrorText, preferenceNotes, blockOf, changeLine, countSection, coveredBy, distinctMeetings, limitOf, offeredText, plannedLine, hours, restoreMissingSlots, shortRoom, splitWhy, suggestions, termLabel, unitText, warnedGroups, withPlanned, withoutCoveredSlots, withoutUrls, type ChatLine } from "./logic";
 import {
   ASK_ADVISOR, Button, DEMO, ErrorCard, Footer, Header, Icon, Loading, Logo, NAVIGATOR,
-  Stepper, StatusBadge, calmScroll, plainText, useLoad, type Screen,
+  Stepper, StatusBadge, calmScroll, plainText, useLoad, wiped, type Screen,
 } from "./ui";
 
 /** "record" is Your record with the plan beside it, reached from the Plan tab, not the tab bar. */
@@ -1565,15 +1565,29 @@ function AppWorkspace({
   const [busy, setBusy] = useState("");
   const [failed, setFailed] = useState("");
   const [previous, setPrevious] = useState<WorkspaceState | null>(saved?.previous ?? null);
+  // ponytail: the whole workspace is written as one blob, after a pause rather than on every change; if the tab's
+  // storage is full the Undo copy goes first. A smaller write per piece if plans outgrow the ~5 MB quota.
   useEffect(() => {
-    try {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
-        profile, built, imported,
-        workspace: { tab, chat, docked, lines, left, aiDown, state, previous },
-      } satisfies SavedSession));
-    } catch {
-      setSaveError(true);
-    }
+    const save = () => {
+      if (wiped.on) return; // "Clear my saved data" was chosen: nothing may write it back
+      const write = (undo: WorkspaceState | null) =>
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+          profile, built, imported,
+          workspace: { tab, chat, docked, lines, left, aiDown, state, previous: undo },
+        } satisfies SavedSession));
+      try {
+        try {
+          write(previous);
+        } catch {
+          write(null);
+        }
+        setSaveError(false);
+      } catch {
+        setSaveError(true);
+      }
+    };
+    const wait = setTimeout(save, 300);
+    return () => clearTimeout(wait);
   }, [profile, built, imported, tab, chat, docked, lines, left, aiDown, state, previous]);
   const student = { ...profile, ...state.options };
   const log = (line: ChatLine) => setLines((ls) => [...ls, line]);
@@ -1595,16 +1609,16 @@ function AppWorkspace({
     setPrevious(state);
     setState(applyAnswer(state, r));
     const line = changeLine(state.semesters, r.semesters, r.check, lastTerm(r.semesters), true);
-    line.text += (r.check.warnings ?? []).filter((w) => w.includes("initial planning preference") && !state.check.warnings?.includes(w))
-      .map((w) => ` · Warning: ${w}`).join("");
+    line.text += preferenceNotes(state.check, r.check);
     log(line);
   };
   const showToast = (x: string) => {
     setToast(x);
     setTimeout(() => setToast(""), 2500);
   };
-  /** A change GatorPath makes itself. Only a plan that passes the check is applied; otherwise nothing changes.
-   * `applied`: a fact the student states (a record edit) stands either way, and a failed check shows its problem. */
+  /** A change GatorPath makes itself. By default only a plan that passes the check is applied; otherwise nothing
+   * changes. `applied`: the student's own say stands either way: a record edit (a fact) and a swap or pick from the
+   * lists (their choice, round 15). A failed check then shows its problem, and Undo puts the old plan back. */
   const attempt = async (label: string, run: () => Promise<typeof state>, note = "", applied = false) => {
     if (sending || busy) return;
     setBusy(label);
@@ -1616,8 +1630,7 @@ function AppWorkspace({
         setPrevious(state);
         setState(next);
         line.text += note;
-        line.text += (next.check.warnings ?? []).filter((w) => w.includes("initial planning preference") && !state.check.warnings?.includes(w))
-          .map((w) => ` · Warning: ${w}`).join("");
+        line.text += preferenceNotes(state.check, next.check);
       }
       log(line);
     } catch (e) {

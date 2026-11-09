@@ -117,6 +117,7 @@ export type Checked = {
   valid: boolean;
   errors: PlanError[];
   warnings?: string[];
+  over_preference?: string[]; // terms above the student's own units per term
   see_advisor?: Advisor[];
   courses?: Record<string, CourseInfo>;
 };

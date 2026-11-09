@@ -26,7 +26,7 @@ Full design: `docs/ARCHITECTURE.md`. Current work: `TASKS.md` (work phase by pha
    DPR text. Two exceptions, both on the student's own machine: `save_profile` (one file, at a path the
    student chose, only when they ask, never inside the repo), and the website's session storage in the
    student's own browser tab (the parsed record, goals and plan, so a reload keeps the work; never the
-   DPR PDF; cleared when the tab closes). The server keeps nothing. Never commit a real transcript, DPR
+   DPR PDF; cleared when the tab closes or the footer's "Clear my saved data" is chosen). The server keeps nothing. Never commit a real transcript, DPR
    or any real student data. Test fixtures are synthetic.
 6. **`check_plan` is the source of truth.** Anything that produces a plan must pass it in tests.
 

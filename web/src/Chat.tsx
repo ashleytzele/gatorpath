@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Left } from "./api";
 import { leftText, type ChatLine, type Suggestion } from "./logic";
-import { Icon, NAVIGATOR, calmScroll, plainText } from "./ui";
+import { Icon, LOGO_SRC, NAVIGATOR, calmScroll, plainText } from "./ui";
 
 /** A chat reply's light markdown as React elements (nothing is injected as HTML): paragraphs, "- " and "1. " lists,
  * **bold** and links. */
@@ -98,7 +98,7 @@ export function ChatPanel(props: {
     <aside className={`chat-dock ${props.open ? "open" : ""}`} aria-label="Chat with Gator AI">
       <div className="chat-dock-head">
         <h2>
-          <span className="logo-mark chat-logo-mark"><img src="/gatorpath-logo.png?v=4" alt="" /></span> Gator AI
+          <span className="logo-mark chat-logo-mark"><img src={LOGO_SRC} alt="" /></span> Gator AI
         </h2>
         <button className="chat-close" onClick={props.hide} aria-label="Hide the chat">
           Hide

@@ -226,6 +226,14 @@ def test_sections_for_a_terms_courses(tmp_path, monkeypatch):
     assert "chosen sections" in pinned["warnings"][0]
     free = server.get_sections("2027-spring", ["CSC 653", "CSC 648"])
     assert free["schedule"] == {"CSC 648": ["6481"], "CSC 653": ["4324"]}
+    # a pinned search that ran out of steps is "couldn't check", never "your sections block it"
+    real = server.pick_sections
+    monkeypatch.setattr(server, "pick_sections", lambda found, limit=20000, keep=frozenset(): real(found, keep=keep) | (
+        {"schedule": None, "all_counted": False} if keep else {}))
+    gave_up = server.get_sections("2027-spring", ["CSC 653", "CSC 648"], keep=["4321"])
+    assert gave_up["schedule"] is None and not gave_up["pinned_blocking"] and not gave_up["all_counted"]
+    assert "Too many sections" in gave_up["warnings"][0]
+    monkeypatch.setattr(server, "pick_sections", real)
     assert server.get_sections("2027-fall", ["CSC 653"])["unknown"] == ["CSC 653"]  # schedule not out
     assert server.get_sections("spring", ["CSC 653"])["error"] == "bad_term"
 
@@ -262,6 +270,8 @@ def test_searches_manual_choices_beyond_first_hundred(monkeypatch):
     assert later["options"][0]["description"]
     assert first["total_options"] > len(first["options"])
     assert code not in [o["code"] for o in first["options"]]
+    for typed in (code.replace(" ", ""), code.replace(" ", "").lower()):  # "csc600" finds CSC 600
+        assert server.list_eligible_electives(TRANSFER_SENIOR, "elective", by_term="2027-spring", query=typed)["options"][0]["code"] == code
 
 
 def test_full_list_puts_the_terms_sections_first(tmp_path, monkeypatch):

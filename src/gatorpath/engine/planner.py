@@ -408,10 +408,12 @@ def ud_ge_ready(ctx: dict, university: dict) -> tuple[bool, list[str]]:
 
 
 def check_plan(profile: dict, plan: dict, program: dict, university: dict, catalog: dict, prereqs: dict) -> dict:
-    """{valid, errors, warnings, terms, remaining}. Errors make a plan invalid; warnings don't."""
+    """{valid, errors, warnings, over_preference, terms, remaining}. Errors make a plan invalid; warnings don't.
+    over_preference: the warnings for terms above the student's own max_units_per_term (also in warnings)."""
     prereqs = with_needs(program, prereqs, catalog)
     errors: list[dict] = []
     warnings: list[str] = ["Assumes in-progress and planned courses are passed with the grades their requirements need"]
+    over_preference: list[str] = []
     advise: list[tuple[str, str]] = []
     err = lambda kind, msg, **kw: errors.append({"error": kind, "message": msg, **kw})
     load, levels = university["academic_load"], university["class_level"]
@@ -524,7 +526,8 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         cap = fixed if fixed is not None else sem.get("max_units", load["normal_max"])
         if term_units > cap:
             if fixed is not None:
-                warnings.append(f"{term}: {term_units:g} units exceeds your {cap:g}-unit initial planning preference")
+                over_preference.append(f"{term}: {term_units:g} units exceeds your {cap:g}-unit initial planning preference")
+                warnings.append(over_preference[-1])
             else:
                 err("over_cap", f"{term}: {term_units:g} units is over max_units ({cap:g})", term=term)
         if winter and term_units > ws.get("units", 0):
@@ -702,7 +705,8 @@ def check_plan(profile: dict, plan: dict, program: dict, university: dict, catal
         advise += [("major_advisor", f"GatorPath's rules for {program.get('title', program['program'])} aren't verified yet: review this plan "
                     "with an advisor before registering"), ("dpr", "Check what counts toward each requirement")]
     return {"catalog_year": program["catalog_year"], "valid": not errors, "errors": errors,
-            "warnings": list(dict.fromkeys(warnings)), "see_advisor": see_advisor(advise, program, university),
+            "warnings": list(dict.fromkeys(warnings)), "over_preference": over_preference,
+            "see_advisor": see_advisor(advise, program, university),
             "terms": terms_out, "remaining": remaining}
 
 

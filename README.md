@@ -79,7 +79,7 @@ change. A change that makes the plan worse is refused unless you insist, and the
 a key the site still plans, and you choose the courses yourself.
 
 The PDF is read in memory, and your name and ID are dropped as it's read. The web app saves your record and plan in
-this tab's session storage so a reload keeps your work; closing the tab clears it. The server keeps no
+this tab's session storage so a reload keeps your work; closing the tab clears it, or choose "Clear my saved data" in the footer. The server keeps no
 student record. Anthropic's API receives your major, catalog year, goal, load choices and course list,
 never your name, ID or GPA, and a grade only if you type one in the chat. Questions an advisor should answer go to
 [Navigator](https://sfsu.campus.eab.com/).

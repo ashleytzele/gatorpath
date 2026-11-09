@@ -1,6 +1,6 @@
 // Run: node web/src/logic.check.ts
 import assert from "node:assert/strict";
-import { aiErrorText, blockOf, changeLine, countSection, coveredBy, describeChange, distinctMeetings, goalText, leftText, limitOf, offeredText, markOf, pathwayLine, plainWarning, restoreMissingSlots, shortRoom, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutCoveredSlots, withoutUrls, withPlanned } from "./logic.ts";
+import { aiErrorText, preferenceNotes, blockOf, changeLine, countSection, coveredBy, describeChange, distinctMeetings, goalText, leftText, limitOf, offeredText, markOf, pathwayLine, plainWarning, restoreMissingSlots, shortRoom, splitWhy, suggestions, termLabel, warnedGroups, plannedLine, withoutCoveredSlots, withoutUrls, withPlanned } from "./logic.ts";
 
 const g = (id: string, status: string) => ({ id, title: id, kind: "major", source: "", status, counted: [], in_progress: [] });
 const term = (t: string, courses: (string | { slot: string; units: number })[]) => ({ term: t, courses });
@@ -26,6 +26,11 @@ assert.deepEqual(restoreMissingSlots([swappedGE[0]], initialGE,
   [term("2027-spring", ["AA S 323", { slot: "sfss_esca", units: 0 }])]);
 assert.equal(restoreMissingSlots(swappedGE, initialGE,
   [{ error: "prereq_not_met", message: "AA S 323 needs a prerequisite" }], "2027-spring"), swappedGE);
+const over = (...w: string[]) => ({ valid: true, errors: [], over_preference: w });
+assert.equal(preferenceNotes(over(), over("2027-fall: 14 units exceeds your 12-unit initial planning preference")),
+  " · Warning: 2027-fall: 14 units exceeds your 12-unit initial planning preference");
+assert.equal(preferenceNotes(over("a"), over("a")), ""); // already said before this edit
+assert.equal(preferenceNotes(over(), { valid: true, errors: [] }), "");
 assert.equal(shortRoom("Thornton Hall 329"), "TH 329");
 assert.equal(shortRoom("Humanities Building 384"), "HUM 384");
 assert.equal(shortRoom("Online"), "Online");

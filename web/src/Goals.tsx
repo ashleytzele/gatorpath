@@ -146,22 +146,24 @@ export function GoalsScreen({
     return found.program === profile.program ? found : {};
   });
   const previous = draft.options ?? {};
-  const [interests, setInterests] = useState(picks.interests.length ? picks.interests : draft.picks?.interests ?? []);
-  const [after, setAfter] = useState(picks.after.length ? picks.after : draft.picks?.after ?? []);
+  // the draft is written on every change, so it is newer than the options the last build kept
+  const from = <K extends keyof Options>(key: K) => (key in previous ? previous[key] : saved[key]);
+  const [interests, setInterests] = useState(draft.picks?.interests ?? picks.interests);
+  const [after, setAfter] = useState(draft.picks?.after ?? picks.after);
   const [previewMajor, setPreviewMajor] = useState(profile.program);
-  const [graduateBy, setGraduateBy] = useState(saved.graduate_by ?? previous.graduate_by ?? "");
-  const [units, setUnits] = useState(String(saved.max_units_per_term ?? previous.max_units_per_term ?? ""));
-  const [summer, setSummer] = useState(saved.include_summer ?? previous.include_summer ?? false);
-  const [winter, setWinter] = useState(saved.include_winter ?? previous.include_winter ?? false);
-  const [f1, setF1] = useState(saved.f1 === true ? "yes" : saved.f1 === false ? "no" : previous.f1 === true ? "yes" : previous.f1 === false ? "no" : "");
-  const [qr, setQr] = useState(saved.qr_pathway ?? previous.qr_pathway ?? profile.qr_pathway);
-  const [start, setStart] = useState(saved.start_term ?? previous.start_term ?? "");
+  const [graduateBy, setGraduateBy] = useState(from("graduate_by") ?? "");
+  const [units, setUnits] = useState(String(from("max_units_per_term") ?? ""));
+  const [summer, setSummer] = useState(from("include_summer") ?? false);
+  const [winter, setWinter] = useState(from("include_winter") ?? false);
+  const [f1, setF1] = useState(from("f1") === true ? "yes" : from("f1") === false ? "no" : "");
+  const [qr, setQr] = useState(from("qr_pathway") ?? profile.qr_pathway);
+  const [start, setStart] = useState(from("start_term") ?? "");
   useEffect(() => {
     try { sessionStorage.setItem(GOALS_KEY, JSON.stringify({
       program: profile.program,
       picks: { interests, after },
-      options: { graduate_by: graduateBy, max_units_per_term: units ? Number(units) : undefined,
-        include_summer: summer, include_winter: winter, f1: f1 === "yes" ? true : f1 === "no" ? false : undefined,
+      options: { graduate_by: graduateBy, max_units_per_term: units ? Number(units) : null, // null, not left out: "back to the default" must win over an older value
+        include_summer: summer, include_winter: winter, f1: f1 === "yes" ? true : f1 === "no" ? false : null,
         qr_pathway: qr, start_term: start },
     })); } catch { /* storage unavailable */ }
   }, [interests, after, graduateBy, units, summer, winter, f1, qr, start]);

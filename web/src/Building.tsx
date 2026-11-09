@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { assist, buildPlan, getAudit, message, type Assisted, type Audit, type Options, type PlanResult, type Profile } from "./api";
-import { Button, ErrorCard, Icon, useLoad } from "./ui";
+import { Button, ErrorCard, Icon, LOGO_SRC, useLoad } from "./ui";
 
 const STEP_MS = 900; // one checklist line about every 0.9 s while the planner and the AI work
 
@@ -90,7 +90,7 @@ export default function BuildingScreen({
   return (
     <main className="building-screen" role="status">
       <div className="building-orb">
-        <span className="logo-mark building-logo"><img src="/gatorpath-logo.png?v=4" alt="" /></span>
+        <span className="logo-mark building-logo"><img src={LOGO_SRC} alt="" /></span>
         <i />
         <i />
         <i />

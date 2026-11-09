@@ -176,16 +176,20 @@ function CourseSearch({ code, setCode, add }: { code: string; setCode: (code: st
   useEffect(() => {
     if (!subject) return;
     let cancelled = false;
-    let pending = courseCache.get(subject);
-    if (!pending) {
-      pending = searchCourses(subject);
-      courseCache.set(subject, pending);
-      pending.catch(() => courseCache.delete(subject));
-    }
-    pending.then((rows) => {
-      if (!cancelled) { setFound({ subject, rows }); setError(""); }
-    }).catch(() => { if (!cancelled) setError("Search is unavailable. You can still enter a course code."); });
-    return () => { cancelled = true; };
+    const ask = () => {
+      let pending = courseCache.get(subject);
+      if (!pending) {
+        pending = searchCourses(subject);
+        courseCache.set(subject, pending);
+        pending.catch(() => courseCache.delete(subject));
+      }
+      pending.then((rows) => {
+        if (!cancelled) { setFound({ subject, rows }); setError(""); }
+      }).catch(() => { if (!cancelled) setError("Search is unavailable. You can still enter a course code."); });
+    };
+    // a subject already fetched answers at once; a new one waits for a pause, so "C", "CS" aren't each a request
+    const wait = setTimeout(ask, courseCache.has(subject) ? 0 : 250);
+    return () => { cancelled = true; clearTimeout(wait); };
   }, [subject]);
   const prefix = code.toUpperCase().replace(/\s/g, "");
   const results = found.subject === subject && subject

@@ -2,6 +2,7 @@
 lives here. Nothing is stored or logged: an upload stays in memory, and no student data goes in a URL. /api/assist is
 the one route with an LLM behind it (assistant.py); everything else is deterministic."""
 
+import functools
 import math
 import os
 import re
@@ -197,6 +198,18 @@ def course(code: str) -> dict:
     return server.get_course(code)
 
 
+COURSE_ROWS = 300  # the biggest subject has about 100 courses; this only bounds a surprise
+
+
+@functools.cache  # built once per process: the catalog doesn't change while it runs
+def subject_index(db: Path, year: str) -> dict[str, list[str]]:
+    """{"AAS": ["AA S 101", ...]} with the spaces of a subject like "AA S" dropped, each list in number order."""
+    out: dict[str, list[str]] = {}
+    for code in server.catalog(db, year):
+        out.setdefault(code.rsplit(" ", 1)[0].replace(" ", ""), []).append(code)
+    return {s: sorted(codes, key=lambda c: (number(c), c)) for s, codes in out.items()}
+
+
 @app.get("/api/search-courses")
 def search_courses(query: str) -> dict:
     """The course-code box: a subject ("CSC", "AA S") and the start of a number list that subject's courses in number
@@ -206,12 +219,12 @@ def search_courses(query: str) -> dict:
         return {"results": []}
     cat = server.catalog(server.DB, server.YEAR)
     typed = "".join(query.upper().split())
-    subject = lambda c: c.rsplit(" ", 1)[0].replace(" ", "")
+    by_subject = subject_index(server.DB, server.YEAR)
     # longest first, so "ENGR 1" isn't read as ENG
-    hit = next((s for s in sorted({subject(c) for c in cat}, key=len, reverse=True)
+    hit = next((s for s in sorted(by_subject, key=len, reverse=True)
                 if typed.startswith(s) and re.fullmatch(r"(\d{1,3}[A-Z]{0,3})?", typed[len(s):])), None)
-    codes = (sorted((c for c in cat if subject(c) == hit and c.replace(" ", "").startswith(typed)), key=lambda c: (number(c), c))
-             if hit else [r["code"] for r in server.search_courses(query, limit=50)["results"]])
+    codes = ([c for c in by_subject[hit] if c.replace(" ", "").startswith(typed)][:COURSE_ROWS] if hit
+             else [r["code"] for r in server.search_courses(query, limit=50)["results"]])
     text = db.descriptions(server.DB, server.YEAR, codes)
     return {"results": [{"code": c, "title": cat[c]["title"], "description": text.get(c)} for c in codes]}
 

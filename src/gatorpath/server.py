@@ -269,7 +269,9 @@ def get_sections(term: str, codes: list[str], online: list[str] | None = None, k
     available = {c: (fully_online(secs) or secs) if c in wanted and not mine(secs) else secs
                  for c, secs in found.items()}
     picked = pick_sections(available, keep=kept)
-    pinned_blocking = bool(kept and picked["schedule"] is None and pick_sections(available)["schedule"] is not None)
+    # a pinned search that ran out of steps proves nothing: say "couldn't check", not "your sections block it"
+    pinned_blocking = bool(kept and picked["schedule"] is None and picked["all_counted"]
+                           and pick_sections(available)["schedule"] is not None)
     for code, secs in found.items():
         for sec in secs:
             if sec.get("class_nbr") in (picked["schedule"] or {}).get(code, []):
@@ -522,8 +524,9 @@ def check_plan(profile: Profile, plan: Plan) -> dict:
     """Validate a term-by-term plan. **Call this before presenting any plan, fix every error, and re-check until
     valid.** `courses` gives each planned course's title, units and source_page for the plan's table: no get_course
     per course. Errors (with Bulletin text/pages): prereq not met by that term, course already passed or planned twice,
-    unknown course, units over the term's cap (term max_units, else 15). The student's max_units_per_term guides the
-    initial plan and produces a warning, not an error, if a later edit exceeds it.
+    unknown course, units over the term's cap (term max_units, else 15; with the student's max_units_per_term, which
+    guides the first plan, a later edit above it is a warning in over_preference, not an error: the 15-unit advisor
+    flag and the university's 19-unit maximum still apply).
     requirement or 120/upper-division units not covered. Warnings: unverifiable prereqs (GPA not given, permission),
     loads above the normal 15 (p.2393; "as on the Bulletin roadmap" with no advisor when the term's roadmap semester
     prints that load), unfilled slots.
@@ -667,7 +670,9 @@ def list_eligible_electives(profile: Profile, group_id: str, plan: Plan | None =
     out = eligible_options(clean, group_id, program, university, catalog_for(clean), prereqs_for(clean), plan, by_term, 10**6)
     if "options" in out and query.strip():
         words = query.casefold().split()
-        out["options"] = [o for o in out["options"] if all(w in f'{o["code"]} {o["title"]}'.casefold() for w in words)]
+        # "csc600" and "CSC 600" both find CSC 600: match the code with and without its space as well
+        hay = lambda o: f'{o["code"]} {o["code"].replace(" ", "")} {o["title"]}'.casefold()
+        out["options"] = [o for o in out["options"] if all(w in hay(o) for w in words)]
         out["total_options"] = len(out["options"])
     if "options" in out and online:
         out = online_options(out, catalog(DB, YEAR))

@@ -228,10 +228,9 @@ def change_plan(state: dict, changes: list[dict], force: bool = False) -> dict:
     kept = [p | {"term": where[p["code"]]} for p in picks if p["code"] in where]
     state |= {"semesters": semesters, "errors": errors, "changed": True,
               "picks": [p for p in kept if p["code"] not in {a["code"] for a in added}] + added}
-    noted = [w for w in result["warnings"] if "can't check" not in w]
+    noted = [w for w in result["warnings"] if "can't check" not in w and w not in result["over_preference"]]
     return {"applied": True, "valid": result["valid"], "errors": errors, "open_slots": open_slots(state),
-            "warnings": [w for w in noted if "initial planning preference" in w]
-                        + [w for w in noted if "initial planning preference" not in w][:6]}
+            "warnings": result["over_preference"] + noted[:6]}
 
 
 def choose_section(state: dict, args: dict) -> dict:

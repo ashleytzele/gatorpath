@@ -178,6 +178,7 @@ def test_the_workspace_is_the_main_landmark_and_its_copy_matches_its_buttons():
     assert '<main className="workspace-main">' in APP  # the plan, Electives and Schedule screens have one, like the others
     assert "Swap or Choose a row" not in APP  # a chosen row's button says Details; an open one says Choose
     assert "of ${same.length}" in APP  # rows of one requirement are numbered, not five of "Electives (15 units)"
+    assert "Clear my saved data" in APP and "wiped.on" in APP  # the footer clears this tab's saved record and plan
     assert "Still working" in APP + (Path(__file__).parents[1] / "web/src/Building.tsx").read_text()
 
 

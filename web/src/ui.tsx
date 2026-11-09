@@ -188,11 +188,12 @@ export function Tooltip({ text }: { text: string }) {
   );
 }
 
+export const LOGO_SRC = "/gatorpath-logo.png?v=4"; // bump the number when the picture changes
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="logo" aria-label="GatorPath home">
+    <div className="logo" aria-label="GatorPath">
       <span className="logo-mark">
-        <img src="/gatorpath-logo.png?v=4" alt="" />
+        <img src={LOGO_SRC} alt="" />
       </span>
       {!compact && (
         <span>
@@ -287,7 +288,7 @@ export function Header({
 
 export const NAVIGATOR = "https://sfsu.campus.eab.com/";
 export const ASK_ADVISOR = "Ask an advisor in Navigator"; // the one name for the advising link
-export const PRIVACY = "Your DPR PDF is never saved. Your record and plan stay in this browser tab through reloads and clear when you close the tab. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA.";
+export const PRIVACY = "Your DPR PDF is never saved. Your record and plan stay in this browser tab through reloads and clear when you close the tab, or when you choose Clear my saved data. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA.";
 /** Engine text in the student's words: "2027-spring" -> "Spring 2027", a requirement's id -> its title. */
 export function plainText(text: string, audit?: Audit) {
   const titles = new Map((audit?.groups ?? []).map((g) => [g.id, g.title]));
@@ -316,6 +317,44 @@ export function Stepper({ current }: { current: number }) {
   );
 }
 
+/** Set when the student clears this tab's saved data, so a save already waiting can't write it back. */
+export const wiped = { on: false };
+
+/** Removes everything this tab saved (record, goals, plan, chat) and goes back to the first page. Two steps, so a
+ * stray click can't throw a plan away. */
+function ClearSaved() {
+  const [sure, setSure] = useState(false);
+  if (!sure)
+    return (
+      <button type="button" className="pl-link" onClick={() => setSure(true)}>
+        Clear my saved data
+      </button>
+    );
+  return (
+    <span role="alert">
+      Remove your record and plan from this tab?{" "}
+      <button
+        type="button"
+        className="pl-link"
+        onClick={() => {
+          wiped.on = true;
+          try {
+            sessionStorage.clear();
+          } catch {
+            /* storage is unavailable: nothing was saved */
+          }
+          window.location.assign("/");
+        }}
+      >
+        Yes, clear it
+      </button>{" "}
+      <button type="button" className="pl-link" onClick={() => setSure(false)}>
+        Keep it
+      </button>
+    </span>
+  );
+}
+
 export function Footer() {
   return (
     <footer>
@@ -324,7 +363,8 @@ export function Footer() {
         Unofficial student-built tool, not affiliated with SF State. Questions about your plan?{" "}
         <a href={NAVIGATOR} target="_blank" rel="noreferrer">
           {ASK_ADVISOR}
-        </a>
+        </a>{" "}
+        · <ClearSaved />
       </span>
     </footer>
   );

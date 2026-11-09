@@ -135,6 +135,10 @@ export const withoutUrls = (text: string) =>
     .replace(/\s{2,}/g, " ")
     .trim();
 
+/** The chat line's tail for terms an edit pushed over the student's own units per term (new ones only). */
+export const preferenceNotes = (before: Checked, after: Checked) =>
+  (after.over_preference ?? []).filter((w) => !before.over_preference?.includes(w)).map((w) => ` · Warning: ${w}`).join("");
+
 export type Mark = "complete" | "progress" | "planned" | "incomplete" | "exception" | "warning";
 export const markOf = (g: Group, warned: boolean, planned = false): Mark =>
   warned ? "warning" : g.status === "satisfied" ? "complete" : g.status === "waived" ? "exception" : g.status === "in_progress" || g.in_progress.length > 0 ? "progress" : planned ? "planned" : "incomplete";
