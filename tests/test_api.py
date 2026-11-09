@@ -182,6 +182,18 @@ def test_the_workspace_is_the_main_landmark_and_its_copy_matches_its_buttons():
     assert "Still working" in APP + (Path(__file__).parents[1] / "web/src/Building.tsx").read_text()
 
 
+def test_the_stylesheet_uses_tokens_for_colors_and_stacking():
+    css = (Path(__file__).parents[1] / "web/src/index.css").read_text()
+    tokens, _, rules = css.partition("  * {\n    box-sizing: border-box;")
+    assert not re.findall(r"#[0-9a-fA-F]{3,8}\b", rules), "a color outside the :root tokens"
+    assert not re.findall(r"z-index:\s*\d", css), "a raw z-index: use --z-raised, --z-sticky, --z-bar, --z-sheet, --z-overlay or --z-toast"
+
+
+def test_the_f1_question_has_to_be_answered_before_the_plan_is_built():
+    goals = (Path(__file__).parents[1] / "web/src/Goals.tsx").read_text()
+    assert "if (!f1)" in goals and "Choose Yes, No or Prefer not to say" in goals and 'value="skip"' in goals
+
+
 def test_the_site_never_calls_a_plan_verified_and_sends_questions_to_navigator():
     assert "verified" not in APP.lower() and "https://sfsu.campus.eab.com/" in APP
     assert "advising.sfsu.edu" not in APP and "/undergrads/advising" not in APP

@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { getPathways, getPrograms, type Options, type Profile } from "./api";
 import { goalText, pathwayLine, termLabel } from "./logic";
-import { Button, DEMO, Icon, NAVIGATOR, Stepper, Tooltip, nearbyTerms, useLoad } from "./ui";
+import { Button, DEMO, Icon, NAVIGATOR, Stepper, Tooltip, calmScroll, nearbyTerms, useLoad } from "./ui";
 
 export type Picks = { interests: string[]; after: string[] };
 
@@ -75,7 +75,7 @@ function ChipPicker({ names, picked, set }: { names: string[]; picked: string[];
   );
 }
 
-function Q({ n, title, hint, group, children }: { n: number; title: ReactNode; hint?: string; group?: boolean; children: ReactNode }) {
+function Q({ n, title, hint, group, id, children }: { n: number; title: ReactNode; hint?: string; group?: boolean; id?: string; children: ReactNode }) {
   const head = (
     <>
       <span className="q-num">{n}</span>
@@ -86,12 +86,12 @@ function Q({ n, title, hint, group, children }: { n: number; title: ReactNode; h
     </>
   );
   return group ? (
-    <fieldset className="q">
+    <fieldset className="q" id={id}>
       <legend className="q-head">{head}</legend>
       {children}
     </fieldset>
   ) : (
-    <section className="q">
+    <section className="q" id={id}>
       <div className="q-head">{head}</div>
       {children}
     </section>
@@ -155,7 +155,8 @@ export function GoalsScreen({
   const [units, setUnits] = useState(String(from("max_units_per_term") ?? ""));
   const [summer, setSummer] = useState(from("include_summer") ?? false);
   const [winter, setWinter] = useState(from("include_winter") ?? false);
-  const [f1, setF1] = useState(from("f1") === true ? "yes" : from("f1") === false ? "no" : "");
+  const [f1, setF1] = useState(String((previous as { f1_choice?: string }).f1_choice ?? (from("f1") === true ? "yes" : from("f1") === false ? "no" : "")));
+  const [f1Missing, setF1Missing] = useState(false); // Build was pressed without an answer
   const [qr, setQr] = useState(from("qr_pathway") ?? profile.qr_pathway);
   const [start, setStart] = useState(from("start_term") ?? "");
   useEffect(() => {
@@ -163,7 +164,7 @@ export function GoalsScreen({
       program: profile.program,
       picks: { interests, after },
       options: { graduate_by: graduateBy, max_units_per_term: units ? Number(units) : null, // null, not left out: "back to the default" must win over an older value
-        include_summer: summer, include_winter: winter, f1: f1 === "yes" ? true : f1 === "no" ? false : null,
+        include_summer: summer, include_winter: winter, f1: f1 === "yes" ? true : f1 === "no" ? false : null, f1_choice: f1,
         qr_pathway: qr, start_term: start },
     })); } catch { /* storage unavailable */ }
   }, [interests, after, graduateBy, units, summer, winter, f1, qr, start]);
@@ -265,12 +266,14 @@ export function GoalsScreen({
       <Q
         n={++n}
         group
+        id="q-f1"
         title={<>Are you on an F-1 student visa? <Tooltip text="F-1 students need at least 12 units every fall and spring." /></>}
-        hint="This sets your minimum load."
+        hint="This sets your minimum load. Please answer, so we don't plan terms under 12 units for you by mistake."
       >
-        <Radio name="f1" value="no" checked={f1 === "no"} set={setF1}>No</Radio>
-        <Radio name="f1" value="yes" checked={f1 === "yes"} set={setF1}>Yes</Radio>
-        <Radio name="f1" value="skip" checked={f1 === "skip"} set={setF1}>Prefer not to say</Radio>
+        <Radio name="f1" value="no" checked={f1 === "no"} set={(v) => { setF1(v); setF1Missing(false); }}>No</Radio>
+        <Radio name="f1" value="yes" checked={f1 === "yes"} set={(v) => { setF1(v); setF1Missing(false); }}>Yes</Radio>
+        <Radio name="f1" value="skip" checked={f1 === "skip"} set={(v) => { setF1(v); setF1Missing(false); }}>Prefer not to say</Radio>
+        {f1Missing && <p className="q-error" role="alert">Choose Yes, No or Prefer not to say, then build your plan.</p>}
         {f1 === "yes" && (
           <p className="q-note">Every fall and spring stays at 12 units or more. For other visa questions, ask the international office.</p>
         )}
@@ -291,7 +294,11 @@ export function GoalsScreen({
       <div className="flow-action">
         <Button kind="ghost" onClick={back}><Icon name="back" size={16} /> Back</Button>
         <Button
-          onClick={() =>
+          onClick={() => {
+            if (!f1) {
+              setF1Missing(true);
+              return calmScroll(document.getElementById("q-f1"), "center");
+            }
             build(
               {
                 ...(goal && { goal }),
@@ -304,8 +311,8 @@ export function GoalsScreen({
                 ...(units && { max_units_per_term: Number(units) }),
               },
               { interests, after },
-            )
-          }
+            );
+          }}
         >
           Build my plan <Icon name="arrow" />
         </Button>
