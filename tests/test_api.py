@@ -278,6 +278,7 @@ def test_building_waits_for_the_ai_and_the_workspace_no_longer_fills_on_mount():
     assert "skeleton" not in building and 'className="skip-card"' in building  # a card with the choice, no grey boxes
     assert "abort.current?.abort()" in building and "setSkipped(true)" in building and "finish(" not in building[building.index("<section"):building.index("</section>")]
     assert "skipped" in APP and "You chose your own electives" in APP  # the chat's first line says so
+    assert "work.aiAvailable ? state.semesters" in APP  # no "Choose my open courses" while Gator AI is off
 
 
 def test_buttons_say_swap_select_or_choose():

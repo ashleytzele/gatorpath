@@ -1870,7 +1870,7 @@ function AppWorkspace({
       <ChatPanel
         open={chat}
         lines={lines}
-        suggestions={suggestions(state.plan, student, state.semesters.flatMap((x) => x.courses.filter(isSlot)).length)}
+        suggestions={suggestions(state.plan, student, work.aiAvailable ? state.semesters.flatMap((x) => x.courses.filter(isSlot)).length : 0)} // no open choices to offer to Gator AI when it is off
         onSuggest={suggest}
         onSend={send}
         onUndo={undo}
