@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { assist, buildPlan, getAudit, message, type Assisted, type Audit, type Options, type PlanResult, type Profile } from "./api";
-import { Button, ErrorCard, Icon, LOGO_SRC, useLoad } from "./ui";
+import { Button, ErrorCard, Icon, LOGO_SRC, calmScroll, useLoad } from "./ui";
 
 const STEP_MS = 900; // one checklist line about every 0.9 s while the planner and the AI work
 
@@ -15,7 +15,7 @@ export default function BuildingScreen({
   profile: Profile;
   options: Options;
   notes: string[];
-  done: (plan: PlanResult, audit: Audit, filled: Assisted | null, why?: string) => void;
+  done: (plan: PlanResult, audit: Audit, filled: Assisted | null, why?: string, skipped?: boolean) => void;
   back: () => void;
 }) {
   const built = useLoad(
@@ -24,6 +24,7 @@ export default function BuildingScreen({
   );
   const [ai, setAi] = useState<{ filled: Assisted | null; why: string } | null>(null);
   const [shown, setShown] = useState(1);
+  const [skipped, setSkipped] = useState(false); // the student chose their own electives: Gator AI isn't asked
   const [slow, setSlow] = useState(false); // Gator AI has run past the "about a minute" it promised
   const cancelled = useRef(false);
   const abort = useRef<AbortController | null>(null);
@@ -60,6 +61,10 @@ export default function BuildingScreen({
   ];
   const planned = shown >= steps.length; // every planner line is out
   const waiting = planned && needsAi && !ai; // only Gator AI is left
+  const card = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (waiting) calmScroll(card.current, "nearest"); // on a short window the card would sit below the fold
+  }, [waiting]);
   useEffect(() => {
     if (!waiting) return;
     const t = setTimeout(() => setSlow(true), 60_000);
@@ -67,7 +72,7 @@ export default function BuildingScreen({
   }, [waiting]);
   const settled = !!plan && !!ai;
   const finished = planned && settled;
-  const finish = (filled: Assisted | null, why = "") => built.data && done(built.data[0], built.data[1], filled, why);
+  const finish = (filled: Assisted | null, why = "") => built.data && done(built.data[0], built.data[1], filled, why, skipped);
   useEffect(() => {
     if (!finished) return;
     const t = setTimeout(() => finish(ai!.filled, ai!.why), STEP_MS);
@@ -104,23 +109,34 @@ export default function BuildingScreen({
       <div className="check-list">
         {steps.slice(0, Math.min(shown, steps.length)).map((s, i) => line(s, !planned && i === shown - 1, s))}
         {planned && needsAi && line(
-          ai ? (ai.filled ? "Electives and GE chosen with Gator AI" : "Gator AI isn't available; you can choose electives yourself") : "Choosing electives and GE with Gator AI, about a minute",
+          skipped ? "Skipped Gator AI: you'll choose your electives"
+            : ai ? (ai.filled ? "Electives and GE chosen with Gator AI" : "Gator AI isn't available; you can choose electives yourself") : "Choosing electives and GE with Gator AI, about a minute",
           !ai,
           "ai",
         )}
         {finished && line("Checked against the Bulletin", false, "checked")}
         {finished && line("Your plan is ready · Opening your plan…", false, "ready")}
       </div>
-      {!finished && <div className="skeleton-row">
-        <i />
-        <i />
-        <i />
-      </div>}
-      {slow && waiting && <p className="building-slow">Still working. A long plan takes Gator AI a little longer. You can wait, or skip and choose your electives yourself.</p>}
-      {planned && needsAi && !ai && (
-        <Button kind="secondary" onClick={() => { cancelled.current = true; abort.current?.abort(); finish(null); }}>
-          Skip and choose my electives myself →
-        </Button>
+      {waiting && (
+        <section className="skip-card" aria-labelledby="skip-title" ref={card}>
+          <h2 id="skip-title">Rather pick your own electives?</h2>
+          <p>
+            {slow
+              ? "Still working. A long plan takes Gator AI a little longer. You can wait, or skip and choose from the courses that fit."
+              : "Skip Gator AI and choose from the courses that fit. You can ask Gator AI for help later."}
+          </p>
+          <Button
+            kind="secondary"
+            onClick={() => {
+              cancelled.current = true; // its answer is dropped, and the request stops
+              abort.current?.abort();
+              setSkipped(true);
+              setAi({ filled: null, why: "" });
+            }}
+          >
+            Skip, I’ll choose myself
+          </Button>
+        </section>
       )}
     </main>
   );

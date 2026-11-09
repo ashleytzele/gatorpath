@@ -1543,6 +1543,7 @@ function AppWorkspace({
       ? [changeLine(built.plan.semesters, built.filled.semesters, built.filled.check, lastTerm(built.filled.semesters), true)]
       : []),
     ...(built.why ? [{ kind: "refused" as const, text: aiErrorText(built.why) }] : []),
+    ...(built.skipped ? [{ kind: "ai" as const, text: "You chose your own electives. Say “choose my open courses” whenever you want Gator AI to pick." }] : []),
   ]);
   const [left, setLeft] = useState(() => saved?.left ?? built.filled?.left ?? limitOf(built.why)); // the first fill may have hit a limit
   const [sending, setSending] = useState(false);
@@ -1914,7 +1915,7 @@ function AppWorkspace({
   );
 }
 
-type Built = { options: Options; plan: PlanResult; audit: Audit; filled: Assisted | null; why: string };
+type Built = { options: Options; plan: PlanResult; audit: Audit; filled: Assisted | null; why: string; skipped?: boolean };
 
 export default function App() {
   const [saved, setSaved] = useState(savedSession);
@@ -1987,11 +1988,11 @@ export default function App() {
           options={options}
           notes={imported ? [...new Set([...imported.cross_check, ...imported.warnings])] : []}
           back={() => go("goals")}
-          done={(plan, audit, filled, why = "") => {
+          done={(plan, audit, filled, why = "", skipped = false) => {
             setNeeds(plan.needs_input);
             if (plan.needs_input) return go("goals");
             setSaved(null);
-            setBuilt({ options, plan, audit, filled, why });
+            setBuilt({ options, plan, audit, filled, why, skipped });
             go("app");
           }}
         />

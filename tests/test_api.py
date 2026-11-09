@@ -273,7 +273,11 @@ def test_your_goals_are_numbered_questions_with_no_advanced_options():
 
 def test_building_waits_for_the_ai_and_the_workspace_no_longer_fills_on_mount():
     assert "started.current" not in APP and "function BuildingScreen" not in (Path(__file__).parents[1] / "web/src/App.tsx").read_text()
-    assert "Skip and choose my electives myself" in APP
+    building = (Path(__file__).parents[1] / "web/src/Building.tsx").read_text()
+    assert "Rather pick your own electives?" in building and "Skip, I’ll choose myself" in building
+    assert "skeleton" not in building and 'className="skip-card"' in building  # a card with the choice, no grey boxes
+    assert "abort.current?.abort()" in building and "setSkipped(true)" in building and "finish(" not in building[building.index("<section"):building.index("</section>")]
+    assert "skipped" in APP and "You chose your own electives" in APP  # the chat's first line says so
 
 
 def test_buttons_say_swap_select_or_choose():
