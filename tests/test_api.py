@@ -261,6 +261,30 @@ def test_check_again_says_whether_the_ai_has_a_key_and_counts_nothing(monkeypatc
     assert api.used.today == 0 and not any(api.used.recent.values())
 
 
+def test_the_build_screen_can_ask_which_model_call_a_fill_is_on(monkeypatch):
+    seen = {}
+    monkeypatch.setattr(api.assistant, "connect", lambda: None)
+    monkeypatch.setattr(api.assistant, "ask", lambda *a, **k: seen.update(progress=a[7]) or {"reply": "ok"})
+    monkeypatch.setattr(api, "used", api.Usage())
+    body = {"profile": STUDENT, "plan": {"semesters": []}}
+    client.post("/api/assist", json=body | {"job": "build-abc12345"})
+    assert callable(seen["progress"])  # a valid job id gets a progress callback
+    client.post("/api/assist", json=body | {"job": "../../etc"})
+    assert seen["progress"] is None  # anything else doesn't
+    api.steps["build-abc12345"] = 4
+    assert client.get("/api/assist-progress", params={"job": "build-abc12345"}).json() == {"step": 4}
+    assert client.get("/api/assist-progress", params={"job": "unknown-job-id"}).json() == {"step": 0}
+    assert client.get("/api/assist-progress", params={"job": "../x"}).json() == {"step": 0}
+    api.steps.clear()
+
+
+def test_electives_rows_get_what_each_chosen_course_needs_and_when_it_runs():
+    got = client.get("/api/course-lines", params=[("codes", "CSC 340"), ("codes", "csc340"), ("codes", "NOPE 999")]).json()["courses"]
+    assert list(got) == ["CSC 340"]  # one entry, however it was typed; an unknown course is left out
+    assert "needs" in got["CSC 340"] and "offered" in got["CSC 340"]
+    assert client.get("/api/course-lines", params=[("codes", "CSC 215")] * 100).status_code == 200  # bounded to 60
+
+
 def test_pathways_name_each_placements_first_math():
     got = client.get("/api/pathways", params={"program": "bs-cs"}).json()["pathways"]
     assert [(p["pathway"], [c["code"] for c in p["courses"]]) for p in got] == [

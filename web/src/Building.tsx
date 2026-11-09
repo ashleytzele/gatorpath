@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { assist, buildPlan, getAudit, message, type Assisted, type Audit, type Options, type PlanResult, type Profile } from "./api";
+import { assist, buildPlan, getAssistProgress, getAudit, message, type Assisted, type Audit, type Options, type PlanResult, type Profile } from "./api";
 import { Button, ErrorCard, Icon, LOGO_SRC, calmScroll, useLoad } from "./ui";
 
 const STEP_MS = 900; // one checklist line about every 0.9 s while the planner and the AI work
@@ -28,6 +28,8 @@ export default function BuildingScreen({
   const [slow, setSlow] = useState(false); // Gator AI has run past the "about a minute" it promised
   const cancelled = useRef(false);
   const abort = useRef<AbortController | null>(null);
+  const job = useRef(crypto.randomUUID?.() ?? `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`); // names this build's AI request, so the page can ask how far it is
+  const [step, setStep] = useState(0);
   const plan = built.data?.[0];
   const needsAi = !!plan && !plan.needs_input && (notes.length > 0 || plan.semesters.some((s) => s.courses.some((c) => typeof c !== "string")));
 
@@ -37,7 +39,7 @@ export default function BuildingScreen({
     let stale = false; // this effect's own flag: StrictMode's simulated unmount must not drop the real answer
     const request = new AbortController();
     abort.current = request;
-    assist({ ...profile, ...options }, plan.semesters, [], [], {}, notes, request.signal)
+    assist({ ...profile, ...options }, plan.semesters, [], [], {}, notes, request.signal, job.current)
       .then((filled) => !stale && !cancelled.current && setAi({ filled, why: "" }))
       .catch((e) => !stale && !cancelled.current && setAi({ filled: null, why: message(e) })); // 503, 429 or any error: go on without it
     return () => {
@@ -61,6 +63,11 @@ export default function BuildingScreen({
   ];
   const planned = shown >= steps.length; // every planner line is out
   const waiting = planned && needsAi && !ai; // only Gator AI is left
+  useEffect(() => {
+    if (!needsAi || ai) return; // a progress line only while Gator AI is working
+    const poll = setInterval(() => getAssistProgress(job.current).then((n) => n && setStep(n), () => {}), 2000);
+    return () => clearInterval(poll);
+  }, [needsAi, ai]);
   const card = useRef<HTMLElement>(null);
   useEffect(() => {
     if (waiting) calmScroll(card.current, "nearest"); // on a short window the card would sit below the fold
@@ -110,7 +117,8 @@ export default function BuildingScreen({
         {steps.slice(0, Math.min(shown, steps.length)).map((s, i) => line(s, !planned && i === shown - 1, s))}
         {planned && needsAi && line(
           skipped ? "Skipped Gator AI: you'll choose your electives"
-            : ai ? (ai.filled ? "Electives and GE chosen with Gator AI" : "Gator AI isn't available; you can choose electives yourself") : "Choosing electives and GE with Gator AI, about a minute",
+            : ai ? (ai.filled ? "Electives and GE chosen with Gator AI" : "Gator AI isn't available; you can choose electives yourself")
+              : step ? `Choosing electives and GE with Gator AI · working on step ${step}` : "Choosing electives and GE with Gator AI, about a minute",
           !ai,
           "ai",
         )}

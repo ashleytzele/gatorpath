@@ -265,6 +265,9 @@ export const getPathways = (program: string, catalogYear?: string) =>
     `/api/pathways?program=${encodeURIComponent(program)}${catalogYear ? `&catalog_year=${encodeURIComponent(catalogYear)}` : ""}`,
   ).then((r) => r.pathways);
 export const getAiStatus = () => call<{ connected: boolean }>("/api/ai-status");
+export type CourseLine = { needs?: string | null; offered?: Offered | null };
+export const getCourseLines = (codes: string[]) =>
+  call<{ courses: Record<string, CourseLine> }>(`/api/course-lines?${codes.map((c) => `codes=${encodeURIComponent(c)}`).join("&")}`).then((r) => r.courses);
 export const getCourse = (code: string) => call<Course>(`/api/course?code=${encodeURIComponent(code)}`);
 export type CourseMatch = { code: string; title: string; description: string | null };
 export const searchCourses = (query: string) =>
@@ -291,4 +294,7 @@ export const assist = (
   sections: Record<string, string[]>,
   notes: string[] = [], // what the DPR import found: the first reply says it
   signal?: AbortSignal, // aborting tells the server to stop asking the model
-) => post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages, sections, notes }, signal);
+  job?: string, // an id made up here, so getAssistProgress can ask which model call this request is on
+) => post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages, sections, notes, job }, signal);
+export const getAssistProgress = (job: string) =>
+  call<{ step: number }>(`/api/assist-progress?job=${encodeURIComponent(job)}`).then((r) => r.step);

@@ -839,7 +839,10 @@ on top of real data.
 The chat is the product and the page is its display (D35): a web version of Claude Code with this MCP server. It stays
 docked beside the plan, it fills the plan after `build_plan`, and every result lands in it, what-ifs included.
 `POST /api/assist` is the one route with an LLM behind it (D34). The site still works without it: no key, and the student
-chooses from the same options.
+chooses from the same options. While a fill runs, the build screen asks `GET /api/assist-progress?job=` (an id the page made up) which model call
+it is on, and shows "step N"; the server keeps only that number and drops it when the request ends. Skip aborts the request and
+the server stops before its next model call. `GET /api/course-lines` gives the Electives rows each chosen course's
+prerequisites and offering history in one request.
 
 - **The same tools.** The list comes from `server.mcp.list_tools()` with `profile` and `plan` taken out, because the
   backend fills those in. Left out: `build_plan` (`replan` commits it) and what takes a path on the server's disk.

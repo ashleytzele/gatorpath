@@ -155,10 +155,11 @@ def electives(profile: Profile = Body(), requirement: str = Body(), plan: Plan |
 @app.post("/api/assist")
 async def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = Body(default=[]),
                  messages: list[Message] = Body(default=[]), sections: dict[str, list[str]] = Body(default={}),
-                 notes: list[str] = Body(default=[])) -> dict:
+                 notes: list[str] = Body(default=[]), job: str = Body(default="")) -> dict:
     """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py).
     sections: {term: [class_nbr]} the student chose on the Schedule, which the chat can change too. notes: what the DPR
-    import found, said in the first reply. If the page goes away (the student skipped the AI) no more model calls
+    import found, said in the first reply. job: an id the page made up; GET /api/assist-progress?job= says which
+    model call it is on. If the page goes away (the student skipped the AI) no more model calls
     are made; the one in flight finishes and is dropped."""
     gone = threading.Event()
 
@@ -172,8 +173,10 @@ async def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(
     try:
         assistant.connect()  # no key: say so before the hourly limit counts the question
         left = admit(address(request))
+        key = job if JOB.fullmatch(job) else ""
         got = await run_in_threadpool(assistant.ask, profile, plan, picks, messages, sections,
-                                      [n[:LONGEST_NOTE] for n in notes[:12]], gone.is_set)
+                                      [n[:LONGEST_NOTE] for n in notes[:12]], gone.is_set,
+                                      (lambda n: steps.__setitem__(key, n)) if key else None)
         return {**got, "left": left}
     except assistant.NotConnected as e:
         raise HTTPException(503, str(e)) from e
@@ -182,6 +185,17 @@ async def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(
     finally:
         gone.set()
         watcher.cancel()
+        steps.pop(job, None)
+
+
+JOB = re.compile(r"[A-Za-z0-9-]{8,64}")
+steps: dict[str, int] = {}  # job id -> the model call it is on. Only a number; gone when the request ends
+
+
+@app.get("/api/assist-progress")
+def assist_progress(job: str) -> dict:
+    """Which model call a running /api/assist is on (0 before the first): the build screen's "step N"."""
+    return {"step": steps.get(job, 0) if JOB.fullmatch(job) else 0}
 
 
 @app.get("/api/ai-status")
@@ -225,6 +239,17 @@ def subject_index(db: Path, year: str) -> dict[str, list[str]]:
     for code in server.catalog(db, year):
         out.setdefault(code.rsplit(" ", 1)[0].replace(" ", ""), []).append(code)
     return {s: sorted(codes, key=lambda c: (number(c), c)) for s, codes in out.items()}
+
+
+@app.get("/api/course-lines")
+def course_lines(codes: list[str] = Query()) -> dict:
+    """For the Electives rows: what each course needs and when it runs, for up to 60 courses in one request."""
+    out = {}
+    for code in dict.fromkeys(codes[:60]):
+        got = server.get_course(code)
+        if "error" not in got:
+            out[got["code"]] = {"needs": (got.get("prereq") or {}).get("raw_text"), "offered": got.get("offered_terms")}
+    return {"courses": out}
 
 
 @app.get("/api/search-courses")

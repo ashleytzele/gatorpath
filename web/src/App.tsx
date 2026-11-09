@@ -7,6 +7,7 @@ import {
   EngineError,
   type Choice,
   getAiStatus,
+  getCourseLines,
   getAudit,
   getCourse,
   getElectives,
@@ -20,6 +21,7 @@ import {
   type ChatMessage,
   type Checked,
   type CourseInfo,
+  type CourseLine,
   type Group,
   type ImportResult,
   type Left,
@@ -729,12 +731,14 @@ function ChoiceRequirementRows({
   open,
   setOpen,
   select,
+  lines,
 }: {
   rows: ChoiceRow[];
   work: Work;
   open: string;
   setOpen: (key: string) => void;
   select: (target: Target, code: string, option: Option) => void;
+  lines: Record<string, CourseLine>;
 }) {
   const back = useRef(""); // the row a Select came from: focus goes back to it once the check is done
   useEffect(() => {
@@ -766,6 +770,13 @@ function ChoiceRequirementRows({
                   </span>
                 ) : (
                   <span className="el-none">Not chosen yet</span>
+                )}
+                {selected && lines[selected] && (
+                  <small className="el-line">
+                    {lines[selected].needs ? `Needs: ${lines[selected].needs}` : "No prerequisites listed"}
+                    {" · "}
+                    {offeredText(lines[selected].offered).split(" · ")[0]}
+                  </small>
                 )}
                 {covering && <small className="el-coverage">Also fulfills this requirement</small>}
                 {!!r.pick?.covers.length && <small className="el-coverage">Also counts for: {r.pick.covers.map((id) => work.audit.groups.find((g) => g.id === id)?.title ?? id).join(", ")}</small>}
@@ -831,6 +842,9 @@ function ElectivesView({
 }) {
   const { audit, check, info, picks, semesters, student } = work;
   const [open, setOpen] = useState(""); // the row whose card is open: one at a time
+  const chosen = [...new Set(picks.map((p) => p.code))].sort();
+  // what each chosen course needs and when it runs, in one request, so a row can say it without opening Details
+  const lines = useLoad(() => (chosen.length ? getCourseLines(chosen) : Promise.resolve({} as Record<string, CourseLine>)), [chosen.join(",")]);
   useEffect(() => setOpen(""), [semesters]); // a change moves rows under an open card
   // In plan order, keyed by place: a choice filled in place keeps its row. ponytail: a pick is always in its term's
   // courses (the server keeps only those; choose and Finish sooner move both), so none is left out here.
@@ -866,7 +880,7 @@ function ElectivesView({
     !!list.length && (
       <Section title={title} count={count(list)}>
         {extra}
-        <ChoiceRequirementRows rows={list} work={work} open={open} setOpen={setOpen} select={select} />
+        <ChoiceRequirementRows rows={list} work={work} open={open} setOpen={setOpen} select={select} lines={lines.data ?? {}} />
       </Section>
     );
   return (

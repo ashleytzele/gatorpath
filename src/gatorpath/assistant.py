@@ -299,10 +299,12 @@ def context(state: dict) -> str:
 
 
 def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sections: dict | None = None,
-        notes: list[str] | None = None, stop: Callable[[], bool] | None = None) -> dict:
+        notes: list[str] | None = None, stop: Callable[[], bool] | None = None,
+        progress: Callable[[int], None] | None = None) -> dict:
     """One student request, or filling the plan when `messages` is empty. A failed call changes nothing. `sections`:
     {term: [class_nbr]} the student chose for the Schedule. `notes`: the DPR import's warnings, for the first reply.
-    `stop`: asked before each model call; true raises Cancelled (the page is gone), so nothing more is spent."""
+    `stop`: asked before each model call; true raises Cancelled (the page is gone), so nothing more is spent.
+    `progress`: told the number of each model call as it starts (1, 2, ...), for the page's "step N"."""
     start = server.check_plan(student, plan)
     state = {"student": student, "semesters": plan["semesters"], "picks": picks, "changed": False, "rebuilt": None, "options": {},
              "sections": dict(sections or {}),
@@ -316,9 +318,11 @@ def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sect
     reply = "I ran out of steps before finishing. Check your plan, or ask an advisor in Navigator: https://sfsu.campus.eab.com/"
     try:
         client = connect()
-        for _ in range(ROUNDS):
+        for step in range(1, ROUNDS + 1):
             if stop and stop():
                 raise Cancelled
+            if progress:
+                progress(step)
             r = client.messages.create(model=MODEL, max_tokens=8000, system=SYSTEM, tools=tools(), messages=history,
                                        cache_control={"type": "ephemeral"})  # each round re-sends the whole history
             history.append({"role": "assistant", "content": r.content})

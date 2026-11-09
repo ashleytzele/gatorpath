@@ -68,6 +68,15 @@ def test_skipping_the_ai_stops_the_fill_before_it_spends_another_model_call(mode
     assert len(seen) == 1
 
 
+def test_the_fill_reports_each_model_call_as_it_starts(model):
+    plan = plan_of()
+    term, slot = slot_in(plan)
+    model(use("change_plan", changes=[{"term": term, "remove": slot, "add": "CSC 652"}]), say("Done."))
+    steps = []
+    assistant.ask(STUDENT, plan, [], [], progress=steps.append)
+    assert steps == [1, 2]  # one call to change the plan, one to say so
+
+
 def test_a_good_change_lands_and_a_worse_one_is_refused(model):
     plan = plan_of()
     term, slot = slot_in(plan)
