@@ -2056,9 +2056,8 @@ p, li, small { text-wrap: pretty; }
 .ld-facts { max-width: 1120px; margin: 0 auto; padding: 40px var(--space-6) 0; }
 .ld-facts ul { list-style: none; margin: 0; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 32px; font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--muted); }
 .ld-sec { max-width: 1120px; margin: 0 auto; padding: 120px var(--space-6); scroll-margin-top: 60px; }
-.ld-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 64px; }
+.ld-what { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 0 64px; align-items: start; }
 .ld-feature { padding: 28px 0 36px; border-top: 1px solid var(--ink); }
-.ld-icon { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-lg); background: var(--green-soft); color: var(--accent); margin-bottom: 18px; }
 .ld h3 { margin: 0 0 var(--space-2); }
 .ld-feature h3 { font-size: 26px; letter-spacing: -0.015em; }
 .ld-feature p { margin: 0; color: var(--muted); max-width: 440px; }
@@ -2068,9 +2067,9 @@ p, li, small { text-wrap: pretty; }
  .ld-route-box { margin: 0; border-radius: 28px; background: var(--green-soft); padding: 28px; overflow: hidden; }
 .ld-route-box img { display: block; width: 100%; border-radius: 14px; box-shadow: 0 14px 40px rgba(27, 31, 29, 0.12); }
 .ld-route-box figcaption { margin-top: 12px; color: var(--muted); font-size: 13px; text-align: center; }
-.ld-schedule-shot { margin: 64px 0 0; }
+.ld-schedule-shot { margin: 0; position: sticky; top: 96px; }
 .ld-schedule-shot img { display: block; width: 100%; border-radius: 18px; border: 1px solid var(--line); box-shadow: 0 16px 42px rgba(27, 31, 29, 0.08); }
-.ld-schedule-shot figcaption { margin-top: 12px; color: var(--muted); font-size: 14px; text-align: center; }
+.ld-schedule-shot figcaption { margin-top: 12px; color: var(--muted); font-size: 14px; }
 .ld-points { list-style: none; margin: 0 0 var(--space-7); padding: 0; }
 .ld-points li { display: flex; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); }
 .ld-points li > span:first-child { flex: none; margin-top: 9px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
@@ -2117,7 +2116,8 @@ p, li, small { text-wrap: pretty; }
   .ld h1 { font-size: 46px; letter-spacing: -0.03em; }
   .ld h2 { font-size: 34px; }
   .ld-links { display: none; }
-  .ld-grid2, .ld-split, .ld-cols { grid-template-columns: minmax(0, 1fr); }
+  .ld-what, .ld-split, .ld-cols { grid-template-columns: minmax(0, 1fr); }
+  .ld-schedule-shot { position: static; margin-top: var(--space-7); }
   .ld-steps { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .ld-stepline { display: none; }
   .ld-sec { padding-top: 72px; padding-bottom: 72px; }

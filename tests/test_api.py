@@ -190,6 +190,12 @@ def test_every_screen_has_a_main_landmark_and_a_skip_link():
     assert 'href="#main"' in (web / "App.tsx").read_text() and 'href="#top"' in (web / "Landing.tsx").read_text()
 
 
+def test_the_landing_page_has_one_kicker_and_no_icon_card_grid():
+    landing = (Path(__file__).parents[1] / "web/src/Landing.tsx").read_text()
+    assert landing.count('className="ld-label"') == 1  # the hero's; the other sections have only their headings
+    assert "ld-grid2" not in landing and "<svg" not in landing and 'className="ld-what"' in landing and "landing-weekly.jpg" in landing
+
+
 def test_the_stylesheet_uses_tokens_for_colors_and_stacking():
     css = (Path(__file__).parents[1] / "web/src/index.css").read_text()
     tokens, _, rules = css.partition("  * {\n    box-sizing: border-box;")

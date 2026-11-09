@@ -6,12 +6,11 @@ const LINKS = [
   ["questions", "Questions"],
 ] as const;
 
-// Each icon is one path in a 24px box.
 const FEATURES = [
-  { title: "Your record, read for you", text: "Upload your DPR and check every requirement, course, grade and unit on one clear page.", icon: "M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6" },
-  { title: "A plan that passes the Bulletin", text: "Every term is checked: prerequisites, unit loads, and when each course is usually offered.", icon: "M5 12l4 4L19 6" },
-  { title: "Ask, and it changes", text: "Finish sooner, lighter terms, a different GE: ask the chat. Every change is checked again before it lands.", icon: "M4 5h16v11H9l-5 4z" },
-  { title: "Next term’s schedule", text: "Sections with no time clashes, with rooms, instructors and class numbers ready for registration.", icon: "M4 6h16v14H4zM4 10h16M9 3v4M15 3v4" },
+  { title: "Your record, read for you", text: "Upload your DPR and check every requirement, course, grade and unit on one clear page." },
+  { title: "A plan that passes the Bulletin", text: "Every term is checked: prerequisites, unit loads, and when each course is usually offered." },
+  { title: "Ask, and it changes", text: "Finish sooner, lighter terms, a different GE: ask the chat. Every change is checked again before it lands." },
+  { title: "Next term’s schedule", text: "Sections with no time clashes, with rooms, instructors and class numbers ready for registration." },
 ];
 
 const POINTS = [
@@ -105,26 +104,22 @@ export function Landing({ start }: { start: () => void }) {
         </section>
 
         <section id="what" className="ld-sec">
-          <p className="ld-label">What you get</p>
           <h2>Everything your DPR leaves you to work out.</h2>
           <p className="ld-sub">Your DPR tells you what’s done. GatorPath works out what to take, and when.</p>
-          <div className="ld-grid2">
-            {FEATURES.map((f) => (
-              <div className="ld-feature" key={f.title}>
-                <span className="ld-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={f.icon} />
-                  </svg>
-                </span>
-                <h3>{f.title}</h3>
-                <p>{f.text}</p>
-              </div>
-            ))}
+          <div className="ld-what">
+            <div>
+              {FEATURES.map((f) => (
+                <div className="ld-feature" key={f.title}>
+                  <h3>{f.title}</h3>
+                  <p>{f.text}</p>
+                </div>
+              ))}
+            </div>
+            <figure className="ld-schedule-shot">
+              <img src="/landing-weekly.jpg" alt="A sample weekly class calendar with course times and rooms" loading="lazy" />
+              <figcaption>A sample week for a fictional student: times, rooms and sections together before registration.</figcaption>
+            </figure>
           </div>
-          <figure className="ld-schedule-shot">
-            <img src="/landing-weekly.jpg" alt="A sample weekly class calendar with course times and rooms" loading="lazy" />
-            <figcaption>See class times, rooms, and sections together before registration.</figcaption>
-          </figure>
         </section>
 
         <section className="ld-band" aria-labelledby="route">
@@ -134,7 +129,6 @@ export function Landing({ start }: { start: () => void }) {
               <figcaption>Sample plan for a fictional student</figcaption>
             </figure>
             <div>
-              <p className="ld-label">Your route</p>
               <h2 id="route">See your whole route.</h2>
               <p className="ld-sub">Every term to graduation on one page, and the reason each class sits where it does.</p>
               <ul className="ld-points">
@@ -148,7 +142,6 @@ export function Landing({ start }: { start: () => void }) {
         </section>
 
         <section className="ld-sec" aria-labelledby="limits">
-          <p className="ld-label">Honest limits</p>
           <h2 id="limits">Helpful, not official.</h2>
           <div className="ld-cols">
             <div>
@@ -172,7 +165,6 @@ export function Landing({ start }: { start: () => void }) {
 
         <section id="how" className="ld-how" aria-labelledby="howh">
           <div className="ld-sec">
-            <p className="ld-label">How it works</p>
             <h2 id="howh">Three steps, about five minutes.</h2>
             <ol className="ld-steps">
               {STEPS.map(([title, text], i) => (
