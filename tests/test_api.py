@@ -207,6 +207,13 @@ def test_the_chat_offers_to_compare_majors_while_gator_ai_is_available():
     assert "compare my plan with another major" in APP
 
 
+def test_the_dpr_video_plays_on_repeat_but_can_be_paused_and_respects_reduced_motion():
+    record = (Path(__file__).parents[1] / "web/src/Record.tsx").read_text()
+    video = record[record.index('<video className="howto-video"'):record.index("</video>")]
+    assert "autoPlay: true, loop: true" in video and " muted " in video and " controls " in video
+    assert "prefers-reduced-motion: reduce" in video  # no autoplay for a student who asks for less motion
+
+
 def test_the_stylesheet_uses_tokens_for_colors_and_stacking():
     css = (Path(__file__).parents[1] / "web/src/index.css").read_text()
     tokens, _, rules = css.partition("  * {\n    box-sizing: border-box;")

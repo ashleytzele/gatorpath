@@ -121,7 +121,9 @@ function UploadPanel({ onSuccess }: { onSuccess: (result: ImportResult) => void 
       <section className="howto" aria-labelledby="howto-title">
         <h2 id="howto-title">How to get your DPR</h2>
         <div className="howto-body">
-          <video className="howto-video" controls playsInline preload="none" poster="/dpr-video-poster.jpg" aria-label="How to get your DPR from Student Center">
+          {/* plays by itself, silent and on repeat, with controls to pause it (WCAG 2.2.2); a student who asks for less motion gets a still poster to start */}
+          <video className="howto-video" controls muted playsInline preload="metadata" poster="/dpr-video-poster.jpg" aria-label="How to get your DPR from Student Center"
+            {...(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? {} : { autoPlay: true, loop: true })}>
             <source src="/how-to-get-your-dpr.mp4" type="video/mp4" />
             Your browser can’t play this video. Follow the steps beside it to save your DPR as a PDF.
           </video>
