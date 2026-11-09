@@ -195,12 +195,14 @@ def test_the_landing_page_is_built_around_the_products_own_screens():
     landing = (root / "web/src/Landing.tsx").read_text()
     assert landing.count('className="ld-label"') == 1  # the hero's; the other sections have only their headings
     assert "<svg" not in landing and "ld-grid2" not in landing  # no icon card grid
-    for picture in ("requirements", "route", "chat", "schedule", "building"):  # every screen you gave is on the page, with alt text
+    for picture in ("requirements", "route", "chat", "schedule"):  # every screen you gave is on the page, with alt text
         name = f"landing-{picture}.jpg"
         assert f'src="/{name}"' in landing and (root / "web/public" / name).exists(), name
     assert not (root / "web/public/landing-plan.jpg").exists() and not (root / "web/public/landing-weekly.jpg").exists()  # the old ones
     assert all(img.count('alt="') == 1 and 'alt=""' not in img for img in re.findall(r"<img [^>]*>", landing))
     assert "Compare with another major" in landing  # the asks are the chat's real buttons
+    assert not (root / "web/public/landing-building.jpg").exists() and "landing-building" not in landing
+    assert 'className="lp-steps"' in landing and "Upload your DPR" in landing  # the three steps are a timeline, not a picture
 
 
 def test_the_chat_note_is_short_and_shows_no_question_counter():

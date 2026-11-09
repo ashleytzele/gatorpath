@@ -101,26 +101,16 @@ export function Landing({ start }: { start: () => void }) {
         </section>
 
         <section id="how" className="lp-sec" aria-labelledby="howh">
-          <div className="lp-how">
-            <div>
-              <h2 id="howh">Three steps, about five minutes.</h2>
-              <ol className="lp-steps">
-                {STEPS.map(([title, text], i) => (
-                  <li key={title}>
-                    <span className="lp-step-dot" aria-hidden="true">{i + 1}</span>
-                    <div>
-                      <h3>{title}</h3>
-                      <p>{text}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <figure className="lp-shot">
-              <img src="/landing-building.jpg" width="1000" height="720" alt="The build screen: a checklist of steps (reading your record, mapping your requirements, placing semesters from the roadmap) ending with Gator AI choosing electives and GE" loading="lazy" />
-              <figcaption>Your plan is built from the Bulletin in about a minute.</figcaption>
-            </figure>
-          </div>
+          <h2 id="howh">Three steps, about five minutes.</h2>
+          <ol className="lp-steps">
+            {STEPS.map(([title, text], i) => (
+              <li key={title}>
+                <span className="lp-step-dot" aria-hidden="true">{i + 1}</span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section id="what" className="lp-sec lp-sec-top" aria-labelledby="whath">

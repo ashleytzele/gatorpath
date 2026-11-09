@@ -2420,13 +2420,14 @@ main:focus { outline: none; } /* focused only by the skip link, to start reading
 
 .lp-sec { max-width: 1200px; margin: 0 auto; padding: 96px var(--space-6) 0; scroll-margin-top: 60px; }
 .lp-sec-top { padding-top: 120px; }
-.lp-how { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 64px; align-items: center; }
 .lp-sec h2 { font-size: clamp(32px, 3.6vw, 46px); }
-.lp-steps { list-style: none; margin: var(--space-7) 0 0; padding: 0; display: grid; gap: var(--space-6); }
-.lp-steps li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: var(--space-4); align-items: start; }
-.lp-step-dot { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: var(--accent); color: var(--on-accent); }
-.lp-steps h3 { font-size: 22px; margin: 0 0 var(--space-1); }
-.lp-steps p { margin: 0; color: var(--muted); max-width: 44ch; }
+/* the steps as a timeline: one line runs through the three numbered dots */
+.lp-steps { list-style: none; margin: var(--space-8) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-8); }
+.lp-steps li { position: relative; }
+.lp-steps li:not(:last-child)::after { content: ""; position: absolute; top: 19px; left: 52px; right: calc(var(--space-8) * -1 + 12px); height: 2px; background: var(--line-strong); }
+.lp-step-dot { position: relative; z-index: var(--z-raised); width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: var(--accent); color: var(--on-accent); box-shadow: 0 0 0 6px var(--canvas); }
+.lp-steps h3 { font-size: 24px; letter-spacing: -0.01em; margin: var(--space-5) 0 var(--space-2); }
+.lp-steps p { margin: 0; color: var(--muted); max-width: 34ch; }
 
 .lp-shot { margin: 0; }
 .lp-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--canvas); box-shadow: 0 16px 42px rgba(27, 31, 29, 0.09); }
@@ -2458,7 +2459,12 @@ main:focus { outline: none; } /* focused only by the skip link, to start reading
 
 @media (max-width: 860px) {
   .lp-hero { grid-template-columns: minmax(0, 1fr); gap: var(--space-7); padding-top: 40px; }
-  .lp-how, .lp-row, .lp-row-chat, .lp-route-inner { grid-template-columns: minmax(0, 1fr); gap: var(--space-7); }
+  .lp-row, .lp-row-chat, .lp-route-inner { grid-template-columns: minmax(0, 1fr); gap: var(--space-7); }
+  .lp-steps { grid-template-columns: minmax(0, 1fr); gap: var(--space-7); margin-top: var(--space-7); }
+  .lp-steps li { padding-left: 60px; }
+  .lp-step-dot { position: absolute; left: 0; top: 0; }
+  .lp-steps h3 { margin-top: 0; }
+  .lp-steps li:not(:last-child)::after { top: 52px; bottom: calc(var(--space-7) * -1 + 12px); left: 19px; right: auto; width: 2px; height: auto; }
   .lp-sec { padding-top: 72px; }
   .lp-sec-top { padding-top: 80px; }
   .lp-row { margin-top: var(--space-7); }
