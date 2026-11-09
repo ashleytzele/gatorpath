@@ -86,7 +86,7 @@ export function Landing({ start }: { start: () => void }) {
               <source src="/gatorpath-demo.mp4" type="video/mp4" />
               Your browser can’t play this video. You can still start planning below.
             </video>
-            <figcaption>A short walkthrough with a fictional student, starting at DPR upload.</figcaption>
+            <figcaption>A short walkthrough with a fictional new student, from picking a major to a checked plan.</figcaption>
           </figure>
         </section>
 
