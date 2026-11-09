@@ -26,6 +26,7 @@ export default function BuildingScreen({
   const [shown, setShown] = useState(1);
   const [slow, setSlow] = useState(false); // Gator AI has run past the "about a minute" it promised
   const cancelled = useRef(false);
+  const abort = useRef<AbortController | null>(null);
   const plan = built.data?.[0];
   const needsAi = !!plan && !plan.needs_input && (notes.length > 0 || plan.semesters.some((s) => s.courses.some((c) => typeof c !== "string")));
 
@@ -33,11 +34,14 @@ export default function BuildingScreen({
     if (!plan) return;
     if (!needsAi) return setAi({ filled: null, why: "" });
     let stale = false; // this effect's own flag: StrictMode's simulated unmount must not drop the real answer
-    assist({ ...profile, ...options }, plan.semesters, [], [], {}, notes)
+    const request = new AbortController();
+    abort.current = request;
+    assist({ ...profile, ...options }, plan.semesters, [], [], {}, notes, request.signal)
       .then((filled) => !stale && !cancelled.current && setAi({ filled, why: "" }))
       .catch((e) => !stale && !cancelled.current && setAi({ filled: null, why: message(e) })); // 503, 429 or any error: go on without it
     return () => {
       stale = true;
+      request.abort(); // leaving this screen (or a StrictMode remount) stops the call too
     };
   }, [plan]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -114,7 +118,7 @@ export default function BuildingScreen({
       </div>}
       {slow && waiting && <p className="building-slow">Still working. A long plan takes Gator AI a little longer. You can wait, or skip and choose your electives yourself.</p>}
       {planned && needsAi && !ai && (
-        <Button kind="secondary" onClick={() => { cancelled.current = true; finish(null); }}>
+        <Button kind="secondary" onClick={() => { cancelled.current = true; abort.current?.abort(); finish(null); }}>
           Skip and choose my electives myself →
         </Button>
       )}

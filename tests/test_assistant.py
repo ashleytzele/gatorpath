@@ -54,6 +54,20 @@ def result_of(seen: list, turn: int) -> dict:
     return json.loads(seen[turn]["messages"][-1]["content"][0]["content"])
 
 
+def test_skipping_the_ai_stops_the_fill_before_it_spends_another_model_call(model):
+    """The student skipped (the page aborted the request): no model call is made, and nothing changes."""
+    plan = plan_of()
+    term, slot = slot_in(plan)
+    seen = model(use("change_plan", changes=[{"term": term, "remove": slot, "add": "CSC 652"}]), say("Done."))
+    with pytest.raises(assistant.Cancelled):
+        assistant.ask(STUDENT, plan, [], [], stop=lambda: True)
+    assert seen == []  # not one call
+    calls = iter([False, True])  # stops after the first round: the change it asked for is dropped with the request
+    with pytest.raises(assistant.Cancelled):
+        assistant.ask(STUDENT, plan, [], [], stop=lambda: next(calls))
+    assert len(seen) == 1
+
+
 def test_a_good_change_lands_and_a_worse_one_is_refused(model):
     plan = plan_of()
     term, slot = slot_in(plan)

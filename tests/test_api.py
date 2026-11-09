@@ -196,7 +196,7 @@ def test_the_preview_bars_stay_behind_demo():
 # ---- /api/assist: how much one address, and everyone, can ask of the AI ----
 
 def test_the_ai_helper_has_an_hourly_limit_per_address_and_a_daily_one_for_everyone(monkeypatch):
-    monkeypatch.setattr(api.assistant, "ask", lambda *a: {"reply": "ok"})
+    monkeypatch.setattr(api.assistant, "ask", lambda *a, **k: {"reply": "ok"})
     monkeypatch.setattr(api.assistant, "connect", lambda: None)  # a key is set
     monkeypatch.setattr(api, "PER_HOUR", 3)
     monkeypatch.setattr(api, "PER_DAY", 5)

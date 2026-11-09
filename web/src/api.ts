@@ -235,11 +235,12 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
   return body;
 }
 
-const post = <T,>(path: string, body: unknown) =>
+const post = <T,>(path: string, body: unknown, signal?: AbortSignal) =>
   call<T>(path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    signal,
   });
 
 export const message = (e: unknown) => (e instanceof Error ? e.message : "Something went wrong. Try again.");
@@ -289,4 +290,5 @@ export const assist = (
   messages: ChatMessage[],
   sections: Record<string, string[]>,
   notes: string[] = [], // what the DPR import found: the first reply says it
-) => post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages, sections, notes });
+  signal?: AbortSignal, // aborting tells the server to stop asking the model
+) => post<Assisted>("/api/assist", { profile, plan: { semesters }, picks, messages, sections, notes }, signal);

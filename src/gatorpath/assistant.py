@@ -9,6 +9,7 @@ import inspect
 import json
 import os
 import re
+from collections.abc import Callable
 
 import anthropic
 
@@ -118,6 +119,10 @@ def tools() -> list[dict]:
         schema["required"] = [k for k in schema.get("required", []) if k not in BACKEND_FILLS]
         return {"name": tool.name, "description": tool.description, "input_schema": schema}
     return [web(t) for t in asyncio.run(server.mcp.list_tools()) if t.name not in NOT_HERE] + OWN_TOOLS
+
+
+class Cancelled(Exception):
+    """The page stopped waiting (the student skipped the AI): no more model calls are made for this request."""
 
 
 class NotConnected(Exception):
@@ -294,9 +299,10 @@ def context(state: dict) -> str:
 
 
 def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sections: dict | None = None,
-        notes: list[str] | None = None) -> dict:
+        notes: list[str] | None = None, stop: Callable[[], bool] | None = None) -> dict:
     """One student request, or filling the plan when `messages` is empty. A failed call changes nothing. `sections`:
-    {term: [class_nbr]} the student chose for the Schedule. `notes`: the DPR import's warnings, for the first reply."""
+    {term: [class_nbr]} the student chose for the Schedule. `notes`: the DPR import's warnings, for the first reply.
+    `stop`: asked before each model call; true raises Cancelled (the page is gone), so nothing more is spent."""
     start = server.check_plan(student, plan)
     state = {"student": student, "semesters": plan["semesters"], "picks": picks, "changed": False, "rebuilt": None, "options": {},
              "sections": dict(sections or {}),
@@ -311,6 +317,8 @@ def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sect
     try:
         client = connect()
         for _ in range(ROUNDS):
+            if stop and stop():
+                raise Cancelled
             r = client.messages.create(model=MODEL, max_tokens=8000, system=SYSTEM, tools=tools(), messages=history,
                                        cache_control={"type": "ephemeral"})  # each round re-sends the whole history
             history.append({"role": "assistant", "content": r.content})

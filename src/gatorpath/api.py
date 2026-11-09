@@ -2,6 +2,7 @@
 lives here. Nothing is stored or logged: an upload stays in memory, and no student data goes in a URL. /api/assist is
 the one route with an LLM behind it (assistant.py); everything else is deterministic."""
 
+import asyncio
 import functools
 import math
 import os
@@ -152,19 +153,35 @@ def electives(profile: Profile = Body(), requirement: str = Body(), plan: Plan |
 
 
 @app.post("/api/assist")
-def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = Body(default=[]),
-           messages: list[Message] = Body(default=[]), sections: dict[str, list[str]] = Body(default={}),
-           notes: list[str] = Body(default=[])) -> dict:
+async def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(), picks: list[Pick] = Body(default=[]),
+                 messages: list[Message] = Body(default=[]), sections: dict[str, list[str]] = Body(default={}),
+                 notes: list[str] = Body(default=[])) -> dict:
     """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py).
     sections: {term: [class_nbr]} the student chose on the Schedule, which the chat can change too. notes: what the DPR
-    import found, said in the first reply."""
+    import found, said in the first reply. If the page goes away (the student skipped the AI) no more model calls
+    are made; the one in flight finishes and is dropped."""
+    gone = threading.Event()
+
+    async def watch():  # ponytail: polls twice a second; a push from the client if that ever matters
+        while not gone.is_set():
+            if await request.is_disconnected():
+                return gone.set()
+            await asyncio.sleep(0.5)
+
+    watcher = asyncio.create_task(watch())
     try:
         assistant.connect()  # no key: say so before the hourly limit counts the question
         left = admit(address(request))
-        return {**assistant.ask(profile, plan, picks, messages, sections, [n[:LONGEST_NOTE] for n in notes[:12]]),
-                "left": left}
+        got = await run_in_threadpool(assistant.ask, profile, plan, picks, messages, sections,
+                                      [n[:LONGEST_NOTE] for n in notes[:12]], gone.is_set)
+        return {**got, "left": left}
     except assistant.NotConnected as e:
         raise HTTPException(503, str(e)) from e
+    except assistant.Cancelled:
+        return {}  # nobody is listening
+    finally:
+        gone.set()
+        watcher.cancel()
 
 
 @app.get("/api/ai-status")
