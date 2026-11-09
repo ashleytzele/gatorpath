@@ -189,6 +189,7 @@ def test_the_preview_bars_stay_behind_demo():
 
 def test_the_ai_helper_has_an_hourly_limit_per_address_and_a_daily_one_for_everyone(monkeypatch):
     monkeypatch.setattr(api.assistant, "ask", lambda *a: {"reply": "ok"})
+    monkeypatch.setattr(api.assistant, "connect", lambda: None)  # a key is set
     monkeypatch.setattr(api, "PER_HOUR", 3)
     monkeypatch.setattr(api, "PER_DAY", 5)
     monkeypatch.setattr(api, "used", api.Usage())
@@ -206,12 +207,23 @@ def test_the_ai_helper_has_an_hourly_limit_per_address_and_a_daily_one_for_every
     assert client.post("/api/plan", json={"profile": STUDENT}).status_code == 200  # planning isn't limited
 
 
+def test_without_a_key_a_question_isnt_counted_against_the_limit(monkeypatch):
+    for key in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN"):
+        monkeypatch.delenv(key, raising=False)
+    monkeypatch.setattr(api, "used", api.Usage())
+    got = client.post("/api/assist", json={"profile": STUDENT, "plan": {"semesters": []}})
+    assert got.status_code == 503 and "isn't connected" in got.json()["detail"]
+    assert api.used.today == 0 and not any(api.used.recent.values())
+
+
 
 def test_pathways_name_each_placements_first_math():
     got = client.get("/api/pathways", params={"program": "bs-cs"}).json()["pathways"]
     assert [(p["pathway"], [c["code"] for c in p["courses"]]) for p in got] == [
         ("1/2", ["MATH 226"]), ("3/4", ["MATH 197", "MATH 198", "MATH 226"])]
     assert all(c["title"] for p in got for c in p["courses"])
+    for program in ("no-such-major", "../../university/2026-27"):  # a made-up id never becomes a file path
+        assert client.get("/api/pathways", params={"program": program}).json()["error"] == "unknown_program"
 
 
 def test_the_landing_page_says_only_what_is_true():

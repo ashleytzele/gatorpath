@@ -157,8 +157,9 @@ def assist(request: Request, profile: Profile = Body(), plan: Plan = Body(), pic
     """The AI helper: a chat message, or with none, fills the plan. check_plan decides every change (assistant.py).
     sections: {term: [class_nbr]} the student chose on the Schedule, which the chat can change too. notes: what the DPR
     import found, said in the first reply."""
-    left = admit(address(request))
     try:
+        assistant.connect()  # no key: say so before the hourly limit counts the question
+        left = admit(address(request))
         return {**assistant.ask(profile, plan, picks, messages, sections, [n[:LONGEST_NOTE] for n in notes[:12]]),
                 "left": left}
     except assistant.NotConnected as e:

@@ -561,12 +561,18 @@ def roadmap_plan(clean: dict, program: dict, university: dict, year: str) -> dic
 
 def qr_pathways(program: str, catalog_year: str | None = None) -> dict:
     """The math each QR pathway takes before the course all of them share: what the placement question asks about."""
+    if program not in programs():  # like every tool; also keeps "../" out of the roadmap path
+        return unknown_program(program)
     year = rules_year({"catalog_year": catalog_year, "program": program})
+    path = roadmap_path(year, program)
+    if not path.exists():
+        return {"catalog_year": year, "warnings": [], "pathways": []}
     cat = catalog_for({})
-    road = yaml.safe_load(roadmap_path(year, program).read_text())
-    return {"catalog_year": year, "warnings": [],
-            "pathways": [{"pathway": q, "courses": [{"code": c, "title": cat[c]["title"]} for c in codes]}
-                         for q, codes in pathway_courses(road).items()]}
+    found = pathway_courses(yaml.safe_load(path.read_text()))
+    missing = sorted({c for codes in found.values() for c in codes if c not in cat})
+    return {"catalog_year": year, "warnings": [f"Not in the {YEAR} Bulletin: {', '.join(missing)}"] if missing else [],
+            "pathways": [{"pathway": q, "courses": [{"code": c, "title": cat.get(c, {}).get("title")} for c in codes]}
+                         for q, codes in found.items()]}
 
 
 @mcp.tool(annotations=READ_ONLY)

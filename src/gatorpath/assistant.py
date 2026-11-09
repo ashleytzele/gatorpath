@@ -7,6 +7,7 @@ import asyncio
 import functools
 import inspect
 import json
+import os
 import re
 
 import anthropic
@@ -123,7 +124,12 @@ class NotConnected(Exception):
     """The site still plans without AI: this says the helper can't answer now."""
 
 
+NO_KEY = "The AI helper isn't connected yet (no Anthropic API key), so you can choose your courses yourself."
+
+
 def connect() -> anthropic.Anthropic:
+    if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):  # where the SDK looks
+        raise NotConnected(NO_KEY)
     return anthropic.Anthropic(max_retries=4, timeout=120.0)
 
 
@@ -323,10 +329,6 @@ def ask(student: dict, plan: dict, picks: list[dict], messages: list[dict], sect
             history.append({"role": "user", "content": results})
     except anthropic.APIError as e:
         raise NotConnected("The AI helper didn't answer, so your plan is unchanged. Try again in a moment.") from e
-    except TypeError as e:  # the SDK's "Could not resolve authentication method"
-        if "authentication" not in str(e):
-            raise
-        raise NotConnected("The AI helper isn't connected yet (no Anthropic API key), so you can choose your courses yourself.") from e
     final = server.check_plan(state["student"], {"semesters": state["semesters"]})
     return {"reply": reply, "changed": state["changed"], "semesters": state["semesters"], "picks": state["picks"], "check": final,
             "rebuilt": state["rebuilt"], "options": state["options"], "sections": state["sections"]}
