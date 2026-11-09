@@ -24,6 +24,7 @@ export default function BuildingScreen({
   );
   const [ai, setAi] = useState<{ filled: Assisted | null; why: string } | null>(null);
   const [shown, setShown] = useState(1);
+  const [slow, setSlow] = useState(false); // Gator AI has run past the "about a minute" it promised
   const cancelled = useRef(false);
   const plan = built.data?.[0];
   const needsAi = !!plan && !plan.needs_input && (notes.length > 0 || plan.semesters.some((s) => s.courses.some((c) => typeof c !== "string")));
@@ -54,6 +55,12 @@ export default function BuildingScreen({
     "Checking which terms offer each course",
   ];
   const planned = shown >= steps.length; // every planner line is out
+  const waiting = planned && needsAi && !ai; // only Gator AI is left
+  useEffect(() => {
+    if (!waiting) return;
+    const t = setTimeout(() => setSlow(true), 60_000);
+    return () => clearTimeout(t);
+  }, [waiting]);
   const settled = !!plan && !!ai;
   const finished = planned && settled;
   const finish = (filled: Assisted | null, why = "") => built.data && done(built.data[0], built.data[1], filled, why);
@@ -105,6 +112,7 @@ export default function BuildingScreen({
         <i />
         <i />
       </div>}
+      {slow && waiting && <p className="building-slow">Still working. A long plan takes Gator AI a little longer. You can wait, or skip and choose your electives yourself.</p>}
       {planned && needsAi && !ai && (
         <Button kind="secondary" onClick={() => { cancelled.current = true; finish(null); }}>
           Skip and choose my electives myself →

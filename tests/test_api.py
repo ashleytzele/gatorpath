@@ -174,6 +174,13 @@ def test_the_plan_tab_has_no_what_if_row_or_old_progress_view():
     assert "What if I" not in APP and '"Progress"' not in APP and "ProgressView" not in APP
 
 
+def test_the_workspace_is_the_main_landmark_and_its_copy_matches_its_buttons():
+    assert '<main className="workspace-main">' in APP  # the plan, Electives and Schedule screens have one, like the others
+    assert "Swap or Choose a row" not in APP  # a chosen row's button says Details; an open one says Choose
+    assert "of ${same.length}" in APP  # rows of one requirement are numbered, not five of "Electives (15 units)"
+    assert "Still working" in APP + (Path(__file__).parents[1] / "web/src/Building.tsx").read_text()
+
+
 def test_the_site_never_calls_a_plan_verified_and_sends_questions_to_navigator():
     assert "verified" not in APP.lower() and "https://sfsu.campus.eab.com/" in APP
     assert "advising.sfsu.edu" not in APP and "/undergrads/advising" not in APP

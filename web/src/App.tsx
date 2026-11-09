@@ -746,6 +746,9 @@ function ChoiceRequirementRows({
     <ul className="el-rows">
       {rows.map((r) => {
         const key = r.key;
+        const same = rows.filter((x) => x.id === r.id);
+        // five rows of "Electives (15 units)" read as 75 units: name each one, and leave off the group's total
+        const label = same.length > 1 ? `${r.title.replace(/\s*\(\d+(?:\.\d+)? units?\)$/, "")} · ${same.indexOf(r) + 1} of ${same.length}` : r.title;
         const target = { group: r.id, term: r.term, title: r.title, replacing: r.pick?.code };
         const covering = r.pick ? undefined : coveredBy(r.id, work.picks);
         const selected = r.pick?.code ?? covering?.code;
@@ -755,7 +758,7 @@ function ChoiceRequirementRows({
         return (
           <li key={key}>
             <div className="el-row">
-              <span className="el-req">{r.title}</span>
+              <span className="el-req">{label}</span>
               <span className="el-course">
                 {selected ? (
                   <span className="el-course-main">
@@ -780,11 +783,11 @@ function ChoiceRequirementRows({
                 }}
               >
                 {selected ? "Details" : "Choose"}
-                <span className="sr-only"> {r.title}</span>
+                <span className="sr-only"> {label}</span>
               </button>
             </div>
             {(details || options) && (
-              <FloatingCard key={open} label={details ? `${selected} details` : `Options for ${r.title}`} onClose={() => setOpen("")}>
+              <FloatingCard key={open} label={details ? `${selected} details` : `Options for ${label}`} onClose={() => setOpen("")}>
                 <div className="pl-card">
                   {details && selected ? (
                     <>
@@ -795,7 +798,7 @@ function ChoiceRequirementRows({
                     </>
                   ) : (
                     <>
-                      <h3>{r.title}</h3>
+                      <h3>{label}</h3>
                       <p className="pl-card-sub">{r.pick ? `In your plan: ${r.pick.code}` : r.units ? `Open choice · ${unitText(r.units)}` : "Open choice"}</p>
                       <ChoiceOptions
                         work={work}
@@ -872,8 +875,8 @@ function ElectivesView({
         <h1>Electives & GE</h1>
         <p>
           {picks.some((p) => p.ai) && student.goal && student.goal !== "Undecided" && `Picked around your focus: ${student.goal}. `}
-          {openCount ? `${openCount} of ${rows.length} choices still open.` : "All choices made."} Swap or Choose a row to see
-          the courses that fit{work.aiAvailable ? ", or ask the chat" : ""}.
+          {openCount ? `${openCount} of ${rows.length} choices still open.` : "All choices made."} Choose a course for each open row.
+          A chosen row has Details, where you can read about it or swap it{work.aiAvailable ? ". You can also ask the chat" : ""}.
         </p>
       </div>
       {!check.valid && <ProblemPanel errors={check.errors} audit={audit} ask={work.aiAvailable ? work.ask : undefined} />}
@@ -1812,7 +1815,7 @@ function AppWorkspace({
   };
   return (
     <div className={`workspace ${docked ? "" : "chat-hidden"}`}>
-      <div className="workspace-main">
+      <main className="workspace-main">
         <div className="workspace-stepper"><Stepper current={3} /></div>
         {saveError && <ErrorCard text="This browser could not save your plan for a reload." />}
         <Tabs tab={tab} setTab={setTab} />
@@ -1849,7 +1852,7 @@ function AppWorkspace({
         {tab === "schedule" && (
           <ScheduleView work={work} openElectives={() => setTab("electives")} toast={showToast} />
         )}
-      </div>
+      </main>
       <ChatPanel
         open={chat}
         lines={lines}
