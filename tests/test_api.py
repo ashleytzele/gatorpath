@@ -95,6 +95,12 @@ def test_course_search_lists_the_whole_subject_with_descriptions():
     narrowed = client.get("/api/search-courses", params={"query": "CSC 6"}).json()["results"]
     assert narrowed and all(row["code"].startswith("CSC 6") for row in narrowed)
     assert narrowed == [row for row in rows if row["code"].startswith("CSC 6")]
+    # a subject with a space, typed with or without it, and a word that isn't a subject
+    spaced = client.get("/api/search-courses", params={"query": "aa s 2"}).json()["results"]
+    assert [row["code"] for row in spaced] == ["AA S 210", "AA S 213"]
+    assert client.get("/api/search-courses", params={"query": "AAS2"}).json()["results"] == spaced
+    assert "CSC 101" in [row["code"] for row in client.get("/api/search-courses", params={"query": "intro"}).json()["results"]]
+    assert "description" not in server.search_courses("CSC")["results"][0]  # the MCP tool stays lean (D31)
 
 
 def test_plan_returns_the_engine_fields_and_applies_the_options():

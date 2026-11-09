@@ -23,9 +23,11 @@ Full design: `docs/ARCHITECTURE.md`. Current work: `TASKS.md` (work phase by pha
 4. **No LLM calls in the server.** Tools are deterministic. The AI client does the talking. On the web that client is
    `assistant.py`: it stays out of `server.py` and `engine/`, and `check_plan` decides every change it makes.
 5. **No student data at rest.** Don't store, log, cache, or print student profiles, transcript or
-   DPR text. The only exception is `save_profile`: one file, at a path the student chose, on their
-   machine, only when they ask, never inside the repo. Never commit a real transcript, DPR or any real
-   student data. Test fixtures are synthetic.
+   DPR text. Two exceptions, both on the student's own machine: `save_profile` (one file, at a path the
+   student chose, only when they ask, never inside the repo), and the website's session storage in the
+   student's own browser tab (the parsed record, goals and plan, so a reload keeps the work; never the
+   DPR PDF; cleared when the tab closes). The server keeps nothing. Never commit a real transcript, DPR
+   or any real student data. Test fixtures are synthetic.
 6. **`check_plan` is the source of truth.** Anything that produces a plan must pass it in tests.
 
 ## Commands

@@ -4,13 +4,13 @@ the one route with an LLM behind it (assistant.py); everything else is determini
 
 import math
 import os
+import re
 import threading
 import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
-import re
 from typing import Literal, TypedDict
 
 import uvicorn
@@ -20,7 +20,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette.datastructures import UploadFile
 from starlette.formparsers import MultiPartParser
 
-from gatorpath import assistant, dpr, server
+from gatorpath import assistant, db, dpr, server
+from gatorpath.engine.rules import number
 from gatorpath.server import Plan, Profile
 
 MAX_PDF = 15 * 1024 * 1024  # what the upload screen promises
@@ -187,17 +188,21 @@ def course(code: str) -> dict:
 
 @app.get("/api/search-courses")
 def search_courses(query: str) -> dict:
+    """The course-code box: a subject ("CSC", "AA S") and the start of a number list that subject's courses in number
+    order; other text is the keyword search. Rows carry their description here, not in the MCP tool (D31)."""
     query = query.strip()[:60]
     if len(query) < 2:
         return {"results": []}
-    code = re.fullmatch(r"([A-Za-z]{2,5})\s*(\d{0,3}[A-Za-z]?)?", query)
-    if code:
-        subject = code[1].upper()
-        found = server.search_courses(subject, subject=subject, limit=500)
-        prefix = query.upper().replace(" ", "")
-        rows = [row for row in found["results"] if row["code"].replace(" ", "").startswith(prefix)]
-        return found | {"results": rows, "total_matches": len(rows)}
-    return server.search_courses(query, limit=500)
+    cat = server.catalog(server.DB, server.YEAR)
+    typed = "".join(query.upper().split())
+    subject = lambda c: c.rsplit(" ", 1)[0].replace(" ", "")
+    # longest first, so "ENGR 1" isn't read as ENG
+    hit = next((s for s in sorted({subject(c) for c in cat}, key=len, reverse=True)
+                if typed.startswith(s) and re.fullmatch(r"(\d{1,3}[A-Z]{0,3})?", typed[len(s):])), None)
+    codes = (sorted((c for c in cat if subject(c) == hit and c.replace(" ", "").startswith(typed)), key=lambda c: (number(c), c))
+             if hit else [r["code"] for r in server.search_courses(query, limit=50)["results"]])
+    text = db.descriptions(server.DB, server.YEAR, codes)
+    return {"results": [{"code": c, "title": cat[c]["title"], "description": text.get(c)} for c in codes]}
 
 
 if DIST.is_dir():  # last, so /api wins

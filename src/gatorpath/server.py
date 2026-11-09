@@ -214,12 +214,8 @@ def search_courses(query: str, subject: str | None = None, level: str | None = N
     exact = norm_code(query)
     rows = [r | {"offered": offered(r["code"])} for r in db.search_courses(DB, YEAR, query)
             if (not want or r["code"].rsplit(" ", 1)[0].replace(" ", "") == want) and lo <= number(r["code"]) < hi]
-    rows.sort(key=lambda r: (number(r["code"]), r["code"]) if want and query.strip().upper() == want else (r["code"] != exact,))
-    total_matches = len(rows)
-    rows = rows[:max(1, min(limit, 500))]
-    descriptions = db.descriptions(DB, YEAR, [r["code"] for r in rows])
-    rows = [r | {"description": descriptions.get(r["code"])} for r in rows]
-    return {"catalog_year": YEAR, "results": rows, "total_matches": total_matches,
+    rows.sort(key=lambda r: r["code"] != exact)  # stable: an exact code hit first, then FTS rank
+    return {"catalog_year": YEAR, "results": rows[:max(1, min(limit, 50))], "total_matches": len(rows),
             "warnings": [offering_note(DB, YEAR)]}
 
 

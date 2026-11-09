@@ -1894,8 +1894,9 @@ export default function App() {
   const [flow] = useState(savedFlow);
   const [screen, setScreen] = useState<Screen>(flow?.screen ?? (saved ? "app" : "landing"));
   const [style, setStyle] = useState(false);
-  const [profile, setProfile] = useState<Profile | null>(saved?.profile ?? flow?.profile ?? null);
-  const [imported, setImported] = useState<ImportResult | null>(saved?.imported ?? flow?.imported ?? null);
+  // a saved step is newer than the saved plan: the student went back from the plan and edited
+  const [profile, setProfile] = useState<Profile | null>(flow ? flow.profile : saved?.profile ?? null);
+  const [imported, setImported] = useState<ImportResult | null>(flow ? flow.imported : saved?.imported ?? null);
   const [options, setOptions] = useState<Options>(flow?.options ?? {});
   const [picks, setPicks] = useState<Picks>(flow?.picks ?? { interests: [], after: [] });
   const [needs, setNeeds] = useState<string | undefined>(flow?.needs);

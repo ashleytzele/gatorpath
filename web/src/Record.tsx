@@ -165,7 +165,8 @@ function recordDraft(): Record<string, unknown> {
 
 const courseCache = new Map<string, Promise<CourseMatch[]>>();
 function CourseSearch({ code, setCode, add }: { code: string; setCode: (code: string) => void; add: () => void }) {
-  const subject = /^[A-Za-z]{2,5}/.exec(code.trim())?.[0].toUpperCase() ?? "";
+  // the letters before the number, spaces kept: "AA S 323" -> "AA S"
+  const subject = /^[A-Za-z]+(?:\s+[A-Za-z]+)*/.exec(code.trim())?.[0].replace(/\s+/g, " ").toUpperCase() ?? "";
   const [found, setFound] = useState<{ subject: string; rows: CourseMatch[] }>({ subject: "", rows: [] });
   const [selected, setSelected] = useState<CourseMatch | null>(null);
   const [open, setOpen] = useState(true);

@@ -947,8 +947,8 @@ pass it (tested).
 ## 9. Privacy & responsible AI
 
 - **No server-side student data at rest, except a file the student asks for.** The profile lives in the
-  conversation. The web app keeps the record and plan in the current tab's session storage across reloads, and
-  clears it on Start over or when the tab closes. The server keeps no database of students and no logs of profiles. `save_profile` writes
+  conversation. The web app keeps the record, goals and plan in the current tab's session storage across reloads
+  (never the DPR PDF); closing the tab clears it. The server keeps no database of students and no logs of profiles. `save_profile` writes
   one YAML file at a path the student chose, on their own machine, only when they ask. It's plain
   text they can read or delete, and the server refuses to write it inside the repo. This beats AI-client memory: the
   data stays exact (no half-remembered grades), stays local, and works with any client (D13).
