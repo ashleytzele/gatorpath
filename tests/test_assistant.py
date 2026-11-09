@@ -77,6 +77,12 @@ def test_the_fill_reports_each_model_call_as_it_starts(model):
     assert steps == [1, 2]  # one call to change the plan, one to say so
 
 
+def test_a_major_comparison_has_its_own_answer_shape():
+    for label in ("**Carries over**", "**Counts only toward your 120 units**", "**Still needed**", "**Can't confirm**", "**Next**"):
+        assert label in assistant.SYSTEM
+    assert "If the student hasn't said which major, ask which one first" in assistant.SYSTEM
+
+
 def test_a_good_change_lands_and_a_worse_one_is_refused(model):
     plan = plan_of()
     term, slot = slot_in(plan)

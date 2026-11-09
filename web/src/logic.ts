@@ -50,7 +50,7 @@ export function distinctMeetings(meetings: Meeting[]) {
   return [...byTime.values()];
 }
 
-export type Suggestion = { id: "sooner" | "lighter" | "summer" | "winter" | "choose"; label: string };
+export type Suggestion = { id: "sooner" | "lighter" | "summer" | "winter" | "choose" | "major"; label: string };
 /** The few next steps worth offering under a plan, in this order, at most three. */
 export function suggestions(plan: PlanResult, options: Options, open: number): Suggestion[] {
   const out: Suggestion[] = [];

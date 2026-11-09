@@ -1782,6 +1782,7 @@ function AppWorkspace({
     else if (id === "summer") whatIf({ include_summer: true });
     else if (id === "winter") whatIf({ include_winter: true });
     else if (id === "choose") fill();
+    else if (id === "major") work.ask("I'd like to compare my plan with another major.");
   };
   const show = (codes: string[]) => {
     setTab("plan");
@@ -1884,7 +1885,10 @@ function AppWorkspace({
       <ChatPanel
         open={chat}
         lines={lines}
-        suggestions={suggestions(state.plan, student, work.aiAvailable ? state.semesters.flatMap((x) => x.courses.filter(isSlot)).length : 0)} // no open choices to offer to Gator AI when it is off
+        suggestions={[
+          ...suggestions(state.plan, student, work.aiAvailable ? state.semesters.flatMap((x) => x.courses.filter(isSlot)).length : 0), // no open choices to offer to Gator AI when it is off
+          ...(work.aiAvailable ? [{ id: "major" as const, label: "Compare with another major" }] : []), // always last, outside the three-suggestion cap
+        ]}
         onSuggest={suggest}
         onSend={send}
         onUndo={undo}

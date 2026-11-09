@@ -202,6 +202,11 @@ def test_the_chat_note_is_short_and_shows_no_question_counter():
     assert "leftText" not in APP and "{free" not in chat  # the limit is shown only once it is reached
 
 
+def test_the_chat_offers_to_compare_majors_while_gator_ai_is_available():
+    assert '"Compare with another major"' in APP and "work.aiAvailable ? [{ id: \"major\"" in APP
+    assert "compare my plan with another major" in APP
+
+
 def test_the_stylesheet_uses_tokens_for_colors_and_stacking():
     css = (Path(__file__).parents[1] / "web/src/index.css").read_text()
     tokens, _, rules = css.partition("  * {\n    box-sizing: border-box;")
