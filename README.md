@@ -6,7 +6,7 @@ in what order?" Every answer is checked against the official Bulletin.
 
 **The AI suggests, the code verifies.**
 
-> Status: v0.1.0 (2026-10-30), phase 7 (evals, first users); the website is live at <https://gatorpath.fly.dev>. Design: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+> Status: v0.2.0 (2026-11-10), phase 7 (evals, first users); the website is live at <https://gatorpath.fly.dev>. Design: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 > Work: [`TASKS.md`](TASKS.md). Changes: [releases](https://github.com/ashleytzele/gatorpath/releases).
 
 ## Why
