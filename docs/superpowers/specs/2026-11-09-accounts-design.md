@@ -1,4 +1,4 @@
-# Accounts: sign in with a school email, and keep the plan (design)
+# Accounts: sign in with a student email, and keep the plan (design)
 
 Status: draft for the owner's approval. Nothing is built. Calls the author made are marked **(my call)**; the owner
 decides the ones under "Needs the owner".
@@ -6,14 +6,14 @@ decides the ones under "Needs the owner".
 ## Why
 
 Today a student's record, goals and plan live in the tab's session storage (ARCHITECTURE §9). Closing the tab loses
-them, and a plan can't follow a student from a laptop to a phone. The owner wants sign-in with a school email and a
+them, and a plan can't follow a student from a laptop to a phone. The owner wants sign-in with a student email and a
 database that keeps the plan. This reverses golden rule 5 ("no student data at rest") for the website, so it comes
 with a written exception, a privacy page and a way to delete everything.
 
 ## Goals
 
 1. A student signs in with an SF State email and gets their plan back on any device.
-2. Only school emails can sign up.
+2. Only student emails can sign up (`mail.sfsu.edu`). Staff and other addresses can't.
 3. Signing in is optional. Everything that works today without an account keeps working.
 4. A student can see what's kept, download it, and delete it, in two clicks each.
 5. Keep as little as possible: the plan and the answers that make it, nothing else.
@@ -41,8 +41,8 @@ with a written exception, a privacy page and a way to delete everything.
 "Continue your plan". Signed in with none, it reads "Start planning" as today.
 
 **Sign-in (a card over the page, two steps).**
-1. "Sign in with your school email." One field, "you@sfsu.edu or you@mail.sfsu.edu", button "Email me a code".
-   Any other address: "GatorPath is for SF State students. Use your school email." Same screen creates the account:
+1. "Sign in with your student email." One field, "you@mail.sfsu.edu", button "Email me a code".
+   Any other address: "GatorPath is for SF State students. Use your student email (@mail.sfsu.edu)." Same screen creates the account:
    there is no separate sign-up.
 2. "We sent a 6-digit code to a\*\*\*@mail.sfsu.edu. It works for 10 minutes." One field, "Sign in", "Send a new code",
    "Use a different email". Wrong code: "That code didn't work" (and a count of tries left after the third miss).
@@ -70,8 +70,8 @@ A code works for any school address without depending on which sign-in SF State 
 Google sign-in limited to the school's domain would be less typing but ties the site to a provider setup the owner
 would have to confirm; it can be added later beside this.
 
-- Allowed domains: `sfsu.edu` and `mail.sfsu.edu` (**to confirm** with a real student address). A setting, not a
-  hard-coded list.
+- Allowed domain: `mail.sfsu.edu` only, decided by the owner 2026-11-09; **to confirm** with a real student address
+  before launch. A setting, not hard-coded, so a second domain is one line.
 - `POST /api/auth/code {email}`: lowercase and trim the address, check the domain, then always answer 200 with the
   same text. If allowed, make a 6-digit code from `secrets`, store its SHA-256 hash with the address and an expiry (10
   minutes), and email it. Sending is limited to 3 per address per hour and 10 per network address per hour, and a new
