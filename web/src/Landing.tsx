@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Icon, Logo, NAVIGATOR } from "./ui";
 
 const LINKS = [
@@ -44,7 +43,6 @@ const FAQ = [
 const ASKS = ["Choose my open courses", "Finish sooner", "Lighter terms", "Add summer", "Add Winter Session", "Compare with another major"];
 
 export function Landing({ start }: { start: () => void }) {
-  const demo = useRef<HTMLVideoElement>(null);
   return (
     <>
       <a className="skip-link" href="#top">Skip to the main content</a>
@@ -74,16 +72,12 @@ export function Landing({ start }: { start: () => void }) {
               <button className="ld-btn ld-btn-green" onClick={start}>
                 Start planning <Icon name="arrow" size={18} />
               </button>
-              <button className="ld-btn ld-btn-outline" onClick={() => demo.current?.play()}>
-                <span className="ld-tri" aria-hidden="true" />
-                Watch the demo
-              </button>
             </div>
             <p className="ld-fine">No account needed. Your DPR PDF is never saved.</p>
           </div>
           <figure className="lp-demo">
             {/* plays by itself, silent and on repeat, with controls to pause it (WCAG 2.2.2); a student who asks for less motion gets a still poster */}
-            <video ref={demo} className="lp-demo-video" controls muted playsInline preload="metadata" poster="/landing-upload.jpg" aria-label="GatorPath walkthrough from picking a major to a plan"
+            <video className="lp-demo-video" controls muted playsInline preload="metadata" poster="/landing-upload.jpg" aria-label="GatorPath walkthrough from picking a major to a plan"
               {...(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? {} : { autoPlay: true, loop: true })}>
               <source src="/gatorpath-demo.mp4" type="video/mp4" />
               Your browser can’t play this video. You can still start planning below.

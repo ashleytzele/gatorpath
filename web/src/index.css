@@ -2041,11 +2041,8 @@ p, li, small { text-wrap: pretty; }
 .ld-btn-sm { min-height: 0; padding: 10px 18px; font-size: 15px; }
 .ld-btn-green { background: var(--accent); color: var(--on-accent); }
 .ld-btn-green:hover { background: var(--accent-hover); }
-.ld-btn-outline { background: var(--canvas); border-color: var(--line-strong); color: var(--ink); padding: 0 24px; }
-.ld-btn-outline:hover { background: var(--accent-wash); }
 .ld-btn-dark { background: var(--ink); color: var(--on-accent); min-height: 48px; padding: 0 24px; }
 .ld-btn-white { background: var(--canvas); color: var(--forest); padding: 0 28px; }
-.ld-tri { width: 0; height: 0; border-left: 9px solid var(--accent); border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
 .ld-fine { margin: 18px 0 0; font-size: 15px; color: var(--faint); }
 .ld-facts { max-width: 1200px; margin: 0 auto; padding: 40px var(--space-6) 0; }
 .ld-facts ul { list-style: none; margin: 0; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 32px; font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--muted); }
@@ -2408,7 +2405,7 @@ button.cal-block:focus-visible { outline: 2px solid var(--ink); outline-offset: 
 main:focus { outline: none; } /* focused only by the skip link, to start reading there */
 
 /* ---- the landing page, built around the product's own screens ---- */
-.lp-hero { max-width: 1200px; margin: 0 auto; padding: 72px var(--space-6) var(--space-7); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 56px; align-items: center; }
+.lp-hero { max-width: 1360px; margin: 0 auto; padding: 72px var(--space-6) var(--space-7); display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr); gap: 32px; align-items: center; }
 .ld .lp-hero h1 { font-size: clamp(42px, 5.2vw, 66px); letter-spacing: -0.03em; line-height: 1.04; margin: 0 0 var(--space-5); max-width: none; }
 .lp-hero .ld-label { margin-bottom: var(--space-4); }
 .lp-lede { margin: 0 0 var(--space-7); max-width: 520px; font-size: 20px; color: var(--muted); }
