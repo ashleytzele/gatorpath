@@ -11,10 +11,9 @@ from gatorpath import stats
 SRC = Path(__file__).parents[1] / "src/gatorpath"
 
 
-@pytest.fixture(autouse=True)
-def stats_file(tmp_path, monkeypatch):
-    monkeypatch.setenv("GATORPATH_STATS_DB", str(tmp_path / "s.db"))
-    return tmp_path / "s.db"
+@pytest.fixture
+def stats_file(tmp_path):  # the same file conftest.py points every test at
+    return tmp_path / "stats.db"
 
 
 def test_counts_add_up_per_day_event_and_program():

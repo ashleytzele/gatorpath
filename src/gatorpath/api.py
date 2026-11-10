@@ -1,9 +1,11 @@
 """The web app (ARCHITECTURE §7.6): thin routes over the functions the MCP tools run, plus web/dist. No planning logic
-lives here. Nothing is stored or logged: an upload stays in memory, and no student data goes in a URL. /api/assist is
-the one route with an LLM behind it (assistant.py); everything else is deterministic."""
+lives here. Nothing about a student is stored or logged: an upload stays in memory, and no student data goes in a URL.
+stats.py keeps anonymous daily totals and the feedback students send (D37). /api/assist is the one route with an LLM
+behind it (assistant.py); everything else is deterministic."""
 
 import asyncio
 import functools
+import hmac
 import math
 import os
 import re
@@ -22,7 +24,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.datastructures import UploadFile
 from starlette.formparsers import MultiPartParser
 
-from gatorpath import assistant, db, dpr, server
+from gatorpath import assistant, db, dpr, server, stats
 from gatorpath.engine.rules import number
 from gatorpath.server import Plan, Profile
 
@@ -79,6 +81,7 @@ def admit(who: str) -> dict[str, int]:
                                      f"minute{'s' if wait != 1 else ''}; planning works without it.")
         times.append(now)
         used.today += 1
+        stats.count("ai_question")
         return {"hour": PER_HOUR - len(times), "day": PER_DAY - used.today}
 
 
@@ -118,8 +121,10 @@ async def import_dpr(request: Request) -> dict:
             raise HTTPException(400, "Send the PDF as the `file` part of a multipart form")
         data = await upload.read()
         program = form.get("program")  # the student's pick from unknown_program's choices
-    return await run_in_threadpool(server.dpr_profile, lambda: dpr.read_pdf_bytes(data),
-                                   program if isinstance(program, str) else None, lambda: dpr.read_statuses_bytes(data), details=True)
+    got = await run_in_threadpool(server.dpr_profile, lambda: dpr.read_pdf_bytes(data),
+                                  program if isinstance(program, str) else None, lambda: dpr.read_statuses_bytes(data), details=True)
+    stats.count("dpr_import")
+    return got
 
 
 @app.post("/api/audit")
@@ -137,7 +142,10 @@ def audit(profile: Profile = Body(embed=True)) -> dict:
 
 @app.post("/api/plan")
 def plan(profile: Profile = Body(), options: Options = Body(default={})) -> dict:
-    return server.build_plan(profile | options)
+    got = server.build_plan(profile | options)
+    known = {p["id"] for p in server.list_programs()["programs"]}
+    stats.count("plan_built", profile.get("program") if profile.get("program") in known else "other")  # a bounded set of keys
+    return got
 
 
 @app.post("/api/check")
@@ -206,6 +214,46 @@ def ai_status() -> dict:
     except assistant.NotConnected:
         return {"connected": False}
     return {"connected": True}
+
+
+@app.post("/api/visit")
+def visit(request: Request, ref: str | None = Body(default=None, embed=True)) -> dict:
+    """One per browser tab, sent by the page: a visit, and (once a day per address and browser) a visitor."""
+    stats.count("visit", ref=ref or "")
+    stats.seen(address(request), request.headers.get("user-agent", ""))
+    return {"ok": True}
+
+
+FEEDBACK_PER_HOUR = 5
+feedback_log: dict[str, deque] = defaultdict(deque)  # ponytail: in memory and per process, like `used`
+
+
+@app.post("/api/feedback")
+def feedback(request: Request, message: str = Body(embed=True)) -> dict:
+    if not message.strip():
+        raise HTTPException(400, "Write a message first")
+    now, who = time.time(), address(request)
+    with used.lock:
+        times = feedback_log[who]
+        while times and now - times[0] > 3600:
+            times.popleft()
+        if len(times) >= FEEDBACK_PER_HOUR:
+            raise HTTPException(429, "That's a lot of messages this hour. Try again later.")
+        times.append(now)
+    if not stats.add_feedback(message):
+        raise HTTPException(503, "We couldn't save that just now. Try again later.")
+    return {"ok": True}
+
+
+@app.get("/api/stats")
+def usage(request: Request, days: int = 30, feedback: bool = False) -> dict:
+    """The owner's numbers. Closed (404) until GATORPATH_STATS_TOKEN is set; the token comes in a header, never the URL."""
+    token = os.environ.get("GATORPATH_STATS_TOKEN", "")
+    if not token:
+        raise HTTPException(404)
+    if not hmac.compare_digest(request.headers.get("authorization", ""), f"Bearer {token}"):
+        raise HTTPException(401)
+    return stats.report(days, feedback)
 
 
 @app.get("/api/sections")

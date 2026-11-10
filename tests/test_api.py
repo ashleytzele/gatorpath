@@ -9,7 +9,9 @@ import pytest
 from fastapi.testclient import TestClient
 from test_server import DPR, SCENARIOS, fixture_db, use_fixture_db  # noqa: F401  (the fixtures apply here too)
 
-from gatorpath import api, dpr, server
+from collections import defaultdict, deque
+
+from gatorpath import api, dpr, server, stats
 
 client = TestClient(api.app)
 APP = "\n".join(  # every web source file but the node checks
@@ -368,3 +370,60 @@ def test_buttons_say_swap_select_or_choose():
     assert not [w for w in words if re.match(r"(Change|Pick)\b", w)]
     assert re.findall(r'"(Change|Pick)"', APP) == []
     assert "Swap" in APP and "Select" in APP
+
+
+# ---- anonymous counts, feedback, /api/stats (D37) ----
+
+def test_visits_and_visitors_are_counted_and_ref_is_kept():
+    for _ in range(2):
+        assert client.post("/api/visit", json={"ref": "flyer"}, headers={"User-Agent": "Safari"}).json() == {"ok": True}
+    got = stats.report()
+    assert got["totals"]["visit"] == 2 and got["totals"]["visitor"] == 1 and got["refs"] == {"flyer": 2}
+    assert client.post("/api/visit", json={}).status_code == 200  # no ref is fine
+
+
+def test_planning_counts_the_major_and_the_import(monkeypatch):
+    post("/api/plan", profile=STUDENT)
+    client.post("/api/plan", json={"profile": {"program": "nope"}})  # whatever it answers, "nope" is not a key
+    assert stats.report()["majors"].get(STUDENT["program"]) == 1
+    assert "nope" not in stats.report()["majors"] and set(stats.report()["majors"]) <= {STUDENT["program"], "other"}
+    monkeypatch.setattr(dpr, "read_pdf_bytes", lambda data: DPR)
+    upload(b"%PDF-1.4 x")
+    assert stats.report()["totals"]["dpr_import"] == 1
+
+
+def test_an_admitted_ai_question_is_counted_and_a_refused_one_is_not(monkeypatch):
+    monkeypatch.setattr(api, "used", api.Usage())
+    for _ in range(api.PER_HOUR):
+        api.admit("x")
+    with pytest.raises(api.HTTPException):
+        api.admit("x")
+    assert stats.report()["totals"]["ai_question"] == api.PER_HOUR
+
+
+def test_feedback_is_stored_limited_and_validated(monkeypatch):
+    monkeypatch.setattr(api, "feedback_log", defaultdict(deque))
+    assert client.post("/api/feedback", json={"message": "  "}).status_code == 400
+    codes = [client.post("/api/feedback", json={"message": f"m{i}"}).status_code for i in range(6)]
+    assert codes == [200] * 5 + [429]
+    assert [m["message"] for m in stats.report(feedback=True)["feedback"]] == ["m4", "m3", "m2", "m1", "m0"]
+
+
+def test_stats_needs_the_token(monkeypatch):
+    monkeypatch.delenv("GATORPATH_STATS_TOKEN", raising=False)
+    assert client.get("/api/stats").status_code == 404
+    monkeypatch.setenv("GATORPATH_STATS_TOKEN", "s3cret")
+    assert client.get("/api/stats").status_code == 401
+    assert client.get("/api/stats", headers={"Authorization": "Bearer nope"}).status_code == 401
+    assert client.get("/api/stats?token=s3cret").status_code == 401  # never from the URL
+    ok = client.get("/api/stats", headers={"Authorization": "Bearer s3cret"})
+    assert ok.status_code == 200 and "days" in ok.json() and "feedback" not in ok.json()
+    stats.add_feedback("hello")
+    asked = client.get("/api/stats?feedback=true", headers={"Authorization": "Bearer s3cret"}).json()
+    assert asked["feedback"][0]["message"] == "hello"
+
+
+def test_a_broken_stats_file_does_not_break_planning(monkeypatch):
+    monkeypatch.setenv("GATORPATH_STATS_DB", "/nonexistent-dir/x.db")
+    assert client.post("/api/plan", json={"profile": STUDENT}).status_code == 200
+    assert client.post("/api/visit", json={}).status_code == 200
