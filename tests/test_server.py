@@ -259,6 +259,7 @@ def test_a_free_elective_lists_options_too():
     assert "AA S 213" not in [o["code"] for o in got["options"]]  # done already
 
 
+@pytest.mark.skipif(not REAL_DB.exists(), reason="catalog.db not built (git-ignored)")
 def test_searches_manual_choices_beyond_first_hundred(monkeypatch):
     monkeypatch.setattr(server, "DB", REAL_DB)
     first = server.list_eligible_electives(TRANSFER_SENIOR, "elective", by_term="2027-spring", limit=100)
