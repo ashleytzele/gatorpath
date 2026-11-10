@@ -15,6 +15,7 @@ from pathlib import Path
 EVENTS = frozenset({"visit", "visitor", "dpr_import", "plan_built", "ai_question", "feedback"})
 MAX_MESSAGE = 2000
 MAX_STORED = 5000  # messages kept; past this a flood can't fill the disk
+CONTROL = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")  # everything unprintable but tab and newline
 REF = re.compile(r"[a-z0-9_-]{1,20}")
 _salt: tuple[date, str] = (date.min, "")  # ponytail: in memory, so a restart counts a returning visitor once more that day
 
@@ -70,7 +71,7 @@ def seen(who: str, agent: str) -> None:
 
 def add_feedback(message: str) -> bool:
     """Keeps the first 2000 characters. False when there is nothing to keep, the store is full, or it can't be written."""
-    message = message.strip()[:MAX_MESSAGE]
+    message = CONTROL.sub("", message).strip()[:MAX_MESSAGE]  # a message is read in the owner's terminal: no escape codes
     if not message:
         return False
     try:

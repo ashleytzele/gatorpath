@@ -95,3 +95,8 @@ def test_the_tables_hold_no_student_data(stats_file):
 def test_server_and_engine_never_import_stats():
     files = [SRC / "server.py", *(SRC / "engine").glob("*.py")]
     assert files and not [f.name for f in files if "stats" in f.read_text()]
+
+
+def test_feedback_keeps_no_control_characters():
+    assert stats.add_feedback("hi\x1b[31m red\x00 there\nsecond line\ttab")
+    assert stats.report(feedback=True)["feedback"][0]["message"] == "hi[31m red there\nsecond line\ttab"
