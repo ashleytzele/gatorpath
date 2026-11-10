@@ -34,7 +34,7 @@ const STEPS = [
 
 const FAQ = [
   ["Is GatorPath official?", "No. GatorPath is a student-built planning aid. Your DPR is the official record, and your academic advisor confirms what counts toward your degree."],
-  ["Is my data safe?", "Your DPR PDF is read in memory and never saved. Your record and plan stay in this browser tab's session storage so a reload keeps your work; they clear when you close the tab or choose Clear my saved data. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA. It only learns a grade if you type one in the chat."],
+  ["Is my data safe?", "Your DPR PDF is read in memory and never saved. Your record and plan stay in this browser tab's session storage so a reload keeps your work; they clear when you close the tab or choose Clear my saved data. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA. It only learns a grade if you type one in the chat. GatorPath counts visits, plans built and questions asked as anonymous daily totals, and keeps feedback you choose to send. It never keeps your record, grades or plan."],
   ["What’s a DPR, and how do I get it?", "Your Degree Progress Report shows your completed courses and what your degree still requires. In Student Center, open Degree Progress Report, click Expand All and View All, then Print → Save as PDF."],
   ["Does it work for my major?", "It has the 2026–27 rules for the bachelor’s programs listed when you choose your goals, written from the Bulletin. Always compare your plan with your DPR and an advisor."],
   ["Does it use AI?", "Gator AI chooses electives and answers in the chat (Claude Haiku). Planning and every check use Bulletin rules. Gator AI has hourly and daily limits; planning works without it."],

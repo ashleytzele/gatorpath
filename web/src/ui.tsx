@@ -289,7 +289,7 @@ export function Header({
 
 export const NAVIGATOR = "https://sfsu.campus.eab.com/";
 export const ASK_ADVISOR = "Ask an advisor in Navigator"; // the one name for the advising link
-export const PRIVACY = "Your DPR PDF is never saved. Your record and plan stay in this browser tab through reloads and clear when you close the tab, or when you choose Clear my saved data. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA.";
+export const PRIVACY = "Your DPR PDF is never saved. Your record and plan stay in this browser tab through reloads and clear when you close the tab, or when you choose Clear my saved data. Gator AI sees your major, goal and courses, never your name, ID, grades or GPA. GatorPath counts visits, plans built and questions asked as anonymous daily totals, and keeps feedback you choose to send. It never keeps your record, grades or plan.";
 /** Engine text in the student's words: "2027-spring" -> "Spring 2027", a requirement's id -> its title. */
 export function plainText(text: string, audit?: Audit) {
   const titles = new Map((audit?.groups ?? []).map((g) => [g.id, g.title]));

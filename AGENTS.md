@@ -26,7 +26,7 @@ Full design: `docs/ARCHITECTURE.md`. Current work: `TASKS.md` (work phase by pha
    DPR text. Two exceptions, both on the student's own machine: `save_profile` (one file, at a path the
    student chose, only when they ask, never inside the repo), and the website's session storage in the
    student's own browser tab (the parsed record, goals and plan, so a reload keeps the work; never the
-   DPR PDF; cleared when the tab closes or the footer's "Clear my saved data" is chosen). The server keeps nothing. Never commit a real transcript, DPR
+   DPR PDF; cleared when the tab closes or the footer's "Clear my saved data" is chosen). The server keeps no student data; the website counts events as anonymous daily totals (never a profile, DPR, grades or plan) and keeps feedback messages students choose to send (`stats.py`, D37). Never commit a real transcript, DPR
    or any real student data. Test fixtures are synthetic.
 6. **`check_plan` is the source of truth.** Anything that produces a plan must pass it in tests.
 
@@ -52,6 +52,7 @@ uv run gatorpath                   # start MCP server (stdio)
 (cd web && npm install && npm run build) && uv run gatorpath-web   # the website + /api on http://127.0.0.1:8000
 ANTHROPIC_API_KEY=... uv run gatorpath-web   # the same, with the AI helper (auto-fill and chat); without a key the site still plans
 GATORPATH_AI_PER_HOUR=5 GATORPATH_AI_PER_DAY=30 ANTHROPIC_API_KEY=... uv run gatorpath-web   # the AI helper's limits (these are the defaults: $20 a month)
+uv run python -m gatorpath.stats [--days 30] [--feedback]   # the anonymous usage totals (the live site: GET /api/stats with GATORPATH_STATS_TOKEN)
 uv run gatorpath-web & (cd web && npm run dev)   # frontend work: Vite on :5173 proxies /api to :8000
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit

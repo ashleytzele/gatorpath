@@ -9,6 +9,12 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 ---
 
+## Now — Deploy, anonymous usage counts and feedback (2026-11-09)
+
+Plan: `docs/superpowers/plans/2026-11-09-deploy-counts-feedback.md` (D37). Sign-in is deferred.
+- [x] `stats.py`, the count/feedback/stats routes, the visit ping and the feedback dialog
+- [ ] First deploy to Fly.io (Task 6: the owner runs the account steps), then check the live numbers
+
 ## Now — Redesign every page, one at a time (2026-11-07)
 
 The user doesn't want widget cards. Each page is written out in text first, then prototyped on one private Claude canvas

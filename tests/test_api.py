@@ -432,3 +432,10 @@ def test_a_broken_stats_file_does_not_break_planning(monkeypatch):
 def test_the_site_counts_a_visit_and_offers_feedback():
     for text in ("/api/visit", "/api/feedback", "Send feedback", "Please don't type your name or ID", "gatorpath-visited"):
         assert text in APP, text
+
+
+def test_the_site_says_what_it_counts():
+    root = Path(__file__).parents[1]
+    assert "anonymous daily totals" in APP and "feedback you choose to send" in APP
+    assert "D37" in (root / "docs/ARCHITECTURE.md").read_text()
+    assert "anonymous daily totals" in (root / "AGENTS.md").read_text()

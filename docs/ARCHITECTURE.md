@@ -824,8 +824,10 @@ fields come back as they are:
 The math placement is asked only while the pathway's gate course is still ahead. Every `/api/assist` answer carries
 `left: {hour, day}`, the questions left.
 
-What keeps golden rule 5: the site has no database and sets no cookies, and a student's record lives in the tab's memory
-until they start over. The PDF never reaches the disk: Starlette writes an upload past its 1 MB spool to a temp file, so
+What keeps golden rule 5: the site has no student database and sets no cookies, and a student's record lives in the tab's memory
+until they start over. The one file it keeps (`stats.py`, D37) holds anonymous daily totals, a one-way visitor hash deleted the next day, and
+feedback messages students choose to send; `GET /api/stats` reads it with the owner's token, and `POST /api/visit` and
+`POST /api/feedback` write it. The PDF never reaches the disk: Starlette writes an upload past its 1 MB spool to a temp file, so
 the spool limit sits above a size checked before parsing, and `pdftotext` reads it over stdin. No student data goes in
 a URL (`/api/electives` is a POST for this reason) and the access log is off.
 
@@ -952,7 +954,7 @@ pass it (tested).
 
 - **No server-side student data at rest, except a file the student asks for.** The profile lives in the
   conversation. The web app keeps the record, goals and plan in the current tab's session storage across reloads
-  (never the DPR PDF); closing the tab clears it, as does the footer's "Clear my saved data" (two steps). The server keeps no database of students and no logs of profiles. `save_profile` writes
+  (never the DPR PDF); closing the tab clears it, as does the footer's "Clear my saved data" (two steps). The server keeps no database of students and no logs of profiles. The website keeps anonymous daily totals (visits, visitors, DPR imports, plans built by major, AI questions, feedback messages) and the feedback text students choose to send, never a profile, grades or a plan (D37). `save_profile` writes
   one YAML file at a path the student chose, on their own machine, only when they ask. It's plain
   text they can read or delete, and the server refuses to write it inside the repo. This beats AI-client memory: the
   data stays exact (no half-remembered grades), stays local, and works with any client (D13).
@@ -1105,6 +1107,7 @@ students; 0 hallucinated courses."*
 | D34 | The web backend may call an LLM (Claude Haiku), the MCP server still doesn't: `assistant.py` is a client of the same functions, the model edits a plan only through `check_plan`, and the student's record stays on the backend | Students on the web have no AI client of their own, and a plan with 20 open slots isn't a plan yet. Golden rule 4 protects deterministic tools, which this keeps (a test checks `server.py` never imports it). It changes what the site can promise: planned courses and the goal now reach Anthropic, and the site says so | 2026-11-07 |
 | D35 | The chat is the product; the page shows what it did. It gets the MCP server's tools, stays docked beside the plan, and can change anything the student can, the record included. A student who insists can keep a plan that fails, and it stays marked as failing | The owner's direction (2026-11-07): the site should be Claude Code with this server, with the page as the visual part. This replaces the brainstorm's "no chat always on screen". Golden rule 6 holds: `check_plan`'s verdict is never hidden or softened, only no longer a veto over the student's own plan | 2026-11-07 |
 | D36 | The DPR's status icons decide each requirement's status, and D33 reaches the major when the rules are another catalog year's: a required-courses group none of whose courses the DPR names is left out the same way | The print keeps each requirement's icon as an image the legend names; a collapsed section still has it, so "collapsed" means whatever its icon says, not unknown. Two prints of one DPR, with and without Expand All, now give the same audit and plan. A Fall 2025 Public Health DPR planned with the 2026-27 rules got BIOL 100, which its DPR doesn't name and whose section it shows complete. With the student's own year's rules a missing group is a print or parse problem, so it stays | 2026-11-07 |
+| D37 | The website keeps anonymous daily totals and feedback messages the student chooses to send (`stats.py`, one SQLite file); sign-in and accounts are deferred (design in `docs/superpowers/specs/2026-11-09-accounts-design.md`). Visitors are a hash of address and browser that is deleted the next day | The owner needs to know how many people use it. Counting events covers everyone who plans; accounts would count only people who sign in and would ask students to hand over their grades. Totals keep golden rule 5 in spirit: nothing in the file says who a student is | 2026-11-09 |
 
 ---
 
