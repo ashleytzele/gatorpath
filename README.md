@@ -20,8 +20,7 @@ its source: a Bulletin page, or the SF State office page it came from.
 ## Setup (macOS)
 
 You need `gatorpath.zip`, which includes the course catalog: download it from the
-[latest release](https://github.com/ashleytzele/gatorpath/releases/latest) (the repo is private: ask the maintainer
-for access). Then:
+[latest release](https://github.com/ashleytzele/gatorpath/releases/latest). Then:
 
 ```bash
 brew install uv poppler
