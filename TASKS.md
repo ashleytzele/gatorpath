@@ -14,6 +14,7 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 Plan: `docs/superpowers/plans/2026-11-09-deploy-counts-feedback.md` (D37). Sign-in is deferred.
 - [x] `stats.py`, the count/feedback/stats routes, the visit ping and the feedback dialog
 - [x] First deploy to Fly.io: https://gatorpath.fly.dev (2026-11-10), checked live; read the numbers with `fly ssh console -C "uv run --no-sync python -m gatorpath.stats"`
+- [x] Class Search refreshed 2026-11-10 (all 116 subjects): Spring 2027 3,565 sections (was 3,552), Summer 2027 newly published, 490 sections; Fall 2027 not out yet. Redeployed with the chat pill (D38). Redo with `--years 0 --through <term>` after moving that term's `data/cache/offerings/<term>-*.json` aside, then `fly deploy --remote-only`
 
 ## Now — Redesign every page, one at a time (2026-11-07)
 
