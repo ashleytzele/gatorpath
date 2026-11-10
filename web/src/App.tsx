@@ -1937,6 +1937,9 @@ function AppWorkspace({
   );
 }
 
+// the same answers give the same plan: JSON with sorted keys, so two equal objects compare equal
+const sameAs = (v: unknown) => JSON.stringify(v, (_, x) => x && typeof x === "object" && !Array.isArray(x) ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => (a < b ? -1 : 1))) : x);
+
 type Built = { options: Options; plan: PlanResult; audit: Audit; filled: Assisted | null; why: string; skipped?: boolean };
 
 export default function App() {
@@ -1951,6 +1954,7 @@ export default function App() {
   const [picks, setPicks] = useState<Picks>(flow?.picks ?? { interests: [], after: [] });
   const [needs, setNeeds] = useState<string | undefined>(flow?.needs);
   const [built, setBuilt] = useState<Built | null>(saved?.built ?? null);
+  const [builtFor, setBuiltFor] = useState(""); // the record and answers the current plan was built from; empty after a reload
   useEffect(() => {
     try {
       if (screen === "landing") sessionStorage.setItem(LANDING_KEY, "1"); else sessionStorage.removeItem(LANDING_KEY);
@@ -2000,6 +2004,11 @@ export default function App() {
           needs={needs}
           back={back}
           build={(chosen, chips) => {
+            // nothing changed since the plan was built: back to it (and the chat's changes to it), no new Gator AI request
+            if (built && sameAs({ profile, options: chosen, picks: chips }) === builtFor) {
+              setSaved(savedSession());
+              return go("app");
+            }
             setOptions(chosen);
             setPicks(chips);
             go("building");
@@ -2017,6 +2026,7 @@ export default function App() {
             if (plan.needs_input) return go("goals");
             setSaved(null);
             setBuilt({ options, plan, audit, filled, why, skipped });
+            setBuiltFor(sameAs({ profile, options, picks }));
             go("app");
           }}
         />
