@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { message, type Audit } from "./api";
+import { FeedbackLink } from "./Feedback";
 
 // ?demo shows the prototype's preview bars. The data stays real: they only force a state on top of it.
 export const DEMO = new URLSearchParams(window.location.search).has("demo");
@@ -364,7 +365,7 @@ export function Footer() {
         <a href={NAVIGATOR} target="_blank" rel="noreferrer">
           {ASK_ADVISOR}
         </a>{" "}
-        · <ClearSaved />
+        · <ClearSaved /> · <FeedbackLink />
       </span>
     </footer>
   );

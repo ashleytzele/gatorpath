@@ -15,6 +15,7 @@ import {
   getSections,
   importDpr,
   message,
+  visit,
   type Advisor,
   type Assisted,
   type Audit,
@@ -1954,6 +1955,14 @@ export default function App() {
   const [picks, setPicks] = useState<Picks>(flow?.picks ?? { interests: [], after: [] });
   const [needs, setNeeds] = useState<string | undefined>(flow?.needs);
   const [built, setBuilt] = useState<Built | null>(saved?.built ?? null);
+  useEffect(() => {
+    // one visit per tab, with where it came from (?ref=); the server keeps a daily total, never who
+    try {
+      if (DEMO || sessionStorage.getItem("gatorpath-visited")) return;
+      sessionStorage.setItem("gatorpath-visited", "1");
+    } catch { return; }
+    visit(new URLSearchParams(location.search).get("ref"));
+  }, []);
   const [builtFor, setBuiltFor] = useState(""); // the record and answers the current plan was built from; empty after a reload
   useEffect(() => {
     try {

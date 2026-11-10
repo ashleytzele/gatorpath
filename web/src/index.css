@@ -2017,6 +2017,12 @@ p, li, small { text-wrap: pretty; }
   max-height: calc(100dvh - 32px); overflow: auto; overscroll-behavior: contain;
 }
 .floating-card::backdrop { background: rgba(20, 30, 25, 0.45); }
+.fb { display: grid; gap: var(--space-3); }
+.fb h3 { margin: 0; }
+.fb textarea { display: block; width: 100%; box-sizing: border-box; resize: vertical; min-height: 120px; padding: var(--space-3); border: 1px solid var(--line-strong); border-radius: var(--radius); font: inherit; line-height: 1.4; background: var(--card); color: var(--ink); }
+.fb-note { margin: 0; font-size: 14px; color: var(--muted); }
+.fb-error { margin: 0; color: var(--red); }
+.fb-actions { display: flex; gap: var(--space-3); }
 .floating-close { position: absolute; top: var(--space-2); right: var(--space-2); width: 32px; height: 32px; border: 0; background: none; font-size: 22px; line-height: 1; color: var(--muted); cursor: pointer; border-radius: var(--radius-sm); }
 @media (max-width: 640px) {
   .floating-card { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); padding: var(--space-3); }

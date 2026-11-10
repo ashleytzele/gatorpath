@@ -427,3 +427,8 @@ def test_a_broken_stats_file_does_not_break_planning(monkeypatch):
     monkeypatch.setenv("GATORPATH_STATS_DB", "/nonexistent-dir/x.db")
     assert client.post("/api/plan", json={"profile": STUDENT}).status_code == 200
     assert client.post("/api/visit", json={}).status_code == 200
+
+
+def test_the_site_counts_a_visit_and_offers_feedback():
+    for text in ("/api/visit", "/api/feedback", "Send feedback", "Please don't type your name or ID", "gatorpath-visited"):
+        assert text in APP, text

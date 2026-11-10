@@ -251,6 +251,9 @@ export function importDpr(file: File, program?: string) {
   if (program) form.append("program", program); // the student's pick when the DPR alone doesn't say
   return call<ImportResult>("/api/import-dpr", { method: "POST", body: form });
 }
+/** Once per tab, from the page: a visit (and where it came from, `?ref=`). Never throws: a count must not break the site. */
+export const visit = (ref: string | null) => post("/api/visit", { ref }).then(() => {}, () => {});
+export const sendFeedback = (text: string) => post("/api/feedback", { message: text }).then(() => {});
 export const getAudit = (profile: Profile) => post<Audit>("/api/audit", { profile });
 
 let programs: Promise<Program[]> | undefined;

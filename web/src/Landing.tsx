@@ -1,3 +1,4 @@
+import { FeedbackLink } from "./Feedback";
 import { Icon, Logo, NAVIGATOR } from "./ui";
 
 const LINKS = [
@@ -228,6 +229,7 @@ export function Landing({ start }: { start: () => void }) {
               <a href={`#${id}`} key={id}>{label}</a>
             ))}
             <a href={NAVIGATOR} target="_blank" rel="noreferrer">Talk to an advisor</a>
+            <FeedbackLink />
           </nav>
           <p>Unofficial student-built tool, not affiliated with SF State. Your DPR and your academic advisor are the official sources for your degree requirements.</p>
         </div>
