@@ -439,3 +439,11 @@ def test_the_site_says_what_it_counts():
     assert "anonymous daily totals" in APP and "feedback you choose to send" in APP
     assert "D37" in (root / "docs/ARCHITECTURE.md").read_text()
     assert "anonymous daily totals" in (root / "AGENTS.md").read_text()
+
+
+def test_server_settings():
+    assert api.server_settings({}) == {"host": "127.0.0.1", "port": 8000, "access_log": False}
+    online = api.server_settings({"GATORPATH_HOST": "0.0.0.0", "PORT": "8080", "GATORPATH_BEHIND_PROXY": "1"})
+    assert online["host"] == "0.0.0.0" and online["port"] == 8080
+    assert online["proxy_headers"] is True and online["forwarded_allow_ips"] == "*"
+    assert "proxy_headers" not in api.server_settings({"PORT": "8080"})  # a forwarded address is trusted only behind a proxy

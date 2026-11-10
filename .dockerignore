@@ -1,0 +1,13 @@
+.git
+.venv
+.superpowers
+.env
+web/node_modules
+web/dist
+data/*
+!data/catalog.db
+*.pdf
+evals
+docs
+tests
+dist

@@ -1,0 +1,31 @@
+# GatorPath on Fly.io: one machine (the usage file is SQLite on its volume, and the AI limits live in its memory).
+app = "gatorpath"            # change it if Fly says the name is taken
+primary_region = "sjc"
+
+[env]
+  GATORPATH_HOST = "0.0.0.0"
+  PORT = "8080"
+  GATORPATH_BEHIND_PROXY = "1"            # Fly's proxy forwards each student's address
+  GATORPATH_STATS_DB = "/data/stats.db"   # on the volume below
+
+[[mounts]]
+  source = "gatorpath_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+  [[http_service.checks]]
+    method = "GET"
+    path = "/api/ai-status"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "20s"
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1

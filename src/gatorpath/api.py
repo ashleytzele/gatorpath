@@ -12,6 +12,7 @@ import re
 import threading
 import time
 from collections import defaultdict, deque
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
@@ -323,8 +324,17 @@ if DIST.is_dir():  # last, so /api wins
     app.mount("/", StaticFiles(directory=DIST, html=True))
 
 
+def server_settings(env: Mapping[str, str] = os.environ) -> dict:
+    """uvicorn's arguments from the environment: this computer by default; on a host, its address and port, and the
+    proxy's forwarded address trusted only when GATORPATH_BEHIND_PROXY=1 (else every student would look like the proxy)."""
+    settings: dict = {"host": env.get("GATORPATH_HOST", "127.0.0.1"), "port": int(env.get("PORT", 8000)), "access_log": False}
+    if env.get("GATORPATH_BEHIND_PROXY") == "1":
+        settings |= {"proxy_headers": True, "forwarded_allow_ips": "*"}
+    return settings
+
+
 def main() -> None:
     """`uv run gatorpath-web`: the site and its API on this computer."""
     if not DIST.is_dir():
         print("web/dist isn't built, so this serves /api only (cd web && npm install && npm run build)")
-    uvicorn.run(app, host="127.0.0.1", port=8000, access_log=False)
+    uvicorn.run(app, **server_settings())
