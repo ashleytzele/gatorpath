@@ -13,6 +13,6 @@ def fixed_today(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def stats_file(tmp_path, monkeypatch):
+def stats_env(tmp_path, monkeypatch):
     """The routes count events: no test writes the real data/stats.db."""
     monkeypatch.setenv("GATORPATH_STATS_DB", str(tmp_path / "stats.db"))
