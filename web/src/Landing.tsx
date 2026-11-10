@@ -82,7 +82,9 @@ export function Landing({ start }: { start: () => void }) {
             <p className="ld-fine">No account needed. Your DPR PDF is never saved.</p>
           </div>
           <figure className="lp-demo">
-            <video ref={demo} className="lp-demo-video" controls playsInline preload="none" poster="/landing-upload.jpg" aria-label="GatorPath walkthrough from DPR upload to a plan">
+            {/* plays by itself, silent and on repeat, with controls to pause it (WCAG 2.2.2); a student who asks for less motion gets a still poster */}
+            <video ref={demo} className="lp-demo-video" controls muted playsInline preload="metadata" poster="/landing-upload.jpg" aria-label="GatorPath walkthrough from picking a major to a plan"
+              {...(window.matchMedia("(prefers-reduced-motion: reduce)").matches ? {} : { autoPlay: true, loop: true })}>
               <source src="/gatorpath-demo.mp4" type="video/mp4" />
               Your browser can’t play this video. You can still start planning below.
             </video>
