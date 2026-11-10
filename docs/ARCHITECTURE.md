@@ -998,36 +998,46 @@ pass it (tested).
 - **`pdftotext`** from poppler (`brew install poppler`) for the Bulletin and transcripts
 - **`httpx` + `beautifulsoup4`** for the class-search scraper
 - **`pyyaml`** for the rules, **`pytest`** for tests
+- **`fastapi` + `uvicorn`** for the web API; **React + Vite** for the site (`web/`); **Docker + Fly.io** to host it
 
 ```
 gatorpath/
-├── AGENTS.md            # instructions for AI coding agents (and humans)
-├── CLAUDE.md            # → @AGENTS.md
-├── README.md
-├── TASKS.md             # phased task list
-├── docs/ARCHITECTURE.md # this file
-├── pyproject.toml
+├── AGENTS.md, CLAUDE.md   # instructions for AI coding agents (and humans); CLAUDE.md → @AGENTS.md
+├── README.md, PRODUCT.md  # the public intro; who it is for and how it should feel (design context)
+├── TASKS.md               # phased task list, newest work first
+├── pyproject.toml, uv.lock
+├── Dockerfile, .dockerignore, fly.toml   # the Fly.io deploy (§7.6)
+├── .github/workflows/test.yml            # pytest on every push
+├── docs/
+│   ├── ARCHITECTURE.md    # this file
+│   ├── review-2026-27-drafts.md          # first-pass review of the AI-drafted programs
+│   ├── README.md          # what each doc is
+│   └── superpowers/{specs,plans}/        # written designs and build plans, dated
 ├── src/gatorpath/
-│   ├── server.py        # MCP tool + prompt definitions only (thin)
-│   ├── db.py            # sqlite access
+│   ├── server.py          # MCP tool + prompt definitions only (thin)
+│   ├── api.py             # the web API: thin routes over the same functions (§7.6)
+│   ├── assistant.py       # the web's chat (Claude Haiku); never imported by server.py (D34)
+│   ├── stats.py           # anonymous daily totals and feedback for the website (D37); only api.py imports it
+│   ├── db.py              # sqlite access
+│   ├── dpr.py             # local DPR PDF → profile + what's left (PII dropped)
+│   ├── transcript.py      # local PDF → completed courses (PII dropped)
 │   ├── engine/
-│   │   ├── prereq.py    # parse + evaluate prereq expressions
-│   │   ├── rules.py     # load YAML, evaluate requirement groups (audit)
-│   │   └── planner.py   # build_plan, check_plan
-│   ├── ingest/
-│   │   ├── bulletin.py  # PDF → course/prereq/course_link
-│   │   └── offerings.py # class search → offering
-│   ├── dpr.py           # local DPR PDF → profile + what's left (PII dropped)
-│   └── transcript.py    # local PDF → completed courses (PII dropped)
+│   │   ├── prereq.py      # parse + evaluate prereq expressions
+│   │   ├── rules.py       # load YAML, evaluate requirement groups (audit)
+│   │   └── planner.py     # build_plan, check_plan
+│   └── ingest/
+│       ├── bulletin.py    # PDF → course/prereq/course_link
+│       ├── offerings.py   # class search → offering
+│       └── programs.py    # program pages → source text, AI drafts, checks, loading
+├── web/                   # React + Vite site; src/ holds the screens, api.ts the calls, public/ the media
 ├── rules/
-│   ├── programs/2026-27/bs-cs.yaml
-│   ├── university/2026-27.yaml   # GE, SF State Studies, AI, GWAR, totals
-│   └── roadmaps/2026-27/bs-cs.yaml
-├── evals/
-│   ├── profiles/*.yaml  # synthetic students
-│   └── run_evals.py
-├── tests/
-└── data/                # git-ignored: raw PDFs, catalog.db, scrape cache
+│   ├── programs/<year>/   # reviewed requirement YAML, one file per program
+│   ├── university/<year>.yaml    # GE, SF State Studies, AI, GWAR, totals
+│   ├── roadmaps/<year>/   # official roadmap variants
+│   └── drafts/<year>/     # AI drafts waiting for a person; the server never reads them
+├── evals/                 # synthetic profiles, questions, run_evals.py, REPORT.md
+├── tests/                 # one file per module; fixtures/ holds real Bulletin rows
+└── data/                  # git-ignored: raw PDFs, catalog.db, scrape cache, stats.db (locally)
 ```
 
 ---
@@ -1129,7 +1139,6 @@ students; 0 hallucinated courses."*
 - transfer credit (ASSIST for CA community colleges; similarity + Course Equivalency
   Request drafting for out-of-state)
 - week-level schedule builder from live sections
-- web roadmap UI on top of the same server
 
 ---
 

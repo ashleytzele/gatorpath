@@ -24,3 +24,6 @@ web/dist/
 # design tool (impeccable): its cache; critiques in .impeccable/critique are kept
 .impeccable/hook.cache.json
 .impeccable/live/
+
+# agent workspaces (brainstorm companion, plan ledgers): local scratch
+.superpowers/

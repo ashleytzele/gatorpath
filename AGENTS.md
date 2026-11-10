@@ -54,6 +54,8 @@ ANTHROPIC_API_KEY=... uv run gatorpath-web   # the same, with the AI helper (aut
 GATORPATH_AI_PER_HOUR=5 GATORPATH_AI_PER_DAY=30 ANTHROPIC_API_KEY=... uv run gatorpath-web   # the AI helper's limits (these are the defaults: $20 a month)
 uv run python -m gatorpath.stats [--days 30] [--feedback]   # the anonymous usage totals (the live site: GET /api/stats with GATORPATH_STATS_TOKEN)
 uv run gatorpath-web & (cd web && npm run dev)   # frontend work: Vite on :5173 proxies /api to :8000
+fly deploy --remote-only   # the live site, https://gatorpath.fly.dev (needs `fly auth login`; secrets are set on Fly, never in the repo)
+fly ssh console -C "uv run --no-sync python -m gatorpath.stats --days 30 --feedback"   # the live usage numbers
 uv run python evals/run_evals.py   # eval report: Claude Code + Codex CLI, writes evals/REPORT.md
 uv run python evals/run_evals.py --into data/evals/<run> --retry   # rerun sessions that hit a usage limit
 uv run --with anthropic python evals/run_evals.py --clients haiku   # Haiku on the API: the bare client, needs ANTHROPIC_API_KEY
@@ -84,6 +86,7 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 |---|---|
 | `src/gatorpath/server.py` | MCP tool/prompt definitions only. Keep it thin and call the engine |
 | `src/gatorpath/api.py` | Web API: thin routes over the same functions (ARCHITECTURE §7.6). No planning logic, nothing stored |
+| `src/gatorpath/stats.py` | Anonymous daily totals and the feedback students send (D37). Only `api.py` imports it; `server.py` and `engine/` never do (a test checks) |
 | `src/gatorpath/assistant.py` | The web's AI helper: Haiku's tool loop. Never imported by `server.py` (golden rule 4; ARCHITECTURE §7.7) |
 | `web/` | React + Vite site. `src/api.ts` holds the calls; `?demo` shows the preview bars |
 | `web/src/` | `App.tsx` the workspace (Plan, Electives & GE, Schedule, record view); `Landing`, `Record`, `Goals`, `Building`, `Chat` the screens; `ui.tsx`, `FloatingCard`, `StatusMark` shared pieces; `logic.ts` pure functions, self-check `node web/src/logic.check.ts` |
@@ -96,6 +99,9 @@ mkdir -p dist && git archive -o dist/gatorpath.zip --prefix=gatorpath/data/ --ad
 | `rules/roadmaps/<year>/` | Official roadmap variants as YAML |
 | `rules/drafts/<year>/` | AI-drafted program rules and roadmaps (`<id>.roadmap.yaml`) waiting for a person (the server never reads them) |
 | `evals/` | Synthetic profiles + eval runner |
+| `Dockerfile`, `fly.toml`, `.dockerignore` | The Fly.io deploy: one machine, `data/catalog.db` baked into the image, `stats.db` on a volume (ARCHITECTURE §7.6) |
+| `docs/` | `ARCHITECTURE.md` (the design), `superpowers/specs/` and `plans/` (dated designs and build plans), `README.md` (index) |
+| `PRODUCT.md` | Who the site is for and how it should feel (design context) |
 | `data/` | **git-ignored**: raw PDFs, `catalog.db`, scrape cache |
 
 ## Conventions

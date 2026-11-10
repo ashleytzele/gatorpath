@@ -6,7 +6,7 @@ in what order?" Every answer is checked against the official Bulletin.
 
 **The AI suggests, the code verifies.**
 
-> Status: v0.1.0 (2026-10-30), phase 7 (evals, first users). Design: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+> Status: v0.1.0 (2026-10-30), phase 7 (evals, first users); the website is live at <https://gatorpath.fly.dev>. Design: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 > Work: [`TASKS.md`](TASKS.md). Changes: [releases](https://github.com/ashleytzele/gatorpath/releases).
 
 ## Why
@@ -62,7 +62,7 @@ and nothing checks that plan.
 
 ## Website
 
-Claude Code with this server, for students with no AI app: upload your DPR (or type your courses), and a chat beside your
+Live at **<https://gatorpath.fly.dev>**, or run it yourself below. Claude Code with this server, for students with no AI app: upload your DPR (or type your courses), and a chat beside your
 plan does the rest. Ask anything about your degree, or tell it what to change, and the plan updates. Needs Node as well as
 the Setup above:
 
@@ -78,11 +78,18 @@ questions, changes classes and the pace, and corrects your record when you tell 
 change. A change that makes the plan worse is refused unless you insist, and then the plan stays marked as failing. Without
 a key the site still plans, and you choose the courses yourself.
 
-The PDF is read in memory, and your name and ID are dropped as it's read. The web app saves your record and plan in
+The PDF is read in memory, and your name and ID are dropped as it's read. There is no sign-in. The website counts visits, plans built and questions asked as anonymous daily totals (never who), and keeps feedback you choose to send with its "Send feedback" link. The web app saves your record and plan in
 this tab's session storage so a reload keeps your work; closing the tab clears it, or choose "Clear my saved data" in the footer. The server keeps no
-student record. Anthropic's API receives your major, catalog year, goal, load choices and course list,
+student record (ARCHITECTURE D37 covers the totals and feedback). Anthropic's API receives your major, catalog year, goal, load choices and course list,
 never your name, ID or GPA, and a grade only if you type one in the chat. Questions an advisor should answer go to
 [Navigator](https://sfsu.campus.eab.com/).
+
+### Deploying and reading the numbers
+
+The site runs on Fly.io: one machine, the course catalog baked into the image, and a small volume for the usage file.
+`fly deploy --remote-only` ships a new version (see the `fly` lines in [`AGENTS.md`](AGENTS.md)). The usage numbers
+are `uv run python -m gatorpath.stats` locally, or on the live site
+`fly ssh console -C "uv run --no-sync python -m gatorpath.stats --days 30 --feedback"`.
 
 ## Evals
 
@@ -160,7 +167,8 @@ rules engine, as a web app). How GatorPath differs: [ARCHITECTURE §3](docs/ARCH
 
 - v1: SF State, BS Computer Science (2026-27 Bulletin), then BS Applied Mathematics (2026-27, rules unverified), then
   the other bachelor's programs (2026-27, AI-drafted, unverified)
-- Later: transfer credit, week-level schedules, web UI
+- Later: transfer credit, accounts so a plan follows a student across devices (designed in
+  `docs/superpowers/specs/2026-11-09-accounts-design.md`, not built)
 
 *Not affiliated with San Francisco State University. Always confirm with your advisor and your
 official Degree Progress Report.*
