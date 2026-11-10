@@ -1551,7 +1551,7 @@ function AppWorkspace({
 }) {
   const [tab, setTab] = useState<Tab>(saved?.tab ?? "plan");
   const [chat, setChat] = useState(saved?.chat ?? false);
-  const [docked, setDocked] = useState(saved?.docked ?? true); // on a wide screen the chat sits beside the plan until hidden
+  const [docked, setDocked] = useState(!!saved?.docked && !!saved?.chat); // closed until the student opens it: a pill in the corner; open, it sits beside the plan (full screen on a phone)
   const lastTerm = (semesters: Semester[]) => semesters[semesters.length - 1]?.term ?? "";
   const down = (m: string) => /isn't connected/.test(m); // the AI has no key here
   const [lines, setLines] = useState<ChatLine[]>(() => saved?.lines?.filter((line) => saved.aiDown || line.kind !== "refused" || !down(line.text)).map((line) =>
@@ -1564,6 +1564,10 @@ function AppWorkspace({
     ...(built.why ? [{ kind: "refused" as const, text: aiErrorText(built.why) }] : []),
     ...(built.skipped ? [{ kind: "ai" as const, text: "You chose your own electives. Say “choose my open courses” whenever you want Gator AI to pick." }] : []),
   ]);
+  const [seen, setSeen] = useState(saved ? lines.length : 0); // messages the student has had the chat open for: the pill's dot says there are more
+  useEffect(() => {
+    if (chat && docked) setSeen(lines.length);
+  }, [chat, docked, lines.length]);
   const [left, setLeft] = useState(() => saved?.left ?? built.filled?.left ?? limitOf(built.why)); // the first fill may have hit a limit
   const [sending, setSending] = useState(false);
   const [aiDown, setAiDown] = useState(saved?.aiDown ?? down(built.why));
@@ -1803,14 +1807,6 @@ function AppWorkspace({
     }, 50);
   };
   const told = useRef(!!built.filled); // the DPR notes go with the first request only
-  useEffect(() => {
-    const open = () => {
-      setChat(true);
-      setDocked(true);
-    };
-    document.addEventListener("gator-ask", open);
-    return () => document.removeEventListener("gator-ask", open);
-  }, []);
   // the record as it stands (edits change it), and as if every planned course were passed: "With your plan"
   const record = useLoad(() => getAudit(student), [state.options]);
   const withPlan = useLoad(() => getAudit(withPlanned(student, state.semesters)), [state.options, state.semesters]);
@@ -1919,13 +1915,14 @@ function AppWorkspace({
       />
       {(!docked || !chat) && (
         <button
-          className={`chat-reopen ${docked ? "phone-only" : ""}`}
+          className="chat-reopen"
           onClick={() => {
             setChat(true);
             setDocked(true);
           }}
         >
           <Icon name="spark" size={16} /> Ask Gator AI
+          {lines.length > seen && <span className="chat-dot" role="status" aria-label="New message" />}
         </button>
       )}
       {toast && (

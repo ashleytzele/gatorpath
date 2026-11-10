@@ -267,18 +267,9 @@ export function Header({
         {screen !== "landing" && (
           <div className="header-actions">
             {screen === "app" && (
-              <>
-                <button
-                  className="header-link ask-header"
-                  onClick={() => document.dispatchEvent(new Event("gator-ask"))}
-                >
-                  <span className="long-label">Ask about your plan</span>
-                  <span className="short-label">Chat</span>
-                </button>
-                <a className="header-link advisor-link" href={NAVIGATOR} target="_blank" rel="noreferrer">
-                  Ask an advisor
-                </a>
-              </>
+              <a className="header-link advisor-link" href={NAVIGATOR} target="_blank" rel="noreferrer">
+                Ask an advisor
+              </a>
             )}
           </div>
         )}

@@ -1182,10 +1182,6 @@ legend.q-head + * { clear: both; }
 }
 
 /* Plan, picker, and schedule state refinements */
-.ask-header {
-  color: var(--accent);
-  font-weight: 600;
-}
 .variant-switcher {
   display: flex;
   align-items: center;
@@ -1466,9 +1462,6 @@ legend.q-head + * { clear: both; }
   }
   .header-actions {
     gap: var(--space-3);
-  }
-  .ask-header {
-    font-size: 13px;
   }
   
   
@@ -1901,9 +1894,6 @@ p, li, small { text-wrap: pretty; }
 .workspace-main .plan-actions {
   flex-wrap: wrap;
 }
-.header-link.ask-header {
-  display: none;
-}
 @media (max-width: 1000px) {
   .chat-dock {
     display: none;
@@ -1918,13 +1908,9 @@ p, li, small { text-wrap: pretty; }
   .chat-close {
     display: block;
   }
-  .header-link.ask-header {
-    display: inline-flex;
-  }
 }
 
 /* Phone: short labels, no crowded header, a timeline that names only where you start and finish */
-.short-label { display: none; }
 .header-link {
   border: 0;
   background: none;
@@ -1937,9 +1923,6 @@ p, li, small { text-wrap: pretty; }
   white-space: nowrap;
 }
 @media (max-width: 760px) {
-  .long-label { display: none; }
-  .short-label { display: inline; }
-  .header-link.advisor-link { display: none; } /* the footer has it */
 }
 /* Problems: one line each, a lead line for what stopped the plan */
 .plan-problem-panel .problem-lead { margin: var(--space-3) 0 0; font-size: 14px; font-weight: 650; color: var(--red); }
@@ -1956,16 +1939,15 @@ p, li, small { text-wrap: pretty; }
 /* The split: chat about 30%, the plan the rest, centred on a wide screen; the chat can step aside */
 .workspace.chat-hidden .chat-dock { display: none; }
 .chat-reopen {
-  position: fixed; right: var(--space-4); bottom: var(--space-4); z-index: var(--z-bar);
+  position: fixed; right: var(--space-4); bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px)); z-index: var(--z-bar);
   display: inline-flex; align-items: center; gap: var(--space-2); min-height: 44px; padding: 0 var(--space-4);
   border: 0; border-radius: var(--radius-pill); background: var(--accent); color: white;
-  font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(25, 45, 38, 0.16);
+  font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(25, 45, 38, 0.16);
 }
+.chat-reopen:hover { background: var(--accent-hover); }
+.chat-dot { position: absolute; top: 4px; right: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--amber); border: 2px solid white; box-sizing: content-box; }
 .chat-bubble.working small { color: var(--faint); }
 
-@media (max-width: 1000px) {
-  .chat-reopen { display: none; }
-}
 
 /* Fewer boxes: an open choice is a row of its term, the upload's drop zone is its only box */
 
@@ -2227,11 +2209,10 @@ p, li, small { text-wrap: pretty; }
 .chat-note { margin: var(--space-2) 0 0; font-size: 12px; color: var(--muted); }
 .chat-note b { color: var(--amber); }
 .row-flash { background: var(--green-soft) !important; outline: 2px solid var(--green); outline-offset: -2px; }
-/* A bottom bar on a phone (and the button that brings a hidden chat back on a laptop) */
-@media (min-width: 1001px) { .chat-reopen.phone-only { display: none; } }
+/* The pill that opens the chat is the same corner button on every screen; the page leaves room for it on a phone */
 @media (max-width: 1000px) {
-  .chat-reopen { display: inline-flex; left: 0; right: 0; bottom: 0; border-radius: 0; justify-content: center; min-height: 52px; }
   .chat-dock.open { padding-bottom: var(--space-3); }
+  .workspace-main { padding-bottom: 72px; }
 }
 
 /* ===== Your plan: the Plan tab. Tabs as plain text; a route down one line; rows split by 1px lines ===== */

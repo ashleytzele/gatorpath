@@ -456,3 +456,8 @@ def test_the_address_comes_from_fly_only_behind_the_proxy(monkeypatch):
     monkeypatch.setenv("GATORPATH_BEHIND_PROXY", "1")
     assert api.address(spoof) == "9.9.9.9"           # behind Fly: its header, not X-Forwarded-For
     assert api.address(request(("x-forwarded-for", "6.6.6.6"))) == "10.0.0.1"
+
+
+def test_the_chat_opens_from_a_corner_pill_and_the_header_points_to_an_advisor():
+    assert "chat-reopen" in APP and "Ask Gator AI" in APP and "Ask an advisor" in APP
+    assert "Ask about your plan" not in APP and "gator-ask" not in APP  # the header's chat button is gone
