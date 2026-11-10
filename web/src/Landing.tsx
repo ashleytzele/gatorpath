@@ -82,7 +82,6 @@ export function Landing({ start }: { start: () => void }) {
               <source src="/gatorpath-demo.mp4" type="video/mp4" />
               Your browser can’t play this video. You can still start planning below.
             </video>
-            <figcaption>A short walkthrough with a fictional new student, from picking a major to a checked plan.</figcaption>
           </figure>
         </section>
 
@@ -131,7 +130,6 @@ export function Landing({ start }: { start: () => void }) {
           <div className="lp-route-inner">
             <figure className="lp-shot lp-shot-light">
               <img src="/landing-route.jpg" width="1500" height="716" alt="A term-by-term plan: Spring 2027, 16 units, with each course, its units and the requirement it counts for" loading="lazy" />
-              <figcaption>Sample plan for a fictional student</figcaption>
             </figure>
             <div className="lp-copy">
               <h2 id="route">See your whole route.</h2>
@@ -174,7 +172,6 @@ export function Landing({ start }: { start: () => void }) {
             </div>
             <figure className="lp-shot">
               <img src="/landing-schedule.jpg" width="1400" height="992" alt="A weekly class calendar, Monday to Friday, with each course's time, building and room" loading="lazy" />
-              <figcaption>A sample week for a fictional student.</figcaption>
             </figure>
           </div>
         </section>

@@ -2413,7 +2413,7 @@ main:focus { outline: none; } /* focused only by the skip link, to start reading
 .lp-hero .ld-fine { margin-top: var(--space-4); }
 .lp-demo { margin: 0; }
 /* no frame: the white frames multiply into the page and the edges fade out, so the video sits on the background */
-.lp-demo-video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: transparent; mix-blend-mode: multiply; -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent); mask-composite: intersect; }
+.lp-demo-video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: transparent; mix-blend-mode: multiply; -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent), linear-gradient(to bottom, transparent, black 6%, black 94%, transparent); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent), linear-gradient(to bottom, transparent, black 6%, black 94%, transparent); mask-composite: intersect; }
 .lp-demo figcaption, .lp-shot figcaption { margin-top: var(--space-3); color: var(--faint); font-size: 14px; }
 
 .lp-sec { max-width: 1200px; margin: 0 auto; padding: 96px var(--space-6) 0; scroll-margin-top: 60px; }

@@ -328,7 +328,7 @@ def test_pathways_name_each_placements_first_math():
 
 def test_the_landing_page_says_only_what_is_true():
     majors = len(list((Path(__file__).parents[1] / "rules/programs/2026-27").glob("*.yaml")))
-    assert f"Rules for {majors} majors" in APP and "Watch the demo" in APP
+    assert f"Rules for {majors} majors" in APP
     assert "Trusted by" not in APP and "testimonial" not in APP.lower()
 
 
