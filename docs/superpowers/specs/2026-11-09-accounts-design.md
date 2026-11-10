@@ -1,6 +1,6 @@
 # Accounts: sign in with a student email, and keep the plan (design)
 
-Status: draft for the owner's approval. Nothing is built. Calls the author made are marked **(my call)**; the owner
+Status: deferred 2026-11-09. The owner needed usage numbers, which `docs/superpowers/plans/2026-11-09-deploy-counts-feedback.md` gives without sign-in. Build this only if students ask to keep a plan across devices. Nothing is built. Calls the author made are marked **(my call)**; the owner
 decides the ones under "Needs the owner".
 
 ## Why
