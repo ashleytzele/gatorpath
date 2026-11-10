@@ -5,7 +5,7 @@ primary_region = "sjc"
 [env]
   GATORPATH_HOST = "0.0.0.0"
   PORT = "8080"
-  GATORPATH_BEHIND_PROXY = "1"            # Fly's proxy forwards each student's address
+  GATORPATH_BEHIND_PROXY = "1"            # read each student's address from Fly-Client-IP
   GATORPATH_STATS_DB = "/data/stats.db"   # on the volume below
 
 [[mounts]]

@@ -36,7 +36,7 @@
 1. The stats file is missing, read-only or the disk is full: the student's plan, import and chat still work (Task 1 test, Task 2 test).
 2. A script posts junk `ref`, `program` or huge feedback: rows stay bounded, `ref` is `[a-z0-9_-]{1,20}`, `program` is a known id or `other`, feedback is cut at 2000 characters and refused after 5000 stored messages (Tasks 1, 2).
 3. `/api/stats` with no token configured is not open (404), a wrong token is 401, and the token is never read from the URL (Task 2).
-4. Behind Fly's proxy every student would look like one address, which would break the AI hourly limit and the visitor count: `server_settings` trusts the proxy's forwarded address only when `GATORPATH_BEHIND_PROXY=1` (Task 5, checked live in Task 6).
+4. Behind Fly's proxy every student would look like one address, which would break the AI hourly limit and the visitor count: `address()` reads Fly's `Fly-Client-IP` header only when `GATORPATH_BEHIND_PROXY=1`, and never `X-Forwarded-For`, which a visitor can set (Task 5, checked live in Task 6).
 5. Feedback text may contain a name or ID: the report leaves it out unless `feedback=1` is asked for, and the form warns (Tasks 1, 3).
 
 ---
@@ -154,7 +154,7 @@
 - Test: `tests/test_api.py`
 
 **Interfaces:**
-- Produces: `server_settings(env: Mapping[str, str] = os.environ) -> dict` returning uvicorn keyword arguments: default `{"host": "127.0.0.1", "port": 8000, "access_log": False}`; `GATORPATH_HOST` sets `host`; `PORT` sets `port` (int); `GATORPATH_BEHIND_PROXY=1` adds `{"proxy_headers": True, "forwarded_allow_ips": "*"}`. `main()` calls `uvicorn.run(app, **server_settings())`.
+- Produces: `server_settings(env: Mapping[str, str] = os.environ) -> dict` returning uvicorn keyword arguments: default `{"host": "127.0.0.1", "port": 8000, "access_log": False}`; `GATORPATH_HOST` sets `host`; `PORT` sets `port` (int). `address(request)` returns the `Fly-Client-IP` header when `GATORPATH_BEHIND_PROXY=1` (never `X-Forwarded-For`), else the connection's address. (Changed after the final review: uvicorn trusts the first `X-Forwarded-For` entry, which a visitor can set.) `main()` calls `uvicorn.run(app, **server_settings())`.
 
 - [ ] **Step 1: Write the failing test** `test_server_settings`: `{}` gives the defaults; `{"GATORPATH_HOST": "0.0.0.0", "PORT": "8080", "GATORPATH_BEHIND_PROXY": "1"}` gives host `0.0.0.0`, port `8080`, `proxy_headers` true and `forwarded_allow_ips` `"*"`; `{"PORT": "8080"}` alone has no `proxy_headers` key.
 - [ ] **Step 2: Run** it. Expected: FAIL.
@@ -174,7 +174,7 @@
 - [ ] **Step 3:** `fly secrets set ANTHROPIC_API_KEY=<key> GATORPATH_STATS_TOKEN=$(openssl rand -hex 24)`; keep the token somewhere private.
 - [ ] **Step 4:** `fly deploy`, then `fly scale count 1`. Expected: the deploy ends with "Visit your newly deployed app at https://<app>.fly.dev".
 - [ ] **Step 5: Check live.** Open `https://<app>.fly.dev`: the landing page loads and the demo video plays; build a new-student plan end to end; `curl -s https://<app>.fly.dev/api/ai-status`; `curl -s -H "Authorization: Bearer $TOKEN" https://<app>.fly.dev/api/stats` shows `visit`, `plan_built` and the major.
-- [ ] **Step 6: Check the proxy.** Note today's `visitor` total from `/api/stats`, then open the site once on a phone over cellular (a different network address). `visitor` goes up by 1. If it does not, Fly's proxy is being counted as the one address: check `GATORPATH_BEHIND_PROXY` with `fly ssh console -C "env"`. (This also protects the AI hourly limit, which is per address.)
+- [ ] **Step 6: Check the proxy.** Note today's `visitor` total from `/api/stats`, then open the site once on a phone over cellular (a different network address). `visitor` goes up by 1. If it does not, Fly's proxy is being counted as the one address: check `GATORPATH_BEHIND_PROXY` with `fly ssh console -C "env"`. (This also protects the AI hourly limit, which is per address.) Then send two `POST /api/visit` requests from your laptop with `-H "Fly-Client-IP: 1.2.3.4"` and `-H "X-Forwarded-For: 5.6.7.8"` changed between them: if `visitor` rises by two, Fly is not overwriting `Fly-Client-IP` and the limits can be dodged; tell Claude before opening the site to students.
 - [ ] **Step 7: Volume backup.** Run `fly volumes snapshots list gatorpath_data` and note the retention it shows; `stats.db` is the only data that cannot be rebuilt.
 - [ ] **Step 8 (later, optional): A domain.** Buy one, `fly certs add <domain>`, add the DNS records the command prints, wait for `fly certs show <domain>` to say issued. Needed only for looks, and for email if sign-in is ever built.
 - [ ] **Step 9: Commit** any `fly.toml` changes `fly launch` made (`git add fly.toml && git commit -m "Deploy: fly.toml as launched"`).

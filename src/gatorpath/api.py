@@ -57,8 +57,10 @@ used = Usage()
 
 
 def address(request: Request) -> str:
-    """Who's asking. ponytail: behind a proxy this is the proxy, unless uvicorn runs with --proxy-headers and
-    --forwarded-allow-ips set to it"""
+    """Who's asking. Behind Fly (GATORPATH_BEHIND_PROXY=1) its proxy sets Fly-Client-IP; X-Forwarded-For is never read,
+    because a visitor can write it and so dodge every per-address limit. ponytail: another host needs its own header."""
+    if os.environ.get("GATORPATH_BEHIND_PROXY") == "1" and (ip := request.headers.get("fly-client-ip")):
+        return ip
     return request.client.host if request.client else "unknown"
 
 
@@ -325,12 +327,8 @@ if DIST.is_dir():  # last, so /api wins
 
 
 def server_settings(env: Mapping[str, str] = os.environ) -> dict:
-    """uvicorn's arguments from the environment: this computer by default; on a host, its address and port, and the
-    proxy's forwarded address trusted only when GATORPATH_BEHIND_PROXY=1 (else every student would look like the proxy)."""
-    settings: dict = {"host": env.get("GATORPATH_HOST", "127.0.0.1"), "port": int(env.get("PORT", 8000)), "access_log": False}
-    if env.get("GATORPATH_BEHIND_PROXY") == "1":
-        settings |= {"proxy_headers": True, "forwarded_allow_ips": "*"}
-    return settings
+    """uvicorn's arguments from the environment: this computer by default; on a host, its address and port."""
+    return {"host": env.get("GATORPATH_HOST", "127.0.0.1"), "port": int(env.get("PORT", 8000)), "access_log": False}
 
 
 def main() -> None:

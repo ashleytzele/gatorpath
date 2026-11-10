@@ -444,6 +444,15 @@ def test_the_site_says_what_it_counts():
 def test_server_settings():
     assert api.server_settings({}) == {"host": "127.0.0.1", "port": 8000, "access_log": False}
     online = api.server_settings({"GATORPATH_HOST": "0.0.0.0", "PORT": "8080", "GATORPATH_BEHIND_PROXY": "1"})
-    assert online["host"] == "0.0.0.0" and online["port"] == 8080
-    assert online["proxy_headers"] is True and online["forwarded_allow_ips"] == "*"
-    assert "proxy_headers" not in api.server_settings({"PORT": "8080"})  # a forwarded address is trusted only behind a proxy
+    assert online == {"host": "0.0.0.0", "port": 8080, "access_log": False}  # X-Forwarded-For is never trusted: a visitor can set it
+
+
+def test_the_address_comes_from_fly_only_behind_the_proxy(monkeypatch):
+    from starlette.requests import Request
+    request = lambda *headers: Request({"type": "http", "client": ("10.0.0.1", 1), "headers": [(k.encode(), v.encode()) for k, v in headers]})
+    spoof = request(("fly-client-ip", "9.9.9.9"), ("x-forwarded-for", "6.6.6.6"))
+    monkeypatch.delenv("GATORPATH_BEHIND_PROXY", raising=False)
+    assert api.address(spoof) == "10.0.0.1"          # on this computer a header is just a header
+    monkeypatch.setenv("GATORPATH_BEHIND_PROXY", "1")
+    assert api.address(spoof) == "9.9.9.9"           # behind Fly: its header, not X-Forwarded-For
+    assert api.address(request(("x-forwarded-for", "6.6.6.6"))) == "10.0.0.1"
