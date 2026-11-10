@@ -13,7 +13,7 @@ Legend: `[ ]` todo · `[x]` done · `(?)` needs a decision first
 
 Plan: `docs/superpowers/plans/2026-11-09-deploy-counts-feedback.md` (D37). Sign-in is deferred.
 - [x] `stats.py`, the count/feedback/stats routes, the visit ping and the feedback dialog
-- [ ] First deploy to Fly.io (Task 6: the owner runs the account steps), then check the live numbers
+- [x] First deploy to Fly.io: https://gatorpath.fly.dev (2026-11-10), checked live; read the numbers with `fly ssh console -C "uv run --no-sync python -m gatorpath.stats"`
 
 ## Now — Redesign every page, one at a time (2026-11-07)
 
