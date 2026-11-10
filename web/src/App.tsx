@@ -132,6 +132,10 @@ type SavedWorkspace = {
 type SavedSession = { profile: Profile; imported: ImportResult | null; built: Built; workspace: SavedWorkspace };
 const SESSION_KEY = "gatorpath-plan-v1";
 const FLOW_KEY = "gatorpath-flow-v1";
+const LANDING_KEY = "gatorpath-landing-v1"; // set while the student is on the landing page, so a reload stays there instead of reopening the saved plan
+function onLanding(): boolean {
+  try { return sessionStorage.getItem(LANDING_KEY) === "1"; } catch { return false; }
+}
 type SavedFlow = { screen: "record" | "review" | "goals" | "building"; profile: Profile | null; imported: ImportResult | null; options: Options; picks: Picks; needs?: string };
 function savedFlow(): SavedFlow | null {
   try {
@@ -1938,7 +1942,7 @@ type Built = { options: Options; plan: PlanResult; audit: Audit; filled: Assiste
 export default function App() {
   const [saved, setSaved] = useState(savedSession);
   const [flow] = useState(savedFlow);
-  const [screen, setScreen] = useState<Screen>(flow?.screen ?? (saved ? "app" : "landing"));
+  const [screen, setScreen] = useState<Screen>(flow?.screen ?? (saved && !onLanding() ? "app" : "landing"));
   const [style, setStyle] = useState(false);
   // a saved step is newer than the saved plan: the student went back from the plan and edited
   const [profile, setProfile] = useState<Profile | null>(flow ? flow.profile : saved?.profile ?? null);
@@ -1949,6 +1953,7 @@ export default function App() {
   const [built, setBuilt] = useState<Built | null>(saved?.built ?? null);
   useEffect(() => {
     try {
+      if (screen === "landing") sessionStorage.setItem(LANDING_KEY, "1"); else sessionStorage.removeItem(LANDING_KEY);
       if (screen === "landing" || screen === "app") sessionStorage.removeItem(FLOW_KEY);
       else sessionStorage.setItem(FLOW_KEY, JSON.stringify({ screen, profile, imported, options, picks, needs }));
     } catch { /* storage is unavailable */ }
